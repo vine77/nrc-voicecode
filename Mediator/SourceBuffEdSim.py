@@ -377,34 +377,3 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
                 self.goto(self.len())
                 
 
-    def search_for(self, regexp, direction=1, num=1, where=1):
-        
-        """Moves cursor to the next occurence of regular expression
-           *STR regexp* 
-
-           *INT* direction -- if positive, search forward, otherwise
-            search backward
-
-           *INT* num -- number of occurences to search for
-
-           *INT* where -- if positive, move cursor after the occurence,
-           otherwise move it before
-
-
-           Returns *None* if no occurence was found. Otherwise,
-           returns a match object.
-           
-        """
-        
-        success = None
-        reobject = re.compile(regexp)
-        the_match = reobject.search(self.content, pos=self.cur_pos())
-        if (the_match):
-            success = the_match
-            if (where > 0):
-                self.goto(the_match.end())
-            else:
-                self.goto(the_match.start())
-        return success
-
-        

@@ -1,13 +1,7 @@
 
-D:\VoiceCode\VCode.python\Admin>rem  
-
-D:\VoiceCode\VCode.python\Admin>rem Shortcut for invoking VoiceCode regression test 
-
-D:\VoiceCode\VCode.python\Admin>rem
-
 D:\VoiceCode\VCode.python\Admin>cd D:\VoiceCode\VCode.python\Admin 
 
-D:\VoiceCode\VCode.python\Admin>python test.py all 
+D:\VoiceCode\VCode.python\Admin>python test.py all         
 
 
 *******************************************************************************
@@ -219,7 +213,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 9c7220>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 9cc420>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -1822,7 +1816,7 @@ natlink.UnknownName exception was sucessfully raised.
 
 >>> Starting mediator with persistence
 Compiling symbols for file 'D:\VoiceCode\VCode.python\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 8b2ee0> from file 'D:\VoiceCode\VCode.python\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 886ff0> from file 'D:\VoiceCode\VCode.python\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.python\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file 'D:\VoiceCode\VCode.python\Config\py_std_sym.py'
 
@@ -5449,402 +5443,431 @@ Saying: ['before', 'paren']
 137:    (1<CURSOR>)
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'paren']
-Associate 'after' with symbol (Enter selection):
-
-  '0': no association
-  '1': after (*new*)
-  '2': After (*new*)
-  '3': AFTER (*new*)
-
-> 134:    0<1<2
+Saying: ['previous paren']
+134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (<CURSOR>1After)
+137:    (<CURSOR>1)
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'parens']
 134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After)<CURSOR>
+137:    (1)<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'paren']
 134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After<CURSOR>)
+137:    (1<CURSOR>)
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'parens']
 134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After<CURSOR>)
+137:    <CURSOR>(1)
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+135:    0>1>2
+136:    0=1=2
+137:    (1)
+138:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between brackets', '1']
-134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After[1<CURSOR>])
+137:    (1)
+138:    [1<CURSOR>]
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'bracket']
-134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After<CURSOR>[1])
+137:    (1)
+138:    <CURSOR>[1]
 
 *** End of source buffer ***
 Saying: ['after', 'bracket']
-134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After[<CURSOR>1])
+137:    (1)
+138:    [<CURSOR>1]
 
 *** End of source buffer ***
 Saying: ['before', 'bracket']
-Associate 'before bracket' with symbol (Enter selection):
-
-  '0': no association
-  '1': before_bracket (*new*)
-  '2': BeforeBracket (*new*)
-  '3': beforeBracket (*new*)
-  '4': BEFORE_BRACKET (*new*)
-  '5': beforebracket (*new*)
-  '6': BEFOREBRACKET (*new*)
-
-> 134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket<CURSOR>1])
+137:    (1)
+138:    [1<CURSOR>]
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'bracket']
-134:    0<1<2
+Saying: ['previous', 'bracket']
 135:    0>1>2
 136:    0=1=2
-137:    (1After[<CURSOR>BeforeBracket1])
+137:    (1)
+138:    [<CURSOR>1]
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'brackets']
-134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1]<CURSOR>)
+137:    (1)
+138:    [1]<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'bracket']
-134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1<CURSOR>])
+137:    (1)
+138:    [1<CURSOR>]
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'brackets']
-134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1<CURSOR>])
+137:    (1)
+138:    <CURSOR>[1]
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+136:    0=1=2
+137:    (1)
+138:    [1]
+139:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between braces', '1']
-134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1{1<CURSOR>}])
+137:    (1)
+138:    [1]
+139:    {1<CURSOR>}
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'brace']
-134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1<CURSOR>{1}])
+137:    (1)
+138:    [1]
+139:    <CURSOR>{1}
 
 *** End of source buffer ***
 Saying: ['after', 'brace']
-134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1{<CURSOR>1}])
+137:    (1)
+138:    [1]
+139:    {<CURSOR>1}
 
 *** End of source buffer ***
 Saying: ['before', 'brace']
-Associate 'before brace' with symbol (Enter selection):
-
-  '0': no association
-  '1': before_brace (*new*)
-  '2': BeforeBrace (*new*)
-  '3': beforeBrace (*new*)
-  '4': BEFORE_BRACE (*new*)
-  '5': beforebrace (*new*)
-  '6': BEFOREBRACE (*new*)
-
-> 134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace<CURSOR>1}])
+137:    (1)
+138:    [1]
+139:    {1<CURSOR>}
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'brace']
-134:    0<1<2
-135:    0>1>2
+Saying: ['previous', 'brace']
 136:    0=1=2
-137:    (1After[BeforeBracket1{<CURSOR>BeforeBrace1}])
+137:    (1)
+138:    [1]
+139:    {<CURSOR>1}
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'braces']
-134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1}<CURSOR>])
+137:    (1)
+138:    [1]
+139:    {1}<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'brace']
-134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<CURSOR>}])
+137:    (1)
+138:    [1]
+139:    {1<CURSOR>}
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'braces']
-134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<CURSOR>}])
+137:    (1)
+138:    [1]
+139:    <CURSOR>{1}
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between angled', '1']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<1<CURSOR>>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <1<CURSOR>>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'angled']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<CURSOR><1>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <CURSOR><1>
 
 *** End of source buffer ***
 Saying: ['after', 'angled']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<<CURSOR>1>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <<CURSOR>1>
 
 *** End of source buffer ***
 Saying: ['before', 'angled']
-Associate 'before' with symbol (Enter selection):
-
-  '0': no association
-  '1': before (*new*)
-  '2': Before (*new*)
-  '3': BEFORE (*new*)
-
-> 134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<<CURSOR>>1>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <1<CURSOR>>
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'angled']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<<CURSOR>>1>}])
+Saying: ['previous', 'angled']
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <1<CURSOR>>
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'angled']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<><CURSOR>1>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <1><CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'angled']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<<CURSOR>>1>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <1<CURSOR>>
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'angled']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<<CURSOR>>1>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <CURSOR><1>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+138:    [1]
+139:    {1}
+140:    <1>
+141:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between single quotes', '1']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'1<CURSOR>'>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    '1<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'single', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<<CURSOR>'1'>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    <CURSOR>'1'
 
 *** End of source buffer ***
 Saying: ['after', 'single', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'<CURSOR>1'>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    '<CURSOR>1'
 
 *** End of source buffer ***
 Saying: ['before', 'single', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'<CURSOR>1'>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    '1<CURSOR>'
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'single', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'<CURSOR>1'>1>}])
+Saying: ['previous', 'single', 'quote']
+138:    [1]
+139:    {1}
+140:    <1>
+141:    '1<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'single', 'quotes']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'<CURSOR>>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    '1'<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'single', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1<CURSOR>'>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    '1<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'single', 'quotes']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'<CURSOR>>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    <CURSOR>'1'
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+139:    {1}
+140:    <1>
+141:    '1'
+142:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between quotes', '1']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"1<CURSOR>">1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "1<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'<CURSOR>"1">1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    <CURSOR>"1"
 
 *** End of source buffer ***
 Saying: ['after', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"<CURSOR>1">1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "<CURSOR>1"
 
 *** End of source buffer ***
 Saying: ['before', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"<CURSOR>1">1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "1<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"<CURSOR>1">1>}])
+Saying: ['previous', 'quote']
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "1<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'quotes']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"<CURSOR>>1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "1"<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1<CURSOR>">1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "1<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'quotes']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"<CURSOR>>1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "1<CURSOR>"
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+140:    <1>
+141:    '1'
+142:    "1"
+143:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between back quotes', '1']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`1<CURSOR>`>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    `1<CURSOR>`
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'back', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"<CURSOR>`1`>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    <CURSOR>`1`
 
 *** End of source buffer ***
 Saying: ['after', 'back', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`<CURSOR>1`>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    `<CURSOR>1`
 
 *** End of source buffer ***
 Saying: ['before', 'back', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`Before`<CURSOR>1`>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    `1<CURSOR>`
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'back', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`Before`<CURSOR>1`>1>}])
+Saying: ['previous', 'back', 'quote']
+140:    <1>
+141:    '1'
+142:    "1"
+143:    `1<CURSOR>`
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'back', 'quotes']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`Before`1`<CURSOR>>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    `1`<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'back', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`Before`1<CURSOR>`>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    `1<CURSOR>`
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'back', 'quotes']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`Before`1`<CURSOR>>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    <CURSOR>`1`
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+141:    '1'
+142:    "1"
+143:    `1`
+144:    <CURSOR>
 
 *** End of source buffer ***
 Compiling symbols for file 'D:\VoiceCode\VCode.python\Config\py_std_sym.py'
@@ -9265,402 +9288,431 @@ Saying: ['before', 'paren']
 137:    (1<CURSOR>)
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'paren']
-Associate 'after' with symbol (Enter selection):
-
-  '0': no association
-  '1': after (*new*)
-  '2': After (*new*)
-  '3': AFTER (*new*)
-
-> 134:    0<1<2
+Saying: ['previous paren']
+134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (<CURSOR>1After)
+137:    (<CURSOR>1)
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'parens']
 134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After)<CURSOR>
+137:    (1)<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'paren']
 134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After<CURSOR>)
+137:    (1<CURSOR>)
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'parens']
 134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After<CURSOR>)
+137:    <CURSOR>(1)
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+135:    0>1>2
+136:    0=1=2
+137:    (1)
+138:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between brackets', '1']
-134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After[1<CURSOR>])
+137:    (1)
+138:    [1<CURSOR>]
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'bracket']
-134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After<CURSOR>[1])
+137:    (1)
+138:    <CURSOR>[1]
 
 *** End of source buffer ***
 Saying: ['after', 'bracket']
-134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After[<CURSOR>1])
+137:    (1)
+138:    [<CURSOR>1]
 
 *** End of source buffer ***
 Saying: ['before', 'bracket']
-Associate 'before bracket' with symbol (Enter selection):
-
-  '0': no association
-  '1': before_bracket (*new*)
-  '2': BeforeBracket (*new*)
-  '3': beforeBracket (*new*)
-  '4': BEFORE_BRACKET (*new*)
-  '5': beforebracket (*new*)
-  '6': BEFOREBRACKET (*new*)
-
-> 134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket<CURSOR>1])
+137:    (1)
+138:    [1<CURSOR>]
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'bracket']
-134:    0<1<2
+Saying: ['previous', 'bracket']
 135:    0>1>2
 136:    0=1=2
-137:    (1After[<CURSOR>BeforeBracket1])
+137:    (1)
+138:    [<CURSOR>1]
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'brackets']
-134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1]<CURSOR>)
+137:    (1)
+138:    [1]<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'bracket']
-134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1<CURSOR>])
+137:    (1)
+138:    [1<CURSOR>]
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'brackets']
-134:    0<1<2
 135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1<CURSOR>])
+137:    (1)
+138:    <CURSOR>[1]
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+136:    0=1=2
+137:    (1)
+138:    [1]
+139:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between braces', '1']
-134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1{1<CURSOR>}])
+137:    (1)
+138:    [1]
+139:    {1<CURSOR>}
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'brace']
-134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1<CURSOR>{1}])
+137:    (1)
+138:    [1]
+139:    <CURSOR>{1}
 
 *** End of source buffer ***
 Saying: ['after', 'brace']
-134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1{<CURSOR>1}])
+137:    (1)
+138:    [1]
+139:    {<CURSOR>1}
 
 *** End of source buffer ***
 Saying: ['before', 'brace']
-Associate 'before brace' with symbol (Enter selection):
-
-  '0': no association
-  '1': before_brace (*new*)
-  '2': BeforeBrace (*new*)
-  '3': beforeBrace (*new*)
-  '4': BEFORE_BRACE (*new*)
-  '5': beforebrace (*new*)
-  '6': BEFOREBRACE (*new*)
-
-> 134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace<CURSOR>1}])
+137:    (1)
+138:    [1]
+139:    {1<CURSOR>}
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'brace']
-134:    0<1<2
-135:    0>1>2
+Saying: ['previous', 'brace']
 136:    0=1=2
-137:    (1After[BeforeBracket1{<CURSOR>BeforeBrace1}])
+137:    (1)
+138:    [1]
+139:    {<CURSOR>1}
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'braces']
-134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1}<CURSOR>])
+137:    (1)
+138:    [1]
+139:    {1}<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'brace']
-134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<CURSOR>}])
+137:    (1)
+138:    [1]
+139:    {1<CURSOR>}
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'braces']
-134:    0<1<2
-135:    0>1>2
 136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<CURSOR>}])
+137:    (1)
+138:    [1]
+139:    <CURSOR>{1}
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between angled', '1']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<1<CURSOR>>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <1<CURSOR>>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'angled']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<CURSOR><1>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <CURSOR><1>
 
 *** End of source buffer ***
 Saying: ['after', 'angled']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<<CURSOR>1>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <<CURSOR>1>
 
 *** End of source buffer ***
 Saying: ['before', 'angled']
-Associate 'before' with symbol (Enter selection):
-
-  '0': no association
-  '1': before (*new*)
-  '2': Before (*new*)
-  '3': BEFORE (*new*)
-
-> 134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<<CURSOR>>1>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <1<CURSOR>>
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'angled']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<<CURSOR>>1>}])
+Saying: ['previous', 'angled']
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <1<CURSOR>>
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'angled']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<><CURSOR>1>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <1><CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'angled']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<<CURSOR>>1>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <1<CURSOR>>
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'angled']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<<CURSOR>>1>}])
+137:    (1)
+138:    [1]
+139:    {1}
+140:    <CURSOR><1>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+138:    [1]
+139:    {1}
+140:    <1>
+141:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between single quotes', '1']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'1<CURSOR>'>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    '1<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'single', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<<CURSOR>'1'>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    <CURSOR>'1'
 
 *** End of source buffer ***
 Saying: ['after', 'single', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'<CURSOR>1'>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    '<CURSOR>1'
 
 *** End of source buffer ***
 Saying: ['before', 'single', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'<CURSOR>1'>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    '1<CURSOR>'
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'single', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'<CURSOR>1'>1>}])
+Saying: ['previous', 'single', 'quote']
+138:    [1]
+139:    {1}
+140:    <1>
+141:    '1<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'single', 'quotes']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'<CURSOR>>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    '1'<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'single', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1<CURSOR>'>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    '1<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'single', 'quotes']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'<CURSOR>>1>}])
+138:    [1]
+139:    {1}
+140:    <1>
+141:    <CURSOR>'1'
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+139:    {1}
+140:    <1>
+141:    '1'
+142:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between quotes', '1']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"1<CURSOR>">1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "1<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'<CURSOR>"1">1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    <CURSOR>"1"
 
 *** End of source buffer ***
 Saying: ['after', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"<CURSOR>1">1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "<CURSOR>1"
 
 *** End of source buffer ***
 Saying: ['before', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"<CURSOR>1">1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "1<CURSOR>"
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"<CURSOR>1">1>}])
+Saying: ['previous', 'quote']
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "1<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'quotes']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"<CURSOR>>1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "1"<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1<CURSOR>">1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "1<CURSOR>"
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'quotes']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"<CURSOR>>1>}])
+139:    {1}
+140:    <1>
+141:    '1'
+142:    "1<CURSOR>"
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+140:    <1>
+141:    '1'
+142:    "1"
+143:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['between back quotes', '1']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`1<CURSOR>`>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    `1<CURSOR>`
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'back', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"<CURSOR>`1`>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    <CURSOR>`1`
 
 *** End of source buffer ***
 Saying: ['after', 'back', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`<CURSOR>1`>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    `<CURSOR>1`
 
 *** End of source buffer ***
 Saying: ['before', 'back', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`Before`<CURSOR>1`>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    `1<CURSOR>`
 
 *** End of source buffer ***
-Saying: ['after', 'previous', 'back', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`Before`<CURSOR>1`>1>}])
+Saying: ['previous', 'back', 'quote']
+140:    <1>
+141:    '1'
+142:    "1"
+143:    `1<CURSOR>`
 
 *** End of source buffer ***
 Saying: ['out', 'of', 'back', 'quotes']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`Before`1`<CURSOR>>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    `1`<CURSOR>
 
 *** End of source buffer ***
 Saying: ['before', 'previous', 'back', 'quote']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`Before`1<CURSOR>`>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    `1<CURSOR>`
 
 *** End of source buffer ***
 Saying: ['back', 'out', 'of', 'back', 'quotes']
-134:    0<1<2
-135:    0>1>2
-136:    0=1=2
-137:    (1After[BeforeBracket1{BeforeBrace1<Before<'Before'1'"Before"1"`Before`1`<CURSOR>>1>}])
+140:    <1>
+141:    '1'
+142:    "1"
+143:    <CURSOR>`1`
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+
+
+141:    '1'
+142:    "1"
+143:    `1`
+144:    <CURSOR>
 
 *** End of source buffer ***
 Compiling symbols for file 'D:\VoiceCode\VCode.python\Config\py_std_sym.py'

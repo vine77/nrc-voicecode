@@ -1080,7 +1080,7 @@ class SymDict(PickledObject.PickledObject):
 
         global language_definitions
         definition = None
-        language_name = SourceBuff.language_name(None, file_name)
+        language_name = SourceBuff.language_name(file_name)
 #        print '-- SymDict.get_language_definition: language_definitions=%s, language_name=%s' % (language_definitions, language_name)
         if language_definitions.has_key(language_name):
             definition = language_definitions[language_name]

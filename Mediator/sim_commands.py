@@ -341,5 +341,7 @@ def quit(clean_sr_voc=0, save_speech_files=None, disconnect=1):
         
     quit_flag = 1            
 
-
-
+def setmic(state):
+    if sr_interface.speech_able():
+        sr_interface.connect()
+        natlink.setMicState(state)

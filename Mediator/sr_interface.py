@@ -102,9 +102,7 @@ def disconnect():
     """
     global sr_is_connected
 
-#    print '-- sr_interface.disconnect: called, sr_is_connected=%s' % sr_is_connected
     if speech_able() and sr_is_connected:
-#        print '-- sr_interface.disconnect: calling natlink.natDisconnect()'
         natlink.natDisconnect()
     sr_is_connected = 0        
 
@@ -148,9 +146,7 @@ def openUser(user_name, create_if_not_exist=0, create_using_model=None, create_u
 
 def saveUser():
     """Saves the current user"""
-#    print '-- sr_interface.saveUser: saving user'
     natlink.saveUser()
-#    print '-- sr_interface.saveUser: user saved'    
     sr_user_needs_saving = 0
 
 def addedByVC(flag):   
