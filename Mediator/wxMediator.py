@@ -53,14 +53,13 @@ import WinSystemMSW
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="off", 
+debug.config_traces(status="on", 
                     active_traces={
-                          'ActionInsertNewClause.execute': 1,
-                          'SourceBuff.closest_occurence_to_cursor': 1,
-                          'SourceBuff.ignore_occurence': 1,
-                          'SourceBuff.same_as_previous_search': 1,
-                          'ActionSearch.execute': 1,
-######################################################
+#                        'ActionInsertNewClause.execute': 1,
+#                        'SourceBuff.closest_occurence_to_cursor': 1,
+#                        'SourceBuff.ignore_occurence': 1,
+#                        'SourceBuff.same_as_previous_search': 1,
+#                        'ActionSearch.execute': 1,
 #                        'SymDict.init_from_file': 1,
 #                        'wxMediator': 1,
 #                        'SymDict.match_pseudo_symbol': 1,
@@ -102,6 +101,7 @@ debug.config_traces(status="off",
 #                      'CmdInterp.interpret_massaged': 1,
 #                      'CmdInterp.interpret_NL_cmd': 1,
 #                      'CmdInterp.match_untranslated_text': 1,
+#                      'CmdInterp.is_spoken_symbol': 1,
 #                      'SymDict.accept_symbol_match': 1, 
 #                      'SymDict.add_symbol': 1, 
 #                      'SymDict.update_spoken_forms': 1,
@@ -430,24 +430,52 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
 
         correct_evt = CorrectUtteranceEventWX(self)
         correct_recent_evt = CorrectRecentEventWX(self)
-        self.the_mediator = \
-            NewMediatorObject.NewMediatorObject(server = self.the_server,
-                console = console, wave_playback = WavePlaybackWX, 
-                correct_evt = correct_evt,
-                correct_recent_evt = correct_recent_evt,
-                test_or_suite = test_suite,
-                global_grammars = 1, exclusive = 1,
-                profile_prefix = profile_prefix,
-                bypass_sr_recog = bypass_sr_recog)
+        try:
+            self.the_mediator = \
+                NewMediatorObject.NewMediatorObject(server = self.the_server,
+                    console = console, wave_playback = WavePlaybackWX, 
+                    correct_evt = correct_evt,
+                    correct_recent_evt = correct_recent_evt,
+                    test_or_suite = test_suite,
+                    global_grammars = 1, exclusive = 1,
+                    profile_prefix = profile_prefix,
+                    bypass_sr_recog = bypass_sr_recog)
+        except:
+# if at all possible, NMO.__init__ should to construct the
+# mediator in a legal state, so that we can safely call
+# NMO.quit and NMO.cleanup.  NMO can then indicate to us that we must quit by
+# having NMO.configure return false.
+#
+# However, if there is an unanticipated exception in the constructor, we
+# should destroy the main frame so that the application will
+# actually exit, before re-raising the exception.
+            sys.stderr.write('Mediator initialization failed...exiting\n')
+            self.should_prompt_save_speech_files(0)
+            self.main_frame().close_window()
+            self.quitting = 1
+            raise
+
         sys.stderr.write('Configuring the mediator...\n')
         sys.stderr.flush()
-        okay = self.the_mediator.configure()
+        try:
+            okay = self.the_mediator.configure()
+        except:
+# if there is an unanticipated exception in configure, we
+# should destroy the main frame so that the application will
+# actually exit, before re-raising the exception.
+            sys.stderr.write('Mediator initialization failed...exiting\n')
+            self.should_prompt_save_speech_files(0)
+            self.main_frame().close_window()
+            self.cleanup()
+            raise
+
         if not okay:
             sys.stderr.write('Mediator configuration failed...exiting\n')
             self.should_prompt_save_speech_files(0)
             self.main_frame().close_window()
             self.quitting = 1
             return
+
         sys.stderr.write('Finished wxMediator init...\n')
         sys.stderr.flush()
 

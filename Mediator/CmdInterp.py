@@ -522,11 +522,16 @@ class CmdInterp(OwnerObject):
             app.bind_to_buffer(initial_buffer)
 
         untranslated_words = []
+
+# flag indicating whether untranslated words consists of an exact match
+# of the spoken form to an existing symbol
+        exact_symbol = 0
         
         #
         # Process the beginning of the command until there is nothing
         # left
         #
+
         while len(cmd) > 0:
              trace('CmdInterp.interpret_massaged', 'now, cmd=%s' % cmd)
 
@@ -587,8 +592,9 @@ class CmdInterp(OwnerObject):
 # flush untranslated words before executing action
                          if untranslated_words:
                              self.match_untranslated_text(untranslated_words, 
-                                 app)
+                                 app, exact_symbol)
                              untranslated_words = []
+                             exact_symbol = 0
                          aCSC.interpret(app)
                          break
                  if csc_applies:
@@ -615,8 +621,10 @@ class CmdInterp(OwnerObject):
                  trace('CmdInterp.interpret_massaged', 'processing leading LSA=\'%s\'' % chopped_LSA)
 # flush untranslated words before inserting LSA
                  if untranslated_words:
-                     self.match_untranslated_text(untranslated_words, app)
+                     self.match_untranslated_text(untranslated_words, app, 
+                         exact_symbol)
                      untranslated_words = []
+                     exact_symbol = 0
                  actions_gen.ActionInsert(code_bef=chopped_LSA, code_after='').log_execute(app, None)
                  cmd = cmd_without_LSA
                  head_was_translated = 1
@@ -634,7 +642,12 @@ class CmdInterp(OwnerObject):
                  #       SomeprefixSomeClass or SomeClassSomepostfix.
                  #
                  trace('CmdInterp.interpret_massaged', 'processing leading symbol=\'%s\'' % chopped_symbol)
+                 if untranslated_words:
+                     exact_symbol = 0
+                 else:
+                     exact_symbol = 1
                  untranslated_words.append( chopped_symbol)
+
                  cmd = cmd_without_symbol
                  head_was_translated = 1
                                           
@@ -647,6 +660,7 @@ class CmdInterp(OwnerObject):
                  #                 
                  trace('CmdInterp.interpret_massaged', 'processing leading word=\'%s\'' % chopped_word)
                  untranslated_words.append( chopped_word)
+                 exact_symbol = 0
                  cmd = cmd_without_word
                  head_was_translated = 1
 
@@ -663,8 +677,10 @@ class CmdInterp(OwnerObject):
                  # symbol.
                  #
                  trace('CmdInterp.interpret_massaged', 'found the end of some untranslated text')
-                 self.match_untranslated_text(untranslated_words, app)
+                 self.match_untranslated_text(untranslated_words, app,
+                     exact_symbol)
                  untranslated_words = []
+                 exact_symbol = 0
 
              if untranslated_words:
                  untranslated_text = string.join(untranslated_words)
@@ -782,13 +798,18 @@ class CmdInterp(OwnerObject):
             command_tuples.append((spoken, written))
         return self.massage_command_tuples(command_tuples)
 
-    def match_untranslated_text(self, untranslated_words, app):
+    def match_untranslated_text(self, untranslated_words, app,
+        exact_symbol = 0):
         """Tries to match last sequence of untranslated text to a symbol.
         
         **INPUTS**
         
-        *[STR]* -- list of untranslated words
-        
+        *[STR]* untranslated_words -- list of untranslated words
+
+        *AppState* app -- editor into which the command was spoken
+
+        *BOOL* exact_symbol -- true if the untranslated text was an
+        exact match for the spoken form of a symbol
 
         **OUTPUTS**
         
@@ -796,8 +817,19 @@ class CmdInterp(OwnerObject):
         """
         
         untranslated_text = string.join(untranslated_words)
-
         trace('CmdInterp.match_untranslated_text', 'untranslated_text=\'%s\'' % (untranslated_text))
+
+        if exact_symbol:
+            spoken_form = untranslated_text
+            trace('CmdInterp.match_untranslated_text', 
+                'exact symbol spoken "%s"' % (spoken_form))
+            written_symbol = self.choose_best_symbol(spoken_form, 
+                self.known_symbols.spoken_form_info[spoken_form].symbols)
+            trace('CmdInterp.match_untranslated_text', 
+                'exact symbol written "%s"' % (untranslated_text))
+            actions_gen.ActionInsert(code_bef=written_symbol, code_after='').log_execute(app, None)                            
+            return
+
 #        trace('CmdInterp.match_untranslated_text', 'symbols are: %s' % self.known_symbols.print_symbols())
 #        print '-- CmdInterp.match_untranslated_text: untranslated_text=\'%s\'' % (untranslated_text);
 #        print '-- CmdInterp.match_untranslated_text: symbols are: '; self.known_symbols.print_symbols()
@@ -824,18 +856,17 @@ class CmdInterp(OwnerObject):
         #
         reg = '[\d\s]+'
         num_match = re.match(reg, text_no_spaces)
-        if not self.known_symbols.symbol_info.has_key(text_no_spaces) and \
-           not num_match:
-            symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
-            trace('CmdInterp.match_untranslated_text', 'symbol_matches=%s' % symbol_matches)
-            if symbol_matches:
-                self.dlg_select_symbol_match(untranslated_text, 
-                    symbol_matches, app)
-            else:
-                actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                
-        else:
+        if num_match:
             untranslated_text = re.sub('\s', '', untranslated_text)        
             actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                            
+            return
+        symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
+        trace('CmdInterp.match_untranslated_text', 'symbol_matches=%s' % symbol_matches)
+        if symbol_matches:
+            self.dlg_select_symbol_match(untranslated_text, 
+                symbol_matches, app)
+        else:
+            actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                
         
 
     def enable_symbol_match_dlg(self, enable = 1):
@@ -1122,11 +1153,14 @@ class CmdInterp(OwnerObject):
         **INPUTS**
         
         *STR* spoken_form -- String to be checked
-        
+
+        *AppState* app -- the editor for which we are interpreting a
+        command
 
         **OUTPUTS**
         
-        *BOOL* return value -- True iif *spoken_form* is the spoken form of a CSC.
+        *STR* -- spoken form of the matching CSCmd, or None if there is
+        no matching CSC.
         """
         trace('CmdInterp.is_spoken_CSC', 'spoken_form=%s' % spoken_form)
         chopped_CSC = None
@@ -1143,11 +1177,15 @@ class CmdInterp(OwnerObject):
         
         **INPUTS**
         
-        *none* -- 
+        *STR* spoken_form -- String to be checked
+
+        *AppState* app -- the editor for which we are interpreting a
+        command
         
         **OUTPUTS**
 
-        *BOOL* return value -- True iif *spoken_form* is the spoken form of a LSA.
+        *STR* -- written form of the matching LSAlias, or None if there is
+        no matching LSA.
         """
         trace('CmdInterp.is_spoken_LSA', 'spoken_form = \'%s\'' % spoken_form)
 #        print '-- CmdInterp.is_spoken_LSA: spoken_form = \'%s\'' % spoken_form
@@ -1185,25 +1223,27 @@ class CmdInterp(OwnerObject):
         
         **INPUTS**
         
-        *none* -- 
+        *STR* spoken_form -- String to be checked
+
+        *AppState* app -- the editor for which we are interpreting a
+        command
         
         **OUTPUTS**
 
-        *BOOL* return value -- True iif *spoken_form* is the spoken form of a
-        known symbol.
+        *STR* -- written form of the known symbol, or None if no symbol
+        matches the spoken form
         """
 
 #        trace('CmdInterp.is_spoken_symbol', 'spoken_form=%s, self.known_symbols.spoken_form_info=%s' % (spoken_form, self.known_symbols.spoken_form_info))
 #        print '-- CmdInterp.is_spoken_symbol: spoken_form=%s, self.known_symbols.spoken_form_info=%s' % (spoken_form, self.known_symbols.spoken_form_info)
         
-        written_symbol = None
+        symbol = None
         if self.known_symbols.spoken_form_info.has_key(spoken_form):
-            written_symbol = self.choose_best_symbol(spoken_form, self.known_symbols.spoken_form_info[spoken_form].symbols)
+            symbol = spoken_form
 
-        trace('CmdInterp.is_spoken_symbol', 'returning written_symbol=\'%s\'' % written_symbol)
-#        print '-- CmdInterp.is_spoken_symbol: returning written_symbol=\'%s\'' % written_symbol
+        trace('CmdInterp.is_spoken_symbol', 'returning symbol=\'%s\'' % symbol)
         
-        return written_symbol
+        return symbol
 
     def choose_best_symbol(self, spoken_form, choices):
         """Chooses the best match for a spoken form of a symbol.
@@ -1217,8 +1257,8 @@ class CmdInterp(OwnerObject):
         
         *STR* spoken_form -- spoken form of the symbol. 
         
-        *ANY* choices -- undocumented 
-        
+        *[STR]* choices -- list of written forms of symbols having this
+        spoken form
 
         **OUTPUTS**
         
@@ -1226,6 +1266,7 @@ class CmdInterp(OwnerObject):
         """
 
         return choices[0]
+
     def index_csc(self, acmd):
         """Add a new csc to the command interpreter's command dictionary
 
