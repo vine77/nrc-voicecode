@@ -173,15 +173,21 @@ class DictWinGram(WinGram):
 
     **INSTANCE ATTRIBUTES**
 
-    *none*
+    *CmdInterp* interp -- interpreter to which to forward results
+
+    *AppState* app -- application which is the target of the grammar
+
+    *STR* buff_name -- name of the buffer corresponding to this
+    grammar.  Buff_name will be passed to
+    CmdInterp.interpret_NL_cmd as the initial buffer.
 
     **CLASS ATTRIBUTES**
 
     *none*
     """
-    def __init__(self, **attrs):
+    def __init__(self, interp, app, buff_name = None, **attrs):
 	self.deep_construct(DictWinGram,
-	    {}, attrs)
+	    {'interp': interp, 'app': app,'buff_name': buff_name}, attrs)
 
     def set_context(self, before = "", after = ""):
 	"""set the context to improve dictation accuracy
@@ -214,7 +220,7 @@ class SelectWinGram(WinGram):
 
     *none*
     """
-    def __init__(self, buff_name = None, **attrs):
+    def __init__(self, app, buff_name = None, **attrs):
 	"""
 	**INPUTS**
 	
@@ -222,7 +228,7 @@ class SelectWinGram(WinGram):
 	selection grammar (can also be set by activate)
 	"""
 	self.deep_construct(SelectWinGram,
-	    {'buff_name' : buff_name}, attrs)
+	    {'app': app,'buff_name' : buff_name}, attrs)
 
     def activate(self, buff_name, window = None, exclusive = 0, 
 	all_results = 0):
@@ -303,12 +309,14 @@ class WinGramFactory(Object):
 	self.deep_construct(WinGramFactory,
 	    {}, attrs)
 
-    def make_dictation(self, app, buff_name, window = None):
+    def make_dictation(self, interp, app, buff_name, window = None):
 	"""create a new dictation grammar
 
 	**INPUTS**
 
-	*AppState* app -- application to which to forward results
+	*CmdInterp* interp -- interpreter to which to forward results
+
+	*AppState* app -- application which is the target of the grammar
 
 	*STR* buff_name -- name of the buffer corresponding to this
 	grammar.  Buff_name will be passed to
@@ -374,7 +382,8 @@ class DictWinGramDummy(DictWinGram):
 
 	*none*
 	"""
-	print "DictWinGramDummy for window %d" % (self.window)
+	print "DictWinGramDummy for buffer = %s, window %d" \
+	    % (repr(self.buff_name), self.window)
 
     def set_context(self, before = "", after = ""):
 	"""set the context to improve dictation accuracy
@@ -502,7 +511,7 @@ class SelectWinGramDummy(SelectWinGram):
 	*none*
 	"""
 	print "SelectWinGramDummy for buffer %s, window %d" % \
-	    (self.buff_name, self.window)
+	    (repr(self.buff_name), self.window)
 
     def activate(self, buff_name, window = None, exclusive = 0, 
 	all_results = 0):
@@ -599,7 +608,7 @@ class WinGramFactoryDummy(Object):
 	self.deep_construct(WinGramFactoryDummy,
 	    {}, attrs)
 
-    def make_dictation(self, app, buff_name, window = None):
+    def make_dictation(self, interp, app, buff_name, window = None):
 	"""create a new dictation grammar
 
 	**INPUTS**
@@ -616,7 +625,8 @@ class WinGramFactoryDummy(Object):
 
 	*DictWinGram* -- new dictation grammar
 	"""
-	return DictWinGramDummy(window = window)
+	return DictWinGramDummy(interp = interp, app = app, 
+	    buff_name = buff_name, window = window)
     
     def make_selection(self, app, window = None, buff_name = None):
 	"""create a new selection grammar
@@ -635,5 +645,6 @@ class WinGramFactoryDummy(Object):
 
 	*SelectWinGram* -- new selection grammar
 	"""
-	return SelectWinGramDummy(window = window, buff_name = buff_name)
+	return SelectWinGramDummy(app = app, buff_name = buff_name, 
+	    window = window)
     

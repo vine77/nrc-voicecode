@@ -51,8 +51,8 @@ class GramMgr(Object):
                             args)
 
     def __del__(self):
-	"""destructor: any subclass must call this destructor explicitly
-	before returning
+	"""destructor: any subclass which overrides __del__
+	must call this destructor explicitly before returning
 
 	**INPUTS**
 	
@@ -192,16 +192,20 @@ class WinGramMgr(GramMgr):
     *none*
     """
 
-    def __init__(self, factory, **args):
+    def __init__(self, factory, interp, **args):
 	"""
 	
 	**INPUTS**
 	
 	*WinGramFactory* factory -- factory which will supply WinGramMgr
 	with new window-specific dictation and selection grammars.
+
+	*CmdInterp* interp -- command interpreter to which dictation
+	results should be sent
 	"""
         self.deep_construct(WinGramMgr,
-                            {'factory': factory, 'dict_grammars' : {},
+                            {'factory': factory, 'interp': interp,
+			    'dict_grammars' : {},
 			    'sel_grammars' : {}},
                             args)
 
@@ -236,17 +240,25 @@ class WinGramMgr(GramMgr):
 
 #  set dictation context
 	current = self.app.cur_pos(f_name = buffer)
+#	print current
         self.app.drop_breadcrumb(buffname = buffer)
         self.app.drop_breadcrumb(buffname = buffer)
-	self.app.search_for(r'\s+\S+', direction = -1, 
+#	self.app.search_for(r'\S+\s+\S+', direction = -1, 
+#	    num = 1, where = -1, f_name = buffer)
+	self.app.search_for(r'\s+\S', direction = -1, 
 	    num = 2, where = -1, f_name = buffer)
+#	self.app.search_for(r'\s+\S+', direction = -1, 
+#	    num = 2, where = -1, f_name = buffer)
 	start = self.app.cur_pos(f_name = buffer)
-	before = self.app.get_text(start, current)
+#	print start
+	before = self.app.get_text(start, current, f_name = buffer)
+#	print before
         self.app.pop_breadcrumbs()
 	self.app.search_for(r'\S+\s+', direction = 1, 
 	    num = 2, where = 1, f_name = buffer)
 	end = self.app.cur_pos(f_name = buffer)
-	after = self.app.get_text(current, end)
+#	print end
+	after = self.app.get_text(current, end, f_name = buffer)
         self.app.pop_breadcrumbs()
 	self.dict_grammars[window][buffer].set_context(before, after)
 
@@ -300,7 +312,8 @@ class WinGramMgr(GramMgr):
 		self.new_window(window, buffer)
 	    if not self.dict_grammars[window].has_key(buffer):
 		self.dict_grammars[window][buffer] = \
-		    self.factory.make_dictation(self.app, buffer, window)
+		    self.factory.make_dictation(self.interp, self.app, 
+		    buffer, window)
 
     def new_window(self, window, buffer = None):
 	"""add a new window
@@ -320,7 +333,7 @@ class WinGramMgr(GramMgr):
 	    self.dict_grammars[window] = {}
 	if not self.sel_grammars.has_key(window):
 	    self.sel_grammars[window] = self.factory.make_selection(self.app,
-		window, buff_name = buffer)
+		window)
 
     def delete_window(self, window):
 	"""clean up and destroy all grammars for a window which 

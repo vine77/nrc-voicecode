@@ -1438,7 +1438,6 @@ def test_rsm_dictionaries():
     another_Emacs = 2
     yet_another_Emacs = 4
     Vim = 3
-    new_instance
     i = new_instance(manager, 'Emacs', Emacs)
     manager_state(manager)
     print 'new window 14'
@@ -1478,12 +1477,17 @@ auto_test.add_test('rsm_dictionaries', test_rsm_dictionaries,
 
 def activate_for(manager, buffer, window):
     print 'activating buffer %s for window %d' % (buffer, window)
+    manager.app.change_buffer(buffer)
+    manager.app.refresh_if_necessary()
     manager.activate(buffer, window)
 
-def new_buffer(manager, buffer, window = None):
+def new_buffer(manager, buffer, window = None, before = "", after = ""):
     print 'new buffer %s' % (buffer)
     if window != None:
 	 print 'with window %d' % (window)
+    manager.app.open_file(buffer)
+    b = manager.app.find_buff(buffer)
+    b.insert_indent(before, after)
     manager.new_buffer(buffer, window)
 
 def new_window(manager, window):
@@ -1499,29 +1503,81 @@ def buffer_closed(manager, buffer):
     manager.buffer_closed(buffer)
 
 def test_gram_manager():
+    fish_h_before = "void move(float x, y);"
+    fish_h_after = "\n"
+    fish_before = """/* This is a small test buffer for C */
+
+void move(float x, y)
+"""
+    fish_after = """{
+  move_horiz(x);
+  move_vert(y)
+  horiz_pos = 0;
+  this_sym_is_unres = 0;
+  this_sym_is_unres_too = 0;
+  this_sym_has_an_other_abbrev = 0;
+  f_name;
+  f_name2();
+  API_function(1);
+  API_function(2);
+}
+"""
+
+    fowl_before = """import sys
+
+def something(value):
+    print """
+    fowl_after = """value
+
+if __name__ == '__main__':
+    something('nice')
+"""
+
+    dog_before = """#!/usr/local/bin/perl5
+
+
+#
+# Environment variables for voiceGrip 
+#
+$voiceGripHome = $ENV{'VGTWO'};
+$voiceGripOS = $ENV{'VGOS'};
+if ($voiceGripOS eq 'win') {
+    $dirSep = "\\";
+    $curDirCom = 'cd';
+} else {
+    $dirSep = """
+    dog_after = """'/';
+    $curDirCom = 'pwd';
+};
+"""
+
     factory = sr_grammars.WinGramFactoryDummy()
-    app = EdSim.EdSim()
-    manager = GramMgr.WinGramMgr(factory, app = app)
+    app = EdSim.EdSim(multiple=1)
+    manager = GramMgr.WinGramMgr(factory, None, app = app)
     w = 5
     w2 = 7
-    new_buffer(manager, 'fish.C', w)
-    new_buffer(manager, 'fowl.py', w)
+    new_buffer(manager, 'fish.C', w, fish_before, fish_after)
+    new_buffer(manager, 'fowl.py', w, fowl_before, fowl_after)
     activate_for(manager, 'fish.C', w)
     new_window(manager, w2)
-    new_buffer(manager, 'dog.pl', w2)
+    new_buffer(manager, 'dog.pl', w2, dog_before, dog_after)
+    new_buffer(manager, 'fish.h', w2, fish_h_before, fish_h_after)
     activate_for(manager, 'dog.pl', w2)
     activate_for(manager, 'fish.h', w2)
     activate_for(manager, 'fowl.py', w)
+    app.close_buffer('fowl.py', -1)
     buffer_closed(manager, 'fowl.py')
     print 'deactivate all for window %d' % (w)
     manager.deactivate_all(w)
     delete_window(manager, w2)
+    app.close_buffer('dog.pl', -1)
     buffer_closed(manager,  'dog.pl')
     activate_for(manager,'fish.C', w)
     print 'deactivate all'
     manager.deactivate_all()
+    app.close_all_buffers(-1)
 
 # this test requires a dummy editor with support for multiple buffers,
 # so I have commented it out until one is available - DCF
-# auto_test.add_test('dummy_grammars', test_gram_manager, 
-#    'Testing WinGramMgr grammar management with dummy grammars.')
+auto_test.add_test('dummy_grammars', test_gram_manager, 
+   'Testing WinGramMgr grammar management with dummy grammars.')

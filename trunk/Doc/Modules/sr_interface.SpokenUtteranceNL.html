@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Apr 02 00:10:33 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Fri Apr 05 14:35:36 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -18,12 +18,12 @@
 <P CLASS="DeclaredIn">Declared in module <A HREF="sr_interface.html">sr_interface</A></P>
 
 <H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">sr_interface.SpokenUtteranceNL<BR>
-&nbsp;&nbsp;Object.Object<BR>
+&nbsp;&nbsp;SpokenUtterance.SpokenUtterance<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SpokenUtteranceNL</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">SpokenUtteranceNL</SPAN>(<A CLASS="DocLink" HREF="SpokenUtterance.SpokenUtterance.html">SpokenUtterance</A>):
     <A CLASS="DocLink" HREF="#sr_interface.SpokenUtteranceNL.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.SpokenUtteranceNL.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">results</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)<SPAN CLASS="OneLiner"> # creates a SpokenUtteranceNL from a results object</SPAN>
     <A CLASS="DocLink" HREF="#sr_interface.SpokenUtteranceNL._get_alternative"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.SpokenUtteranceNL._get_alternative</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">choice</SPAN>)
     <A CLASS="DocLink" HREF="#sr_interface.SpokenUtteranceNL.adapt"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.SpokenUtteranceNL.adapt</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">words</SPAN>)
@@ -48,6 +48,20 @@
     <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from SpokenUtterance.SpokenUtterance</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SpokenUtterance.SpokenUtterance.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#SpokenUtterance.SpokenUtterance.adapt"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SpokenUtterance.SpokenUtterance.adapt</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">words</SPAN>)
+    <A CLASS="DocLink" HREF="#SpokenUtterance.SpokenUtterance.adapt_spoken"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SpokenUtterance.SpokenUtterance.adapt_spoken</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms</SPAN>)
+    <A CLASS="DocLink" HREF="#SpokenUtterance.SpokenUtterance.alternatives"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SpokenUtterance.SpokenUtterance.alternatives</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n</SPAN>)
+    <A CLASS="DocLink" HREF="#SpokenUtterance.SpokenUtterance.alternatives_available"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SpokenUtterance.SpokenUtterance.alternatives_available</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#SpokenUtterance.SpokenUtterance.can_be_adapted"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SpokenUtterance.SpokenUtterance.can_be_adapted</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#SpokenUtterance.SpokenUtterance.playback"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SpokenUtterance.SpokenUtterance.playback</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # plays back recorded utterance.</SPAN>
+    <A CLASS="DocLink" HREF="#SpokenUtterance.SpokenUtterance.playback_available"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SpokenUtterance.SpokenUtterance.playback_available</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates whether playback of the utterance is available.</SPAN>
+    <A CLASS="DocLink" HREF="#SpokenUtterance.SpokenUtterance.set_spoken"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SpokenUtterance.SpokenUtterance.set_spoken</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms</SPAN>)
+    <A CLASS="DocLink" HREF="#SpokenUtterance.SpokenUtterance.set_words"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SpokenUtterance.SpokenUtterance.set_words</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">words</SPAN>)
+    <A CLASS="DocLink" HREF="#SpokenUtterance.SpokenUtterance.spoken_forms"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SpokenUtterance.SpokenUtterance.spoken_forms</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # returns list of spoken forms from the utterance</SPAN>
+    <A CLASS="DocLink" HREF="#SpokenUtterance.SpokenUtterance.words"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SpokenUtterance.SpokenUtterance.words</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
 </PRE><H2>Description</H2><P>
 implementation of SpokenUtterance using natlink ResObj.
@@ -648,6 +662,259 @@ Attributes are only set if they already exist in
 <DT>
 <EM>none</EM>
 <DD>
+</DL>
+<H2 ID="SpokenUtterance.SpokenUtterance.adapt" CLASS="Method">SpokenUtterance.SpokenUtterance.adapt(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">words</SPAN>)</H2>
+<P>None</P>
+
+<P>
+changes the stored list of words so that 
+subsequent correction boxes can display the corrected list, and
+informs the speech engine of the corrected list of words, so
+it can adapt.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[(STR, STR)]</EM>
+<DD>corrected list of words 
+(as (spoken, written) 2-tuples) 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the adaption was accepted
+
+</DL>
+<H2 ID="SpokenUtterance.SpokenUtterance.adapt_spoken" CLASS="Method">SpokenUtterance.SpokenUtterance.adapt_spoken(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms</SPAN>)</H2>
+<P>None</P>
+
+<P>
+changes the stored list of words so that 
+subsequent correction boxes can display the corrected list, and
+informs the speech engine of the corrected list of words, so
+it can adapt.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM> spoken_forms
+<DD>corrected list of spoken forms 
+(written forms will be assumed to be identical)
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the adaption was accepted
+
+</DL>
+<H2 ID="SpokenUtterance.SpokenUtterance.alternatives" CLASS="Method">SpokenUtterance.SpokenUtterance.alternatives(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">n</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns the best recognition alternatives available 
+(for the whole utterance) including the original.  
+Will not return more than n alternatives, but may return fewer
+(if the speech engine has not provided that many).</P>
+<P>
+Note: the first alternative in the list will not be identical
+to the output of words(), if the phrase has previously been
+corrected with set_words.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> n
+<DD>number of alternatives requested
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[[(STR, STR)]]</EM>
+<DD>list of list of words (as (spoken, written) 
+2-tuples) 
+</DL>
+<H2 ID="SpokenUtterance.SpokenUtterance.alternatives_available" CLASS="Method">SpokenUtterance.SpokenUtterance.alternatives_available(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns number of recognition alternatives available 
+(for the whole utterance), or -1 if the number
+is unknown.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM>
+<DD>number of recognition alternatives available (including
+the original), or -1 if the number is unknown (NaturallySpeaking
+doesn't indicate the total number, but simply lets you keep
+asking for the next one until it runs out.
+
+</DL>
+<H2 ID="SpokenUtterance.SpokenUtterance.can_be_adapted" CLASS="Method">SpokenUtterance.SpokenUtterance.can_be_adapted(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+indicates whether the utterance can be corrected for adaption
+of the speech engine.  Utterances for which there was no speech
+information or for which the speech information has been lost or
+discarded may not be adaptable.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if the speech information is available for adaption.
+
+</DL>
+<H2 ID="SpokenUtterance.SpokenUtterance.playback" CLASS="Method">SpokenUtterance.SpokenUtterance.playback(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>plays back recorded utterance.</P>
+
+<P>
+Playback is synchronous.  It will handle turning the microphone
+off and back on again (if necessary)</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true unless playback was unavailable, or 
+there was an error in playback (e.g.  another program had 
+control of the audio device)
+
+</DL>
+<H2 ID="SpokenUtterance.SpokenUtterance.playback_available" CLASS="Method">SpokenUtterance.SpokenUtterance.playback_available(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>indicates whether playback of the utterance is available.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if playback is available, false if it is not
+(because utterance wasn't actually spoken, or speech data has 
+been lost, or because the implementation doesn't support
+playback)
+
+</DL>
+<H2 ID="SpokenUtterance.SpokenUtterance.set_spoken" CLASS="Method">SpokenUtterance.SpokenUtterance.set_spoken(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms</SPAN>)</H2>
+<P>None</P>
+
+<P>
+changes the stored list of words (after correction) so that 
+subsequent correction boxes can display the corrected list.
+The results object is unaffected.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM> spoken_forms
+<DD>corrected list of spoken forms 
+(written forms will be assumed to be identical)
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<H2 ID="SpokenUtterance.SpokenUtterance.set_words" CLASS="Method">SpokenUtterance.SpokenUtterance.set_words(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">words</SPAN>)</H2>
+<P>None</P>
+
+<P>
+changes the stored list of words (after correction) so that 
+subsequent correction boxes can display the corrected list.
+The results object is unaffected.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[(STR, STR)]</EM>
+<DD>corrected list of words 
+(as (spoken, written) 2-tuples) 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<H2 ID="SpokenUtterance.SpokenUtterance.spoken_forms" CLASS="Method">SpokenUtterance.SpokenUtterance.spoken_forms(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>returns list of spoken forms from the utterance</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM>
+<DD>list of spoken forms from the utterance
+
+</DL>
+<H2 ID="SpokenUtterance.SpokenUtterance.words" CLASS="Method">SpokenUtterance.SpokenUtterance.words(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns list of words (as (spoken, written) 2-tuples) 
+from the utterance.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[(STR, STR)]</EM>
+<DD>list of words (as (spoken, written) 2-tuples) 
 </DL>
 
 <HR>

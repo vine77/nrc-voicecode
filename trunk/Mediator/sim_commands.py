@@ -129,6 +129,12 @@ print_symbols()
 provoke()
    causes an error deliberately
 
+save()
+   Save the current file
+
+save_as(filename, no_prompt=0)
+   Save the current file
+
 quit()
    Quit the simulator.
 
@@ -185,6 +191,22 @@ def open_file(fname):
     the_mediator.interp.known_symbols.parse_symbols(fname)
     the_mediator.interp.on_app.curr_buffer().refresh_if_necessary()
 # show_buff()
+
+def list_buffers():
+    global the_mediator
+    print the_mediator.interp.on_app.open_buffers_from_app()
+
+
+def change_buffer(buff_name):
+    global the_mediator
+    if the_mediator.interp.on_app.change_buffer(buff_name):
+	show_buff()
+    else:
+        print 'unknown buffer'
+
+def close_buffer(buff_name, save = 0):
+    global the_mediator
+    the_mediator.interp.on_app.close_buffer(buff_name, save)
 
 def save():
     """save current buffer"""
