@@ -3,29 +3,32 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Nov 24 23:31:54 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 04 18:18:29 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
-<title>Class WasForegroundWindowMSW</title>
+<title>Class WinSystemMSW</title>
 </head>
 
 <body>
 <P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
 
 
-<H1 CLASS="ClassName">class WasForegroundWindowMSW</H1>
-<P CLASS="DeclaredIn">Declared in module <A HREF="MediatorConsoleWX.html">MediatorConsoleWX</A></P>
+<H1 CLASS="ClassName">class WinSystemMSW</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="WinSystemMSW.html">WinSystemMSW</A></P>
 
-<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">MediatorConsoleWX.WasForegroundWindowMSW<BR>
-&nbsp;&nbsp;MediatorConsole.WasForegroundWindow<BR>
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">WinSystemMSW.WinSystemMSW<BR>
+&nbsp;&nbsp;WinSystem.WinSystem<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WasForegroundWindowMSW</SPAN>(<A CLASS="DocLink" HREF="MediatorConsole.WasForegroundWindow.html">WasForegroundWindow</A>):
-    <A CLASS="DocLink" HREF="#MediatorConsoleWX.WasForegroundWindowMSW.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.WasForegroundWindowMSW.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsoleWX.WasForegroundWindowMSW.restore_to_foreground</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # restores the window to the foreground</SPAN>
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">WinSystemMSW</SPAN>(<A CLASS="DocLink" HREF="WinSystem.WinSystem.html">WinSystem</A>):
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WinSystemMSW.WinSystemMSW.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#WinSystemMSW.WinSystemMSW.raise_main_frame"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WinSystemMSW.WinSystemMSW.raise_main_frame</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WinSystemMSW.WinSystemMSW.set_hot_key</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#WinSystemMSW.WinSystemMSW.set_main_frame_handle"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WinSystemMSW.WinSystemMSW.set_main_frame_handle</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">handle</SPAN>)<SPAN CLASS="OneLiner"> # set the value of the main_frame_handle after construction</SPAN>
+    <A CLASS="DocLink" HREF="#WinSystemMSW.WinSystemMSW.store_foreground_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WinSystemMSW.WinSystemMSW.store_foreground_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -33,21 +36,65 @@
     <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
     <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
 
-    <SPAN CLASS="InheritsHead"># Inherited from MediatorConsole.WasForegroundWindow</SPAN>
-    <A CLASS="DocLink" HREF="#MediatorConsole.WasForegroundWindow.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.WasForegroundWindow.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorConsole.WasForegroundWindow.restore_to_foreground</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # restores the window to the foreground</SPAN>
+    <SPAN CLASS="InheritsHead"># Inherited from WinSystem.WinSystem</SPAN>
+    <A CLASS="DocLink" HREF="#WinSystem.WinSystem.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WinSystem.WinSystem.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">main_frame_handle=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#WinSystem.WinSystem.raise_main_frame"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WinSystem.WinSystem.raise_main_frame</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#WinSystem.WinSystem.set_main_frame_handle"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WinSystem.WinSystem.set_main_frame_handle</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">handle</SPAN>)<SPAN CLASS="OneLiner"> # set the value of the main_frame_handle after construction</SPAN>
+    <A CLASS="DocLink" HREF="#WinSystem.WinSystem.store_foreground_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">WinSystem.WinSystem.store_foreground_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
 </PRE><H2>Description</H2><P>
-win32 implementation of WasForegroundWindow interface for 
-storing the current foreground window and restoring it to 
-the foreground later
+abstract base class defining an interface for window-system
+specific tasks
 </P>
-<H2 ID="MediatorConsoleWX.WasForegroundWindowMSW.__init__" CLASS="Method">MediatorConsoleWX.WasForegroundWindowMSW.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<H2 ID="WinSystemMSW.WinSystemMSW.raise_main_frame" CLASS="Method">WinSystemMSW.WinSystemMSW.raise_main_frame(<SPAN CLASS="Argument">self</SPAN>)</H2>
 <P>None</P>
 
 <P>
-create an object which stores the current foreground
-window</P>
+bring the main frame of the application (and any modal dialog
+boxes on top of it to the foreground</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="WinSystemMSW.WinSystemMSW.set_main_frame_handle" CLASS="Method">WinSystemMSW.WinSystemMSW.set_main_frame_handle(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">handle</SPAN>)</H2>
+<P>set the value of the main_frame_handle after construction</P>
+
+
+<DL>
+
+<DT>
+<EM>INT handle</EM>
+<DD>the window-system specific ID for the
+main frame of the mediator application
+
+</DL>
+<H2 ID="WinSystemMSW.WinSystemMSW.store_foreground_window" CLASS="Method">WinSystemMSW.WinSystemMSW.store_foreground_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+detect the current foreground window, and store it in a
+WasForegroundWindow object, so that the window can later
+be restored to the foreground</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>WasForegroundWindowMSW</EM>
+<DD>the object which can be used to restore
+the window to the foreground
+
+</DL>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 
@@ -178,12 +225,69 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="MediatorConsole.WasForegroundWindow.__init__" CLASS="Method">MediatorConsole.WasForegroundWindow.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<H2 ID="WinSystem.WinSystem.__init__" CLASS="Method">WinSystem.WinSystem.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">main_frame_handle=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
 <P>None</P>
 
 <P>
-create an object which stores the current foreground
-window</P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT main_frame_handle</EM>
+<DD>the window-system specific ID for the
+main frame of the mediator application
+
+</DL>
+<H2 ID="WinSystem.WinSystem.raise_main_frame" CLASS="Method">WinSystem.WinSystem.raise_main_frame(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+bring the main frame of the application (and any modal dialog
+boxes on top of it to the foreground</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="WinSystem.WinSystem.set_main_frame_handle" CLASS="Method">WinSystem.WinSystem.set_main_frame_handle(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">handle</SPAN>)</H2>
+<P>set the value of the main_frame_handle after construction</P>
+
+
+<DL>
+
+<DT>
+<EM>INT handle</EM>
+<DD>the window-system specific ID for the
+main frame of the mediator application
+
+</DL>
+<H2 ID="WinSystem.WinSystem.store_foreground_window" CLASS="Method">WinSystem.WinSystem.store_foreground_window(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+detect the current foreground window, and store it in a
+WasForegroundWindow object, so that the window can later
+be restored to the foreground</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>WasForegroundWindow</EM>
+<DD>the object which can be used to restore
+the window to the foreground
+
+</DL>
 
 <HR>
 <TABLE ALIGN="LEFT">

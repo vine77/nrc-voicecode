@@ -190,7 +190,7 @@ class wxMediatorSim(WaxEdSim.WaxEdSimBase, wxMediator):
 ##############################################################################
 def run():
     """Start a ServerNewMediator/ServerMainThread with external message 
-    loop using win32event and the new NewMediatorObject
+    loop using wxWindows events and the new NewMediatorObject
     """
 
     sys.stderr.write('creating wxMediator\n')

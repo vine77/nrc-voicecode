@@ -29,20 +29,6 @@ GUI windows and dialog boxes
 
 
 """
-class WasForegroundWindow(Object.Object):
-    """abstract base class defining an interface for storing the current
-    foreground window and restoring it to the foreground later
-
-    """
-    def __init__(self, **args):
-        """create an object which stores the current foreground
-        window"""
-        self.deep_construct(WasForegroundWindow, {}, args)
-
-    def restore_to_foreground(self):
-        """restores the window to the foreground"""
-        debug.virtual('WasForegroundWindow.restore_to_foreground')
-
 
 class MediatorConsole(Object.OwnerObject):
     """
@@ -53,19 +39,51 @@ class MediatorConsole(Object.OwnerObject):
     *WinGramFactory gram_factory* -- the grammar factory used to add
     speech grammars to dialog boxes
 
+    *INT main_frame_handle* -- the window-system specific ID for the
+    main frame of the mediator application
 
+    *WinSystem win_sys -- WinSystem interface to
+    window-system specific functions
     **CLASS ATTRIBUTES**
     
     *none* 
     """
-    def __init__(self, **attrs):
+    def __init__(self, main_frame_handle, win_sys, **attrs):
+        """
+        **INPUTS**
+
+        *INT main_frame_handle* -- the window-system specific ID for the
+        main frame of the mediator application
+
+        *WinSystem win_sys -- WinSystem interface to
+        window-system specific functions
+        """
         self.deep_construct(MediatorConsole,
                             {
+                             'main_frame_handle': main_frame_handle,
+                             'win_sys': win_sys,
                              'mediator': None,
                              'gram_factory': None
                             },
                             attrs)
         self.name_parent('mediator')
+        self.win_sys.set_main_frame_handle(main_frame_handle)
+
+    def store_foreground_window(self):
+        """detect the current foreground window, and store it in a
+        WasForegroundWindow object, so that the window can later
+        be restored to the foreground
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *WasForegroundWindow* -- the object which can be used to restore
+        the window to the foreground
+        """
+        return self.win_sys.store_foreground_window()
 
     def set_mediator(self, mediator):
         """assigns a parent mediator to the console
@@ -142,22 +160,6 @@ class MediatorConsole(Object.OwnerObject):
         *BOOL* -- true if the user made changes and approved them
         """
         debug.virtual('MediatorConsole.correct_utterance')
-
-    def store_foreground_window(self):
-        """detect the current foreground window, and store it in a
-        WasForegroundWindow object, so that the window can later
-        be restored to the foreground
-
-        **INPUTS**
-
-        *none*
-
-        **OUTPUTS**
-
-        *WasForegroundWindow* -- the object which can be used to restore
-        the window to the foreground
-        """
-        debug.virtual('MediatorConsole.store_foreground_window')
 
     def raise_active_window(self):
         """makes the active window (within the current process) the
