@@ -87,10 +87,13 @@ from actions_py import *
 
 the_mediator = None
 
-def cleanup(clean_sr_voc=0):
-    global the_mediator
+def cleanup(clean_sr_voc=0, save_speech_files = None, disconnect = 1):
+    global the_mediator, console_win_handle
 
     sim_commands.quit(clean_sr_voc=clean_sr_voc)
+    if the_mediator:
+        the_mediator.quit(clean_sr_voc=clean_sr_voc, 
+	    save_speech_files=save_speech_files, disconnect=disconnect)
 
 def init_simulator(app, symdict_pickle_fname=None, 
     disable_dlg_select_symbol_matches = None, window = 0, exclusive = 0,
@@ -212,13 +215,18 @@ def simulator_mode(options):
     
 
     editor_app.run(app_control = app)
+    print 'gui exited'
         
 if (__name__ == '__main__'):
     
     opts, args = util.gopt(['h', None, 's', None, 'p', 50007, 't', None])
     
 #    print '-- mediator.__main__: opts=%s' % opts
-    
+  
+    sim_commands.__dict__['clean_sr_voc_flag']=0
+    sim_commands.__dict__['save_speech_files_flag']=None
+    sim_commands.__dict__['disconnect_flag']=1
+  
     if opts['h']:
         print __doc__
 	print sim_commands.__doc__
@@ -235,5 +243,5 @@ simulator_mode(opts)""")
         #
         simulator_mode(opts)
 
-    cleanup()
-        
+    cleanup(sim_commands.clean_sr_voc_flag, 
+	sim_commands.save_speech_files_flag, sim_commands.disconnect_flag)

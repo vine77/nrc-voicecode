@@ -27,6 +27,13 @@ from Object import Object
 from CmdPrompt import *
 from wxPython.wx import *
 
+# workaround for minor bug in wxPython 2.3.2.1 (should be fixed in later
+# versions, and the workaround will still work then)
+def fix_x_y(value):
+    if len(value) == 3:
+	return value[1], value[2]
+    return value
+
 class wxCmdPromptWithHistory(CmdPromptWithHistory):
     """concrete implementation of CmdPromptWithHistory using a single
     line wxTextCtrl.  Up and down arrows move through the history,
@@ -214,13 +221,7 @@ class wxCmdLog(CmdLog):
 	width, height = self.log.GetClientSizeTuple()
 	char_height = self.log.GetCharHeight()
 	line_height = height/char_height
-	xy = self.log.PositionToXY(p)
-	if len(xy) == 2:
-	    x, y = xy
-	elif len(xy) == 3:
-	    dummy, x, y = xy
-	else:
-	    return
+	x, y = fix_x_y(self.log.PositionToXY(p))
 	y = y- line_height
 	p = self.log.XYToPosition(x, y)
 	self.log.ShowPosition(p)

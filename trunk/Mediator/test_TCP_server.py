@@ -194,7 +194,7 @@ class ListenThread(threading.Thread, Object.Object):
 		{'value': success})
         elif action == 'terminating':
             print "VoiceCode server was unilaterally shutdown."
-            sys.exit
+            sys.exit()
 
     def run(self):
         """Listen for requests from VoiceCode and execute them.

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Apr 03 17:50:45 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Apr 07 13:30:57 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -27,14 +27,16 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.active_field"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.active_field</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates what part of the editor has the focus.</SPAN>
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.app_active_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.app_active_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.app_change_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.app_change_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Changes the external application's active buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.app_close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.app_close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save</SPAN>)<SPAN CLASS="OneLiner"> # Close a buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.app_save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.app_save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Save the current buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
-    <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.change_buffer_dont_bind_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.change_buffer_dont_bind_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)<SPAN CLASS="OneLiner"> # Changes the external application's active buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.drop_breadcrumb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.drop_breadcrumb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)<SPAN CLASS="OneLiner"> # Drops a breadcrumb</SPAN>
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.multiple_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.multiple_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support multiple open buffers?</SPAN>
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.new_compatible_sb"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.new_compatible_sb</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Creates a new instance of [SourceBuff].</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.open_buffers_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.open_buffers_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.pop_breadcrumbs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.pop_breadcrumbs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)<SPAN CLASS="OneLiner"> # Pops breadcrumbs from the breadcrumbs stack</SPAN>
+    <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.query_buffer_from_app"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.query_buffer_from_app</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.recog_begin</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window_id</SPAN>)<SPAN CLASS="OneLiner"> # Haven't figured out how to make WaxEdit block user input</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.recog_end</SPAN>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Haven't figured out how to make WaxEdit block user input</SPAN>
     <A CLASS="DocLink" HREF="#AppStateWaxEdit.AppStateWaxEdit.tell_editor_to_open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppStateWaxEdit.AppStateWaxEdit.tell_editor_to_open_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)<SPAN CLASS="OneLiner"> # See [AppState.tell_editor_to_open_file()] for doc.</SPAN>
@@ -47,12 +49,12 @@
     <A CLASS="DocLink" HREF="#AppState.AppState.active_field"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.active_field</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # indicates what part of the editor has the focus.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.active_language"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.active_language</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns name of active programming language.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.app_active_buffer_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.app_active_buffer_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppState.app_change_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.app_change_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Changes the external application's active buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.app_close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.app_close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # Ask the editor to close a buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.app_save_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.app_save_file</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">full_path=None</SPAN>, <SPAN CLASS="Argument">no_prompt=0</SPAN>)<SPAN CLASS="OneLiner"> # Tell the external editor to save the current buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.apply_updates"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.apply_updates</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">updates</SPAN>)<SPAN CLASS="OneLiner"> # Applies a list of updates returned by the external application.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.bidirectional_selection"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.bidirectional_selection</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # does editor support selections with cursor at left?</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.bind_to_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.bind_to_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Binds the AppState to a particular buffer.</SPAN>
-    <A CLASS="DocLink" HREF="#AppState.AppState.change_app_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.change_app_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Changes the external application's active buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.change_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.change_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)<SPAN CLASS="OneLiner"> # Changes the active buffer.</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.close_all_buffers"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_all_buffers</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # Tell the editor to close all buffers known to VoiceCode</SPAN>
     <A CLASS="DocLink" HREF="#AppState.AppState.close_buffer"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppState.close_buffer</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)<SPAN CLASS="OneLiner"> # close a buffer</SPAN>
@@ -109,11 +111,8 @@ in Python.</P>
 <EM>WaxEdit</EM> the_editor
 <DD>The WaxEdit editor wrapped into <EM>self</EM>.
 <DT>
-<EM>SourceBuffTB</EM> only_buffer
-<DD>THE buffer
-<DT>
-<EM>STR</EM> only_buffer_name
-<DD>its name
+<EM>STR</EM> active_buffer_name
+<DD>name of the currently active buffer
 <DT>
 [AS_ServiceBreadcrumbs] breadcrumbs_srv
 <DD>Breadcrumbs service used by
@@ -180,6 +179,38 @@ method for a description of buffer binding).</P>
 <DT>
 <EM>STR</EM>
 <DD>file name of current buffer
+</DL>
+<P>
+AppState.AppState.html#curr_buffer_name</P>
+<H2 ID="AppStateWaxEdit.AppStateWaxEdit.app_change_buffer" CLASS="Method">AppStateWaxEdit.AppStateWaxEdit.app_change_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)</H2>
+<P>Changes the external application's active buffer.</P>
+
+<P>
+This variant only changes the buffer in the external
+application. It does not resynchronise VoiceCode with external
+application.</P>
+<P>
+This should NOT bind the <EM>AppState</EM> to the new buffer. This
+should be done only by [change_buffer].
+See [curr_buffer_name] for a description of buffer binding.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>buff_name=None</EM>
+<DD>Name of the buffer to switch to.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if buff_name exists and the external application
+successfully switches to it
 </DL>
 <P>
 AppState.AppState.html#curr_buffer_name</P>
@@ -256,37 +287,6 @@ failed
 <DD>true if editor allows setting the selection at the
 left end of the selection
 </DL>
-<H2 ID="AppStateWaxEdit.AppStateWaxEdit.change_buffer_dont_bind_from_app" CLASS="Method">AppStateWaxEdit.AppStateWaxEdit.change_buffer_dont_bind_from_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)</H2>
-<P>Changes the external application's active buffer.</P>
-
-<P>
-This variant only changes the buffer in the external
-application. It does not resynchronise VoiceCode with external
-application.</P>
-<P>
-This should NOT bind the <EM>AppState</EM> to the new buffer. This
-should be done only by [change_buffer].
-See [curr_buffer_name] for a description of buffer binding.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-STR <EM>buff_name=None</EM>
-<DD>Name of the buffer to switch to.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<P>
-AppState.AppState.html#curr_buffer_name</P>
 <H2 ID="AppStateWaxEdit.AppStateWaxEdit.drop_breadcrumb" CLASS="Method">AppStateWaxEdit.AppStateWaxEdit.drop_breadcrumb(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buffname=None</SPAN>, <SPAN CLASS="Argument">pos=None</SPAN>)</H2>
 <P>Drops a breadcrumb</P>
 
@@ -344,6 +344,26 @@ STR <EM>buff_name</EM>
 </DL>
 <P>
 ..[SourceBuff] SourceBuff.SourceBuff.html</P>
+<H2 ID="AppStateWaxEdit.AppStateWaxEdit.open_buffers_from_app" CLASS="Method">AppStateWaxEdit.AppStateWaxEdit.open_buffers_from_app(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+retrieve a list of the names of open buffers from the
+application.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM>
+<DD>list of the names of open buffers
+
+</DL>
 <H2 ID="AppStateWaxEdit.AppStateWaxEdit.pop_breadcrumbs" CLASS="Method">AppStateWaxEdit.AppStateWaxEdit.pop_breadcrumbs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">num=1</SPAN>, <SPAN CLASS="Argument">gothere=1</SPAN>)</H2>
 <P>Pops breadcrumbs from the breadcrumbs stack</P>
 
@@ -353,6 +373,31 @@ STR <EM>buff_name</EM>
 if <EM>BOOL gothere</EM> is true, then move cursor to the last popped
 breadcrumb.
 </P>
+<H2 ID="AppStateWaxEdit.AppStateWaxEdit.query_buffer_from_app" CLASS="Method">AppStateWaxEdit.AppStateWaxEdit.query_buffer_from_app(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+query the application to see if a buffer by the name of buff_name 
+exists.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer to check
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>does the buffer exist?
+
+</DL>
 <H2 ID="AppStateWaxEdit.AppStateWaxEdit.tell_editor_to_open_file" CLASS="Method">AppStateWaxEdit.AppStateWaxEdit.tell_editor_to_open_file(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_name</SPAN>)</H2>
 <P>See [AppState.tell_editor_to_open_file()] for doc.</P>
 
@@ -497,6 +542,39 @@ method for a description of buffer binding).</P>
 </DL>
 <P>
 AppState.AppState.html#curr_buffer_name</P>
+<H2 ID="AppState.AppState.app_change_buffer" CLASS="Method">AppState.AppState.app_change_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>Changes the external application's active buffer.</P>
+
+<P>
+This variant only changes the buffer in the external
+application. It does not resynchronise VoiceCode with external
+application.</P>
+<P>
+This should NOT bind the <EM>AppState</EM> to the new buffer. This
+should be done only by [change_buffer].</P>
+<P>
+See [curr_buffer_name] for a description of buffer binding.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+STR <EM>buff_name</EM>
+<DD>Name of the buffer to switch to.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if buff_name exists and the external application
+successfully switches to it
+</DL>
+<P>
+AppState.AppState.html#curr_buffer_name</P>
 <H2 ID="AppState.AppState.app_close_buffer" CLASS="Method">AppState.AppState.app_close_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">save=0</SPAN>)</H2>
 <P>Ask the editor to close a buffer.</P>
 
@@ -618,39 +696,6 @@ STR <EM>buff_name</EM>
 </DL>
 <P>
 ..[curr_buffer_name] AppState.AppState.html#curr_buffer_name</P>
-<H2 ID="AppState.AppState.change_app_buffer" CLASS="Method">AppState.AppState.change_app_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
-<P>Changes the external application's active buffer.</P>
-
-<P>
-This variant only changes the buffer in the external
-application. It does not resynchronise VoiceCode with external
-application.</P>
-<P>
-This should NOT bind the <EM>AppState</EM> to the new buffer. This
-should be done only by [change_buffer].</P>
-<P>
-See [curr_buffer_name] for a description of buffer binding.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-STR <EM>buff_name</EM>
-<DD>Name of the buffer to switch to.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM>
-<DD>true if buff_name exists and the external application
-successfully switches to it
-</DL>
-<P>
-AppState.AppState.html#curr_buffer_name</P>
 <H2 ID="AppState.AppState.change_buffer" CLASS="Method">AppState.AppState.change_buffer(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
 <P>Changes the active buffer.</P>
 
@@ -818,7 +863,7 @@ history</P>
 <DL>
 
 <DT>
-<EM>(</EM> <A HREF="Context.Context.html">Context</A>, [Action]*)* hist_entry
+<EM>(</EM> <A HREF="Context.Context.html">Context</A>, <A HREF="Action.Action.html">Action</A> <EM>)</EM> hist_entry
 <DD>The context and action of the <EM>nth</EM> most
 recent command in the application's command history.
 </DL>

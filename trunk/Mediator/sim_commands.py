@@ -410,9 +410,12 @@ def clear_abbreviations():
 def quit(clean_sr_voc=0, save_speech_files=None, disconnect=1):
     global quit_flag, the_mediator
 
-    if the_mediator:
-        the_mediator.quit(clean_sr_voc=clean_sr_voc, save_speech_files=save_speech_files, disconnect=disconnect)
+#     if the_mediator:
+#         the_mediator.quit(clean_sr_voc=clean_sr_voc, save_speech_files=save_speech_files, disconnect=disconnect)
         
+    clean_sr_voc_flag = clean_sr_voc
+    save_speech_files_flag = save_speech_files
+    disconnect_flag = disconnect
     quit_flag = 1            
 
 def getmic():

@@ -40,9 +40,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
     *WaxEdit* the_editor -- The WaxEdit editor wrapped into *self*.
 
-    *SourceBuffTB* only_buffer -- THE buffer
-    
-    *STR* only_buffer_name -- its name
+    *STR* active_buffer_name -- name of the currently active buffer
 
     [AS_ServiceBreadcrumbs] breadcrumbs_srv -- Breadcrumbs service used by
     this AppState.
@@ -59,14 +57,14 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
     def __init__(self, editor, **attrs):
         self.deep_construct(AppStateWaxEdit,
                             {'the_editor': editor, 
-                             'only_buffer': None, 'only_buffer_name' : "",
+                             'active_buffer_name' : "",
                              'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(self)},
                             attrs,
                             )
-        self.only_buffer =  SourceBuffTB(app = self, buff_name="", \
+        self.open_buffers[self.active_buffer_name] =  \
+	    SourceBuffTB(app = self, buff_name="", \
 	    underlying_buffer = self.the_editor.editor_buffer(),
 	    language=None)
-        self.open_buffers[self.only_buffer_name] = self.only_buffer
 
 
     def new_compatible_sb(self, buff_name):
@@ -148,9 +146,9 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
         file:///./AppState.AppState.html#curr_buffer_name"""        
       
-	return self.only_buffer_name
+	return self.active_buffer_name
 
-    def change_buffer_dont_bind_from_app(self, buff_name=None):
+    def app_change_buffer(self, buff_name=None):
 	"""Changes the external application's active buffer.
 
         This variant only changes the buffer in the external
@@ -167,12 +165,16 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
        
         **OUTPUTS**
         
-        *none* --         
+        *BOOL* -- true if buff_name exists and the external application
+	successfully switches to it
         
+            
         file:///./AppState.AppState.html#curr_buffer_name"""
 
-        self.only_buffer_name = buff_name
-
+        if self.query_buffer_from_app(buff_name):
+	    self.active_buffer_name = buff_name
+	    return 1
+	return 0
         
     def active_field(self):
 	"""indicates what part of the editor has the focus.
@@ -202,6 +204,32 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	    return None
 	return ('unknown')
 
+    def drop_breadcrumb(self, buffname=None, pos=None):
+
+        """Drops a breadcrumb
+
+        *INT pos* is the position where to drop the crumb. *STR
+         buffname* is the name of the source buffer.
+        
+        If *pos* not specified, drop breadcrumb at cursor position.
+
+        If *buff* not specified either, drop breadcrumb in current buffer
+	"""
+        self.breadcrumbs_srv.drop_breadcrumb(buffname, pos)
+
+
+    def pop_breadcrumbs(self, num=1, gothere=1):
+        """Pops breadcrumbs from the breadcrumbs stack
+
+        *INT num* is the number of crumbs to pop. If None, then pop 1 crumb.
+
+        if *BOOL gothere* is true, then move cursor to the last popped
+        breadcrumb.
+        """
+        self.breadcrumbs_srv.pop_breadcrumbs(num, gothere)
+
+
+
 
     def tell_editor_to_open_file(self, file_name):
         """See [AppState.tell_editor_to_open_file()] for doc.
@@ -221,16 +249,45 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	# WaxEdit only supports one open buffer at a time
 	if success:
 	    if self.curr_buffer_name() != None:
-		del self.open_buffers[self.curr_buffer_name()]
-	    self.only_buffer =  SourceBuffTB(app = self, buff_name=file_name, 
+		name = self.curr_buffer_name()
+		self.close_buffer(name, 0)
+            self.open_buffers[file_name] = SourceBuffTB(app = self, 
+		buff_name=file_name, 
 		underlying_buffer = self.the_editor.editor_buffer(),
 		indent_level=3, indent_to_curr_level=1)
-	    self.only_buffer_name = file_name
-            self.open_buffers[file_name] = self.only_buffer            
+	    self.active_buffer_name = file_name
 	    self.the_editor.set_name(short)
-            buff_name = self.only_buffer.buff_name
+            buff_name = self.active_buffer_name
 
         return buff_name
+
+    def query_buffer_from_app(self, buff_name):
+	"""query the application to see if a buffer by the name of buff_name 
+	exists.
+
+        **INPUTS**
+
+	*STR* buff_name -- name of the buffer to check
+
+        **OUTPUTS**
+
+	*BOOL* -- does the buffer exist?
+	"""
+	return buff_name in self.open_buffers_from_app()
+
+    def open_buffers_from_app(self):
+	"""retrieve a list of the names of open buffers from the
+	application.
+
+        **INPUTS**
+
+	*none*
+
+        **OUTPUTS**
+
+	*[STR]* -- list of the names of open buffers
+	"""
+	return self.open_buffers.keys()
 
         
     def app_save_file(self, full_path = None, no_prompt = 0):
@@ -270,69 +327,15 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	if not success:
 	    return None
 	path, short = os.path.split(f_path)
-	print path
-	print short
 	if path:
 	    self.curr_dir = path
 	old_name = self.curr_buffer_name()
 	if not old_name or old_name != f_path:
-	    self.only_buffer_name = f_path
-	    self.open_buffers[f_path] = self.only_buffer
+	    self.active_buffer_name = f_path
+	    self.open_buffers[f_path] = self.open_buffers[old_name]
 	    del self.open_buffers[old_name]
 	self.the_editor.set_name(short)
 	return f_path
-
-    def multiple_buffers(self):
-      	"""does editor support multiple open buffers?
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports having multiple buffers open 
-	at the same time"""
-	return 0
-
-    def bidirectional_selection(self):
-      	"""does editor support selections with cursor at left?
-
-	**INPUTS**
-
-	*none*
-
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor allows setting the selection at the
-	left end of the selection"""
-	return 0
-
-    def drop_breadcrumb(self, buffname=None, pos=None):
-
-        """Drops a breadcrumb
-
-        *INT pos* is the position where to drop the crumb. *STR
-         buffname* is the name of the source buffer.
-        
-        If *pos* not specified, drop breadcrumb at cursor position.
-
-        If *buff* not specified either, drop breadcrumb in current buffer
-	"""
-        self.breadcrumbs_srv.drop_breadcrumb(self, buffname, pos)
-
-
-    def pop_breadcrumbs(self, num=1, gothere=1):
-        """Pops breadcrumbs from the breadcrumbs stack
-
-        *INT num* is the number of crumbs to pop. If None, then pop 1 crumb.
-
-        if *BOOL gothere* is true, then move cursor to the last popped
-        breadcrumb.
-        """
-        self.breadcrumbs_srv.pop_breadcrumbs(num, gothere)
-
-
 
     def multiple_buffers(self):
       	"""does editor support multiple open buffers?
@@ -380,7 +383,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 	buff = self.find_buff(buff_name)
 	if buff == None:
 	    return 0
-	self.only_buffer_name = None
+	self.active_buffer_name = None
 	del self.open_buffers[buff_name]
 	return 1
         
