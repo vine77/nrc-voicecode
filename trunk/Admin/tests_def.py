@@ -3666,6 +3666,8 @@ def test_number_dictation():
 add_test('number_dictation', test_number_dictation, desc='Test number dictation')
 
 
+
+
 ##############################################################################
 # Inserting new statements above/below current line
 ##############################################################################
@@ -3888,6 +3890,36 @@ def test_explicit_indentation():
    
       
 add_test('explicit_indent', test_explicit_indentation, 'Testing explicit indentation.')
+
+
+##############################################################################
+# Testing dictation of standard function calls
+##############################################################################
+
+def test_standard_function_call():
+   testing.init_simulator_regression()   
+      
+   commands.open_file('blah1.py')
+   
+   # These ones should be interpreted as calls
+   commands.say(['absolute', 'value', 'with', 'arguments', 'one'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   commands.say(['absolute', 'value', 'of', 'one'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   commands.say(['absolute', 'value', 'without', 'arguments'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)               
+   commands.say(['some', 'function', 'with', 'argument', 'some', 'argument'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)            
+      
+   # These ones should be interpreted as new symbols
+   commands.say(['absolute', 'value'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   commands.say(['some', 'function', 'of', 'some', 'argument'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   
+   
+
+
+add_test('std_func_calls', test_standard_function_call, 'Testing CSCs for calling standard functions.')
 
 
 ##############################################################################

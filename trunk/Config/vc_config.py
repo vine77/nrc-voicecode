@@ -908,6 +908,18 @@ function_definitions.add_csc(acmd)
 
 
 ###############################################################################
+# CSCs for calling standard functions and methods
+###############################################################################
+
+
+standard_function_calls = CSCmdSet('standard function calls', 
+    description = 'CSCs for calling predefined functions and methods definitions')    
+std_func_call_helper = StandardFunctionCalls(standard_function_calls)
+std_func_call_helper.add_function_name(['abs', 'absolute', 'absolute value'], {'python': 'abs'}, standard_function_calls)
+
+
+
+###############################################################################
 # Python specific stuff
 ###############################################################################
 

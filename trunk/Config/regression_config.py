@@ -117,6 +117,7 @@ add_csc_set(compound_statements)
 add_csc_set(ctrl_structures)
 add_csc_set(data_structures)
 add_csc_set(function_definitions)
+add_csc_set(standard_function_calls)
 
 # Python-specific
 

@@ -11392,6 +11392,104 @@ Heard previous one
 
 
 *******************************************************************************
+* Name        : std_func_calls
+* Description : Testing CSCs for calling standard functions.
+*******************************************************************************
+
+WARNING: source file 'blah1.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['absolute', 'value', 'with', 'arguments', 'one']
+Heard absolute value with arguments one
+*** Start of source buffer ***
+  1: abs(1<CURSOR>)
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+*** Start of source buffer ***
+  1: abs(1)
+  2: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['absolute', 'value', 'of', 'one']
+Heard absolute value of one
+*** Start of source buffer ***
+  1: abs(1)
+  2: abs(1<CURSOR>)
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+*** Start of source buffer ***
+  1: abs(1)
+  2: abs(1)
+  3: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['absolute', 'value', 'without', 'arguments']
+Heard absolute value without arguments
+*** Start of source buffer ***
+  1: abs(1)
+  2: abs(1)
+  3: abs()<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+*** Start of source buffer ***
+  1: abs(1)
+  2: abs(1)
+  3: abs()
+  4: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['some', 'function', 'with', 'argument', 'some', 'argument']
+Heard some function with argument some argument
+*** Start of source buffer ***
+  1: abs(1)
+  2: abs(1)
+  3: abs()
+  4: some_function(some_argument<CURSOR>)
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+  2: abs(1)
+  3: abs()
+  4: some_function(some_argument)
+  5: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['absolute', 'value']
+Heard absolute value
+  2: abs(1)
+  3: abs()
+  4: some_function(some_argument)
+  5: absolute_value<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+  3: abs()
+  4: some_function(some_argument)
+  5: absolute_value
+  6: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['some', 'function', 'of', 'some', 'argument']
+Heard some function of some argument
+  3: abs()
+  4: some_function(some_argument)
+  5: absolute_value
+  6: some_function_of_some_argument<CURSOR>
+
+*** End of source buffer ***
+
+
+*******************************************************************************
 * Name        : symbol_formatting
 * Description : Testing styling and manual formatting of new symbols.
 *******************************************************************************
