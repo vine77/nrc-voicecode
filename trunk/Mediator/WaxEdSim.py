@@ -114,10 +114,12 @@ class WaxEdSimPane(wxPanel):
 	if sys.platform == 'win32':
 # allows text longer than 64K
 	    flags = flags | wxTE_RICH
-	    cr_bug = 0
+# rich text uses \r only for new lines, so offsets into internal and 
+# external buffers are the same
+#	    cr_bug = 0
         editor =wxTextCtrl(top_and_bottom, ID_EDITOR, "", wxDefaultPosition,
-	    wxDefaultSize, flags)
-#	    wxDefaultSize, wxTE_MULTILINE)
+#	    wxDefaultSize, flags)
+	    wxDefaultSize, wxTE_MULTILINE)
         log =wxTextCtrl(top_and_bottom, ID_EDITOR, "", wxDefaultPosition,
 	    wxDefaultSize, flags | wxTE_READONLY)
         self.editor = editor
@@ -443,6 +445,21 @@ class WaxEdSim(wxApp, WaxEdit.WaxEdit):
 	*BOOL* -- true if editor window has the focus
 	"""
 	return self.frame.editor_has_focus()
+
+    def mic_change(self, state):
+	"""function to receive microphone state change callbacks
+
+	**INPUTS**
+
+	*STR* state -- new state ('on', 'off', 'sleeping', 'disabled')
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	print 'eh?\n'
+	self.frame.pane.command_log.write('Microphone is now '+state+'\n')
+
 
     def run(self, app_control):
 	"""starts the message loop.  Note: this function does not

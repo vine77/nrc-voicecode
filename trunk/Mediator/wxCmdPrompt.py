@@ -209,6 +209,17 @@ class wxCmdLog(CmdLog):
 	*none*
 	"""
 	self.log.AppendText(string)
+#	self.log.SetScrollPos(wxVERTICAL, self.log.GetScrollRange(wxVERTICAL), 1)
+	p = self.log.GetLastPosition()
+	width, height = self.log.GetClientSizeTuple()
+	char_height = self.log.GetCharHeight()
+	line_height = height/char_height
+	x, y = self.log.PositionToXY(p)
+	y = y- line_height
+	p = self.log.XYToPosition(x, y)
+	self.log.ShowPosition(p)
+
+#	self.log.ShowPosition(self.log.GetLastPosition())
 
 
 

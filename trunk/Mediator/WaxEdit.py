@@ -37,6 +37,20 @@ class WaxEdit:
 
     *none*
     """
+    def mic_change(self, state):
+	"""function to receive microphone state change callbacks
+
+	**INPUTS**
+
+	*STR* state -- new state ('on', 'off', 'sleeping', 'disabled')
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        pass
+# no-op by default, can be overridden
+
     def is_active(self):
 	"""indicates whether the editor frame is active
 
