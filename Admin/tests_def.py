@@ -154,6 +154,7 @@ auto_test.add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
 # Testing CmdInterp
 ##############################################################################
 
+test_mediator = None
 
 def test_CmdInterp():    
     #
@@ -161,11 +162,15 @@ def test_CmdInterp():
     #
     natlink.natConnect()
     a_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
-    MediatorObject.to_configure = a_mediator
+# I don't think this is necessary (or correct -- we do want the mediator
+# to go out of scope) but for regression testing purposes, I'm first
+# leaving it in and then will remove it.
+    global test_mediator
+    test_mediator = a_mediator
     acmd = CSCmd(spoken_forms=['for', 'for loop'], meanings={ContC(): c_simple_for, ContPy(): py_simple_for})
-    MediatorObject.add_csc(acmd)
+    a_mediator.add_csc(acmd)
     acmd = CSCmd(spoken_forms=['loop body', 'goto body'], meanings={ContC(): c_goto_body, ContPy(): py_goto_body})
-    MediatorObject.add_csc(acmd)
+    a_mediator.add_csc(acmd)
 
     
     a_mediator.interp.on_app.open_file(vc_globals.test_data + os.sep + 'small_buff.c')

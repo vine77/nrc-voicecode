@@ -23,7 +23,7 @@
 # User added abbreviations
 ###############################################################################
 
-from MediatorObject import add_abbreviation
+# from MediatorObject import add_abbreviation
 
 add_abbreviation('attr', ['attribute'])
 add_abbreviation('buff', ['buffer'])
@@ -45,7 +45,7 @@ add_abbreviation('init', ['initial', 'initialize'])
 add_abbreviation('interp', ['interpreter'])
 add_abbreviation('mtime', ['M. time'])
 add_abbreviation('os', ['operating system', 'O. S.'])
-add_abbreviation('pos', ['position', 'positionning'])
+add_abbreviation('pos', ['position', 'positioning'])
 add_abbreviation('prof', ['profile', 'profiling', 'professional'])
 add_abbreviation('py', ['python'])
 add_abbreviation('regexp', ['regular expression'])

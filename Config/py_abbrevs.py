@@ -24,7 +24,7 @@
 # libraries
 #############################################################################
 
-from MediatorObject import add_abbreviation
+# from MediatorObject import add_abbreviation
 
 add_abbreviation('abs', ['absolute'])
 add_abbreviation('addr', ['address'])
