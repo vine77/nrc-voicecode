@@ -539,7 +539,16 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
 # if we don't have the buffer contents cached, just get the entire
 # current contents (which should already include the deletion), thereby
 # caching it
-            self.get_text()
+#            self.get_text()
+# 
+# Oops - this causes major problems because there may already have been
+# other changes to the buffer, whose change callbacks are still in the
+# queue.  Therefore, the safe thing to do is to leave the buffer
+# uncached until the next time we explicitly synchronize with the 
+# application (which first flushes all updates from the listen_msgr)
+            trace('SourceBuffCached.delete_cbk.short', 
+                'no cache - ignoring callback')
+            pass
         else:
             old_text = self.get_text()
             self._put_cache('get_text', old_text[:range[0]] + old_text[range[1]:])
@@ -581,11 +590,18 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         SourceBuff.SourceBuff.insert_cbk(self, range, text)
         if self._not_cached('get_text'):
 # if we don't have the buffer contents cached, just get the entire
-# current contents (which should already include the insertion), thereby
+# current contents (which should already include the deletion), thereby
 # caching it
+#            self.get_text()
+# 
+# Oops - this causes major problems because there may already have been
+# other changes to the buffer, whose change callbacks are still in the
+# queue.  Therefore, the safe thing to do is to leave the buffer
+# uncached until the next time we explicitly synchronize with the 
+# application (which first flushes all updates from the listen_msgr)
             trace('SourceBuffCached.insert_cbk.short', 
-                'no cache - getting text')
-            self.get_text()
+                'no cache - ignoring callback')
+            pass
         else:
             range_non_nil = [range[0], range[1]]
             if range_non_nil[1] == None:

@@ -55,12 +55,12 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#################################                        
 #                    'ActionEmacsListBuffers.execute': 1,
 #                    'insert_cbk': 1,
 #                    'get_mess.updates': 1,
 #                    'test_basic_correction': 1,
 #                    'SourceBuffMessaging.insert': 1,
-#################################                        
 #                        'StandardFunctionCallsHelper.add_function_name': 1,
 #                        'ActionFuncCallWithParens.__init__': 1,
 #                        'SymDict.add_symbol': 1,
@@ -115,6 +115,8 @@ debug.config_traces(status="on",
 #                        'reinterpret_recent': 1,
 #                        'wxMediator': 1,
 #                        'send_mess': 1,
+#                        'SourceBuffCached': 1,
+#                        'SourceBuffWithDiffs': 1,
 #                        'SourceBuffCached.get_text.short': 1,
 #                        'SourceBuffCached.insert_cbk.short': 1,
 #                        'SourceBuffCached.uncache_data_after_buffer_change': 1,
