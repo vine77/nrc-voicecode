@@ -321,10 +321,21 @@ class AppState(Object):
         """
         debug.virtual('AppState.open_file')
 
-    def save_file(self, full_path):
+    def save_file(self, full_path = None, no_prompt = 0):
         """Save the current buffer.
 
-        Save file with path *STR full_path*.        
+        **INPUTS**
+	
+	*STR full_path* -- full path under which to save the file, or
+	None to use the buffer name
+
+	*BOOL no_prompt* -- overwrite any existing file without
+	prompting.  No_prompt should only be set to true if the caller
+	has already prompted the user.
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the file was successfully saved
         """
 	debug.virtual('AppState.save_file')
 

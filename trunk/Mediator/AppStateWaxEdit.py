@@ -129,12 +129,31 @@ class AppStateWaxEdit(AppState.AppState):
 	    self.open_buffers[name] = self.only_buffer
 
         
-    def save_file(self, full_path):
+    def save_file(self, full_path = None, no_prompt = 0):
         """Save the current buffer.
 
-        Save file with path *STR full_path*.        
+        **INPUTS**
+	
+	*STR full_path* -- full path under which to save the file, or
+	None to use the buffer name
+
+	*BOOL no_prompt* -- overwrite any existing file without
+	prompting.  No_prompt should only be set to true if the caller
+	has already prompted the user.
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the file was successfully saved
         """
-	success = self.the_editor.save_file(full_path)
+	f_path = full_path
+	quiet = no_prompt
+	if not f_path:
+	    f_path = self.curr_buffer_name()
+	    quiet = 1
+	if not quiet and f_path != self.curr_buffer_name():
+	    if not os.path.exists(f_path):
+		quiet = 1
+	success = self.the_editor.save_file(f_path, quiet)
 #         try:
 #             source_file = open(name, 'rw')
 #             source = source_file.read()
@@ -142,16 +161,20 @@ class AppStateWaxEdit(AppState.AppState):
 #         except Exception, err:
 # 	    return
 	# WaxEdit only supports one open buffer at a time
-	if success:
-	    path, short = os.path.split(full_path)
-	    if path:
-		self.curr_dir = path
-	    old_name = self.curr_buffer_name()
-	    if not old_name or old_name != full_path:
-		self.only_buffer_name = full_path
-		self.open_buffers[full_path] = self.only_buffer
-		del self.open_buffers[old_name]
-	    self.the_editor.set_name(short)
+	if not success:
+	    return 0
+	path, short = os.path.split(f_path)
+	print path
+	print short
+	if path:
+	    self.curr_dir = path
+	old_name = self.curr_buffer_name()
+	if not old_name or old_name != f_path:
+	    self.only_buffer_name = f_path
+	    self.open_buffers[f_path] = self.only_buffer
+	    del self.open_buffers[old_name]
+	self.the_editor.set_name(short)
+	return 1
 
     def multiple_buffers(self):
       	"""does editor support multiple open buffers?

@@ -228,18 +228,19 @@ class SourceBuff(Object):
 
 
     def get_selection(self):
-	"""retrieves range of current selection.  Note: the current
-	position should coincide with either the start or end of the
-	selection. 
-
+        """retrieves range of current selection
+        
+	Note: the current position should coincide with either the 
+	start or end of the selection. 
+        
 	**INPUTS**
-
+        
 	*none*
-	
+        
 	**OUTPUTS**
-
+        
 	*INT* (start, end)
-
+        
 	start is the offset into the buffer of the start of the current
 	selection.  end is the offset into the buffer of the character 
 	following the selection (this matches Python's slice convention).
@@ -253,7 +254,7 @@ class SourceBuff(Object):
 
 	*none*
 
-	**OUTPUS**
+	**OUTPUTS**
 	
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
@@ -537,9 +538,9 @@ class SourceBuff(Object):
         
     def move_relative(self, rel_movement):
         """Move cursor to plus or minus a certain number of characters
-
+        
 	**INPUTS** 
-
+        
         *INT rel_movement* -- number of characters to move, relative to 
 	current position.  If < 0 then move to the left. Otherwise, move to the
         right.
