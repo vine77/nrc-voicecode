@@ -142,7 +142,7 @@ def dictate_pseudo_python(commands):
 
     commands.say(['except', 'do', 'the', 'following', 'print', 'single', 'quotes', 'error'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
 
-    commands.say(['finally', 'do', 'print', 'single', 'quotes', 'all', 'right'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
+    commands.say(['finally', 'do', 'print', 'single', 'quotes', 'all', 'right'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)        
     
     commands.quit(save_speech_files=0, disconnect=0)
 
@@ -219,6 +219,30 @@ def test_python_compilation(testing):
 #   do_edit_test(testing, edit_file, test_function, descr)    
 
 ###################################################################
+# Misc python statements
+###################################################################
+
+def test_misc_py_statements(testing):
+
+    testing.init_simulator_regression()
+    names = testing.namespace()
+    commands = names['commands']
+
+    commands.open_file('blah.py')
+    commands.say(['define', 'class', 'some', 'variable', 'class', 'body'], user_input="1\n0\n0\n")
+    commands.say(['define', 'method', 'some', 'method', 'add', 'arguments'], user_input="1\n0\n0\n")   
+    commands.say(['collect', 'arguments', 'positional', 'arguments', 'comma'], user_input="1\n0\n0\n")      
+    commands.say(['collect', 'keyword', 'arguments', 'keyword', 'arguments'], user_input="1\n0\n0\n") 
+    commands.say(['class', 'body'], user_input="0\n0\n0\n")         
+    commands.say(['some', 'array', 'equals', 'some', 'other', 'array', 
+                  'sliced', 'at', 'one', 'colon', 'five', 'new', 'statement'], user_input="1\n1\n0\n")   
+    commands.say(['some', 'dictionary', 'item', 'with', 'key', 'zero', 'jump', 'out', 
+                  'equals', 'one'], user_input="1\n0\n0\n")
+    commands.say(['comment', 'above'])
+    commands.say(['this', 'is', 'a', 'commented', 'out'], user_input='1\n0\n0\n')
+    
+
+###################################################################
 # Python editing test functions
 ###################################################################
 
@@ -280,5 +304,8 @@ def add_else_clause_test(commands):
 def add_except_clause_test(commands):   
    commands.goto_line(26)
    commands.say(['catch', 'exceptions'])
+   
+
+   
 
    

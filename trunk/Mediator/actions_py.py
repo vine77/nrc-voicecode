@@ -146,3 +146,26 @@ py_old_function_body = \
 py_function_body = \
     ActionPyInsertInBody()
 
+    
+class ActionPyCommentAbove(Action):
+    """Creates a new comment line above the current one."""
+    
+    def __init__(self, **args_super):
+        self.deep_construct(ActionPyCommentAbove, \
+                            {}, \
+                            args_super, \
+                            {})
+
+    def execute(self, app, cont):
+        """See [Action.execute].
+        
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+        
+
+        was_on_line = app.line_num_of()
+        found = app.search_for('(^|\n)', direction=-1, where=-1)
+        app.insert('\n')
+        if was_on_line == 1:
+           app.goto(0)
+        app.insert('# ')
+    

@@ -623,23 +623,37 @@ acmd = CSCmd(spoken_forms=['at index', 'indexed by'],
                        ContPerl(): ActionInsert('[', ']',
                                      spacing = like_open_paren)},
              docstring='array element access')
+functional_pairs.add_csc(acmd)                          
+acmd = CSCmd(spoken_forms=['sliced at'],
+             meanings={ContPy(): ActionInsert('[', ']',
+                                     spacing = like_open_paren)},
+             docstring='array slicing')             
 functional_pairs.add_csc(acmd)             
-acmd = CSCmd(spoken_forms=['at key'],
+# Note: 'at key' is often misrecognised
+acmd = CSCmd(spoken_forms=['with key', 'item with key', 'at key'],
              meanings={ContPy(): ActionInsert('[', ']',
                                      spacing = like_open_paren),
                        ContPerl(): ActionInsert('{', '}',
                                      spacing = like_open_paren)},
              docstring='dictionary/hash element access')
-functional_pairs.add_csc(acmd)                          
+functional_pairs.add_csc(acmd)
 
 
 # aliases for dictating comments
 
 comment_aliases = LSAliasSet('comment aliases', 
     description = "aliases for dictating comments")
+comment_commands = CSCmdSet('comment commands',
+    description = "commands for dictating comments")
 
-comment_aliases.add_lsa(LSAlias(['comment line', 'new comment'], 
-    {'perl': '\n#', 'python': '\n#'}, spacing = no_space_before))
+comment_aliases.add_lsa(LSAlias(['comment line', 'new comment', 'comment below', 'new comment below'], 
+    {'perl': '\n#', 'python': '\n#'}, spacing = no_space_before))            
+acmd = CSCmd(spoken_forms=['comment above', 'add comment above', 
+                           'new comment above', 'comment line above'], 
+             meanings={ContLanguage('python'): ActionPyCommentAbove()}, 
+             docstring='add a new comment line above current one.')
+             
+comment_commands.add_csc(acmd)              
 comment_aliases.add_lsa(LSAlias(['begin comment'],
     {'perl': '# ', 'python': '# ', 'C': '// '}))
 comment_aliases.add_lsa(LSAlias(['begin long comment'],
@@ -933,8 +947,12 @@ python_operators = LSAliasSet('Python operators',
     description = 'Python-specific operators')
 python_operators.add_lsa(LSAlias(['concatenate', 'concatenate with'], 
     {'python': ' + '}, binary_operator))
-python_operators.add_lsa(LSAlias(['collect arguments', 'collect rest'], 
+python_operators.add_lsa(LSAlias(['collect arguments', 'collect positinal arguments', 
+                                  'collect arguments in', 'collect positinal arguments in'], 
+    {'python': '*'}, no_space_after))
+python_operators.add_lsa(LSAlias(['collect keyword arguments','collect keyword arguments in'], 
     {'python': '**'}, no_space_after))
+    
 
 # functional names for Python-specific paired punctuation
 

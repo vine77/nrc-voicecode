@@ -1,9 +1,17 @@
 
+C:\eclipse\workspace\VCode\Mediator>rem  
+
+C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
+
+C:\eclipse\workspace\VCode\Mediator>rem
+
 C:\eclipse\workspace\VCode\Mediator>c:
 
-C:\eclipse\workspace\VCode\Mediator>cd c:\eclipse\workspace\VCode\Mediator 
+C:\eclipse\workspace\VCode\Mediator>cd C:\Eclipse\workspace\VCode\Mediator 
 
-C:\eclipse\workspace\VCode\Mediator>python wxMediator.py --bypass -t all        
+C:\eclipse\workspace\VCode\Mediator>rem python new_server.py --bypass -t all 
+
+C:\eclipse\workspace\VCode\Mediator>python wxMediator.py -t all  
 creating wxMediator
 Loading test definitions...
 Configuring the mediator...
@@ -625,7 +633,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01F19380>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x02056F18>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -666,11 +674,7 @@ _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  void  move  float  x  y  move_horiz  move_vert  horiz_pos  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev  f_name  f_name2  API_function 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name', 'f_name2']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
-'x': appears in ['x']
-'y': appears in ['y']
 
 *** End of compilation test ***
 
@@ -765,13 +769,7 @@ _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  autoTst  import  auto_test  exceptions  os  posixpath  profile  sys  class  Object  if  environ  has_key  and  code_file  expandvars  sep  execfile  def  __init__  self  pass  deep_construct  this_class  attrs_this_class  attrs_superclasses  exclude_bases  for  a_base  in  __bases__  not  an_attr_def  items  __dict__  init_attrs  attrs  an_attr_init  setattr  SmallObject  name  age  LargeObject  SmallNonObject  LargeNonObject  profConstrSmallObj  num_times  index  range  obj  profConstrLargeObj  profConstrSmallNonObj  profConstrLargeNonObj  profGetSmallObj  her_age  profGetLargeObj  profGetSmallNonObj  profGetLargeNonObj  profSetSmallObj  profSetLargeObj  profSetSmallNonObj  profSetLargeNonObj  profObject  try_attribute  operation  stdout  write  code  else  x  try  exec  except  AttributeError  exc  str  prof_test  run  self_test  add_test  __name__ 
 Unresolved abbreviations are:
 'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
-'execfile': appears in ['execfile']
-'expandvars': appears in ['expandvars']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 'posixpath': appears in ['posixpath']
-'setattr': appears in ['setattr']
-'stdout': appears in ['stdout']
-'x': appears in ['x']
 
 *** End of compilation test ***
 
@@ -815,11 +813,7 @@ _cached_symbols_as_one_string is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name2', 'f_name']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
-'x': appears in ['x']
-'y': appears in ['y']
 
 
 Accepting: 'this symbol is unresolved' -> 'this_sym_is_unres', 
@@ -848,10 +842,6 @@ _cached_symbols_as_one_string is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name2', 'f_name']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
-'x': appears in ['x']
-'y': appears in ['y']
 
 *** End of accept symbol match test ***
 
@@ -1037,10 +1027,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'c:\\eclipse\\workspace\\VCode\\Data\\TestData'
+'C:\\Eclipse\\workspace\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'c:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -1074,6 +1064,8 @@ List of abbreviations
 'arg' expands to ['argument']
 'argv' expands to ['arg V.', 'argument value']
 'asc' expands to ['ascii']
+'asyn' expands to ['asynchronous']
+'async' expands to ['asynchronous']
 'atan' expands to ['arc tangent']
 'atof' expands to ['A. to F.']
 'atol' expands to ['A. to L.']
@@ -1226,7 +1218,7 @@ List of abbreviations
 'sys' expands to ['system']
 'temp' expands to ['temporary']
 'termid' expands to ['term I. D.', 'terminal I. D.']
-'tmp' expands to ['temporary']
+'tmp' expands to ['T. M. P.', 'temporary']
 'tok' expands to ['token']
 'trans' expands to ['transform', 'transformation', 'transition', 'translation', 'transport']
 'tst' expands to ['test']
@@ -1246,10 +1238,6 @@ List of unresolved abbreviations
 
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
-'f': appears in ['f_name', 'f_name2']
-'y': appears in ['y']
-'x': appears in ['x']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 
 >>> Testing console command: say(['this', 'symbol', 'is', 'unresolved', ',\\comma'], user_input='1\n')
@@ -1282,6 +1270,8 @@ List of abbreviations
 'arg' expands to ['argument']
 'argv' expands to ['arg V.', 'argument value']
 'asc' expands to ['ascii']
+'asyn' expands to ['asynchronous']
+'async' expands to ['asynchronous']
 'atan' expands to ['arc tangent']
 'atof' expands to ['A. to F.']
 'atol' expands to ['A. to L.']
@@ -1434,7 +1424,7 @@ List of abbreviations
 'sys' expands to ['system']
 'temp' expands to ['temporary']
 'termid' expands to ['term I. D.', 'terminal I. D.']
-'tmp' expands to ['temporary']
+'tmp' expands to ['T. M. P.', 'temporary']
 'tok' expands to ['token']
 'trans' expands to ['transform', 'transformation', 'transition', 'translation', 'transport']
 'tst' expands to ['test']
@@ -1454,10 +1444,6 @@ List of abbreviations
 List of unresolved abbreviations
 
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name', 'f_name2']
-'y': appears in ['y']
-'x': appears in ['x']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 
 >>> Testing console command: print_symbols()
@@ -1521,6 +1507,8 @@ List of abbreviations
 'arg' expands to ['argument']
 'argv' expands to ['arg V.', 'argument value']
 'asc' expands to ['ascii']
+'asyn' expands to ['asynchronous']
+'async' expands to ['asynchronous']
 'atan' expands to ['arc tangent']
 'atof' expands to ['A. to F.']
 'atol' expands to ['A. to L.']
@@ -1673,7 +1661,7 @@ List of abbreviations
 'sys' expands to ['system']
 'temp' expands to ['temporary']
 'termid' expands to ['term I. D.', 'terminal I. D.']
-'tmp' expands to ['temporary']
+'tmp' expands to ['T. M. P.', 'temporary']
 'tok' expands to ['token']
 'trans' expands to ['transform', 'transformation', 'transition', 'translation', 'transport']
 'tst' expands to ['test']
@@ -1693,10 +1681,6 @@ List of abbreviations
 List of unresolved abbreviations
 
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name', 'f_name2']
-'y': appears in ['y']
-'x': appears in ['x']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 
 >>> Testing console command: say(['file', 'name', ',\\comma'], user_input='1\n')
@@ -1751,6 +1735,8 @@ List of abbreviations
 'arg' expands to ['argument']
 'argv' expands to ['arg V.', 'argument value']
 'asc' expands to ['ascii']
+'asyn' expands to ['asynchronous']
+'async' expands to ['asynchronous']
 'atan' expands to ['arc tangent']
 'atof' expands to ['A. to F.']
 'atol' expands to ['A. to L.']
@@ -1903,7 +1889,7 @@ List of abbreviations
 'sys' expands to ['system']
 'temp' expands to ['temporary']
 'termid' expands to ['term I. D.', 'terminal I. D.']
-'tmp' expands to ['temporary']
+'tmp' expands to ['T. M. P.', 'temporary']
 'tok' expands to ['token']
 'trans' expands to ['transform', 'transformation', 'transition', 'translation', 'transport']
 'tst' expands to ['test']
@@ -1923,10 +1909,6 @@ List of abbreviations
 List of unresolved abbreviations
 
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name', 'f_name2']
-'y': appears in ['y']
-'x': appears in ['x']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 
 >>> Testing console command: say(['application', 'programming', 'interface', 'function', ',\\comma'], user_input='1\n')
@@ -1960,6 +1942,8 @@ List of abbreviations
 'arg' expands to ['argument']
 'argv' expands to ['arg V.', 'argument value']
 'asc' expands to ['ascii']
+'asyn' expands to ['asynchronous']
+'async' expands to ['asynchronous']
 'atan' expands to ['arc tangent']
 'atof' expands to ['A. to F.']
 'atol' expands to ['A. to L.']
@@ -2112,7 +2096,7 @@ List of abbreviations
 'sys' expands to ['system']
 'temp' expands to ['temporary']
 'termid' expands to ['term I. D.', 'terminal I. D.']
-'tmp' expands to ['temporary']
+'tmp' expands to ['T. M. P.', 'temporary']
 'tok' expands to ['token']
 'trans' expands to ['transform', 'transformation', 'transition', 'translation', 'transport']
 'tst' expands to ['test']
@@ -2132,10 +2116,6 @@ List of abbreviations
 List of unresolved abbreviations
 
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name', 'f_name2']
-'y': appears in ['y']
-'x': appears in ['x']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
@@ -2747,7 +2727,7 @@ were reinterpreted, as expected
 
 
 
->>> Testing console command: open_file(r'c:\eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3414,6 +3394,8 @@ List of abbreviations
 'arg' expands to ['argument']
 'argv' expands to ['arg V.', 'argument value']
 'asc' expands to ['ascii']
+'asyn' expands to ['asynchronous']
+'async' expands to ['asynchronous']
 'atan' expands to ['arc tangent']
 'atof' expands to ['A. to F.']
 'atol' expands to ['A. to L.']
@@ -3566,7 +3548,7 @@ List of abbreviations
 'sys' expands to ['system']
 'temp' expands to ['temporary']
 'termid' expands to ['term I. D.', 'terminal I. D.']
-'tmp' expands to ['temporary']
+'tmp' expands to ['T. M. P.', 'temporary']
 'tok' expands to ['token']
 'trans' expands to ['transform', 'transformation', 'transition', 'translation', 'transport']
 'tst' expands to ['test']
@@ -3584,10 +3566,9 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 
 
->>> Testing console command: compile_symbols([r'c:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3723,7 +3704,7 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'c:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -7061,6 +7042,173 @@ Heard new statement
 
 
 *******************************************************************************
+* Name        : py_misc_statements
+* Description : testing miscelleneous python statements.
+*******************************************************************************
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Heard define class some variable class body
+Associate 'some variable' with symbol (Enter selection):
+
+  '0': no association
+  '1': some_variable (*new*)
+  '2': SomeVariable (*new*)
+  '3': someVariable (*new*)
+  '4': SOME_VARIABLE (*new*)
+  '5': somevariable (*new*)
+  '6': SOMEVARIABLE (*new*)
+
+> *** Start of source buffer ***
+  1: class some_variable:
+  2:    <CURSOR>
+
+*** End of source buffer ***
+Heard define method some method add arguments
+Associate 'some method' with symbol (Enter selection):
+
+  '0': no association
+  '1': some_method (*new*)
+  '2': SomeMethod (*new*)
+  '3': someMethod (*new*)
+  '4': SOME_METHOD (*new*)
+  '5': somemethod (*new*)
+  '6': SOMEMETHOD (*new*)
+
+> *** Start of source buffer ***
+  1: class some_variable:
+  2:    def some_method(self, <CURSOR>):
+  3:       
+
+*** End of source buffer ***
+Heard collect arguments positional arguments comma
+Associate 'positional arguments' with symbol (Enter selection):
+
+  '0': no association
+  '1': positional_arguments (*new*)
+  '2': PositionalArguments (*new*)
+  '3': positionalArguments (*new*)
+  '4': POSITIONAL_ARGUMENTS (*new*)
+  '5': positionalarguments (*new*)
+  '6': POSITIONALARGUMENTS (*new*)
+
+> *** Start of source buffer ***
+  1: class some_variable:
+  2:    def some_method(self, *positional_arguments, <CURSOR>):
+  3:       
+
+*** End of source buffer ***
+Heard collect keyword arguments keyword arguments
+Associate 'keyword arguments' with symbol (Enter selection):
+
+  '0': no association
+  '1': keyword_arguments (*new*)
+  '2': KeywordArguments (*new*)
+  '3': keywordArguments (*new*)
+  '4': KEYWORD_ARGUMENTS (*new*)
+  '5': keywordarguments (*new*)
+  '6': KEYWORDARGUMENTS (*new*)
+
+> *** Start of source buffer ***
+  1: class some_variable:
+  2:    def some_method(self, *positional_arguments, **keyword_arguments<CURSOR>):
+  3:       
+
+*** End of source buffer ***
+Heard class body
+*** Start of source buffer ***
+  1: class some_variable:
+  2:    def some_method(self, *positional_arguments, **keyword_arguments):
+  3:       <CURSOR>
+
+*** End of source buffer ***
+Heard some array equals some other array sliced at one colon five new statement
+Associate 'some array' with symbol (Enter selection):
+
+  '0': no association
+  '1': some_array (*new*)
+  '2': SomeArray (*new*)
+  '3': someArray (*new*)
+  '4': SOME_ARRAY (*new*)
+  '5': somearray (*new*)
+  '6': SOMEARRAY (*new*)
+
+> Associate 'some other array' with symbol (Enter selection):
+
+  '0': no association
+  '1': some_other_array (*new*)
+  '2': SomeOtherArray (*new*)
+  '3': someOtherArray (*new*)
+  '4': SOME_OTHER_ARRAY (*new*)
+  '5': someotherarray (*new*)
+  '6': SOMEOTHERARRAY (*new*)
+
+> *** Start of source buffer ***
+  1: class some_variable:
+  2:    def some_method(self, *positional_arguments, **keyword_arguments):
+  3:       some_array = some_other_array[1: 5]
+  4:       <CURSOR>
+
+*** End of source buffer ***
+Heard some dictionary item with key zero jump out equals one
+Associate 'some dictionary' with symbol (Enter selection):
+
+  '0': no association
+  '1': some_dictionary (*new*)
+  '2': SomeDictionary (*new*)
+  '3': someDictionary (*new*)
+  '4': SOME_DICTIONARY (*new*)
+  '5': somedictionary (*new*)
+  '6': SOMEDICTIONARY (*new*)
+
+> *** Start of source buffer ***
+  1: class some_variable:
+  2:    def some_method(self, *positional_arguments, **keyword_arguments):
+  3:       some_array = some_other_array[1: 5]
+  4:       some_dictionary[0] = 1<CURSOR>
+
+*** End of source buffer ***
+Heard comment above
+*** Start of source buffer ***
+  1: class some_variable:
+  2:    def some_method(self, *positional_arguments, **keyword_arguments):
+  3:       some_array = some_other_array[1: 5]
+  4:       # <CURSOR>
+  5:       some_dictionary[0] = 1
+
+*** End of source buffer ***
+Heard this is a commented out
+Associate 'this' with symbol (Enter selection):
+
+  '0': no association
+  '1': this (*new*)
+  '2': This (*new*)
+  '3': THIS (*new*)
+
+> Associate 'a commented out' with symbol (Enter selection):
+
+  '0': no association
+  '1': a_commented_out (*new*)
+  '2': ACommentedOut (*new*)
+  '3': aCommentedOut (*new*)
+  '4': A_COMMENTED_OUT (*new*)
+  '5': acommentedout (*new*)
+  '6': ACOMMENTEDOUT (*new*)
+
+> *** Start of source buffer ***
+  1: class some_variable:
+  2:    def some_method(self, *positional_arguments, **keyword_arguments):
+  3:       some_array = some_other_array[1: 5]
+  4:       # this is a commented out<CURSOR>
+  5:       some_dictionary[0] = 1
+
+*** End of source buffer ***
+
+
+*******************************************************************************
 * Name        : python
 * Description : testing the various CSCs and LSAs for dictating Python from scratch
 *******************************************************************************
@@ -7563,6 +7711,17 @@ Associate 'ed simulator' with symbol (Enter selection):
   '6': edsimulator (*new*)
   '7': EDSIMULATOR (*new*)
 
+> Associate 'ed simulator' with symbol (Enter selection):
+
+  '0': no association
+  '1': EdSim
+  '2': ed_simulator (*new*)
+  '3': EdSimulator (*new*)
+  '4': edSimulator (*new*)
+  '5': ED_SIMULATOR (*new*)
+  '6': edsimulator (*new*)
+  '7': EDSIMULATOR (*new*)
+
 >   5: from cont_gen import ContC, ContPy
   6: from CSCmd import CSCmd
   7: from EdSim import EdSim
@@ -7579,7 +7738,18 @@ Heard from module object import symbol object new statement
 *** End of source buffer ***
 Saying: ['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement']
 Heard import modules Ed simulator comma symbol dictionary new statement
-  7: from EdSim import EdSim
+Associate 'ed simulator' with symbol (Enter selection):
+
+  '0': no association
+  '1': EdSim
+  '2': ed_simulator (*new*)
+  '3': EdSimulator (*new*)
+  '4': edSimulator (*new*)
+  '5': ED_SIMULATOR (*new*)
+  '6': edsimulator (*new*)
+  '7': EDSIMULATOR (*new*)
+
+>   7: from EdSim import EdSim
   8: from Object import Object
   9: import EdSim, SymDict
  10: <CURSOR>
@@ -8902,7 +9072,6 @@ _cached_symbols_as_one_string is:
 Unresolved abbreviations are:
 'asymbol': appears in ['isASYMBOL']
 'isasymbol': appears in ['ISASYMBOL', 'ISASYMBOL2', 'isasymbol', 'isasymbol2']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
 'sasymbol': appears in ['ISasymbol']
 
 *** End of compilation test ***
@@ -9517,7 +9686,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'c:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9605,7 +9774,7 @@ Heard move horizontally
 
 
 
->>> Testing console command: open_file(r'c:\eclipse\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\Eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -11715,6 +11884,7 @@ Heard previous one
 *** End of source buffer ***
 
 
+
 *******************************************************************************
 * Name        : unusual_symbols
 * Description : compilation and dictation of unusual symbols
@@ -11732,9 +11902,6 @@ se: ['se']
 _cached_symbols_as_one_string is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  s  se  openlog 
 Unresolved abbreviations are:
-'openlog': appears in ['openlog']
-'parsed': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym']
-'s': appears in ['s']
 'se': appears in ['se']
 
 *** End of compilation test ***
@@ -11913,6 +12080,6 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  314.0 secs
+Test suite completed in:  325.858999968 secs
 -----------------------------------------------
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'

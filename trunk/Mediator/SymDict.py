@@ -949,8 +949,7 @@ class SymDict(Object):
         # Save dictionary to file
         #
         self.save()
-
-#        print '-- SymDict.parse_symbols_from_files: symbols are:'; self.print_symbols()                    
+                
 
     def parse_symbols_from_file(self, file_name, add_sr_entries=1):
         """Parse symbols from a source file.

@@ -1549,8 +1549,16 @@ add_test('python_editing', pseudo_python_editing_wrapper, 'testing the various C
 
 def python_compilation_wrapper():
     test_pseudo_python.test_python_compilation(testing)
-    
+
+def python_misc_statements_wrapper():
+   test_pseudo_python.test_misc_py_statements(testing)
+   
 add_test('python_compilation', python_compilation_wrapper, 'testing parsing of python symbols.')
+    
+
+
+add_test('py_misc_statements', python_misc_statements_wrapper, 'testing miscelleneous python statements.')
+
 
 ##############################################################################
 # Testing repetition of last commands
@@ -3219,7 +3227,7 @@ def test_temporary():
    testing.init_simulator_regression()
    temp_config = temp_factory.new_config()   
    commands.open_file('blah.py')
-   commands.say(['new', 'symbol'])
+   commands.say(['results', 'at', 'index', 'zero', 'jump', 'out', 'equals', 'zero'], user_input='0\n')
 
    
 #add_test('temp', test_temporary, desc='temporary test')
@@ -3252,3 +3260,4 @@ define_suite_by_range(name = 'from_select_pseudo', first = 'select_pseudocode')
 
 # tests starting with 'python' and going through the last
 define_suite_by_range(name = 'from_python', first = 'python')
+
