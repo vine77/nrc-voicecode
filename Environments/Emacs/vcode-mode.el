@@ -314,11 +314,18 @@ sent."
    )
 )
 
-(defun vcode-mode (status)
+(defun vcode-mode-OLD (status)
    (interactive "P")
    (vcode-configure-for-regression-testing nil)
-   (vr-deprecated-mode status "vcode")
+   (vcode-mode-toggle-to status "vcode")
 )
+
+(defun vcode-mode (&optional status)
+   (interactive "P")
+   (vcode-configure-for-regression-testing nil)
+   (vcode-mode-toggle-to status "vcode")
+)
+
 
 (defun vcode-interactive-test ()
   (interactive)
@@ -342,10 +349,10 @@ sent."
   (vcode-close-all-buffers)
   (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"))
   (vcode-configure-for-regression-testing t)
-  (vr-deprecated-mode 1 "vcode-test")
+  (vcode-mode-toggle-to 1 "vcode-test")
   (setq vcode-is-test-editor t)
 ;  (vcode-configure-for-regression-testing nil)
-;  (vr-deprecated-mode nil)
+;  (vcode-mode-toggle-to nil)
 )
 
 (defun vcode-config-py-mode-for-regression-testing ()
@@ -456,7 +463,7 @@ re-starting vr-deprecated Mode to undo vr-deprecated-add-to-activation-list.")
 In the dictation buffer, the format is vr-deprecated:<micstate>.")
 (make-variable-buffer-local 'vcode-mode-line)
 (if (not (assq 'vr-deprecated-mode minor-mode-alist))
-    (setq minor-mode-alist (cons '(vr-deprecated-mode vcode-mode-line)
+    (setq minor-mode-alist (cons '(vcode-mode-toggle-to vcode-mode-line)
 				 minor-mode-alist)))
 
 (defvar vcode-mode-mic-state "not connected"
@@ -1311,7 +1318,7 @@ Changes are put in a changes queue `vr-deprecated-queued-changes.
 (defun vr-deprecated-quit ()
   "Turn off vr-deprecated mode, and cause the vr-deprecated mode subprocess to exit cleanly."
   (interactive)
-  (vr-deprecated-mode 0))
+  (vcode-mode-toggle-to 0))
 
 (defun vr-deprecated-toggle-mic ()
   "Toggles the state of the Dragon NaturallySpeaking microphone:
@@ -1362,7 +1369,7 @@ off -> on, {on,sleeping} -> off."
     ('error (progn
 	      (message "vr-deprecated Mode: cannot connect to %s:%d" host port)
 	      (message (format "Error condition was: %S" e))
-	      (vr-deprecated-mode 0)
+	      (vcode-mode-toggle-to 0)
 	      nil)))
 )
 
@@ -1390,13 +1397,13 @@ off -> on, {on,sleeping} -> off."
   )
 
 (defun vr-deprecated-kill-emacs ()
-  (vr-deprecated-mode 0)
+  (vcode-mode-toggle-to 0)
   (sleep-for 1)
   t)
 
 (defun vr-deprecated-cmd-terminating (vr-deprecated-request)
   (let (vr-deprecated-emacs-cmds)
-    (vr-deprecated-mode 0))
+    (vcode-mode-toggle-to 0))
   (if vr-deprecated-host
       (vr-deprecated-sentinel nil "finished\n"))
   (message "vr-deprecated process terminated; vr-deprecated Mode turned off")
@@ -1407,7 +1414,7 @@ off -> on, {on,sleeping} -> off."
 ;; vr-deprecated Mode entry/exit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun vr-deprecated-mode (arg &optional speech-server)
+(defun vcode-mode-toggle-to (arg &optional speech-server)
   "Toggle vr-deprecated mode.  With argument ARG, turn vr-deprecated mode on iff ARG is
 positive.
 
@@ -1438,8 +1445,8 @@ instructions.
 )
 
 (defun vcode-mode-activate (arg)
-  "Activates the vr-deprecated mode, after it has been configured for a particular
-speech server"
+  "Activates the vr-deprecated mode, after it has been configured for a 
+   particular speech server"
 
   (setq vr-deprecated-mode
         (if (null arg) (not vr-deprecated-mode)
@@ -1479,7 +1486,7 @@ speech server"
           `("%b -- " (, invocation-name "@" system-name)))
     (vr-deprecated-activate-buffer nil)
     (if vr-deprecated-host
-; DCF - I think this is left over from vr-deprecated-mode.  We should send an
+; DCF - I think this is left over from vr-mode.  We should send an
 ; editor_disconnecting message (not just a string)
 ;      (vr-deprecated-send-cmd "exit")
         (vcode-disconnecting))
@@ -1597,11 +1604,11 @@ which is the list representing the command and its arguments."
   (cond ((eq (nth 1 vr-deprecated-request) 'succeeded)
 	 (vr-deprecated-startup))
 	((eq (nth 1 vr-deprecated-request) 'no-window)
-	 (vr-deprecated-mode 0)
+	 (vcode-mode-toggle-to 0)
 	 (message "vr-deprecated process: no window matching %s %s"
 		  vr-deprecated-win-class vr-deprecated-win-title))
 	(t
-	 (vr-deprecated-mode 0)
+	 (vcode-mode-toggle-to 0)
 	 (message "vr-deprecated process initialization: %s"
 		  (nth 1 vr-deprecated-request))))
   t)
@@ -1668,7 +1675,7 @@ See vcode-cmd-prepare-for-ignored-key.
 This is ridiculous, but Emacs does not automatically change its
 concept of selected-frame until you type into it.  
 
-The old solution to this, inherited from vr-deprecated-mode, was to have
+The old solution to this, inherited from vr-mode, was to have
 the server us the HWND of the foreground window and explcitly activate the
 frame that owns it.  The problem with this solution is that it requires
 that Emacs's window-id match the Windows HWNd, which won't be the case
@@ -1917,7 +1924,7 @@ command was a yank or not."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Configuration allowing vr-deprecated-mode to interact with VoiceCode speech 
+;;; Configuration allowing vr-mode to interact with VoiceCode speech 
 ;;; server.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
