@@ -23,7 +23,7 @@
 
 import re, sys, types
 from xml.marshal.wddx import WDDXMarshaller, WDDXUnmarshaller
-from debug import trace
+import debug
 
 import debug, Object
 
@@ -142,7 +142,7 @@ class Messenger(Object.Object):
         *none* response -- 
         """
 
-        trace('send_mess', 'mess_name=\'%s\'' % (mess_name))
+        debug.trace('send_mess', 'mess_name=\'%s\'' % (mess_name))
         unpkd_mess = self.encoder.encode(mess_name, mess_argvals)
         pkd_mess = self.packager.pack_mess(unpkd_mess)
         self.packager.send_packed_mess(pkd_mess, self.transporter)
@@ -162,12 +162,12 @@ class Messenger(Object.Object):
         (STR, {STR: STR}) name_argvals_mess -- The message retrieved
          from external editor in *(mess_name, {arg:val})* format."""
 
-        trace('get_mess', 'expecting %s' % repr(expect))
+        debug.trace('get_mess', 'expecting %s' % repr(expect))
         
         pkd_mess = self.packager.get_packed_mess(self.transporter)
         unpkd_mess = self.packager.unpack_mess(pkd_mess)
         name_argvals_mess = self.encoder.decode(unpkd_mess)
-#        trace('get_mess', 'received message args=%s' % repr(name_argvals_mess[1]))
+#        debug.trace('get_mess', 'received message args=%s' % repr(name_argvals_mess[1]))
 
         if expect != None and (not (name_argvals_mess[0] in expect)):
             self.wrong_message(name_argvals_mess, expect)
@@ -329,7 +329,7 @@ class MessPackager_FixedLenSeq(MessPackager):
 
         ..[MessTransporter] file:///./messaging.MessTransporter.html"""
 
-        trace('send_packed_mess', 'pkd_mess="%s"' % pkd_mess)
+        debug.trace('send_packed_mess', 'pkd_mess="%s"' % pkd_mess)
         
         #
         # Nothing particular about how such messages need to be sent.
@@ -950,7 +950,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         .. [MessEncoder] file:///./messaging.MessEncoder.html
         .. [MessEncoder_LenPrefArgs] file:///./messaging.MessEncoder_LenPrefArgs.html"""
 
-        trace('encode_data_item', 'item=\'%s\'' % repr(item))
+        debug.trace('encode_data_item', 'item=\'%s\'' % repr(item))
 
         #
         # Convert numbers and 'None' to strings
@@ -960,14 +960,14 @@ class MessEncoder_LenPrefArgs(Object.Object):
             isinstance(item, types.FloatType) or
             item == None):
             item = repr(item)
-            trace('encode_data_item', 'item=\'%s\' converted to string from a number type' % repr(item))
+            debug.trace('encode_data_item', 'item=\'%s\' converted to string from a number type' % repr(item))
         
 
         if isinstance(item, types.StringType):
             #
             # Data item is just a string
             #
-            trace('encode_data_item', 'item=\'%s\' is a string' % repr(item))
+            debug.trace('encode_data_item', 'item=\'%s\' is a string' % repr(item))
             delims = ('<', '>')
             str_item = item
         elif isinstance(item, types.ListType) or isinstance(item, types.TupleType):
@@ -1000,7 +1000,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         #
         str_item = "%s%s%s%s" % (len(str_item), delims[0], str_item, delims[1])
 
-        trace('encode_data_item', 'string item=\'%s\' yields str_item=\'%s\'' % (repr(item), str_item))
+        debug.trace('encode_data_item', 'string item=\'%s\' yields str_item=\'%s\'' % (repr(item), str_item))
 
         return str_item
                 
@@ -1071,7 +1071,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         #
         # Get type and length of the data item
         #
-        trace('decode_data_item', 'str_item=\'%s\'' % str_item)
+        debug.trace('decode_data_item', 'str_item=\'%s\'' % str_item)
         a_match = re.match('\s*(\d+)\s*([<\\[{])', str_item)
         length = int(float(a_match.group(1)))
         delim_open = a_match.group(2)
@@ -1083,7 +1083,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         descr = str_item[:length]
         str_item = str_item[length:]
 
-        trace('decode_data_item', 'descr=\'%s\'' % descr)
+        debug.trace('decode_data_item', 'descr=\'%s\'' % descr)
         
         #
         # Decode appropriate data type, depending on delimiter
@@ -1101,7 +1101,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         #
         # Read past the closing delimiter
         #
-        trace('decode_data_item', 'looking for closing delimiter in \'%s\'' % str_item)
+        debug.trace('decode_data_item', 'looking for closing delimiter in \'%s\'' % str_item)
         a_match = re.match('\s*%s\s*' % delim_close, str_item)
         str_item = str_item[a_match.end():]
         
@@ -1183,7 +1183,7 @@ class MessEncoder_LenPrefArgs(Object.Object):
         # Parse description until it's all blanks
         #
         while not re.match('^\s*$', descr):
-            trace('decode_dict_descr', 'descr=\'%s\'' % descr)
+            debug.trace('decode_dict_descr', 'descr=\'%s\'' % descr)
 
             #
             # Parse the key and value

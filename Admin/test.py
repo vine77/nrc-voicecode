@@ -22,9 +22,14 @@
 """Regression testing script"""
 
 import os, natlink, posixpath, sys
-import MediatorObject, sim_commands, sr_interface, vc_globals
+import debug.MediatorObject, sim_commands, sr_interface, vc_globals
 
 sys.path = sys.path + [vc_globals.config, vc_globals.admin]
+
+# Uncomment this and add some entries to trace_what if you want to 
+# activate some traces.
+#debug.config_traces(status="on", trace_what={})
+
 
 #
 # Make sure we run tests without connecting to NatSpeak
