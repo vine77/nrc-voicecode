@@ -99,7 +99,7 @@ class Action(Object.Object):
         app.log_cmd(cont, self)
 
 
-    def execute(self):
+    def execute(self, app, cont):
         """Execute the action.
         
         **INPUTS**
