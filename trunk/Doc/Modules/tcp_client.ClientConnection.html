@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:38:15 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:14:52 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -26,7 +26,7 @@
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ClientConnection</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.connect"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.connect</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">host=None</SPAN>, <SPAN CLASS="Argument">listen_port=None</SPAN>, <SPAN CLASS="Argument">talk_port=None</SPAN>)<SPAN CLASS="OneLiner"> # connect to the mediator</SPAN>
-    <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.disconnect"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.disconnect</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">notify=1</SPAN>)<SPAN CLASS="OneLiner"> # disconnect from the mediator</SPAN>
+    <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.disconnect"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.disconnect</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.is_connected"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.is_connected</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.listen"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.listen</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>)<SPAN CLASS="OneLiner"> # creates and starts a data thread on the listen_sock</SPAN>
     <A CLASS="DocLink" HREF="#tcp_client.ClientConnection.new_data_thread_given_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientConnection.new_data_thread_given_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>)
@@ -67,6 +67,11 @@ connected to the mediator
 <DT>
 STR <EM>ID</EM>
 <DD>unique ID assigned to this connection
+<DT>
+Event <EM>client_quitting</EM>
+<DD>threading.Event 
+used to signal to the data thread that the connection is 
+ending, or the client is quitting
 </DL>
 <P>
 <STRONG>CLASS ATTRIBUTES</STRONG></P>
@@ -120,21 +125,18 @@ for the talk connection and the MixedMessenger for the listen
 connection, or None if the connection was not made successfully
 
 </DL>
-<H2 ID="tcp_client.ClientConnection.disconnect" CLASS="Method">tcp_client.ClientConnection.disconnect(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">notify=1</SPAN>)</H2>
-<P>disconnect from the mediator</P>
+<H2 ID="tcp_client.ClientConnection.disconnect" CLASS="Method">tcp_client.ClientConnection.disconnect(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
 
 <P>
+disconnect from the mediator.  Note that ClientEditor has the
+messengers, so it will have to be in charge of 
+notifying the mediator that we are disconnecting 
+(if it was client-initiated).  It should do so after this call.</P>
+<P>
 <STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>BOOL</EM> notify
-<DD>true if we should notify the mediator that we
-are disconnecting.  False if we are calling disconnect in
-response to a disconnection from the mediator and should
-therefore disconnect silently.
-</DL>
+<P>
+<EM>none</EM></P>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 

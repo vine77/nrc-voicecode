@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:38:15 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:14:52 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -19,12 +19,15 @@
 
 <H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">tcp_client.ClientEditor<BR>
 &nbsp;&nbsp;Object.OwnerObject<BR>
+&nbsp;&nbsp;AppState.AppCbkHandler<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ClientEditor</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ClientEditor</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>, <A CLASS="DocLink" HREF="AppState.AppCbkHandler.html">AppCbkHandler</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor</SPAN>, <SPAN CLASS="Argument">owner</SPAN>, <SPAN CLASS="Argument">ID</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_client.ClientEditor.close_app_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.close_app_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_client.ClientEditor.close_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.close_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.cmd_active_buffer_name</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">arguments</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.cmd_beginning_of_line</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">arguments</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.cmd_bidirectional_selection</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">arguments</SPAN>)
@@ -55,16 +58,30 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.cmd_pref_newline_convention</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">arguments</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.cmd_recog_begin</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">arguments</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.cmd_recog_end</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">arguments</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.cmd_save_file</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">arguments</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.cmd_set_selection</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">arguments</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.cmd_set_text</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">arguments</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.cmd_terminating</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">arguments</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.cmd_updates</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">arguments</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_client.ClientEditor.connected"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.connected</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">talk_msgr</SPAN>, <SPAN CLASS="Argument">listen_msgr</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_client.ClientEditor.curr_buff_name_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.curr_buff_name_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_client.ClientEditor.disconnected"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.disconnected</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_client.ClientEditor.do_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.do_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_client.ClientEditor.mediator_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.mediator_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_client.ClientEditor.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.on_change</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">start</SPAN>, <SPAN CLASS="Argument">end</SPAN>, <SPAN CLASS="Argument">text</SPAN>, <SPAN CLASS="Argument">selection_start</SPAN>, <SPAN CLASS="Argument">selection_end</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>, <SPAN CLASS="Argument">program_initiated</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_client.ClientEditor.open_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.open_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_client.ClientEditor.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_client.ClientEditor.sel_update"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_client.ClientEditor.sel_update</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from AppState.AppCbkHandler</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppCbkHandler.close_app_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.close_app_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppCbkHandler.close_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.close_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppCbkHandler.curr_buff_name_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.curr_buff_name_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppCbkHandler.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppCbkHandler.open_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.open_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppCbkHandler.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -97,12 +114,20 @@ the mediator without blocking
 AppState <EM>editor</EM>
 <DD>the AppState interface to the underlying editor
 <DT>
+STR <EM>editor_name</EM>
+<DD>the string which the editor uses to identify
+itself to the ClientEditor
+<DT>
 <EM>{STR:FCT}</EM> msg_map
 <DD>map from message names to (unbound) methods
 taking <EM>(self, {arg:val})</EM> to handle that message
 <DT>
 <EM>[STR] expect</EM>
 <DD>list of commands expected from the mediator
+<DT>
+<EM>BOOL ignore_callbacks</EM>
+<DD>flag to indicate that callbacks are
+triggered by a mediator-initiated message and should be ignored
 <DT>
 <EM>[{STR:ANY}] awaiting_response</EM>
 <DD>list of responses to a
@@ -122,6 +147,49 @@ itself during callbacks to its owner
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="tcp_client.ClientEditor.close_app_cbk" CLASS="Method">tcp_client.ClientEditor.close_app_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which indicates that the application has 
+closed or disconnected from the mediator</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance to be removed
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="tcp_client.ClientEditor.close_buffer_cbk" CLASS="Method">tcp_client.ClientEditor.close_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the application
+has closed a buffer</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer which was closed
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="tcp_client.ClientEditor.connected" CLASS="Method">tcp_client.ClientEditor.connected(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">talk_msgr</SPAN>, <SPAN CLASS="Argument">listen_msgr</SPAN>)</H2>
 <P>None</P>
 
@@ -133,6 +201,29 @@ means of the provided talk_msgr and listen_msgr.</P>
 <STRONG>INPUTS</STRONG></P>
 <P>
 <EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="tcp_client.ClientEditor.curr_buff_name_cbk" CLASS="Method">tcp_client.ClientEditor.curr_buff_name_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the current
+buffer has changed</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the newly current buffer 
+</DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
 <P>
@@ -189,6 +280,84 @@ in the queue</P>
 <P>
 <EM>none</EM>
 </P>
+<H2 ID="tcp_client.ClientEditor.new_window" CLASS="Method">tcp_client.ClientEditor.new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+called when the editor notifies us of a new window for the 
+specified instance</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if window is added
+
+</DL>
+<H2 ID="tcp_client.ClientEditor.open_buffer_cbk" CLASS="Method">tcp_client.ClientEditor.open_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the application
+has opened a new buffer </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer which was opened
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="tcp_client.ClientEditor.rename_buffer_cbk" CLASS="Method">tcp_client.ClientEditor.rename_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the application
+has renamed a buffer</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> old_buff_name
+<DD>old name of the buffer 
+<DT>
+<EM>STR</EM> new_buff_name
+<DD>new name of the buffer 
+</DL>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="tcp_client.ClientEditor.sel_update" CLASS="Method">tcp_client.ClientEditor.sel_update(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">buff_name=None</SPAN>)</H2>
 <P>None</P>
 
@@ -215,6 +384,154 @@ buffer
 <DD>the update descriptions
 
 </DL>
+<H2 ID="AppState.AppCbkHandler.close_app_cbk" CLASS="Method">AppState.AppCbkHandler.close_app_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which indicates that the application has 
+closed or disconnected from the mediator</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance to be removed
+<DT>
+<EM>BOOL unexpected</EM>
+<DD>1 if the editor broke the connection
+without first sending an editor_disconnecting message
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppCbkHandler.close_buffer_cbk" CLASS="Method">AppState.AppCbkHandler.close_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the application
+has closed a buffer</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer which was closed
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppCbkHandler.curr_buff_name_cbk" CLASS="Method">AppState.AppCbkHandler.curr_buff_name_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the current
+buffer has changed</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the newly current buffer 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppCbkHandler.new_window" CLASS="Method">AppState.AppCbkHandler.new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+called when the editor notifies us of a new window for the 
+specified instance</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if window is added
+
+</DL>
+<H2 ID="AppState.AppCbkHandler.open_buffer_cbk" CLASS="Method">AppState.AppCbkHandler.open_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the application
+has opened a new buffer </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer which was opened
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppCbkHandler.rename_buffer_cbk" CLASS="Method">AppState.AppCbkHandler.rename_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the application
+has renamed a buffer</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> old_buff_name
+<DD>old name of the buffer 
+<DT>
+<EM>STR</EM> new_buff_name
+<DD>new name of the buffer 
+</DL>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
 <P>Define new attributes for <EM>self</EM></P>
 

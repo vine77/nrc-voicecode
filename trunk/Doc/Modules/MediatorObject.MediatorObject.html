@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:38:11 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:12:16 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -28,7 +28,7 @@
     <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.add_abbreviation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.add_abbreviation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">abbreviation</SPAN>, <SPAN CLASS="Argument">expansions</SPAN>)<SPAN CLASS="OneLiner"> # Add an abbreviation to VoiceCode's abbreviations dictionary.</SPAN>
     <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.add_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.add_csc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)<SPAN CLASS="OneLiner"> # Add a new Context Sensitive Command.</SPAN>
     <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.add_lsa"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.add_lsa</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms</SPAN>, <SPAN CLASS="Argument">meanings</SPAN>)<SPAN CLASS="OneLiner"> # Add a language specific word.</SPAN>
-    <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.close_app_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.close_app_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.close_app_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.close_app_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.configure"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.configure</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">config_file='H:\\Projects\\VoiceCode\\VCode\\Config\\vc_config.py'</SPAN>)<SPAN CLASS="OneLiner"> # Configures a mediator object based on a configuration file.</SPAN>
     <A CLASS="DocLink" HREF="#MediatorObject.MediatorObject.define_config_functions"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.define_config_functions</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">names</SPAN>, <SPAN CLASS="Argument">exclude=[]</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.MediatorObject.print_abbreviations</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
@@ -183,7 +183,7 @@ dictated text, e.g. "is not equal to").</P>
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="MediatorObject.MediatorObject.close_app_cbk" CLASS="Method">MediatorObject.MediatorObject.close_app_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>)</H2>
+<H2 ID="MediatorObject.MediatorObject.close_app_cbk" CLASS="Method">MediatorObject.MediatorObject.close_app_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance_name</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -204,6 +204,10 @@ if any.</P>
 included only for compatibility with the usual call from
 AppState to the AppMgr.  This implementation of MediatorObject
 has only one editor instance, so it ignores this parameter
+<DT>
+<EM>BOOL unexpected</EM>
+<DD>1 if the editor broke the connection
+without first sending an editor_disconnecting message
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

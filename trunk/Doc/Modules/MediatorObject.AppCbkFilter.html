@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 08 19:38:11 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:12:16 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -19,15 +19,18 @@
 
 <H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">MediatorObject.AppCbkFilter<BR>
 &nbsp;&nbsp;Object.OwnerObject<BR>
+&nbsp;&nbsp;AppState.AppCbkHandler<BR>
 </P>
 
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
-<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">AppCbkFilter</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">AppCbkFilter</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>, <A CLASS="DocLink" HREF="AppState.AppCbkHandler.html">AppCbkHandler</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.AppCbkFilter.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">the_mediator</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
-    <A CLASS="DocLink" HREF="#MediatorObject.AppCbkFilter.close_app_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.AppCbkFilter.close_app_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorObject.AppCbkFilter.close_app_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.AppCbkFilter.close_app_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorObject.AppCbkFilter.close_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.AppCbkFilter.close_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorObject.AppCbkFilter.curr_buff_name_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.AppCbkFilter.curr_buff_name_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorObject.AppCbkFilter.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.AppCbkFilter.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#MediatorObject.AppCbkFilter.open_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.AppCbkFilter.open_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
     <A CLASS="DocLink" HREF="#MediatorObject.AppCbkFilter.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">MediatorObject.AppCbkFilter.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
@@ -45,6 +48,15 @@
     <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
     <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
 
+    <SPAN CLASS="InheritsHead"># Inherited from AppState.AppCbkHandler</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppCbkHandler.close_app_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.close_app_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppCbkHandler.close_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.close_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppCbkHandler.curr_buff_name_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.curr_buff_name_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppCbkHandler.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppCbkHandler.open_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.open_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)
+    <A CLASS="DocLink" HREF="#AppState.AppCbkHandler.rename_buffer_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppState.AppCbkHandler.rename_buffer_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)
+
 </PRE><H2>Description</H2><P>
 <STRONG>INSTANCE ATTRIBUTES</STRONG></P>
 
@@ -59,7 +71,7 @@
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="MediatorObject.AppCbkFilter.close_app_cbk" CLASS="Method">MediatorObject.AppCbkFilter.close_app_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<H2 ID="MediatorObject.AppCbkFilter.close_app_cbk" CLASS="Method">MediatorObject.AppCbkFilter.close_app_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -73,6 +85,10 @@ closed or disconnected from the mediator</P>
 <DT>
 <EM>STR</EM> instance
 <DD>name of the application instance to be removed
+<DT>
+<EM>BOOL unexpected</EM>
+<DD>1 if the editor broke the connection
+without first sending an editor_disconnecting message
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -85,6 +101,29 @@ closed or disconnected from the mediator</P>
 <P>
 callback from AppState which notifies us that the application
 has closed a buffer</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer which was closed
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="MediatorObject.AppCbkFilter.curr_buff_name_cbk" CLASS="Method">MediatorObject.AppCbkFilter.curr_buff_name_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the current
+buffer has changed</P>
 <P>
 <STRONG>INPUTS</STRONG></P>
 
@@ -127,6 +166,29 @@ specified instance</P>
 <DD>true if window is added
 
 </DL>
+<H2 ID="MediatorObject.AppCbkFilter.open_buffer_cbk" CLASS="Method">MediatorObject.AppCbkFilter.open_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the application
+has opened a buffer</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer which was closed
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="MediatorObject.AppCbkFilter.rename_buffer_cbk" CLASS="Method">MediatorObject.AppCbkFilter.rename_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)</H2>
 <P>None</P>
 
@@ -394,6 +456,154 @@ its owned objects are the last remaining references</P>
 <EM>none</EM></P>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppCbkHandler.close_app_cbk" CLASS="Method">AppState.AppCbkHandler.close_app_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which indicates that the application has 
+closed or disconnected from the mediator</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance to be removed
+<DT>
+<EM>BOOL unexpected</EM>
+<DD>1 if the editor broke the connection
+without first sending an editor_disconnecting message
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppCbkHandler.close_buffer_cbk" CLASS="Method">AppState.AppCbkHandler.close_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the application
+has closed a buffer</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer which was closed
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppCbkHandler.curr_buff_name_cbk" CLASS="Method">AppState.AppCbkHandler.curr_buff_name_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the current
+buffer has changed</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the newly current buffer 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppCbkHandler.new_window" CLASS="Method">AppState.AppCbkHandler.new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+called when the editor notifies us of a new window for the 
+specified instance</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if window is added
+
+</DL>
+<H2 ID="AppState.AppCbkHandler.open_buffer_cbk" CLASS="Method">AppState.AppCbkHandler.open_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the application
+has opened a new buffer </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+<DT>
+<EM>STR</EM> buff_name
+<DD>name of the buffer which was opened
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppState.AppCbkHandler.rename_buffer_cbk" CLASS="Method">AppState.AppCbkHandler.rename_buffer_cbk(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">old_buff_name</SPAN>, <SPAN CLASS="Argument">new_buff_name</SPAN>)</H2>
+<P>None</P>
+
+<P>
+callback from AppState which notifies us that the application
+has renamed a buffer</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> old_buff_name
+<DD>old name of the buffer 
+<DT>
+<EM>STR</EM> new_buff_name
+<DD>new name of the buffer 
+</DL>
 <P>
 <EM>none</EM>
 </P>
