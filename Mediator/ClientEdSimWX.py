@@ -150,7 +150,7 @@ class ClientEdSimPane(wxPanel, Object.OwnerObject):
 
     def on_toggle_connection(self, event):
         """event handler for connect/disconnect button
-	"""
+        """
         event.Skip()
 # do button GUI toggle regardless
         if self.exiting:
@@ -163,16 +163,16 @@ class ClientEdSimPane(wxPanel, Object.OwnerObject):
 
     def disconnected(self):
         """method by which the frame notifies us that the mediator
-	has disconnected
+        has disconnected
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.connection.disconnect()
         self.update_button()
 
@@ -265,16 +265,16 @@ class ClientEdSimFrame(wxFrame, Object.OwnerObject):
 
     def disconnected(self):
         """method by which the application notifies us that the mediator
-	has disconnected
+        has disconnected
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.pane.disconnected()
 
     def __init__(self, app, parent, ID, title, client_name, host = None,
@@ -302,43 +302,43 @@ class ClientEdSimFrame(wxFrame, Object.OwnerObject):
 
     def disconnect_editor(self):
         """method by which the panel notifies us that a disconnected
-	message should be sent to the editor
-	**INPUTS**
+        message should be sent to the editor
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.app.disconnect_editor()
 
     def editor_connected(self, talk, listen):
         """method by which the frame notifies us that we should call the
-	connected method of the editor
-	
-	**INPUTS**
+        connected method of the editor
+        
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.app.editor_connected(talk, listen)
 
     def hook_data_event(self):
         """method by which the pane tells us to hook the 
-	wxEVT_SOCKET_DATA event
+        wxEVT_SOCKET_DATA event
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.app.hook_data_event()
 
 class ClientEdSimWX(wxApp, Object.OwnerObject):
@@ -362,25 +362,25 @@ class ClientEdSimWX(wxApp, Object.OwnerObject):
         host = None, listen_port = None, talk_port = None, 
         **args):
         """
-	**INPUTS**
+        **INPUTS**
 
-	*BOOL multiple* -- should this EdSim allow for multiple open
-	buffers?
+        *BOOL multiple* -- should this EdSim allow for multiple open
+        buffers?
 
-	BOOL *client_indentation* -- if true, use the name
-	EdSimClientIndent when handshaking with the server, to ensure that
-	the server will not override indentation on the server-side.
+        BOOL *client_indentation* -- if true, use the name
+        EdSimClientIndent when handshaking with the server, to ensure that
+        the server will not override indentation on the server-side.
 
-	*STR* host -- name or IP address of the host on which the
-	mediator server is running.  Defaults to a server running
-	locally.
+        *STR* host -- name or IP address of the host on which the
+        mediator server is running.  Defaults to a server running
+        locally.
 
-	*INT* listen_port -- port number on which the server expects
-	new listen connections.  Defaults to VC_LISTENER_PORT
+        *INT* listen_port -- port number on which the server expects
+        new listen connections.  Defaults to VC_LISTENER_PORT
 
-	*INT* talk_port -- port number on which the server expects
-	new talk connections.  Defaults to VC_TALKER_PORT
-	"""
+        *INT* talk_port -- port number on which the server expects
+        new talk connections.  Defaults to VC_TALKER_PORT
+        """
         self.deep_construct(ClientEdSimWX,
                             {
                              'client_indentation': client_indentation,
@@ -400,8 +400,8 @@ class ClientEdSimWX(wxApp, Object.OwnerObject):
 
     def app_closing(self, ID, unexpected = 0):
         """method called by ClientEditor when it gets a message from
-	AppState saying that it is closing
-	"""
+        AppState saying that it is closing
+        """
 # ClientEditor expects this to be defined, but EdSim doesn't ever
 # generate a close_app_cbk, so we don't ever expect to receive this.
         self.editor.disconnected()
@@ -410,8 +410,8 @@ class ClientEdSimWX(wxApp, Object.OwnerObject):
 
     def mediator_closing(self, ID, unexpected = 0):
         """method called by editor when it gets a message from the
-	mediator that it is closing (or if the connection is broken
-	without warning"""
+        mediator that it is closing (or if the connection is broken
+        without warning"""
         self.editor.disconnected()
         self.frame.disconnected()
 
@@ -431,7 +431,7 @@ class ClientEdSimWX(wxApp, Object.OwnerObject):
 
     def on_data(self, event):
         """event handler for data events
-	"""
+        """
         self.editor.mediator_cmd()
 
     def run(self):
@@ -439,46 +439,46 @@ class ClientEdSimWX(wxApp, Object.OwnerObject):
 
     def disconnect_editor(self):
         """method by which the frame notifies us that a disconnected
-	message should be sent to the editor
+        message should be sent to the editor
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.editor.disconnected()
 
     def editor_connected(self, talk, listen):
         """method by which the frame notifies us that we should call the
-	connected method of the editor
-	
-	**INPUTS**
+        connected method of the editor
+        
+        **INPUTS**
 
-	*Messenger talk* -- the Messenger for the talk connection
-	
-	*Messenger listen* -- the Messenger for the listen connection
+        *Messenger talk* -- the Messenger for the talk connection
+        
+        *Messenger listen* -- the Messenger for the listen connection
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.editor.connect(talk, listen)
 
     def hook_data_event(self):
         """method by which the frame tells us to hook the 
-	wxEVT_SOCKET_DATA event
+        wxEVT_SOCKET_DATA event
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         EVT_MINE(self, wxEVT_SOCKET_DATA, 
             self.on_data)
 

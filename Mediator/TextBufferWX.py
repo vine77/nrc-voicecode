@@ -66,15 +66,15 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
     def __init__(self, underlying_control, carriage_return_bug = 1, **args):
         """wraps underlying wxPython wxTextCtrl
 
-	**INPUTS**
+        **INPUTS**
 
-	*wxTextCtrl* underlying_control -- underlying text control - a wxPython
-	text control object
+        *wxTextCtrl* underlying_control -- underlying text control - a wxPython
+        text control object
     
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(TextBufferWX,
                             {'underlying':underlying_control,
                             'program_initiated':0,
@@ -98,8 +98,8 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
       
     def _on_evt_text(self, event):
         """handler for wxEVT_COMMAND_TEXT_UPDATED.
-	
-	"""
+        
+        """
 # program initiated calls originate from set_text, which handles
 # updating self.contents_external and internal, and calling
 # _on_change_specification
@@ -118,64 +118,64 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
 
     def modified(self):
         """has the buffer been modified since the last time it was
-	saved?
+        saved?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the buffer has been modified since the last
-	save (or load)
-	"""
+        *BOOL* -- true if the buffer has been modified since the last
+        save (or load)
+        """
         return self.underlying.IsModified()
 
     def save_file(self, f_path):
         """save the buffer to a file
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR f_path* -- full path of the file
+        *STR f_path* -- full path of the file
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the file was saved successfully
-	"""
+        *BOOL* -- true if the file was saved successfully
+        """
         return self.underlying.SaveFile(f_path)
 
     def load_file(self, f_path):
         """load the buffer from a file (erasing the current contents)
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR f_path* -- full path of the file
+        *STR f_path* -- full path of the file
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the file was loaded successfully
-	"""
+        *BOOL* -- true if the file was loaded successfully
+        """
         success = self.underlying.LoadFile(f_path)
         return success
 
     def range_defaults(self, start = None, end = None):
         """translates from TextBuffer defaults for specifying start and
-	end of a range to the appropriate values for wxTextCtrl (except
-	that we use external offsets here)
-	
-	**INPUTS**
-	
-	*INT* start -- external offset of start of range, or None to
-	default to the beginning of the buffer
+        end of a range to the appropriate values for wxTextCtrl (except
+        that we use external offsets here)
+        
+        **INPUTS**
+        
+        *INT* start -- external offset of start of range, or None to
+        default to the beginning of the buffer
 
-	*INT* end -- external offset of character following end of 
-	range, or None to default to the end of the buffer
+        *INT* end -- external offset of character following end of 
+        range, or None to default to the end of the buffer
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- external offsets
-	
-	"""
+        *(INT, INT)* -- external offsets
+        
+        """
 
 # note: this uses internal positions
         if (start == None):
@@ -190,17 +190,17 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
 
     def line_range_internal(self, start, end):
         """find line numbers of a range of internal positions within
-	contents_internal
+        contents_internal
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* start -- character offset into contents_internal of start of range
-	*INT* end  -- character offset into contents_internal of end of range
+        *INT* start -- character offset into contents_internal of start of range
+        *INT* end  -- character offset into contents_internal of end of range
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- corresponding range of line numbers
-	"""
+        *(INT, INT)* -- corresponding range of line numbers
+        """
         before = string.split(self.contents_internal[0:start], self.crnl)
 #        print before
         first = len(before) - 1
@@ -213,17 +213,17 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
     
     def line_range_external(self, start, end):
         """find line numbers of a range of external positions within
-	contents_external
+        contents_external
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* start -- character offset into contents_external of start of range
-	*INT* end  -- character offset into contents_external of end of range
+        *INT* start -- character offset into contents_external of start of range
+        *INT* end  -- character offset into contents_external of end of range
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- corresponding range of line numbers
-	"""
+        *(INT, INT)* -- corresponding range of line numbers
+        """
         first = len(string.split(self.contents_external[0:start], self.nl)) -1
         range = self.contents_external[start:end]
         n = len(string.split(range, self.nl)) -1
@@ -232,19 +232,19 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
 
     def external_to_internal(self, start, end):
         """converts a range of external positions (NL only) to
-	internal positions (in the underlying
-	buffer which uses CR-LF)
+        internal positions (in the underlying
+        buffer which uses CR-LF)
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* start -- start of range (external)
-	*INT* end -- end of range (external)
+        *INT* start -- start of range (external)
+        *INT* end -- end of range (external)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- corresponding character range 
-	internally, using CR-LF
-	"""
+        *(INT, INT)* -- corresponding character range 
+        internally, using CR-LF
+        """
         lines = self.line_range_external(start, end)
         s = start +lines[0]*self.delta_width
         e = end +lines[1]*self.delta_width
@@ -252,18 +252,18 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
 
     def internal_to_external(self, start, end):
         """converts a range of internal positions (in the underlying
-	buffer which uses CR-LF) to external positions (NL only)
+        buffer which uses CR-LF) to external positions (NL only)
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* start -- start of range (internal)
-	*INT* end -- end of range (internal)
+        *INT* start -- start of range (internal)
+        *INT* end -- end of range (internal)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- corresponding character range 
-	externally, assuming only newlines
-	"""
+        *(INT, INT)* -- corresponding character range 
+        externally, assuming only newlines
+        """
         lines = self.line_range_internal(start, end)
         s = start -lines[0]*self.delta_width
         e = end -lines[1]*self.delta_width
@@ -273,21 +273,21 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
     def set_text(self, text, start = None, end = None):
         """changes a portion of the buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* text -- the new text.
-	
-	*INT* start -- the offset into the buffer of the text to the
-	replaced.  Defaults to start of buffer.
+        *STR* text -- the new text.
+        
+        *INT* start -- the offset into the buffer of the text to the
+        replaced.  Defaults to start of buffer.
 
-	*INT* end -- the offset into the buffer of the character following 
-	the text to be replaced (this matches Python's slice convention).
-	Defaults to end of buffer.
+        *INT* end -- the offset into the buffer of the character following 
+        the text to be replaced (this matches Python's slice convention).
+        Defaults to end of buffer.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none* --
-	"""
+        *none* --
+        """
 # store initial value of flag
         program_initiated = self.program_initiated
         s, e = self.range_defaults(start, end)
@@ -308,7 +308,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
         selection_start, selection_end = self.get_selection()
         self._on_change_specification(s, e, text, selection_start,
             selection_end, self.program_initiated)
-# restore flag to initial value	
+# restore flag to initial value
         self.program_initiated = program_initiated
 #        if self.carriage_return_bug:
 #            s, e = self._internal_range(s, e)
@@ -322,36 +322,36 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
     def get_text(self, start = None, end = None):
         """retrieves a portion of the buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* start -- the start of the region returned.
-	Defaults to start of buffer.
+        *INT* start -- the start of the region returned.
+        Defaults to start of buffer.
 
-	*INT* end -- the offset into the buffer of the character following 
-	the region to be returned (this matches Python's slice convention).
-	Defaults to end of buffer.
+        *INT* end -- the offset into the buffer of the character following 
+        the region to be returned (this matches Python's slice convention).
+        Defaults to end of buffer.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- contents of specified range of the buffer
-	"""
+        *STR* -- contents of specified range of the buffer
+        """
         s, e = self.range_defaults(start, end)
         return self.contents_external[s:e]
 
     def get_selection(self):
         """retrieves range of current selection
 
-	**INPUTS**
+        **INPUTS**
 
-	*none* --
-	
-	**OUTPUTS**
+        *none* --
+        
+        **OUTPUTS**
 
-	*INT* (start, end) -- start is the offset into the buffer of 
-	the start of the current
-	selection.  end is the offset into the buffer of the character 
-	following the selection (this matches Python's slice convention).
-	"""
+        *INT* (start, end) -- start is the offset into the buffer of 
+        the start of the current
+        selection.  end is the offset into the buffer of the character 
+        following the selection (this matches Python's slice convention).
+        """
         s, e = self.underlying.GetSelection()
 #        print s, e
         if self.carriage_return_bug:
@@ -362,19 +362,19 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
     def set_selection(self, start = None, end = None):
         """changes range of current selection
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* start -- the start of the region to be selected.
-	Defaults to start of buffer.
+        *INT* start -- the start of the region to be selected.
+        Defaults to start of buffer.
 
-	*INT* end -- the offset into the buffer of the character following 
-	the region to be selected (this matches Python's slice convention).
-	Defaults to end of buffer.
+        *INT* end -- the offset into the buffer of the character following 
+        the region to be selected (this matches Python's slice convention).
+        Defaults to end of buffer.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *none* --
-	"""
+        """
         # wxTextCtrl doesn't actually trigger a change notification (EVT_TEXT)
         # on selection changes, but just in case we switch to a
         # different underlying buffer which does,
@@ -392,58 +392,58 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
     def cur_pos(self):
         """returns current position  (= end of the current selection)
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- the offset into the buffer of the current cursor
-	position.
-	"""
+        *INT* -- the offset into the buffer of the current cursor
+        position.
+        """
         return self.get_selection()[1]
 
     def len(self):
         """returns length of buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- the length of the buffer
-	"""
+        *INT* -- the length of the buffer
+        """
         return len(self.contents_internal)
 
     def line_height(self):
         """get number of lines per screen
-	
-	**INPUTS**
-	
-	*none*
-	
-	**OUTPUT**
-	
-	*INT* -- number of lines which fit on the screen at a time
-	"""
+        
+        **INPUTS**
+        
+        *none*
+        
+        **OUTPUT**
+        
+        *INT* -- number of lines which fit on the screen at a time
+        """
         width, height = self.underlying.GetClientSizeTuple()
         char_height = self.underlying.GetCharHeight()
         return height/char_height
 
     def get_visible(self):
         """ get start and end offsets of the currently visible region of
-	the buffer.  End is the offset of the first character not
-	visible (matching Python's slice convention)
+        the buffer.  End is the offset of the first character not
+        visible (matching Python's slice convention)
 
-	**INPUTS**
+        **INPUTS**
 
-	*none* --
+        *none* --
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* (start, end) -- visible range
-	"""
+        *INT* (start, end) -- visible range
+        """
 # check this
         screen  = self.line_height()
         starting_line = self.underlying.GetScrollPos(wxVERTICAL)
@@ -482,15 +482,15 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
     def line_num_of( self, pos = None):
         """find line number of position pos
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT pos* -- the offset into the buffer of the desired position. 
-	 Defaults to the current position.
+        *INT pos* -- the offset into the buffer of the desired position. 
+         Defaults to the current position.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- corresponding line number (starting with 0)
-	"""
+        *INT* -- corresponding line number (starting with 0)
+        """
 
         if pos == None:
             pos = self.cur_pos()
@@ -500,15 +500,15 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
     def line_nums_of_range(self, range = None):
         """find line numbers of a range of positions
 
-	**INPUTS**
+        **INPUTS**
 
-	*(INT, INT) range* -- range of character offsets into the buffer. 
-	 Defaults to the current selection.
+        *(INT, INT) range* -- range of character offsets into the buffer. 
+         Defaults to the current selection.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- corresponding pair of line numbers (starting with 0)
-	"""
+        *(INT, INT)* -- corresponding pair of line numbers (starting with 0)
+        """
 
         if range == None:
             range = self.get_selection()
@@ -519,34 +519,34 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
 
     def lines(self):
         """return number of lines in the buffer
-	
-	**INPUTS**
-	
-	*none*
-	
-	**OUTPUT**
-	
-	*int* -- number of lines in the buffer (incomplete lines are
-	counted, so this is always > 0
-	"""
+        
+        **INPUTS**
+        
+        *none*
+        
+        **OUTPUT**
+        
+        *int* -- number of lines in the buffer (incomplete lines are
+        counted, so this is always > 0
+        """
         return self.underlying.GetNumberOfLines()
 
     def position_of_line(self, line = None, where = -1):
         """returns the position of the start or end of the specified line 
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT line* -- line number (starting with 0).  Defaults to current line.
-	If line is out of range, returns position of end of buffer.
+        *INT line* -- line number (starting with 0).  Defaults to current line.
+        If line is out of range, returns position of end of buffer.
 
         *INT where* indicates whether the position of the end
          (*where > 0*) or at the beginning (*where < 0*) of the line
-	 should be returned.
+         should be returned.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- position of start/end of that line.
-	"""
+        *INT* -- position of start/end of that line.
+        """
 
         end = None
         if line == None:
@@ -570,15 +570,15 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
     def line_length(self, line = None):
         """returns the length of the specified line
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT line* -- line number (starting with 0).  Defaults to current line.
-	If line is out of range, returns None.
+        *INT line* -- line number (starting with 0).  Defaults to current line.
+        If line is out of range, returns None.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- length of start of that line.
-	"""
+        *INT* -- length of start of that line.
+        """
         if line == None:
             line = self.line_num_of()
         elif line > self.underlying.GetNumberOfLines():
@@ -588,34 +588,34 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
     def goto_line(self, line = None, where = -1):
         """Go to a particular line in a buffer.
 
-	*INT line* -- line number (starting with 0).  Defaults to current line.
-	If line is greater than the number of lines, goes to the end of
-	the buffer.
+        *INT line* -- line number (starting with 0).  Defaults to current line.
+        If line is greater than the number of lines, goes to the end of
+        the buffer.
 
         *INT where* indicates if the cursor should go at the end
          (*where > 0*) or at the beginning (*where < 0*) of the line.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         pos = self.position_of_line(line, where)
         self.set_selection(pos, pos)
     
     def range_of_line(self, line = None):
         """returns the character range corresponding to the specified line 
-	(not including the newline)
+        (not including the newline)
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT line* -- line number (starting with 0).  Defaults to current line.
-	If line is out of range, last line is used.
+        *INT line* -- line number (starting with 0).  Defaults to current line.
+        If line is out of range, last line is used.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- offsets into the buffer of the start and end of
-	the line.
-	"""
+        *(INT, INT)* -- offsets into the buffer of the start and end of
+        the line.
+        """
         end = None
         if line == None:
             end = self.cur_pos()
@@ -636,17 +636,17 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
       
     def range_of_lines(self, first_line, last_line):
         """returns the character range corresponding to the specified range
-	of lines (not including the final newline)
+        of lines (not including the final newline)
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT first_line, second_line* -- line numbers (starting with 0)
+        *INT first_line, second_line* -- line numbers (starting with 0)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(INT, INT)* -- offsets into the buffer of the start and end of
-	the range of lines.
-	"""
+        *(INT, INT)* -- offsets into the buffer of the start and end of
+        the range of lines.
+        """
     
         lines = string.split(self.get_text(), self.nl)
         last = len(lines) - 1
@@ -664,18 +664,18 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
       
     def ranges_of_lines(self, first_line, last_line):
         """returns a list of the character ranges corresponding to the 
-	specified range of lines (not including the final newline of
-	each line)
+        specified range of lines (not including the final newline of
+        each line)
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT first_line, second_line* -- line numbers (starting with 0)
+        *INT first_line, second_line* -- line numbers (starting with 0)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[(INT, INT), ...]* -- offsets into the buffer of the start and end of
-	the each line in the range of lines.
-	"""
+        *[(INT, INT), ...]* -- offsets into the buffer of the start and end of
+        the each line in the range of lines.
+        """
         lines = string.split(self.get_text(), self.nl)
         last = len(lines) - 1
         before = string.join(lines[0:first_line], self.nl)

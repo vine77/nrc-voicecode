@@ -732,16 +732,16 @@ class ChildObject(Object):
     """
     def cleanup(self):
         """method to cleanup circular references by cleaning up 
-	any children, and then removing the reference to the parent
+        any children, and then removing the reference to the parent
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # the parent may be called something more specific than "parent", so we
 # can't define a generic cleanup here.  The specific subclasses will
 # have to do that.  Also, the child object may have children of its own,
@@ -786,94 +786,94 @@ class OwnerObject(Object):
     def owned_by(self):
         """returns the name of the parent attribute
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- name of the parent, or None if none
-	"""
+        *STR* -- name of the parent, or None if none
+        """
         return self.parent_name
 
     def name_parent(self, parent = None):
         """specify the name of the attribute containing a reference to 
-	this object's parent.
+        this object's parent.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR parent* -- name of the parent, or None if none
+        *STR parent* -- name of the parent, or None if none
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         if self.parent_name != None:
             raise RuntimeError('OwnerObject named a second parent')
         self.parent_name = parent
 
     def add_grandparent(self, grandparent):
         """specify the name of the attribute containing a reference to 
-	this object's grandparent (or great-grandparent, etc.)
-	(Actually, any other reference which needs to be del'ed but not
-	cleaned up)
+        this object's grandparent (or great-grandparent, etc.)
+        (Actually, any other reference which needs to be del'ed but not
+        cleaned up)
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR grandparent* -- names of owned attributes
+        *STR grandparent* -- names of owned attributes
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.grandparents.append(grandparent)
 
 
     def add_owned(self, owned):
         """append a new attribute name to the list of owned objects
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR owned* -- names of owned attributes
+        *STR owned* -- names of owned attributes
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.owned_objects.append(owned)
 
 
     def add_owned_list(self, owned):
         """append new attribute names to the list of owned objects
 
-	**INPUTS**
+        **INPUTS**
 
-	*[STR] owned* -- names of owned attributes
+        *[STR] owned* -- names of owned attributes
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.owned_objects.extend(owned)
 
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
-	its owned objects are the last remaining references
+        its owned objects are the last remaining references
 
-	**NOTE:** subclasses must call their parent class's 
-	remove_other_references method, after performing their own duties.
-	Also, a class inheriting from two OwnerObject classes MUST
-	define remove_other_references and call both subclasses'
-	versions
+        **NOTE:** subclasses must call their parent class's 
+        remove_other_references method, after performing their own duties.
+        Also, a class inheriting from two OwnerObject classes MUST
+        define remove_other_references and call both subclasses'
+        versions
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # subclasses must call their parent class's remove_other_references
 # method, after performing their own duties
         pass
@@ -883,16 +883,16 @@ class OwnerObject(Object):
 
         **INPUTS***
 
-	*OwnerObject object* -- note: class of object is the expected
-	class, but _cleanup_object doesn't assume this is correct, nor
-	does it check whether the object is a subclass of
-	OwnerObject, only that it is a class instance and that it
-	has a cleanup attribute
+        *OwnerObject object* -- note: class of object is the expected
+        class, but _cleanup_object doesn't assume this is correct, nor
+        does it check whether the object is a subclass of
+        OwnerObject, only that it is a class instance and that it
+        has a cleanup attribute
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- reason for error (or None if no error).
-	"""
+        *STR* -- reason for error (or None if no error).
+        """
 
         if object == None:
             return None
@@ -925,16 +925,16 @@ class OwnerObject(Object):
         
     def cleanup(self):
         """method to cleanup circular references by cleaning up 
-	any children, and then removing the reference to the parent
+        any children, and then removing the reference to the parent
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.trace('OwnerObject.cleanup', 'cleanup of %s' % repr(self))
 #        debug.print_call_stack()
         self.remove_other_references()
@@ -1427,7 +1427,7 @@ def profObject(num_times):
     profGetSmallObj(num_times)
     profGetLargeObj(num_times)
     profGetSmallNonObj(num_times)
-    profGetLargeNonObj(num_times)	
+    profGetLargeNonObj(num_times)
     profSetSmallObj(num_times)
     profSetLargeObj(num_times)
     profSetSmallNonObj(num_times)

@@ -45,20 +45,20 @@ class wxFrameMenuMixIn(Object):
     def insert_menu(self, menu, title, before):
         """insert a new menu into the menu bar before a menu with a given name
 
-	**INPUTS**
+        **INPUTS**
 
-	*wxMenu menu* -- new menu to insert
+        *wxMenu menu* -- new menu to insert
 
-	*STR title* -- title of the new menu
+        *STR title* -- title of the new menu
 
-	*STR before* -- title of the existing menu before which to insert 
-	the new menu
+        *STR before* -- title of the existing menu before which to insert 
+        the new menu
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the before menu is found and the new menu is
-	successfully inserted
-	"""
+        *BOOL* -- true if the before menu is found and the new menu is
+        successfully inserted
+        """
         menu_bar = self.GetMenuBar()
         index = menu_bar.FindMenu(before)
         if index == -1:
@@ -67,16 +67,16 @@ class wxFrameMenuMixIn(Object):
 
     def get_menu_by_name(self, title):
         """finds a menu by name and returns the menu (menubar.FindMenu
-	finds the index by name)
+        finds the index by name)
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR title* -- title of the menu
+        *STR title* -- title of the menu
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*wxMenu* -- the menu, or None, if the menu is not found.
-	"""
+        *wxMenu* -- the menu, or None, if the menu is not found.
+        """
         menu_bar = self.GetMenuBar()
         index = menu_bar.FindMenu(title)
         if index == -1:
@@ -86,15 +86,15 @@ class wxFrameMenuMixIn(Object):
     def list_item_labels(self, menu):
         """return a list of the labels from a list of menu items
 
-	**INPUTS**
+        **INPUTS**
 
-	*wxMenu menu* -- the menu
+        *wxMenu menu* -- the menu
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[STR]* -- the list of labels representing 
-	the contents of that menu
-	"""
+        *[STR]* -- the list of labels representing 
+        the contents of that menu
+        """
         items = menu.GetMenuItems()
         titles = []
         for item in items:
@@ -104,16 +104,16 @@ class wxFrameMenuMixIn(Object):
     def find_item_index_by_label(self, menu, label):
         """returns the index of a given label in a given menu 
 
-	**INPUTS**
+        **INPUTS**
 
-	*wxMenu menu* -- the menu
+        *wxMenu menu* -- the menu
 
-	*STR label* -- label of the item within that menu
+        *STR label* -- label of the item within that menu
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- the index of the item, or None if not found
-	"""
+        *INT* -- the index of the item, or None if not found
+        """
         labels = self.list_item_labels(menu)
         for i in range(len(labels)):
             if labels[i] == label:
@@ -123,16 +123,16 @@ class wxFrameMenuMixIn(Object):
     def find_item_by_label(self, menu, label):
         """returns the wxMenuItem with a given label in a given menu 
 
-	**INPUTS**
+        **INPUTS**
 
-	*wxMenu menu* -- the menu
+        *wxMenu menu* -- the menu
 
-	*STR label* -- label of the item within that menu
+        *STR label* -- label of the item within that menu
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*wxMenuItem* -- the item, or None if not found
-	"""
+        *wxMenuItem* -- the item, or None if not found
+        """
         i = self.find_item_index_by_label(menu, label)
         if i == None:
             return None
@@ -143,47 +143,47 @@ class wxFrameMenuMixIn(Object):
         checkable = 0, sub_menu = None):
         """create a new menu item to insert into a given parent menu
 
-	**INPUTS**
+        **INPUTS**
 
-	*wxMenu parent_menu* -- the menu into which the item is about to
-	be inserted
+        *wxMenu parent_menu* -- the menu into which the item is about to
+        be inserted
 
-	*INT ID* -- the wxPython ID for the item (if -1, the item will
-	be a separator)
+        *INT ID* -- the wxPython ID for the item (if -1, the item will
+        be a separator)
 
-	*STR text* -- text of the menu item
+        *STR text* -- text of the menu item
 
-	*STR help_string* -- help string for the item
+        *STR help_string* -- help string for the item
 
-	*BOOL checkable* -- is the item checkable
+        *BOOL checkable* -- is the item checkable
 
-	*wxMenu sub_menu* -- does the item introduce a sub_menu?
+        *wxMenu sub_menu* -- does the item introduce a sub_menu?
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*wxMenuItem* -- the new item
-	"""
+        *wxMenuItem* -- the new item
+        """
         return wxMenuItem(parent_menu, ID, text, help_string, 
             checkable, sub_menu)
 
     def insert_item_before_label(self, menu_item, menu, label):
         """insert a new menu item into a menu before the item with a given 
-	label
+        label
 
-	**INPUTS**
+        **INPUTS**
 
-	*wxMenuItem menu_item* -- new menu to insert
+        *wxMenuItem menu_item* -- new menu to insert
 
-	*wxMenu menu* -- new menu to insert
+        *wxMenu menu* -- new menu to insert
 
-	*STR label* -- label of the existing menu item before which to insert 
-	the new item
+        *STR label* -- label of the existing menu item before which to insert 
+        the new item
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the existing item is found and the new item is
-	successfully inserted
-	"""
+        *BOOL* -- true if the existing item is found and the new item is
+        successfully inserted
+        """
         index = self.find_item_index_by_label(menu, label)
 #        print 'index ', index
         if index == None:

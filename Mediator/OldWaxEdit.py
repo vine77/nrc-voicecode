@@ -40,154 +40,154 @@ class WaxEdit:
     def mic_change(self, state):
         """function to receive microphone state change callbacks
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* state -- new state ('on', 'off', 'sleeping', 'disabled')
+        *STR* state -- new state ('on', 'off', 'sleeping', 'disabled')
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         pass
 # no-op by default, can be overridden
 
     def is_active(self):
         """indicates whether the editor frame is active
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if frame window is active
-	"""
+        *BOOL* -- true if frame window is active
+        """
         debug.virtual('WaxEdit.is_active')
 
     def editor_has_focus(self):
         """indicates whether the editor window has the focus
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	*BOOL* -- true if editor window has the focus
-	"""
+        **OUTPUTS**
+        *BOOL* -- true if editor window has the focus
+        """
         debug.virtual('WaxEdit.editor_has_focus')
 
 
     def editor_buffer(self):
         """returns a reference to the TextBufferWX embedded in the GUI
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*TextBufferWX* -- the TextBufferWX
-	"""
+        *TextBufferWX* -- the TextBufferWX
+        """
         debug.virtual('WaxEdit.editor_buffer')
 
 
     def open_file_in_buffer(self, name):
         """opens a new file in the existing TextBufferWX
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true on success (otherwise the existing file is left
-	there)
-	"""
+        *BOOL* -- true on success (otherwise the existing file is left
+        there)
+        """
         debug.virtual('WaxEdit.open_file_in_buffer')
 
     def save_file(self, full_path, no_prompt = 0):
         """Saves the file in the existing TextBufferWX
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR full_path* -- path name of file to save
+        *STR full_path* -- path name of file to save
 
-	*BOOL no_prompt* -- if true, don't prompt before overwriting
-	an existing file.
+        *BOOL no_prompt* -- if true, don't prompt before overwriting
+        an existing file.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true on success (otherwise the existing file is left
-	there)
-	"""
+        *BOOL* -- true on success (otherwise the existing file is left
+        there)
+        """
         debug.virtual('WaxEdit.save_file')
 
     def set_instance_string(self, instance_string):
         """sets the title string which is included in the full title 
-	displayed in the title bar
+        displayed in the title bar
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance_string -- string to include as part of the title
+        *STR* instance_string -- string to include as part of the title
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('WaxEdit.set_instance_string')
   
     def set_name(self, name):
         """sets the filename to name (usually indicated in the title bar)
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* name -- name of current file
+        *STR* name -- name of current file
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('WaxEdit.set_name')
 
     def run(self, app_control):
         """starts the message loop.  Note: this function does not
-	return until the GUI exits.
+        return until the GUI exits.
 
-	**INPUTS**
+        **INPUTS**
 
-	*AppStateWaxEdit app_control* -- reference to corresponding 
-	AppState interface
+        *AppStateWaxEdit app_control* -- reference to corresponding 
+        AppState interface
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('WaxEdit.run')
 
     def set_change_callback(self, change_callback = None):
         """changes the callback to a new function
 
-	**INPUTS**
+        **INPUTS**
       
-	*FCT* change_callback --
-	change_callback( *INT* start, *INT* end, *STR* text, 
-	*INT* selection_start, *INT* selection_end, 
-	*STR* buff_name, *BOOL* program_initiated)
+        *FCT* change_callback --
+        change_callback( *INT* start, *INT* end, *STR* text, 
+        *INT* selection_start, *INT* selection_end, 
+        *STR* buff_name, *BOOL* program_initiated)
 
-	The arguments to the change callback specify the character offsets
-	of the start and end of the changed region (before the change),
-	the text with which this region was replaced, the start and end
-	of the selected region (after the change), the name of the
-	buffer reporting the change, and whether the change was
-	program-initiated or editor-initiated.
+        The arguments to the change callback specify the character offsets
+        of the start and end of the changed region (before the change),
+        the text with which this region was replaced, the start and end
+        of the selected region (after the change), the name of the
+        buffer reporting the change, and whether the change was
+        program-initiated or editor-initiated.
 
-	Note the difference between this change_callback and the
-	TextBufferWX one: here the name of the buffer is returned,
-	rather than a reference to the underlying TextBufferWX.  
+        Note the difference between this change_callback and the
+        TextBufferWX one: here the name of the buffer is returned,
+        rather than a reference to the underlying TextBufferWX.  
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.virtual('WaxEdit.set_change_callback')
 

@@ -54,58 +54,58 @@ class SourceBuffState(SourceBuffCookie):
 
     def rename_buffer_cbk(self, new_buff_name):
         """callback which notifies us that the application
-	has renamed the buffer corresponding to this cookie
+        has renamed the buffer corresponding to this cookie
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* new_buff_name -- new name of the buffer 
+        *STR* new_buff_name -- new name of the buffer 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.buff_name = new_buff_name
 
     def name(self):
         """returns buff_name
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
-	
-	**OUTPUTS**
+        *none*
+        
+        **OUTPUTS**
 
-	*STR* -- file name
-	"""
+        *STR* -- file name
+        """
         return self.buff_name
 
     def get_selection(self):
         """retrieves range of stored selection.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
-	
-	**OUTPUTS**
+        *none*
+        
+        **OUTPUTS**
 
-	*INT* (start, end)
+        *INT* (start, end)
 
-	start is the offset into the buffer of the start of the current
-	selection.  end is the offset into the buffer of the character 
-	following the selection (this matches Python's slice convention).
-	"""
+        start is the offset into the buffer of the start of the current
+        selection.  end is the offset into the buffer of the character 
+        following the selection (this matches Python's slice convention).
+        """
         return self.selection_range
 
     def contents(self):
         """returns stored contents
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- contents of the buffer
-	"""
+        *STR* -- contents of the buffer
+        """
         return self.text
       

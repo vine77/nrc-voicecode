@@ -54,23 +54,23 @@ class TargetWindow(Object):
     def __init__(self, window, module, instance = None, single_display = 0, 
         **args):
         """abstract class, so this is only called by subclass
-	constructor.
+        constructor.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- unique integer identifying this window to 
-	the operating system
+        *INT* window -- unique integer identifying this window to 
+        the operating system
 
-	*STR* module -- name of the executable module associated with this
-	window
+        *STR* module -- name of the executable module associated with this
+        window
 
-	*STR* instance -- name of initial instance associated with this window
-	(or None if no initial instance)
+        *STR* instance -- name of initial instance associated with this window
+        (or None if no initial instance)
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.deep_construct(TargetWindow,
                             { 'window': window,
                               'module': module,
@@ -84,28 +84,28 @@ class TargetWindow(Object):
     def add_instance(self, instance):
         """add a new instance to the window
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the instance was added successfully
-	"""
+        *BOOL* -- true if the instance was added successfully
+        """
         debug.virtual('TargetWindow.add_instance')
 
     def delete_instance(self, instance):
         """notify TargetWindow that an editor instance has been deleted
     
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if instance was known to be associated with this
-	window
-	"""
+        *BOOL* -- true if instance was known to be associated with this
+        window
+        """
         try:
             self.window_instances.remove(instance)
         except ValueError:
@@ -115,14 +115,14 @@ class TargetWindow(Object):
     def known_instance(self, instance):
         """is instance known?
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if instance is known 
-	"""
+        *BOOL* -- true if instance is known 
+        """
         if instance in self.instance_names():
             return 1
         return 0
@@ -130,114 +130,114 @@ class TargetWindow(Object):
     def module_name(self):
         """returns the module name corresponding to this window
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- the module name
-	"""
+        *STR* -- the module name
+        """
         return self.module
 
     def instance_names(self):
         """returns the list of known instances associated with the
-	window, in order of the most recently active instance
+        window, in order of the most recently active instance
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*[STR]* -- the instance names
-	"""
+        *[STR]* -- the instance names
+        """
         return self.window_instances
 
     def instances(self):
         """returns the number of known instances associated with the
-	window
+        window
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*INT* -- how many instances are associated with this window
-	"""
+        *INT* -- how many instances are associated with this window
+        """
         return len(self.window_instances)
 
     def shared(self):
         """can this window be shared by multiple instances, or is it a
-	dedicated editor window?  **Note:** shared should return true if
-	the window is a shareable shell window, even if there is only
-	one instance currently associated with the window.
+        dedicated editor window?  **Note:** shared should return true if
+        the window is a shareable shell window, even if there is only
+        one instance currently associated with the window.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is window shareable?
-	"""
+        *BOOL* -- is window shareable?
+        """
         debug.virtual('TargetWindow.shared')
 
     def single_display(self):
         """does this module display multiple remote windows in this single 
-	local window?  **Note:** single_display is not consistent with a
-	dedicated module.
+        local window?  **Note:** single_display is not consistent with a
+        dedicated module.
 
-	**INPUTS**
+        **INPUTS**
 
-	*INT* window -- handle of the local window
+        *INT* window -- handle of the local window
 
-	*STR* title -- title of the local window
+        *STR* title -- title of the local window
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is this a single-window display?
-	"""
+        *BOOL* -- is this a single-window display?
+        """
         return self.single_window_display
 
     def active_instance(self, title, editors, default_to_recent = 1):
         """attempts to determine the name of the active instance
-	currently associated with this window
+        currently associated with this window
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title -- the current title of the window
+        *STR* title -- the current title of the window
 
-	*AppMgr* editors -- application manager for associating instance
-	names with applications
+        *AppMgr* editors -- application manager for associating instance
+        names with applications
 
-	*BOOL* default_to_recent -- controls behavior of 
-	active_instance when it is unable to determine which instance is
-	active.  If true, active_instance will
-	default to the most recently known active instance.  Otherwise,
-	it will return none.
+        *BOOL* default_to_recent -- controls behavior of 
+        active_instance when it is unable to determine which instance is
+        active.  If true, active_instance will
+        default to the most recently known active instance.  Otherwise,
+        it will return none.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- the active instance name, or None if no known
-	instance appears to be active in this window
-	"""
+        *STR* -- the active instance name, or None if no known
+        instance appears to be active in this window
+        """
         debug.virtual('TargetWindow.active_instance')
 
     def activate_instance(self, instance):
         """raise instance to front of list of most recently active instances 
-	for this window
+        for this window
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if instance is known (otherwise, does
-	nothing)
-	"""
+        *BOOL* -- true if instance is known (otherwise, does
+        nothing)
+        """
         if not self.known_instance(instance):
             return 0
         try:
@@ -249,23 +249,23 @@ class TargetWindow(Object):
 
     def verify_new_instance(self, title, instance, editors):
         """attempt to verify whether this window belongs to
-	the named instance.  
+        the named instance.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title -- title of the window 
+        *STR* title -- title of the window 
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	*AppMgr* editors -- the AppMgr object
+        *AppMgr* editors -- the AppMgr object
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if verify_new_instance was able to determine that the
-	window was associated with the named instance, false if it
-	was able to determine that the window was not associated
-	with the instance, and None if it was unable to determine.
-	"""
+        *BOOL* -- true if verify_new_instance was able to determine that the
+        window was associated with the named instance, false if it
+        was able to determine that the window was not associated
+        with the instance, and None if it was unable to determine.
+        """
         debug.virtual('TargetWindow.verify_new_instance')
         
 
@@ -287,56 +287,56 @@ class DedicatedWindow(TargetWindow):
 
     def shared(self):
         """can this window be shared by multiple instances, or is it a
-	dedicated editor window?  **Note:** shared should return true if
-	the window is a shareable shell window, even if there is only
-	one instance currently associated with the window.
+        dedicated editor window?  **Note:** shared should return true if
+        the window is a shareable shell window, even if there is only
+        one instance currently associated with the window.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is window shareable?
-	"""
+        *BOOL* -- is window shareable?
+        """
         return 0
 
     def add_instance(self, instance):
         """add a new instance to the window
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the instance was added successfully
-	"""
+        *BOOL* -- true if the instance was added successfully
+        """
 # only one instance, can't add another
         return 0 
 
     def active_instance(self, title, editors, default_to_recent = 1):
         """attempts to determine the name of the active instance
-	currently associated with this window
+        currently associated with this window
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title -- the current title of the window
+        *STR* title -- the current title of the window
 
-	*AppMgr* editors -- application manager for associating instance
-	names with applications
+        *AppMgr* editors -- application manager for associating instance
+        names with applications
 
-	*BOOL* default_to_recent -- controls behavior of 
-	active_instance when it is unable to determine which instance is
-	active.  If true, active_instance will
-	default to the most recently known active instance.  Otherwise,
-	it will return none.
+        *BOOL* default_to_recent -- controls behavior of 
+        active_instance when it is unable to determine which instance is
+        active.  If true, active_instance will
+        default to the most recently known active instance.  Otherwise,
+        it will return none.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- the active instance name, or None if no known
-	instance appears to be active in this window
-	"""
+        *STR* -- the active instance name, or None if no known
+        instance appears to be active in this window
+        """
         if self.instances() == 0:
 # should never be true  (for a dedicated window)
             return None
@@ -345,23 +345,23 @@ class DedicatedWindow(TargetWindow):
 
     def verify_new_instance(self, title, instance, editors):
         """attempt to verify whether this window belongs to
-	the named instance.  
+        the named instance.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title -- title of the window 
+        *STR* title -- title of the window 
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	*AppMgr* editors -- the AppMgr object
+        *AppMgr* editors -- the AppMgr object
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if verify_new_instance was able to determine that the
-	window was associated with the named instance, false if it
-	was able to determine that the window was not associated
-	with the instance, and None if it was unable to determine.
-	"""
+        *BOOL* -- true if verify_new_instance was able to determine that the
+        window was associated with the named instance, false if it
+        was able to determine that the window was not associated
+        with the instance, and None if it was unable to determine.
+        """
 # dedicated windows can't have new instances
         return 0
         
@@ -388,31 +388,31 @@ class SharedWindow(TargetWindow):
 
     def shared(self):
         """can this window be shared by multiple instances, or is it a
-	dedicated editor window?  **Note:** shared should return true if
-	the window is a shareable shell window, even if there is only
-	one instance currently associated with the window.
+        dedicated editor window?  **Note:** shared should return true if
+        the window is a shareable shell window, even if there is only
+        one instance currently associated with the window.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- is window shareable?
-	"""
+        *BOOL* -- is window shareable?
+        """
         return 1
 
     def add_instance(self, instance):
         """add a new instance to the window
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if the instance was added successfully
-	"""
+        *BOOL* -- true if the instance was added successfully
+        """
         if self.known_instance(instance):
             return 0
         self.window_instances.insert(0, instance)
@@ -420,26 +420,26 @@ class SharedWindow(TargetWindow):
 
     def active_instance(self, title, editors, default_to_recent = 1):
         """attempts to determine the name of the active instance
-	currently associated with this window
+        currently associated with this window
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title -- the current title of the window
+        *STR* title -- the current title of the window
 
-	*AppMgr* editors -- application manager for associating instance
-	names with applications
+        *AppMgr* editors -- application manager for associating instance
+        names with applications
 
-	*BOOL* default_to_recent -- controls behavior of 
-	active_instance when it is unable to determine which instance is
-	active.  If true, active_instance will
-	default to the most recently known active instance.  Otherwise,
-	it will return none.
+        *BOOL* default_to_recent -- controls behavior of 
+        active_instance when it is unable to determine which instance is
+        active.  If true, active_instance will
+        default to the most recently known active instance.  Otherwise,
+        it will return none.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- the active instance name, or None if no known
-	instance appears to be active in this window
-	"""
+        *STR* -- the active instance name, or None if no known
+        instance appears to be active in this window
+        """
         if self.instances() == 0:
             return None
         unknown_instance = None
@@ -471,23 +471,23 @@ class SharedWindow(TargetWindow):
 
     def verify_new_instance(self, title, instance, editors):
         """attempt to verify whether this window belongs to
-	the named instance.  
+        the named instance.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* title -- title of the window 
+        *STR* title -- title of the window 
 
-	*STR* instance -- name of the editor instance
+        *STR* instance -- name of the editor instance
 
-	*AppMgr* editors -- the AppMgr object
+        *AppMgr* editors -- the AppMgr object
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if verify_new_instance was able to determine that the
-	window was associated with the named instance, false if it
-	was able to determine that the window was not associated
-	with the instance, and None if it was unable to determine.
-	"""
+        *BOOL* -- true if verify_new_instance was able to determine that the
+        window was associated with the named instance, false if it
+        was able to determine that the window was not associated
+        with the instance, and None if it was unable to determine.
+        """
         if self.variable_title:
             app = editors.app_instance(instance)
             s = app.instance_string()

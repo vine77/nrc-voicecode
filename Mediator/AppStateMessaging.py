@@ -193,8 +193,8 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         INT *window_id* -- The ID of the window that was active when
         the recognition began.                
 
-	*BOOL block* -- true if the speech engine can detect recog_end
-	events reliably.  If so, and if the editor is capable of doing so, 
+        *BOOL block* -- true if the speech engine can detect recog_end
+        events reliably.  If so, and if the editor is capable of doing so, 
         the editor may (at its discretion) also stop responding to user
         input until method [recog_end()] is invoked.  This is to
         prevent a bunch of problems that can arise if the user types
@@ -202,14 +202,14 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         cases, the results of the utterance interpretation can be
         unpredictable, especially when it comes to correction.
 
-	**NOTE:** However, if block is false, the editor **MUST NOT**
-	stop responding, because the mediator will not be able to use
-	recog_end to tell it to resume responding to user input.  
+        **NOTE:** However, if block is false, the editor **MUST NOT**
+        stop responding, because the mediator will not be able to use
+        recog_end to tell it to resume responding to user input.  
 
-	Also, the editor must provide a way for the user to re-enable
-	input manually, in case the mediator crashes.  If it cannot do
-	so, it should not stop responding, regardless of the value of
-	block.
+        Also, the editor must provide a way for the user to re-enable
+        input manually, in case the mediator crashes.  If it cannot do
+        so, it should not stop responding, regardless of the value of
+        block.
 
         **OUTPUTS**
         
@@ -268,24 +268,24 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
     def mediator_closing(self):
         """method called to inform AppState that the mediator is
-	closing.    Internal editors should exit.  They may prompt the
-	user to save modified files, but must not allow the user to
-	cancel and leave the editor running.  External editors should
-	disconnect but not close.  **Note:** this method should not
-	block.  For external editors, that means the corresponding
-	message should have a response for which to wait.  Otherwise, a
-	single hung or disconnected editor hang the mediator and prevent
-	it from closing or from notifying the rest of the connected
-	editors that it was closing.  
+        closing.    Internal editors should exit.  They may prompt the
+        user to save modified files, but must not allow the user to
+        cancel and leave the editor running.  External editors should
+        disconnect but not close.  **Note:** this method should not
+        block.  For external editors, that means the corresponding
+        message should have a response for which to wait.  Otherwise, a
+        single hung or disconnected editor hang the mediator and prevent
+        it from closing or from notifying the rest of the connected
+        editors that it was closing.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.talk_msgr.send_mess('mediator_closing')
 # this message has no response, otherwise we might block waiting for it
 # if the external editor had hung, crashed, or been disconnected
@@ -428,11 +428,11 @@ class AppStateMessaging(AppStateCached.AppStateCached):
     def app_active_buffer_name(self):
         
         """Reads the file name of the active buffer, directly from the
-	external application.
+        external application.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- file name of app's active buffer"""
+        *STR* -- file name of app's active buffer"""
 
         self.talk_msgr.send_mess('active_buffer_name')
         response = self.talk_msgr.get_mess(expect=['active_buffer_name_resp'])
@@ -441,18 +441,18 @@ class AppStateMessaging(AppStateCached.AppStateCached):
     def is_active(self):
         """is the editor application active (not suspended)?
 
-	Usually true, except for remote editors running in a (Unix)
-	shell.  GUI editors tend to minimize instead of suspending, so
-	their process should still be active.
+        Usually true, except for remote editors running in a (Unix)
+        shell.  GUI editors tend to minimize instead of suspending, so
+        their process should still be active.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor is active (i.e. has not been suspended)
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor is active (i.e. has not been suspended)
+        """
         if self.query_active:
             return self._is_active_from_app()
         else:
@@ -467,18 +467,18 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         """private method to query the editor application to see if its
         process is active (not suspended)?
 
-	Usually true, except for remote editors running in a (Unix)
-	shell.  GUI editors tend to minimize instead of suspending, so
-	their process should still be active.
+        Usually true, except for remote editors running in a (Unix)
+        shell.  GUI editors tend to minimize instead of suspending, so
+        their process should still be active.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor is active (i.e. has not been suspended)
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor is active (i.e. has not been suspended)
+        """
         self.talk_msgr.send_mess('process_active')
         response = self.talk_msgr.get_mess(expect=['process_active_resp'])
         return response[1]['value']                
@@ -486,24 +486,24 @@ class AppStateMessaging(AppStateCached.AppStateCached):
     def is_active_is_safe(self):
         """can is_active safely be queried, without blocking?
 
-	For example, Emacs provides a suspend-hook and a
-	suspend-resume-hook, so a properly written AppStateEmacs can
-	set a flag on suspend and clear it on resume, and will therefore
-	be able to respond to is_active without querying Emacs.
+        For example, Emacs provides a suspend-hook and a
+        suspend-resume-hook, so a properly written AppStateEmacs can
+        set a flag on suspend and clear it on resume, and will therefore
+        be able to respond to is_active without querying Emacs.
 
-	Also, except for remote editors running in a (Unix)
-	shell, this is usually true.  GUI editors tend to minimize 
-	instead of suspending, so their process should still be active.
+        Also, except for remote editors running in a (Unix)
+        shell, this is usually true.  GUI editors tend to minimize 
+        instead of suspending, so their process should still be active.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if is_active can be queried without blocking,
-	even if the editor has been suspended. 
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if is_active can be queried without blocking,
+        even if the editor has been suspended. 
+        """
         return self.is_active_safe
 
     def suspendable(self):
@@ -512,22 +512,22 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         GUI editors which fork, allowing the command-line command to exit).  
         If so, this makes querying the editor to is if it is_active unsafe. 
 
-	Usually false for Windows and most GUI editors.
+        Usually false for Windows and most GUI editors.
 
         **NOTE:** this method is used to determine how to implement
         is_active and whether is_active_is_safe.  It is generally 
         called only by an AppState subclass (or a ClientEditor wrapper) 
         and only when the editor first starts or connects to the mediator.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor is running in an environment where 
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor is running in an environment where 
         it can be suspended
-	"""
+        """
         self.talk_msgr.send_mess('suspendable')
         response = self.talk_msgr.get_mess(expect=['suspendable_resp'])
         return response[1]['value']                
@@ -540,88 +540,88 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         called only by an AppState subclass (or a ClientEditor wrapper) 
         and only when the editor first starts or connects to the mediator.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if the editor can (and will) notify the mediator
+        **OUTPUTS**
+        
+        *BOOL* -- true if the editor can (and will) notify the mediator
         prior to its process being suspended and once it has been resumed.
-	"""
+        """
         self.talk_msgr.send_mess('suspend_notification')
         response = self.talk_msgr.get_mess(expect=['suspend_notification_resp'])
         return response[1]['value']                
 
     def shared_window(self):
         """is the editor running in a window which could be shared with
-	another editor instance (because it is a shell window,
-	and this instance could be suspended or closed)
+        another editor instance (because it is a shell window,
+        and this instance could be suspended or closed)
 
-	Usually false for GUI editors.
+        Usually false for GUI editors.
 
-	Note: remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will also appear to be
-	shared windows.  However, the mediator will perform a separate 
-	check to detect this, so for remote editors which do not share windows 
-	on the remote system, AppState.shared_window should report
-	false.
-	
-	**INPUTS**
+        Note: remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will also appear to be
+        shared windows.  However, the mediator will perform a separate 
+        check to detect this, so for remote editors which do not share windows 
+        on the remote system, AppState.shared_window should report
+        false.
+        
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor is running in a potentially shared window
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor is running in a potentially shared window
+        """
         return self.in_shared_window
 
     def _shared_window_from_app(self):
         """is the editor running in a window which could be shared with
-	another editor instance (because it is a shell window,
-	and this instance could be suspended or closed)
+        another editor instance (because it is a shell window,
+        and this instance could be suspended or closed)
 
-	Usually false for GUI editors.
+        Usually false for GUI editors.
 
-	Note: remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will also appear to be
-	shared windows.  However, the mediator will perform a separate 
-	check to detect this, so for remote editors which do not share windows 
-	on the remote system, AppState.shared_window should report
-	false.
-	
-	**INPUTS**
+        Note: remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will also appear to be
+        shared windows.  However, the mediator will perform a separate 
+        check to detect this, so for remote editors which do not share windows 
+        on the remote system, AppState.shared_window should report
+        false.
+        
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor is running in a potentially shared window
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor is running in a potentially shared window
+        """
         self.talk_msgr.send_mess('shared_window')
         response = self.talk_msgr.get_mess(expect=['shared_window_resp'])
         return response[1]['value']                
 
     def set_instance_string(self, instance_string):
         """specifies the identifier string for this editor instance.  If the 
-	editor is capable of setting the window title to include this string, 
-	it should (and then should return this string when the
-	instance_string method is called.  
+        editor is capable of setting the window title to include this string, 
+        it should (and then should return this string when the
+        instance_string method is called.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance_string -- the identifying string to be included in the
-	window title if possible.
+        *STR* instance_string -- the identifying string to be included in the
+        window title if possible.
 
-	**OUTPUTS**
-	
+        **OUTPUTS**
+        
         *BOOL* -- true if the editor can and will include the 
         instance string in its window title for all windows 
         containing editor buffers.
-	"""
+        """
         self.talk_msgr.send_mess('set_instance_string', 
             {'instance_string': instance_string})
         response = self.talk_msgr.get_mess(expect = \
@@ -632,51 +632,51 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
     def instance_string(self):
         """returns the identifier string for this editor instance (which 
-	should be a substring of the window title)
+        should be a substring of the window title)
 
-	Note: multiple windows of remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will not be able to set 
-	the overall title.  
-	However, the mediator will perform a 
-	separate check to detect this, so remote editors which support
-	identifying title strings should still return the appropriate
-	string.
+        Note: multiple windows of remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will not be able to set 
+        the overall title.  
+        However, the mediator will perform a 
+        separate check to detect this, so remote editors which support
+        identifying title strings should still return the appropriate
+        string.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*STR* -- the identifying string, or None if the editor was not given 
-	such a string or cannot set the window title.
-	"""
+        **OUTPUTS**
+        
+        *STR* -- the identifying string, or None if the editor was not given 
+        such a string or cannot set the window title.
+        """
         if self.can_show_instance_string:
             return self.the_instance_string
         return None
 
     def title_escape_sequence(self, before = "", after = ""):
         """gives the editor a (module-dependent) hint about the escape
-	sequence which can be used to set the module's window title, if
-	any.  If the editor has its own mechanism for setting the window
-	title, it should simply ignore this method.  
+        sequence which can be used to set the module's window title, if
+        any.  If the editor has its own mechanism for setting the window
+        title, it should simply ignore this method.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* before -- the escape sequence to be sent before the string
-	to place in the window title, or the empty string if there is no
-	escape sequence
+        *STR* before -- the escape sequence to be sent before the string
+        to place in the window title, or the empty string if there is no
+        escape sequence
 
-	*STR* after -- the escape sequence which terminates the window
-	title value
+        *STR* after -- the escape sequence which terminates the window
+        title value
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *BOOL* -- true if the editor, given the title escape sequence, 
         can and will include the instance string in its window title 
         for all windows containing editor buffers.
-	"""
+        """
         if before != "" and after != "":
             self.talk_msgr.send_mess('title_escape', 
                 {'before': before, 'after': after})
@@ -687,55 +687,55 @@ class AppStateMessaging(AppStateCached.AppStateCached):
     def multiple_windows(self):
         """does editor support multiple windows per instance?
 
-	Note: the purpose of this function is to allow the RecogStartMgr
-	to determine whether a previously unknown window could belong to
-	this known instance.  Therefore, Emacs running in text mode 
-	should return false, even though it can have (sub-)windows in 
-	a single frame.  
-	
-	Note: multiple windows of remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will not appear to the mediator 
-	as having separate windows.  However, the mediator will perform a 
-	separate check to detect this, so remote editors which support
-	multiple windows should return true, regardless of the remote
-	display method.
+        Note: the purpose of this function is to allow the RecogStartMgr
+        to determine whether a previously unknown window could belong to
+        this known instance.  Therefore, Emacs running in text mode 
+        should return false, even though it can have (sub-)windows in 
+        a single frame.  
+        
+        Note: multiple windows of remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will not appear to the mediator 
+        as having separate windows.  However, the mediator will perform a 
+        separate check to detect this, so remote editors which support
+        multiple windows should return true, regardless of the remote
+        display method.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports opening multiple editor windows.  
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor supports opening multiple editor windows.  
+        """
         return self.multiple_window_support
 
     def _multiple_windows_from_app(self):
         """does editor support multiple windows per instance?
 
-	Note: the purpose of this function is to allow the RecogStartMgr
-	to determine whether a previously unknown window could belong to
-	this known instance.  Therefore, Emacs running in text mode 
-	should return false, even though it can have (sub-)windows in 
-	a single frame.  
-	
-	Note: multiple windows of remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will not appear to the mediator 
-	as having separate windows.  However, the mediator will perform a 
-	separate check to detect this, so remote editors which support
-	multiple windows should return true, regardless of the remote
-	display method.
+        Note: the purpose of this function is to allow the RecogStartMgr
+        to determine whether a previously unknown window could belong to
+        this known instance.  Therefore, Emacs running in text mode 
+        should return false, even though it can have (sub-)windows in 
+        a single frame.  
+        
+        Note: multiple windows of remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will not appear to the mediator 
+        as having separate windows.  However, the mediator will perform a 
+        separate check to detect this, so remote editors which support
+        multiple windows should return true, regardless of the remote
+        display method.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports opening multiple editor windows.  
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor supports opening multiple editor windows.  
+        """
         self.talk_msgr.send_mess('multiple_windows')
         response = self.talk_msgr.get_mess(expect=['multiple_windows_resp'])
         return response[1]['value']                
@@ -743,14 +743,14 @@ class AppStateMessaging(AppStateCached.AppStateCached):
     def multiple_buffers(self):
         """does editor support multiple open buffers?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports having multiple buffers open 
-	at the same time"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor supports having multiple buffers open 
+        at the same time"""
 
         return self.multiple_buffer_support
         
@@ -759,14 +759,14 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
         Retrieve this information directly from the external editor.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports having multiple buffers open 
-	at the same time"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor supports having multiple buffers open 
+        at the same time"""
 
         self.talk_msgr.send_mess('multiple_buffers')
         response = self.talk_msgr.get_mess(expect=['multiple_buffers_resp'])
@@ -777,14 +777,14 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
         Get this value directly from the external editor
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor allows setting the selection at the
-	left end of the selection"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor allows setting the selection at the
+        left end of the selection"""
 
         return self.bidirectional_selection_support
 
@@ -793,14 +793,14 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
         Get this value directly from the external editor
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor allows setting the selection at the
-	left end of the selection"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor allows setting the selection at the
+        left end of the selection"""
 
         self.talk_msgr.send_mess('bidirectional_selection')
         response = self.talk_msgr.get_mess(expect=['bidirectional_selection_resp'])
@@ -834,18 +834,18 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         """Tell the external editor to save the current buffer.
 
         **INPUTS**
-	
-	*STR full_path* -- full path under which to save the file, or
-	None to use the buffer name
+        
+        *STR full_path* -- full path under which to save the file, or
+        None to use the buffer name
 
-	*BOOL no_prompt* -- overwrite any existing file without
-	prompting.  No_prompt should only be set to true if the caller
-	has already prompted the user.
+        *BOOL no_prompt* -- overwrite any existing file without
+        prompting.  No_prompt should only be set to true if the caller
+        has already prompted the user.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- new buffer name if successful, or None if the save 
-	failed
+        *STR* -- new buffer name if successful, or None if the save 
+        failed
         """
         #
         # Tell external editor to save the file
@@ -862,16 +862,16 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
     def query_buffer_from_app(self, buff_name):
         """query the application to see if a buffer by the name of buff_name 
-	exists.
+        exists.
 
         **INPUTS**
 
-	*STR* buff_name -- name of the buffer to check
+        *STR* buff_name -- name of the buffer to check
 
         **OUTPUTS**
 
-	*BOOL* -- does the buffer exist?
-	"""
+        *BOOL* -- does the buffer exist?
+        """
         self.talk_msgr.send_mess('confirm_buffer_exists', {'buff_name': buff_name})
         response = \
             self.talk_msgr.get_mess(expect=['confirm_buffer_exists_resp'])

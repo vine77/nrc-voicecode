@@ -107,24 +107,24 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
     def mediator_closing(self):
 
         """method called to inform AppState that the mediator is
-	closing.    Internal editors should exit.  They may prompt the
-	user to save modified files, but must not allow the user to
-	cancel and leave the editor running.  External editors should
-	disconnect but not close.  **Note:** this method should not
-	block.  For external editors, that means the corresponding
-	message should have a response for which to wait.  Otherwise, a
-	single hung or disconnected editor hang the mediator and prevent
-	it from closing or from notifying the rest of the connected
-	editors that it was closing.  
+        closing.    Internal editors should exit.  They may prompt the
+        user to save modified files, but must not allow the user to
+        cancel and leave the editor running.  External editors should
+        disconnect but not close.  **Note:** this method should not
+        block.  For external editors, that means the corresponding
+        message should have a response for which to wait.  Otherwise, a
+        single hung or disconnected editor hang the mediator and prevent
+        it from closing or from notifying the rest of the connected
+        editors that it was closing.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         self.close_all_buffers()
 
     def updates_from_app(self, what=[], exclude=1):
@@ -155,7 +155,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
     def app_active_buffer_name(self):
         
         """Returns the file name of the buffer currently active in the
-	external application.
+        external application.
 
         Note that this may or may not be the same the buffer that
         VoiceCode is currently bound to (see [curr_buffer_name]
@@ -165,9 +165,9 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
         *none* --
         
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- file name of current buffer
+        *STR* -- file name of current buffer
 
         file:///./AppState.AppState.html#curr_buffer_name"""        
       
@@ -191,7 +191,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
         **OUTPUTS**
         
         *BOOL* -- true if buff_name exists and the external application
-	successfully switches to it
+        successfully switches to it
         
             
         file:///./AppState.AppState.html#curr_buffer_name"""
@@ -204,25 +204,25 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
     def active_field(self):
         """indicates what part of the editor has the focus.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*(STR)* -- Name of the active Field. Elements of
-	the array refer to a sequence of objects in the user interface
-	that lead to the active field.
+        *(STR)* -- Name of the active Field. Elements of
+        the array refer to a sequence of objects in the user interface
+        that lead to the active field.
 
-	If *None*, then the buffer [self.curr_buffer] has the focus. 
+        If *None*, then the buffer [self.curr_buffer] has the focus. 
 
-	Example: in VisualBasic, it might be: *('menu bar', 'File', 'Save
-	as', 'file name')*.
+        Example: in VisualBasic, it might be: *('menu bar', 'File', 'Save
+        as', 'file name')*.
 
-	Example: in Emacs, it might be *('find-buffer', 'buffer-name')*
-	where find-buffer is the name of the command that was invoked and
-	buffer-name refers to the argument that is being asked for.
-	"""
+        Example: in Emacs, it might be *('find-buffer', 'buffer-name')*
+        where find-buffer is the name of the command that was invoked and
+        buffer-name refers to the argument that is being asked for.
+        """
         if not self.the_editor.is_active():
             return ('inactive')
         if self.the_editor.editor_has_focus():
@@ -239,7 +239,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
         If *pos* not specified, drop breadcrumb at cursor position.
 
         If *buff* not specified either, drop breadcrumb in current buffer
-	"""
+        """
         self.breadcrumbs_srv.drop_breadcrumb(buff_name, pos)
 
 
@@ -289,30 +289,30 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
     def query_buffer_from_app(self, buff_name):
         """query the application to see if a buffer by the name of buff_name 
-	exists.
+        exists.
 
         **INPUTS**
 
-	*STR* buff_name -- name of the buffer to check
+        *STR* buff_name -- name of the buffer to check
 
         **OUTPUTS**
 
-	*BOOL* -- does the buffer exist?
-	"""
+        *BOOL* -- does the buffer exist?
+        """
         return buff_name in self.open_buffers_from_app()
 
     def open_buffers_from_app(self):
         """retrieve a list of the names of open buffers from the
-	application.
+        application.
 
         **INPUTS**
 
-	*none*
+        *none*
 
         **OUTPUTS**
 
-	*[STR]* -- list of the names of open buffers
-	"""
+        *[STR]* -- list of the names of open buffers
+        """
         return self.open_buffers.keys()
 
         
@@ -320,18 +320,18 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
         """Save the current buffer.
 
         **INPUTS**
-	
-	*STR full_path* -- full path under which to save the file, or
-	None to use the buffer name
+        
+        *STR full_path* -- full path under which to save the file, or
+        None to use the buffer name
 
-	*BOOL no_prompt* -- overwrite any existing file without
-	prompting.  No_prompt should only be set to true if the caller
-	has already prompted the user.
+        *BOOL no_prompt* -- overwrite any existing file without
+        prompting.  No_prompt should only be set to true if the caller
+        has already prompted the user.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* -- new buffer name if successful, or None if the save 
-	failed
+        *STR* -- new buffer name if successful, or None if the save 
+        failed
 
         """
         f_path = full_path
@@ -368,85 +368,85 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
     def is_active(self):
         """is the editor application active (not suspended)?
 
-	Usually true, except for remote editors running in a (Unix)
-	shell.  GUI editors tend to minimize instead of suspending, so
-	their process should still be active.
+        Usually true, except for remote editors running in a (Unix)
+        shell.  GUI editors tend to minimize instead of suspending, so
+        their process should still be active.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor is active (i.e. has not been suspended)
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor is active (i.e. has not been suspended)
+        """
         return 1
 
     def is_active_is_safe(self):
         """can is_active safely be queried, without blocking?
 
-	For example, Emacs provides a suspend-hook and a
-	suspend-resume-hook, so a properly written AppStateEmacs can
-	set a flag on suspend and clear it on resume, and will therefore
-	be able to respond to is_active without querying Emacs.
+        For example, Emacs provides a suspend-hook and a
+        suspend-resume-hook, so a properly written AppStateEmacs can
+        set a flag on suspend and clear it on resume, and will therefore
+        be able to respond to is_active without querying Emacs.
 
-	Also, except for remote editors running in a (Unix)
-	shell, this is usually true.  GUI editors tend to minimize 
-	instead of suspending, so their process should still be active.
+        Also, except for remote editors running in a (Unix)
+        shell, this is usually true.  GUI editors tend to minimize 
+        instead of suspending, so their process should still be active.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if is_active can be queried without blocking,
-	even if the editor has been suspended. 
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if is_active can be queried without blocking,
+        even if the editor has been suspended. 
+        """
         return 1
 
     def shared_window(self):
         """is the editor running in a window which could be shared with
-	another editor instance (because it is a shell window,
-	and this instance could be suspended or closed)
+        another editor instance (because it is a shell window,
+        and this instance could be suspended or closed)
 
-	Usually false for GUI editors.
+        Usually false for GUI editors.
 
-	Note: remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will also appear to be
-	shared windows.  However, the mediator will perform a separate 
-	check to detect this, so for remote editors which do not share windows 
-	on the remote system, AppState.shared_window should report
-	false.
-	
-	**INPUTS**
+        Note: remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will also appear to be
+        shared windows.  However, the mediator will perform a separate 
+        check to detect this, so for remote editors which do not share windows 
+        on the remote system, AppState.shared_window should report
+        false.
+        
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor is running in a potentially shared window
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor is running in a potentially shared window
+        """
         return 0
 
     def set_instance_string(self, instance_string):
         """specifies the identifier string for this editor instance.  If the 
-	editor is capable of setting the window title to include this string, 
-	it should (and then should return this string when the
-	instance_string method is called.  
+        editor is capable of setting the window title to include this string, 
+        it should (and then should return this string when the
+        instance_string method is called.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance_string -- the identifying string to be included in the
-	window title if possible.
+        *STR* instance_string -- the identifying string to be included in the
+        window title if possible.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *BOOL* -- true if the editor can and will include the 
         instance string in its window title for all windows 
         containing editor buffers.
-	"""
+        """
         self.the_instance_string = title
         self.can_show_instance_string = \
             self.the_editor.set_instance_string(title)
@@ -454,105 +454,105 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
 
     def instance_string(self):
         """returns the identifier string for this editor instance (which 
-	should be a substring of the window title)
+        should be a substring of the window title)
 
-	Note: multiple windows of remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will not be able to set 
-	the overall title.  
-	However, the mediator will perform a 
-	separate check to detect this, so remote editors which support
-	identifying title strings should still return the appropriate
-	string.
+        Note: multiple windows of remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will not be able to set 
+        the overall title.  
+        However, the mediator will perform a 
+        separate check to detect this, so remote editors which support
+        identifying title strings should still return the appropriate
+        string.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*STR* -- the identifying string, or None if the editor was not given 
-	such a string or cannot set the window title.
-	"""
+        **OUTPUTS**
+        
+        *STR* -- the identifying string, or None if the editor was not given 
+        such a string or cannot set the window title.
+        """
         if self.can_show_instance_string:
             return self.the_instance_string
         return None
 
     def title_escape_sequence(self, before = "", after = ""):
         """gives the editor a (module-dependent) hint about the escape
-	sequence which can be used to set the module's window title, if
-	any.  If the editor has its own mechanism for setting the window
-	title, it should simply ignore this method.  
+        sequence which can be used to set the module's window title, if
+        any.  If the editor has its own mechanism for setting the window
+        title, it should simply ignore this method.  
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* before -- the escape sequence to be sent before the string
-	to place in the window title, or the empty string if there is no
-	escape sequence
+        *STR* before -- the escape sequence to be sent before the string
+        to place in the window title, or the empty string if there is no
+        escape sequence
 
-	*STR* after -- the escape sequence which terminates the window
-	title value
+        *STR* after -- the escape sequence which terminates the window
+        title value
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *BOOL* -- true if the editor, given the title escape sequence, 
         can and will include the instance string in its window title 
         for all windows containing editor buffers.
-	"""
+        """
 # we can set the title ourselves, so ignore
         return self.can_show_instance_string
 
     def multiple_windows(self):
         """does editor support multiple windows per instance?
 
-	Note: the purpose of this function is to allow the RecogStartMgr
-	to determine whether a previously unknown window could belong to
-	this known instance.  Therefore, Emacs running in text mode 
-	should return false, even though it can have (sub-)windows in 
-	a single frame.  
-	
-	Note: multiple windows of remote editors running in a remote display
-	which appears as a single window to be local operating system 
-	(X servers in single window mode, VNC) will not appear to the mediator 
-	as having separate windows.  However, the mediator will perform a 
-	separate check to detect this, so remote editors which support
-	multiple windows should return true, regardless of the remote
-	display method.
+        Note: the purpose of this function is to allow the RecogStartMgr
+        to determine whether a previously unknown window could belong to
+        this known instance.  Therefore, Emacs running in text mode 
+        should return false, even though it can have (sub-)windows in 
+        a single frame.  
+        
+        Note: multiple windows of remote editors running in a remote display
+        which appears as a single window to be local operating system 
+        (X servers in single window mode, VNC) will not appear to the mediator 
+        as having separate windows.  However, the mediator will perform a 
+        separate check to detect this, so remote editors which support
+        multiple windows should return true, regardless of the remote
+        display method.
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports opening multiple editor windows.  
-	"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor supports opening multiple editor windows.  
+        """
         return 0
 
     def multiple_buffers(self):
         """does editor support multiple open buffers?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor supports having multiple buffers open 
-	at the same time"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor supports having multiple buffers open 
+        at the same time"""
         return 0
 
     def bidirectional_selection(self):
         """does editor support selections with cursor at left?
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
-	
-	*BOOL* -- true if editor allows setting the selection at the
-	left end of the selection"""
+        **OUTPUTS**
+        
+        *BOOL* -- true if editor allows setting the selection at the
+        left end of the selection"""
         return 0
 
     def app_close_buffer(self, buff_name, save=0):

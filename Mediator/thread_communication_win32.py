@@ -38,24 +38,24 @@ class Win32InterThreadEvent(InterThreadEvent):
     """
     def __init__(self, event, **args):
         """
-	**INPUTS**
+        **INPUTS**
 
-	*PyHandle event* -- Win32 event to raised to notify the main thread
-	"""
+        *PyHandle event* -- Win32 event to raised to notify the main thread
+        """
         self.deep_construct(Win32InterThreadEvent,
                             {'event': event},
                             args)
     def notify(self):
         """send the message, and return asynchronously
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         win32event.SetEvent(self.event)
 
 class Win32SomeSocketHasDataEvent(SocketHasDataEvent):
@@ -74,24 +74,24 @@ class Win32SomeSocketHasDataEvent(SocketHasDataEvent):
     """
     def __init__(self, event, **args):
         """
-	**INPUTS**
+        **INPUTS**
 
-	*PyHandle event* -- Win32 event to raised to notify the main thread
-	"""
+        *PyHandle event* -- Win32 event to raised to notify the main thread
+        """
         self.deep_construct(Win32SomeSocketHasDataEvent,
                             {'event': event},
                             args)
     def notify(self):
         """send the message, and return asynchronously
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         win32event.SetEvent(self.event)
 
 

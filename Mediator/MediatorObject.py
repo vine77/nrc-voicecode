@@ -96,105 +96,105 @@ class AppCbkFilter(Object.OwnerObject, AppState.AppCbkHandler):
 
     def close_app_cbk(self, instance, unexpected = 0):
         """callback from AppState which indicates that the application has 
-	closed or disconnected from the mediator
+        closed or disconnected from the mediator
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance to be removed
+        *STR* instance -- name of the application instance to be removed
       
- 	*BOOL unexpected* -- 1 if the editor broke the connection
-	without first sending an editor_disconnecting message
+        *BOOL unexpected* -- 1 if the editor broke the connection
+        without first sending an editor_disconnecting message
    
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # for now at least, this does the same thing as delete_instance
         self.mediator.close_app_cbk(instance, unexpected = unexpected)
 
     def close_buffer_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the application
-	has closed a buffer
+        has closed a buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* buff_name -- name of the buffer which was closed
+        *STR* buff_name -- name of the buffer which was closed
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # ignored by MediatorObject
         pass
 
     def open_buffer_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the application
-	has opened a buffer
+        has opened a buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* buff_name -- name of the buffer which was closed
+        *STR* buff_name -- name of the buffer which was closed
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # ignored by MediatorObject
         pass
 
     def curr_buff_name_cbk(self, instance, buff_name):
         """callback from AppState which notifies us that the current
-	buffer has changed
+        buffer has changed
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	*STR* buff_name -- name of the buffer which was closed
+        *STR* buff_name -- name of the buffer which was closed
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 # ignored by MediatorObject
         pass
 
     def rename_buffer_cbk(self, instance, old_buff_name, new_buff_name):
         """callback from AppState which notifies us that the application
-	has renamed a buffer
+        has renamed a buffer
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance 
+        *STR* instance -- name of the application instance 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*STR* old_buff_name -- old name of the buffer 
+        *STR* old_buff_name -- old name of the buffer 
 
-	*STR* new_buff_name -- new name of the buffer 
+        *STR* new_buff_name -- new name of the buffer 
 
-	*none*
-	"""
+        *none*
+        """
 # ignored by MediatorObject
         pass
 
 
     def new_window(self, instance):
         """called when the editor notifies us of a new window for the 
-	specified instance
+        specified instance
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if window is added
-	"""
+        *BOOL* -- true if window is added
+        """
 # ignored by MediatorObject
         pass
     
@@ -202,14 +202,14 @@ class AppCbkFilter(Object.OwnerObject, AppState.AppCbkHandler):
         """called when the editor notifies us that its process is about
         to be suspended
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *none*
-	"""
+        """
 # really, this shouldn't be ignored, but the old MediatorObject and 
 # ServerOldMediator have no mechanism for dealing with this
         pass
@@ -218,14 +218,14 @@ class AppCbkFilter(Object.OwnerObject, AppState.AppCbkHandler):
         """called when the editor notifies us that its process has 
         resumed after having been suspended 
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance -- name of the application instance
+        *STR* instance -- name of the application instance
 
-	**OUTPUTS**
+        **OUTPUTS**
 
         *none*
-	"""
+        """
 # since we're ignoring suspend_cbk, there is nothing to do on resume_cbk
         pass
 
@@ -323,20 +323,20 @@ class MediatorObject(Object.Object):
 
     def define_config_functions(self, names, exclude = []):
         """Adds the appropriate configuration functions to the  given
-	namespace, to allow the configuration file to access the
-	appropriate mediator methods.  These functions are generally
-	bound methods.
+        namespace, to allow the configuration file to access the
+        appropriate mediator methods.  These functions are generally
+        bound methods.
         
         **INPUTS**
 
-	*{STR: ANY}* names -- the dictionary or namespace to which to
-	add the functions
+        *{STR: ANY}* names -- the dictionary or namespace to which to
+        add the functions
 
-	*[STR] exclude* -- list of mediator object attribute objects 
-	to ignore during reconfiguration.  Currently, the only recognized 
-	attributes are ['editors', 'interp'].  MediatorObject may
-	exclude some attribute objects not supported by this version, 
-	even if they are not specified.
+        *[STR] exclude* -- list of mediator object attribute objects 
+        to ignore during reconfiguration.  Currently, the only recognized 
+        attributes are ['editors', 'interp'].  MediatorObject may
+        exclude some attribute objects not supported by this version, 
+        even if they are not specified.
         
         **OUTPUTS**
         
@@ -450,26 +450,26 @@ class MediatorObject(Object.Object):
                 
     def close_app_cbk(self, instance_name, unexpected = 0):
         """method called by our AppState to tell us that it is closing, or
-	disconnecting from the mediator.  This method is included
-	only to allow an external editor to disconnect when we are
-	running tcp_server with this old MediatorObject implementation.
-	MediatorObject responds to this message only by informing its,
-	if any.
+        disconnecting from the mediator.  This method is included
+        only to allow an external editor to disconnect when we are
+        running tcp_server with this old MediatorObject implementation.
+        MediatorObject responds to this message only by informing its,
+        if any.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* instance_name -- name of the instance.  This parameter is
-	included only for compatibility with the usual call from
-	AppState to the AppMgr.  This implementation of MediatorObject
-	has only one editor instance, so it ignores this parameter
+        *STR* instance_name -- name of the instance.  This parameter is
+        included only for compatibility with the usual call from
+        AppState to the AppMgr.  This implementation of MediatorObject
+        has only one editor instance, so it ignores this parameter
       
- 	*BOOL unexpected* -- 1 if the editor broke the connection
-	without first sending an editor_disconnecting message
+        *BOOL unexpected* -- 1 if the editor broke the connection
+        without first sending an editor_disconnecting message
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         debug.trace('MediatorObject.close_app_cbk', 
             'Mediator Object received close app callback')
         if self.owner and self.id:
@@ -481,13 +481,13 @@ class MediatorObject(Object.Object):
     def add_csc(self, acmd, add_voc_entry=1):
         """Add a new Context Sensitive Command.
 
-	[CSCmd] *acmd* is the command to add.
+        [CSCmd] *acmd* is the command to add.
 
-	*BOOL add_voc_entry = 1* -- if true, add a SR vocabulary entry
-	for the CSC's spoken forms
-	
+        *BOOL add_voc_entry = 1* -- if true, add a SR vocabulary entry
+        for the CSC's spoken forms
+        
 
-	.. [CSCmd] file:///./CSCmd.CSCmd.html"""
+        .. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
         self.interp.add_csc(acmd, add_voc_entry)
 
@@ -495,46 +495,46 @@ class MediatorObject(Object.Object):
     def add_lsa(self, spoken_forms, meanings):
         """Add a language specific word.
 
-	These words get added and removed dynamically from the SR
-	vocabulary, depending on the language of the active buffer.
+        These words get added and removed dynamically from the SR
+        vocabulary, depending on the language of the active buffer.
 
-	A redundant CSC is also added to allow translation of the LSA at
-	the level of the Mediator, in cases where NatSpeak prefers to
-	recognise the LSA as dictated text instead of a spoken/written
-	word (this often happens if the spoken form looks to much like
-	dictated text, e.g. "is not equal to").
-	
-	**INPUTS**
-	
-	*STR* spoken_forms -- List of spoken form of the word.
+        A redundant CSC is also added to allow translation of the LSA at
+        the level of the Mediator, in cases where NatSpeak prefers to
+        recognise the LSA as dictated text instead of a spoken/written
+        word (this often happens if the spoken form looks to much like
+        dictated text, e.g. "is not equal to").
+        
+        **INPUTS**
+        
+        *STR* spoken_forms -- List of spoken form of the word.
 
-	*{STR: STR}* meanings -- Dictionary of language specific
-	 meanings. Key is the language name and value is the written form
-	 of the LSA for that langugage. If language name is *None*, then
-	 it means that this LSA applies for all languages (I know, it
-	 doesn't make much sense syntactically).
-	
-	**OUTPUTS**
-	
-	*none* -- 
-	"""
+        *{STR: STR}* meanings -- Dictionary of language specific
+         meanings. Key is the language name and value is the written form
+         of the LSA for that langugage. If language name is *None*, then
+         it means that this LSA applies for all languages (I know, it
+         doesn't make much sense syntactically).
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
         
         self.interp.add_lsa(spoken_forms, meanings)
 
     def add_abbreviation(self, abbreviation, expansions):
         """Add an abbreviation to VoiceCode's abbreviations dictionary.
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR* abbreviation -- the abbreviation 
+        *STR* abbreviation -- the abbreviation 
 
-	*[STR]* expansions -- list of possible expansions
+        *[STR]* expansions -- list of possible expansions
 
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none* -- 
-	"""
+        *none* -- 
+        """
         self.interp.add_abbreviation(abbreviation, expansions, user_added=1)
 
 

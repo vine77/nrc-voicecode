@@ -738,12 +738,12 @@ class ActionInsertNewClause(Action):
         for ii in range(self.add_lines):
             app.insert_indent(code_bef='\n', code_after='')
 
-	    #
-	    # Client-side automatic indentation is usually smart enough to know
-	    # if a new clause should be backindented or not. 
-	    # But our language-indenpendant server-side indentation needs to be 
-	    # told more explicitely. 
-	    #
+            #
+            # Client-side automatic indentation is usually smart enough to know
+            # if a new clause should be backindented or not. 
+            # But our language-indenpendant server-side indentation needs to be 
+            # told more explicitely. 
+            #
         if self.back_indent_by > 0 and app.curr_buffer().uses_server_side_indent():
             app.decr_indent_level(levels=self.back_indent_by)
 

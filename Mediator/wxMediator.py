@@ -55,6 +55,7 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                        'CmdInterp': 1,
 #                        'reinterpret_recent': 1,
 #                        'wxMediator': 1,
 #                        'send_mess': 1,
