@@ -98,7 +98,7 @@ def find_pydoc_path(names=None):
     *STR* -- full path of the script, or None if it couldn't be found.
     """
     if not names:
-        names = ['pydoc.py', 'pdoc.py']
+        names = ['oldpydoc.py', 'pdoc.py', 'pydoc.py']
     for name in names:
         for directory in sys.path:
             if os.path.exists(directory):
