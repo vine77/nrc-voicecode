@@ -1,0 +1,1100 @@
+##############################################################################
+# VoiceCode, a programming-by-voice environment
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#
+# (C)2002, National Research Council of Canada
+#
+##############################################################################
+
+"""classes for creating VoiceCode TCP/IP client as a counterpart to 
+AppStateMessaging and communicating with it via the ServerMainThread classes in tcp_server.py
+"""
+
+import vc_globals
+
+import os, posixpath, pythoncom, re, select, socket
+import SocketServer, string, sys, threading, time, whrandom, win32event
+
+import AppState
+
+import debug
+import EdSim
+import messaging, Object
+import util
+import Queue
+
+import thread_communication
+from tcp_threads import *
+
+
+
+# Uncomment this and add some entries to active_traces if you want to 
+# activate some traces.
+#debug.config_traces(status="on", active_traces={'get_mess':1, 'send_mess': 1})
+#debug.config_traces(status="on", active_traces = 'all')
+#debug.config_traces(status="on", active_traces = {'sr_interface':1},
+#allow_trace_id_substrings = 1)
+
+# Uncomment this and add some entries to active_traces if you want to 
+# activate some traces.
+#debug.config_traces(status="on",
+#              active_traces={
+#                             'get_mess':1,
+#                             'send_mess': 1,
+#                             'SourceBuffEdSim': 1
+#                             })
+
+debug.config_traces(status="on", active_traces='all')
+
+
+#
+# Port numbers for the communication link
+#
+VC_LISTENER_PORT = 45770
+VC_TALKER_PORT = 45771
+
+class ClientConnection(Object.Object):
+    """class for connecting to the TCP mediator server and listening for 
+    incoming messages.
+
+    connect will create a ListenAndQueueMsgsThread to listen 
+    for data on the talk_sock (the mediator server talks on the talk_sock, 
+    while we listen) and queue complete messages.  
+    The LAQM Thread also notifies the main thread of a pending message using a
+    SocketHasDataEvent.  
+
+    **INSTANCE ATTRIBUTES**
+
+    ListenAndQueueMsgsThread *data_thread* -- 
+    thread which polls for data from the listen messenger
+
+    BOOL *connecting* -- flag indicating that the server is in the
+    process of connecting to the mediator
+
+    BOOL *connected* -- flag indicating that the server is 
+    connected to the mediator
+
+    STR *ID* -- unique ID assigned to this connection
+
+    Event *client_quitting* -- threading.Event 
+    used to signal to the data thread that the connection is 
+    ending, or the client is quitting
+ 
+
+    **CLASS ATTRIBUTES**
+    
+    *none* -- 
+
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(ClientConnection, 
+                            {
+			     'data_thread': None,
+			     'connecting': 0,
+			     'connected': 0,
+			     'ID': None,
+			     'client_quitting': threading.Event()
+                             }, 
+                            args_super)
+
+    def new_data_thread_given_event(self, listen_sock, data_event):
+        """creates a new ListenAndQueueMsgsThread to monitor the
+	listen_sock
+        
+        **INPUTS**
+
+	SocketHasDataEvent *data_event* -- the SocketHasDataEvent event
+	to pass to the new thread
+
+        STR *ID* -- The unique ID of the listen socket
+        
+        socket *listen_sock* -- The listen socket
+        
+        **OUTPUTS**
+        
+        [ListenAndQueueMsgsThread] -- the new threading.Thread object
+
+        ..[ListenAndQueueMsgsThread] 
+	file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
+	a_msgr = messaging.messenger_factory(listen_sock)
+	queue = Queue.Queue(10)
+	broken_connection = ('broken_connection', {})
+	thread = ListenAndQueueMsgsThread(a_msgr, queue, data_event,
+	   self.client_quitting, broken_connection)
+	return thread
+
+    def is_connected(self):
+	"""tells whether the client is currently connected or connecting
+	to the mediator
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true if the  client is currently connected (or
+	connecting) to a mediator
+	"""
+	return self.connecting or self.connected
+
+    def open_vc_listener_conn(self, app_name, host, listen_port):
+        """Connects to VoiceCode on the listen port
+
+	**INPUTS**
+
+	*STR* app_name -- name of the application to give to the
+	mediator
+
+	*STR* host -- name or IP address of the host on which the
+	mediator server is running.  Defaults to a server running
+	locally.
+
+	*INT* listen_port -- port number on which the server expects
+	new listen connections
+
+	**OUTPUTS**
+
+	*Messenger* -- a Messenger for the vc_listener connection, or 
+	None if the connection was not made successfully
+	"""
+
+        a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        a_socket.connect(host, listen_port)
+        
+        #
+        # Create a messenger
+        #
+        packager = messaging.MessPackager_FixedLenSeq()
+        transporter = messaging.MessTransporter_Socket(sock=a_socket)
+        encoder = messaging.MessEncoderWDDX()
+        vc_listen_msgr = messaging.MessengerBasic(packager=packager, 
+	    transporter=transporter, encoder=encoder)
+
+        debug.trace('ClientConnection.open_vc_listener_conn',
+              'sending name of editor')
+        
+        #
+        # Send name of editor
+        #
+        vc_listen_msgr.get_mess(expect=['send_app_name'])
+        vc_listen_msgr.send_mess('app_name', {'value': app_name})
+
+
+        debug.trace('ClientConnection.open_vc_listener_conn',
+              'getting ID')
+        
+        #
+        # Get unique identifier from VoiceCode
+        #
+        msg = vc_listen_msgr.get_mess(expect=['your_id_is'])
+        self.ID = msg[1]['value']
+        vc_listen_msgr.send_mess('ok')
+        
+        debug.trace('ClientConnection.open_vc_listener_conn',
+              'done')
+
+	return vc_listen_msgr
+
+    def open_vc_talker_conn(self, host, talk_port):
+        """Connects to VoiceCode on the talk port
+        
+        **INPUTS**
+
+	*STR* host -- name or IP address of the host on which the
+	mediator server is running.  Defaults to a server running
+	locally.
+
+	*INT* talk_port -- port number on which the server expects
+	new talk connections
+
+	**OUTPUTS**
+
+	*socket* -- socket for the talk connection, or None if the 
+	connection was not made successfully
+        """
+
+        debug.trace('ClientConnection.open_vc_talker_conn', 'started')
+        
+        #
+        # Open the socket
+        #
+        a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        a_socket.connect(host, talk_port)
+
+        debug.trace('ClientConnection.open_vc_talker_conn', 'socket opened')
+        
+        #
+        # Create a temporary messenger
+        #
+        packager = messaging.MessPackager_FixedLenSeq()
+        transporter = messaging.MessTransporter_Socket(sock=a_socket)
+        encoder = messaging.MessEncoderWDDX()
+        vc_talk_msgr = messaging.MessengerBasic(packager=packager, transporter=transporter, encoder=encoder)
+        
+
+        debug.trace('ClientConnection.open_vc_talker_conn', 'sending ID')
+        
+        #
+        # Send the connection pair ID to the remote server
+        #
+        vc_talk_msgr.get_mess(expect=['send_id'])
+        vc_talk_msgr.send_mess('my_id_is', {'value': self.ID})
+        
+        debug.trace('test_TCP_server.open_vc_talker_conn', 'done')
+	return a_socket
+
+    def connect(self, app_name, data_event,
+	    host = None, 
+	    listen_port = None,
+	    talk_port = None):
+	"""connect to the mediator
+
+	**INPUTS**
+
+	*STR* app_name -- name of the application to give to the
+	mediator
+
+	SocketHasDataEvent *data_event* -- the SocketHasDataEvent event
+	to pass to the new data thread so it can notify the main thread
+	when there is a command waiting in the queue.
+
+	*STR* host -- name or IP address of the host on which the
+	mediator server is running.  Defaults to a server running
+	locally.
+
+	*INT* listen_port -- port number on which the server expects
+	new listen connections.  Defaults to VC_LISTENER_PORT
+
+	*INT* talk_port -- port number on which the server expects
+	new talk connections.  Defaults to VC_TALKER_PORT
+
+	**OUTPUTS**
+
+	*(Messenger, MixedMessenger)* -- a tuple containing the Messenger 
+	for the talk connection and the MixedMessenger for the listen
+	connection, or None if the connection was not made successfully
+	"""
+	if self.is_connected():
+	    return None
+	self.connecting = 1
+	if listen_port == None:
+	    listen_port = VC_LISTENER_PORT
+	if talk_port == None:
+	    talk_port = VC_TALKER_PORT
+
+	if host == None:
+	    host = socket.gethostname()
+	# vc listener means the VoiceCode mediator is listening -- we're
+	# talking
+        talk_msgr = self.open_vc_listener_conn(app_name, host, listen_port)
+	if talk_msgr == None:
+	    self.connecting = 0
+	    return None
+	# vc talker means the VoiceCode mediator is talking -- we're
+	# listening
+        listen_sock = self.open_vc_talker_conn(host, talk_port)
+	if listen_sock == None:
+	    self.connecting = 0
+	    return None
+
+	self.connecting = 0
+	self.connected = 1
+
+	listen_msgr = self.listen(listen_sock, data_event)
+	return talk_msgr, listen_msgr
+
+    def disconnect(self):
+	"""disconnect from the mediator.  Note that ClientEditor has the
+	messengers, so it will have to be in charge of 
+	notifying the mediator that we are disconnecting 
+	(if it was client-initiated).  It should do so after this call.
+	
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*BOOL* -- true if we disconnected successfully
+	"""
+	if not self.is_connected():
+	    return 0
+	self.client_quitting.set()
+	return 1
+
+    def listen(self, listen_sock, data_event):
+        """creates and starts a data thread on the listen_sock
+        
+        **INPUTS**
+        
+        socket *listen_sock* -- The listen socket
+
+        **OUTPUTS**
+        
+	*MixedMessenger* -- a MixedMessenger for the listen socket, which 
+	sends messages via an underlying MessengerBasic, but receives them 
+	from a Queue.
+	"""
+        
+	data_thread = self.new_data_thread_given_event(listen_sock,
+	    data_event)
+	self.data_thread = data_thread
+	messages = data_thread.message_queue()
+	data_thread.setDaemon(1)
+	data_thread.start()
+
+	listen_response_msgr = messaging.messenger_factory(listen_sock, 
+	    sleep = 0.05)        
+        listen_msgr = messaging.MixedMessenger(listen_response_msgr, messages)
+ 
+	return listen_msgr
+
+class ClientEditor(Object.OwnerObject, AppState.AppCbkHandler):
+    """abstract base class for handling messages to and from the client editor
+
+    **INSTANCE ATTRIBUTES**
+
+    Messenger *talk_msgr* -- Messenger for sending commands to the mediator
+
+    MixedMessenger *listen_msgr* -- MixedMessenger for receiving commands from 
+    the mediator without blocking
+
+    AppState *editor* -- the AppState interface to the underlying editor
+
+    STR *editor_name* -- the string which the editor uses to identify
+    itself to the ClientEditor
+
+    *{STR:FCT}* msg_map -- map from message names to (unbound) methods
+    taking *(self, {arg:val})* to handle that message
+
+    *[STR] expect* -- list of commands expected from the mediator
+
+    *BOOL ignore_callbacks* -- flag to indicate that callbacks are
+    triggered by a mediator-initiated message and should be ignored
+
+    *[{STR:ANY}] awaiting_response* -- list of responses to a
+    mediator-initiated change, or None if we are not in the middle of a
+    mediator-initiated change
+
+    *owner* -- the owner of the ClientEditor, which should be notified
+    if the mediator sends a 'mediator_closing' or 'terminating' message
+
+    *STR ID* -- unique ID of this ClientEditor, so that it can identify
+    itself during callbacks to its owner
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, editor, owner, ID, **args):
+	self.deep_construct(ClientEditor,
+	                    {
+			     'talk_msgr': None,
+			     'listen_msgr': None,
+			     'editor': editor,
+			     'editor_name': None,
+			     'owner': owner,
+			     'ID': ID,
+			     'msg_map': {},
+			     'expect': [],
+			     'ignore_callbacks': 0,
+			     'awaiting_response': None,
+			    },
+			    args)
+	self.add_owned('editor')
+	self.name_parent('owner')
+	self.expect=['recog_begin', 'recog_end', 'cur_pos', 
+	    'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 
+	    'set_selection', 'get_text', 'make_position_visible', 'len', 
+	    'insert', 'delete', 'goto', 'active_buffer_name', 
+	    'indent', 'insert_indent', 
+	    'incr_indent_level',
+	    'decr_indent_level',
+	    'line_num_of', 'goto_line',
+	    'beginning_of_line', 'end_of_line',
+	    'multiple_buffers', 'bidirectional_selection', 'get_visible', 
+	    'language_name', 'newline_conventions', 
+	    'pref_newline_convention', 'open_file', 'close_buffer', 
+	    'save_file',
+	    'terminating', 'mediator_closing', 'updates']
+	for msg_name in self.expect:
+	    method_name = 'cmd_' + msg_name
+#	    msg_handler = self.__class__.__dict__[method_name]
+	    msg_handler = getattr(self, method_name)
+	    self.msg_map[msg_name] = msg_handler
+	self.editor_name = self.editor.name()
+	if self.editor_name == None:
+	    self.editor_name = 'client'
+	    self.editor.set_name(self.editor_name)
+	self.editor.set_manager(self)
+         
+
+    def disconnected(self):
+	"""method to call to let the ClientEditor know that the client
+	has disconnected from the mediator
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.talk_msgr = None
+	self.listen_msgr = None
+	self.editor.set_change_callback(None)
+
+    def connected(self, talk_msgr, listen_msgr):
+	"""method to call to let the ClientEditor know that the client
+	has connected to the mediator, and can communicate with it by
+	means of the provided talk_msgr and listen_msgr.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.talk_msgr = talk_msgr
+	self.listen_msgr = listen_msgr
+	self.editor.set_change_callback(self.on_change)
+	
+    def on_change(self, start, end, text, selection_start,
+	selection_end, buff_name, program_initiated):
+	updates = {'range': (start, end), 'buff_name': buff_name}
+	if text == "":
+	    updates['action'] = 'delete'
+	else:
+	    updates['action'] = 'insert'
+	    updates['text'] = text
+	if program_initiated:
+	    if self.awaiting_response == None:
+		err = 'error: ClientEditor received program_initiated '
+		err = err + 'change callback:\n'
+		err = err + '(%d, %d), [%s], %s' % (start, end, text, buff_name)
+		err = err + '\nbut awaiting_response was None'
+		sys.stderr.write(err)
+	    else:
+		self.awaiting_response.append(updates)
+	else:
+	    update_list = [updates] + self.sel_update(buff_name)
+	    self.talk_msgr.send_mess('update', {'value': update_list})
+
+    def mediator_cmd(self):
+	"""method to call when the main thread receives a message
+	from the data thread that a command from the mediator is waiting
+	in the queue
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.listen_msgr:
+	    cmd = self.listen_msgr.get_mess(expect = self.expect)
+	    if cmd:
+		self.do_cmd(cmd)
+
+    def do_cmd(self, cmd):
+	"""perform the appropriate action in response to the command
+	from the mediator
+
+	**INPUTS**
+
+	(STR, {STR: STR}) cmd -- The message retrieved
+        from external editor in *(mess_name, {arg:val})* format
+ 
+	**OUTPUTS**
+
+	*none*
+	"""
+
+        debug.trace('ClientEditor.do_cmd', 'cmd=%s' % repr(cmd))
+	handler = self.msg_map[cmd[0]]
+	handler(cmd[1])
+
+
+    def close_app_cbk(self, instance):
+	"""callback from AppState which indicates that the application has 
+	closed or disconnected from the mediator
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance to be removed
+    
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.editor_name == instance:
+	    self.talk_msgr.send_mess('editor_disconnecting')
+
+    def close_buffer_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the application
+	has closed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the buffer which was closed
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.editor_name == instance:
+	    if not self.ignore_callbacks:
+		updates = {'action': 'close_buff', 'buff_name': buff_name}
+		update_list = [updates] + self.sel_update(buff_name)
+		self.talk_msgr.send_mess('update', {'value': update_list})
+
+    def open_buffer_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the application
+	has opened a new buffer 
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the buffer which was opened
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.editor_name == instance:
+	    if not self.ignore_callbacks:
+		updates = {'action': 'open_buff', 'buff_name': buff_name}
+		update_list = [updates] + self.sel_update(buff_name)
+		self.talk_msgr.send_mess('update', {'value': update_list})
+
+    def curr_buff_name_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the current
+	buffer has changed
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the newly current buffer 
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.editor_name == instance:
+	    if not self.ignore_callbacks:
+		updates = {'action': 'curr_buffer', 'buff_name': buff_name}
+		update_list = [updates] + self.sel_update(buff_name)
+		self.talk_msgr.send_mess('update', {'value': update_list})
+
+    def rename_buffer_cbk(self, instance, old_buff_name, new_buff_name):
+	"""callback from AppState which notifies us that the application
+	has renamed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	**OUTPUTS**
+
+	*STR* old_buff_name -- old name of the buffer 
+
+	*STR* new_buff_name -- new name of the buffer 
+
+	*none*
+	"""
+	if self.editor_name == instance:
+	    if not self.ignore_callbacks:
+		updates = {'action': 'rename_buff', 
+			   'old_buff_name': old_buff_name,
+			   'new_buff_name': new_buff_name
+			  }
+		update_list = [updates] + self.sel_update(buff_name)
+		self.talk_msgr.send_mess('update', {'value': update_list})
+
+    def new_window(self, instance):
+	"""called when the editor notifies us of a new window for the 
+	specified instance
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+	*BOOL* -- true if window is added
+	"""
+	if self.editor_name == instance:
+	    if not self.ignore_callbacks:
+		updates = {'action': 'new_window'}
+		update_list = [updates] + self.sel_update(buff_name)
+		self.talk_msgr.send_mess('update', {'value': update_list})
+
+    def cmd_multiple_buffers(self, arguments):
+	value = self.editor.multiple_buffers()
+	self.listen_msgr.send_mess('multiple_buffers_resp', 
+	   {'value': value})
+
+    def cmd_bidirectional_selection(self, arguments):
+	value = self.editor.bidirectional_selection()
+	self.listen_msgr.send_mess('bidirectional_selection_resp', 
+	   {'value': value})
+
+    def cmd_active_buffer_name(self, arguments):
+	buff_name = self.editor.app_active_buffer_name()
+	self.listen_msgr.send_mess('active_buffer_name_resp', 
+	   {'value': buff_name})
+
+    def cmd_recog_begin(self, arguments):
+	window_id = messaging.messarg2int(arguments['window_id'])
+	block = messaging.messarg2int(arguments['block'])
+	value = self.editor.recog_begin(window_id, block)
+	self.listen_msgr.send_mess('recog_begin_resp', {'value': value}) 
+
+    def cmd_recog_end(self, arguments):
+	value = self.editor.recog_end()
+	self.listen_msgr.send_mess('recog_end_resp')
+
+    def cmd_cur_pos(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.cur_pos(buff_name = buff_name)
+	self.listen_msgr.send_mess('cur_pos_resp', {'value': value})
+
+    def cmd_confirm_buffer_exists(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.query_buffer_from_app(buff_name)
+	self.listen_msgr.send_mess('confirm_buffer_exists_resp', 
+	    {'value': value})
+
+    def cmd_list_open_buffers(self, arguments):
+	value = self.editor.open_buffers_from_app()
+	self.listen_msgr.send_mess('list_open_buffers_resp', {'value': value})
+
+    def cmd_get_selection(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.get_selection(buff_name = buff_name)
+	self.listen_msgr.send_mess('get_selection_resp', 
+	    {'value': value})
+ 
+    def sel_update(self, buff_name = None):
+	"""create update descriptions for the current cursor location
+	and selection for a given buffer
+
+	**INPUTS**
+
+	*STR buff_name* -- name of the buffer, or None for the current
+	buffer
+
+	**OUTPUTS**
+
+	*[{STR:ANY}]* -- the update descriptions
+	"""
+	if buff_name == None:
+	    buff_name = self.editor.app_active_buffer_name()
+	buff = self.editor.find_buff(buff_name)
+        updates = []
+
+        updates.append({'action': 'select', 'range': buff.get_selection(), 
+	    'buff_name': buff_name})        
+        updates.append({'action': 'goto', 'pos': buff.cur_pos(), 
+	    'buff_name': buff_name})
+
+        return updates
+        
+    def cmd_set_selection(self, arguments):
+	buff_name = arguments['buff_name']
+	range = messaging.messarg2intlist(arguments['range'])
+	cursor_at = messaging.messarg2int(arguments['cursor_at'])
+	self.editor.set_selection(range, cursor_at, buff_name = buff_name)
+	updates =  self.sel_update(buff_name)
+	self.listen_msgr.send_mess('set_selection_resp',
+	    {'updates': updates})
+
+    def cmd_get_text(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.get_text(buff_name = buff_name)
+	self.listen_msgr.send_mess('get_text_resp', 
+	    {'value': value})
+ 
+    def cmd_set_text(self, arguments):
+	buff_name = arguments['buff_name']
+	text = arguments['text']
+	start = messaging.messarg2int(arguments['start'])
+	end = messaging.messarg2int(arguments['end'])
+	self.awaiting_response = []
+	b_name = buff_name
+	if b_name == None:
+	    b_name = self.editor.curr_buffer()
+	self.editor.set_text(text, start = start, end = end, 
+	    buff_name = buff_name)
+	updates = self.awaiting_response
+	self.awaiting_response = None
+	updates = updates + self.sel_update(b_name)
+	self.listen_msgr.send_mess('set_text_resp', 
+	    {'updates': updates})
+
+    def cmd_make_position_visible(self, arguments):
+	buff_name = arguments['buff_name']
+	self.editor.make_position_visible(buff_name = buff_name)
+	self.listen_msgr.send_mess('make_position_visible_resp') 
+
+    def cmd_len(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.len(buff_name = buff_name)
+	self.listen_msgr.send_mess('len', {'value': value})
+
+    def cmd_line_num_of(self, arguments):
+	buff_name = arguments['buff_name']
+#	print arguments
+	position = messaging.messarg2int(arguments['position'])
+	value = self.editor.line_num_of(position = position, buff_name = buff_name)
+	self.listen_msgr.send_mess('line_num_of_resp', {'value': value})
+
+    def cmd_beginning_of_line(self, arguments):
+	buff_name = arguments['buff_name']
+	pos = messaging.messarg2int(arguments['pos'])
+	value = self.editor.beginning_of_line(pos = pos, buff_name = buff_name)
+	self.listen_msgr.send_mess('beginning_of_line_resp', {'value': value})
+
+    def cmd_end_of_line(self, arguments):
+	buff_name = arguments['buff_name']
+	pos = messaging.messarg2int(arguments['pos'])
+	value = self.editor.end_of_line(pos = pos, buff_name = buff_name)
+	self.listen_msgr.send_mess('end_of_line_resp', {'value': value})
+
+    def cmd_indent(self, arguments):
+	buff_name = arguments['buff_name']
+	range = messaging.messarg2intlist(arguments['range'])
+	self.awaiting_response = []
+	b_name = buff_name
+	if b_name == None:
+	    b_name = self.editor.curr_buffer()
+	self.editor.indent(range, buff_name = buff_name)
+	self.editor.print_buff_if_necessary(buff_name = buff_name)
+	updates = self.awaiting_response
+	self.awaiting_response = None
+	updates = updates + self.sel_update(b_name)
+	self.listen_msgr.send_mess('indent_resp', 
+	    {'updates': updates})
+
+    def cmd_insert(self, arguments):
+	buff_name = arguments['buff_name']
+	text = arguments['text']
+	range = messaging.messarg2intlist(arguments['range'])
+	self.awaiting_response = []
+	b_name = buff_name
+	if b_name == None:
+	    b_name = self.editor.curr_buffer()
+	self.editor.insert(text, range, buff_name = buff_name)
+	self.editor.print_buff_if_necessary(buff_name = buff_name)
+	updates = self.awaiting_response
+	self.awaiting_response = None
+	updates = updates + self.sel_update(b_name)
+	self.listen_msgr.send_mess('insert_resp', 
+	    {'updates': updates})
+
+    def cmd_insert_indent(self, arguments):
+	buff_name = arguments['buff_name']
+	code_bef = arguments['code_bef']
+	code_after = arguments['code_after']
+	range = messaging.messarg2intlist(arguments['range'])
+	self.awaiting_response = []
+	b_name = buff_name
+	if b_name == None:
+	    b_name = self.editor.curr_buffer()
+	self.editor.insert_indent(code_bef, code_after, range, 
+	    buff_name = buff_name)
+	self.editor.print_buff_if_necessary(buff_name = buff_name)
+	updates = self.awaiting_response
+	self.awaiting_response = None
+	updates = updates + self.sel_update(b_name)
+	self.listen_msgr.send_mess('insert_indent_resp', 
+	    {'updates': updates})
+
+
+    def cmd_delete(self, arguments):
+	buff_name = arguments['buff_name']
+	range = messaging.messarg2intlist(arguments['range'])
+	self.awaiting_response = []
+	b_name = buff_name
+	if b_name == None:
+	    b_name = self.editor.curr_buffer()
+	self.editor.delete(range, buff_name = buff_name)
+	self.editor.print_buff_if_necessary(buff_name = buff_name)
+	updates = self.awaiting_response
+	self.awaiting_response = None
+	updates = updates + self.sel_update(b_name)
+	self.listen_msgr.send_mess('delete_resp', 
+	    {'updates': updates})
+
+    def cmd_incr_indent_level(self, arguments):
+	buff_name = arguments['buff_name']
+	levels = arguments['levels']
+	range = messaging.messarg2intlist(arguments['range'])
+	self.awaiting_response = []
+	b_name = buff_name
+	if b_name == None:
+	    b_name = self.editor.curr_buffer()
+	self.editor.incr_indent_level(levels, range, buff_name = buff_name)
+	self.editor.print_buff_if_necessary(buff_name = buff_name)
+	updates = self.awaiting_response
+	self.awaiting_response = None
+	updates = updates + self.sel_update(b_name)
+	self.listen_msgr.send_mess('incr_indent_level_resp', 
+	    {'updates': updates})
+
+    def cmd_decr_indent_level(self, arguments):
+	buff_name = arguments['buff_name']
+	levels = messaging.messarg2int(arguments['levels'])
+	range = messaging.messarg2intlist(arguments['range'])
+	self.awaiting_response = []
+	b_name = buff_name
+	if b_name == None:
+	    b_name = self.editor.curr_buffer()
+	self.editor.decr_indent_level(levels, range, buff_name = buff_name)
+	self.editor.print_buff_if_necessary(buff_name = buff_name)
+	updates = self.awaiting_response
+	self.awaiting_response = None
+	updates = updates + self.sel_update(b_name)
+	self.listen_msgr.send_mess('decr_indent_level_resp', 
+	    {'updates': updates})
+
+    
+    def cmd_goto(self, arguments):
+	buff_name = arguments['buff_name']
+	pos = messaging.messarg2int(arguments['pos'])
+	self.awaiting_response = []
+	b_name = buff_name
+	if b_name == None:
+	    b_name = self.editor.curr_buffer()
+	self.editor.goto(pos, buff_name = buff_name)
+	updates = self.awaiting_response
+	self.awaiting_response = None
+	updates = updates + self.sel_update(b_name)
+	self.listen_msgr.send_mess('goto_resp', 
+	    {'updates': updates})
+
+    def cmd_goto_line(self, arguments):
+	buff_name = arguments['buff_name']
+	linenum = messaging.messarg2int(arguments['linenum'])
+	where = messaging.messarg2int(arguments['where'])
+	self.awaiting_response = []
+	b_name = buff_name
+	if b_name == None:
+	    b_name = self.editor.curr_buffer()
+	self.editor.goto_line(linenum, where, buff_name = buff_name)
+	updates = self.awaiting_response
+	self.awaiting_response = None
+	updates = updates + self.sel_update(b_name)
+	self.listen_msgr.send_mess('goto_line_resp', 
+	    {'updates': updates})
+    
+    
+    def cmd_get_visible(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.get_visible(buff_name = buff_name)
+	self.listen_msgr.send_mess('get_visible_resp', {'value': value})
+
+    def cmd_language_name(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.language_name(buff_name = buff_name)
+	self.listen_msgr.send_mess('language_name_resp', {'value': value})
+
+    def cmd_newline_conventions(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.newline_conventions(buff_name = buff_name)
+	self.listen_msgr.send_mess('newline_conventions_resp', {'value': value})
+
+    def cmd_pref_newline_convention(self, arguments):
+	buff_name = arguments['buff_name']
+	value = self.editor.pref_newline_convention(buff_name = buff_name)
+	self.listen_msgr.send_mess('pref_newline_convention_resp', 
+	    {'value': value})
+
+    def cmd_open_file(self, arguments):
+	file_name = arguments['file_name']
+	self.ignore_callbacks = 1
+	new_buff_name = self.editor.open_file(file_name = file_name)
+	self.ignore_callbacks = 0
+	self.listen_msgr.send_mess('open_file_resp', 
+	    {'buff_name': new_buff_name})
+
+    def cmd_close_buffer(self, arguments):
+	buff_name = arguments['buff_name']
+	save = messaging.messarg2int(arguments['save'])
+	self.ignore_callbacks = 1
+	success = self.editor.app_close_buffer(buff_name, save)
+	self.ignore_callbacks = 0
+	self.listen_msgr.send_mess('close_buffer_resp', {'value': success})
+
+    def cmd_save_file(self, arguments):
+	file_name = arguments['full_path']
+	no_prompt = arguments['no_prompt']
+	self.ignore_callbacks = 1
+	new_buff_name = self.editor.save_file(full_path = full_path,
+	    no_prompt = no_prompt)
+	self.ignore_callbacks = 0
+	self.listen_msgr.send_mess('save_file_resp', 
+	    {'buff_name': new_buff_name})
+
+    def cmd_terminating(self, arguments):
+	self.cmd_mediator_closing(arguments)
+
+    def cmd_mediator_closing(self, arguments):
+	self.owner.mediator_closing(self.ID)
+
+    def cmd_updates(self, arguments):
+	debug.virtual('ClientEditor.cmd_updates')
+
+class ClientEditorChangeSpec(ClientEditor):
+    """implementation of ClientEditor for an editor which supports change
+    specification events for all user-initiated changes
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **args):
+	self.deep_construct(ClientEditorChangeSpec,
+	                    {
+			    },
+			    args)
+
+    def cmd_updates(self, arguments):
+# editor supports change specification events for all user-initiated
+# changes.  Therefore, on_change will already handle updates, except for
+# selection and current buffer changes, so those are the only ones we
+# need to send here
+	updates =  self.sel_update()
+	self.listen_msgr.send_mess('updates',
+	    {'value': updates})
+
+class DummyDataEvent(thread_communication.SocketHasDataEvent):
+    """dummy SocketHasDataEvent for UneventfulLoop
+    """
+    def notify(self):
+# UneventfulLoop will poll for data, and has no event loops, so we 
+# don't need to notify the main thread of anything.
+	pass
+
+class UneventfulLoop(Object.OwnerObject):
+    """class for running the EdSim editor simulator as a TCP client
+
+    Since EdSim has no user-interface, we don't need an event loop.
+    Instead, we just have a loop to poll for
+    messages from the server.
+
+    As with test_TCP_server, we exit once the connection has been
+    closed.
+
+    **INSTANCE ATTRIBUTES**
+
+    ClientConnection *connection* -- the connection to the mediator
+    server
+
+    ClientEditorChangeSpec *editor* -- the client wrapper for the EdSim 
+    instance
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, multiple = 0, print_buff = 0, **args):
+	"""
+	**INPUTS**
+
+	*BOOL multiple* -- should this EdSim allow for multiple open
+	buffers?
+
+	*BOOL print_buff* -- should this EdSim call print_buff whenever
+	the buffer changes?
+	"""
+	self.deep_construct(UneventfulLoop,
+	                    {
+			     'connection': ClientConnection(),
+			     'editor': None
+			    }, args)
+	underlying_editor = EdSim.EdSim(multiple = multiple, 
+	   print_buff_when_changed = print_buff)
+	self.editor = ClientEditorChangeSpec(editor = underlying_editor, 
+	    owner = self, ID = 'dummy')
+
+    def mediator_closing(self, ID):
+	sys.stderr.write('mediator disconnected')
+	self.quit_flag = 1
+
+    def run(self, host = None, listen_port = None, talk_port = None):
+	messengers = self.connection.connect('EdSim', DummyDataEvent(), 
+	    host = host, listen_port = listen_port, talk_port = talk_port)
+	if messengers == None:
+	    sys.stderr.write('Unable to connect to server\n')
+	    return
+	talk, listen = messengers
+	self.editor.connected(talk, listen)
+	self.quit_flag = 0
+	while not self.quit_flag:
+	    while listen.receiver.empty():
+		time.sleep(.05)
+	    self.editor.mediator_cmd()
+	self.editor.disconnected()
+	return
+	
+class ClientMainThread(Object.OwnerObject):
+    """abstract base class for the main thread of an editor client to
+    the mediator server.
+
+    **INSTANCE ATTRIBUTES**
+
+    ClientConnection *connection* -- the connection to the mediator
+    server
+
+    Queue *mediator_cmds* -- the queue to which commands from the
+    mediator are added
+
+    AppState, AppChangeSpec *editor* -- the editor, supporting the
+    AppState interface, as well as the AppChangeSpec interface for
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **args):
+	self.deep_construct(ClientMainThread,
+	                    {
+			     'connection': None,
+			     'editor': None,
+			     'mediator_cmds': None
+			    },
+			    args)
+
+
+
+
+
+
