@@ -102,7 +102,7 @@ class SourceBuff(OwnerObject):
 
         *INT* start -- start of the modified range
 
-        *INT* end -- end of the modified range
+        *INT* end -- end of the modified range. If None, default to the end of the buffer.
 
         *STR* text -- the new text replacing this range
 
@@ -1681,7 +1681,8 @@ class SourceBuff(OwnerObject):
         **INPUTS**
         
         (INT, INT) *range* -- Start and end position of text to be
-        replaced by the insertion.
+        replaced by the insertion. If end of range is None, default to 
+        the end of the buffer.
 
         STR *text* -- Text to be inserted
 
@@ -1728,10 +1729,14 @@ class SourceBuff(OwnerObject):
         # Figure out the text before/within/after the selection
         #
         selection_start, selection_end = self.get_selection()
-
+        if selection_start > selection_end:
+           tmp = selection_end
+           selection_end = selection_start
+           selection_start = tmp
+           
         debug.trace('SourceBuff.print_buff',
-            'selection_start, selection_end = %d, %d' % \
-            (selection_start, selection_end))
+            'self.name()=%s, selection_start, selection_end = %d, %d' % \
+            (self.name(), selection_start, selection_end))
         #
         # Figure out the first and last line to be printed
         #

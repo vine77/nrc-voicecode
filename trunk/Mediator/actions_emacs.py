@@ -63,9 +63,10 @@ class ActionEmacsListBuffers(Action):
         #     'switch_buffer_dlg' message type. But sending
         #     keys will do for now.
         app.app_change_buffer()
+        app.synchronize_with_app()
         debug.trace('ActionEmacsListBuffers.execute', 
-                    '** app.curr_buffer().name()=%s' % app.curr_buffer().name())
-#        ActionCompileSymbols().execute(app=app, cont=cont, state=state)
+                    '** app.curr_buffer().name()=%s' % app.curr_buffer().name())        
+        ActionCompileSymbols("*Buffer List*").execute(app=app, cont=cont, state=state)
 
 
     def doc(self):

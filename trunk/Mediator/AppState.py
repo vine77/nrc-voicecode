@@ -838,7 +838,7 @@ class AppState(OwnerObject):
 
         *INT* start -- start of the modified range
 
-        *INT* end -- end of the modified range
+        *INT* end -- end of the modified range. If None, default to the end of the buffer.
 
         *STR* text -- the new text replacing this range
 

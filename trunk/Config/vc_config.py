@@ -1247,6 +1247,14 @@ acmd = CSCmd(spoken_forms=['emacs find file', 'emacs open file'],
              docstring='opens an Emacs dired buffer.')
 emacs_ctrl.add_csc(acmd)             
 
+###############################################################################
+# Define syntax of a pseudo-language used only to compile symbols for
+# file names
+###############################################################################
+define_language('file_names',
+                LangDef(regexp_symbol='[a-zA-Z0-9\\-_]+',
+                        regexps_no_symbols=[]))
+
 
 
 ######################################################################

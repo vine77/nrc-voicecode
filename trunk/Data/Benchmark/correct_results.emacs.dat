@@ -155,6 +155,125 @@ Heard select hello
 
 
 *******************************************************************************
+* Name        : switch_buffer
+* Description : Switching to an other buffer in Emacs.
+*******************************************************************************
+
+WARNING: source file 'dummy.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Got command: say(['class', 'dummy'],None,0,0,)
+Heard class dummy
+*** Start of source buffer ***
+  1: class Dummy<CURSOR>:
+  2:     
+
+*** End of source buffer ***
+WARNING: source file 'test.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Got command: say(['emacs', 'switch', 'to', 'buffer'],None,0,0,)
+Heard emacs switch to buffer
+Compiling symbols for *Buffer List*
+
+**AD: Messages below don't cause problems, but should get rid of them.
+      DO NOT ERASE THIS MESSAGE FROM THE BENCHMARK BEFORE FIXING THE
+      ISSUE.
+
+WARNING: error trying to get info from vocabulary word ''
+WARNING: error trying to get info from vocabulary word '-\'
+WARNING: error trying to get info from vocabulary word ''
+WARNING: error trying to get info from vocabulary word ''
+WARNING: error trying to get info from vocabulary word '-\'
+WARNING: error trying to get info from vocabulary word ''
+WARNING: error trying to get info from vocabulary word ''
+WARNING: error trying to get info from vocabulary word '-\'
+WARNING: error trying to get info from vocabulary word ''
+Done compiling symbols
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Got command: say(['select', 'dummy'],None,0,0,)
+Heard select dummy
+*** Start of source buffer ***
+  1:  MR Buffer           Size  Mode         File
+  2:  -- ------           ----  ----         ----
+  3: .   test.py	        0  Python	
+  4:  *  <SEL_START>dummy<SEL_END>.py	       17  Python	
+  5:     *scratch*	        0  Lisp Interaction 
+  6:  *  *Messages*	      181  Fundamental	
+  7: 
+Got command: say(['new', 'line'],None,0,0,)
+Heard new line
+
+**AD: Does this warning about cont_emacs.ContEmacsInBuffNamed not
+      resetting the cursor position matter? 
+      DO NOT ERASE THIS MESSAGE FROM THE BENCHMARK BEFORE FIXING THE
+      ISSUE.
+
+Warning: context <cont_emacs.ContEmacsInBuffNamed instance at 0x01F5BAB8>
+didn't restore the cursor position
+*** Start of source buffer ***
+  1:  MR Buffer           Size  Mode         File
+  2:  -- ------           ----  ----         ----
+  3: .   test.py	        0  Python	
+  4:  *  <SEL_START>dummy<SEL_END>.py	       17  Python	
+  5:     *scratch*	        0  Lisp Interaction 
+  6:  *  *Messages*	      181  Fundamental	
+  7: 
+*** Start of source buffer ***
+  1: class Dummy<CURSOR>:
+  2:     
+
+*** End of source buffer ***
+WARNING: source file 'dummy.py' doesn't exist.
+*** Start of source buffer ***
+  1: class Dummy<CURSOR>:
+  2:     
+
+*** End of source buffer ***
+Got command: say(['emacs', 'switch', 'to', 'buffer'],None,0,0,)
+Heard emacs switch to buffer
+Compiling symbols for *Buffer List*
+Done compiling symbols
+*** Start of source buffer ***
+  1: class Dummy<CURSOR>:
+  2:     
+
+*** End of source buffer ***
+Got command: say(['select', 'dummy'],None,0,0,)
+Heard select dummy
+*** Start of source buffer ***
+  1:  MR Buffer           Size  Mode         File
+  2:  -- ------           ----  ----         ----
+  3: .*  <SEL_START>dummy<SEL_END>.py	       17  Python	
+  4:     test.py	        0  Python	
+  5:     *scratch*	        0  Lisp Interaction 
+  6:  *  *Messages*	      216  Fundamental	
+Got command: say(['hello'],None,0,0,)
+Heard hello
+*** Start of source buffer ***
+  1:  MR Buffer           Size  Mode         File
+  2:  -- ------           ----  ----         ----
+  3: .*  <SEL_START>dummy<SEL_END>.py	       17  Python	
+  4:     test.py	        0  Python	
+  5:     *scratch*	        0  Lisp Interaction 
+  6:  *  *Messages*	      216  Fundamental	
+*** Start of source buffer ***
+  1:  MR Buffer           Size  Mode         File
+  2:  -- ------           ----  ----         ----
+  3: .*  <SEL_START>dummy<SEL_END>.py	       17  Python	
+  4:     test.py	        0  Python	
+  5:     *scratch*	        0  Lisp Interaction 
+  6:  *  *Messages*	      216  Fundamental	
+
+
+*******************************************************************************
 * Name        : text_mode
 * Description : Test dictation of normal text.
 *******************************************************************************
@@ -12948,93 +13067,6 @@ Heard some function of some argument
   4: some_function(some_argument)
   5: abs
   6: some_function_of_some_argument<CURSOR>
-
-*** End of source buffer ***
-
-
-*******************************************************************************
-* Name        : switch_buffer
-* Description : Switching to an other buffer in Emacs.
-*******************************************************************************
-
-WARNING: source file 'dummy.py' doesn't exist.
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
-Got command: say(['class', 'dummy'],None,0,0,)
-Heard class dummy
-*** Start of source buffer ***
-  1: class Dummy<CURSOR>:
-  2:     
-
-*** End of source buffer ***
-WARNING: source file 'test.py' doesn't exist.
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
-Got command: say(['emacs', 'switch', 'to', 'buffer'],None,0,0,)
-Heard emacs switch to buffer
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
-Got command: say(['select', 'dummy'],None,0,0,)
-Heard select dummy
-*** Start of source buffer ***
-  1:  MR Buffer           Size  Mode         File
-  2:  -- ------           ----  ----         ----
-  3: .   test.py	        0    Pyth	on	
-  4:  <SEL_START>dummy<SEL_END>.py	 .py	         17 	 Pyth*scratch*	 scratch*  	        0  Lisp  Inte*Messages*	 *  *Mess  ages*	     	2651  Fundamental	
-  5: 
-
-*** End of source buffer ***
-Got command: say(['new', 'line'],None,0,0,)
-Heard new line
-*** Start of source buffer ***
-  1:  MR Buffer           Size  Mode         File
-  2:  -- ------           ----  ----         ----
-  3: .   test.py	        0    Pyth	on	
-  4:  <SEL_START>dummy<SEL_END>.py	 .py	         17 	 Pyth*scratch*	 scratch*  	        0  Lisp  Inte*Messages*	 *  *Mess  ages*	     	2651  Fundamental	
-  5: 
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: class Dummy<CURSOR>:
-  2:     
-
-*** End of source buffer ***
-WARNING: source file 'dummy.py' doesn't exist.
-*** Start of source buffer ***
-  1: class Dummy<CURSOR>:
-  2:     
-
-*** End of source buffer ***
-Got command: say(['emacs', 'switch', 'to', 'buffer'],None,0,0,)
-Heard emacs switch to buffer
-*** Start of source buffer ***
-  1: class Dummy<CURSOR>:
-  2:     
-
-*** End of source buffer ***
-Got command: say(['select', 'dummy'],None,0,0,)
-Heard select dummy
-*** Start of source buffer ***
-  1: 651  Fundamental	
-  2: dummy.py	 dummy.py	 <SEL_START>dummy<SEL_END>.pydummy.py  	test.py	 test.py	 test.pytest.py  	*scratch*	 *scratch*	 *scratch**scratch*   *Messages*	 *Messages*	 *Messages**Messages*  	
-
-*** End of source buffer ***
-Got command: say(['hello'],None,0,0,)
-Heard hello
-*** Start of source buffer ***
-  1: 651  Fundamental	
-  2: dummy.py	 dummy.py	 <SEL_START>dummy<SEL_END>.pydummy.py  	test.py	 test.py	 test.pytest.py  	*scratch*	 *scratch*	 *scratch**scratch*   *Messages*	 *Messages*	 *Messages**Messages*  	
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: 651  Fundamental	
-  2: dummy.py	 dummy.py	 <SEL_START>dummy<SEL_END>.pydummy.py  	test.py	 test.py	 test.pytest.py  	*scratch*	 *scratch*	 *scratch**scratch*   *Messages*	 *Messages*	 *Messages**Messages*  	
 
 *** End of source buffer ***
 

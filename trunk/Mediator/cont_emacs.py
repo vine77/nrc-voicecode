@@ -93,7 +93,7 @@ class ContEmacsInBuffNamed(Context):
           if re.match(self.name, buff_name):
              answer = 1
           
-       debug.trace('ContEmacsInBuffNamed._applies', '\tmp_cont.applies(app, preceding_symbol)=%s, buff_name=%s, returns answer=%s' % (tmp_cont.applies(app, preceding_symbol), buff_name, answer))
+       debug.trace('ContEmacsInBuffNamed._applies', 'buff_name=%s, returns answer=%s' % (buff_name, answer))
        
        return answer        
 
