@@ -50,6 +50,7 @@ from cont_gen import *
 from exceptions import Exception
 
 
+if_else_c = vc_globals.test_data + os.sep + 'ifelse.c'
 small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'
 small_buff_py = vc_globals.test_data + os.sep + 'small_buff.py'
 large_buff_py = vc_globals.test_data + os.sep + 'large_buff.py'
@@ -1985,6 +1986,33 @@ def test_punctuation():
     commands.quit(save_speech_files=0, disconnect=0)    
 
 add_test('punctuation', test_punctuation, 'testing the various Python CSCs and LSAs')
+
+
+##############################################################################
+# Testing dictation of operators
+##############################################################################
+
+def test_operators():
+    testing.init_simulator_regression()
+    commands.open_file('blah.py')
+
+    commands.say(['count', 'plus', 'equals', 'extra', 'new',
+        'statement'], echo_utterance = 1)
+    commands.say(['bits', 'binary', 'or', 'equals', 'flag', 'new',
+        'statement'], echo_utterance = 1)
+    commands.say(['bits', 'right', 'shift', 'equals', '1\\one', 'new',
+        'statement'], echo_utterance = 1)
+    commands.say(['bits', 'ampersand', 'equals', 'flag', 'shift', 'left', '1\\one', 'new',
+        'statement'], echo_utterance = 1)
+    commands.say(['factor', 'star', 'equals', 'N.', 'new',
+        'statement'], echo_utterance = 1)
+    commands.say(['value', 'slash', 'equals', 'parens', '1\\one',
+        'plus', 'discount', 'rate', 'new', 'statement'], echo_utterance = 1)
+    commands.say(['rate', 'divide', 'equals', 'time',
+        'new', 'statement'], echo_utterance = 1)
+    commands.quit(save_speech_files=0, disconnect=0)    
+
+add_test('operators', test_operators, 'testing various operators')
 
 
 
@@ -4280,6 +4308,77 @@ def test_standard_function_call():
 
 add_test('std_func_calls', test_standard_function_call, 'Testing CSCs for calling standard functions.')
 
+
+
+##############################################################################
+# Testing navigation by syntax
+##############################################################################
+
+class SyntaxNavError(RuntimeError):
+    pass
+
+def test_syntax_navigation():
+    
+    testing.init_simulator_regression()    
+    commands.open_file(if_else_c)
+    app = testing.editor()
+    if not app.syntax_nav_supported():
+        print 'Editor does not support syntax navigation'
+        return
+
+    commands.goto_line(7)
+    test_say(['after', 'next', ')\\close-paren'])
+    orig = app.cur_pos()
+    pos = app.find_matching(direction = -1)
+    try:
+        if pos is None:
+            raise SyntaxNavError('ERROR: failed to find matching open paren')
+        print '\nfound matching open paren\n'
+        commands.goto(pos)
+        pos = app.find_matching()
+        if pos is None:
+            raise SyntaxNavError('ERROR: failed to find matching close paren')
+        print '\nfound matching close paren\n'
+        commands.goto(pos)
+        if pos != orig:
+            print "WARNING: didn't return to original position"
+    except SyntaxNavError, e:
+        print e
+
+    test_say(['after', 'next', '}\\close-brace'])
+    orig = app.cur_pos()
+    pos = app.find_matching(direction = -1)
+    try:
+        if pos is None:
+            raise SyntaxNavError('ERROR: failed to find matching open brace')
+        print '\nfound matching open brace\n'
+        commands.goto(pos)
+        pos = app.find_matching()
+        if pos is None:
+            raise SyntaxNavError('ERROR: failed to find matching close brace')
+        print '\nfound matching close brace\n'
+        commands.goto(pos)
+        if pos != orig:
+            print "WARNING: didn't return to original position"
+    except SyntaxNavError, e:
+        print e
+
+    test_say(['before', 'previous', ';\\semicolon'])
+    orig = app.cur_pos()
+    pos = app.beginning_of_statement()
+    try:
+        if pos is None:
+            msg = 'ERROR: failed to find beginning of statement'
+            raise SyntaxNavError(msg)
+        print '\nfound beginning of statement\n'
+        commands.goto(pos)
+    except SyntaxNavError, e:
+        print e
+
+add_test('syntax_navigation', test_syntax_navigation, 
+    desc='testing navigation by syntax in C')    
+
+
 ##############################################################################
 # Testing special cases for the symbol matching algorithm
 ##############################################################################
@@ -4545,3 +4644,5 @@ define_suite_by_range(name = 'from_select_pseudo', first = 'select_pseudocode')
 # tests starting with 'python' and going through the last
 define_suite_by_range(name = 'from_python', first = 'python')
 
+# tests starting with 'python' and going through the last
+define_suite_by_range(name = 'from_blank', first = 'blank_line_context')

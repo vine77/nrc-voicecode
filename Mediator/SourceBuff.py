@@ -1,4 +1,4 @@
-##############################################################################
+#############################################################################
 # VoiceCode, a programming-by-voice environment
 #
 # This program is free software; you can redistribute it and/or
@@ -710,6 +710,71 @@ class SourceBuff(OwnerObject):
         
 
 ###################################################################
+# Methods for code syntax navigation
+###################################################################
+
+    def syntax_nav_supported(self):
+        """
+        Indicates whether this SourceBuff instance supports syntax
+        navigation (either in the mediator or through the external
+        editor
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        return 0
+
+    def find_matching(self, direction = 1):
+        """
+        Finds a matching brace/bracket/parenthesis.
+
+        NOTE: this method does not find matching quotes, or any other
+        character where the opening and closing characters are
+        identical
+
+        ** INPUTS **
+
+        *INT direction* -- direction of the search.  Direction = 1
+        means to search forward for the character matching the one at
+        the current cursor position.  Direction = minus 1 means to
+        search backward for the character matching the one before the
+        current cursor position.
+
+        ** OUTPUTS **
+
+        *INT* -- the position of the matching character, or if the
+        character adjacent to the cursor was not a bracket, brace, or
+        parenthesis, or if no matching character could be found
+        """
+        debug.virtual('SourceBuff.find_matching')
+
+    def beginning_of_statement(self):
+        """Finds the location of the beginning of the current
+        statement
+
+        NOTE: initially, this method maybe implemented using the
+        external editor, said the exact definition of the current
+        statement and where it starts may vary.
+
+        ** INPUTS **
+
+        *none*
+
+        ** OUTPUTS **
+
+        *INT* -- the position of the beginning of the statement found
+        at the cursor position
+        """
+        debug.virtual('SourceBuff.beginning_of_statement')
+        
+    
+
+###################################################################
 # Methods for automatic indentation.
 # Eventually make those abstract methods, and create methods in
 # SourceBuffWithServices that forward them to the indentation service
@@ -847,6 +912,7 @@ class SourceBuff(OwnerObject):
 
         debug.virtual('SourceBuff.decr_indent_level')
 
+###################################################################
 
     def delete(self, range = None):
         """Delete text in a source buffer range.

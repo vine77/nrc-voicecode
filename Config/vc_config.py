@@ -607,18 +607,56 @@ math_ops.add_lsa(LSAlias(['minus'],
     name = 'subtraction')
 math_ops.add_lsa(LSAlias(['modulo'], {'C': ' % ', 'python': ' % '}, 
     spacing = binary_operator))
-math_ops.add_lsa(LSAlias(['left shift'], 
+math_ops.add_lsa(LSAlias(['left shift', 'shift left'], 
     {'C': ' << ', 'python': ' << ', 'perl': ' << '}, 
     spacing = binary_operator))
-math_ops.add_lsa(LSAlias(['right shift'], 
+math_ops.add_lsa(LSAlias(['right shift', 'shift right'], 
     {'C': ' >> ', 'python': ' >> ', 'perl': ' >> '},
     spacing = binary_operator))
+
+math_ops.add_lsa(LSAlias(['plus equals'], 
+    {'C': ' += ', 'python': ' += ', 'perl': ' += '}, spacing = binary_operator),
+    name = 'add and assign')
+math_ops.add_lsa(LSAlias(['minus equals'], 
+    {'C': ' -= ', 'python': ' -= ', 'perl': ' -= '}, spacing = binary_operator),
+    name = 'subtract and assign')
+math_ops.add_lsa(LSAlias(['times equals', 'star equals'], 
+    {'C': ' *= ', 'python': ' *= ', 'perl': ' *= '}, spacing = binary_operator),
+    name = 'multiply and assign')
+math_ops.add_lsa(LSAlias(['slash equals', 'divide equals'], 
+    {'C': ' /= ', 'python': ' /= ', 'perl': ' /= '}, spacing = binary_operator),
+    name = 'divide and assign')
+
+math_ops.add_lsa(LSAlias(['percent equals', 'modulo equals'], 
+    {'C': ' %= ', 'python': ' %= ', 'perl': ' %= '}, spacing = binary_operator),
+    name = 'assign remainder')
+math_ops.add_lsa(LSAlias(['shift left equals', 'left shift equals'], 
+    {'C': ' <<= ', 'python': ' <<= ', 'perl': ' <<= '}, 
+    spacing = binary_operator),
+    name = 'shift left and assign')
+math_ops.add_lsa(LSAlias(['shift right equals', 'right shift equals'], 
+    {'C': ' >>= ', 'python': ' >>= ', 'perl': ' >>= '}, 
+    spacing = binary_operator),
+    name = 'shift right and assign')
 
 math_ops.add_lsa(LSAlias(['binary and', 'bitwise and'], {'C': ' & ', 'python': ' & '}, spacing = binary_operator))
 math_ops.add_lsa(LSAlias(['binary or', 'bitwise or'], {'C': ' | ', 'python': ' | '}, spacing = binary_operator))
 math_ops.add_lsa(LSAlias(['binary not', 'bitwise not'], {'C': '~', 'python': '~'}, spacing = unary_operator))
 math_ops.add_lsa(LSAlias(['binary exclusive or', 'binary X. or', 'bitwise exclusive or', 'bitwise X. or'], {'C': ' ^ ', 'python': ' ^ '}, spacing = binary_operator))
 
+math_ops.add_lsa(LSAlias(['ampersand equals', 'binary and equals', 
+    'bitwise and equals'], 
+    {'C': ' &= ', 'python': ' &= ', 'perl': ' &= '}, spacing = binary_operator),
+    name = 'binary-and and assign')
+math_ops.add_lsa(LSAlias(['pipe equals', 'binary or equals', 
+    'bitwise and equals'], 
+    {'C': ' |= ', 'python': ' |= ', 'perl': ' |= '}, spacing = binary_operator),
+    name = 'binary-or and assign')
+math_ops.add_lsa(LSAlias(['caret equals', 'exclusive or equals', 
+    'binary exclusive or equals', 'binary X. or equals', 
+    'bitwise exclusive or equals', 'bitwise X. or equals'], 
+    {'C': ' ^= ', 'python': ' ^= ', 'perl': ' ^= '}, spacing = binary_operator),
+    name = 'binary-exclusive-or and assign')
 
 ## logical operators
 

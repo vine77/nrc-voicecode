@@ -179,11 +179,6 @@ WARNING: source file 'test.py' doesn't exist.
 Got command: say(['emacs', 'switch', 'to', 'buffer'],None,0,0,)
 Heard emacs switch to buffer
 Compiling symbols for *Buffer List*
-
-**AD: Messages below don't cause problems, but should get rid of them.
-      DO NOT ERASE THIS MESSAGE FROM THE BENCHMARK BEFORE FIXING THE
-      ISSUE.
-
 WARNING: error trying to get info from vocabulary word ''
 WARNING: error trying to get info from vocabulary word '-\'
 WARNING: error trying to get info from vocabulary word ''
@@ -206,17 +201,11 @@ Heard select dummy
   3: .   test.py	        0  Python	
   4:  *  <SEL_START>dummy<SEL_END>.py	       17  Python	
   5:     *scratch*	        0  Lisp Interaction 
-  6:  *  *Messages*	      181  Fundamental	
+  6:  *  *Messages*	      194  Fundamental	
   7: 
 Got command: say(['new', 'line'],None,0,0,)
 Heard new line
-
-**AD: Does this warning about cont_emacs.ContEmacsInBuffNamed not
-      resetting the cursor position matter? 
-      DO NOT ERASE THIS MESSAGE FROM THE BENCHMARK BEFORE FIXING THE
-      ISSUE.
-
-Warning: context <cont_emacs.ContEmacsInBuffNamed instance at 0x01F5BAB8>
+Warning: context <cont_emacs.ContEmacsInBuffNamed instance at 0x012B8390>
 didn't restore the cursor position
 *** Start of source buffer ***
   1:  MR Buffer           Size  Mode         File
@@ -224,7 +213,7 @@ didn't restore the cursor position
   3: .   test.py	        0  Python	
   4:  *  <SEL_START>dummy<SEL_END>.py	       17  Python	
   5:     *scratch*	        0  Lisp Interaction 
-  6:  *  *Messages*	      181  Fundamental	
+  6:  *  *Messages*	      194  Fundamental	
   7: 
 *** Start of source buffer ***
   1: class Dummy<CURSOR>:
@@ -254,7 +243,7 @@ Heard select dummy
   3: .*  <SEL_START>dummy<SEL_END>.py	       17  Python	
   4:     test.py	        0  Python	
   5:     *scratch*	        0  Lisp Interaction 
-  6:  *  *Messages*	      216  Fundamental	
+  6:  *  *Messages*	      229  Fundamental	
 Got command: say(['hello'],None,0,0,)
 Heard hello
 *** Start of source buffer ***
@@ -263,14 +252,14 @@ Heard hello
   3: .*  <SEL_START>dummy<SEL_END>.py	       17  Python	
   4:     test.py	        0  Python	
   5:     *scratch*	        0  Lisp Interaction 
-  6:  *  *Messages*	      216  Fundamental	
+  6:  *  *Messages*	      229  Fundamental	
 *** Start of source buffer ***
   1:  MR Buffer           Size  Mode         File
   2:  -- ------           ----  ----         ----
   3: .*  <SEL_START>dummy<SEL_END>.py	       17  Python	
   4:     test.py	        0  Python	
   5:     *scratch*	        0  Lisp Interaction 
-  6:  *  *Messages*	      216  Fundamental	
+  6:  *  *Messages*	      229  Fundamental	
 
 
 *******************************************************************************
@@ -757,7 +746,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01BBAA00>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x0126C0C0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -3777,7 +3766,7 @@ THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test 
 _cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym 
 Heard compile symbols
-Compiling symbols for None
+Compiling symbols for small_buff.py
 Done compiling symbols
 *** Start of source buffer ***
   1: <CURSOR># This is a small test buffer for Python
@@ -5387,6 +5376,74 @@ Got command: say(['select', '0\\zero', '.\\point', '04\\oh four'],0
 Heard select zero point oh four
 *** Start of source buffer ***
   1: 2354, <SEL_START>0.04<SEL_END>
+
+*** End of source buffer ***
+
+
+*******************************************************************************
+* Name        : operators
+* Description : testing various operators
+*******************************************************************************
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['count', 'plus', 'equals', 'extra', 'new', 'statement']
+Heard count plus equals extra new statement
+*** Start of source buffer ***
+  1: count += extra
+  2: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['bits', 'binary', 'or', 'equals', 'flag', 'new', 'statement']
+Heard bits binary or equals flag new statement
+*** Start of source buffer ***
+  1: count += extra
+  2: bits |= flag
+  3: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['bits', 'right', 'shift', 'equals', '1\\one', 'new', 'statement']
+Heard bits right shift equals one new statement
+*** Start of source buffer ***
+  1: count += extra
+  2: bits |= flag
+  3: bits >>= 1
+  4: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['bits', 'ampersand', 'equals', 'flag', 'shift', 'left', '1\\one', 'new', 'statement']
+Heard bits ampersand equals flag shift left one new statement
+  2: bits |= flag
+  3: bits >>= 1
+  4: bits &= flag << 1
+  5: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['factor', 'star', 'equals', 'N.', 'new', 'statement']
+Heard factor star equals N. new statement
+  3: bits >>= 1
+  4: bits &= flag << 1
+  5: factor *= n
+  6: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['value', 'slash', 'equals', 'parens', '1\\one', 'plus', 'discount', 'rate', 'new', 'statement']
+Heard value slash equals parens one plus discount rate new statement
+  4: bits &= flag << 1
+  5: factor *= n
+  6: value /= (1 + discount_rate)
+  7: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['rate', 'divide', 'equals', 'time', 'new', 'statement']
+Heard rate divide equals time new statement
+  5: factor *= n
+  6: value /= (1 + discount_rate)
+  7: rate /= time
+  8: <CURSOR>
 
 *** End of source buffer ***
 
@@ -13489,6 +13546,109 @@ Heard new statement
 
 
 *******************************************************************************
+* Name        : syntax_navigation
+* Description : testing navigation by syntax in C
+*******************************************************************************
+
+*** Start of source buffer ***
+  1: <CURSOR>/* test buffer for C statements */
+  2: 
+  3: 
+  4: float extreme(float *values, int n, bool biggest, bool absolute) 
+  4: float extreme(float *values, int n, bool biggest, bool absolute) 
+  5: {
+  6:     float *trans(float);
+  7: <CURSOR>    
+  8:     if (absolute)
+  9:         trans = &fabs;
+ 10:     else
+
+
+>>> Testing console command: say(['after', 'next', ')\\close-paren'], user_input='None')
+Heard after next close-paren
+  5: {
+  6:     float *trans(float);
+  7:     
+  8:     if (absolute)<CURSOR>
+  9:         trans = &fabs;
+ 10:     else
+ 11:         trans = &identity;
+
+found matching open paren
+
+  5: {
+  6:     float *trans(float);
+  7:     
+  8:     if <CURSOR>(absolute)
+  9:         trans = &fabs;
+ 10:     else
+ 11:         trans = &identity;
+
+found matching close paren
+
+  5: {
+  6:     float *trans(float);
+  7:     
+  8:     if (absolute)<CURSOR>
+  9:         trans = &fabs;
+ 10:     else
+ 11:         trans = &identity;
+
+
+>>> Testing console command: say(['after', 'next', '}\\close-brace'], user_input='None')
+Heard after next close-brace
+ 15:         if (biggest) {
+ 16:             if ((*trans)(values[i]) > (*trans)(x)) 
+ 17:                 x = values[i];
+ 18:         } <CURSOR>else {
+ 19:             if ((*trans)(values[i]) < (*trans)(x)) 
+ 20:                 x = values[i];
+ 21:         }
+
+found matching open brace
+
+ 12: 
+ 13:     float x = values[0];
+ 14:     for (i = 1; i < n; i++) {
+ 15:         if (biggest) <CURSOR>{
+ 16:             if ((*trans)(values[i]) > (*trans)(x)) 
+ 17:                 x = values[i];
+ 18:         } else {
+
+found matching close brace
+
+ 15:         if (biggest) {
+ 16:             if ((*trans)(values[i]) > (*trans)(x)) 
+ 17:                 x = values[i];
+ 18:         }<CURSOR> else {
+ 19:             if ((*trans)(values[i]) < (*trans)(x)) 
+ 20:                 x = values[i];
+ 21:         }
+WARNING: didn't return to original position
+
+
+>>> Testing console command: say(['before', 'previous', ';\\semicolon'], user_input='None')
+Heard before previous semicolon
+ 14:     for (i = 1; i < n; i++) {
+ 15:         if (biggest) {
+ 16:             if ((*trans)(values[i]) > (*trans)(x)) 
+ 17:                 x = values[i]<CURSOR>;
+ 18:         } else {
+ 19:             if ((*trans)(values[i]) < (*trans)(x)) 
+ 20:                 x = values[i];
+
+found beginning of statement
+
+ 13:     float x = values[0];
+ 14:     for (i = 1; i < n; i++) {
+ 15:         if (biggest) {
+ 16:             <CURSOR>if ((*trans)(values[i]) > (*trans)(x)) 
+ 17:                 x = values[i];
+ 18:         } else {
+ 19:             if ((*trans)(values[i]) < (*trans)(x)) 
+
+
+*******************************************************************************
 * Name        : unusual_symbols
 * Description : compilation and dictation of unusual symbols
 *******************************************************************************
@@ -13662,5 +13822,6 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  1820.14699996 secs
+Test suite completed in:  2317.12199998 secs
 -----------------------------------------------
+MessTransporter_Socket.receive_string: no data received in Thread-6
