@@ -362,10 +362,10 @@ class MessPackager_FixedLenSeq(MessPackager):
         while not (last_chunk == '1'):
             a_chunk = transporter.receive_string(self.chunk_len)
             pkd_message = pkd_message + a_chunk
-#            print '-- get_packed_mess: read a chunk, pkd_message=\'%s\'' % pkd_message
+#            print '-- get_packed_mess: read len(a_chunk)=%s, a_chunk=\'%s\'' % (len(a_chunk), a_chunk)
             last_chunk = a_chunk[0]
 
-#        print '-- get_packed_mess: done'
+#        print '-- get_packed_mess: done, pkd_message=\'%s\'' % pkd_message
         
         return pkd_message
 

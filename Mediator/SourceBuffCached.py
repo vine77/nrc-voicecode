@@ -104,11 +104,29 @@ class SourceBuffCached(SourceBuff.SourceBuff):
 
 #        print '-- SourceBuffCached.init_cache: called'
 
-        self.cache = {'language_name': None, 'cur_pos': None,
+        self.cache = {'file_name': None,
+                      'language_name': None, 'cur_pos': None,
                       'get_selection': None, 'get_text': None,
                       'get_visible': None, 'newline_conventions': None,
                       'pref_newline_convention': None}
 
+
+    def file_name(self):
+        """Returns the name of the file being displayed in this buffer.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        STR *name* -- 
+        """
+        if self.cache['file_name'] == None:
+            self.cache['file_name'] = self._file_name_from_app()
+        return self.cache['file_name']
+        
 
     def language_name(self):
         """Returns the name of the language a file is written in

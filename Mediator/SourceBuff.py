@@ -56,7 +56,7 @@ class SourceBuff(Object):
     
     **INSTANCE ATTRIBUTES**
     
-    *STR fname=None* -- Name of the source file loaded into buffer
+    *STR buff_id=None* -- Unique ID for the buffer.
     
     *AppState app* -- application object containing the buffer
 
@@ -79,11 +79,11 @@ class SourceBuff(Object):
     
     """
     
-    def __init__(self, app, fname=None, **attrs):
+    def __init__(self, app, buff_id=None, **attrs):
         self.init_attrs({'last_search': None})
         self.deep_construct(SourceBuff,
                             {'app': app,
-			     'fname': fname,
+			     'buff_id': buff_id,
                              'print_nlines': 3},
                             attrs
                             )
@@ -99,8 +99,7 @@ class SourceBuff(Object):
         **OUTPUTS**
         
         STR *name* -- 
-        """
-        
+        """        
         debug.virtual('SourceBuff.file_name')
 
     def to_sync(self, item, what, exclude):
