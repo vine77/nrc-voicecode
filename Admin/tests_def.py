@@ -715,6 +715,7 @@ def test_punctuation():
 
     commands.say(['variable', ' \\blank space', ' = \\equals', ' \\space bar', 'index', '*\\asterisk', '2', '**\\double asterisk', '8', '\n\\newline'], user_input='1\n2\n1\n1\n1\n1\n1\n', echo_utterance=1)
 
+## causes recognitionMimic error in Natspeak 4
     commands.say(['variable', ' = \\equals', 'variable', '/\\slash', '2', '+\\plus sign', '1', '-\\minus sign', 'index', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['variable', ' = \\equals', 'index', '%\\percent', '2', ' + \\plus', 'index', '%\\percent sign', '3', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -1586,12 +1587,13 @@ class FakeAppState(EdSim.EdSim):
         return self.safe_active
     def set_instance_string(self, instance_string):
         self.the_instance_string = instance_string
+        return self.title_control
     def instance_string(self):
         if self.title_control:
             return self.the_instance_string 
         return None
     def title_escape_sequence(self, a, b):
-        pass
+        return self.title_control
 
 def old_test_am_dictionaries():
     manager = AppMgr.AppMgr()
@@ -2183,7 +2185,7 @@ auto_test.add_test('EdSim_alloc_cleanup', test_EdSim_alloc_cleanup,
 ##############################################################################
 def check_stored_utterances(instance_name, expected):
     sys.stdout.flush()
-    the_mediator = testing.mediator
+    the_mediator = testing.mediator()
     n = the_mediator.stored_utterances(instance_name)
     if n == expected:
         print '\n%d stored utterances, as expected\n' %n
@@ -2215,7 +2217,7 @@ def check_stored_utterances(instance_name, expected):
    
 def check_recent(instance_name, expected_utterances, expected_status):
     sys.stdout.flush()
-    the_mediator = testing.mediator
+    the_mediator = testing.mediator()
     n = the_mediator.stored_utterances(instance_name)
     recent = the_mediator.recent_dictation(instance_name)
     expected = len(expected_utterances)
@@ -2226,7 +2228,8 @@ def check_recent(instance_name, expected_utterances, expected_status):
         print msg
         n_compare = min(n, expected)
     for i in range(1, n_compare+1):
-        expect = string.split(expected_utterances[-i])
+        expect = expected_utterances[-i]
+#        expect = string.split(expected_utterances[-i])
         received = recent[-i][0].spoken_forms()
         status = recent[-i][1]
         if expect != received:
@@ -2255,7 +2258,7 @@ def check_scratch_recent(instance_name, n = 1, should_fail = 0):
     print 'scratching %d\n' %n
     sys.stdout.flush()
 
-    the_mediator = testing.mediator
+    the_mediator = testing.mediator()
     scratched = the_mediator.scratch_recent(instance_name, n = n)
     msg = 'scratch %d ' % n
     if scratched == n:
@@ -2276,7 +2279,7 @@ def check_scratch_recent(instance_name, n = 1, should_fail = 0):
     return scratched
 
 def test_reinterpret(instance_name, changed, user_input = None):
-    the_mediator = testing.mediator
+    the_mediator = testing.mediator()
     done = None
     try:
         if user_input:
@@ -2308,7 +2311,7 @@ def test_reinterpret(instance_name, changed, user_input = None):
 def reinterpret(instance_name, utterances, errors, user_input = None, 
     should_fail = 0):
     sys.stdout.flush()
-    the_mediator = testing.mediator
+    the_mediator = testing.mediator()
     n = the_mediator.stored_utterances(instance_name)
     recent = the_mediator.recent_dictation(instance_name)
     n_recent = 0
@@ -2360,7 +2363,8 @@ def reinterpret(instance_name, utterances, errors, user_input = None,
             print 'utterance %d was changed ' % i
             sys.stdout.flush()
             utterance.set_spoken(spoken)
-            utterances[-i] = string.join(utterance.spoken_forms())
+#            utterances[-i] = string.join(utterance.spoken_forms())
+            utterances[-i] = utterance.spoken_forms()
             print 'utterance %d was corrected' % i
             sys.stdout.flush()
     done = None
@@ -2416,33 +2420,33 @@ def test_basic_correction():
         return
     commands.open_file('blah.py')
 
-    the_mediator = testing.mediator
+    the_mediator = testing.mediator()
     print '\n***Testing initial state***\n'
 
     check_stored_utterances(instance_name, expected = 0)
 
     print '\n***Some simple dictation***\n'
 
-    utterances = ['class clown inherits from student']
+    utterances = []
+    utterances.append(string.split('class clown inherits from student'))
     input = ['0\n0\n']
     status = [1]
 
-    utterances.append('class body')
+    utterances.append(string.split('class body'))
     input.append('')
     status.append(1)
 
-    utterances.append('define method popularity method body')
+    utterances.append(string.split('define method popularity method body'))
     input.append('0\n')
     status.append(1)
 
 
-    utterances.append('return 8')
+    utterances.append(string.split('return 8'))
     input.append('')
     status.append(1)
 
     for i in range(len(utterances)):
-        split = string.split(utterances[i])
-        test_say(split, user_input = input[i])
+        test_say(utterances[i], user_input = input[i])
 
     print '\n***Testing state***\n'
 
@@ -2474,12 +2478,11 @@ def test_basic_correction():
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
-    utterances.append('define method grades method body return B.')
+    utterances.append(string.split('define method grades method body return B.'))
     input.append('0\n2\n')
     status.append(1)
 
-    split = string.split(utterances[-1])
-    test_say(split, user_input = input[-1])
+    test_say(utterances[-1], user_input = input[-1])
 
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
@@ -2510,25 +2513,25 @@ def test_basic_correction():
     commands.open_file('blahblah.py')
 
 
-    utterances = ['class cloud inherits from student']
+    utterances = []
+    utterances.append(string.split('class cloud inherits from student'))
     input = ['0\n0\n']
     status = [1]
 
-    utterances.append('class body')
+    utterances.append(string.split('class body'))
     input.append('')
     status.append(1)
 
-    utterances.append('fine method popularity method body')
+    utterances.append(string.split('fine method popularity method body'))
     input.append('0\n')
     status.append(1)
 
-    utterances.append('return 8')
+    utterances.append(string.split('return 8'))
     input.append('')
     status.append(1)
 
     for i in range(len(utterances)):
-        split = string.split(utterances[i])
-        test_say(split, user_input = input[i])
+        test_say(utterances[i], user_input = input[i])
 
     print '\n***Testing state***\n'
 
@@ -2559,21 +2562,21 @@ def test_basic_correction():
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
-    new_utterances = ['new line']
+    new_utterances = []
+    new_utterances.append(string.split('new line'))
     new_input = ['']
     new_status = [1]
 
-    new_utterances.append('back indent')
+    new_utterances.append(['back indent'])
     new_input.append('')
     new_status.append(1)
 
-    new_utterances.append('excess equals 0')
+    new_utterances.append(string.split('excess equals 0'))
     new_input.append('0\n')
     new_status.append(1)
 
     for i in range(len(new_utterances)):
-        split = string.split(new_utterances[i])
-        test_say(split, user_input = new_input[i])
+        test_say(new_utterances[i], user_input = new_input[i])
 
     editor = the_mediator.editors.app_instance(instance_name)
     buffer = editor.curr_buffer()
@@ -2613,22 +2616,27 @@ def test_basic_correction():
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
-    new_utterances = ['excess equals 1 new line']
+    new_utterances = []
+    new_utterances.append(string.split('excess equals 1 new line'))
     new_input = ['0\n']
     new_status = [1]
 
-    new_utterances.append('back indent')
+    new_utterances.append(['back indent'])
     new_input.append('')
     new_status.append(1)
 
-    new_utterances.append('results at index 0 jump out equals 0')
+    new_utterances.append(string.split('results at index 0 jump out equals 0'))
     new_input.append('0\n')
     new_status.append(1)
 
 
     for i in range(len(new_utterances)):
-        split = string.split(new_utterances[i])
-        test_say(split, user_input = new_input[i])
+#        if new_utterances[i] == 'back indent':
+#            test_say([new_utterances[i]], user_input = new_input[i])
+#        else:
+#            split = string.split(new_utterances[i])
+#            test_say(split, user_input = new_input[i])
+        test_say(new_utterances[i], user_input = new_input[i])
 
     utterances.extend(new_utterances)
     input.extend(new_input)
@@ -2672,9 +2680,12 @@ auto_test.add_test('basic_correction', test_basic_correction,
 ##############################################################################
 def test_set_text():
     testing.init_simulator_regression()
-    the_mediator = testing.mediator
+    the_mediator = testing.mediator()
     instance_name = testing.editor()
-    editor = the_mediator.editors.app_instance(instance_name)
+    if instance_name: 
+        editor = the_mediator.editors.app_instance(instance_name)
+    else:
+        editor = the_mediator.app
     commands.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
     buffer = editor.curr_buffer()
     buffer.set_text('nothing left')

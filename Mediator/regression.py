@@ -42,6 +42,20 @@ class PersistentConfig(Object.Object):
     def __init__(self, **args):
         self.deep_construct(PersistentConfig, {}, args)
 
+    def mediator(self):
+        """returns a reference to the MediatorObject (or
+        NewMediatorObject)
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *MediatorObject* or *NewMediatorObject*
+        """
+        return mediator.the_mediator
+
     def editor(self):
         """returns the instance name of the editor instance being used
         for regression testing, if we are using NewMediatorObject,
@@ -147,6 +161,19 @@ class PersistentConfigOldMediator(Object.Object):
         self.names['init_simulator_regression'] = \
             self.init_simulator_regression
 
+    def mediator(self):
+        """returns a reference to the MediatorObject (or
+        NewMediatorObject)
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *MediatorObject* or *NewMediatorObject*
+        """
+        return mediator.the_mediator
 
     def editor(self):
         """returns the instance name of the editor instance being used
@@ -235,7 +262,7 @@ class PersistentConfigNewMediator(Object.Object):
 
     **INSTANCE ATTRIBUTES**
 
-    *NewMediatorObject mediator* -- the existing mediator, which will be
+    *NewMediatorObject the_mediator* -- the existing mediator, which will be
     reset by the init_simulator_regression method
 
     *{STR:ANY} names* -- the namespace dictionary in which the
@@ -259,7 +286,7 @@ class PersistentConfigNewMediator(Object.Object):
 	regression test definitions file, tests_def, has been (or will be) 
 	run with execfile
 
-        *NewMediatorObject mediator* -- the existing mediator, which will be
+        *NewMediatorObject the_mediator* -- the existing mediator, which will be
         reset by the init_simulator_regression method
 
         *STR editor_name* -- the name of the editor being used for those
@@ -273,7 +300,7 @@ class PersistentConfigNewMediator(Object.Object):
 	"""
         self.deep_construct(PersistentConfigNewMediator, 
                             {
-                             'mediator': mediator,
+                             'the_mediator': mediator,
                              'names': names,
                              'correction': correction,
                              'editor_name': editor_name,
@@ -295,6 +322,20 @@ class PersistentConfigNewMediator(Object.Object):
         *STR* -- the name of the editor instance
         """
         return self.editor_name
+
+    def mediator(self):
+        """returns a reference to the MediatorObject (or
+        NewMediatorObject)
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *MediatorObject* or *NewMediatorObject*
+        """
+        return self.the_mediator
 
     def correction_available(self):
         """indicates whether correction features are available, so that
@@ -350,11 +391,11 @@ class PersistentConfigNewMediator(Object.Object):
 #        sr_interface.connect()
         debug.trace('PersistentConfigNewMediator.init_simulator_regression',
             'about to reset persistent mediator')
-        self.mediator.reset(symdict_pickle_fname = symdict_pickle_fname,
+        self.mediator().reset(symdict_pickle_fname = symdict_pickle_fname,
             symbol_match_dlg = self.symbol_match_dlg)
-        editor = self.mediator.editor_instance(self.editor_name)
+        editor = self.mediator().editor_instance(self.editor_name)
         editor.init_for_test()
-        interp = self.mediator.interpreter()
+        interp = self.mediator().interpreter()
         commands = sim_commands.SimCmdsObj(editor, interp, self.names)
         commands.bind_methods(self.names)
         self.names['commands'] = commands

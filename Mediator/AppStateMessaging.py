@@ -79,6 +79,13 @@ class AppStateMessaging(AppStateCached.AppStateCached):
     we should use it to respond to is_active.  If true, we instead 
     query the editor
 
+    STR *the_instance_string* -- unique in identifying string to be 
+    included in the window title if possible.
+
+    BOOL *can_show_instance_string* -- flag indicating whether the editor 
+    can and will include the instance string in the title of every 
+    window containing an editor buffer.
+
     **CLASS ATTRIBUTES**
     
 
@@ -93,6 +100,8 @@ class AppStateMessaging(AppStateCached.AppStateCached):
             'multiple_window_support': 0})        
         self.deep_construct(AppStateMessaging, 
                             {'id': id,
+                             'the_instance_string': None,
+                             'can_show_instance_string': 0,
                              'listen_msgr': listen_msgr,
                              'listen_can_block': listen_can_block,
                              'talk_msgr': talk_msgr,
@@ -601,12 +610,17 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
 	**OUTPUTS**
 	
-	*none*
+        *BOOL* -- true if the editor can and will include the 
+        instance string in its window title for all windows 
+        containing editor buffers.
 	"""
         self.talk_msgr.send_mess('set_instance_string', 
             {'instance_string': instance_string})
         response = self.talk_msgr.get_mess(expect = \
             ['set_instance_string_resp'])
+        self.the_instance_string = instance_string
+        self.can_show_instance_string = response[1]['value']
+        return self.can_show_instance_string 
 
     def instance_string(self):
         """returns the identifier string for this editor instance (which 
@@ -630,10 +644,9 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 	*STR* -- the identifying string, or None if the editor was not given 
 	such a string or cannot set the window title.
 	"""
-        self.talk_msgr.send_mess('get_instance_string')
-        response = self.talk_msgr.get_mess(expect = \
-            ['get_instance_string_resp'])
-        return response[1]['value']                
+        if self.can_show_instance_string:
+            return self.the_instance_string
+        return None
 
     def title_escape_sequence(self, before = "", after = ""):
         """gives the editor a (module-dependent) hint about the escape
@@ -652,11 +665,15 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 
 	**OUTPUTS**
 
-	*none*
+        *BOOL* -- true if the editor, given the title escape sequence, 
+        can and will include the instance string in its window title 
+        for all windows containing editor buffers.
 	"""
         self.talk_msgr.send_mess('title_escape', 
             {'before': before, 'after': after})
         response = self.talk_msgr.get_mess(expect = ['title_escape_resp'])
+        self.can_show_instance_string = response[1]['value']
+        return self.can_show_instance_string
 
     def multiple_windows(self):
         """does editor support multiple windows per instance?

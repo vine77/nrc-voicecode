@@ -329,7 +329,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 7fcaf0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 945a50>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2255,7 +2255,7 @@ were reinterpreted, as expected
 *** End of source buffer ***
 
 
->>> Testing console command: say(['back', 'indent'], user_input='')
+>>> Testing console command: say(['back indent'], user_input='')
 *** Start of source buffer ***
   1: class clown(student):
   2:    def popularity(self):
@@ -2346,7 +2346,7 @@ Associate 'excess' with symbol (Enter selection):
 *** End of source buffer ***
 
 
->>> Testing console command: say(['back', 'indent'], user_input='')
+>>> Testing console command: say(['back indent'], user_input='')
   2:    def popularity(self):
   3:       return 8
   4:    excess = 1
@@ -3222,7 +3222,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 247b130> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 24654d0> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -10212,9 +10212,9 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 -----------------------------------------------
-Test suite completed in:  1262.28999996 secs
+Test suite completed in:  1275.75 secs
 -----------------------------------------------
 Message loop ended, cleaning up
-cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at 93ed00>
+cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at 929c50>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 ExtLoopWin32.run returning

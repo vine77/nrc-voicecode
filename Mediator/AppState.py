@@ -1422,7 +1422,8 @@ class AppState(OwnerObject):
 
 	**OUTPUTS**
 	
-	*none*
+        *BOOL* -- true if the editor can and will include the instance 
+        string in its window title for all windows containing editor buffers
 	"""
         debug.virtual('AppState.set_instance_string')
 
@@ -1448,7 +1449,6 @@ class AppState(OwnerObject):
 	*STR* -- the identifying string, or None if the editor was not given 
 	such a string or cannot set the window title.
 	"""
-        
         debug.virtual('AppState.instance_string')
 
     def title_escape_sequence(self, before = "", after = ""):
@@ -1468,7 +1468,9 @@ class AppState(OwnerObject):
 
 	**OUTPUTS**
 
-	*none*
+        *BOOL* -- true if the editor, given the title escape sequence, 
+        can and will include the instance string in its window title 
+        for all windows containing editor buffers.
 	"""
         debug.virtual('AppState.title_escape_sequence')
 
@@ -2057,7 +2059,7 @@ class AppState(OwnerObject):
 
 
 
-    def init_for_test(self):
+    def init_for_test(self, save = -1):
         
         """Reinitialise the *AppState* so that it is ready for a new
         regression test.
@@ -2068,8 +2070,16 @@ class AppState(OwnerObject):
         
         **INPUTS**
         
-        *none* -- 
-        
+        INT *save* -- *-1* -> don't save the buffer
+                      *0* -> query user if buffer needs saving
+                      *1* -> save without querying user
+
+        **Note: The default value of save is -1 (don't save buffers),
+        unlike that for close_buffer and close_all_buffers.  The
+        regression test should call editor.init_for_test once 
+        with save = 0 before the tests begin, to allow the user to save.
+        Subsequent calls should use the default value, so that the tests can
+        close temporary buffers it creates without further user input.
 
         **OUTPUTS**
         
@@ -2079,7 +2089,10 @@ class AppState(OwnerObject):
         #
         # Just ask the editor to close all buffers known to VoiceCode
         #
-        self.close_all_buffers(-1)
+        for a_buff_name in self.open_buffers_from_app():
+            self.close_buffer(a_buff_name, save)
+        for a_buff_name in self.open_buffers.keys():
+            self.close_buffer_cbk(a_buff_name)
 
     def close_all_buffers(self, save=0):
         """Tell the editor to close all buffers known to VoiceCode
@@ -2097,10 +2110,8 @@ class AppState(OwnerObject):
         """
 
 #        print '-- AppState.close_all_buffers: called'
-        for a_buff_name in self.open_buffers_from_app():
-            self.close_buffer(a_buff_name, save)
         for a_buff_name in self.open_buffers.keys():
-            self.close_buffer_cbk(a_buff_name)
+            self.close_buffer(a_buff_name, save)
 
     def close_buffer(self, buff_name, save=0):
         """close a buffer

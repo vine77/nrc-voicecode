@@ -481,10 +481,12 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
 	**OUTPUTS**
 	
-	*none*
+        *BOOL* -- true if the editor, can and will include the 
+        instance string in its window title for all windows 
+        containing editor buffers.
 	"""
 # can't set the title on an instance-specific basis, so ignore
-        pass
+        return 0
 
     def instance_string(self):
         """returns the identifier string for this editor instance (which 
@@ -528,10 +530,12 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 
 	**OUTPUTS**
 
-	*none*
+        *BOOL* -- true if the editor, given the title escape sequence, 
+        can and will include the instance string in its window title 
+        for all windows containing editor buffers.
 	"""
 # can't set the title on an instance-specific basis, so ignore
-        pass
+        return 0
 
     def multiple_windows(self):
         """does editor support multiple windows per instance?

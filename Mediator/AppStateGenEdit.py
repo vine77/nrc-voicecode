@@ -42,7 +42,14 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 
     [AS_ServiceBreadcrumbs] breadcrumbs_srv -- Breadcrumbs service used by
     this AppState.
-    
+
+    STR *the_instance_string* -- unique in identifying string to be 
+    included in the window title if possible.
+
+    BOOL *can_show_instance_string* -- flag indicating whether the editor 
+    can and will include the instance string in the title of every 
+    window containing an editor buffer.
+
     **CLASS ATTRIBUTES**
     
     *none* -- 
@@ -56,6 +63,7 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
         self.deep_construct(AppStateGenEdit,
                             {'the_editor': editor, 
                              'the_instance_string': None,
+                             'can_show_instance_string': 0,
                              'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(self)},
                             attrs, new_default = {'app_name': 'GenEdit'}
                             )
@@ -521,11 +529,15 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 	window title if possible.
 
 	**OUTPUTS**
-	
-	*none*
+
+        *BOOL* -- true if the editor can and will include the 
+        instance string in its window title for all windows 
+        containing editor buffers.
 	"""
         self.the_instance_string = instance_string
-        self.the_editor.set_instance_string(instance_string)
+        self.can_show_instance_string =  \
+            self.the_editor.set_instance_string(instance_string)
+        return self.can_show_instance_string
 
     def instance_string(self):
         """returns the identifier string for this editor instance (which 
@@ -549,7 +561,9 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 	*STR* -- the identifying string, or None if the editor was not given 
 	such a string or cannot set the window title.
 	"""
-        return self.the_instance_string
+        if self.can_show_instance_string:
+            return self.the_instance_string
+        return None
 
     def title_escape_sequence(self, before = "", after = ""):
         """gives the editor a (module-dependent) hint about the escape
@@ -568,10 +582,12 @@ class AppStateGenEdit(AppStateNonCached.AppStateNonCached):
 
 	**OUTPUTS**
 
-	*none*
+        *BOOL* -- true if the editor, given the title escape sequence, 
+        can and will include the instance string in its window title 
+        for all windows containing editor buffers.
 	"""
 # we can set the title ourselves, so ignore
-        pass
+        return self.can_show_instance_string
 
     def multiple_windows(self):
         """does editor support multiple windows per instance?

@@ -649,6 +649,8 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
 
 
             trace('mediator.say', 'words=%s' % words)
+#            for word in words:
+#                print word, natlink.getWordInfo(word)
 #        print '-- mediator.say: words=%s' % words
             sys.stdout.flush()
 
