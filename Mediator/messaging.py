@@ -315,15 +315,13 @@ class MessengerBasic(Messenger):
         pkd_mess = self.packager.get_packed_mess(self.transporter)
         unpkd_mess = self.packager.unpack_mess(pkd_mess)
         name_argvals_mess = self.encoder.decode(unpkd_mess)
-#        trace('get_mess', 'received message args=%s' % repr(name_argvals_mess[1]))
 
         if expect != None and (not (name_argvals_mess[0] in expect)):
-            trace('get_mess', 'wrong_message %s, expectin %s' % \
+            trace('get_mess', 'wrong_message %s, expecting %s' % \
                 (repr(name_argvals_mess), repr(expect)))
             self.wrong_message(name_argvals_mess, expect)
 
-        trace('get_mess', 'got it!')
-        trace('get_mess', 'name_argvals_mess=%s' % repr(name_argvals_mess))
+        trace('get_mess', 'got one of %s!. It was: %s' % (repr(expect), repr(name_argvals_mess)))
         
         return name_argvals_mess
         
@@ -1068,10 +1066,10 @@ class MessEncoderWDDX(MessEncoder):
 # Functions for converting message arguments to certain data types
 ###############################################################################
 
-def messarg2int(messarg):
-    """Converts a message argument to an int.
+def messarg_is_None(messarg):
+    """Indicates whether or not a message argument looks like the value None.
 
-    Convert the message argument to the value *None* if it is one of the
+    Returns true if the message argument is one of the
     following:
 
        *''* (the string)
@@ -1086,7 +1084,7 @@ def messarg2int(messarg):
     
     **OUTPUTS**
     
-    INT | None *as_int* -- The message argument converted to int.
+    BOOL *answer* -- True iif the message argument can be interpreted as the value None
     """
 
     if messarg == 'None' or messarg == '' or messarg == []:
@@ -1094,13 +1092,51 @@ def messarg2int(messarg):
         # Note: MessEncoder_LenPrefArgs encodes None value as string 'None',
         # while MessEncoderWDDX encodes it as the empty string, and
         # EmacsLisp's nil value gets encoded as an empty list.
-        #        
+        # 
+        trace('messarg_is_None', 'messarg=%s, returning 1' % messarg)       
+        return 1
+    else:
+        trace('messarg_is_None', 'messarg=%s, returning 0' % messarg)           
+        return 0
+
+
+def messarg2int(messarg):
+    """Converts a message argument to an int.
+    
+    **INPUTS**
+    
+    STR *messarg* -- The message argument to be converted.
+    
+    
+    **OUTPUTS**
+    
+    INT | None *as_int* -- The message argument converted to int.
+    """
+
+    if messarg_is_None(messarg):
         as_int = None
     else:
         as_int = int(float(messarg))
         return as_int
 
+def messarg2str(messarg):
+    """Converts a message argument to a str or None.
+    
+    **INPUTS**
+    
+    STR *messarg* -- The message argument to be converted.
+    
+    
+    **OUTPUTS**
+    
+    INT | None *as_str* -- The message argument converted to str.
+    """
 
+    if messarg_is_None(messarg):
+        as_str = None
+    else:
+        as_str = messarg
+        return as_str
 
 def messarg2intlist(messarg):
     """Converts a message argument to a list of integers.

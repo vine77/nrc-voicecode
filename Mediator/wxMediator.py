@@ -55,11 +55,7 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
-#	                    'SourceBuff.insert_indent': 1,
-#	                    'insert': 1,
-#	                    'interpret_NL_cmd': 1,
-#	                    'interpret_massaged': 1,
-#	                    'bind_to_buffer': 1,
+#                       'AppStateMessaging.apply_upd_descr': 1,
 ################################
 #                         "ContBlankLine.applies": 1,
 #                        'ActionInsertNewClause.execute': 1,
