@@ -185,6 +185,7 @@ class ResMgr(OwnerObject):
         should they be modified except as part of the correction
         process.  Also, the status of whether a given utterance can be
         re-interpreted may change if the user makes other changes to the 
+        buffer during correction.
         """
         debug.virtual('ResMgr.recent_dictation')
 
@@ -418,6 +419,7 @@ class ResMgrStd(ResMgr):
         should they be modified except as part of the correction
         process.  Also, the status of whether a given utterance can be
         re-interpreted may change if the user makes other changes to the 
+        buffer during correction.
         """
         return None
 # no information stored, but subclasses will need to
@@ -1349,6 +1351,9 @@ class ResMgrBasic(ResMgrStd):
     *CorrectUtteranceEvent correct_evt* -- doorbell used to send an 
     event to bring up a correction box asynchronously
 
+    *CorrectRecentEvent correct_recent_evt* -- doorbell used to send an 
+    event to bring up a correct recent box asynchronously
+
     *[SpokenUtterance] utterances* -- stack of recent utterances, sorted with
     most recent last (technically a queue, since it has finite size and
     the oldest utterances can be dropped on push to maintain this limit)
@@ -1372,11 +1377,13 @@ class ResMgrBasic(ResMgrStd):
     *StateStackBasic states* -- stack representing the state of the editor 
     application before/after recent utterances
     """
-    def __init__(self, correct_evt, max_utterances = 30, **args):
+    def __init__(self, correct_evt, correct_recent_evt, 
+        max_utterances = 30, **args):
         self.deep_construct(ResMgrBasic,
                             {
                              'max_utterances': max_utterances,
                              'correct_evt': correct_evt,
+                             'correct_recent_evt': correct_recent_evt,
                              'utterances': [],
                              'numbers': [],
                              'next_number': 0,
@@ -1390,6 +1397,7 @@ class ResMgrBasic(ResMgrStd):
 
     def remove_other_references(self):
         self.correct_evt = None
+        self.correct_recent_evt = None
         
     def store(self, result, initial_buffer, number):
         """store the result, along with the editor state before and 
@@ -1517,7 +1525,7 @@ class ResMgrBasic(ResMgrStd):
         should they be modified except as part of the correction
         process.  Also, the status of whether a given utterance can be
         re-interpreted may change if the user makes other changes to the 
-        buffer during
+        buffer during correction.
         """
         available = self.stored_utterances()
         self.call_count = self.call_count + 1
@@ -1746,31 +1754,39 @@ class ResMgrBasic(ResMgrStd):
         if console.already_modal():
             console.dismiss_modal()
         self.correct_evt.notify(self.name, number)
-    
-    def was_correct_nth(self, n = 1):
-        """initiate user correction of the most recent dictation utterance 
-        into the given editor, if possible
+
+    def correct_recent(self):
+        """initiate user correction of one or more recent dictation 
+        utterances into the given editor, if possible
 
         **INPUTS**
 
-        *INT n* -- the depth in the editor state stack of the utterance
-        to be corrected
+        *none*
 
         **OUTPUTS**
 
         *none*
         """
         console = self.console()
-        if n > self.stored_utterances():
-            return
-        utterance = self.utterances[-n]
-        can_reinterpret = self.can_reinterpret(n)
-        if console.correct_utterance(self.name, n, utterance, 
-            can_reinterpret, should_adapt = 1):
-            print 'okay'
-            print self.reinterpret_recent(changed = [n])
-        else:
-            print 'cancelled'
+        if console.already_modal():
+            console.dismiss_modal()
+        self.correct_recent_evt.notify(self.name)
+    
+    def correct_recent_synchronous(self):
+        """initiate user correction of one or more recent dictation 
+        utterances into the given editor, if possible
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        console = self.console()
+        utterances = self.recent_dictation()
+        console.correct_recent(self.name, utterances)
     
     def correct_last(self):
         """initiate user correction of the most recent dictation utterance 
@@ -1834,14 +1850,22 @@ class ResMgrBasicFactory(ResMgrFactory):
 
     *INT max_utterances* -- the maximum number of recent dictation 
     utterances each ResMgrBasic should store
+
+    *CorrectUtteranceEvent correct_evt* -- doorbell used to send an 
+    event to bring up a correction box asynchronously
+
+    *CorrectRecentEvent correct_recent_evt* -- doorbell used to send an 
+    event to bring up a correct recent box asynchronously
     """
-    def __init__(self, correct_evt, max_utterances = 30, **args):
+    def __init__(self, correct_evt, correct_recent_evt, 
+        max_utterances = 30, **args):
         """
         *INT max_utterances* -- the maximum number of recent dictation 
         utterances each ResMgrBasic should store
         """
         self.deep_construct(ResMgrBasicFactory, 
                             {'correct_evt': correct_evt,
+                             'correct_recent_evt': correct_recent_evt,
                              'max_utterances': max_utterances}, 
                             args)
 
@@ -1859,6 +1883,7 @@ class ResMgrBasicFactory(ResMgrFactory):
         return ResMgrBasic(recog_mgr = recog_mgr, 
             instance_name = instance_name, 
             correct_evt = self.correct_evt,
+            correct_recent_evt = self.correct_recent_evt,
             max_utterances = self.max_utterances)
 
    

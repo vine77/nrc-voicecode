@@ -131,6 +131,9 @@ class NewMediatorObject(Object.OwnerObject):
     *CorrectUtteranceEvent correct_evt* -- doorbell used to send an
     event to bring up the correction box asynchronously.
 
+    *CorrectRecentEvent correct_recent_evt* -- doorbell used to send an
+    event to bring up the correct recent box asynchronously.
+
     *{STR:ANY} test_args* -- list of test names to run
 
     *{STR:ANY} test_space* -- if the mediator is started in regression 
@@ -165,6 +168,7 @@ class NewMediatorObject(Object.OwnerObject):
                  console = None,
                  wave_playback = None,
                  correct_evt = None,
+                 correct_recent_evt = None,
                  test_args = None,
                  test_space = None, global_grammars = 0, exclusive = 0, 
                  symdict_pickle_fname = None,
@@ -241,6 +245,7 @@ class NewMediatorObject(Object.OwnerObject):
                              'the_console': console,
                              'wave_playback': wave_playback,
                              'correct_evt': correct_evt,
+                             'correct_recent_evt': correct_recent_evt,
                              'interp': interp,
                              'test_args': test_args,
                              'test_space': test_space,
@@ -289,7 +294,7 @@ class NewMediatorObject(Object.OwnerObject):
             correct_words = ["Correct"]
         grammar_factory = \
             sr_grammarsNL.WinGramFactoryNL(correct_words = correct_words, 
-                recent_words = [], wave_playback = self.wave_playback)
+                recent_words = ['Recent'], wave_playback = self.wave_playback)
 # suppress Correct That if there is no console
 # suppress Correct Recent for now, because it isn't implemented yet 
         if self.the_console:
@@ -297,7 +302,8 @@ class NewMediatorObject(Object.OwnerObject):
         GM_factory = GramMgr.WinGramMgrFactory(grammar_factory, 
             global_grammars = 0, correction = 'basic')
         res_mgr_factory = \
-            ResMgr.ResMgrBasicFactory(correct_evt = self.correct_evt)
+            ResMgr.ResMgrBasicFactory(correct_evt = self.correct_evt,
+            correct_recent_evt = self.correct_recent_evt)
         recog_mgr = RecogStartMgrNL.RecogStartMgrNL(GM_factory = GM_factory,
             res_mgr_factory = res_mgr_factory)
         self.editors = AppMgr.AppMgr(recog_mgr, mediator = self)
@@ -1122,6 +1128,8 @@ class NewMediatorObject(Object.OwnerObject):
 
         **INPUTS**
 
+        *STR instance_name* -- name of the application instance
+
         *INT utterance_number* -- the number assigned to the utterance by
         interpret_dictation
 
@@ -1130,6 +1138,25 @@ class NewMediatorObject(Object.OwnerObject):
         *none*
         """
         self.editors.correct_utterance(instance_name, utterance_number)
+
+    def correct_recent(self, instance_name):
+        """initiate user selection of a recent utterance to correct
+
+        NOTE: this is a synchronous method which starts a modal
+        correction box, and will not return until the user has 
+        dismissed the correct recent dialog box.  Generally, it should 
+        be called only in response to a CorrectRecent event, rather than
+        in direct response to a spoken correction command.
+
+        **INPUTS**
+
+        *STR instance_name* -- name of the application instance
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.editors.correct_recent(instance_name)
 
 ###############################################################################
 # Configuration functions. These are not methods

@@ -111,6 +111,7 @@ wxEVT_SOCKET_DATA = wxNewEventType()
 wxEVT_NEW_LISTEN_CONN = wxNewEventType()
 wxEVT_NEW_TALK_CONN = wxNewEventType()
 wxEVT_CORRECT_UTTERANCE = wxNewEventType()
+wxEVT_CORRECT_RECENT = wxNewEventType()
 
 class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
     """main frame for the GUI mediator
@@ -298,10 +299,12 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
         console = MediatorConsoleWX(self.main_frame())
 
         correct_evt = CorrectUtteranceEventWX(self, wxEVT_CORRECT_UTTERANCE)
+        correct_recent_evt = CorrectRecentEventWX(self, wxEVT_CORRECT_RECENT)
         self.the_mediator = \
             NewMediatorObject.NewMediatorObject(server = self.the_server,
                 console = console, wave_playback = WavePlaybackWX, 
                 correct_evt = correct_evt,
+                correct_recent_evt = correct_recent_evt,
                 test_args = test_args,
                 test_space = test_space, global_grammars = 1, exclusive = 1)
 #        print self.the_mediator.server
@@ -401,6 +404,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
         *none*
         """
         EVT_MINE(self, wxEVT_CORRECT_UTTERANCE, self.on_correct_utterance)
+        EVT_MINE(self, wxEVT_CORRECT_RECENT, self.on_correct_recent)
 
     def on_correct_utterance(self, event):
         """handler for UtteranceCorrectionEventWX
@@ -408,7 +412,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
         **INPUTS**
 
         *UtteranceCorrectionEventWX event* -- the event posted by 
-        ResMgr.correct_nth_asynchronous via CorrectUtteranceEvent
+        ResMgr.correct_nth via CorrectUtteranceEvent
 
         **OUTPUTS**
 
@@ -418,6 +422,23 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
             number = event.utterance_number
             instance = event.instance_name
             self.the_mediator.correct_utterance(instance, number)
+
+    def on_correct_recent(self, event):
+        """handler for UtteranceCorrectionEventWX
+
+        **INPUTS**
+
+        *RecentCorrectionEventWX event* -- the event posted by 
+        ResMgr.correct_recent via CorrectRecentEvent
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if not self.quitting:
+            instance = event.instance_name
+            self.the_mediator.correct_recent(instance)
+
 
     def create_main(self):
         """create the main frame window for the mediator, but do not

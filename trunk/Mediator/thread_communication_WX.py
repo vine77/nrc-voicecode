@@ -41,6 +41,11 @@ class UtteranceCorrectionEventWX(GenericEventWX):
         self.instance_name = instance_name
         self.utterance_number = utterance_number
 
+class RecentCorrectionEventWX(GenericEventWX):
+    def __init__(self, evt_type, instance_name):
+        GenericEventWX.__init__(self, evt_type)
+        self.instance_name = instance_name
+
 
 class InterThreadEventWX(InterThreadEvent):
     """implementation of InterThreadEvent using the wxPython custom
@@ -59,11 +64,11 @@ class InterThreadEventWX(InterThreadEvent):
     """
     def __init__(self, evt_handler, evt_type, **args):
         """
-	**INPUTS**
+        **INPUTS**
 
-	*wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
-	post the event.
-	"""
+        *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+        post the event.
+        """
         self.deep_construct(InterThreadEventWX,
                             {'evt_handler': evt_handler,
                              'evt_type': evt_type},
@@ -71,14 +76,14 @@ class InterThreadEventWX(InterThreadEvent):
     def notify(self):
         """send the message, and return synchronously
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         event = GenericEventWX(self.evt_type)
         wxPostEvent(self.evt_handler, event)
 
@@ -100,15 +105,15 @@ class SocketHasDataWX(SocketHasDataEvent):
     """
     def __init__(self, evt_handler, evt_type, socket_ID, **args):
         """
-	**INPUTS**
+        **INPUTS**
 
-	*wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
-	post the event.
+        *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+        post the event.
 
-	*WXTYPE evt_type* -- type/ID of the wxWindow event
+        *WXTYPE evt_type* -- type/ID of the wxWindow event
 
-	*STR socket_ID* -- the unique ID of the socket
-	"""
+        *STR socket_ID* -- the unique ID of the socket
+        """
         self.deep_construct(SocketHasDataWX,
                             {'evt_handler': evt_handler,
                              'evt_type': evt_type,
@@ -117,14 +122,14 @@ class SocketHasDataWX(SocketHasDataEvent):
     def notify(self):
         """send the message, and return synchronously
 
-	**INPUTS**
+        **INPUTS**
 
-	*none*
+        *none*
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         event = SocketDataEventWX(self.evt_type, self.socket_ID)
         wxPostEvent(self.evt_handler, event)
 
@@ -152,12 +157,12 @@ class CorrectUtteranceEventWX(CorrectUtteranceEvent):
     """
     def __init__(self, evt_handler, evt_type, **args):
         """
-	**INPUTS**
+        **INPUTS**
 
-	*wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
-	post the event.
+        *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+        post the event.
 
-	*WXTYPE evt_type* -- type/ID of the wxWindow event
+        *WXTYPE evt_type* -- type/ID of the wxWindow event
         """
         self.deep_construct(CorrectUtteranceEventWX,
                             {'evt_handler': evt_handler,
@@ -167,7 +172,7 @@ class CorrectUtteranceEventWX(CorrectUtteranceEvent):
     def notify(self, instance_name, utterance_number):
         """send the message, and return synchronously
 
-	**INPUTS**
+        **INPUTS**
 
         *STR instance_name* -- unique name identifying the editor
         instance
@@ -175,11 +180,61 @@ class CorrectUtteranceEventWX(CorrectUtteranceEvent):
         *INT utterance_number* -- the number assigned by
         ResMgr.interpret_dictation to the utterance to be corrected
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
         event = UtteranceCorrectionEventWX(self.evt_type, 
             instance_name, utterance_number)
+        wxPostEvent(self.evt_handler, event)
+
+class CorrectRecentEventWX(CorrectRecentEvent):
+    """implementation of CorrectRecentEvent using custom wxPython
+    events
+
+    Unlike InterThreadEvent and SocketHasDataEvent, this event is
+    currently used for asynchronous communication within the main thread.
+    Its purpose is to invoke the modal correction box, while letting the 
+    correction grammar's on_results method return immediately, so as to 
+    allow speech input to the correction box (or other windows).
+
+    **INSTANCE ATTRIBUTES**
+
+    *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+    post the event.
+
+    *WXTYPE evt_type* -- type/ID of the wxWindow event
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, evt_handler, evt_type, **args):
+        """
+        **INPUTS**
+
+        *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+        post the event.
+
+        *WXTYPE evt_type* -- type/ID of the wxWindow event
+        """
+        self.deep_construct(CorrectRecentEventWX,
+                            {'evt_handler': evt_handler,
+                             'evt_type': evt_type},
+                            args)
+
+    def notify(self, instance_name):
+        """send the message, and return synchronously
+
+        **INPUTS**
+
+        *STR instance_name* -- unique name identifying the editor
+        instance
+
+        **OUTPUTS**
+
+        *none*
+        """
+        event = RecentCorrectionEventWX(self.evt_type, instance_name)
         wxPostEvent(self.evt_handler, event)
 

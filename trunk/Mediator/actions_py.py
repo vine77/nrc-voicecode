@@ -71,7 +71,7 @@ class ActionPyInsertInBody(Action):
 # character should be a newline (unless we are at the end of the buffer).  
 # In either case, this next search, with where = -1, should not move the
 # cursor.
-        match = app.search_for('\n\s*(\n|$)', where = -1, unlogged = 1)
+        match = app.search_for('\n[ \t]*(\n|$)', where = -1, unlogged = 1)
         if not match:
 # if no blank line, insert a new one and indent it appropriately
             insert_indented_line = ActionInsert(code_bef = '\n\t', 
@@ -80,7 +80,7 @@ class ActionPyInsertInBody(Action):
         else:
 # if there is a blank line, just go to the end of it 
 # (and assume that it has the correct indentation)
-            match = app.search_for('\n\s*', unlogged = 1)
+            match = app.search_for('\n[ \t]*', unlogged = 1)
 
 py_class_body = \
     ActionPyInsertInBody()
