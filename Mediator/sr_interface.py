@@ -491,6 +491,15 @@ class CodeSelectGrammar(SelectGramBase):
                   'select', 'select next', 'select previous'])
 #       self.load(['select', 'correct'])       
        
+    def deactivate(self):
+	SelectGramBase.deactivate(self)
+	self.isActive = 0
+
+    def activate(self, window = 0, exclusive = None):
+	if self.isActive:
+	    return
+	SelectGramBase.activate(self, window = window, exclusive = exclusive)
+	self.isActive = 1
 
     def gotBegin(self, moduleInfo):
 #        print '-- CodeSelectGrammar.gotBegin: called'
@@ -506,8 +515,8 @@ class CodeSelectGrammar(SelectGramBase):
 #	    self.activate()
 	    self.setSelectText(visible)
 	elif self.interpreter.on_app.active_field() == None:
-	    self.activate(self.window)
 	    self.setSelectText(visible)
+	    self.activate(self.window)
 	else:
 	    self.deactivate()
         
