@@ -727,6 +727,9 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
         EVT_ACTIVATE(self, self.OnActivate) 
         self.most_recent_focus = None
 
+    def set_status_text(self, text):
+        self.SetStatusText(text)
+
     def show(self, initial = 0):
         """show the window corresponding to this frame
 
