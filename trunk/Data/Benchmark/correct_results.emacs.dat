@@ -98,14 +98,14 @@ Heard hello
   6: # is safe for you to proceed with your work.
   7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
   8: 
-  9: # This is hello<CURSOR>a small buffer for testing editing of Python code
+  9: # This is ahello<CURSOR> small buffer for testing editing of Python code
  10: 
  11: class AClass(ASuper):
  12:     """This is a dummy class"""
   6: # is safe for you to proceed with your work.
   7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
   8: 
-  9: <CURSOR># This is helloa small buffer for testing editing of Python code
+  9: <CURSOR># This is ahello small buffer for testing editing of Python code
  10: 
  11: class AClass(ASuper):
  12:     """This is a dummy class"""
@@ -113,7 +113,7 @@ Got command: goto(472,)
   6: # is safe for you to proceed with your work.
   7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
   8: 
-  9: #<CURSOR> This is helloa small buffer for testing editing of Python code
+  9: #<CURSOR> This is ahello small buffer for testing editing of Python code
  10: 
  11: class AClass(ASuper):
  12:     """This is a dummy class"""
@@ -124,14 +124,14 @@ Heard hello
   6: # is safe for you to proceed with your work.
   7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
   8: 
-  9: #hello<CURSOR>elloa small buffer for testing editing of Python code
+  9: #hello<CURSOR>hello small buffer for testing editing of Python code
  10: 
  11: class AClass(ASuper):
  12:     """This is a dummy class"""
 Got command: goto_line(10,)
   7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
   8: 
-  9: #helloelloa small buffer for testing editing of Python code
+  9: #hellohello small buffer for testing editing of Python code
  10: <CURSOR>
  11: class AClass(ASuper):
  12:     """This is a dummy class"""
@@ -142,7 +142,7 @@ Got command: say(['next', 'comma'],None,0,0,)
 Heard next comma
   7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
   8: 
-  9: #helloelloa small buffer for testing editing of Python code
+  9: #hellohello small buffer for testing editing of Python code
  10: , <CURSOR>hi
  11: class AClass(ASuper):
  12:     """This is a dummy class"""
@@ -150,7 +150,7 @@ Heard next comma
 Got command: goto_line(10,)
   7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
   8: 
-  9: #helloelloa small buffer for testing editing of Python code
+  9: #hellohello small buffer for testing editing of Python code
  10: <CURSOR>, hi
  11: class AClass(ASuper):
  12:     """This is a dummy class"""
@@ -161,7 +161,7 @@ Got command: say(['select', 'hello'],0
 Heard select hello
   7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
   8: 
-  9: #helloelloa small buffer for testing editing of Python code
+  9: #hellohello small buffer for testing editing of Python code
  10:  <SEL_START>hello<SEL_END> , hi
  11: class AClass(ASuper):
  12:     """This is a dummy class"""
@@ -507,8 +507,8 @@ WARNING: source file 'blah.cpp' doesn't exist.
 *** End of source buffer ***
 Heard wrap header
 *** Start of source buffer ***
-  1: #ifndef BLAH_CPP5485595
-  2: #define BLAH_CPP5485595
+  1: #ifndef BLAH_CPP5965547
+  2: #define BLAH_CPP5965547
   3: 
   4: <CURSOR>
   5: #endif
@@ -518,8 +518,8 @@ Heard wrap header
 Saying: ['pound', 'include', 'quotes', 'string', 'after', 'quotes']
 Heard pound include quotes string after quotes
 *** Start of source buffer ***
-  1: #ifndef BLAH_CPP5485595
-  2: #define BLAH_CPP5485595
+  1: #ifndef BLAH_CPP5965547
+  2: #define BLAH_CPP5965547
   3: 
   4: #include "str"<CURSOR>
   5: #endif
@@ -527,7 +527,7 @@ Heard pound include quotes string after quotes
 
 *** End of source buffer ***
 Heard new line
-  2: #define BLAH_CPP5485595
+  2: #define BLAH_CPP5965547
   3: 
   4: #include "str"
   5: <CURSOR>
@@ -1887,7 +1887,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01C90CC0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01F0E580>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -9443,7 +9443,7 @@ Traceback (most recent call last):
 AssertionError: This should always fail
 
 ----------------------------------------------------------------------
-Ran 2 tests in 0.010s
+Ran 2 tests in 0.000s
 
 FAILED (failures=1)
 FFFF
@@ -9504,7 +9504,7 @@ AssertionError: Nevermind, this test is supposed to fail.
 Item at position 1 was wrong. Expected 'beautiful', but got 'wonderful'
 
 ----------------------------------------------------------------------
-Ran 4 tests in 0.000s
+Ran 4 tests in 0.010s
 
 FAILED (failures=4)
 
@@ -11520,7 +11520,7 @@ WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented y
 WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
 .
 ----------------------------------------------------------------------
-Ran 5 tests in 0.260s
+Ran 5 tests in 0.221s
 
 OK
 
@@ -11544,7 +11544,7 @@ WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented y
 WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!
 .
 ----------------------------------------------------------------------
-Ran 6 tests in 0.531s
+Ran 6 tests in 0.340s
 
 OK
 
@@ -14684,15 +14684,15 @@ Heard select previous index equals zero
 * Description : Testing subclasses of wxWindows widgets.
 *******************************************************************************
 
-...
+....
 ----------------------------------------------------------------------
-Ran 3 tests in 0.040s
+Ran 4 tests in 0.030s
 
 OK
 
 
 
 -----------------------------------------------
-Test suite completed in:  667.309000015 secs
+Test suite completed in:  658.546999931 secs
 -----------------------------------------------
 WARNING: stub function ReformatFromRecentViewWX.on_activate is not implemented yet!!!

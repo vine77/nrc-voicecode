@@ -113,7 +113,7 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
         *Queue.Queue* -- the message queue
         """
         debug.trace('ListenAndQueueMsgsThread.message_queue', '** invoked, call stack is:')
-        debug.trace_call_stack('ListenAndQueueMsgsThread.message_queue', '**')
+#        debug.trace_call_stack('ListenAndQueueMsgsThread.message_queue', '**')
         return self.completed_msgs
 
     def get_mess(self):
@@ -144,7 +144,7 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
         *none*
         """
         debug.trace('ListenAndQueueMsgsThread.notify_main', 'self.event=%s' % self.event)
-        debug.trace_call_stack('ListenAndQueueMsgsThread.notify_main', '**')
+#        debug.trace_call_stack('ListenAndQueueMsgsThread.notify_main', '**')
         self.event.notify()
 
     def run(self):
@@ -233,7 +233,7 @@ class ListenNewConnThread(threading.Thread, Object.Object):
 
         *none*
         """
-        debug.trace_call_stack('ListenNewConnThread.notify_main', '**')
+#        debug.trace_call_stack('ListenNewConnThread.notify_main', '**')
         self.event.notify()
 
     def run(self):

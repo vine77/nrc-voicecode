@@ -3643,6 +3643,7 @@ add_test('basic_correction', test_basic_correction,
 def test_wxWindowsWithHelpers():
    suite = unittest.TestSuite()
    suite.addTest(unittest.makeSuite(wxWindowsWithHelpersTest.wxListCtrlWithHelpersTest,'test'))
+   suite.addTest(unittest.makeSuite(wxWindowsWithHelpersTest.wxDialogWithHelpersTest,'test'))
 
    unittest.TextTestRunner().run(suite) 
    

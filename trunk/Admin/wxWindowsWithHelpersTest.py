@@ -4,11 +4,16 @@ import wxWindowsWithHelpers
 import debug
 
 
-class wxListCtrlTestDlg(wxDialog):
+class wxListCtrlTestDlg(wxWindowsWithHelpers.wxDialogWithHelpers):
     def __init__(self):
-        wxDialog.__init__(self, None, wxNewId(), "Testing wxListCtrlWithHelpers", (1, 1),
+        wxWindowsWithHelpers.wxDialogWithHelpers.__init__(self, None, wxNewId(), "Testing wxListCtrlWithHelpers", (1, 1),
                           (600, 400),
                           style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+                          
+        self.button = wxButton(self, wxNewId(), "Button", wxDefaultPosition, 
+                               wxDefaultSize)
+        EVT_BUTTON(self, self.button.GetId(), self.on_button)
+        self.button_was_clicked = false
 
         self.list = \
             wxWindowsWithHelpers.wxListCtrlWithHelpers(self, wxNewId(), 
@@ -25,6 +30,9 @@ class wxListCtrlTestDlg(wxDialog):
         self.list.InsertStringItem(1, "item 1-0")
         self.list.SetStringItem(1,1,"item 1-1")
         self.list.SetStringItem(1,2, "item 1-2")
+        
+    def on_button(self, event):
+        self.button_was_clicked = true
 
 
 class wxListCtrlWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
@@ -34,6 +42,9 @@ class wxListCtrlWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
        
     def setUp(self):
        self.dlg = wxListCtrlTestDlg()       
+
+    def tearDown(self):
+       self.dlg.Destroy()
 
     def test_NumberOfColumns(self):
        self.assert_equals(3, self.dlg.list.NumberOfColumns(),
@@ -49,6 +60,22 @@ class wxListCtrlWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
                                                "Cells of the list were wrong.")
                                                
                                                    
+       
+class wxDialogWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
+        
+    def __init__(self, name):
+       TestCaseWithHelpers.TestCaseWithHelpers.__init__(self, name)
+       
+    def setUp(self):
+       self.dlg = wxListCtrlTestDlg()       
+
     def tearDown(self):
        self.dlg.Destroy()
+
+    def test_ClickButton(self):
+       self.assert_(not self.dlg.button_was_clicked,
+                    "button started out as being clicked.")
+       self.dlg.ClickButton(self.dlg.button)
+       self.assert_(self.dlg.button_was_clicked,
+                    "button was not clicked.")
        

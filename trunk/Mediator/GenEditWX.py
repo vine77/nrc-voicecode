@@ -823,7 +823,7 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
             debug.critical_warning(msg)
 # this is diagnostic information associated with the critical warning, 
 # not a trace, so it should always be printed
-            debug.print_call_stack()
+#            debug.print_call_stack()
             self.cleanup()
         debug.trace('WaxFrameBase.close_window', 'calling self.Close')
         self.Close()

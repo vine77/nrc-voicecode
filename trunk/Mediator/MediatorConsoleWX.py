@@ -474,7 +474,6 @@ class DlgModelViewWX(MediatorConsole.DlgModelView):
     def __init__(self, **args):
         """
         """
-        debug.trace('DlgModelViewWX.__init__', '** invoked args=%s' % args)
         ID_DISMISS_FLAG_TIMER = wxNewId()
         self.deep_construct(DlgModelViewWX,
                             {
@@ -533,6 +532,7 @@ class DlgModelViewWX(MediatorConsole.DlgModelView):
         *DismissModalEvent* -- the event
         """
         return DismissModalFlagTimerWX(self.bye)
+        
 
 # this doesn't work because of a bug in wxPython (modal dialog boxes 
 # which were started from a custom event handler are created from within
@@ -834,6 +834,7 @@ class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
         return button_sizer
 
     def on_dismiss(self):
+        debug.trace_call_stack('CorrectionBoxViewWX.on_dismiss')
         self.EndModal(wxID_DISMISS_MODAL)
 
     def on_playback(self, event):
@@ -956,8 +957,11 @@ class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
 
         *none*
         """
+        print '-- simulate_OK\n\n'
+        debug.trace_call_stack('CorrectionBoxViewWX.simulate_OK')
         button_event = wxCommandEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK)
         self.ProcessEvent(button_event)
+        
 # DCF: For some reason, wxPostEvent doesn't work right if the correction
 # box was created from within my custom event handler (though it does if
 # it was created from within an EVT_BUTTON handler)
@@ -1780,7 +1784,7 @@ class ReformatRecentSymbols(DlgModelViewWX):
     def on_ok(self, event=None):
         pass
       
-    def on_cancel(self):
+    def on_cancel(self, event):
         self.void_all_user_reformattings()
        
     def void_all_user_reformattings(self):
@@ -1834,7 +1838,7 @@ class ReformatRecentSymbols(DlgModelViewWX):
        
        
 
-class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture, 
+class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxWindowsWithHelpers.wxDialogWithHelpers, possible_capture, 
                               Object.OwnerObject):
     """dialog box which lists recently dictated symbols, allowing the user 
     to select one for reformatting
@@ -1881,7 +1885,7 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_
         use_pos = pos
         if pos is None:
             use_pos = wxDefaultPosition
-        wxDialog.__init__(self, parent, wxNewId(), "Correct Recent", use_pos,
+        wxWindowsWithHelpers.wxDialogWithHelpers.__init__(self, parent, wxNewId(), "Correct Recent", use_pos,
             (600, 400),
             style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
         possible_capture.__init__(self)
@@ -1895,7 +1899,7 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_
                              'corrected': {},
                              'correct_n_gram': None,
                             }, args, 
-                            exclude_bases = {possible_capture:1, wxDialog: 1}
+                            exclude_bases = {possible_capture:1, wxWindowsWithHelpers.wxDialogWithHelpers: 1}
                            )
                            
         
@@ -1966,14 +1970,15 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_
         recent.ScrollList(0, len(symbols))
         self.recent = recent
         main_sizer.Add(recent, 1, wxEXPAND | wxALL)
-        okb = wxButton(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
-        cancelb = wxButton(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)
-        EVT_BUTTON(self, okb.GetId(), self.on_ok)
+        self.okb = wxButton(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
+        self.cancelb = wxButton(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)      
+        EVT_BUTTON(self, self.okb.GetId(), self.on_ok)
+        EVT_BUTTON(self, self.cancelb.GetId(), self.on_cancel)        
         b_sizer = wxBoxSizer(wxHORIZONTAL)
-        b_sizer.Add(okb, 0, 0)
-        b_sizer.Add(cancelb, 0, 0)
+        b_sizer.Add(self.okb, 0, 0)
+        b_sizer.Add(self.cancelb, 0, 0)
         main_sizer.Add(b_sizer, 0, wxEXPAND | wxALL)
-        okb.SetDefault()
+        self.okb.SetDefault()
 # note: neither of these handlers gets called if a child control 
 # has the focus.
 # I thought they would be called if the focused control didn't have a
@@ -2010,6 +2015,9 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_
         
     def on_ok(self, event=None):
         self.model().on_ok(event)
+        
+    def on_cancel(self, event):
+        self.model().on_cancel(event)
 
     def on_activate(self, event):
         debug.not_implemented('ReformatRecentSymbolsViewWX.on_activate')
@@ -2081,10 +2089,10 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_
        return self.recent.GetNextSelected(-1)
 
     def do_cancel(self):
-       self.model().on_cancel()
+       self.ClickButton(self.cancelb)
        
     def do_ok(self):
-       self.on_ok()
+       self.ClickButton(self.okb)
        
 class ReformatFromRecentWX(DlgModelViewWX):
     """model-view dialog for reformatting one dictated symbol.
@@ -2158,7 +2166,7 @@ class ReformatFromRecentWX(DlgModelViewWX):
     def do_cancel(self):
        self.view().do_cancel()
        
-    def on_cancel(self):
+    def on_cancel(self, event):
        self.was_okayed = false
        self.symbol.reformat_to(None)         
 
@@ -2172,7 +2180,7 @@ class ReformatFromRecentWX(DlgModelViewWX):
     def do_type_form(self, form):
        self.view().do_type_form(form)
        
-class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture, 
+class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxWindowsWithHelpers.wxDialogWithHelpers, possible_capture, 
                               Object.ChildObject):
     """dialog box for reformatting a single symbol.
 
@@ -2208,12 +2216,12 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
                              'console': console,
                              'symbol': symbol,
                             }, args, 
-                            exclude_bases = {possible_capture:1, wxDialog: 1}
+                            exclude_bases = {possible_capture:1, wxWindowsWithHelpers.wxDialogWithHelpers: 1}
                            )
                            
         
 
-        wxDialog.__init__(self, parent, wxNewId(), "Reformat symbol", wxDefaultPosition,
+        wxWindowsWithHelpers.wxDialogWithHelpers.__init__(self, parent, wxNewId(), "Reformat symbol", wxDefaultPosition,
             (600, 400),
             style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
         
@@ -2260,14 +2268,15 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
         formats_pick_list.ScrollList(0, len(self.symbol.suggestions_list()))
         self.formats_pick_list = formats_pick_list
         main_sizer.Add(formats_pick_list, 1, wxEXPAND | wxALL)
-        okb = wxButton(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
-        cancelb = wxButton(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)
-        EVT_BUTTON(self, okb.GetId(), self.on_ok)
+        self.okb = wxButton(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
+        self.cancelb = wxButton(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)
+        EVT_BUTTON(self, self.okb.GetId(), self.on_ok)
+        EVT_BUTTON(self, self.cancelb.GetId(), self.on_cancel)
         b_sizer = wxBoxSizer(wxHORIZONTAL)
-        b_sizer.Add(okb, 0, 0)
-        b_sizer.Add(cancelb, 0, 0)
+        b_sizer.Add(self.okb, 0, 0)
+        b_sizer.Add(self.cancelb, 0, 0)
         main_sizer.Add(b_sizer, 0, wxEXPAND | wxALL)
-        okb.SetDefault()
+        self.okb.SetDefault()
 # note: neither of these handlers gets called if a child control 
 # has the focus.
 # I thought they would be called if the focused control didn't have a
@@ -2307,8 +2316,6 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
         self.txt_chosen_form.SetFocus()
 
 
-        
-
     def reset(self, symbol):
        """reinitialise the view layer
        
@@ -2334,6 +2341,10 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
 
     def on_ok(self, event=None):
        self.model().on_ok(event)
+
+    def on_cancel(self, event=None):
+       self.model().on_cancel(event)
+
        
     def on_activate(self, event):
        debug.not_implemented('ReformatFromRecentViewWX.on_activate')
@@ -2365,10 +2376,10 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
        self.txt_chosen_form.SetValue(written_form)
        
     def do_cancel(self):
-       self.model().on_cancel()
+       self.ClickButton(self.cancelb)
        
     def do_ok(self):
-       self.model().on_ok()
+       self.ClickButton(self.okb)
        
     def do_type_form(self, form):
        self.set_alternate_form(form)

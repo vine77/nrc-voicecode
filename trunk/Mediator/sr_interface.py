@@ -136,7 +136,7 @@ def connect(user_name, mic_state=None, mic_change_callback = None):
     
     if not sr_is_connected:
         trace('sr_interface.connect', 'mic_state=%s, sr_is_connected=%s' % (mic_state, sr_is_connected))
-        trace_call_stack('sr_interface.connect')
+#        trace_call_stack('sr_interface.connect')
 # 1 means use threads -- needed for GUI apps
         natlink.natConnect(1)
         sr_is_connected = 1            
@@ -268,7 +268,7 @@ def getWordInfo(word, flag = None):
        # In case the word's spelling is not allowed by
        # NatSpeak
        print "WARNING: error trying to get info from vocabulary word '%s'" % word
-       debug.print_call_stack()
+#       debug.print_call_stack()
        answer = None       
 
     return answer

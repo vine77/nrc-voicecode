@@ -1163,7 +1163,7 @@ class SymbolConstruction(Object):
         return self.symbols
 
     def insert_existing_symbol(self, symbol, found_in_utter, exact_matches = [],
-                        inexact_matches = None, forbidden = None):
+                        inexact_matches = [], forbidden = []):
         """
         Insert a known symbol with the given written form, track the
         associated changes, and create a SymbolResult
@@ -1208,7 +1208,7 @@ class SymbolConstruction(Object):
         self.reset()
       
     def insert_new_symbol(self, interp_phrase, exact_matches = [],
-                        inexact_matches = None, forbidden = None):
+                        inexact_matches = [], forbidden = []):
         """
         Generate and insert a new symbol, track the
         associated changes, and create a SymbolResult
@@ -1859,6 +1859,7 @@ class CmdInterp(OwnerObject):
                not self.builder_factory.manually_specified():
             trace('CmdInterp.match_untranslated_text', 
                 'exact symbol spoken "%s"' % (spoken_form))
+            trace('CmdInterp.match_untranslated_text', 'complete_match=%s' % complete_match)
             if len(complete_match) > 0:
                 written_symbol = self.choose_best_symbol(spoken_form, 
                     complete_match)
@@ -1906,9 +1907,10 @@ class CmdInterp(OwnerObject):
             weak_matches = self.adjust_match_scores(weak_matches)
             forbidden = self.adjust_match_scores(forbidden)
             inexact_matches = symbol_matches[:] + weak_matches
+
+        trace('CmdInterp.match_untranslated_text',
+              'symbol_matches=%s, inexact_matches=%s, forbidden=%s' % (symbol_matches, inexact_matches, forbidden))
         if symbol_matches:
-            trace('CmdInterp.match_untranslated_text',
-                  'symbol_matches=%s' % symbol_matches)
             symbols.insert_existing_symbol(symbol_matches[0][1], interp_phrase,
                                     exact_matches = complete_match,
                                     inexact_matches = inexact_matches,
