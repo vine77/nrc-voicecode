@@ -22,9 +22,15 @@
 """Define a series of regression tests for VoiceCode"""
 
 import os, sys
-import mediator, CmdInterp, EdSim, MediatorObject, Object, SymDict, test_pseudo_python
-import util
+import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
+import mediator, MediatorObject, Object, SymDict, test_pseudo_python
+import util, vc_globals
 import RecogStartMgr, GramMgr, sr_grammars
+
+from actions_gen import *
+from actions_C_Cpp import *
+from actions_py import *
+from cont_gen import *
 
 
 small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'
@@ -177,9 +183,9 @@ def test_CmdInterp():
 # leaving it in and then will remove it.
     global test_mediator
     test_mediator = a_mediator
-    acmd = CSCmd(spoken_forms=['for', 'for loop'], meanings={ContC(): c_simple_for, ContPy(): py_simple_for})
+    acmd = CSCmd.CSCmd(spoken_forms=['for', 'for loop'], meanings={ContC(): c_simple_for, ContPy(): py_simple_for})
     a_mediator.add_csc(acmd)
-    acmd = CSCmd(spoken_forms=['loop body', 'goto body'], meanings={ContC(): c_goto_body, ContPy(): py_goto_body})
+    acmd = CSCmd.CSCmd(spoken_forms=['loop body', 'goto body'], meanings={ContC(): c_goto_body, ContPy(): py_goto_body})
     a_mediator.add_csc(acmd)    
     a_mediator.interp.on_app.open_file(vc_globals.test_data + os.sep + 'small_buff.c')
     a_mediator.interp.on_app.goto(41)
@@ -407,7 +413,6 @@ auto_test.add_test('no_sr_user', test_no_sr_user, desc='testing connect with ine
 ###############################################################################
 
 def test_command(command):
-
     
     print '\n\n>>> Testing console command: %s\n' % command
     mediator.execute_command(command)
@@ -425,9 +430,9 @@ def test_mediator_console():
     test_command("""compile_symbols(['""" + file + """'])""")
     test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'])
 
-    util.request_console_be(active=1)    
+#    util.request_console_be(active=1)    
     test_command("""say(['select', 'horiz_pos\\horizontal position', '=\equals'])""")
-    util.request_console_be(active=0)        
+#    util.request_console_be(active=0)        
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
 
@@ -450,7 +455,7 @@ def test_select_pseudocode():
     test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n')        
     test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n')
 
-    util.request_console_be(active=1)
+#    util.request_console_be(active=1)
     
     #
     # Testing go commands
@@ -537,7 +542,7 @@ def test_select_pseudocode():
     test_say(['select previous', 'index', '=\\equals', '0'])
     test_say(['select previous', 'index', '=\\equals', '0'])
 
-    util.request_console_be(active=0)    
+#    util.request_console_be(active=0)    
     
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
@@ -552,6 +557,7 @@ auto_test.add_test('select_pseudocode', test_select_pseudocode, desc='testing me
 
 def test_auto_add_abbrevs():
     mediator.init_simulator_regression()
+    
     test_command("""open_file('D:/blah.c')""")
     file = vc_globals.test_data + os.sep + 'small_buff.c'    
     test_command("""compile_symbols(['""" + file + """'])""")
@@ -1341,14 +1347,18 @@ auto_test.add_test('repeat_last', test_repeat_last, 'testing repetition of last 
 
 
 def test_change_direction():
-    mediator.init_simulator_regression()    
+    mediator.init_simulator_regression()
+    
     file_name = vc_globals.test_data + os.sep + 'large_buff.py'
+    
     test_command("""open_file('""" + file_name + """')""")
+    
+    
     test_command("""say(['after hyphen'])""")
     test_command("""say(['again'])""")
-    test_command("""say(['again'])""")    
+    test_command("""say(['again'])""")
     test_command("""say(['previous one'])""")
-    test_command("""say(['previous one'])""")    
+    test_command("""say(['previous one'])""")
     test_command("""say(['next one'])""")
     
 auto_test.add_test('change_direction', test_change_direction, 'testing changing direction of last command')

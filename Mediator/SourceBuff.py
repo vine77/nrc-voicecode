@@ -70,7 +70,10 @@ class SourceBuff(Object):
     *regexp*, *direction*,
     and *where*. The last entry correspond to the position where
     cursor was put after last search.
-    
+
+    INT *print_nlines* -- When printing content of buffer to STDOUT
+    (*print_buff* methods), print this number of lines before and
+    after current line.
 
     CLASS ATTRIBUTES**
     
@@ -80,7 +83,8 @@ class SourceBuff(Object):
         self.init_attrs({'last_search': None})
         self.deep_construct(SourceBuff,
                             {'app': app,
-			     'fname': fname},
+			     'fname': fname,
+                             'print_nlines': 3},
                             attrs
                             )
 
@@ -381,7 +385,6 @@ class SourceBuff(Object):
         
         *INT* -- the distance
         """
-#        print '-- SourceBuff.distance_to_selection: start=%s, *opt_end=%s' % (start, opt_end)
         if len(opt_end) > 0:
             end = opt_end[0]
         else:
@@ -400,7 +403,6 @@ class SourceBuff(Object):
 	if start2 == None or end2 == None:
             start2 = self.cur_pos()
             end2 = start2
-#        print '-- SourceBuff.distance_to_selection: start=%s, end=%s, start2=%s, end2=%s' % (start, end, start2, end2)
         return self.region_distance(start, end, start2, end2)
         
     def get_visible(self):
@@ -490,11 +492,16 @@ class SourceBuff(Object):
 	
 	*(INT, INT)* -- increasing range within bounds
 	"""
+
+#        print '-- SourceBuff.make_valid_range: range=%s' % repr(range)
+        
 	start, end = range        
         if start == None: start = 0
         if end == None: end = self.len() - 1
 	if end < start:
-	    start, end = range[1], range[0]
+            tmp = end
+            end = start
+            start = tmp
 	start = self.make_within_range(start)
 	end = self.make_within_range(end)
 	return start, end
@@ -955,7 +962,7 @@ class SourceBuff(Object):
            Returns *None* if no occurence was found. Otherwise,
            returns a match object."""
 
-#        print '-- SourceBuff.search_for: regexp=%s, direction=%s, num=%s, where=%s' % (regexp, direction, num, where)
+#        print '-- SourceBuff.search_for: called'
         success = None
 
         #
@@ -978,7 +985,6 @@ class SourceBuff(Object):
            else:
                break
 
-#        print '-- SourceBuff.search_for: all_matches_pos=%s' % all_matches_pos
 
         #
         # Look in the list of matches for the num'th match closest to
@@ -989,7 +995,6 @@ class SourceBuff(Object):
                                                          direction=direction,
                                                          where=where)
 
-#        print '-- SourceBuff.search_for: closest_match=%s' % closest_match
         new_cur_pos = None
         the_match_index = None        
         if closest_match != None:
@@ -1002,10 +1007,8 @@ class SourceBuff(Object):
                 if the_match_index < 0:
                     the_match_index = 0
 
-#            print '-- SourceBuff.search_for: the_match_index=%s' % the_match_index
             new_cur_pos = self.pos_extremity(all_matches_pos[the_match_index], where)
 
-#        print '-- SourceBuff.search_for: new_cur_pos=%s' % new_cur_pos
 
         #
         # Log the search so we don't keep bringing back same occurence
@@ -1052,8 +1055,6 @@ class SourceBuff(Object):
         *INT* closest_index -- Index in *occurences* of the closest
          occurence. If no such occurence, returns *None*"""
 
-#        print '-- SourceBuff.closest_occurence_to_cursor: self.cur_pos()=%s, occurences=%s, direction=%s, regexp=%s' % (self.cur_pos(), repr(occurences), direction, regexp)
-
         closest_index = None
         
         #
@@ -1062,7 +1063,6 @@ class SourceBuff(Object):
         #
         shortest_distance = None
         for ii in range(len(occurences)):
-#            print '-- SourceBuff.closest_occurence_to_cursor: ii=%s, closest_index=%s, self.cur_pos()=%s, occurences[ii][0]=%s, occurences[ii][1]=%s' % (ii, closest_index, self.cur_pos(), occurences[ii][0], occurences[ii][1])
 
             if direction == None:
                 #
@@ -1105,7 +1105,6 @@ class SourceBuff(Object):
                         closest_index = ii
                         break
 
-#        print '-- SourceBuff.closest_occurence_to_cursor: returning closest_index=%s' % closest_index                
         return closest_index
 
     def same_as_previous_search(self, regexp, direction, where, match):
@@ -1133,8 +1132,6 @@ class SourceBuff(Object):
 
         ..[search_for] file:///./SourceBuff.SourceBuff.html#search_for"""
 
-#        print '-- SourceBuff.same_as_previous_search: regexp=%s, direction=%s, where=%s, match=%s' % (regexp, direction, where, match)
-#        print '-- SourceBuff.same_as_previous_search: self.last_search=%s' % repr(self.last_search)
 
         #
         # We consider this to be the same occurence as last search iif:
@@ -1167,7 +1164,6 @@ class SourceBuff(Object):
             self.cur_pos() == self.pos_extremity(self.last_search[3], self.last_search[2])):
                 answer = 1
 
-#        print '-- SourceBuff.same_as_previous_search: returning answer=%s' % answer
         return answer
           
     def pos_extremity(self, range, where):
@@ -1305,6 +1301,88 @@ class SourceBuff(Object):
         debug.virtual('SourceBuff.goto_cbk')
         
 
+    def print_buff(self, from_line=None, to_line=None):
+        """Prints buffer to STDOUT.
+
+        This is mostly used when running regression test on an
+        external editor (or the EdSim simulation editor).
+        
+        **INPUTS**
+        
+        *INT* from_line = None -- First line to be printed. If *None*, then
+        print *print_nlines* lines around cursor.
+
+        *INT* to_line = None -- Last line to be printed.
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+#        print '-- SourceBuff.print_buff: from_line=%s, to_line=%s' % (from_line, to_line)
+
+        #
+        # Figure out the first and last line to be printed
+        #
+        if from_line == None:
+           from_line, to_line = self.lines_around_cursor()
+
+        #
+        # Figure out the text before/withing/after the selection
+        #
+	selection_start, selection_end = self.get_selection()
+
+        before_content = self.get_text(0, selection_start)
+        selection_content = self.get_text(selection_start, selection_end)
+        after_content = self.get_text(selection_end)
+
+	printed = before_content
+	if selection_content == '':
+	    printed = printed + '<CURSOR>'
+	else:
+	    printed = printed + '<SEL_START>'
+	    printed = printed + selection_content
+	    printed = printed + '<SEL_END>'
+	printed = printed + after_content
+
+	lines_with_num = self.number_lines(printed, startnum = 1)
+        
+	if from_line == 1:
+	    sys.stdout.write("*** Start of source buffer ***\n")
+	for aline in lines_with_num[from_line-1:to_line]:
+	    sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
+	if to_line == len(lines_with_num):
+	    sys.stdout.write("\n*** End of source buffer ***\n")
+	return
+
+    def lines_around_cursor(self):
+        """Returns the line numbers of lines around cursor
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *(INT from_line, INT to_line)*
+
+        *INT from_line* -- First line of the window.
+
+        *INT to_line* -- Last line of the window.
+        """
+
+        curr_line = self.line_num_of(self.cur_pos())        
+        from_line = curr_line - self.print_nlines
+        to_line = curr_line + self.print_nlines
+	if from_line < 1:
+	    from_line = 1
+	last_line = self.line_num_of(self.len())
+	if to_line > last_line:
+	    to_line = last_line
+        return from_line, to_line
+
+
     def __getitem__(self, key):
         """Get a character of the buffer using the buff[i] syntax.
         
@@ -1316,7 +1394,6 @@ class SourceBuff(Object):
         
         *CHAR* -- the character at position *key*
         """
-#        print '-- SourceBuff.__getitem__: caled'
         return self.content()[key]
 
     def __setitem__(self, key, value):
@@ -1332,7 +1409,6 @@ class SourceBuff(Object):
         
         *none* -- 
         """
-#        print '-- SourceBuff.__setitem__: caled'        
         self.insert(value, (key, key))
 
     def __getslice__(self, start, end):
@@ -1346,7 +1422,6 @@ class SourceBuff(Object):
         
         *STR* -- the slice from *start* to *end*
         """
-#        print '-- SourceBuff.__setitem__: called'        
         return self.content()[start:end]
 
     def __getslice__(self, start, end, value):
@@ -1361,7 +1436,6 @@ class SourceBuff(Object):
         **OUTPUTS**
         
         """
-#        print '-- SourceBuff.__setitem__: called'        
         self.insert(value, (start,end))
 
 

@@ -4,8 +4,81 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
+
+Link with Emacs through vr-mode
+-------------------------------
+
+- VR-mode starts a new instance of the "server" (at this point,
+  VR.exe) every time it connects to DNS. This is probably because
+  VR.exe is not multithreaded and can only handle one connection at a
+  time (don't want to change that, cause multithreading in C++ is probably 
+  a nightmare). 
+
+  This is a problem for VC because then different instances of Emacs will
+  end up sharing different symbols dictionnaries.
+
+  Possible solution
+  *****************
+  
+  Let Emacs start a new instance of VC server. But the server will try to bind
+  to its two sockets. If one of the binds fails, it means that there is already
+  an instance of VC server running (there may be a more direct way of finding
+  this out, but I doubt it because the name of the process running VC server
+  will probably be 'python').
+
+  If VC server finds out it is already running, it will exit, otherwise it will
+  start listening on the two ports. 
+
+  But before it does any of those two things, it will output on STDOUT
+  the message 'listening portNum'. Emacs needs this because every
+  instance of VR.exe listens on a different port number (that it
+  selects).
+
+  Code below illustrates how VC server could check for busy port.
+
+import socket, time
+
+ss_list = []
+
+for ii in range(3):
+
+    ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
+    portNum = 45771
+    while 1:
+        try:
+            print '-- checking availability portNum=%s' % portNum
+            ss.bind('127.0.0.1', portNum)
+            ss_list.append(ss)
+            print '-- portNum=%s was available' % portNum
+            break
+        except socket.error, why:
+            # could analyze why here
+            print '-- failed, why=%s' % why
+            portNum = portNum + 1
+
+    time.sleep(1)
+
+  
+- Make VC server use the same port for the two connections.
+
+  This is what VR-mode does. Using the same port doesn't mean you use
+  the same *connection*! You can have two connections on the same
+  port.
+
+  In the handshake for both types of connections, the first thing that
+  the client does is to let the server know whether it's asking for a
+  VC_LISTEN or VC_TALK connection.
+
+  An advantage of this is that for SSH, need only to tunnel one port
+
+
 Communication protocol
 ----------------------
+
+
+- In tcp_server.py, use postMessageCallback instead of explicit events
+  caught in the mean thread.
 
 - Add a dummy authentification sequence in the handshake part of the
   protocol. For now, this will be ignored, but later on we (i.e. Eric
@@ -22,6 +95,12 @@ Communication protocol
 - Implement an XML based messaging protocol. It will be easier to
   handle at the editor end than Alain's protocol, because there are
   tons of XML libraries in different langauges out there.
+
+- For better efficiency, SourceBuffCached.get_text(start, end) could
+  retrieve only the text between *start* and *end* (*text_region*),
+  and cache the 3ple *(start, end, text_region)*. This would allow certain 
+  commands that only access part of the text to not have to download and cache
+  the whole and then only use a small part of it.
 
 Regression testing
 ------------------

@@ -22,6 +22,8 @@
 """Classes for communicating with an external editor through a messaging protocol"""
 
 import re, sys, types
+from xml.marshal.wddx import WDDXMarshaller, WDDXUnmarshaller
+
 import Object
 
 class Messenger(Object.Object):
@@ -139,10 +141,12 @@ class Messenger(Object.Object):
         *none* response -- 
         """
 
-        print '-- send_mess: mess_name=\'%s\', mess_argvals=%s' % (mess_name, repr(mess_argvals))
+#        print '-- send_mess: mess_name=\'%s\'' % (mess_name)
+#        print '-- send_mess: mess_argvals=%s' % repr(mess_argvals)
         unpkd_mess = self.encoder.encode(mess_name, mess_argvals)
         pkd_mess = self.packager.pack_mess(unpkd_mess)
         self.packager.send_packed_mess(pkd_mess, self.transporter)
+#        print '--- send_mess: DONE sending message'
 
 
     def get_mess(self, expect=None):
@@ -159,11 +163,13 @@ class Messenger(Object.Object):
         (STR, {STR: STR}) name_argvals_mess -- The message retrieved
          from external editor in *(mess_name, {arg:val})* format."""
 
-
+#        print '-- get_mess: expecting %s' % repr(expect)
+        
         pkd_mess = self.packager.get_packed_mess(self.transporter)
         unpkd_mess = self.packager.unpack_mess(pkd_mess)
         name_argvals_mess = self.encoder.decode(unpkd_mess)
-        print '-- get_mess: received \'%s\', %s\n' % (name_argvals_mess[0], repr(name_argvals_mess[1]))
+#        print '-- get_mess: received message name=\'%s\'' % name_argvals_mess[0]
+#        print '-- get_mess: received message args=%s' % repr(name_argvals_mess[1])
 
         if expect != None and (not (name_argvals_mess[0] in expect)):
             self.wrong_message(name_argvals_mess, expect)
@@ -324,6 +330,8 @@ class MessPackager_FixedLenSeq(MessPackager):
         *none* --
 
         ..[MessTransporter] file:///./messaging.MessTransporter.html"""
+
+#        print '-- send_packed_mess: pkd_mess="%s"' % pkd_mess
         
         #
         # Nothing particular about how such messages need to be sent.
@@ -352,9 +360,12 @@ class MessPackager_FixedLenSeq(MessPackager):
         pkd_message = ''
         last_chunk = 0
         while not (last_chunk == '1'):
+#            print '-- MessPackager_FixedLenSeq.get_packed_mess: in while'
             a_chunk = transporter.receive_string(self.chunk_len)
+#            print '-- MessPackager_FixedLenSeq.get_packed_mess: got a_chunk="%s"' % a_chunk            
             pkd_message = pkd_message + a_chunk
             last_chunk = a_chunk[0]
+#            print '-- MessPackager_FixedLenSeq.get_packed_mess: last_chunk="%s"' % last_chunk
 
 #        print '-- get_packed_mess: done'
         
@@ -376,7 +387,7 @@ class MessPackager_FixedLenSeq(MessPackager):
         """
 
 #        print '-- pack_mess: started'
-#        print '-- pack_mess: mess=\'%s\''
+#        print '-- pack_mess: mess=\'%s\'' % mess
         packed_mess = ''
         while not mess == '':
 #            print '-- pack_mess: start loop body'
@@ -390,24 +401,21 @@ class MessPackager_FixedLenSeq(MessPackager):
             # If this is last chunk in message, pad it with blanks to the
             # right
             #
-            num_padding = (self.chunk_len - 1) - len(mess)
+            num_padding = (self.chunk_len - 1) - len(a_chunk)
+#            print '-- pack_mess: before padding, num_padding=%s, a_chunk="%s"' % (num_padding, a_chunk)
             a_chunk = a_chunk + self.large_white_space[:num_padding]
-            
-#            for ii in range(num_padding):
-#                a_chunk = a_chunk + ' '
-
-#            print '-- pack_mess: finished padding'
-            
+#            print '-- pack_mess: after padding, a_chunk="%s"' %a_chunk
+                                  
             #
             # Is this last chunk in the message?
             # 
             mess = mess[self.chunk_len-1:]
             prefix = (mess == '')
-            a_chunk = "%s%s" % (prefix, a_chunk)
             
+            a_chunk = "%s%s" % (prefix, a_chunk)
+#            print '-- pack_mess: after prefixing, a_chunk="%s"' %a_chunk
             packed_mess = packed_mess + a_chunk
 
-#            print '-- pack_mess: end of loop body'
 
 #        print '-- pack_mess: done'
         return packed_mess
@@ -1021,6 +1029,7 @@ class MessTransporter_Socket(MessTransporter):
         mess_len = len(a_string)
         totalsent = 0
         while totalsent < mess_len:
+#            print '-- send_string: sending "%s"' % a_string[totalsent:]
             sent = self.sock.send(a_string[totalsent:])
             if sent == 0:
                 raise RuntimeError, "socket connection broken"
@@ -1069,6 +1078,98 @@ class MessTransporter_Socket(MessTransporter):
         """
         
         self.sock.close()
+
+
+###############################################################################
+# Experimental WDDX message encoder
+###############################################################################
+
+class MessEncoderWDDX(MessEncoder):
+    """WDDX (an XML based protocol) Encoding scheme for messages.
+    
+    Used to go translates messages between the *(name, {arg:val})*
+    format and raw string format. In this format, *name* is the name
+    of the message and *{arg:val}* is a dictionary giving the name and
+    values of the various arguments of that message.
+
+    Note that the *arg*s must be strings, but the *val*s can be of any
+    encodable type. The encodable types are defined recursively as:
+
+    STR -- a simple string
+
+    [ENCODABLE] -- a list (or tuple) of encodable types.
+    
+    {STR:ENCODABLE} -- a dictionnary with string keys and encodable values
+    
+    
+    **INSTANCE ATTRIBUTES**
+    
+    [WDDXMarshaller] *marshaller* -- Marshaller for transforming
+    Python data values into WDDX strings.
+
+    [WDDXUnmarshaller] *unmarshaller* -- Unmarshaller for transforming
+    WDDX strings into Python data values.
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+
+    """
+        
+    def __init__(self, **args_super):
+        self.deep_construct(MessEncoderWDDX, 
+                            {'marshaller': WDDXMarshaller(),
+                             'unmarshaller': WDDXUnmarshaller()}, 
+                            args_super, 
+                            {})
+
+
+    def encode(self, mess_name, mess_argvals):
+        """Encodes a message as a raw string
+        
+        **INPUTS**
+
+        STR *mess_name* -- An identifier indicating what type of
+        message this is.
+        
+        {STR: ANY} *mess_argvals* -- The content of the message in
+        *{arg:val}* format.
+        
+        **OUTPUTS**
+        
+        *STR str_mess* -- The message encoded as a string
+        """
+
+        mess_argvals['message_name'] = mess_name
+        str_mess = self.marshaller.dumps(mess_argvals)
+
+        return str_mess
+
+
+    def decode(self, str_mess):
+        """Decodes a message to {arg:val} format.
+      
+        **INPUTS**
+        
+        *STR* str_mess -- The message in raw string format
+        
+        **OUTPUTS**
+        
+        *(STR, {STR: STR}) name_argvals_mess* -- First element is the
+        message name, second element is message arguments in
+        *(name, {arg:val})* format.  """
+
+        mess_argvals = self.unmarshaller.loads(str_mess)
+
+        #
+        # Name of message is one of the entries in the unmarshalled dictionnary.
+        # Remove it from there.
+        #
+        mess_name = mess_argvals['message_name']
+        del mess_argvals['message_name']
+        return (mess_name, mess_argvals)
+        
+
 
 
 ###############################################################################

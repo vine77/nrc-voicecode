@@ -25,7 +25,7 @@ This file contains functions for defining and running automated
 regression tests.
 """
 
-import re, sys
+import re, sys, time
 import util
 
 test_reg = {}
@@ -78,6 +78,8 @@ def run(to_run):
     test_names = tests_to_do.keys()
     test_names.sort()
 
+    start_time = time.time()
+    
     for a_test_name in test_names:
         [fct, desc] = tests_to_do[a_test_name]
         sys.stdout.write(test_header(a_test_name, desc))
@@ -87,6 +89,14 @@ def run(to_run):
 #        print "-- auto_test.run: global_dicts[a_test_name]=%s" % global_dicts[a_test_name]
 #        print "-- auto_test.run: local_dicts[a_test_name]=%s" % local_dicts[a_test_name]
 #        exec(fct, global_dicts[a_test_name], local_dicts[a_test_name])
+
+        end_time = time.time()
+        
+    elapsed_time = end_time - start_time     
+    print '\n\n\n-----------------------------------------------'
+    print 'Test suite completed in:  %s secs' % elapsed_time
+    print '-----------------------------------------------'            
+
 
 def expand_suite(suite_name):
     """Returns list of tests in a suite.

@@ -59,8 +59,6 @@ class ForwardToBuffer:
 	    return apply(getattr(buffer, self.method), positional, keys)
 
 
-
-
 def use_update_class(action):
     """Returns the class to be used for a particular type of update action.
         
@@ -77,8 +75,7 @@ def use_update_class(action):
     ..[AS_Update] file:///./AppState.AS_Update.html"""
         
     use_class = {'delete': SB_UpdDelete, 'insert': SB_UpdInsert,
-                 'set_selection': SB_UpdSetSelection, 'goto': SB_UpdGoto
-                }
+                 'set_selection': SB_UpdSetSelection, 'goto': SB_UpdGoto}
 
     
     return use_class[action]
@@ -239,6 +236,7 @@ class SB_UpdDelete(SB_Update):
         *none* -- 
         """
         range = messaging.messarg2intlist(self.descr['range'])
+        range = on_buff.make_valid_range(range)
         on_buff.delete_cbk(range=range)
 
 
@@ -273,9 +271,9 @@ class SB_UpdInsert(SB_Update):
         
         *none* -- 
         """
-        range = messaging.messarg2intlist(self.descr['range'])
+        range = messaging.messarg2intlist(self.descr['range'])        
         on_buff.insert_cbk(range=range, text=self.descr['text'])
-
+        
 
 class SB_UpdSetSelection(SB_Update):
     """Update class for setting the selection.
@@ -352,7 +350,7 @@ class SB_UpdGoto(SB_Update):
         """
 
         on_buff.goto_cbk(pos=int(self.descr['pos']))
-            
+
 	
 class AppState(Object):
     """Interface to the programming environment.    
@@ -414,7 +412,7 @@ class AppState(Object):
     'delete', 'goto', 'goto_line', 'move_relative_line',
     'move_relative_page', 'search_for',
     'refresh_if_necessary', 'refresh', 'incr_indent_level',
-    'decr_indent_level']
+    'decr_indent_level', 'print_buff']
 
     def __getattr__( self, name):
 	if name in self.buffer_methods:
@@ -936,6 +934,8 @@ class AppState(Object):
         .. [self.curr_buffer] file:///AppState.AppState.html
         """
 
+#        print '-- AppState.find_buff: buff_name=%s' % buff_name
+        
         if (buff_name == None):
             buff_name = self.curr_buffer_name()
             
@@ -944,6 +944,7 @@ class AppState(Object):
                 return self.open_buffers[buff_name]
             else:
                 new_buff = self.new_source_buffer(buff_name)
+                self.open_buffers[buff_name] = new_buff
                 return new_buff
         else:
             return None
@@ -988,15 +989,18 @@ class AppState(Object):
         to represent this new file.
         
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+
+#        print '-- AppState.open_file_cbk: name=%s' % name
         
         #
         # First make sure we don't already have a buffer by that name
         #
-        if not self.find_buff(buff_name=name):
-            new_buff = self.new_source_buffer(name)
-        return new_buff
+        buff = self.find_buff(buff_name=name)
+        if not buff:
+            buff = self.new_source_buffer(name)
+        
+        return buff
             
-
 
     def new_compatible_sb(self, fname):
         """Creates a new instance of [SourceBuff].
@@ -1034,13 +1038,20 @@ class AppState(Object):
         
         """
 
+#        print '-- AppState.new_source_buffer: fname=%s' % fname
         new_buff = self.new_compatible_sb(fname=fname)
         self.open_buffers[fname] = new_buff
+        return new_buff
 
     def open_file(self, name, lang = None):
         """Tell the external editor to open a file.
 
-        Open file with name *STR name* and written in language *STR lang*. 
+        Open file with name *STR name* and written in language *STR lang*.
+
+        Right now, this is used mostly so that the regression testing
+        procedure can tell the external editor to open a test
+        file. But in the future, it may be used to voice-enable the
+        open-file dialogue using pseudo-code dictation of file names.        
         """
         debug.virtual('AppState.open_file')
 
@@ -1079,9 +1090,7 @@ class AppState(Object):
 
         buff = self.curr_buffer()
         language = buff.language_name()
-        return self.curr_buffer().language_name()
-
-
+        return language
 
     def log_cmd(self, cont, action):
         """Logs a command in the application's history
@@ -1127,3 +1136,72 @@ class AppState(Object):
             entry_pos = len(self.history) - nth
             hist_entry = self.history[entry_pos]
         return hist_entry
+
+
+
+    def init_for_test(self):
+        
+        """Reinitialise the *AppState* so that it is ready for a new
+        regression test.
+
+        When running several regression tests using the same
+        *AppState* (for example, an *AppState* connected to an
+        external editor), we need to reinitialise it after every test.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        #
+        # Just ask the editor to close all buffers known to VoiceCode
+        #
+        self.close_all_buffers()
+
+
+
+    def close_all_buffers(self, save=0):
+        """Tell the editor to close all buffers known to VoiceCode
+        
+        **INPUTS**
+        
+        INT *save* -- *-1* -> don't save the buffer
+                            *0* -> query user if buffer needs saving
+                            *1* -> save without querying user
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+#        print '-- AppState.close_all_buffers: called'
+        for a_buff_name in self.open_buffers.keys():
+            self.close_buffer(a_buff_name, save)
+        self.open_buffers = {}
+        self.bound_buffer_name = None
+
+    def close_buffer(self, buff_name, save=0):
+        """Ask the editor to close a buffer.
+        
+        **INPUTS**
+        
+        STR *buff_name* -- name of buffer to close
+
+        INT *save* -- *-1* -> don't save the buffer
+                            *0* -> query user if buffer needs saving
+                            *1* -> save without querying user
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        debug.virtual('AppState.close_buffer')
+
+

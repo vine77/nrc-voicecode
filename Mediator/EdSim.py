@@ -284,3 +284,30 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	*BOOL* -- true if editor allows setting the selection at the
 	left end of the selection"""
 	return 0
+
+    def close_buffer(self, buff_name, save):
+        """Close a buffer.
+        
+        **INPUTS**
+
+        STR *buff_name* -- name of buffer to close
+
+        INT *save* -- *-1* -> don't save the buffer
+                            *0* -> query user if buffer needs saving
+                            *1* -> save without querying user
+
+        **OUTPUTS**
+        
+        *none* -- 
+
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+
+#        print '-- EdSim.close_buffer: called'
+        if self.bound_buffer_name == buff_name:
+            self.bound_buffer_name = None
+        self.only_buffer_name = None
+        del self.open_buffers[buff_name]
+        
+
+
+

@@ -98,11 +98,59 @@ def cleanup(clean_sr_voc=0):
 
 def init_simulator(symdict_pickle_fname=None,
                    disable_dlg_select_symbol_matches = None,
-                   window=None, exclusive=0, allResults=0):
+                   window=None, exclusive=0, allResults=0,
+                   reuse_mediator=0, on_app=None):
 
-#    print '-- mediator.init_simulator: window=%s, exclusive=%s, allResults=%s' % (window, exclusive, allResults)
+    """
+    Creates a global [MediatorObject] instance *the_mediator*, and configures it.
+
+    **INPUTS**
+
+    STR *symdict_pickle_fname=None* -- Name of the file containing the
+    persistent version of the symbols dictionnary.
+    
+    BOOL *disable_dlg_select_symbol_matches = None* -- If *true*,
+    disable the dialog for confirming new symbol matches with the
+    user.
+    
+    STR *window=None* -- Window handle of application associated with
+    the mediator. The mediator listens only when this window is
+    active. If *window=0*, then mediator is not associated with a
+    particular window and it will always listen for utterances.
+    
+    BOOL *exclusive=0* -- See [MediatorObject.exclusive] for details.
+    
+    BOOL *allResults=0* -- See [MediatorObject.allResults] for details.
+
+    [AppState] *on_app=None* -- [AppState] instance to use for the
+    mediator. If *None*, then use a new [EdSim] instance.
+
+    BOOL *reuse_mediator* -- If *true*, then reuse the existing
+    mediator (if any), instead of creating one from scratch (useful
+    when regression testing using an external editor instead of EdSim).
+
+    [AppState] *on_app* -- Attach this [AppState] to the meditor
+    instead of generating a new one from scratch (useful when
+    regression testing using an external editor instead of EdSim).
+
+    
+    **OUTPUT**
+
+    *none*
+
+    ..[AppState] file:///./AppState.AppState.html
+    ..[EdSim] file:///./EdSim.EdSim.html
+    ..[MediatorObject] file:///./MediatorObject.MediatorObject.html
+    ..[MediatorObject.allResults] file:///./MediatorObject.MediatorObject.html
+    ..[MediatorObject.exclusive] file:///./MediatorObject.MediatorObject.html
+    """
+
+#    print '-- mediator.init_simulator: window=%s, exclusive=%s, allResults=%s, reuse_mediator=%s' % (window, exclusive, allResults, reuse_mediator)
     
     global the_mediator
+
+    if on_app == None:
+        on_app = EdSim.EdSim()
     
     if window == None:
         window = console_win_handle
@@ -118,6 +166,7 @@ def init_simulator(symdict_pickle_fname=None,
             #
             # Remove symbols from NatSpeak's dictionary 
             #
+            pass
             the_mediator.interp.known_symbols.cleanup(resave=0)
 
         #
@@ -128,9 +177,8 @@ def init_simulator(symdict_pickle_fname=None,
         #
         if the_mediator:
             the_mediator.quit(save_speech_files=0, disconnect=0)            
-            
-            
-        the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()), window=window, exclusive=exclusive, allResults=allResults)
+        
+        the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=on_app), window=window, exclusive=exclusive, allResults=allResults)
 
         #
         # Read the symbol dictionary from file
@@ -159,15 +207,37 @@ def init_simulator(symdict_pickle_fname=None,
     sim_commands.command_space['testdata'] = \
         os.path.join(home, 'Data', 'TestData')
 
-def init_simulator_regression(symdict_pickle_fname=None, disable_dlg_select_symbol_matches = None):
+def init_simulator_regression(symdict_pickle_fname=None, disable_dlg_select_symbol_matches = None, on_app=None):
     
     """Initialises the simulator using a global exclusive grammar so that
     the user can continue to work in other applications using the keyboard
-    while the regression test is running"""
+    while the regression test is running.
+
+    Also, if there already exists a mediator, we reuse its [AppState], in
+    case this was an [AppState] connected to an external editor (don't want to
+    have the external editor reconnect after each test).
+
+    **INPUTS**
+
+    [AppState] *on_app* -- [AppState] to use for the regression
+    tests. If *None* and there already exists a simulator, reuse the
+    [AppState] from that simulator.
     
-    init_simulator(symdict_pickle_fname=symdict_pickle_fname, window=0,
-                   exclusive=1, allResults=0,
-                   disable_dlg_select_symbol_matches=disable_dlg_select_symbol_matches)                   
+    ..[AppState] file:///./AppState.AppState.html"""
+
+#    print '-- mediator.init_simulator_regression: on_app=%s' % on_app
+
+    if the_mediator and on_app == None:
+        on_app = the_mediator.interp.on_app
+    
+    init_simulator(on_app=on_app, symdict_pickle_fname=symdict_pickle_fname,
+                   window=0, exclusive=1, allResults=0, reuse_mediator=1,
+                   disable_dlg_select_symbol_matches=disable_dlg_select_symbol_matches)
+
+    #
+    # Make sure to reinitialise the external editor.
+    #
+    the_mediator.interp.on_app.init_for_test()
     
 
 def execute_command(cmd):

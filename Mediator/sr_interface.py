@@ -901,8 +901,8 @@ class CommandDictGrammar(DictGramBase):
 	DictGramBase.activate(self, window = self.window, exclusive = self.exclusive)
 	self.isActive = 1
 
-    def gotBegin(self, moduleInfo):
-#        print '-- CommandDictGrammar.gotBegin: self.window=%s, self.isActive=%s, self.interpreter.on_app.active_field()=%s, moduleInfo=%s' % (self.window, self.isActive, self.interpreter.on_app.active_field(), moduleInfo)
+    def gotBegin(self, moduleInfo):        
+#        print '-- CommandDictGrammar.gotBegin: self.window=%s, self.isActive=%s, self.exclusive=%s, self.allResults=%s, self.interpreter.on_app.active_field()=%s, moduleInfo=%s' % (self.window, self.isActive, self.exclusive, self.allResults, self.interpreter.on_app.active_field(), moduleInfo)
 	if self.window == 0:
 	    pass
 #            print '-- CommandDictGrammar.gotBegin: this is a global grammar. Just pass'
@@ -1009,6 +1009,7 @@ class CodeSelectGrammar(SelectGramBase):
 	self.isActive = 1
 
     def gotBegin(self, moduleInfo):
+#        print '-- CodeSelectGrammar.gotBegin: called, self=%s' % repr(self.__dict__)
 #        print '-- CodeSelectGrammar.gotBegin: called,self.interpreter.on_app=%s, self.interpreter.on_app.curr_buffer()=%s' % (self.interpreter.on_app, self.interpreter.on_app.curr_buffer())
 
 	vis_start, vis_end = self.interpreter.on_app.curr_buffer().get_visible()
@@ -1102,6 +1103,9 @@ class CodeSelectGrammar(SelectGramBase):
                         # to the candidate selection ranges.
                         #
                         region = resObj.getSelectInfo(self.gramObj, i)
+
+#                        print '-- CodeSelectGrammar.gotResultsObject: region=%s, self.vis_start=%s' % (repr(region), self.vis_start)
+                        
                         true_region = (region[0] + self.vis_start,
                           region[1] + self.vis_start)
                         self.ranges.append(true_region)
@@ -1115,8 +1119,7 @@ class CodeSelectGrammar(SelectGramBase):
                 # which is closest to the cursor
                 #
                 self.ranges.sort()
-                print ""
-                closest_range_index = self.interpreter.on_app.curr_buffer().closest_occurence_to_cursor(self.ranges, regexp=self.selection_spoken_form(resObj), direction=direction, where=where)           
+                closest_range_index = self.interpreter.on_app.curr_buffer().closest_occurence_to_cursor(self.ranges, regexp=self.selection_spoken_form(resObj), direction=direction, where=where)
 
                 #
                 # Mark selection and/or move cursor  to the appropriate end of
@@ -1124,7 +1127,6 @@ class CodeSelectGrammar(SelectGramBase):
                 #
                 if mark_selection:
                     actions_gen.ActionSelect(range=self.ranges[closest_range_index], cursor_at=where).log_execute(self.interpreter.on_app, None)
-#                self.interpreter.on_app.curr_buffer().set_selection(self.ranges[closest_range_index], cursor_at=where)
                 else:
                     if where > 0:
                         pos = self.ranges[closest_range_index][1]
@@ -1137,6 +1139,7 @@ class CodeSelectGrammar(SelectGramBase):
 # every change to the buffer.  Other editors will usually refresh
 # instantly and automatically, so their AppState/SourceBuff
 # implementations can simply ignore the refresh_if_necessary message.
+
                 self.interpreter.on_app.curr_buffer().refresh_if_necessary()
 
                 #
