@@ -742,6 +742,45 @@ class ActionInsertNewClause(Action):
         app.insert_indent(code_bef=self.code_bef, code_after=self.code_after)
 
 
+class ActionCompileSymbols(Action):
+    """Compiles symbols from a buffer.
+    
+    **INSTANCE ATTRIBUTES**
+        
+    STR *buff_name* -- name of the source buffer from which to compile symbols. If *None*, then
+    use the active buffer.
+        
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+
+    def __init__(self, buff_name=None, **args_super):
+        self.deep_construct(ActionCompileSymbols, \
+                            {'buff_name': buff_name}, \
+                                args_super, \
+                            {})
+                            
+    def doc(self):
+        return 'Compiles symbols from a buffer';
+    
+                            
+
+    def execute(self, app, cont):
+        """See [Action.execute] for details.
+        
+        .. [Action.execute] file:///./Action.Action.html#execute"""
+        
+        buffer = app.find_buff(self.buff_name)
+        manager = app.current_manager()
+        if manager:
+           interpreter = manager.interpreter()
+           interpreter.parse_symbols(buffer.contents(), buffer.language_name())
+
+
+
+    
+    
 
 class ActionSwitchTranslation(Action):
     """Turns translation on/off
@@ -863,3 +902,5 @@ gen_translation_off = \
 
 gen_translation_on = \
     ActionSwitchTranslation(1)
+
+    
