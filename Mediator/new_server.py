@@ -268,7 +268,7 @@ if __name__ == '__main__':
     'bypass', 0, 'p=', None])
     non_exclusive_opts = ['0']
     
-    sr_interface.connect()
+#    sr_interface.connect()
 
     #
     # Create a global grammar manager

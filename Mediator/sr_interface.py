@@ -28,7 +28,7 @@ import natlink
 from natlinkutils import *
 import actions_gen, CmdInterp
 from Object import Object
-from debug import trace
+from debug import trace, trace_call_stack
 
 import SpokenUtterance
 
@@ -132,18 +132,18 @@ def connect(mic_state=None, mic_change_callback = None):
     global sr_is_connected, vc_user_name, vc_base_model, vc_base_topic
     global sr_mic_change_callback
     
-#    trace('sr_interface.connect', 'mic_state=%s, sr_is_connected=%s' % (mic_state, sr_is_connected))
     
     if not sr_is_connected:
+        trace('sr_interface.connect', 'mic_state=%s, sr_is_connected=%s' % (mic_state, sr_is_connected))
+        trace_call_stack('sr_interface.connect')
 # 1 means use threads -- needed for GUI apps
         natlink.natConnect(1)
         sr_is_connected = 1            
-        openUser(vc_user_name, 0, vc_base_model, vc_base_topic)
+        openUser(vc_user_name)
     if mic_state:
         natlink.setMicState(mic_state)
     if mic_change_callback:
-        sr_mic_change_callback = mic_change_callback
-        natlink.setChangeCallback(change_callback)
+        set_change_callback(mic_change_callback)
 
 
 def disconnect():
@@ -167,10 +167,10 @@ def disconnect():
     sr_is_connected = 0        
 
 
-def change_callback(*args):
-    if args[0] == 'mic' and sr_mic_change_callback:
-        sr_mic_change_callback(args[1])
-
+def set_change_callback(mic_change_callback):
+    global sr_mic_change_callback
+    sr_mic_change_callback = mic_change_callback
+    natlink.setChangeCallback(mic_change_callback)
 
 def openUser(user_name, create_if_not_exist=0, create_using_model=None, create_using_topic=None):
 

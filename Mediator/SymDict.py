@@ -597,25 +597,32 @@ class SymDict(PickledObject.PickledObject):
 
         return self._cached_symbols_as_one_string
 
-    def print_symbols(self):
+    def print_symbols(self, symbols = None):
         """Print the content of the symbols dictionary.
         
         **INPUTS**
-        
-        *none* -- 
-        
+
+        *[STR] symbols* -- list of symbols to print, or None to print
+        the whole dictionary
         
         **OUTPUTS**
         
         *none* -- 
         """
-        sorted_symbols = self.symbol_info.keys()
-        sorted_symbols.sort()        
-        for a_symbol in sorted_symbols:
-            a_symbol_info = self.symbol_info[a_symbol]
-            print '%s: %s' % (a_symbol, str(a_symbol_info.spoken_forms))
+        if symbols:
+            the_symbols = symbols
+        else:
+            the_symbols = self.symbol_info.keys()
+            the_symbols.sort()        
+        for a_symbol in the_symbols:
+            try:
+                a_symbol_info = self.symbol_info[a_symbol]
+                print '%s: %s' % (a_symbol, str(a_symbol_info.spoken_forms))
+            except KeyError:
+                print '%s: undefined' % a_symbol
 
-        print '_cached_symbols_as_one_string is:\n   %s' % self._cached_symbols_as_one_string
+        if symbols is None:
+            print '_cached_symbols_as_one_string is:\n   %s' % self._cached_symbols_as_one_string
 
     def print_abbreviations(self, show_unresolved=0):
         """Prints the known and unresolved abbreviations."""
@@ -849,6 +856,7 @@ class SymDict(PickledObject.PickledObject):
             
         if not self.symbol_info.has_key(symbol):
             
+            trace('SymDict.add_symbol', 'new symbol=%s' % symbol)
 #            print '-- SymDict.add_symbol: this is a new symbol'
 
             #
@@ -877,6 +885,8 @@ class SymDict(PickledObject.PickledObject):
                 if not a_spoken_form in self.symbol_info[symbol].spoken_forms:
                     self.symbol_info[symbol].spoken_forms = self.symbol_info[symbol].spoken_forms + [a_spoken_form]
 
+            trace('SymDict.add_symbol', 'new symbol spoken forms = %s' %
+                self.symbol_info[symbol].spoken_forms)
             if resave: self.pickle()
             
 
@@ -1420,7 +1430,8 @@ class SymDict(PickledObject.PickledObject):
 
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
 
-#        print '-- SymDict.accept_symbol_match: the_match.__dict__=%s' % (the_match.__dict__)
+        trace('SymDict.accept_symbol_match', 
+            'the_match.__dict__=%s' % (the_match.__dict__))
 #        print '-- SymDict.accept_symbol_match: the_match.words=%s, the_match.word_matches=%s' % (the_match.words, the_match.word_matches)        
         
         #

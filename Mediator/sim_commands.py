@@ -415,10 +415,10 @@ def provoke(echo_cmd=0):
     if echo_cmd: echo_command('provoke')
     print slidjf
 
-def print_symbols(echo_cmd=0):
+def print_symbols(symbols = None, echo_cmd=0):
     global the_mediator
     if echo_cmd: echo_command('print_symbols')
-    the_mediator.interp.known_symbols.print_symbols()
+    the_mediator.interp.known_symbols.print_symbols(symbols = symbols)
 
 def print_abbreviations(show_unresolved=1, echo_cmd=0):
     global the_mediator
@@ -795,9 +795,9 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         if echo_cmd: self.echo_command('provoke')
         print slidjf
 
-    def print_symbols(self, echo_cmd=0):
+    def print_symbols(self, symbols = None, echo_cmd=0):
         if echo_cmd: self.echo_command('print_symbols')
-        self.interp.known_symbols.print_symbols()
+        self.interp.known_symbols.print_symbols(symbols = symbols)
 
     def print_abbreviations(self, show_unresolved=1, echo_cmd=0):
         if echo_cmd: self.echo_command('print_abbreviations', show_unresolved)

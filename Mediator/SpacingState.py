@@ -63,16 +63,22 @@ end_sentence = 0x400 # as in '.\period'
 binary_operator = 0x1000
 # usually like normal spacing (space before and after), but configurable
 
-unary_or_binary = 0x2000
+unary_operator = 0x2000
+# usually like no space after, but configurable
+
+unary_or_binary = 0x4000
 # for operators like - (minus) which can be unary (if they follow an
 # operator, or binary (otherwise).  The spacing treatment of unary and
 # binary operators will be configured separately
 
-pre_or_postfix = 0x4000 
+pre_or_postfix = 0x8000 
 # for operators like ++ and -- which can be prefix or postfix.  If they
 # follow an identifier or ")", they are assumed to be postfix and will
 # have normal spacing after.  Otherwise, they will be assumed to prefix
 # and will behave like no_space_after
+
+comparison_operator = 0x10000
+# usually normal spacing, but configurable
 
 
 # common synonyms
@@ -81,6 +87,7 @@ like_comma = no_space_before
 like_backslash = no_space_before | no_space_after
 like_slash = no_space_before | no_space_after
 like_colon = no_space_before # user may want to alter this
+like_bang = unary_operator
 
 like_dot = no_space_before | no_space_after
 like_point = no_space_after | letters_and_digits

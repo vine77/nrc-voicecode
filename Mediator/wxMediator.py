@@ -65,6 +65,7 @@ debug.config_traces(status="on",
 #                        'wxMediator': 1,
 #                        'send_mess': 1,
 #                        'get_mess': 1,
+#                        'sr_interface.connect': 1,
 #                        'RSMInfrastructure': 1,
 #                      'RecogStartMgr': 1,
 #                      'pop_breadcrumb': 1,
@@ -79,8 +80,9 @@ debug.config_traces(status="on",
 #                      'init_simulator_regression': 1,
 #                      'WinGramMgr': 1,
 #                      'CmdInterp.interpret_NL_cmd': 1,
-#                      'CmdInterp.interpret_NL_cmd': 1,
 #                      'CmdInterp.match_untranslated_text': 1,
+#                      'SymDict.accept_symbol_match': 1, 
+#                      'SymDict.add_symbol': 1, 
 #                      'CmdInterp.dlg_select_symbol_match': 1,
 #                      'CmdInterp.is_spoken_LSA': 1,
 #                      'CmdInterp.is_spoken_CSC': 1,
@@ -753,7 +755,7 @@ if __name__ == '__main__':
     opts, args = util.gopt(['h', None, 't=', None, 'bypass', 0,
         'p=', None])
     
-    sr_interface.connect()
+#    sr_interface.connect()
 
     #
     # Create a global grammar manager

@@ -1225,6 +1225,7 @@ class CmdInterp(OwnerObject):
             #
             # Remove leading, trailing and double blanks from the spoken form
             #
+            orig_spoken = string.strip(a_spoken_form)
             a_spoken_form = sr_interface.clean_spoken_form(a_spoken_form)
 
             #
@@ -1250,7 +1251,7 @@ class CmdInterp(OwnerObject):
                 #
                 self.cmd_index[a_spoken_form] = [acmd]
                 if (self.add_sr_entries_for_LSAs_and_CSCs):
-                    sr_interface.addWord(a_spoken_form)
+                    sr_interface.addWord(orig_spoken)
 # we had some problems in regression testing because the individual
 # words in a spoken form were unknown, so now we add the individual
 # words in a multiple-word spoken form
@@ -1260,7 +1261,7 @@ class CmdInterp(OwnerObject):
 # this presumably makes Natspeak recognition of the CSC/LSA worse, 
 # so we may want to come up with an alternate solution in the future
                     
-                    all_words = string.split(a_spoken_form)
+                    all_words = string.split(orig_spoken)
                     if (len(all_words) > 1 and 
                         self.add_sr_entries_for_LSAs_and_CSCs):
                         for word in all_words:
@@ -1593,19 +1594,19 @@ class CmdInterp(OwnerObject):
         self.known_symbols.parse_symbols(contents, language_name,
             add_sr_entries = add_sr_entries)
 
-    def print_symbols(self):
+    def print_symbols(self, symbols = None):
         """Print the content of the symbols dictionary.
         
         **INPUTS**
         
-        *none* -- 
-        
+        *[STR] symbols* -- list of symbols to print, or None to print
+        the whole dictionary
         
         **OUTPUTS**
         
         *none* -- 
         """
-        self.known_symbols.print_symbols()
+        self.known_symbols.print_symbols(symbols = symbols)
 
     def print_abbreviations(self, show_unresolved=0):
         """Prints the known and unresolved abbreviations."""
