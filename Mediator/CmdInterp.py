@@ -2081,7 +2081,7 @@ class CmdInterp(OwnerObject):
         *[STR] user_supplied_spoken_forms* -- Spoken forms for the
          symbol which were supplied explicitly by the user. These
          forms are added even if they are not generated automaticly by
-         [update_spoken_forms]. This is useful in cases where the user
+         [get_spoken_forms]. This is useful in cases where the user
          has explicitly supplied spoken forms for a symbol that contains very
          short abbreviations (i.e. abbreviations that are rejected by
          [add_abbreviation]). In such cases, the spoken form wouldn't

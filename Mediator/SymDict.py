@@ -94,11 +94,24 @@ class SymbolInfo(Object):
     *none* -- 
     """
     
-    def __init__(self, spoken_forms=[], **attrs):
+    def __init__(self, spoken_forms = None, **attrs):
         self.deep_construct(SymbolInfo, \
-                            {'spoken_forms': spoken_forms}, \
+                            {'spoken_forms': []}, \
                             attrs, \
                             {})
+        if spoken_forms:
+            self.spoken_forms.extend(spoken_forms)
+            
+    def add_spoken_forms(self, spoken_forms):
+        for form in spoken_forms:
+            if not (form in self.spoken_forms):
+                self.spoken_forms.append(form)
+            
+    def remove_spoken_form(self, spoken_form):
+        self.spoken_forms.remove(spoken_form)
+
+
+
 
 # NOTE: This class is no longer used by SymDict, but must be kept
 # because it is used by the persistent storage of SymDict before 
@@ -368,6 +381,11 @@ class SymDict(OwnerObject):
 
     *FLOAT match_threshold* -- minimum confidence level required of an
     approximate symbol match
+
+    *FCT BOOL(STR, STR) word_exists* -- alternative function to use to
+    check whether a word exists, or None to use self.std_word_exists.
+    Used only in regression testing, to standardize behavior across
+    different versions of the speech engine vocabulary
    
     CLASS ATTRIBUTES**
 
@@ -403,7 +421,7 @@ class SymDict(OwnerObject):
                          'min_chars_run_together': 4,
                          'min_non_consec_chars_for_approx_match': 3,
                          'max_auto_acronym': 3,
-                         'word_exists': sr_interface.getWordInfo,
+                         'word_exists': None,
                          'common_hyphenated': {'un': 0 , 'co': 0, 'non': 0, 
                              're': 0},
                          'weak_pairs': {'n': ['t']}
@@ -706,11 +724,58 @@ class SymDict(OwnerObject):
         if self.unresolved_abbreviations.has_key(abbreviation):
             trace('SymDict._add_corresponding_expansion', 
                     '%s was previously unresolved' % abbreviation)
-            for a_symbol in self.unresolved_abbreviations[abbreviation].keys():
+            if abbreviation[ - 1] == 's':
+                single = abbreviation[:  - 1]
+            else:
+                single = abbreviation
+            symbols = self.unresolved_abbreviations[abbreviation].keys()
+            if not expansion.startswith(single):
+                # if the abbreviation was a prefix of the expansion,
+                # then it was likely to be pronouncable, so we leave
+                # the spoken forms containing that abbreviation
+                self._remove_spoken_forms(symbols, abbreviation)
+                
+            for a_symbol in symbols:
                 trace('SymDict._add_corresponding_expansion', 
                     'updating forms for %s' % a_symbol)
-                self.update_spoken_forms(a_symbol)
+                spoken_forms = self.get_spoken_forms(a_symbol)
+                self.add_symbol(a_symbol, spoken_forms)
+
             del self.unresolved_abbreviations[abbreviation]
+                
+    def _remove_spoken_forms(self, symbols, abbreviation):
+        """
+        Remove the spoken forms containing a given abbreviation from a
+        list of symbols
+
+        ** INPUTS **
+
+        *[STR] symbols* -- the written forms of the symbols
+
+        *STR abbreviation* -- the abbreviation indicating which spoken
+        forms should be removed
+        """
+        for a_symbol in symbols:
+            symbol_info = self.symbol_info[a_symbol]
+            spoken_forms = symbol_info.spoken_forms
+            for spoken_form in spoken_forms:
+                phrase = self.spoken_to_phrase(spoken_form)
+                if abbreviation in phrase:
+                    # if this spoken form is affected, then
+                    # find all symbols associated with this phrase
+                    # and remove the pertinant one
+                    phrase_symbols = \
+                        self.spoken_form_info.complete_match(phrase)
+                    phrase_symbols.remove(a_symbol)
+                    # if that leaves an empty phrase match, remove it
+                    if not phrase_symbols:
+                        self.spoken_form_info.remove_phrase(phrase)
+                    # remove the spoken form from the symbol_info
+                    # entry as well
+                    symbol_info.remove_spoken_form(spoken_form)
+                    # and the vocabulary entry
+                    self.remove_vocabulary_entry(a_symbol, spoken_form)
+
 
     def prepend_abbreviations(self, word, abbreviations):
         """prepends one or more abbreviations to the list of abbreviations 
@@ -1589,8 +1654,8 @@ class SymDict(OwnerObject):
 
         *[STR] user_supplied_spoken_forms* -- Spoken forms for the
          symbol which were supplied explicitly by the user. These
-         forms are added even if they are not generated automaticly by
-         [update_spoken_forms]. This is useful in cases where the user
+         forms are added even if they are not generated automatically by
+         [get_spoken_forms]. This is useful in cases where the user
          has explicitly supplied spoken forms for a symbol that contains very
          short abbreviations (i.e. abbreviations that are rejected by
          [add_abbreviation]). In such cases, the spoken form wouldn't
@@ -1607,12 +1672,19 @@ class SymDict(OwnerObject):
         
         *none* -- 
 
-        .. [update_spoken_forms] file:///./SymDict.SymDict.html#update_spoken_forms
+        .. [get_spoken_forms] file:///./SymDict.SymDict.html#get_spoken_forms
         .. [add_abbreviation] file:///./SymDict.SymDict.html#add_abbreviation"""
         
 #        print '-- SymDict.add_symbol: symbol=%s' % symbol
-            
+
+        spoken_forms = user_supplied_spoken_forms[:]
+        
         if not self.symbol_info.has_key(symbol):
+
+            #
+            # Add an entry to the symbol dictionary
+            #
+            self.symbol_info[symbol] = SymbolInfo(spoken_forms)
             
             self.tentative_symbols[symbol] = tentative
 
@@ -1634,73 +1706,43 @@ class SymDict(OwnerObject):
                     self._cached_symbols_as_one_string[letter] + \
                     new_string_entry
 
-            #
-            # Add an entry to the symbol dictionary
-            #
-            self.symbol_info[symbol] = SymbolInfo()
-            
+            generated_forms = self.get_spoken_forms(symbol)
+            spoken_forms.extend(generated_forms)
+
+            self.symbol_info[symbol].add_spoken_forms(generated_forms)
+
+        else:
             #
             # Add user supplied spoken forms
             #
-            for a_spoken_form in user_supplied_spoken_forms:
-                if not a_spoken_form in self.symbol_info[symbol].spoken_forms:
-                    self.symbol_info[symbol].spoken_forms.append(a_spoken_form)            
-                
-            #
-            # Update the symbol's spoken forms.
-            #
-            self.update_spoken_forms(symbol, user_supplied_spoken_forms=user_supplied_spoken_forms,
-                                             add_sr_entries=add_sr_entries)
+            self.symbol_info[symbol].add_spoken_forms(spoken_forms)
             
+        if add_sr_entries:
+            for form in spoken_forms:
+                added = self.add_vocabulary_entry(symbol, form)
+                # for user-specified forms, and acronyms, we want to use the
+                # capitalization and punctuation given for the vocabulary entry
 
-            trace('SymDict.add_symbol', 'new symbol spoken forms = %s' %
-                self.symbol_info[symbol].spoken_forms)
-            
+        self._update_spoken_form_info(symbol, spoken_forms)
+           
 
-    def update_spoken_forms(self, symbol, user_supplied_spoken_forms=[], 
-                            add_sr_entries=1):
-        """Updates the spoken forms of a native symbol.
+    def _update_spoken_form_info(self, symbol, spoken_forms):
+        """
+        Add new spoken forms to the spoken_form_info data structure
 
-        **INPUTS**
-        
-        *STR* symbol -- Native symbol for which we want to update the
-         spoken forms.
+        NOTE: this method does not add spoken_forms to the symbol info
+        object
 
-        *BOOL* add_sr_entries = 1 -- If true, add written\spoken
-         symbols to the SR vocabulary.
-         
-        *[STR]* user_supplied_spoken_forms -- list of spoken forms for the symbol
-        which were specified explicitly by the user (NOTE: they may or may not be valid matches
-        for the written form)
+        ** INPUTS **
 
-        **OUTPUTS**
-        
-        *none* -- 
+        *STR symbol* -- the written form of the symbol
+
+        *[STR] spoken_forms* -- the list of spoken_forms to add
         """
 
-        global vocabulary_symbols_with_written_form
-
-        trace('SymDict.update_spoken_forms', 'symbol="%s"' % symbol)
-        
-        #
-        # Get the symbol's spoken forms
-        #
-
-        forms_this_symbol = self.get_spoken_forms(symbol)
-        for explicit_spoken_form in user_supplied_spoken_forms:
-           if not explicit_spoken_form in forms_this_symbol:
-              forms_this_symbol.append(explicit_spoken_form)
-        trace('SymDict.update_spoken_forms', 'spoken forms originally are:"%s"\nforms_this_symbol=%s' % (self.symbol_info[symbol].spoken_forms, forms_this_symbol))
-        self.symbol_info[symbol].spoken_forms = forms_this_symbol
-           
-        #
-        # Store information about the symbol and its spoken forms
-        #
-        for a_form in forms_this_symbol:
-            added = self.add_vocabulary_entry(symbol, a_form)
-            # for user-specified forms, and acronyms, we want to use the
-            # capitalization and punctuation given for the vocabulary entry
-            # so we need to convert before adding to the lookup Trie 
+        for a_form in spoken_forms:
+            # convert spoken form to searchable form
+            # before adding to the lookup Trie 
             phrase = self.spoken_to_phrase(a_form)
             symbol_list = self.spoken_form_info.complete_match(phrase)
             if symbol_list is None:
@@ -1708,7 +1750,6 @@ class SymDict(OwnerObject):
             elif symbol not in symbol_list:
                 symbol_list.append(symbol)
             self.spoken_form_info.add_phrase(phrase, symbol_list)
-
 
     def spoken_to_phrase(self, spoken_form):
         """converts a spoken form as added to the speech engine's
@@ -1953,7 +1994,25 @@ class SymDict(OwnerObject):
 
 #        print '-- SymDict.expand_word: returning expansions=%s' % expansions
         expansions.sort()
-        return expansions 
+        return expansions
+
+    def std_word_exists(self, spoken_form, written_form = None):
+        """
+        Checks whether the given word exists in the speech-recognition
+        engine
+
+        ** INPUTS **
+
+        *STR spoken_form* -- the spoken_form of the word
+
+        *STR written_form* -- the written_form of the word
+
+        ** OUTPUTS **
+
+        *BOOL* -- true if the word exists
+        """
+        entry = sr_interface.vocabulary_entry(spoken_form, written_form)
+        return not (sr_interface.getWordInfo(entry) is None)
 
     def check_word(self, word, symbol):
         """Finds pronunciation expansions of a word, based on whether or
@@ -1970,7 +2029,11 @@ class SymDict(OwnerObject):
 
         *[STR] expansions * -- list of possible expansions of the word.
         """
-        if not ((self.word_exists)(word) is None):
+        word_exists = self.word_exists
+        if not word_exists:
+            word_exists = self.std_word_exists
+
+        if word_exists(word):
             expansions = [word]
             if len(word) == 1 and word[0].isalpha():
                 acronym = string.lower(word)
@@ -1981,16 +2044,16 @@ class SymDict(OwnerObject):
         hyphenated_pron = \
             sr_interface.vocabulary_entry(word, hyphenated)
         if self.common_hyphenated.has_key(word) or \
-            not ((self.word_exists)(hyphenated_pron) is None):
+            word_exists(word, hyphenated):
             return [hyphenated]
         if len(word) > 1:
             capped =  word.capitalize()
 # if capitalized form exists, assume that the word is pronouncable (even
 # without the capitalization)
-            if not ((self.word_exists)(capped) is None):
+            if word_exists(capped):
                 return [word]
         upper = word.upper()
-        if not ((self.word_exists)(upper) is None):
+        if word_exists(upper):
 # if word exists only in all-caps form, assume that the effective
 # pronunciation is as an acronym, which may not be pronouncable if not
 # all caps
@@ -2847,9 +2910,10 @@ class SymDict(OwnerObject):
                     print 'WARNING: abbreviation \'%s\' not added (length < %s)' % (abbrev, min_abbreviation_len)            
 
         #
-        # Add the word to the symbol dictionary its spoken forms if its
-        # already there
+        # Add the word to the symbol dictionary, or add its spoken
+        # forms if it is already there
         #
+        
         self.add_symbol(the_match.native_symbol,
         user_supplied_spoken_forms=[the_match.pseudo_symbol])
 

@@ -54,7 +54,7 @@ class SourceBuffState(SourceBuffCookie):
                             'buff_name': buff_name,
                             'selection_range': selection,
                             'cursor_at_end': cursor_at,
-                             'last_search': logged_search},
+                             'logged_search': last_search},
                             attrs
                             )
 
