@@ -758,17 +758,13 @@ class SourceBuff(OwnerObject):
                 'got selection ... range=%s' % repr(range))
         range = self.make_valid_range(range)          
 
-        trace('SourceBuff.insert_indent', '** inserting code_bef')    
         indent_from = range[0]
         self.insert(code_bef, range)
     
-        trace('SourceBuff.insert_indent', '** indenting code_bef')        
         self.indent((indent_from, self.cur_pos()))        
         final_cur_pos = self.cur_pos()
         if code_after != '':
-            trace('SourceBuff.insert_indent', '** inserting code_after')
             self.insert(code_after, (self.cur_pos(), self.cur_pos()))
-            trace('SourceBuff.insert_indent', '** indenting code_after')
             self.indent((final_cur_pos, self.cur_pos()))
             self.goto(final_cur_pos)
 
