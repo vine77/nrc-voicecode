@@ -1619,10 +1619,17 @@ class RSMInfrastructure(RecogStartMgr):
 	*none*
 	"""
 # ensure that AppState is synchronized with the editor
-        app.synchronize_with_app()
+#        app.synchronize_with_app()
+#        self.activate_instance_window(instance_name, window)
+#        buff_name = app.curr_buffer_name()
+#        dictation_allowed = app.recog_begin(window)
+
+# try this order to see if it fixes problem with Emacs with multiple
+# windows
         self.activate_instance_window(instance_name, window)
-        buff_name = app.curr_buffer_name()
         dictation_allowed = app.recog_begin(window)
+        app.synchronize_with_app()
+        buff_name = app.curr_buffer_name()
         if app.active_field() == None and dictation_allowed:
             self.grammars[instance_name].activate(buff_name, window)
         else:

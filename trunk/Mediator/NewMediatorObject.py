@@ -301,6 +301,8 @@ class NewMediatorObject(Object.OwnerObject):
             self.the_console.set_gram_factory(grammar_factory)
         GM_factory = GramMgr.WinGramMgrFactory(grammar_factory, 
             global_grammars = 0, correction = 'basic')
+#        res_mgr_factory = \
+#            ResMgr.ResMgrStdFactory()
         res_mgr_factory = \
             ResMgr.ResMgrBasicFactory(correct_evt = self.correct_evt,
             correct_recent_evt = self.correct_recent_evt)
