@@ -159,6 +159,62 @@ def gopt(opt_defs, cmd=sys.argv[1:]):
 #    print "-- gopt: opt_dict=%s, args=%s" % (str(opt_dict)    , str(args))        
     return opt_dict, args
 
+###############################################################################
+# list processing
+###############################################################################
+
+def remove_occurences_from_list(item, list, max_occurs=None):
+   print "Removing item %s from list %s, with a max number of occurences of %s" % \
+         (item, list, max_occurs)   
+   num_found = 0
+   new_list = []
+   ii = 0
+   for ii in range(len(list)):
+      if list[ii] == item:
+         num_found = num_found + 1
+         if max_occurs != None and num_found >= max_occurs:
+            break
+      else:
+         new_list.append(list[ii])
+      
+   ii_rest = ii + 1   
+   if ii_rest < len(list):
+      new_list = new_list + list[ii_rest:]
+   print "Returning %s" % repr(new_list)   
+      
+   return new_list
+
+#TODO: Turn these into a pyUnit test case.      
+#if __name__ == '__main__':      
+#   list = ['a', 'b', 'c', 'd', 'c', 'e']
+#   print "Remove all occurences"
+#   remove_occurences_from_list('a', list)
+##   remove_occurences_from_list('b', list)   
+#   remove_occurences_from_list('c', list)
+#   remove_occurences_from_list('d', list)   
+#   remove_occurences_from_list('e', list)      
+#   
+#   print "\nRemove only one occurence"
+#   remove_occurences_from_list('a', list, 1)
+#   remove_occurences_from_list('b', list, 1)   
+#   remove_occurences_from_list('c', list, 1)
+#   remove_occurences_from_list('d', list, 1)   
+#   remove_occurences_from_list('e', list, 1)  
+#
+#   list = ('a')
+#   print "\nRemove only one occurence"
+#   remove_occurences_from_list('a', list)
+#   remove_occurences_from_list('b', list)   
+#
+#   list = ('a')
+#   print "\nRemove only one occurence"
+#   remove_occurences_from_list('a', list, 1)
+#   remove_occurences_from_list('b', list, 1)   
+#
+#   list = ()
+#   print "\nRemove only one occurence"
+#   remove_occurences_from_list('a', list)
+#   remove_occurences_from_list('a', list, 1)   
 
 ###############################################################################
 # file system
@@ -229,7 +285,9 @@ def stdin_read_from_string(string):
 
     return old_stdin
 
-
+###########################################################################
+# Identifying instances of basic types
+###########################################################################
 
 def islist(instance):
     """Returns true iif *instance* is a list."""

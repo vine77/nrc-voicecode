@@ -1201,6 +1201,7 @@ class RSMInfrastructure(RecogStartMgr):
 
         *none*
         """
+        debug.trace('RSMInfrastructure.correct_recent_synchronous', '** invoked')
         if self.known_instance(instance):
             self.results[instance].correct_recent_synchronous()
 
@@ -1368,6 +1369,7 @@ class RSMInfrastructure(RecogStartMgr):
         with the oldest first, or None if no utterances could be 
         reinterpreted
         """
+        debug.trace('RSMInfrastructure.reinterpret_recent', '** invoked')
         try:
             return self.results[instance_name].reinterpret_recent(changed)
         except KeyError:

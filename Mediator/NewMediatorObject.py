@@ -1595,6 +1595,113 @@ class NewMediatorObject(Object.OwnerObject):
         reinterpreted
         """
         return self.editors.reinterpret_recent(instance_name, changed)
+
+
+    def can_correct_that_far_back(self, instance_name, utters_to_correct):
+        """
+        Indicates whether we can correct all the utterances in a list.
+        
+        **INPUTS**
+
+        *STR instance_name* -- the name of the editor for which corrections are 
+        being done.
+
+        *INT utters_to_correct* -- Relative indices (i.e. offset from the 
+        end of the recent utterances list) of the utterances that need correction.
+
+        **OUTPUTS**
+
+        *BOOL can_correct* -- True iif we can correct all the utterances in 
+        *utters_to_correct*.
+        """
+        debug.trace('NewMediatorObject.can_correct_that_far_back', 'utters_to_correct=%s' % utters_to_correct)
+        n = self.stored_utterances(instance_name)
+        recent = self.recent_dictation(instance_name)
+        n_recent = 0
+        if recent != None:
+            n_recent = len(recent)
+
+        earliest = max(utters_to_correct)
+        debug.trace('NewMediatorObject.can_correct_that_far_back', '** n=%s, n_recent=%s, earliest=%s' % (n, n_recent, earliest))
+        if n < earliest:
+            print "\ncan't correct error %d utterances ago" % earliest
+            print "because stored_utterances only goes back %d\n" % n
+            sys.stdout.flush()
+            debug.trace('NewMediatorObject.can_correct_that_far_back', '** returning 0')            
+            return 0
+        if n_recent < earliest:
+            print "\ncan't correct error %d utterances ago" % earliest
+            print "because recent_dictation only goes back %d\n" % n_recent
+            sys.stdout.flush()
+            debug.trace('NewMediatorObject.can_correct_that_far_back', '** returning 0')                        
+            return 0
+        okay = 1
+        for i in utters_to_correct:
+            if not self.can_reinterpret(instance_name, i):
+                print "\ndon't expect to be able to correct error %d utterances ago" % i
+                print "because can_reinterpret returned false, but we'll try anyway\n" 
+                sys.stdout.flush()
+            if not okay:
+                debug.trace('NewMediatorObject.can_correct_that_far_back', '** returning 0')                        
+                return 0
+                
+        return 1
+
+    def correct_recent_symbols(self, instance_name, corrections):
+        """
+        **INPUTS**
+
+        *STR instance_name* -- the name of the editor for which corrections are 
+        being done.
+
+        *{INT: (STR, STR, STR)}* -- Description of the symbol corrections to be made.
+        The INT key is the index of the utterance where the correction should be made.
+        The value is a 3ple of strings, specifying: 
+           - the spoken form of the symbol to be corrected
+           - its bad written form
+           - its correct written form
+
+        **OUTPUTS**
+
+        *None*
+        """
+        debug.trace('NewMediatorObject.correct_recent_symbols', '** invoked')
+        if self.can_correct_that_far_back(instance_name, corrections.keys()):
+           debug.trace('NewMediatorObject.correct_recent_symbols', '** can correct')        
+           for utter_rel_index in corrections.keys():
+              debug.trace('NewMediatorObject.correct_recent_symbols', '** utter_rel_index=%s' % utter_rel_index)
+              spoken_form_used, bad_written, correct_written  \
+                 = corrections[utter_rel_index]
+              self.correct_symbol(spoken_form_used, bad_written, correct_written)
+           self.reinterpret_recent(instance_name, corrections.keys())
+              
+    def correct_symbol(self, spoken_form, bad_written_form, correct_written_form):
+        """Correct the written form of a symbol.
+
+        **INPUTS**
+        
+        *STR* spoken_form -- Spoken form of the symbol.
+
+        *STR bad_written_form* -- written form that was matched incorrectly to
+        *spoken_form*.
+        
+        *STR correct_written_form* -- written form that SHOULLD have been used instead
+        for *spoken_form*.
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        
+        **SIDE EFFECTS**
+        
+        If *bad_written_form* is a new symbol that was created tentatively on account
+        of *spoken_form* beind said, then this method will remove *bad_written_form*
+        from the dictionnary altogether. Otherwise, it will simply change the 
+        priority of *bad_written_form* and *correct_written_form* for
+        *spoken_form*.        
+        """
+        self.interp.correct_symbol(spoken_form, bad_written_form, correct_written_form)
+            
    
     def can_reinterpret(self, instance_name, n):
         """can we safely reinterpret the nth most recent utterance
