@@ -1001,7 +1001,8 @@ class SB_ServiceFullState(SB_ServiceState):
                         % (first_lines, last_lines))
         cookie = SourceBuffState.SourceBuffState(buff_name = self.buff.name(), 
             contents = self.buff.contents(), 
-            selection = selection, cursor_at = cursor_at)
+            selection = selection, cursor_at = cursor_at,
+            last_search = self.buff.last_search)
         return cookie
 
     def restore_state(self, cookie):
@@ -1048,6 +1049,7 @@ class SB_ServiceFullState(SB_ServiceState):
         self.buff.set_selection(cookie.get_selection(), cursor_at =
             cookie.cursor_at())
         self.buff.print_buff_if_necessary()
+        self.buff.last_search = cookie.last_search()
         debug.trace('SB_ServiceFullState.restore_state', '*** returning 1')        
         return 1
       

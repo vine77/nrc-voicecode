@@ -54,7 +54,8 @@ py_new_statement_above = \
 
 py_class_definition = \
     ActionInsert(code_bef='class ', code_after=':\n\t',
-                 docstring="""Inserts template code for a Python class""")
+                 docstring="""Inserts template code for a Python class""",
+                 expect = "class")
 
 class ActionPyInsertInBody(Action):
     """Inserts a new line at the start of the block of the previous or 
@@ -92,7 +93,8 @@ py_class_body = \
 
 py_method_declaration = \
     ActionInsert(code_bef='def ', code_after='(self):\n\t',
-                 docstring="""Types template code for a method""")
+                 docstring="""Types template code for a method""",
+                 expect = "method")
 
 py_constructor_definition = \
     ActionInsert(code_bef='def __init__(self', code_after='):\n\t',
@@ -101,7 +103,8 @@ py_constructor_definition = \
 
 py_function_declaration = \
     ActionInsert(code_bef='def ', code_after='():\n\t',
-                 docstring="""Types template code for a function""")
+                 docstring="""Types template code for a function""",
+                 expect = 'function')
 
 class ActionPyAddArgument(Action):
     """Positions the cursor to add arguments to a Python function call or
@@ -119,7 +122,7 @@ class ActionPyAddArgument(Action):
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
         
 
-        found = app.search_for('\\)\s*:{0,1}', where=-1)
+        found = app.search_for('\\)\s*:{0,1}', where=-1, unlogged = 1)
         if found:
             #
             # See if argument list was empty
@@ -169,7 +172,7 @@ class ActionPyCommentAbove(Action):
         
 
         was_on_line = app.line_num_of()
-        found = app.search_for('(^|\n)', direction=-1, where=-1)
+        found = app.search_for('(^|\n)', direction=-1, where=-1, unlogged = 1)
         app.insert('\n')
         if was_on_line == 1:
            app.goto(0)

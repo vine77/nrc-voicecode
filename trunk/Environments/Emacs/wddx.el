@@ -263,7 +263,7 @@
 ;;; Some XML utilities which are not in xml.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun xml-reverse-substitute-special (string)
+(defun old-xml-reverse-substitute-special (string)
 
   "Return STRING, after subsituting special XML sequences (opposite
    direction from function xml-substitute-special, e.g. \"<\" -> \"&lt;\")."
@@ -292,6 +292,69 @@
     (setq string (replace-match "&quot;" t nil string)))
   string
 )
+
+(defun my-suball (original regex replacement)
+  "return a new string with all matches of regex replaced with
+  replacement"
+  (save-match-data
+    (let ((match-from-pos 0) (new-string ""))
+      (while (string-match regex original match-from-pos)
+        (progn
+          (setq new-string 
+               (concat new-string 
+                       (substring original match-from-pos (match-beginning 0))
+                       replacement
+               )
+          )
+          (setq match-from-pos (match-end 0))
+        )
+      )
+     (concat new-string (substring original match-from-pos))
+     )
+  )
+)
+
+(defun my-alt-suball (original regex replacement)
+  "return a new string with all matches of regex replaced with
+  replacement"
+;  oops this is bad: split-string doesn't include empty strings for
+;  multiple consecutive matches, or matches at the start and end of the
+; string
+  (save-match-data
+    (mapconcat 'identity (split-string original regex) replacement)
+  )
+)
+
+(defun my-xml-reverse-substitute-special (string)
+
+  "Return STRING, after subsituting special XML sequences (opposite
+   direction from function xml-substitute-special, e.g. \"<\" -> \"&lt;\")."
+
+  (let ((new-string nil))
+    (setq new-string (my-suball string "&" "&amp;"))
+    (setq new-string (my-suball new-string "<" "&lt;"))
+    (setq new-string (my-suball new-string ">" "&gt;"))
+    (setq new-string (my-suball new-string "'" "&apos;"))
+    (setq new-string (my-suball new-string "\"" "&quot;"))
+    new-string
+  )
+)
+
+(defun xml-reverse-substitute-special (string)
+
+  "Return STRING, after subsituting special XML sequences (opposite
+   direction from function xml-substitute-special, e.g. \"<\" -> \"&lt;\")."
+
+  (let ((new-string nil))
+    (setq new-string (replace-regexp-in-string "&" "&amp;" string))
+    (setq new-string (replace-regexp-in-string "<" "&lt;" new-string))
+    (setq new-string (replace-regexp-in-string ">" "&gt;" new-string))
+    (setq new-string (replace-regexp-in-string "'" "&apos;" new-string))
+    (setq new-string (replace-regexp-in-string "\"" "&quot;" new-string))
+    new-string
+  )
+)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; WDDX encodes Python None value as an empty string. Use these functions to
