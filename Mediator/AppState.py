@@ -455,11 +455,20 @@ class AppState(OwnerObject):
      typed as dictated text, except for commands that turn the
      translation back on (NOT IMPLEMENTED FOR NOW).
 
-     *BOOL* print_buff_when_changed=0 -- If true, then print the content
-     of the current buffer whenever it changes (used mostly for regression
-     testing external editor).
+    *BOOL* print_buff_when_changed=0 -- If true, then print the content
+    of the current buffer whenever it changes (used mostly for regression
+    testing external editor).
 
-    STR *bound_buffer_name=None* -- Name of the buffer that VoiceCode
+    *AppMgr* manager -- the AppMgr object which owns this AppState.
+    Certain callback methods (close_app_cbk, new_buffer_cbk) will notify 
+    the manager.  If we are using the old mediator infrastructure, manager 
+    may be None.  Therefore, AppState must check whether manager == None
+    before sending such notifications.
+
+    *STR* instance_name -- the name of this editor instance, assigned by
+    AppMgr, and used to identify the editor in callbacks to the manager.
+
+    *STR* bound_buffer_name=None -- Name of the buffer that VoiceCode
     is currently bound to operate on. If *None*, use editor's active
     buffer. See [curr_buffer_name] method for a description of buffer
     binding.
@@ -491,11 +500,14 @@ class AppState(OwnerObject):
 	raise AttributeError(name)
     
     def __init__(self, app_name=None, translation_is_off=0,
-                 max_history=100, print_buff_when_changed=0, **attrs):
+                 max_history=100, print_buff_when_changed=0, 
+		 instance_name = None, manager = None, **attrs):
         
         self.init_attrs({'breadcrumbs': [], 'history': []})
         self.deep_construct(AppState, 
                             {'app_name': app_name,
+			     'manager': manager,
+			     'instance_name': instance_name,
                              'rec_utterances': [], 
                              'open_buffers': {},
 			     'bound_buffer_name': None,
@@ -504,7 +516,70 @@ class AppState(OwnerObject):
                              'print_buff_when_changed': print_buff_when_changed},
                             attrs)
 	self.add_owned('open_buffers')
+	self.name_parent('manager')
       
+    def name(self):
+	"""the unique name (assigned by the AppMgr) to this editor
+	instance
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*STR* -- the name of the instance, or None if the manager has
+	not given it one.
+	"""
+	return self.instance_name
+
+    def set_name(self, name):
+	"""assign a unique name to this editor instance.  
+	**NOTE:** only AppMgr should call this method.
+
+	**INPUTS**
+
+	*STR* name -- the name of the instance
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.instance_name = name
+
+    def current_manager(self):
+	"""returns a reference to the AppMgr which owns this AppState
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*AppMgr* -- the AppMgr object which owns this AppState, or None
+	if there is none.
+	"""
+	return self.manager
+
+    def set_manager(self, manager):
+	"""indicates the AppState's manager.  Normally called only by 
+	the manager.  Will only succeed if the old value of manager was
+	None
+
+	**INPUTS**
+	
+	*AppMgr* manager -- the AppMgr object which owns this AppState.
+
+	**OUTPUTS**
+
+	*BOOL* -- false if the manager was previously set, preventing
+	set_manager from changing its value.
+	"""
+	if self.current_manager():
+	    return 0
+	self.manager = manager
+	return 1
+
     def recog_begin(self, window_id):
         """Invoked at the beginning of a recognition event.
 
@@ -1197,18 +1272,50 @@ class AppState(OwnerObject):
 	"""
 	debug.virtual('AppState.open_buffers_from_app')
 
+    def new_window_cbk(self):
+	"""editor invokes this method to notify AppState that it has
+	opened a new window
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.current_manager() and self.name():
+	    self.current_manager().new_window(self.name())
+
+    def close_app_cbk(self):
+	"""editor invokes this method to notify AppState that it is
+	about to close
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	if self.current_manager() and self.name():
+	    self.current_manager().delete_instance(self.name())
 
     def close_buffer_cbk(self, buff_name):
+	"""editor invokes this method to notify AppState that a
+	buffer has been closed
+
+	**INPUTS**
+
+	*STR* buff_name -- the name of the buffer which has been closed
+
+	**OUTPUTS**
+
+	*none*
+	"""
 	buff = self.find_buff(buff_name)
         if buff != None:
-# we need to distinguish between a method which tells the application to
-# close a buffer, and one which cleans up AppState when the application notifies
-# us that a buffer has been closed.  Also, we need to figure out whether
-# the former should also do the latter, or should wait for a
-# close-buffer notification
-
-# this looks like the callback version, since close_buffer, which tells
-# the editor to close a buffer, is virtual
 	    self.open_buffers[buff_name].cleanup()
             del self.open_buffers[buff_name]
 	if self.is_bound_to_buffer() == buff_name:
@@ -1305,7 +1412,6 @@ class AppState(OwnerObject):
         if not self.open_buffers.has_key(buff_name):
             self._new_source_buffer(buff_name)
             
-
     def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].
 
