@@ -110,6 +110,12 @@ class CmdPromptWithHistory(CmdPrompt):
     *INT* stack_index -- index (from back of command_stack) of currently
 	recalled command
 
+    *BOOL* cursor_always_on_top=1 -- if *TRUE*, then *stack_index* is
+    always moved back to the top of the history stack after a new
+    command is pushed to it. If *FALSE*, *stack_index* is left at the
+    current position
+        
+
     **CLASS ATTRIBUTES**
     
     *none* 
@@ -126,7 +132,8 @@ class CmdPromptWithHistory(CmdPrompt):
     direction.
     """
 
-    def __init__(self, max_stack = None, saved_stack = None, **args):
+    def __init__(self, max_stack = None, saved_stack = None,
+                 cursor_always_on_top=1, **args):
 	"""create a new history stack
 
 	**INPUT**
@@ -139,7 +146,8 @@ class CmdPromptWithHistory(CmdPrompt):
         self.deep_construct(CmdPromptWithHistory,
                             {"command_stack": saved_stack,
 			    "max_stack": max_stack,
-			    "stack_index":0},
+			    "stack_index":0,
+                            'cursor_always_on_top': cursor_always_on_top},
                             args)
 	if self.command_stack == None:
 	    self.command_stack = []
@@ -312,15 +320,17 @@ class CmdPromptWithHistory(CmdPrompt):
 
 	*none*
 
-	Note: the stack_index should normally be reset to zero 
-	when a command is pushed onto the stack, but _raw_push does not
-	perform this task.  Unless this is specifically desired, push
+	Note: the stack_index should normally be moved (either reset
+        to 0 or increased by one) when a command is pushed onto the
+        stack, but _raw_push does not perform this task 
+
+        Unless this is specifically desired, push
 	should be used instead.
 	"""
 	self.command_stack.append(command)
 	if self.max_stack and self.depth() > self.max_stack:
 	    del self.command_stack[0]
-	self.stack_index = 0
+
 
     def push(self, command):
 	"""push a (non-empty) command onto the stack, 
@@ -338,7 +348,23 @@ class CmdPromptWithHistory(CmdPrompt):
 # only store non-empty commands
 	if command:
 	     self._raw_push(command)
-	self.stack_index = 0
+
+        if self.cursor_always_on_top:
+            #
+            # Keep cursor on top of the command history
+            #
+            self.stack_index = 0
+        else:
+            #
+            # Keep cursor at current command unless it was already at the
+            # top of the stack (in wich case we want the cursor to always be
+            # positioned at the newest entry). Note that position of current
+            # command has increased by one due to the push of the new command
+            #
+            if self.stack_index > 0:
+                self.stack_index = self.stack_index + 1
+
+
 
     def _on_command(self, command):
 	"""internal function which triggers the
@@ -374,7 +400,7 @@ class CmdLog(Object):
 	"""
 	**INPUTS**
 
-	*STR* prompt -- prompt string to prepend to commands
+	*STR* prompt -- prompt string to prepend to commands        
 	"""
         self.deep_construct(CmdLog,
                             {'prompt':prompt}, 

@@ -641,7 +641,6 @@ class SymDict(PickledObject.PickledObject):
         
         *none* -- 
         """
-
         self.parse_symbols_from_files(self.standard_symbol_sources, add_sr_entries)
 
     

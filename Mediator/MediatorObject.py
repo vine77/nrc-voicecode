@@ -164,7 +164,7 @@ class MediatorObject(Object.Object):
         #
         to_configure.interp.known_symbols.parse_standard_symbols(add_sr_entries=to_configure.interp.known_symbols.sr_symbols_cleansed)
         to_configure.interp.known_symbols.sr_symbols_cleansed = 0
-        
+
         to_configure = None
 
     def quit(self, clean_sr_voc=0, save_speech_files=None, disconnect=1):
@@ -310,6 +310,8 @@ def add_abbreviation(abbreviation, expansions):
 
 def standard_symbols_in(file_list):
     """Compile symbols defined in a series of source files"""
+
+#    print '-- MediatorObject.standard_symbols_in: file_list=%s' % repr(file_list)
     global to_configure
 
     for a_file in file_list:
