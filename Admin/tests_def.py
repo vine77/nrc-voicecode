@@ -874,6 +874,7 @@ fake_words = {
               'ST': 0,
               'CMP': 0,
               'multi-\\multi': 1,
+              'co-\\co': 1,
               'CRC': 0,
               'HSV': 0,
               'IM': 0,

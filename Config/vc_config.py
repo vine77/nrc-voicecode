@@ -1121,7 +1121,9 @@ std_func_call_helper.add_function_name(['A. cos', 'arc cos', 'arc cosine'], 'aco
 std_func_call_helper.add_function_name(['A. cos H.', 'arc cos H.', 'arc cosine H.', 'hyperbolic arc cosine'], 'acosh', py_standard_function_calls)
 std_func_call_helper.add_function_name(['acquire'], 'acquire', py_standard_function_calls)
 
-
+# predefined symbols that cannot be matched to their pseud-symbol form
+#py_explicit_symbols = ExplicitSymbolSet()
+#py_explicit_symbols.ad_symbol('accept2dyear')
 
 ###############################################################################
 # C/C++ specific stuff
