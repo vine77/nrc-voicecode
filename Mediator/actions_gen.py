@@ -481,7 +481,7 @@ class ActionDecrIndentation(ActionRepeatable):
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
         
-        app.decr_indent_level(levels=self.levels, range=(app.cur_pos(), app.cur_pos()))
+        app.decr_indent_level(levels=self.levels)
 
 
     def doc(self):
@@ -745,7 +745,7 @@ class ActionInsertNewClause(Action):
             app.insert_indent(code_bef='\n', code_after='')
 
         if self.back_indent_by > 0:
-        	app.decr_indent_level(levels=self.back_indent_by, range=(app.cur_pos(), app.cur_pos()))
+        	app.decr_indent_level(levels=self.back_indent_by)
             
         trace('ActionInsertNewClause.execute', 
             'insert actual code')

@@ -340,7 +340,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1a66538>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1a75c88>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -3358,7 +3358,7 @@ Heard [('less than', '<'), ('greater than', '>'), ('equal sign', '=')]
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 1a206d8> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 222c320> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'C:\\Eclipse\\workspace\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -7454,132 +7454,133 @@ Heard [('attributes', 'attributes'), ('new', 'new'), ('statement', 'statement'),
  21:       <CURSOR>
 
 *** End of source buffer ***
-Saying: ['back indent']
-Heard [('back indent', 'back indent')]
+Saying: ['back indent', 'define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form']
+Heard [('back indent', 'back indent'), ('define', 'define'), ('method', 'method'), ('spoken', 'spoken'), ('form', 'form'), ('regular', 'regular'), ('expression', 'expression'), ('add', 'add'), ('argument', 'argument'), ('spoken', 'spoken'), ('form', 'form')]
  18:                            'symdict_pickle_file': symdict_pickle_file}, \
  19:                           attrs)
  20: 
- 21: <CURSOR>   
+ 21:    def spoken_form_regexp(self, spoken_form<CURSOR>):
+ 22:       
 
 *** End of source buffer ***
-Saying: ['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form', 'method', 'body']
-Heard [('define', 'define'), ('method', 'method'), ('spoken', 'spoken'), ('form', 'form'), ('regular', 'regular'), ('expression', 'expression'), ('add', 'add'), ('argument', 'argument'), ('spoken', 'spoken'), ('form', 'form'), ('method', 'method'), ('body', 'body')]
+Saying: ['method', 'body']
+Heard [('method', 'method'), ('body', 'body')]
  19:                           attrs)
  20: 
- 21: def spoken_form_regexp(self, spoken_form):
- 22:    <CURSOR>
+ 21:    def spoken_form_regexp(self, spoken_form):
+ 22:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
 Heard [('words', 'words'), ('equals', 'equals'), ('R.', 'R.'), ('E.', 'E.'), ('dot', 'dot'), ('split', 'split'), ('with', 'with'), ('arguments', 'arguments')]
  19:                           attrs)
  20: 
- 21: def spoken_form_regexp(self, spoken_form):
- 22:    words = re.split(<CURSOR>)
+ 21:    def spoken_form_regexp(self, spoken_form):
+ 22:       words = re.split(<CURSOR>)
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', '\\s\\back slash s.', 'plus', 'sign', 'jump', 'out', 'comma', 'spoken', 'form', 'new', 'statement']
 Heard [('single', 'single'), ('quotes', 'quotes'), ('back slash s', '\\s'), ('plus', 'plus'), ('sign', 'sign'), ('jump', 'jump'), ('out', 'out'), ('comma', 'comma'), ('spoken', 'spoken'), ('form', 'form'), ('new', 'new'), ('statement', 'statement')]
  20: 
- 21: def spoken_form_regexp(self, spoken_form):
- 22:    words = re.split('\s+', spoken_form)
- 23:    <CURSOR>
+ 21:    def spoken_form_regexp(self, spoken_form):
+ 22:       words = re.split('\s+', spoken_form)
+ 23:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'empty', 'single', 'quotes', 'new', 'statement']
 Heard [('regular', 'regular'), ('expression', 'expression'), ('equals', 'equals'), ('empty', 'empty'), ('single', 'single'), ('quotes', 'quotes'), ('new', 'new'), ('statement', 'statement')]
- 21: def spoken_form_regexp(self, spoken_form):
- 22:    words = re.split('\s+', spoken_form)
- 23:    regexp = ''
- 24:    <CURSOR>
+ 21:    def spoken_form_regexp(self, spoken_form):
+ 22:       words = re.split('\s+', spoken_form)
+ 23:       regexp = ''
+ 24:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body']
 Heard [('for', 'for'), ('loop', 'loop'), ('a', 'a'), ('word', 'word'), ('in', 'in'), ('list', 'list'), ('words', 'words'), ('loop', 'loop'), ('body', 'body')]
- 22:    words = re.split('\s+', spoken_form)
- 23:    regexp = ''
- 24:    for a_word in words:
- 25:       <CURSOR>
+ 22:       words = re.split('\s+', spoken_form)
+ 23:       regexp = ''
+ 24:       for a_word in words:
+ 25:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['first', 'equals', 'a', 'word', 'at', 'index', '0', 'new', 'statement']
 Heard [('first', 'first'), ('equals', 'equals'), ('a', 'a'), ('word', 'word'), ('at', 'at'), ('index', 'index'), ('0', '0'), ('new', 'new'), ('statement', 'statement')]
- 23:    regexp = ''
- 24:    for a_word in words:
- 25:       first = a_word[0]
- 26:       <CURSOR>
+ 23:       regexp = ''
+ 24:       for a_word in words:
+ 25:          first = a_word[0]
+ 26:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['rest', 'equals', 'a', 'word', 'at', 'index', '1', ':\\colon', 'new', 'statement']
 Heard [('rest', 'rest'), ('equals', 'equals'), ('a', 'a'), ('word', 'word'), ('at', 'at'), ('index', 'index'), ('1', '1'), ('colon', ':'), ('new', 'new'), ('statement', 'statement')]
- 24:    for a_word in words:
- 25:       first = a_word[0]
- 26:       rest = a_word[1: ]
- 27:       <CURSOR>
+ 24:       for a_word in words:
+ 25:          first = a_word[0]
+ 26:          rest = a_word[1: ]
+ 27:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'this', 'word', 'equals', 'single', 'quotes']
 Heard [('regular', 'regular'), ('expression', 'expression'), ('this', 'this'), ('word', 'word'), ('equals', 'equals'), ('single', 'single'), ('quotes', 'quotes')]
- 24:    for a_word in words:
- 25:       first = a_word[0]
- 26:       rest = a_word[1: ]
- 27:       regexp_this_word = '<CURSOR>'
+ 24:       for a_word in words:
+ 25:          first = a_word[0]
+ 26:          rest = a_word[1: ]
+ 27:          regexp_this_word = '<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['open', 'bracket', 'jump', 'out', 'plus', 'string', 'dot', 'lower', 'with', 'arguments', 'first']
 Heard [('open', 'open'), ('bracket', 'bracket'), ('jump', 'jump'), ('out', 'out'), ('plus', 'plus'), ('string', 'string'), ('dot', 'dot'), ('lower', 'lower'), ('with', 'with'), ('arguments', 'arguments'), ('first', 'first')]
- 24:    for a_word in words:
- 25:       first = a_word[0]
- 26:       rest = a_word[1: ]
- 27:       regexp_this_word = '[' + string.lower(first<CURSOR>)
+ 24:       for a_word in words:
+ 25:          first = a_word[0]
+ 26:          rest = a_word[1: ]
+ 27:          regexp_this_word = '[' + string.lower(first<CURSOR>)
 
 *** End of source buffer ***
 Saying: ['jump', 'out', 'plus', 'string', 'dot', 'upper', 'with', 'arguments', 'first', 'new', 'statement']
 Heard [('jump', 'jump'), ('out', 'out'), ('plus', 'plus'), ('string', 'string'), ('dot', 'dot'), ('upper', 'upper'), ('with', 'with'), ('arguments', 'arguments'), ('first', 'first'), ('new', 'new'), ('statement', 'statement')]
- 25:       first = a_word[0]
- 26:       rest = a_word[1: ]
- 27:       regexp_this_word = '[' + string.lower(first) + string.upper(first)
- 28:       <CURSOR>
+ 25:          first = a_word[0]
+ 26:          rest = a_word[1: ]
+ 27:          regexp_this_word = '[' + string.lower(first) + string.upper(first)
+ 28:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empty', 'single', 'quotes', 'if', 'body']
 Heard [('if', 'if'), ('statement', 'statement'), ('not', 'not'), ('regular', 'regular'), ('expression', 'expression'), ('equal', 'equal'), ('to', 'to'), ('empty', 'empty'), ('single', 'single'), ('quotes', 'quotes'), ('if', 'if'), ('body', 'body')]
- 26:       rest = a_word[1: ]
- 27:       regexp_this_word = '[' + string.lower(first) + string.upper(first)
- 28:       if not regexp == '':
- 29:          <CURSOR>
+ 26:          rest = a_word[1: ]
+ 27:          regexp_this_word = '[' + string.lower(first) + string.upper(first)
+ 28:          if not regexp == '':
+ 29:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', '\\s\\back slash s.', 'asterisk', 'new', 'statement']
 Heard [('regular', 'regular'), ('expression', 'expression'), ('equals', 'equals'), ('regular', 'regular'), ('expression', 'expression'), ('plus', 'plus'), ('single', 'single'), ('quotes', 'quotes'), ('back slash s', '\\s'), ('asterisk', 'asterisk'), ('new', 'new'), ('statement', 'statement')]
- 27:       regexp_this_word = '[' + string.lower(first) + string.upper(first)
- 28:       if not regexp == '':
- 29:          regexp = regexp + '\s*'
- 30:          <CURSOR>
+ 27:          regexp_this_word = '[' + string.lower(first) + string.upper(first)
+ 28:          if not regexp == '':
+ 29:             regexp = regexp + '\s*'
+ 30:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement']
 Heard [('regular', 'regular'), ('expression', 'expression'), ('equals', 'equals'), ('regular', 'regular'), ('expression', 'expression'), ('plus', 'plus'), ('regular', 'regular'), ('expression', 'expression'), ('this', 'this'), ('word', 'word'), ('new', 'new'), ('statement', 'statement')]
- 28:       if not regexp == '':
- 29:          regexp = regexp + '\s*'
- 30:          regexp = regexp + regexp_this_word
- 31:          <CURSOR>
+ 28:          if not regexp == '':
+ 29:             regexp = regexp + '\s*'
+ 30:             regexp = regexp + regexp_this_word
+ 31:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['back indent']
-Heard [('back indent', 'back indent')]
- 28:       if not regexp == '':
- 29:          regexp = regexp + '\s*'
- 30:          regexp = regexp + regexp_this_word
- 31: <CURSOR>      
+Saying: ['return', 'regular', 'expression']
+Heard [('return', 'return'), ('regular', 'regular'), ('expression', 'expression')]
+ 28:          if not regexp == '':
+ 29:             regexp = regexp + '\s*'
+ 30:             regexp = regexp + regexp_this_word
+ 31:             return regexp<CURSOR>
 
 *** End of source buffer ***
-Saying: ['return', 'regular', 'expression', 'new', 'statement']
-Heard [('return', 'return'), ('regular', 'regular'), ('expression', 'expression'), ('new', 'new'), ('statement', 'statement')]
- 29:          regexp = regexp + '\s*'
- 30:          regexp = regexp + regexp_this_word
- 31: return regexp
- 32: <CURSOR>
+Saying: ['back indent', 'new statement']
+Heard [('back indent', 'back indent'), ('new statement', 'new statement')]
+ 29:             regexp = regexp + '\s*'
+ 30:             regexp = regexp + regexp_this_word
+ 31:          return regexp
+ 32:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['if', 'not', 'this', 'word', 'then', 'this', 'word', 'equals', 'single', 'quotes', 'hello']
@@ -7601,10 +7602,10 @@ Associate 'this word' with symbol (Enter selection):
   '2': Hello (*new*)
   '3': HELLO (*new*)
 
->  30:          regexp = regexp + regexp_this_word
- 31: return regexp
- 32: if not this_word:
- 33:    this_word = 'hello<CURSOR>'
+>  30:             regexp = regexp + regexp_this_word
+ 31:          return regexp
+ 32:       if not this_word:
+ 33:          this_word = 'hello<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['else', 'if', 'this', 'word', 'is', 'equal', 'to', 'hi', 'then']
@@ -7616,10 +7617,10 @@ Associate 'hi' with symbol (Enter selection):
   '2': Hi (*new*)
   '3': HI (*new*)
 
->  32: if not this_word:
- 33:    this_word = 'hello'
- 34: elif this_word == hi:
- 35:    <CURSOR>
+>  32:       if not this_word:
+ 33:          this_word = 'hello'
+ 34:       elif this_word == hi:
+ 35:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['this', 'word', 'equals', 'greetings', 'else']
@@ -7631,10 +7632,10 @@ Associate 'greetings' with symbol (Enter selection):
   '2': Greetings (*new*)
   '3': GREETINGS (*new*)
 
->  34: elif this_word == hi:
- 35:    this_word = greetings
- 36: else:
- 37:    <CURSOR>
+>  34:       elif this_word == hi:
+ 35:          this_word = greetings
+ 36:       else:
+ 37:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['this', 'word', 'equals', 'single', 'quotes', 'done', 'new', 'statement']
@@ -7646,10 +7647,10 @@ Associate 'done' with symbol (Enter selection):
   '2': Done (*new*)
   '3': DONE (*new*)
 
->  35:    this_word = greetings
- 36: else:
- 37:    this_word = 'done'
- 38:    <CURSOR>
+>  35:          this_word = greetings
+ 36:       else:
+ 37:          this_word = 'done'
+ 38:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['try', 'some', 'function', 'with', 'arguments']
@@ -7664,10 +7665,10 @@ Associate 'some function' with symbol (Enter selection):
   '5': somefunction (*new*)
   '6': SOMEFUNCTION (*new*)
 
->  36: else:
- 37:    this_word = 'done'
- 38:    try:
- 39:       some_function(<CURSOR>)
+>  36:       else:
+ 37:          this_word = 'done'
+ 38:          try:
+ 39:             some_function(<CURSOR>)
 
 *** End of source buffer ***
 Saying: ['except', 'do', 'the', 'following', 'print', 'single', 'quotes', 'error']
@@ -7679,10 +7680,10 @@ Associate 'error' with symbol (Enter selection):
   '2': Error (*new*)
   '3': ERROR (*new*)
 
->  38:    try:
- 39:       some_function()
- 40: except :
- 41:    print 'error<CURSOR>'
+>  38:          try:
+ 39:             some_function()
+ 40:          except :
+ 41:             print 'error<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['finally', 'do', 'print', 'single', 'quotes', 'all', 'right']
@@ -7697,10 +7698,10 @@ Associate 'all right' with symbol (Enter selection):
   '5': allright (*new*)
   '6': ALLRIGHT (*new*)
 
->  40: except :
- 41:    print 'error'
- 42: finally:
- 43:    print 'all_right<CURSOR>'
+>  40:          except :
+ 41:             print 'error'
+ 42:          finally:
+ 43:             print 'all_right<CURSOR>'
 
 *** End of source buffer ***
 
@@ -8183,16 +8184,8 @@ Heard [('attributes', 'attributes'), ('new', 'new'), ('statement', 'statement'),
  21:       <CURSOR>
 
 *** End of source buffer ***
-Saying: ['back indent']
-Heard [('back indent', 'back indent')]
- 18:                            'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
- 19:                           attributes)
- 20: 
- 21: <CURSOR>   
-
-*** End of source buffer ***
-Saying: ['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form', 'method', 'body']
-Heard [('define', 'define'), ('method', 'method'), ('spoken', 'spoken'), ('form', 'form'), ('regular', 'regular'), ('expression', 'expression'), ('add', 'add'), ('argument', 'argument'), ('spoken', 'spoken'), ('form', 'form'), ('method', 'method'), ('body', 'body')]
+Saying: ['back indent', 'define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form']
+Heard [('back indent', 'back indent'), ('define', 'define'), ('method', 'method'), ('spoken', 'spoken'), ('form', 'form'), ('regular', 'regular'), ('expression', 'expression'), ('add', 'add'), ('argument', 'argument'), ('spoken', 'spoken'), ('form', 'form')]
 Associate 'spoken form regular expression' with symbol (Enter selection):
 
   '0': no association
@@ -8213,10 +8206,19 @@ Associate 'spoken form regular expression' with symbol (Enter selection):
   '5': spokenform (*new*)
   '6': SPOKENFORM (*new*)
 
->  19:                           attributes)
+>  18:                            'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
+ 19:                           attributes)
  20: 
- 21: def spoken_form_regular_expression(self, spoken_form):
- 22:    <CURSOR>
+ 21:    def spoken_form_regular_expression(self, spoken_form<CURSOR>):
+ 22:       
+
+*** End of source buffer ***
+Saying: ['method', 'body']
+Heard [('method', 'method'), ('body', 'body')]
+ 19:                           attributes)
+ 20: 
+ 21:    def spoken_form_regular_expression(self, spoken_form):
+ 22:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
@@ -8244,16 +8246,16 @@ Associate 'words' with symbol (Enter selection):
 
 >  19:                           attributes)
  20: 
- 21: def spoken_form_regular_expression(self, spoken_form):
- 22:    words = re.split(<CURSOR>)
+ 21:    def spoken_form_regular_expression(self, spoken_form):
+ 22:       words = re.split(<CURSOR>)
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', '\\s\\back slash s.', 'plus', 'sign', 'jump', 'out', 'comma', 'spoken', 'form', 'new', 'statement']
 Heard [('single', 'single'), ('quotes', 'quotes'), ('back slash s', '\\s'), ('plus', 'plus'), ('sign', 'sign'), ('jump', 'jump'), ('out', 'out'), ('comma', 'comma'), ('spoken', 'spoken'), ('form', 'form'), ('new', 'new'), ('statement', 'statement')]
  20: 
- 21: def spoken_form_regular_expression(self, spoken_form):
- 22:    words = re.split('\s+', spoken_form)
- 23:    <CURSOR>
+ 21:    def spoken_form_regular_expression(self, spoken_form):
+ 22:       words = re.split('\s+', spoken_form)
+ 23:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'empty', 'single', 'quotes', 'new', 'statement']
@@ -8269,10 +8271,10 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
->  21: def spoken_form_regular_expression(self, spoken_form):
- 22:    words = re.split('\s+', spoken_form)
- 23:    re = ''
- 24:    <CURSOR>
+>  21:    def spoken_form_regular_expression(self, spoken_form):
+ 22:       words = re.split('\s+', spoken_form)
+ 23:       re = ''
+ 24:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body']
@@ -8287,10 +8289,10 @@ Associate 'a word' with symbol (Enter selection):
   '5': aword (*new*)
   '6': AWORD (*new*)
 
->  22:    words = re.split('\s+', spoken_form)
- 23:    re = ''
- 24:    for a_word in words:
- 25:       <CURSOR>
+>  22:       words = re.split('\s+', spoken_form)
+ 23:       re = ''
+ 24:       for a_word in words:
+ 25:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['first', 'equals', 'a', 'word', 'at', 'index', '0', 'new', 'statement']
@@ -8302,10 +8304,10 @@ Associate 'first' with symbol (Enter selection):
   '2': First (*new*)
   '3': FIRST (*new*)
 
->  23:    re = ''
- 24:    for a_word in words:
- 25:       first = a_word[0]
- 26:       <CURSOR>
+>  23:       re = ''
+ 24:       for a_word in words:
+ 25:          first = a_word[0]
+ 26:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['rest', 'equals', 'a', 'word', 'at', 'index', '1', ':\\colon', 'new', 'statement']
@@ -8318,10 +8320,10 @@ Associate 'rest' with symbol (Enter selection):
   '3': Rest (*new*)
   '4': REST (*new*)
 
->  24:    for a_word in words:
- 25:       first = a_word[0]
- 26:       re = a_word[1: ]
- 27:       <CURSOR>
+>  24:       for a_word in words:
+ 25:          first = a_word[0]
+ 26:          re = a_word[1: ]
+ 27:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'this', 'word', 'equals', 'single', 'quotes']
@@ -8336,10 +8338,10 @@ Associate 'regular expression this word' with symbol (Enter selection):
   '5': regularexpressionthisword (*new*)
   '6': REGULAREXPRESSIONTHISWORD (*new*)
 
->  24:    for a_word in words:
- 25:       first = a_word[0]
- 26:       re = a_word[1: ]
- 27:       regular_expression_this_word = '<CURSOR>'
+>  24:       for a_word in words:
+ 25:          first = a_word[0]
+ 26:          re = a_word[1: ]
+ 27:          regular_expression_this_word = '<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['open', 'bracket', 'jump', 'out', 'plus', 'string', 'dot', 'lower', 'with', 'arguments', 'first']
@@ -8351,10 +8353,10 @@ Associate 'lower' with symbol (Enter selection):
   '2': Lower (*new*)
   '3': LOWER (*new*)
 
->  24:    for a_word in words:
- 25:       first = a_word[0]
- 26:       re = a_word[1: ]
- 27:       regular_expression_this_word = '[' + string.lower(first<CURSOR>)
+>  24:       for a_word in words:
+ 25:          first = a_word[0]
+ 26:          re = a_word[1: ]
+ 27:          regular_expression_this_word = '[' + string.lower(first<CURSOR>)
 
 *** End of source buffer ***
 Saying: ['jump', 'out', 'plus', 'string', 'dot', 'upper', 'with', 'arguments', 'first', 'new', 'statement']
@@ -8366,10 +8368,10 @@ Associate 'upper' with symbol (Enter selection):
   '2': Upper (*new*)
   '3': UPPER (*new*)
 
->  25:       first = a_word[0]
- 26:       re = a_word[1: ]
- 27:       regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
- 28:       <CURSOR>
+>  25:          first = a_word[0]
+ 26:          re = a_word[1: ]
+ 27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
+ 28:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empty', 'single', 'quotes', 'if', 'body']
@@ -8385,10 +8387,10 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
->  26:       re = a_word[1: ]
- 27:       regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
- 28:       if not re == '':
- 29:          <CURSOR>
+>  26:          re = a_word[1: ]
+ 27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
+ 28:          if not re == '':
+ 29:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', '\\s\\back slash s.', 'asterisk', 'new', 'statement']
@@ -8415,10 +8417,10 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
->  27:       regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
- 28:       if not re == '':
- 29:          re = re + '\s*'
- 30:          <CURSOR>
+>  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
+ 28:          if not re == '':
+ 29:             re = re + '\s*'
+ 30:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement']
@@ -8445,22 +8447,14 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
->  28:       if not re == '':
- 29:          re = re + '\s*'
- 30:          re = re + regular_expression_this_word
- 31:          <CURSOR>
+>  28:          if not re == '':
+ 29:             re = re + '\s*'
+ 30:             re = re + regular_expression_this_word
+ 31:             <CURSOR>
 
 *** End of source buffer ***
-Saying: ['back indent']
-Heard [('back indent', 'back indent')]
- 28:       if not re == '':
- 29:          re = re + '\s*'
- 30:          re = re + regular_expression_this_word
- 31: <CURSOR>      
-
-*** End of source buffer ***
-Saying: ['return', 'regular', 'expression', 'new', 'statement']
-Heard [('return', 'return'), ('regular', 'regular'), ('expression', 'expression'), ('new', 'new'), ('statement', 'statement')]
+Saying: ['return', 'regular', 'expression']
+Heard [('return', 'return'), ('regular', 'regular'), ('expression', 'expression')]
 Associate 'regular expression' with symbol (Enter selection):
 
   '0': no association
@@ -8472,10 +8466,18 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
->  29:          re = re + '\s*'
- 30:          re = re + regular_expression_this_word
- 31: return re
- 32: <CURSOR>
+>  28:          if not re == '':
+ 29:             re = re + '\s*'
+ 30:             re = re + regular_expression_this_word
+ 31:             return re<CURSOR>
+
+*** End of source buffer ***
+Saying: ['back indent', 'new statement']
+Heard [('back indent', 'back indent'), ('new statement', 'new statement')]
+ 29:             re = re + '\s*'
+ 30:             re = re + regular_expression_this_word
+ 31:          return re
+ 32:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['if', 'not', 'this', 'word', 'then', 'this', 'word', 'equals', 'single', 'quotes', 'hello']
@@ -8497,10 +8499,10 @@ Associate 'this word' with symbol (Enter selection):
   '2': Hello (*new*)
   '3': HELLO (*new*)
 
->  30:          re = re + regular_expression_this_word
- 31: return re
- 32: if not this_word:
- 33:    this_word = 'hello<CURSOR>'
+>  30:             re = re + regular_expression_this_word
+ 31:          return re
+ 32:       if not this_word:
+ 33:          this_word = 'hello<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['else', 'if', 'this', 'word', 'is', 'equal', 'to', 'hi', 'then']
@@ -8512,10 +8514,10 @@ Associate 'hi' with symbol (Enter selection):
   '2': Hi (*new*)
   '3': HI (*new*)
 
->  32: if not this_word:
- 33:    this_word = 'hello'
- 34: elif this_word == hi:
- 35:    <CURSOR>
+>  32:       if not this_word:
+ 33:          this_word = 'hello'
+ 34:       elif this_word == hi:
+ 35:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['this', 'word', 'equals', 'greetings', 'else']
@@ -8527,10 +8529,10 @@ Associate 'greetings' with symbol (Enter selection):
   '2': Greetings (*new*)
   '3': GREETINGS (*new*)
 
->  34: elif this_word == hi:
- 35:    this_word = greetings
- 36: else:
- 37:    <CURSOR>
+>  34:       elif this_word == hi:
+ 35:          this_word = greetings
+ 36:       else:
+ 37:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['this', 'word', 'equals', 'single', 'quotes', 'done', 'new', 'statement']
@@ -8542,10 +8544,10 @@ Associate 'done' with symbol (Enter selection):
   '2': Done (*new*)
   '3': DONE (*new*)
 
->  35:    this_word = greetings
- 36: else:
- 37:    this_word = 'done'
- 38:    <CURSOR>
+>  35:          this_word = greetings
+ 36:       else:
+ 37:          this_word = 'done'
+ 38:          <CURSOR>
 
 *** End of source buffer ***
 Saying: ['try', 'some', 'function', 'with', 'arguments']
@@ -8560,10 +8562,10 @@ Associate 'some function' with symbol (Enter selection):
   '5': somefunction (*new*)
   '6': SOMEFUNCTION (*new*)
 
->  36: else:
- 37:    this_word = 'done'
- 38:    try:
- 39:       some_function(<CURSOR>)
+>  36:       else:
+ 37:          this_word = 'done'
+ 38:          try:
+ 39:             some_function(<CURSOR>)
 
 *** End of source buffer ***
 Saying: ['except', 'do', 'the', 'following', 'print', 'single', 'quotes', 'error']
@@ -8575,10 +8577,10 @@ Associate 'error' with symbol (Enter selection):
   '2': Error (*new*)
   '3': ERROR (*new*)
 
->  38:    try:
- 39:       some_function()
- 40: except :
- 41:    print 'error<CURSOR>'
+>  38:          try:
+ 39:             some_function()
+ 40:          except :
+ 41:             print 'error<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['finally', 'do', 'print', 'single', 'quotes', 'all', 'right']
@@ -8593,10 +8595,10 @@ Associate 'all right' with symbol (Enter selection):
   '5': allright (*new*)
   '6': ALLRIGHT (*new*)
 
->  40: except :
- 41:    print 'error'
- 42: finally:
- 43:    print 'all_right<CURSOR>'
+>  40:          except :
+ 41:             print 'error'
+ 42:          finally:
+ 43:             print 'all_right<CURSOR>'
 
 *** End of source buffer ***
 
@@ -10735,13 +10737,191 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 * Description : temporary test
 *******************************************************************************
 
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body']
+Heard [('define', 'define'), ('class', 'class'), ('command', 'command'), ('interpreter', 'interpreter'), ('sub class', 'sub class'), ('of', 'of'), ('object', 'object'), ('class', 'class'), ('body', 'body')]
+Associate 'command interpreter' with symbol (Enter selection):
+
+  '0': no association
+  '1': command_interpreter (*new*)
+  '2': CommandInterpreter (*new*)
+  '3': commandInterpreter (*new*)
+  '4': COMMAND_INTERPRETER (*new*)
+  '5': commandinterpreter (*new*)
+  '6': COMMANDINTERPRETER (*new*)
+
+> Associate 'object' with symbol (Enter selection):
+
+  '0': no association
+  '1': object (*new*)
+  '2': Object (*new*)
+  '3': OBJECT (*new*)
+
+> *** Start of source buffer ***
+  1: class command_interpreter(object):
+  2:    <CURSOR>
+
+*** End of source buffer ***
+Saying: ['define', 'method', 'initialize']
+Heard [('define', 'define'), ('method', 'method'), ('initialize', 'initialize')]
+Associate 'initialize' with symbol (Enter selection):
+
+  '0': no association
+  '1': initialize (*new*)
+  '2': Initialize (*new*)
+  '3': INITIALIZE (*new*)
+
+> *** Start of source buffer ***
+  1: class command_interpreter(object):
+  2:    def initialize<CURSOR>(self):
+  3:       
+
+*** End of source buffer ***
+Saying: ['method', 'body']
+Heard [('method', 'method'), ('body', 'body')]
+*** Start of source buffer ***
+  1: class command_interpreter(object):
+  2:    def initialize(self):
+  3:       <CURSOR>
+
+*** End of source buffer ***
+Saying: ['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form']
+Heard [('define', 'define'), ('method', 'method'), ('spoken', 'spoken'), ('form', 'form'), ('regular', 'regular'), ('expression', 'expression'), ('add', 'add'), ('argument', 'argument'), ('spoken', 'spoken'), ('form', 'form')]
+Associate 'spoken form regular expression' with symbol (Enter selection):
+
+  '0': no association
+  '1': spoken_form_regular_expression (*new*)
+  '2': SpokenFormRegularExpression (*new*)
+  '3': spokenFormRegularExpression (*new*)
+  '4': SPOKEN_FORM_REGULAR_EXPRESSION (*new*)
+  '5': spokenformregularexpression (*new*)
+  '6': SPOKENFORMREGULAREXPRESSION (*new*)
+
+> Associate 'spoken form' with symbol (Enter selection):
+
+  '0': no association
+  '1': spoken_form (*new*)
+  '2': SpokenForm (*new*)
+  '3': spokenForm (*new*)
+  '4': SPOKEN_FORM (*new*)
+  '5': spokenform (*new*)
+  '6': SPOKENFORM (*new*)
+
+> *** Start of source buffer ***
+  1: class command_interpreter(object):
+  2:    def initialize(self):
+  3:       def spoken_form_regular_expression(self, spoken_form<CURSOR>):
+  4:          
+
+*** End of source buffer ***
+Saying: ['back indent']
+Heard [('back indent', 'back indent')]
+*** Start of source buffer ***
+  1: class command_interpreter(object):
+  2:    def initialize(self):
+  3:    <CURSOR>def spoken_form_regular_expression(self, spoken_form):
+  4:          
+
+*** End of source buffer ***
+Saying: ['method', 'body']
+Heard [('method', 'method'), ('body', 'body')]
+*** Start of source buffer ***
+  1: class command_interpreter(object):
+  2:    def initialize(self):
+  3:    def spoken_form_regular_expression(self, spoken_form):
+  4:          <CURSOR>
+
+*** End of source buffer ***
+Saying: ['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body']
+Heard [('for', 'for'), ('loop', 'loop'), ('a', 'a'), ('word', 'word'), ('in', 'in'), ('list', 'list'), ('words', 'words'), ('loop', 'loop'), ('body', 'body')]
+Associate 'a word' with symbol (Enter selection):
+
+  '0': no association
+  '1': a_word (*new*)
+  '2': AWord (*new*)
+  '3': aWord (*new*)
+  '4': A_WORD (*new*)
+  '5': aword (*new*)
+  '6': AWORD (*new*)
+
+> Associate 'words' with symbol (Enter selection):
+
+  '0': no association
+  '1': words (*new*)
+  '2': Words (*new*)
+  '3': WORDS (*new*)
+
+>   2:    def initialize(self):
+  3:    def spoken_form_regular_expression(self, spoken_form):
+  4:       for a_word in words:
+  5:          <CURSOR>
+
+*** End of source buffer ***
+Saying: ['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empty', 'single', 'quotes', 'if', 'body']
+Heard [('if', 'if'), ('statement', 'statement'), ('not', 'not'), ('regular', 'regular'), ('expression', 'expression'), ('equal', 'equal'), ('to', 'to'), ('empty', 'empty'), ('single', 'single'), ('quotes', 'quotes'), ('if', 'if'), ('body', 'body')]
+Associate 'regular expression' with symbol (Enter selection):
+
+  '0': no association
+  '1': regular_expression (*new*)
+  '2': RegularExpression (*new*)
+  '3': regularExpression (*new*)
+  '4': REGULAR_EXPRESSION (*new*)
+  '5': regularexpression (*new*)
+  '6': REGULAREXPRESSION (*new*)
+
+>   3:    def spoken_form_regular_expression(self, spoken_form):
+  4:       for a_word in words:
+  5:          if not regular_expression == '':
+  6:             <CURSOR>
+
+*** End of source buffer ***
+Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement']
+Heard [('regular', 'regular'), ('expression', 'expression'), ('equals', 'equals'), ('regular', 'regular'), ('expression', 'expression'), ('plus', 'plus'), ('regular', 'regular'), ('expression', 'expression'), ('this', 'this'), ('word', 'word'), ('new', 'new'), ('statement', 'statement')]
+Associate 'regular_expression this word' with symbol (Enter selection):
+
+  '0': no association
+  '1': regular_expression_this_word (*new*)
+  '2': RegularExpressionThisWord (*new*)
+  '3': regularExpressionThisWord (*new*)
+  '4': REGULAR_EXPRESSION_THIS_WORD (*new*)
+  '5': regularexpressionthisword (*new*)
+  '6': REGULAREXPRESSIONTHISWORD (*new*)
+
+>   4:       for a_word in words:
+  5:          if not regular_expression == '':
+  6:             regular_expression = regular_expression + regular_expression_this_word
+  7:             <CURSOR>
+
+*** End of source buffer ***
+Saying: ['back indent']
+Heard [('back indent', 'back indent')]
+  4:       for a_word in words:
+  5:          if not regular_expression == '':
+  6:             regular_expression = regular_expression + regular_expression_this_word
+  7:          <CURSOR>
+
+*** End of source buffer ***
+Saying: ['return', 'regular', 'expression', 'new', 'statement']
+Heard [('return', 'return'), ('regular', 'regular'), ('expression', 'expression'), ('new', 'new'), ('statement', 'statement')]
+  5:          if not regular_expression == '':
+  6:             regular_expression = regular_expression + regular_expression_this_word
+  7:          return regular_expression
+  8:       <CURSOR>
+
+*** End of source buffer ***
 
 
 
 -----------------------------------------------
-Test suite completed in:  779.350000024 secs
+Test suite completed in:  759.40199995 secs
 -----------------------------------------------
 Message loop ended, cleaning up
-cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at bbee28>
+cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at bbf050>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 ExtLoopWin32.run returning

@@ -1200,28 +1200,28 @@ add_csc(acmd)
 # Insertions and deletions
 #############################################################################
 
-acmd = CSCmd(spoken_forms=['back space'],
+acmd = CSCmd(spoken_forms=['back space', 'delete backwards'],
              meanings={ContAny(): ActionBackspace(n_times=1)},
              docstring='Backspace one character')
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['back space 2'],
+acmd = CSCmd(spoken_forms=['back space 2', 'delete backwards 2'],
              meanings={ContAny(): ActionBackspace(n_times=2)},
              docstring='Backspace 2 characters')
 add_csc(acmd)
 
 
-acmd = CSCmd(spoken_forms=['back space 3'],
+acmd = CSCmd(spoken_forms=['back space 3', 'delete backwards 3'],
              meanings={ContAny(): ActionBackspace(n_times=3)},
              docstring='Backspace 3 characters')
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['back space 4'],
+acmd = CSCmd(spoken_forms=['back space 4', 'delete backwards 4'],
              meanings={ContAny(): ActionBackspace(n_times=4)},
              docstring='Backspace 4 characters')
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['back space 5'],
+acmd = CSCmd(spoken_forms=['back space 5', 'delete backwards 5'],
              meanings={ContAny(): ActionBackspace(n_times=5)},
              docstring='Backspace 5 characters')
 add_csc(acmd)
@@ -1343,7 +1343,7 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['else if', 'else if clause', 'elsif',
                            'elsif clause', 'elif', 'elif clause'],
              meanings={ContPy(): ActionInsertNewClause('($|\n)', 
-                           code_bef = 'elif ', code_after = ': \n\t'),
+                           code_bef = 'elif ', code_after = ': \n\t', back_indent_by=0),
                        ContC(): c_else_if,
                        ContPerl(): perl_else_if},
              docstring = 'else if clause of conditional statement')

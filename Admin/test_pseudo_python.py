@@ -83,10 +83,10 @@ def dictate_pseudo_python(commands):
     commands.say(['single', 'quotes', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', 'comma', 'continue', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
     commands.say(['attributes', 'new', 'statement', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-
-    commands.say(['back indent'], echo_utterance=1)
-    
-    commands.say(['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form', 'method', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+   
+    commands.say(['back indent', 'define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+        
+    commands.say(['method', 'body'], echo_utterance=1)
     
     commands.say(['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
@@ -111,10 +111,10 @@ def dictate_pseudo_python(commands):
     commands.say(['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'single', 'quotes', '\\s\\back slash s.', 'asterisk', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
     commands.say(['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-
-    commands.say(['back indent'], echo_utterance=1)
     
-    commands.say(['return', 'regular', 'expression', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['return', 'regular', 'expression'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+    commands.say(['back indent', 'new statement'], echo_utterance=1)    
 
     commands.say(['if', 'not', 'this', 'word', 'then', 'this', 'word', 'equals', 'single', 'quotes', 'hello'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
 

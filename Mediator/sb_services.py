@@ -453,7 +453,6 @@ class SB_ServiceIndent(SB_Service):
         *none*
         """
 
-#        print '-- SB_ServiceIndent.insert_indent: code_bef=\'%s\', code_after=\'%s\', range=%s' % (code_bef, code_after, range)
         debug.trace('SB_ServiceIndent.insert_indent',
             'code_bef="%s", code_after="%s", range=%s' \
             % (code_bef, code_after, repr(range)))
@@ -939,19 +938,9 @@ class SB_ServiceFullState(SB_ServiceState):
                     '*** cookie.contents=\n%s\n' % cookie.contents())
         debug.trace('SB_ServiceFullState.restore_state', 
                     '*** cookie.get_selection()=%s' % repr(cookie.get_selection()))
-        #deb
-        if debug.trace_is_active('SB_ServiceFullState.restore_state'):
-            debug.trace('SB_ServiceFullState.restore_state', '*** before set_text, buffer contaisns')
-            self.buff.print_buff_if_necessary()                    
-        #fin
                     
         self.buff.set_text(cookie.contents())
         
-        #deb
-        if debug.trace_is_active('SB_ServiceFullState.restore_state'):
-            debug.trace('SB_ServiceFullState.restore_state', '*** before set_selection, buffer contaisns')
-            self.buff.print_buff_if_necessary()                    
-        #fin
         
         self.buff.set_selection(cookie.get_selection())
         self.buff.print_buff_if_necessary()
