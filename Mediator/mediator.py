@@ -100,7 +100,7 @@ def init_simulator(symdict_pickle_fname=None,
                    disable_dlg_select_symbol_matches = None,
                    window=None, exclusive=0, allResults=0):
 
-#    print '-- mediator.init_simulator: disable_dlg_select_symbol_matches=%s, window=%s, exclusive=%s, allResults=%s' % (disable_dlg_select_symbol_matches, window, exclusive, allResults)
+#    print '-- mediator.init_simulator: window=%s, exclusive=%s, allResults=%s' % (window, exclusive, allResults)
     
     global the_mediator
     
@@ -176,10 +176,7 @@ def execute_command(cmd):
 	exec cmd in sim_commands.__dict__, sim_commands.command_space
 	#	  exec command in sim_commands and command_space
     except Exception, err:
-	traceback.print_exc()
-#    else:
-#        if the_mediator.interp.on_app.curr_buffer:
-#            the_mediator.interp.on_app.curr_buffer.print_buff()
+        traceback.print_exc()
 
         
 def simulator_mode(options):

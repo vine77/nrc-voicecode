@@ -24,13 +24,13 @@
 
 import debug
 import re, string, sys
-import sb_services, SourceBuffIndent
+import sb_services, SourceBuffNonCached
 
 
 from Object import Object
 import SourceBuffState
 
-class SourceBuffTB(SourceBuffIndent.SourceBuffIndent):
+class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
     """implementation of (most of) SourceBuff as a wrapper around an
     object which inherits multiple interfaces: TextBuffer, VisibleBuffer, 
     and NumberedLines.
