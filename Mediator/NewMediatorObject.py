@@ -1616,7 +1616,7 @@ class NewMediatorObject(Object.OwnerObject):
 
         **OUTPUTS**
 
-        *[SymbolToReformat]* -- the symbols spoken in the n most recent 
+        *[InterpretedSymbol]* -- the symbols spoken in the n most recent 
         utterances (or all available if < n), sorted most recent last.
         
         Note:  These symbols should not be stored permanently, nor

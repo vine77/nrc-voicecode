@@ -227,7 +227,7 @@ class ResMgr(OwnerObject):
 
         **OUTPUTS**
 
-        *[SymbolToReformat]* -- the symbols spoken in the n most recent 
+        *[InterpretedSymbol]* -- the symbols spoken in the n most recent 
         utterances (or all available if < n), sorted most recent last.
         
         Note:  These symbols should not be stored permanently, nor
@@ -2432,7 +2432,7 @@ class ResMgrBasic(ResMgrStd):
 
         **OUTPUTS**
 
-        *[SymbolToReformat]* -- the symbols spoken in the n most recent 
+        *[InterpretedSymbol]* -- the symbols spoken in the n most recent 
         utterances (or all available if < n), sorted most recent last.
         
         Note:  These symbols should not be stored permanently, nor
@@ -2443,6 +2443,31 @@ class ResMgrBasic(ResMgrStd):
         utterances = self.recent_correctable_dictation(n)
         debug.trace('ResMgrBasic.recent_symbols', '** utterances=%s' % repr(utterances))
 #TODO: Return the symbols computed from the utterances.
+        symbols = []
+        for an_utter in utterances:
+           pass
+        return symbols
+           
+    
+    def interpreted_symbols_for_utter(self, utter):
+        """returns a list of all symbols interpreted for utterance *utter*.
+        
+        **INPUTS**
+
+        *SpokenUtterance utter* -- The utterance.
+
+        **OUTPUTS**
+
+        *[InterpretedSymbol]* -- list of all the symbols that were interpreted 
+        for this utterance."""
+        
+        symbols = []
+        for a_symbol_info in utterance.symbols.items():
+            pass
+#           symbols.append(InterpretedSymbol(written=a_symbol_info[1],
+#                                            spoken=a_symbol_info[0], 
+#                                            utterance=utter,
+#                                            utter_id=???Where do I get this ID from???))
            
 
     
@@ -2837,7 +2862,7 @@ class ResMgrBasic(ResMgrStd):
         debug.trace("ResMgrBasicreformat_recent_synchronous", "invoked")
         console = self.console()
         symbols = self.recent_symbols()
-        if utterances:
+        if symbol:
             console.reformat_recent(self.name, symbols)
         
 

@@ -216,7 +216,7 @@ class WinGram(GramCommon, OwnerObject):
         """
         debug.virtual('WinGram.gram_type')
         
-    def results_callback(self, words):
+    def results_callback(self, utterance):
         """informs the GramMgr of the results of recognition
         
         Note: the sole purpose of this method is to provide feedback 
@@ -225,13 +225,13 @@ class WinGram(GramCommon, OwnerObject):
         
         **INPUTS**
 
-        *[(STR, STR)]* words* -- list of spoken, written forms 
-        representing the recognition results
+        *SpokenUtterance utterance* -- The utterance that got recognised.
 
         **OUTPUTS**
 
         *none*
         """
+        words = utterance.words()
         s = self.format_utterance_message(words)
         if self.manager:
             self.manager.user_message(s)
@@ -345,7 +345,7 @@ class DictWinGram(WinGram):
         if debug.tracing('DictWinGram.on_results'):
             debug.trace('DictWinGram.on_results', 'results.words()=%s, self.results_callback=%s, self.manager=%s' % 
                         (repr(results.words()), self.results_callback, self.manager))
-        self.results_callback(results.words())
+        self.results_callback(results)
         self.manager.interpret_dictation(results, \
             initial_buffer = self.buff_name)
 
