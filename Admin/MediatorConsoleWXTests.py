@@ -283,3 +283,4 @@ class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
         self.dlg.do_ok()
         self.assert_symbol_was_reformatted_to(typed_form)
         self.assert_dialog_was_okayed()
+        

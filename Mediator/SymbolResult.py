@@ -22,6 +22,7 @@
 from Object import Object
 import debug
 import symbol_formatting
+import util
 
 class SymbolResult(Object):
     """
@@ -187,7 +188,8 @@ class SymbolResult(Object):
         *[STR]* -- The list from most likely to least likely.
         """
         debug.trace('SymbolResult.suggestions_list', '** self.native_symbol()=%s, self.exact_matches()=%s' %(self.native_symbol(), self.exact_matches()))
-        list = [self.native_symbol()] + self.exact_matches()
+        list = [self.native_symbol()] + \
+               util.remove_occurences_from_list(self.native_symbol(), self.exact_matches())
        
         sorted_possible = self.possible_matches()
         

@@ -56,10 +56,11 @@ import WinSystemMSW
 debug.config_traces(status="off", 
                     active_traces={
 #################################  
-                    'SymDict.correct_symbol': 1,
-                    'NewMediatorObject.correct_symbol_results': 1,
-                    'NewMediatorObject.correct_recent_symbols': 1,
-                    'NewMediatorObject.utter_id_to_rel_utter_index': 1,
+                    'ReformatRecentSymbols.reformat_nth': 1,
+#                    'SymDict.correct_symbol': 1,
+#                    'NewMediatorObject.correct_symbol_results': 1,
+#                    'NewMediatorObject.correct_recent_symbols': 1,
+#                    'NewMediatorObject.utter_id_to_rel_utter_index': 1,
 #                    'NewMediatorObject.correct_recent_symbol': 1,
 #                    'ResMgrBasicreformat_recent_synchronous': 1,
 #                    'on_ok': 1,
