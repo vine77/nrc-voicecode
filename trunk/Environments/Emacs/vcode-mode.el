@@ -3319,17 +3319,20 @@ buffer"
 )
 
 (defun vcode-language-for-file (file-name)
-  (let ((extension) (lang-name "file_names"))
+  (let ((extension nil) (lang-name "file_names"))
     (vcode-trace "vcode-language-for-file" "file-name=%S" file-name)
     (if file-name 
 	(progn 
 	  (save-match-data
 	    (string-match "\\.\\(.*\\)$" file-name)
-	    (setq extension (substring file-name 
-				       (match-beginning 1) (match-end 1)))
+            (if (match-beginning 1)
+		(setq extension (substring file-name 
+					   (match-beginning 1) (match-end 1)))
+	    )
 	  )
-	  (setq lang-name (cl-gethash extension vcode-language-name-map 
-				      "file_names"))
+	  (if extension 
+	      (setq lang-name (cl-gethash extension vcode-language-name-map 
+				      "file_names")))
 	)
     )
     lang-name
