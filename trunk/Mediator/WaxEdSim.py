@@ -45,6 +45,7 @@ ID_PANE = 120
 ID_PROMPT = 130
 ID_COMMAND_LINE = 140
 ID_MIC_BUTTON = 150
+ID_MIC_LABEL = 151
 
 
 class WaxEdSimPane(wxPanel):
@@ -106,6 +107,17 @@ class WaxEdSimPane(wxPanel):
 
         self.vbox = wxBoxSizer(wxVERTICAL)
 
+        self.button_line = wxBoxSizer(wxHORIZONTAL)
+
+	self.green_light = wxBitmap("green.bmp", wxBITMAP_TYPE_BMP)
+	self.grey_light = wxBitmap("grey.bmp", wxBITMAP_TYPE_BMP)
+	self.dark_grey_light = wxBitmap("darkgrey.bmp", wxBITMAP_TYPE_BMP)
+	self.mic_button = wxBitmapButton(self, ID_MIC_BUTTON, self.grey_light)
+	self.mic_label = wxStaticText(self, ID_MIC_LABEL, "Microphone: ")
+	self.button_line.Add(self.mic_label, 0, wxALIGN_CENTER)
+	self.button_line.Add(self.mic_button, 0)
+	EVT_BUTTON(self, ID_MIC_BUTTON, self.on_mic_button)
+
         top_and_bottom = wxAutoSplitterWindow.wxFixedFocusSplitter(self,
 	    ID_SPLITTER, 1)
         top_and_bottom.SetMinimumPaneSize(30)
@@ -129,12 +141,7 @@ class WaxEdSimPane(wxPanel):
 	self.command_log = wxCmdPrompt.wxCmdLog(log, prompt = self.prompt_text)
 
         self.prompt_line = wxBoxSizer(wxHORIZONTAL)
-	self.green_light = wxBitmap("green.bmp", wxBITMAP_TYPE_BMP)
-	self.grey_light = wxBitmap("grey.bmp", wxBITMAP_TYPE_BMP)
-	self.dark_grey_light = wxBitmap("darkgrey.bmp", wxBITMAP_TYPE_BMP)
-	self.mic_button = wxBitmapButton(self, ID_MIC_BUTTON, self.grey_light)
-	EVT_BUTTON(self, ID_MIC_BUTTON, self.on_mic_button)
-	self.vbox.Add(self.mic_button, 0)
+	self.vbox.Add(self.button_line, 0)
         self.vbox.Add(top_and_bottom, 1, wxEXPAND | wxALL, 4)
         self.vbox.Add(self.prompt_line, 0, wxEXPAND | wxALL, 4)
 
@@ -380,7 +387,9 @@ class WaxEdSimFrame(wxFrame):
         answer = dlg.ShowModal()
         if answer == wxID_OK:
             file_path = dlg.GetPath()
-	    self.app_control.open_file(file_path)
+# hack to get CmdInterp to scan for symbols	    
+	    self.pane.command_space['open_file'](file_path)
+#	    self.app_control.open_file(file_path)
         
     def on_activate(self, event):
         current = wxWindow_FindFocus()
