@@ -84,6 +84,8 @@ class MediatorObject(Object.Object):
     
     **INSTANCE ATTRIBUTES**
 
+    [AppState] *app* -- interface to editor 
+
     [CmdInterp] *interp=CmdInterp.CmdInterp()* -- Command interpreter used to
     translate pseudo-code to native code.
     
@@ -115,23 +117,26 @@ class MediatorObject(Object.Object):
     ..[CommandDictGrammar] file:///./sr_interface.CommandDictGrammar.html
     ..[CodeSelectGrammar] file:///./sr_interface.CodeSelectGrammar.html"""
     
-    def __init__(self, interp=CmdInterp.CmdInterp(), window = 0, exclusive=0,
+    def __init__(self, app = None, interp=CmdInterp.CmdInterp(), 
+		 window = 0, exclusive=0,
                  allResults = 0, **attrs):
 #        print '-- MediatorObject.__init__: called, window=%s' % window
         sr_interface.connect('off')        
         self.deep_construct(MediatorObject,
-                            {'interp': interp,
+                            {'app': app,
+			     'interp': interp,
                              'mixed_grammar': None,
                              'code_select_grammar': None,
 			     'window': window},
                             attrs,
                             {})
         self.mixed_grammar = \
-	    sr_interface.CommandDictGrammar(interpreter=self.interp, 
+	    sr_interface.CommandDictGrammar(app = self.app,
+		interpreter=self.interp, 
 	        window = window, exclusive = exclusive,
                 allResults = allResults)
         self.code_select_grammar = \
-	    sr_interface.CodeSelectGrammar(interpreter=self.interp,
+	    sr_interface.CodeSelectGrammar(app = self.app,
 		window = window, exclusive = exclusive,
                 allResults = allResults)
 

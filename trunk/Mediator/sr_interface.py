@@ -856,6 +856,8 @@ class CommandDictGrammar(DictGramBase):
     executes it.
     
     **INSTANCE ATTRIBUTES**
+
+    [AppState] *app* -- interface to the editor application
     
     [CmdInterp] *interpreter*-- Command interpreter used to and execute the
     recognised dictation utterances.
@@ -880,8 +882,9 @@ class CommandDictGrammar(DictGramBase):
     *none* -- 
     """
     
-    def __init__(self, interpreter=None, window = 0, exclusive = 0,
+    def __init__(self, app = None, interpreter=None, window = 0, exclusive = 0,
                  allResults = 0, **attrs):
+        self.__dict__['app'] = app
         self.__dict__['interpreter'] = interpreter
         DictGramBase.__init__(self)
 	self.window = window
@@ -906,7 +909,7 @@ class CommandDictGrammar(DictGramBase):
 	self.isActive = 1
 
     def gotBegin(self, moduleInfo):        
-#        print '-- CommandDictGrammar.gotBegin: self.window=%s, self.isActive=%s, self.exclusive=%s, self.allResults=%s, self.interpreter.on_app.active_field()=%s, moduleInfo=%s' % (self.window, self.isActive, self.exclusive, self.allResults, self.interpreter.on_app.active_field(), moduleInfo)
+#        print '-- CommandDictGrammar.gotBegin: self.window=%s, self.isActive=%s, self.exclusive=%s, self.allResults=%s, self.app.active_field()=%s, moduleInfo=%s' % (self.window, self.isActive, self.exclusive, self.allResults, self.app.active_field(), moduleInfo)
 
         #
         # Tell the external editor which window was active when utterance
@@ -915,12 +918,12 @@ class CommandDictGrammar(DictGramBase):
         #
         # Check if Editor currently allows user to dictate in that window.
         #
-        self.dictation_allowed = self.interpreter.on_app.recog_begin(moduleInfo[2])
+        self.dictation_allowed = self.app.recog_begin(moduleInfo[2])
         
 	if self.window == 0:
 	    pass
 #            print '-- CommandDictGrammar.gotBegin: this is a global grammar. Just pass'
-	elif (self.interpreter.on_app.active_field() == None and
+	elif (self.app.active_field() == None and
               self.dictation_allowed):
 #            print '-- CommandDictGrammar.gotBegin: I think this is supposed to be called only when editor window is active.'
 	    if not self.isActive:
@@ -933,7 +936,7 @@ class CommandDictGrammar(DictGramBase):
         
     def gotResultsObject(self, recogType, results):
 #        print '-- CommandDictGramm.gotResultsObject: recogType=%s' % recogType
-#        print '-- CommandDictGramm.gotResultsObject: self.interpreter.on_app=%s, self.dictation_allowed=%s' % (self.interpreter.on_app, self.dictation_allowed)
+#        print '-- CommandDictGramm.gotResultsObject: self.app=%s, self.dictation_allowed=%s' % (self.app, self.dictation_allowed)
 
         if self.dictation_allowed:        
             #
@@ -966,8 +969,8 @@ class CommandDictGrammar(DictGramBase):
             if recogType == 'self' or (recogType == 'other' and self.allResults):
                 self.last = SpokenUtteranceNL(results)
                 words = results.getWords(0)
-                self.interpreter.interpret_NL_cmd(words)
-                self.interpreter.on_app.curr_buffer().refresh_if_necessary()
+                self.interpreter.interpret_NL_cmd(words, self.app)
+                self.app.curr_buffer().refresh_if_necessary()
 
 #        print '-- CommandDictGramm.gotResults: exited'
         
@@ -976,10 +979,9 @@ class CodeSelectGrammar(SelectGramBase):
     """A grammar for selecting part of the visible code.
     
     **INSTANCE ATTRIBUTES**
-    
-    [CmdInterp] *interpreter=None*-- Command interpreter used to and execute the
-    recognised dictation utterances.
 
+    [AppState] *app* -- interface to the editor application
+    
     *INT window* -- MSW window handle of the window which must be in the
     foreground for the grammar to be activated, or 0 to make the grammar
     global
@@ -995,10 +997,10 @@ class CodeSelectGrammar(SelectGramBase):
     *none* -- 
     """
 
-    def __init__(self, interpreter=None, window = 0, exclusive = 0,
+    def __init__(self, app = None, window = 0, exclusive = 0,
                  allResults = 0):
         DictGramBase.__init__(self)
-        self.interpreter = interpreter
+	self.app = app
 	self.window = window
         self.exclusive = exclusive
         self.allResults = allResults
@@ -1026,17 +1028,17 @@ class CodeSelectGrammar(SelectGramBase):
 
     def gotBegin(self, moduleInfo):
 #        print '-- CodeSelectGrammar.gotBegin: called, self=%s' % repr(self.__dict__)
-#        print '-- CodeSelectGrammar.gotBegin: called,self.interpreter.on_app=%s, self.interpreter.on_app.curr_buffer()=%s' % (self.interpreter.on_app, self.interpreter.on_app.curr_buffer())
+#        print '-- CodeSelectGrammar.gotBegin: called,self.app=%s, self.app.curr_buffer()=%s' % (self.app, self.app.curr_buffer())
 
-	vis_start, vis_end = self.interpreter.on_app.curr_buffer().get_visible()
+	vis_start, vis_end = self.app.curr_buffer().get_visible()
 	self.vis_start = vis_start
 	visible = \
-	    self.interpreter.on_app.curr_buffer().get_text(vis_start, vis_end)
+	    self.app.curr_buffer().get_text(vis_start, vis_end)
 	self.setSelectText(visible)
 	if self.window == 0:
 #	    self.activate()
 	    self.setSelectText(visible)
-	elif self.interpreter.on_app.active_field() == None:
+	elif self.app.active_field() == None:
 	    self.setSelectText(visible)
 	    self.activate()
 	else:
@@ -1135,20 +1137,20 @@ class CodeSelectGrammar(SelectGramBase):
                 # which is closest to the cursor
                 #
                 self.ranges.sort()
-                closest_range_index = self.interpreter.on_app.curr_buffer().closest_occurence_to_cursor(self.ranges, regexp=self.selection_spoken_form(resObj), direction=direction, where=where)
+                closest_range_index = self.app.curr_buffer().closest_occurence_to_cursor(self.ranges, regexp=self.selection_spoken_form(resObj), direction=direction, where=where)
 
                 #
                 # Mark selection and/or move cursor  to the appropriate end of
                 # the selection.
                 #
                 if mark_selection:
-                    actions_gen.ActionSelect(range=self.ranges[closest_range_index], cursor_at=where).log_execute(self.interpreter.on_app, None)
+                    actions_gen.ActionSelect(range=self.ranges[closest_range_index], cursor_at=where).log_execute(self.app, None)
                 else:
                     if where > 0:
                         pos = self.ranges[closest_range_index][1]
                     else:
                         pos = self.ranges[closest_range_index][0]
-                    self.interpreter.on_app.curr_buffer().goto(pos)
+                    self.app.curr_buffer().goto(pos)
 
 # this is needed for the EdSim mediator simulator.  We want EdSim to
 # refresh at the end of interpretation of a whole utterance, not with 
@@ -1156,14 +1158,14 @@ class CodeSelectGrammar(SelectGramBase):
 # instantly and automatically, so their AppState/SourceBuff
 # implementations can simply ignore the refresh_if_necessary message.
 
-                self.interpreter.on_app.curr_buffer().refresh_if_necessary()
+                self.app.curr_buffer().refresh_if_necessary()
 
                 #
                 # Log the selected occurence so that if the user repeats the
                 # same Select Pseudocode operation we don't end up selecting
                 # the same occurence again
                 #
-                self.interpreter.on_app.curr_buffer().log_search(regexp=self.selection_spoken_form(resObj), direction=direction, where=where, match=self.ranges[closest_range_index])
+                self.app.curr_buffer().log_search(regexp=self.selection_spoken_form(resObj), direction=direction, where=where, match=self.ranges[closest_range_index])
 
 
     def selection_spoken_form(self, resObj):

@@ -38,9 +38,6 @@ class CmdInterp(Object):
     
     **INSTANCE ATTRIBUTES**
 
-    [AppState] *on_app=None* -- application for which we are
-    interpreting the commands
-    
     *{STR: [[* (Context] *, FCT)]} cmd_index={}* -- index of CSCs. Key
      is the spoken form of the command, value is a list of contextual
      meanings. A contextual meaning is a pair of a *context object*
@@ -69,7 +66,7 @@ class CmdInterp(Object):
     .. [Context] file:///./Context.Context.html
     .. [SymDict] file:///./SymDict.SymDict.html"""
     
-    def __init__(self, on_app=None, symdict_pickle_file=None,
+    def __init__(self, symdict_pickle_file=None,
                  disable_dlg_select_symbol_matches = None, **attrs):
 
         #
@@ -81,7 +78,7 @@ class CmdInterp(Object):
         # But these can
         #
         self.deep_construct(CmdInterp,
-                            {'on_app': on_app, 'cmd_index': {}, 
+                            {'cmd_index': {}, 
                              'known_symbols': SymDict.SymDict(), 
                              'language_specific_aliases': {},
                              'symdict_pickle_file': symdict_pickle_file,
@@ -106,7 +103,7 @@ class CmdInterp(Object):
             regexp = regexp + regexp_this_word
         return regexp
 
-    def interpret_NL_cmd(self, cmd, initial_buffer = None):
+    def interpret_NL_cmd(self, cmd, app, initial_buffer = None):
         
         """Interprets a natural language command and executes
         corresponding instructions.
@@ -123,9 +120,9 @@ class CmdInterp(Object):
 #        print '-- CmdInterp.interpret_NL_cmd: cmd=%s' % cmd
         
 	if initial_buffer == None:
-	    self.on_app.bind_to_buffer(self.on_app.curr_buffer_name())
+	    app.bind_to_buffer(app.curr_buffer_name())
 	else:
-	    self.on_app.bind_to_buffer(initial_buffer)
+	    app.bind_to_buffer(initial_buffer)
 
 	untranslated_words = []
 
@@ -141,9 +138,12 @@ class CmdInterp(Object):
              #
              # Identify leading CSC, LSA, symbol and ordinary word
              #
-             chopped_CSC, CSC_consumes, cmd_without_CSC = self.chop_CSC(cmd)
-             chopped_LSA, LSA_consumes, cmd_without_LSA = self.chop_LSA(cmd)
-             chopped_symbol, symbol_consumes, cmd_without_symbol = self.chop_symbol(cmd)
+             chopped_CSC, CSC_consumes, cmd_without_CSC = \
+	         self.chop_CSC(cmd, app)
+             chopped_LSA, LSA_consumes, cmd_without_LSA = \
+	         self.chop_LSA(cmd, app)
+             chopped_symbol, symbol_consumes, cmd_without_symbol = \
+	         self.chop_symbol(cmd, app)
              chopped_word, word_consumes, cmd_without_word = self.chop_word(cmd)             
              most_consumed = max((LSA_consumes, symbol_consumes, CSC_consumes, word_consumes))
 
@@ -177,13 +177,14 @@ class CmdInterp(Object):
                  CSCs = self.cmd_index[chopped_CSC]
                  csc_applies = 0
                  for aCSC in CSCs:
-                     csc_applies = aCSC.applies(self.on_app)
+                     csc_applies = aCSC.applies(app)
                      if (csc_applies):
 # flush untranslated words before executing action
 		         if untranslated_words:
-			     self.match_untranslated_text(untranslated_words)
+			     self.match_untranslated_text(untranslated_words, 
+				 app)
 			     untranslated_words = []
-			 aCSC.interpret(self.on_app)
+			 aCSC.interpret(app)
                          break
                  if csc_applies:
                      #
@@ -209,9 +210,9 @@ class CmdInterp(Object):
 #                 print '-- CmdInterp.interpret_NL_cmd: processing leading LSA=\'%s\'' % chopped_LSA
 # flush untranslated words before inserting LSA
 		 if untranslated_words:
-		     self.match_untranslated_text(untranslated_words)
+		     self.match_untranslated_text(untranslated_words, app)
 		     untranslated_words = []
-                 actions_gen.ActionInsert(code_bef=chopped_LSA, code_after='').log_execute(self.on_app, None)
+                 actions_gen.ActionInsert(code_bef=chopped_LSA, code_after='').log_execute(app, None)
                  cmd = cmd_without_LSA
                  head_was_translated = 1
 
@@ -257,22 +258,22 @@ class CmdInterp(Object):
                  # symbol.
                  #
 #                 print '-- CmdInterp.interpret_NL_cmd: found the end of some untranslated text'
-                 self.match_untranslated_text(untranslated_words)
+                 self.match_untranslated_text(untranslated_words, app)
 	 	 untranslated_words = []
 
              if untranslated_words:
                  untranslated_text = string.join(untranslated_words)
              else:
                  untranslated_text = None
-#             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', self.on_app.curr_buffer().cur_pos=%s' % (untranslated_text, self.on_app.curr_buffer().cur_pos())
+#             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos())
 
         # make sure to unbind the buffer before returning
-	self.on_app.unbind_from_buffer()
+	app.unbind_from_buffer()
 
         #
         # Notify external editor of the end of recognition
         #
-        self.on_app.recog_end()
+        app.recog_end()
 
 
     def massage_command(self, command):
@@ -302,7 +303,7 @@ class CmdInterp(Object):
             mod_command = mod_command + [sr_interface.vocabulary_entry(spoken, written, clean_written=0)]
         return mod_command
 
-    def match_untranslated_text(self, untranslated_words):
+    def match_untranslated_text(self, untranslated_words, app):
         """Tries to match last sequence of untranslated text to a symbol.
         
         **INPUTS**
@@ -347,16 +348,17 @@ class CmdInterp(Object):
             symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
 #            print '-- CmdInterp.match_untranslated_text: symbol_matches=%s' % symbol_matches
             if symbol_matches:
-                self.dlg_select_symbol_match(untranslated_text, symbol_matches)
+                self.dlg_select_symbol_match(untranslated_text, 
+		    symbol_matches, app)
 	    else:
-                actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(self.on_app, None)                
-#		self.on_app.insert_indent(untranslated_text, '')
+                actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                
+#		app.insert_indent(untranslated_text, '')
 	else:
-            actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(self.on_app, None)                            
-#	    self.on_app.insert_indent(untranslated_text, '')
+            actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                            
+#	    app.insert_indent(untranslated_text, '')
         
 
-    def dlg_select_symbol_match(self, untranslated_text, symbol_matches):
+    def dlg_select_symbol_match(self, untranslated_text, symbol_matches, app):
         """Asks the user to select a match for pseudo symbol.
         
         **INPUTS**
@@ -416,15 +418,15 @@ class CmdInterp(Object):
             #
             # Insert matched symbol
             #
-            actions_gen.ActionInsert(code_bef=chosen_match.native_symbol, code_after='').log_execute(self.on_app, None)            
-#            self.on_app.insert_indent(chosen_match.native_symbol, '')
+            actions_gen.ActionInsert(code_bef=chosen_match.native_symbol, code_after='').log_execute(app, None)            
+#            app.insert_indent(chosen_match.native_symbol, '')
 	else:
-            actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(self.on_app, None)                        
-#	    self.on_app.insert_indent(untranslated_text, '')
+            actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                        
+#	    app.insert_indent(untranslated_text, '')
 	
             
 
-    def chop_CSC(self, cmd):
+    def chop_CSC(self, cmd, app):
         """Chops the start of a command if it starts with a CSC.
         
         **INPUTS**
@@ -448,9 +450,9 @@ class CmdInterp(Object):
         
 #        print '-- CmdInterp.chop_CSC: cmd=%s' % cmd
 
-        return self.chop_construct(cmd, CmdInterp.is_spoken_CSC)
+        return self.chop_construct(cmd, CmdInterp.is_spoken_CSC, app)
 
-    def chop_LSA(self, command):
+    def chop_LSA(self, command, app):
         """Chops off the first word of a command if it is an LSA.
                 
         **INPUTS**
@@ -475,9 +477,9 @@ class CmdInterp(Object):
         """
         
 #        print '-- CmdInterp.chop_LSA: command=%s' % command
-        return self.chop_construct(command, CmdInterp.is_spoken_LSA)
+        return self.chop_construct(command, CmdInterp.is_spoken_LSA, app)
 
-    def chop_symbol(self, command):
+    def chop_symbol(self, command, app):
         """Chops off the beginning of a command if it is a known symbol.
         
         **INPUTS**
@@ -500,8 +502,8 @@ class CmdInterp(Object):
         """
 
 #        print '-- CmdInterp.chop_symbols: command=%s' % command
-#        if not self.on_app.translation_is_off:
-        return self.chop_construct(command, CmdInterp.is_spoken_symbol)
+#        if not app.translation_is_off:
+        return self.chop_construct(command, CmdInterp.is_spoken_symbol, app)
 #        else:
 #            return None, 0, command
     
@@ -534,7 +536,7 @@ class CmdInterp(Object):
         
 
 
-    def chop_construct(self, cmd, construct_check):
+    def chop_construct(self, cmd, construct_check, app):
         """Look at NL command to see if it starts with a
         particular kind of construct (e.g. CSC, LSA, symbol)
         
@@ -585,7 +587,7 @@ class CmdInterp(Object):
             a_spoken_form = sr_interface.clean_spoken_form(a_spoken_form)
 #            print '-- CmdInterp.chop_construct: upto=%s, a_spoken_form=%s' % (upto, a_spoken_form)
 
-            chopped_construct = construct_check(self, a_spoken_form)
+            chopped_construct = construct_check(self, a_spoken_form, app)
 #            print '-- CmdInterp.chop_construct: after construct_check'
             if chopped_construct != None:
                 #
@@ -603,7 +605,7 @@ class CmdInterp(Object):
         
 
 
-    def is_spoken_CSC(self, spoken_form):
+    def is_spoken_CSC(self, spoken_form, app):
         """Checks if a string is the spoken form of a CSC.
         
         **INPUTS**
@@ -624,7 +626,7 @@ class CmdInterp(Object):
 
 
 
-    def is_spoken_LSA(self, spoken_form):
+    def is_spoken_LSA(self, spoken_form, app):
         """Checks if a string is the spoken form of an LSA.
         
         **INPUTS**
@@ -644,7 +646,7 @@ class CmdInterp(Object):
         #
 
 	aliases = self.language_specific_aliases
-	language = self.on_app.active_language()
+	language = app.active_language()
 #        print '-- CmdInterp.is_spoken_LSA: language=%s' % language
         
         if aliases.has_key(language):
@@ -658,7 +660,7 @@ class CmdInterp(Object):
 
         return written_LSA
         
-    def is_spoken_symbol(self, spoken_form):
+    def is_spoken_symbol(self, spoken_form, app):
         """Checks if a string is the spoken form of a known symbol.
         
         **INPUTS**

@@ -148,7 +148,8 @@ def symbol_match_test(a_mediator, sources, pseudo_symbols):
 def test_SymDict():
     """Self test for SymDict"""
 
-    a_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
+    a_mediator = MediatorObject.MediatorObject(app = EdSim.EdSim(),
+        interp=CmdInterp.CmdInterp())
     a_mediator.configure()
     
     compilation_test(a_mediator, vc_globals.test_data + os.sep + 'small_buff.c')
@@ -176,7 +177,8 @@ def test_CmdInterp():
     # Create a command interpreter connected to the editor simulator
     #
     natlink.natConnect()    
-    a_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
+    a_mediator = MediatorObject.MediatorObject(app = EdSim.EdSim(),
+        interp=CmdInterp.CmdInterp())
     
 # I don't think this is necessary (or correct -- we do want the mediator
 # to go out of scope) but for regression testing purposes, I'm first
@@ -187,12 +189,12 @@ def test_CmdInterp():
     a_mediator.add_csc(acmd)
     acmd = CSCmd.CSCmd(spoken_forms=['loop body', 'goto body'], meanings={ContC(): c_goto_body, ContPy(): py_goto_body})
     a_mediator.add_csc(acmd)    
-    a_mediator.interp.on_app.open_file(vc_globals.test_data + os.sep + 'small_buff.c')
-    a_mediator.interp.on_app.goto(41)
+    a_mediator.app.open_file(vc_globals.test_data + os.sep + 'small_buff.c')
+    a_mediator.app.goto(41)
     print '\n\n>>> Testing command interpreter\n\n'
     print '\n>>> Interpreting in a C buffer'    
     print '\n>>> Current buffer is:\n'
-    a_mediator.interp.on_app.print_buff()
+    a_mediator.app.print_buff()
     old_stdin = util.stdin_read_from_string('1\n')
 
     #
@@ -200,29 +202,32 @@ def test_CmdInterp():
     # e.g. 'for loop' recognised as: ['for loop\for loop']
     #
     print '>>> Interpreting: %s' % ['for loop', 'loop body']
-    a_mediator.interp.interpret_NL_cmd(['for loop', 'loop body'])
+    a_mediator.interp.interpret_NL_cmd(['for loop', 'loop body'],
+	a_mediator.app)
 
     #
     # Test if spoken form of CSC is recognised as multiple vocabulary entries
     # e.g. 'for loop' recognised as ['for', 'loop']
     print '>>> Interpreting: %s' % ['for', 'loop', 'loop', 'body']
-    a_mediator.interp.interpret_NL_cmd(['for', 'loop', 'loop', 'body'])                                       
+    a_mediator.interp.interpret_NL_cmd(['for', 'loop', 'loop', 'body'],
+        a_mediator.app)                                       
     sys.stdin = old_stdin
     print '\n>>> Buffer is now:'
-    a_mediator.interp.on_app.print_buff()
+    a_mediator.app.print_buff()
     
 
-    a_mediator.interp.on_app.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
-    a_mediator.interp.on_app.goto(43)
-    a_mediator.interp.on_app.curr_buffer().language = 'python'
+    a_mediator.app.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
+    a_mediator.app.goto(43)
+    a_mediator.app.curr_buffer().language = 'python'
     print '\n>>> Interpreting in a Python buffer'    
     print '\n>>> Current buffer is:\n'
-    a_mediator.interp.on_app.print_buff()
+    a_mediator.app.print_buff()
 
     print '>>> Interpreting: %s' % ['for loop', 'loop body']
-    a_mediator.interp.interpret_NL_cmd(['for loop', 'loop body'])
+    a_mediator.interp.interpret_NL_cmd(['for loop', 'loop body'],
+        a_mediator.app)
     print '\n>>> Buffer is now:'
-    a_mediator.interp.on_app.print_buff()
+    a_mediator.app.print_buff()
 
     a_mediator.quit(save_speech_files=0, disconnect=0)    
         

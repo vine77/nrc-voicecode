@@ -187,31 +187,31 @@ def open_file(fname):
     *STR fname* is the path of the file"""
 
     global the_mediator
-    the_mediator.interp.on_app.open_file(fname)
+    the_mediator.app.open_file(fname)
     the_mediator.interp.known_symbols.parse_symbols(fname)
-    the_mediator.interp.on_app.curr_buffer().refresh_if_necessary()
+    the_mediator.app.curr_buffer().refresh_if_necessary()
 # show_buff()
 
 def list_buffers():
     global the_mediator
-    print the_mediator.interp.on_app.open_buffers_from_app()
+    print the_mediator.app.open_buffers_from_app()
 
 
 def change_buffer(buff_name):
     global the_mediator
-    if the_mediator.interp.on_app.change_buffer(buff_name):
+    if the_mediator.app.change_buffer(buff_name):
 	show_buff()
     else:
         print 'unknown buffer'
 
 def close_buffer(buff_name, save = 0):
     global the_mediator
-    the_mediator.interp.on_app.close_buffer(buff_name, save)
+    the_mediator.app.close_buffer(buff_name, save)
 
 def save():
     """save current buffer"""
     global the_mediator
-    the_mediator.interp.on_app.save_file()
+    the_mediator.app.save_file()
 
 def save_as(fname, no_prompt = 0):
     """save current buffer
@@ -222,7 +222,7 @@ def save_as(fname, no_prompt = 0):
     an existing file"""
 
     global the_mediator
-    the_mediator.interp.on_app.save_file(fname, no_prompt = no_prompt)
+    the_mediator.app.save_file(fname, no_prompt = no_prompt)
 
 def compile_symbols(file_list):
     global the_mediator
@@ -284,7 +284,7 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
         sys.stdin = temp_file
         
     if bypass_NatLink or os.environ.has_key('VCODE_NOSPEECH'):
-        the_mediator.interp.interpret_NL_cmd(utterance)
+        the_mediator.interp.interpret_NL_cmd(utterance, the_mediator.app)
         show_buff()        
     else:
         if util.islist(utterance) or util.istuple(utterance):
@@ -339,35 +339,35 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
 def goto(pos):
     """Goes to position *INT pos* of the current buffer"""
     global the_mediator
-    the_mediator.interp.on_app.goto(pos)
+    the_mediator.app.goto(pos)
     show_buff()
 
 def goto_line(linenum):
     """Goes to line number *INT linenum* of current source buffer"""
     global the_mediator    
-    the_mediator.interp.on_app.goto_line(linenum)
+    the_mediator.app.goto_line(linenum)
     show_buff()
 
 def make_position_visible(pos):
     global the_mediator    
-    the_mediator.interp.on_app.make_position_visible(pos)
+    the_mediator.app.make_position_visible(pos)
     show_buff()
 
 def select(start, end):
     """Selects from position *start* to position *end* in current buffer"""
     global the_mediator    
-    the_mediator.interp.on_app.set_selection((start, end))
+    the_mediator.app.set_selection((start, end))
     show_buff()
     
 def show_buff():
     """Shows content of current source buffer"""
     global the_mediator    
-    the_mediator.interp.on_app.curr_buffer().refresh_if_necessary()
+    the_mediator.app.curr_buffer().refresh_if_necessary()
 
 def move(steps):
     """Moves cursor by *INT steps* (can be negative)"""
     global the_mediator        
-    the_mediator.interp.on_app.move_relative(steps)
+    the_mediator.app.move_relative(steps)
     show_buff()
 
 
