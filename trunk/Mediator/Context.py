@@ -20,6 +20,7 @@
 ##############################################################################
 
 from Object import Object
+import sys
 
 class Context(Object):
     """Base class for all application contexts.
