@@ -1980,7 +1980,7 @@ class CmdInterp(OwnerObject):
         
         *none* -- 
         """
-        phrase = map(process_initials, symbols.words())
+        phrase = map(SpokenUtterance.remove_periods_from_initials, symbols.words())
         untranslated_text = string.join(phrase)
         spoken_form = untranslated_text
         trace('CmdInterp.match_untranslated_text',
@@ -3043,24 +3043,6 @@ class CmdInterp(OwnerObject):
        return known_spoken_forms.keys()
     
 
-        
-
-# functions, not methods
-
-def process_initials(spoken):
-    """strips the period from initials
-
-    **INPUTS**
-
-    *STR spoken* -- spoken form
-
-    **OUTPUTS**
-
-    *STR* -- spoken form, but with 'A.' -> 'a', etc.
-    """
-    if re.match('[A-Z]\.$', spoken):
-        return string.lower(spoken[0])
-    return spoken
     
 
 # defaults for vim - otherwise ignore
