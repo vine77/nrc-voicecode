@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:15:00 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 29 21:02:15 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,7 +25,7 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ServerMainThread</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_factory</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread._new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread._new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread._new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread._new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.data_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.data_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.deactivate_data_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.deactivate_data_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.handshake_listen_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.handshake_listen_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Invoked when a new socket connection was opened on VC_LISTEN port.</SPAN>
@@ -35,7 +35,7 @@
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_data_thread_given_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_data_thread_given_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_listener_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_listener_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_talker_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_talker_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.package_sock_pair"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.package_sock_pair</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.package_sock_pair"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.package_sock_pair</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.process_ready_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.process_ready_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ready_socks</SPAN>)<SPAN CLASS="OneLiner"> # Processes socket connections that have received new data.</SPAN>
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.quit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.quit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.start_other_threads"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.start_other_threads</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listener_evt</SPAN>, <SPAN CLASS="Argument">talker_evt</SPAN>)
@@ -99,11 +99,13 @@ virtual functions to create the subsidiary threads.</P>
 <DT>
 [Queue] <EM>new_listen_socks</EM>
 <DD>Queue from which to get any new connections.
-Each item is [(socket, (STR, STR, STR))] 
+Each item is [(socket, (STR, STR, STR, BOOL))] 
 a 2ple consiting of a new (uninitialised) socket on the VC_LISTEN
-port, and data about that socket. The data is itself a 3ple
+port, and data about that socket. The data is itself a 4ple
 consisting of: (a) identifier of external editor, (b) name of the
-external editor and (c) window handle of the external editor.
+external editor, (c) window handle of the external editor, and (d)
+a flag indicating whether the client is expecting to be used for
+regression testing. 
 <DT>
 <EM>[(socket, [None, None, None])] new_talk_socks</EM>
 <DD>the socket
@@ -166,7 +168,7 @@ AppStateMessaging instances
 ..[ListenForNewListenersThread] tcp_server.ListenForNewListenersThread.html
 ..[ListenForNewTalkersThread] tcp_server.ListenForNewTalkersThread.html
 </P>
-<H2 ID="tcp_server.ServerMainThread._new_instance" CLASS="Method">tcp_server.ServerMainThread._new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<H2 ID="tcp_server.ServerMainThread._new_instance" CLASS="Method">tcp_server.ServerMainThread._new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -183,6 +185,10 @@ STR <EM>id</EM>
 <DT>
 AppStateMessaging <EM>instance</EM> 
 <DD>the new instance
+<DT>
+BOOL <EM>test_client</EM>
+<DD>flag indicating whether or not the client
+is expecting to be used for regression testing
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -437,7 +443,7 @@ listens for new connections on the VC_TALK port.
 ..[NewConnListThread] 
 tcp_server.NewConnListThread.html
 </P>
-<H2 ID="tcp_server.ServerMainThread.package_sock_pair" CLASS="Method">tcp_server.ServerMainThread.package_sock_pair(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>)</H2>
+<H2 ID="tcp_server.ServerMainThread.package_sock_pair" CLASS="Method">tcp_server.ServerMainThread.package_sock_pair(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -464,6 +470,10 @@ socket <EM>listen_sock</EM>
 <DT>
 socket <EM>talk_sock</EM>
 <DD>The talk socket
+<DT>
+BOOL <EM>test_client</EM>
+<DD>flag indicating whether or not the client
+is expecting to be used for regression testing
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

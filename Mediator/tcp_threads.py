@@ -312,7 +312,7 @@ class NewConnListThread(ListenNewConnThread):
         """
         
         self.new_socks_lock.acquire()
-        self.new_socks.append((client_socket, [None, None, None]))
+        self.new_socks.append((client_socket, [None, None, None, None]))
         self.new_socks_lock.release()        
 
 class ListenNewEditorsThread(ListenNewConnThread):

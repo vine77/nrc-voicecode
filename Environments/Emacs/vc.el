@@ -1105,7 +1105,9 @@ off -> on, {on,sleeping} -> off."
 positive.
 
 The optional argument 'speech-server gives the name of the speech
-server to configure VR Mode for (either 'vr or 'vcode). If not specified,
+server to configure VR Mode for (either 'vr,  'vcode, or 'vcode-test). 
+
+If not specified,
 use whatever speech server VR Mode is currently configured for.
 
 VR mode supports Dragon NaturallySpeaking dictation, Select 'N
@@ -1117,10 +1119,13 @@ instructions.
   (vr-log "-- vr-mode: arg=%S\n" arg)
 
   (vr-log "**-- vr-mode: debug-on-error=%S\n" debug-on-error)
+  (setq vr-vcode-test-client 0)
   (if speech-server
     (cond
       ((string= speech-server "vr") (vr-mode-configure-for-vr-server))
       ((string= speech-server "vcode") (vr-mode-configure-for-vcode-server))
+      ((string= speech-server "vcode-test") (setq vr-vcode-test-client 1) (vr-mode-configure-for-vcode-server))
+      
     )
   )
 
@@ -1986,6 +1991,7 @@ command was a yank or not."
   (cl-puthash 'your_id_is 'vcode-cmd-your-id-is vr-message-handler-hooks)
   (cl-puthash 'send_id 'vcode-cmd-send-app-id vr-message-handler-hooks)
   (cl-puthash 'terminating 'vr-cmd-terminating vr-message-handler-hooks)
+  (cl-puthash 'test_client_query 'vcode-cmd-test-client-query vr-message-handler-hooks)
 
 
   (cl-puthash 'recog_begin 'vcode-cmd-recognition-start 
@@ -2133,6 +2139,20 @@ generated while executing VCode request 'vcode-req."
   )
 
    (vr-log "**-- vcode-cmd-send-app-name: exiting\n")
+)
+
+
+(defun vcode-cmd-test-client-query (vcode-req)
+   "Sends the name of the application ('Emacs) to the VoiceCode server."
+
+   (vr-log (format "**-- vcode-cmd-test-client-query: vcode-req=%S\n" vcode-req))
+
+   (let ((mess-cont (make-hash-table :test 'string=)))
+     (cl-puthash "value" vr-vcode-test-client mess-cont)
+     (vr-send-cmd (run-hook-with-args 'vr-serialize-message-hook (list "test_client_query_resp" mess-cont)))
+  )
+
+   (vr-log "**-- vcode-cmd-test-client-query: exiting\n")
 )
 
 (defun vcode-cmd-your-id-is (vcode-req)

@@ -152,7 +152,8 @@ class ClientConnection(Object.Object):
 	"""
 	return self.connecting or self.connected
 
-    def open_vc_listener_conn(self, app_name, host, listen_port):
+    def open_vc_listener_conn(self, app_name, host, listen_port,
+	test_client = 0):
         """Connects to VoiceCode on the listen port
 
 	**INPUTS**
@@ -166,6 +167,9 @@ class ClientConnection(Object.Object):
 
 	*INT* listen_port -- port number on which the server expects
 	new listen connections
+
+	*BOOL* test_client -- true if this connection is for a client
+	expecting to run regression tests
 
 	**OUTPUTS**
 
@@ -205,6 +209,16 @@ class ClientConnection(Object.Object):
         self.ID = msg[1]['value']
         vc_listen_msgr.send_mess('ok')
         
+        # indicate whether this is a test client expecting to run 
+	# regression tests
+
+        debug.trace('ClientConnection.open_vc_listener_conn',
+              'test client query')
+
+        msg = vc_listen_msgr.get_mess(expect=['test_client_query'])
+        vc_listen_msgr.send_mess('test_client_query_resp', 
+	    {'value': test_client})
+
         debug.trace('ClientConnection.open_vc_listener_conn',
               'done')
 
@@ -261,7 +275,7 @@ class ClientConnection(Object.Object):
     def connect(self, app_name, data_event,
 	    host = None, 
 	    listen_port = None,
-	    talk_port = None):
+	    talk_port = None, test_client = 0):
 	"""connect to the mediator
 
 	**INPUTS**
@@ -283,6 +297,9 @@ class ClientConnection(Object.Object):
 	*INT* talk_port -- port number on which the server expects
 	new talk connections.  Defaults to VC_TALKER_PORT
 
+	*BOOL* test_client -- true if this connection is for a client
+	expecting to run regression tests
+
 	**OUTPUTS**
 
 	*(Messenger, MixedMessenger)* -- a tuple containing the Messenger 
@@ -301,7 +318,8 @@ class ClientConnection(Object.Object):
 	    host = socket.gethostname()
 	# vc listener means the VoiceCode mediator is listening -- we're
 	# talking
-        talk_msgr = self.open_vc_listener_conn(app_name, host, listen_port)
+        talk_msgr = self.open_vc_listener_conn(app_name, host, listen_port, 
+	    test_client = test_client)
 	if talk_msgr == None:
 	    self.connecting = 0
 	    return None
@@ -1021,11 +1039,16 @@ class UneventfulLoop(Object.OwnerObject):
     ClientEditorChangeSpec *editor* -- the client wrapper for the EdSim 
     instance
 
+    BOOL *client_indentation* -- if true, use the name
+    EdSimClientIndent when handshaking with the server, to ensure that
+    the server will not override indentation on the server-side.
+
     **CLASS ATTRIBUTES**
 
     *none*
     """
-    def __init__(self, multiple = 0, print_buff = 0, **args):
+    def __init__(self, multiple = 0, print_buff = 0, client_indentation = 0, 
+	**args):
 	"""
 	**INPUTS**
 
@@ -1034,10 +1057,15 @@ class UneventfulLoop(Object.OwnerObject):
 
 	*BOOL print_buff* -- should this EdSim call print_buff whenever
 	the buffer changes?
+
+	BOOL *client_indentation* -- if true, use the name
+	EdSimClientIndent when handshaking with the server, to ensure that
+	the server will not override indentation on the server-side.
 	"""
 	self.deep_construct(UneventfulLoop,
 	                    {
 			     'connection': ClientConnection(),
+			     'client_indentation': client_indentation,
 			     'editor': None
 			    }, args)
 	underlying_editor = EdSim.EdSim(multiple = multiple, 
@@ -1050,8 +1078,12 @@ class UneventfulLoop(Object.OwnerObject):
 	self.quit_flag = 1
 
     def run(self, host = None, listen_port = None, talk_port = None):
-	messengers = self.connection.connect('EdSim', DummyDataEvent(), 
-	    host = host, listen_port = listen_port, talk_port = talk_port)
+	client_name = 'EdSim'
+	if self.client_indentation:
+	    client_name = 'EdSimClientIndent'
+	messengers = self.connection.connect(client_name, DummyDataEvent(), 
+	    host = host, listen_port = listen_port, talk_port = talk_port, 
+	    test_client = 1)
 	if messengers == None:
 	    sys.stderr.write('Unable to connect to server\n')
 	    return

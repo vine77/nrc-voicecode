@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:15:00 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 29 21:02:15 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -29,9 +29,15 @@
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediatorExtLoop.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owner</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediatorExtLoop.data_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediatorExtLoop.data_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
 
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
     <SPAN CLASS="InheritsHead"># Inherited from tcp_server.ServerMainThread</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_factory</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread._new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread._new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread._new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread._new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.data_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.data_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.deactivate_data_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.deactivate_data_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.handshake_listen_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.handshake_listen_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Invoked when a new socket connection was opened on VC_LISTEN port.</SPAN>
@@ -41,21 +47,15 @@
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_data_thread_given_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_data_thread_given_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_listener_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_listener_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_talker_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_talker_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.package_sock_pair"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.package_sock_pair</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.package_sock_pair"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.package_sock_pair</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.process_ready_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.process_ready_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ready_socks</SPAN>)<SPAN CLASS="OneLiner"> # Processes socket connections that have received new data.</SPAN>
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.quit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.quit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.start_other_threads"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.start_other_threads</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listener_evt</SPAN>, <SPAN CLASS="Argument">talker_evt</SPAN>)
 
-    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
-    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
-
     <SPAN CLASS="InheritsHead"># Inherited from tcp_server.ServerOldMediator</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">test_suite=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator._destroy_mediator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator._destroy_mediator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator._new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator._new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator._new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator._new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator.delete_instance_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator.delete_instance_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator.known_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator.known_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator.quit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator.quit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
@@ -98,7 +98,137 @@ STR <EM>id</EM>
 data thread to ensure that process_ready_socks is called.
 
 </DL>
-<H2 ID="tcp_server.ServerMainThread._new_instance" CLASS="Method">tcp_server.ServerMainThread._new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
+
+<P>
+Attributes are directly through self.__dict__, thus bypassing safe
+__setattr__.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ initial values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
+<P>Build an instance of a class.</P>
+
+<P>
+Basically, this method:
+- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
+- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
+
+<DL>
+
+<DT>
+<EM>CLASS</EM> this_class
+<DD>Class that we want to build. This is a
+ class object as opposed to the name of a class. Constructors
+ of immediate superclasses of <EM>this_class</EM> are called
+ automatically, except if they are listed in *{CLASS: 1}
+ exclude_bases*.
+<DT>
+<EM>{STR: ANY}</EM> attrs_this_class
+<DD>New attributes (and their
+ values) defined by class <EM>this_class</EM>. The keys are the names
+ of the attributes and the values are the values of the
+ attributes (either default values or values passed to
+ *this_class.__init__*). An attribute with the appropriate
+ name will be declared automatically and initialsed to the
+ value specified in <EM>attrs_this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> args_super
+<DD>Arguments received by
+<EM>this_class.__init__</EM> but not recognised by it. These are
+assumed to be arguments defined in the <EM>__init__</EM> of some
+ancestor class and are just passed up the construction
+chain. Keys of <EM>args_super</EM> correspond to the names of the
+arguments and the values corresponds to the values received
+for them by <EM>this_class.__init__</EM>
+<DT>
+<EM>{STR: ANY}</EM> new_default={}
+<DD>Used to change the default
+ value of an ancestor constructor argument. In other words, if
+ <EM>this_class.__init__</EM> was called without specifying a value
+ for an argument that's listed in <EM>new_default</EM>, the default
+ value defined in <EM>new_default</EM> will be used instead of
+ whatever default might be defined in the constructor
+ of an ancestor class. However, if the constructor was called
+ WITH a specific value for that argument, that specific value
+ will be used instead of both the defaults defined in
+ <EM>new_default</EM> and the constructor of ancestor classes. Keys
+ of <EM>new_default</EM> correspond to argument names, and values
+ correspond to the new default values. If you don't specify a
+ value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
+ the defaults of none of the ancestor constructor arguments
+ are redefined by <EM>this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> enforce_value={}
+<DD>Lists of arguments with
+ enforced values. If the constructor is called with a value
+ for an argument that is different from the value specified
+ for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
+ exception will be raised. Also, if the constructor is called
+ without specifying a value for a particular argument, then
+ the value defined in <EM>enforce_value</EM> (if it exists) will be
+ used instead of whatever default might be defined in an
+ ancestor class. Keys of <EM>enforce_value</EM> correspond to
+ argument names and values correspond to the enforced
+ values. If you don't specify a value for <EM>enforce_value</EM>, it
+ defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
+ not enforce the value of any argument.
+<DT>
+<EM>{CLASS: BOOL}</EM> exclude_bases
+<DD>Immediate base classes whose
+constructors should not be called automatically. If an
+immediate superclass of <EM>this_class</EM> is listed in
+<EM>exclude_bases</EM>, then we don't automatically call its
+constructor. It is assumed that the programmer will call the
+constructor manually in <EM>this_class.__init__</EM>. If you do not
+specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
+which means that the constructor of all immediate super
+classes will be called automatically.
+</DL>
+<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+<P>
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised (provided PY_DEBUG_OBJECT=1).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="tcp_server.ServerMainThread._new_instance" CLASS="Method">tcp_server.ServerMainThread._new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -115,6 +245,10 @@ STR <EM>id</EM>
 <DT>
 AppStateMessaging <EM>instance</EM> 
 <DD>the new instance
+<DT>
+BOOL <EM>test_client</EM>
+<DD>flag indicating whether or not the client
+is expecting to be used for regression testing
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -369,7 +503,7 @@ listens for new connections on the VC_TALK port.
 ..[NewConnListThread] 
 tcp_server.NewConnListThread.html
 </P>
-<H2 ID="tcp_server.ServerMainThread.package_sock_pair" CLASS="Method">tcp_server.ServerMainThread.package_sock_pair(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>)</H2>
+<H2 ID="tcp_server.ServerMainThread.package_sock_pair" CLASS="Method">tcp_server.ServerMainThread.package_sock_pair(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -396,6 +530,10 @@ socket <EM>listen_sock</EM>
 <DT>
 socket <EM>talk_sock</EM>
 <DD>The talk socket
+<DT>
+BOOL <EM>test_client</EM>
+<DD>flag indicating whether or not the client
+is expecting to be used for regression testing
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -483,136 +621,6 @@ and that handshake_talk_socks should be called
 <P>
 <EM>none</EM> 
 </P>
-<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Define new attributes for <EM>self</EM></P>
-
-<P>
-Attributes are directly through self.__dict__, thus bypassing safe
-__setattr__.</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- initial values as the values.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
-<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
-<P>Build an instance of a class.</P>
-
-<P>
-Basically, this method:
-- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
-- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
-
-<DL>
-
-<DT>
-<EM>CLASS</EM> this_class
-<DD>Class that we want to build. This is a
- class object as opposed to the name of a class. Constructors
- of immediate superclasses of <EM>this_class</EM> are called
- automatically, except if they are listed in *{CLASS: 1}
- exclude_bases*.
-<DT>
-<EM>{STR: ANY}</EM> attrs_this_class
-<DD>New attributes (and their
- values) defined by class <EM>this_class</EM>. The keys are the names
- of the attributes and the values are the values of the
- attributes (either default values or values passed to
- *this_class.__init__*). An attribute with the appropriate
- name will be declared automatically and initialsed to the
- value specified in <EM>attrs_this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> args_super
-<DD>Arguments received by
-<EM>this_class.__init__</EM> but not recognised by it. These are
-assumed to be arguments defined in the <EM>__init__</EM> of some
-ancestor class and are just passed up the construction
-chain. Keys of <EM>args_super</EM> correspond to the names of the
-arguments and the values corresponds to the values received
-for them by <EM>this_class.__init__</EM>
-<DT>
-<EM>{STR: ANY}</EM> new_default={}
-<DD>Used to change the default
- value of an ancestor constructor argument. In other words, if
- <EM>this_class.__init__</EM> was called without specifying a value
- for an argument that's listed in <EM>new_default</EM>, the default
- value defined in <EM>new_default</EM> will be used instead of
- whatever default might be defined in the constructor
- of an ancestor class. However, if the constructor was called
- WITH a specific value for that argument, that specific value
- will be used instead of both the defaults defined in
- <EM>new_default</EM> and the constructor of ancestor classes. Keys
- of <EM>new_default</EM> correspond to argument names, and values
- correspond to the new default values. If you don't specify a
- value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
- the defaults of none of the ancestor constructor arguments
- are redefined by <EM>this_class</EM>.
-<DT>
-<EM>{STR: ANY}</EM> enforce_value={}
-<DD>Lists of arguments with
- enforced values. If the constructor is called with a value
- for an argument that is different from the value specified
- for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
- exception will be raised. Also, if the constructor is called
- without specifying a value for a particular argument, then
- the value defined in <EM>enforce_value</EM> (if it exists) will be
- used instead of whatever default might be defined in an
- ancestor class. Keys of <EM>enforce_value</EM> correspond to
- argument names and values correspond to the enforced
- values. If you don't specify a value for <EM>enforce_value</EM>, it
- defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
- not enforce the value of any argument.
-<DT>
-<EM>{CLASS: BOOL}</EM> exclude_bases
-<DD>Immediate base classes whose
-constructors should not be called automatically. If an
-immediate superclass of <EM>this_class</EM> is listed in
-<EM>exclude_bases</EM>, then we don't automatically call its
-constructor. It is assumed that the programmer will call the
-constructor manually in <EM>this_class.__init__</EM>. If you do not
-specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
-which means that the constructor of all immediate super
-classes will be called automatically.
-</DL>
-<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
-<P>Initialises existing attributes</P>
-
-<P>
-Attributes are only set if they already exist in
- <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
- raised (provided PY_DEBUG_OBJECT=1).</P>
-<P>
-<STRONG>INPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>{STR: ANY}</EM> attrs
-<DD>dictionary with attribute name as the keys and
- default values as the values.
-</DL>
-<P>
-<STRONG>OUTPUTS</STRONG></P>
-
-<DL>
-
-<DT>
-<EM>none</EM>
-<DD>
-</DL>
 <H2 ID="tcp_server.ServerOldMediator._destroy_mediator" CLASS="Method">tcp_server.ServerOldMediator._destroy_mediator(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)</H2>
 <P>None</P>
 
@@ -634,7 +642,7 @@ that mediator.
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="tcp_server.ServerOldMediator._new_instance" CLASS="Method">tcp_server.ServerOldMediator._new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<H2 ID="tcp_server.ServerOldMediator._new_instance" CLASS="Method">tcp_server.ServerOldMediator._new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -651,6 +659,10 @@ STR <EM>id</EM>
 <DT>
 AppStateMessaging <EM>instance</EM> 
 <DD>the new instance
+<DT>
+BOOL <EM>test_client</EM>
+<DD>flag indicating whether or not the client
+is expecting to be used for regression testing
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

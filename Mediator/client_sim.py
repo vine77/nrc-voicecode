@@ -29,7 +29,7 @@ python client_sim.py [OPTIONS]
 
 where OPTIONS are 
 
-[-m] [-p] [--host host] [--listen listen_port] [--talk talk_port]
+[-m] [-p] [-i] [--host host] [--listen listen_port] [--talk talk_port]
 
 runs an EdSim editor simulator as a TCP client to the mediator server, using
 UneventfulLoopThis 
@@ -47,6 +47,9 @@ OPTIONS
 -p :
    have EdSim print the buffer whenever it changes
 
+-i :
+   use client-side indentation
+
 --host host:
   specify the host name or IP address (Defaults to the local host)
 
@@ -56,9 +59,10 @@ OPTIONS
 --listen listen_port:
   specify the port number to use for the listen connection
     """
-def run(multiple = 0, print_buff = 0, 
+def run(multiple = 0, print_buff = 0, client_indentation = 0,
 	host = None, listen_port = None, talk_port = None):
-    l = UneventfulLoop(multiple, print_buff)
+    l = UneventfulLoop(multiple, print_buff, 
+	client_indentation = client_indentation)
     l.run(host, listen_port, talk_port)
     l.cleanup()
 
@@ -68,6 +72,7 @@ if __name__ == '__main__':
 
 
     opts, args = util.gopt(['h', None, 'm', None, 'p', None,
+                            'i', None,
 			    'host=', None,
                             'talk=', None, 'listen=', None])
     if opts['h']:
@@ -83,5 +88,9 @@ if __name__ == '__main__':
 	print_buff = 0
 	if opts['p']:
 	    print_buff = 1
-	run(multiple, print_buff, host, listen_port, talk_port)
+	client_indentation = 0
+	if opts['i']:
+	    client_indentation = 1
+	run(multiple, print_buff, client_indentation, host, 
+	    listen_port, talk_port)
 

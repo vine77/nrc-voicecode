@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 22 13:15:00 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Mon Jul 29 21:02:15 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -27,7 +27,7 @@
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">ServerOldMediator</SPAN>(<A CLASS="DocLink" HREF="tcp_server.ServerMainThread.html">ServerMainThread</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">test_suite=None</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator._destroy_mediator"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator._destroy_mediator</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator._new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator._new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator._new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator._new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator.delete_instance_cbk"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator.delete_instance_cbk</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">unexpected=0</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator.known_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator.known_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerOldMediator.quit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerOldMediator.quit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
@@ -40,7 +40,7 @@
 
     <SPAN CLASS="InheritsHead"># Inherited from tcp_server.ServerMainThread</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">editor_factory</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread._new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread._new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread._new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread._new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.data_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.data_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.deactivate_data_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.deactivate_data_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.handshake_listen_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.handshake_listen_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Invoked when a new socket connection was opened on VC_LISTEN port.</SPAN>
@@ -50,7 +50,7 @@
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_data_thread_given_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_data_thread_given_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_listener_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_listener_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_talker_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_talker_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.package_sock_pair"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.package_sock_pair</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.package_sock_pair"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.package_sock_pair</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.process_ready_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.process_ready_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">ready_socks</SPAN>)<SPAN CLASS="OneLiner"> # Processes socket connections that have received new data.</SPAN>
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.quit"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.quit</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.start_other_threads"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.start_other_threads</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">listener_evt</SPAN>, <SPAN CLASS="Argument">talker_evt</SPAN>)
@@ -91,7 +91,7 @@ that mediator.
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="tcp_server.ServerOldMediator._new_instance" CLASS="Method">tcp_server.ServerOldMediator._new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<H2 ID="tcp_server.ServerOldMediator._new_instance" CLASS="Method">tcp_server.ServerOldMediator._new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -108,6 +108,10 @@ STR <EM>id</EM>
 <DT>
 AppStateMessaging <EM>instance</EM> 
 <DD>the new instance
+<DT>
+BOOL <EM>test_client</EM>
+<DD>flag indicating whether or not the client
+is expecting to be used for regression testing
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -320,7 +324,7 @@ Attributes are only set if they already exist in
 <EM>none</EM>
 <DD>
 </DL>
-<H2 ID="tcp_server.ServerMainThread._new_instance" CLASS="Method">tcp_server.ServerMainThread._new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<H2 ID="tcp_server.ServerMainThread._new_instance" CLASS="Method">tcp_server.ServerMainThread._new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -337,6 +341,10 @@ STR <EM>id</EM>
 <DT>
 AppStateMessaging <EM>instance</EM> 
 <DD>the new instance
+<DT>
+BOOL <EM>test_client</EM>
+<DD>flag indicating whether or not the client
+is expecting to be used for regression testing
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -591,7 +599,7 @@ listens for new connections on the VC_TALK port.
 ..[NewConnListThread] 
 tcp_server.NewConnListThread.html
 </P>
-<H2 ID="tcp_server.ServerMainThread.package_sock_pair" CLASS="Method">tcp_server.ServerMainThread.package_sock_pair(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>)</H2>
+<H2 ID="tcp_server.ServerMainThread.package_sock_pair" CLASS="Method">tcp_server.ServerMainThread.package_sock_pair(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -618,6 +626,10 @@ socket <EM>listen_sock</EM>
 <DT>
 socket <EM>talk_sock</EM>
 <DD>The talk socket
+<DT>
+BOOL <EM>test_client</EM>
+<DD>flag indicating whether or not the client
+is expecting to be used for regression testing
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
