@@ -21,6 +21,7 @@
 
 from Object import Object
 import debug
+import symbol_formatting
 
 class SymbolResult(Object):
     """
@@ -72,10 +73,6 @@ class SymbolResult(Object):
         
         *STR reformatted_to=None* -- alternate form that this symbol was reformatted
         to.
-    
-        *[STR] alternate_forms=[]* -- list of alternate formats for the symbol.
-        These could be homophonic symbols, or different ways of formatting
-        the same symbol.
         """
        
         self.deep_construct(SymbolResult,
@@ -91,7 +88,6 @@ class SymbolResult(Object):
                              'was_new': new_symbol,
                              'in_utter_interp': in_utter_interp,
                              'reformatted_to': None,
-                             'alternate_forms': []
                             }, args)
        
                             
@@ -164,6 +160,53 @@ class SymbolResult(Object):
         forbidden matches, or None if none have been generated yet
         """
         return self.forbidden
+        
+    def possible_new_symbol_formats(self):
+       """returns a list of possible formats for the symbol if it was
+       to be created as a new symbol"""
+       formats = []
+       for a_style in self.builder_preferences():
+          sym_builder = symbol_formatting.registry.make_builder(a_style)
+          debug.trace('SymbolResult.possible_new_symbol_formats', '** sym_builder=%s' % sym_builder)
+          sym_in_this_format = sym_builder.build_from_words(self.spoken_phrase())
+          debug.trace('SymbolResult.possible_new_symbol_formats', '** sym_in_this_format=%s' % sym_in_this_format)
+          formats.append(sym_in_this_format)
+       return formats    
+        
+    def suggestions_list(self):
+        """returns a prioritized list of written forms that COULD 
+        be used for the symbol. This list is displayed to the user
+        in the symbol reformatting dialog.
+        
+        We first list exact matches, then possible matches (sorted 
+        in decreasing order of likelihood), then formats for 
+        the symbol if it is considered as a new one.
+        
+        **OUTPUTS**
+        
+        *[STR]* -- The list from most likely to least likely.
+        """
+        list = [self.native_symbol()] + self.exact_matches()
+       
+        sorted_possible = self.possible_matches()
+        
+        def cmp(a, b):
+           if a[0] > b[0]: return 1
+           if a[0] < b[0]: return -1
+           return 0
+           
+        sorted_possible.sort(cmp)        
+        sorted_possible.reverse()
+        for a_possible in sorted_possible:
+           if not a_possible[1] in list:
+              list.append(a_possible[1])
+   
+        for a_new_format in self.possible_new_symbol_formats():
+           if not a_new_format in list:
+              list.append(a_new_format)
+        
+        return list
+        
  
     def reformat_to(self, alt_form):
        """Changes the written form of the symbol to an alternate form.

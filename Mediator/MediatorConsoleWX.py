@@ -2132,7 +2132,7 @@ class ReformatFromRecentWX(DlgModelViewWX):
        self.view().do_select_nth_form(nth)
        
     def on_select_alternate_form(self, nth):
-       form = self.symbol.alternate_forms[nth]
+       form = self.symbol.suggestions_list()[nth]
        self.view().set_alternate_form(form)
 
     def do_choose_nth_form(self, nth):
@@ -2140,7 +2140,7 @@ class ReformatFromRecentWX(DlgModelViewWX):
               
     def on_choose_alternate_form(self, nth):
        self.on_select_alternate_form(nth)
-       self.symbol.reformat_to(self.symbol.alternate_forms[nth])
+       self.symbol.reformat_to(self.symbol.suggestions_list()[nth])
        
     def do_cancel(self):
        self.view().do_cancel()
@@ -2232,17 +2232,17 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
             style = wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL)
         set_text_font(formats_pick_list)
         
-        formats_pick_list.InsertColumn(0, "#")
+        formats_pick_list.InsertColumn(0, "")
         formats_pick_list.InsertColumn(1, "Written form")
 
-        for ii in range(len(self.symbol.alternate_forms)):
+        for ii in range(len(self.symbol.suggestions_list())):
            formats_pick_list.InsertStringItem(ii, "%d" % (ii+1))
-           formats_pick_list.SetStringItem(ii, 1, self.symbol.alternate_forms[ii])
+           formats_pick_list.SetStringItem(ii, 1, self.symbol.suggestions_list()[ii])
 
         formats_pick_list.SetColumnWidth(0, wxLIST_AUTOSIZE_USEHEADER)
         formats_pick_list.SetColumnWidth(1, wxLIST_AUTOSIZE_USEHEADER)
 
-        formats_pick_list.ScrollList(0, len(self.symbol.alternate_forms))
+        formats_pick_list.ScrollList(0, len(self.symbol.suggestions_list()))
         self.formats_pick_list = formats_pick_list
         main_sizer.Add(formats_pick_list, 1, wxEXPAND | wxALL)
         okb = wxButton(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
@@ -2276,7 +2276,7 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
         main_sizer.Fit(self)
         main_sizer.SetMinSize(wxSize(q.GetWidth(), 0))
         resize_last_column(self.formats_pick_list)
-        last = len(self.symbol.alternate_forms)-1
+        last = len(self.symbol.suggestions_list())-1
         self.formats_pick_list.EnsureVisible(last)
         self.formats_pick_list.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
         self.formats_pick_list.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)

@@ -56,11 +56,8 @@ import WinSystemMSW
 debug.config_traces(status="off", 
                     active_traces={
 #################################  
-                    'MockReformatFromRecentWX.__init__': 1,
-                    'ReformatFromRecentWX.__init__': 1,
-                    'DlgModelView.__init__': 1,
-                    'CorrectRecentViewWX.on_char': 1,
-                    'MockReformatFromRecentWX.make_view': 1,
+                    'SymbolResult.suggestions_list': 1,
+                    'SymbolResult.possible_new_symbol_formats': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)

@@ -62,10 +62,33 @@ class ReformatRecentTestCase(MediatorConsoleWXTestCase):
     utter1 = MockSpokenUtterance(['new', 'symbol', 'one', 'one', 'equals', 'new', 'symbol', 'one', 'two'])
             
                                   
-    sym1_1 = SymbolResult('new_symbol_1_1', ['new', 'symbol', 'one', 'one'], None, '', None, [], 
+    sym1_1 = SymbolResult(native_symbol = 'new_symbol_1_1', 
+                          spoken_phrase = ['new', 'symbol', 'one', 'one'], 
+                          exact_matches = ['NewSymb1_1'],
+                          as_inserted='',
+                          buff_name=None,
+                          builder_preferences=['std_underscores', 'std_intercaps',
+                                               'std_all_caps_underscores'],
+                          possible_matches = [(2, 'ns11'), (1, 'news1_1')],
+                          forbidden=None,
+                          new_symbol=0,
                           in_utter_interp=None)
-    sym1_2 = SymbolResult('new_symbol_1_2', ['new', 'symbol', 'one', 'two'], None, '', None, [], 
-                          in_utter_interp=None)               
+                     
+    
+                         
+                          
+    sym1_2 = SymbolResult(native_symbol = 'new_symbol_1_2', 
+                          spoken_phrase = ['new', 'symbol', 'one', 'two'], 
+                          exact_matches = ['NewSymb1_2'],
+                          as_inserted='',
+                          buff_name=None,
+                          builder_preferences=['std_underscores', 'std_intercaps',
+                                               'std_all_caps_underscores'],
+                          possible_matches = [(2, 'ns12'), (1, 'news1_2')],
+                          forbidden=None,
+                          new_symbol=0,
+                          in_utter_interp=None)
+    
     sym_list = [sym1_1, sym1_2]
                                    
     phrase1 = MockUtteranceInterpretation(utter1, symbols = sym_list, )
@@ -130,15 +153,23 @@ class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
        
     def setUp(self):
        self.utter1 = MockSpokenUtterance(['new', 'symbol', 'one', 'one', 'equals', 'new', 'symbol', 'one', 'two'])                                  
-       self.sym1_1 = SymbolResult('new_symbol_1_1', ['new', 'symbol', 'one', 'one'], None, '', None, [], 
-                          in_utter_interp=None)
-       self.sym1_1.alternate_forms = ['new_sym_1_1', 'NewSym1_1', 'newSym11', 
-                                      'NEW_SYMBOL_1_1', 'new_symbol_1_1']
+       self.sym1_1 = SymbolResult(native_symbol = 'new_symbol_1_1', 
+                                  spoken_phrase = ['new', 'symbol', 'one', 'one'], 
+                                  exact_matches = ['NewSymb1_1'],
+                                  as_inserted='',
+                                  buff_name=None,
+                                  builder_preferences=['std_underscores', 'std_intercaps',
+                                                       'std_all_caps_underscores'],
+                                  possible_matches = [(2, 'ns11'), (1, 'news1_1')],
+                                  forbidden=None,
+                                  new_symbol=0,
+                                  in_utter_interp=None)
+
        self.dlg = MediatorConsoleWX.ReformatFromRecentWX \
                         (console = self.console, 
                         parent = None, symbol = self.sym1_1)
        # AD: Uncomment this if you want to see what the window looks like. 
-       self.dlg.ShowModal()
+#       self.dlg.ShowModal()
 
 
     def tearDown(self):
@@ -161,9 +192,9 @@ class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
     def test_fixture_initialisation(self):
         self.assert_(self.dlg != None, "Reformat from recent dialog not initialised properly.")
         self.assert_displayed_form_is('new_symbol_1_1')
-        self.assert_displayed_alternate_forms_are(self.sym1_1.alternate_forms)
+        self.assert_displayed_alternate_forms_are(self.sym1_1.suggestions_list())
         self.assert_displayed_spoken_form_is(string.join(self.sym1_1.spoken_phrase()))
-#>        self.assert_displayed_spoken_form_is("blah")
+
         
     def assert_symbol_was_not_reformatted(self):
         self.assert_(not self.dlg.symbol.reformatted_to, "Symbol reformatted prematurely, or its reformatting was not undone as it should have")
@@ -174,13 +205,13 @@ class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
         
     def test_on_select_form(self):
         self.dlg.do_select_nth_form(2)
-        self.assert_displayed_form_is(self.sym1_1.alternate_forms[2], 'Selecting new format did not change the displayed form.')
+        self.assert_displayed_form_is(self.sym1_1.suggestions_list()[2], 'Selecting new format did not change the displayed form.')
         self.assert_symbol_was_not_reformatted()
 
     def test_on_choose_form(self):
         self.dlg.do_choose_nth_form(2)
-        self.assert_displayed_form_is(self.sym1_1.alternate_forms[2], 'Selecting new format did not change the displayed form.')
-        self.assert_symbol_was_reformatted_to(self.sym1_1.alternate_forms[2])
+        self.assert_displayed_form_is(self.sym1_1.suggestions_list()[2], 'Selecting new format did not change the displayed form.')
+        self.assert_symbol_was_reformatted_to(self.sym1_1.suggestions_list()[2])
         
     def test_cancel(self):
         self.dlg.do_choose_nth_form(2)
