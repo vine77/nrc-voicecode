@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-import natlink, sys
+import sys
 import actions_gen, AppState, CmdInterp, cont_gen, CSCmd, Object, re, sr_interface, SymDict, vc_globals
 
 """Defines main class for the mediator.

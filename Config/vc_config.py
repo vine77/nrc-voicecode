@@ -36,8 +36,8 @@
 #       which provides better error reportingn than when evaluated by
 #       MediatorObject.configure().
 #
-import natlink
-from natlinkutils import *
+# import natlink
+# from natlinkutils import *
 
 #
 # Import configuration functions
@@ -86,7 +86,8 @@ if (__name__ == '__main__'):
 	standard_symbols_in = test_mediator.standard_symbols_in
         
 	if sr_interface.speech_able():
-	    natlink.natConnect()    
+#	    natlink.natConnect()    
+	    sr_interface.connect()
 
 
 ##############################################################################

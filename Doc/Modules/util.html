@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Nov 08 00:38:35 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Nov 18 11:36:43 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -15,17 +15,23 @@
 
 
 <H1 CLASS="ModuleName">Module util</H1>
-<PRE><SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#dict_merge"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">dict_merge</SPAN></A>(<SPAN CLASS="Argument">dict1</SPAN>, <SPAN CLASS="Argument">dict2</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Merges two dictionaries</SPAN>
-<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#gopt"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">gopt</SPAN></A>(<SPAN CLASS="Argument">opt_defs</SPAN>, <SPAN CLASS="Argument">cmd=['-i', '-f', 'HTML4', '-d', 'e:\\Projects\\VoiceCode\\VCode\\Doc\\Modules', 'e:\\Projects\\VoiceCode\\VCode\\Mediator\\util.py']</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # High level wrapper around <EM>getopt.getop</EM>.</SPAN>
+<PRE><SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">common_path</SPAN>(<SPAN CLASS="Argument">first</SPAN>, <SPAN CLASS="Argument">second</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#dict_merge"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">dict_merge</SPAN></A>(<SPAN CLASS="Argument">dict1</SPAN>, <SPAN CLASS="Argument">dict2</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Merges two dictionaries</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">find_common</SPAN>(<SPAN CLASS="Argument">a</SPAN>, <SPAN CLASS="Argument">b</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">full_split</SPAN>(<SPAN CLASS="Argument">path</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#gopt"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">gopt</SPAN></A>(<SPAN CLASS="Argument">opt_defs</SPAN>, <SPAN CLASS="Argument">cmd=['-i', '-f', 'HTML4', '-d', 'H:\\Projects\\VoiceCode\\VCode\\Doc\\Modules', 'H:\\Projects\\VoiceCode\\VCode\\Mediator\\util.py']</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # High level wrapper around <EM>getopt.getop</EM>.</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">islist</SPAN>(<SPAN CLASS="Argument">instance</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Returns true iif <EM>instance</EM> is a list.</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">istuple</SPAN>(<SPAN CLASS="Argument">instance</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Returns true iif <EM>instance</EM> is a tuple.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#last_mod"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">last_mod</SPAN></A>(<SPAN CLASS="Argument">f_name</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Returns the time at which a file was last modified.</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">relative_name</SPAN>(<SPAN CLASS="Argument">path</SPAN>, <SPAN CLASS="Argument">head</SPAN>, <SPAN CLASS="Argument">prefix=''</SPAN>)</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">remove_common</SPAN>(<SPAN CLASS="Argument">first</SPAN>, <SPAN CLASS="Argument">second</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#request_console_be"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">request_console_be</SPAN></A>(<SPAN CLASS="Argument">active=1</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#stdin_read_from_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">stdin_read_from_string</SPAN></A>(<SPAN CLASS="Argument">string</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Redirects process' own stdin so it reads from a string</SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'e:\\Projects\\VoiceCode\\VCode\\Mediator\\util.pyc'</SPAN></SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">within_VCode</SPAN>(<SPAN CLASS="Argument">path</SPAN>)</SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Mediator\\util.pyc'</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">may_switch_win_during_tests</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">file</SPAN> <SPAN CLASS="VariableName">redirected_stdin</SPAN> = <SPAN CLASS="VariableValue">&lt;open fi...t 7f0630&gt;</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">redirected_stdin_fname</SPAN> = <SPAN CLASS="VariableValue">'e:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\user_input.dat'</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">file</SPAN> <SPAN CLASS="VariableName">redirected_stdin</SPAN> = <SPAN CLASS="VariableValue">&lt;open fi...t 79aa70&gt;</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">redirected_stdin_fname</SPAN> = <SPAN CLASS="VariableValue">'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\user_input.dat'</SPAN></SPAN>
 </PRE><H2 ID="dict_merge" CLASS="Function">dict_merge(<SPAN CLASS="Argument">dict1</SPAN>, <SPAN CLASS="Argument">dict2</SPAN>)</H2>
 <P>Merges two dictionaries</P>
 
@@ -36,7 +42,7 @@ result <EM>{ANY: ANY} dict3</EM>.</P>
 If a key exists in both <EM>dict1</EM> and <EM>dict2</EM>, the value in <EM>dict1</EM>
 will be used for <EM>dict3</EM>
 </P>
-<H2 ID="gopt" CLASS="Function">gopt(<SPAN CLASS="Argument">opt_defs</SPAN>, <SPAN CLASS="Argument">cmd=['-i', '-f', 'HTML4', '-d', 'e:\\Projects\\VoiceCode\\VCode\\Doc\\Modules', 'e:\\Projects\\VoiceCode\\VCode\\Mediator\\util.py']</SPAN>)</H2>
+<H2 ID="gopt" CLASS="Function">gopt(<SPAN CLASS="Argument">opt_defs</SPAN>, <SPAN CLASS="Argument">cmd=['-i', '-f', 'HTML4', '-d', 'H:\\Projects\\VoiceCode\\VCode\\Doc\\Modules', 'H:\\Projects\\VoiceCode\\VCode\\Mediator\\util.py']</SPAN>)</H2>
 <P>High level wrapper around <EM>getopt.getop</EM>.</P>
 
 <P>

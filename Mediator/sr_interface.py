@@ -98,6 +98,17 @@ def speech_able():
     return not os.environ.has_key('VCODE_NOSPEECH')
 
 
+def set_mic(mic_state):
+    """turns microphone on or off (connecting first, if necessary).
+
+    *STR* mic_state -- *'on'* or *'off'*. State to put the mic in
+    after connection.
+    """
+    if speech_able():
+        if not sr_is_connected:
+	    connect()
+	natlink.setMicState(mic_state)
+
 def connect(mic_state=None, mic_change_callback = None):
     """Connects to the SR system.
     
