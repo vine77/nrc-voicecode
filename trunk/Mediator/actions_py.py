@@ -52,7 +52,7 @@ class ActionPyAddArgument(Action):
             # See if argument list was empty
             #        
             arg_list_empty = 1
-            pos = app.curr_buffer.cur_pos - 1
+            pos = app.curr_buffer.cur_pos() - 1
             
             #
             # Find first preceding non-space character

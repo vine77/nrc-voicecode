@@ -141,6 +141,9 @@ def execute_command(cmd):
 	#	  exec command in sim_commands and command_space
     except Exception, err:
 	traceback.print_exc()
+#    else:
+#        if the_mediator.interp.on_app.curr_buffer:
+#            the_mediator.interp.on_app.curr_buffer.print_buff()
 
         
 def simulator_mode(options):

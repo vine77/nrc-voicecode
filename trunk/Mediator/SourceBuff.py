@@ -1,32 +1,47 @@
+"""State information for the programming environment."""
+
+
+import debug
 import re, string, sys
 
 from Object import Object
 
 file_language = {'c': 'C', 'h': 'C', 'py': 'python'}
 
-#
-# When printing the content of the current buffer, only print this number of
-# lines before and after the current line
-#
-print_window_size = 3
+def language_name(self, file_name):
+    """Returns the name of the language a file is written in
+    
+    **INPUTS**
+    
+    *STR* file_name -- name of the file 
+    
+
+    **OUTPUTS**
+
+    *STR* -- the name of the language
+    """
+    global file_language
+
+    language = None
+    if file_name != None:
+	a_match = re.match('^.*?\.([^\.]*)$', file_name)
+	extension = a_match.group(1)
+	if file_language.has_key(extension):
+	    language =  file_language[extension]
+        return language
 
 
 class SourceBuff(Object):
     """Class representing a source buffer.
 
-    This class implements methods for manipulating buffer containing
+    This abstract class defines interface for manipulating buffer containing
     source code in some programming language.
     
     **INSTANCE ATTRIBUTES**
     
     *STR file_name=None* -- Name of the source file loaded into buffer
     *STR language=None* -- Name of language of the source file
-    *INT cur_pos=0* -- Cursor position (in number of chars) in the buffer
-    *INT visible_start=None* -- Start position (in number of chars) of the visible portion of the source buffer
-    *INT visible_end=None* -- End position (in number of chars) of the visible portion of the source buffer
-    *INT selection_start=None* -- Start position (in number of chars) of the current selection
-    *INT selection_end=None* -- End position (in number of chars) of the current selection
-    *STR content=None* -- Content of the source buffer
+    *AppState app* -- application object containing the buffer
 
     CLASS ATTRIBUTES**
     
@@ -34,16 +49,11 @@ class SourceBuff(Object):
     value is the programming language associated with that extension
     """
     
-    def __init__(self, file_name=None, language=None, cur_pos=0, visible_start=0, visible_end=0, selection_start=None, selection_end=None, content=None, **attrs):
+    def __init__(self, app, file_name=None, language=None, **attrs):
         self.deep_construct(SourceBuff,
-                            {'file_name': file_name, \
-                             'language': language, \
-                             'cur_pos': cur_pos, \
-                             'visible_start': visible_start, \
-                             'visible_end': visible_end, \
-                             'selection_start': selection_start, \
-                             'selection_end': selection_end, \
-                             'content': content}, \
+                            {'app': app, \
+			     'file_name': file_name, \
+                             'language': language}, \
                             attrs \
                             )
 
@@ -114,10 +124,125 @@ class SourceBuff(Object):
         distance = min(abs(region1_start - region2_start), abs(region1_start - region2_end), abs(region1_end - region2_start), abs(region1_end - region2_end))
         return distance
 
+    def cur_pos(self):
+	"""retrieves current position of cursor .  Note: the current
+	position should coincide with either the start or end of the
+	selection.  
 
+	**INPUTS**
+
+	*none*
+	
+	**OUTPUTS**
+
+	*INT* pos -- offset into buffer of current cursor position
+	"""
+
+	pass
+
+
+    def get_selection(self):
+	"""retrieves range of current selection.  Note: the current
+	position should coincide with either the start or end of the
+	selection. 
+
+	**INPUTS**
+
+	*none*
+	
+	**OUTPUTS**
+
+	*INT* (start, end)
+
+	start is the offset into the buffer of the start of the current
+	selection.  end is the offset into the buffer of the character 
+	following the selection (this matches Python's slice convention).
+	"""
+	pass
+
+    def bidirectional_selection(self):
+	"""does editor support selections with cursor at left?
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUS**
+	
+	*BOOL* -- true if editor allows setting the selection at the
+	left end of the selection"""
+	return self.app.bidirectional_selection()
+
+    def goto_end_of_selection(self, end = 1):
+	"""moves cursor to one end of the selection, clearing the
+	selection.
+
+	**INPUTS**
+
+	*INT* end -- left (0) or right (1) end of selection
+
+	**OUTPUT**
+
+	*none*
+	"""
+	target = self.get_selection()[end]
+	self.goto(target)
+
+    def set_selection(self, range, cursor_at = 1):
+	"""sets range of current selection, and sets the position to 
+	beginning or end of the selection.
+
+	**INPUTS**
+
+	*(INT, INT)* range -- offsets into buffer of the start and end
+	of the selection.  end is the offset into the buffer of the character 
+	following the selection (this matches Python's slice convention).
+
+	*INT* cursor_at -- indicates whether the cursor should be
+	placed at the left (0) or right (1) end of the selection.  Note:
+        cursor_at is ignored unless the application supports this
+	choice, as indicated by bidirectional_selection.  
+	Most Windows applications do not.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	pass
+
+    def get_text(self, start = None, end = None):
+	"""retrieves a portion of the buffer
+
+	**INPUTS**
+
+	*INT start* is the start of the region returned.
+	Defaults to start of buffer.
+
+	*INT end* is the offset into the buffer of the character following 
+	the region to be returned (this matches Python's slice convention).
+	Defaults to end of buffer.
+
+	**OUTPUTS**
+
+	*STR* -- contents of specified range of the buffer
+	"""
+	pass
+
+    def contents(self):
+	"""retrieves entire contents of the buffer
+    
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*STR* contents 
+	"""
+	return self.get_text()
 
     def distance_to_selection(self, start, *opt_end):
-        """Coputes the distance of a region to the current selection.
+        """Computes the distance of a region to the current selection.
         
         **INPUTS**
         
@@ -134,161 +259,56 @@ class SourceBuff(Object):
             end = opt_end[0]
         else:
             end = start
-        if self.selection_start != None and self.selection_end != None:
-            start2 = self.selection_start
-            end2 = self.selection_end
-        else:
-            start2 = self.cur_pos
-            end2 = self.cur_pos
+	start2, end2 = self.get_selection()
+	if not (start2 and end2):
+            start2 = self.cur_pos()
+            end2 = start2
         return self.region_distance(start, end, start2, end2)
         
+    def get_visible(self):
+	""" get start and end offsets of the currently visible region of
+	the buffer.  End is the offset of the first character not
+	visible (matching Python's slice convention)
 
-    def print_buff(self, from_line=None, to_line=None):
-        """Prints buffer to STDOUT
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*INT* (start, end)
+	"""
+	pass
+
+    def make_position_visible(self, position = None):
+	"""scroll buffer (if necessary) so that  the specified position
+	is visible
+
+	**INPUTS**
+
+	*INT* position -- position to make visible (defaults to the
+	current position)
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	pass
+    
+    def line_num_of(self, position = None):
+	"""
+        Returns the line number for a particular cursor position
         
         **INPUTS**
         
-        *INT* from_line = None -- First line to be printed. If *None*, then
-        print *print_window_size* lines around cursor.
-
-        *INT* to_line = None -- Last line to be printed.
-
-        **OUTPUTS**
+        *INT* position -- The position.  (defaults to the current position)
         
-        *none* -- 
-        """
-
-        #
-        # Figure out the first and last line to be printed
-        #
-        if from_line == None:
-           from_line, to_line = self.lines_around_cursor()
-
-        #
-        # Figure out the text before/withing/after the selection
-        #
-        if self.selection_start != None or self.selection_end != None:
-            if self.selection_start <= self.selection_end:
-                selection_start = self.selection_start
-                selection_end = self.selection_end
-            else:
-                selection_start = self.selection_end
-                selection_end = self.selection_start
-        else:
-            selection_start = self.cur_pos
-            selection_end = self.cur_pos
-
-        before_content = self.content[:selection_start]
-        selection_content = self.content[selection_start:selection_end]
-        after_content = self.content[selection_end:]
-        
-        sys.stdout.write("*** Start of source buffer ***\n")
-
-        #
-        # Print region before the selection.
-        #
-        curr_line_num = 1
-        lines_with_num = self.number_lines(before_content, startnum=curr_line_num)
-        for aline in lines_with_num[:len(lines_with_num)-1]:
-            if curr_line_num >= from_line and curr_line_num <= to_line:
-                sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-            curr_line_num = curr_line_num + 1
-            
-        if len(lines_with_num) > 0 and curr_line_num >= from_line and curr_line_num <= to_line:
-             lastline = lines_with_num[len(lines_with_num)-1]
-             sys.stdout.write('%3i: %s' % (lastline[0], lastline[1]))
-             curr_line_num = curr_line_num + 1
-        
-        if selection_content == '':
-            sys.stdout.write('<CURSOR>')            
-        else:
-            sys.stdout.write('<SEL_START>')
-
-        #
-        # Print the selection
-        #
-        lines_with_num = self.number_lines(selection_content, startnum=curr_line_num)
-        if (len(lines_with_num) > 0 and curr_line_num >= from_line and curr_line_num <= to_line):
-            firstline = lines_with_num[0]
-            sys.stdout.write('%s\n' % firstline[1])
-            for aline in lines_with_num[1:]:
-                if curr_line_num >= from_line and curr_line_num <= to_line:
-                    sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-                curr_line_num = curr_line_num + 1
-        if selection_content != '': sys.stdout.write('<SEL_END>')
-
-        #
-        # Print region after the selection
-        #
-        lines_with_num = self.number_lines(after_content, startnum=curr_line_num)
-        if (len(lines_with_num) > 0 and curr_line_num >= from_line and curr_line_num <= to_line):
-            firstline = lines_with_num[0]
-            sys.stdout.write('%s\n' % firstline[1])
-            for aline in lines_with_num[1:]:
-                if curr_line_num >= from_line and curr_line_num <= to_line:
-                    sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-                curr_line_num = curr_line_num + 1
-        sys.stdout.write("\n*** End of source buffer ***\n")
-        
-
-
-    def lines_around_cursor(self):
-        """Returns the line numbers of lines around cursor
-        
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *(INT from_line, INT to_line)*
-
-        *INT from_line* -- First line of the window.
-
-        *INT to_line* -- Last line of the window.
-        """
-
-        curr_line = self.line_num_of(self.cur_pos)
-        from_line = self.make_within_range(curr_line - print_window_size)
-        to_line = self.make_within_range(curr_line + print_window_size)
-        return from_line, to_line
-        
-        
-    def line_num_of(self, position):
-        """Returns the line number for a particular cursor position
-        
-        **INPUTS**
-        
-        *INT* position -- The position.
-        
-
         **OUTPUTS**
         
         *INT line_num* -- The line number of that position
         """
         
-        #
-        # Make sure the position is within range
-        #
-        position = self.make_within_range(position)
-        
-        #
-        # Find line number of position
-        #        
-        lines = string.split(self.content, '\n')
-        line_start_pos = None
-        line_end_pos = 0
-        curr_line = 0
-        for a_line in lines:
-            curr_line = curr_line + 1
-            line_start_pos = line_end_pos
-            line_end_pos = line_end_pos + len(a_line) + 1
-            if position >= line_start_pos and position <= line_end_pos:
-                line_num = curr_line
-                break
-            
-        return line_num
+	pass
 
     def number_lines(self, astring, startnum=1):
         """Assign numbers to lines in a string.
@@ -306,10 +326,11 @@ class SourceBuff(Object):
         result = []
 
         if (astring != ''):
+	    lineno = startnum
+#  this would make all lines off by 1
             if (astring[0] == '\n'):
                 lineno = startnum + 1
-            else:
-                lineno = startnum
+#  this would make all lines off by 1
                 
             for aline in lines:
                 result[len(result):] = [(lineno, aline)]
@@ -318,6 +339,38 @@ class SourceBuff(Object):
         return result
 
 
+
+    def len(self):
+	"""return length of buffer in characters.
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*INT* length 
+	"""
+	pass
+
+    def make_valid_range(self, range):
+        """Makes sure a region is increasing and within the buffer's range.
+	
+	**INPUTS** 
+	
+	*(INT, INT)* range -- offsets of initial range
+	
+	**OUTPUTS**
+	
+	*(INT, INT)* -- increasing range within bounds
+	"""
+	start, end = range
+	if end < start:
+	    start, end = range[1], range[0]
+	start = self.make_within_range(start)
+	end = self.make_within_range(end)
+	return start, end
+  
     def make_within_range(self, position):
         """Makes sure a position is within the buffer's range.
         
@@ -332,11 +385,158 @@ class SourceBuff(Object):
         *INT* position -- The possibly corrected position
         """
 
+	length = self.len()
         if position < 0:
             position = 0
-        elif position > len(self.content) - 1 and len(self.content) > 0:
-            position = len(self.content) - 1
+# cursor can be after last character in the buffer
+        elif position > length and length > 0:
+            position = length  
+# put back bugs
+#        elif position > length - 1 and length > 0:
+#            position = length -1 
         return position
+        
+    def move_relative(self, rel_movement):
+        """Move cursor to plus or minus a certain number of characters
 
+	**INPUTS** 
+
+        *INT rel_movement* -- number of characters to move, relative to 
+	current position.  If < 0 then move to the left. Otherwise, move to the
+        right.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        pos = self.make_within_range(self.cur_pos()+rel_movement)
+	self.goto(pos)
+        
+
+# DCF - fix - never replaces selection, and independent defaults for
+# start and end don't support replacing selection - 
+    def insert_indent(self, code_bef, code_after, range = None):
+        """Insert code into source buffer and indent it.
+
+        Replace code in range 
+        with the concatenation of
+        code *STR code_bef* and *str code_after*. Cursor is put right
+        after code *STR bef*.
+
+	**INPUTS**
+
+	*STR* code_bef -- code to be inserted before new cursor location
+        
+	*STR* code_bef -- code to be inserted after new cursor location
+
+	*(INT, INT)* range -- code range to be replaced.  If None,
+	defaults to the current selection.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        
+        debug.virtual('insert_indent')
         
         
+    def insert(self, text, range = None):
+        """Replace text in range with 
+        with text
+
+	**INPUTS**
+
+	*STR text* -- new text
+
+	*(INT, INT)* range -- code range to be replaced.  If None,
+	defaults to the current selection.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+
+        debug.virtual('insert')
+
+    def indent(self, range = None):
+        """Indent code in a source buffer region.
+
+	**INPUTS**
+
+	*(INT, INT)* range -- code range to be replaced.  If None,
+	defaults to the current selection.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+
+        debug.virtual('indent')
+
+
+    def delete(self, range = None):
+        """Delete text in a source buffer range.
+
+	**INPUTS**
+
+	*(INT, INT)* range -- code range to be deleted.  If None,
+	defaults to the current selection.
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        debug.virtual('delete')
+        
+    def goto(self, pos):
+
+        """Moves the cursor to position *INT pos* of source buffer
+	(and make selection empty)
+
+        If *f_name* is *None*, use [self.curr_buffer].
+
+        """
+        
+        debug.virtual('goto')
+
+    def goto_line(self, linenum, where=-1):
+        """Go to a particular line in a buffer.
+
+        *INT linenum* is the line number.
+
+        *INT where* indicates if the cursor should go at the end
+         (*where > 0*) or at the beginning (*where < 0*) of the line.
+	"""
+	pass
+                
+    def search_for(self, regexp, direction=1, num=1, where=1):
+        
+        """Moves cursor to the next occurence of regular expression
+           *STR regexp* in buffer with file name *STR f_name*.
+
+           *INT* direction -- if positive, search forward, otherwise
+            search backward
+
+           *INT* num -- number of occurences to search for
+
+           *INT* where -- if positive, move cursor after the occurence,
+           otherwise move it before
+
+           *STR* f_name -- name of the file in buffer where the search
+            should be done. If *None*, use [self.curr_buffer].
+
+           Returns *None* if no occurence was found. Otherwise,
+           returns a match object.
+        .. [self.curr_buffer] file:///AppState.AppState.html"""
+        
+        debug.virtual('search_for')
+
+# DCF - replace with refresh if necessary and force refresh
+    def refresh_if_needed(self):
+	"""Refresh buffer if necessary"""
+	pass
+
+    def refresh(self):
+	"""Force a refresh of the buffer"""
+	pass
+
