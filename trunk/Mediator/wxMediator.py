@@ -53,16 +53,20 @@ import WinSystemMSW
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="on", 
+debug.config_traces(status="off", 
                     active_traces={
 #################################       
-                    'OwnerObject.__init__': 1,
-                    'DlgModel.setView':1 ,
-                    'TestCaseWithHelpers.assert_sequences_have_same_content': 1,
-                    'MockSpokenUtterance.words': 1,
-                    'MockSpokenUtterance.spoken_forms': 1,
-                    'ReformatRecentSymbolsViewWX.displayed_symbols': 1,
-                    'ReformatRecentSymbolsViewWX.__init__': 1,
+#                    'OwnerObject.__init__': 1,
+#                    'DlgModel.setView':1 ,
+#                    'TestCaseWithHelpers.assert_sequences_have_same_content': 1,
+#                    'MockSpokenUtterance.words': 1,
+#                    'MockSpokenUtterance.spoken_forms': 1,
+#                    'ReformatRecentSymbolsViewWX.displayed_symbols': 1,
+#                    'ReformatRecentSymbolsViewWX.__init__': 1,
+                    'SymbolReformattingWinGramNL.create_rules': 1,
+                    'SymbolReformattingWinGramNL.__init__': 1,
+                    'SymbolReformattingWinGram.__init__': 1,
+                    'WinGram.__init__': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)

@@ -768,7 +768,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x020C69D0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x02111B18>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -1123,8 +1123,12 @@ known windows []
 new window 14
 SelectWinGramDummy for buffer None, window 14
 init
+SymbolReformattingWinGramDummy for window = window 14
+init
 new window 20
 SelectWinGramDummy for buffer None, window 20
+init
+SymbolReformattingWinGramDummy for window = window 20
 init
 
 state {
@@ -1138,6 +1142,8 @@ known windows [14, 20]
 new instance of emacs 2
 with window 10
 SelectWinGramDummy for buffer None, window 10
+init
+SymbolReformattingWinGramDummy for window = window 10
 init
 
 state {
@@ -1154,7 +1160,11 @@ new instance of Vim 3
 delete window 20
 SelectWinGramDummy for buffer None, window 20
 deactivating
+SymbolReformattingWinGramDummy for window = window 20
+deactivating
 SelectWinGramDummy for buffer None, window 20
+del
+SymbolReformattingWinGramDummy for window = window 20
 del
 
 state {
@@ -1171,11 +1181,17 @@ known windows [10, 14]
 delete instance emacs(1)
 SelectWinGramDummy for buffer None, window 10
 deactivating
+SymbolReformattingWinGramDummy for window = window 10
+deactivating
+SymbolReformattingWinGramDummy for window = window 10
+del
 SelectWinGramDummy for buffer None, window 10
 del
 new instance of emacs 4
 with window 7
 SelectWinGramDummy for buffer None, window 7
+init
+SymbolReformattingWinGramDummy for window = window 7
 init
 
 state {
@@ -1192,6 +1208,10 @@ known windows [7, 14]
 delete instance emacs(0)
 SelectWinGramDummy for buffer None, window 14
 deactivating
+SymbolReformattingWinGramDummy for window = window 14
+deactivating
+SymbolReformattingWinGramDummy for window = window 14
+del
 SelectWinGramDummy for buffer None, window 14
 del
 
@@ -1208,6 +1228,10 @@ delete instance Vim(0)
 delete instance emacs(2)
 SelectWinGramDummy for buffer None, window 7
 deactivating
+SymbolReformattingWinGramDummy for window = window 7
+deactivating
+SymbolReformattingWinGramDummy for window = window 7
+del
 SelectWinGramDummy for buffer None, window 7
 del
 
@@ -1221,9 +1245,13 @@ new instance of emacs 5
 with window 94
 SelectWinGramDummy for buffer None, window 94
 init
+SymbolReformattingWinGramDummy for window = window 94
+init
 new instance of emacs 6
 with window 94
 SelectWinGramDummy for buffer None, window 94
+init
+SymbolReformattingWinGramDummy for window = window 94
 init
 
 state {
@@ -1238,7 +1266,11 @@ known windows [94]
 
 SelectWinGramDummy for buffer None, window 94
 deactivating
+SymbolReformattingWinGramDummy for window = window 94
+deactivating
 SelectWinGramDummy for buffer None, window 94
+del
+SymbolReformattingWinGramDummy for window = window 94
 del
 
 state {
@@ -1261,6 +1293,10 @@ known windows [94]
 
 SelectWinGramDummy for buffer None, window 94
 deactivating
+SymbolReformattingWinGramDummy for window = window 94
+deactivating
+SymbolReformattingWinGramDummy for window = window 94
+del
 SelectWinGramDummy for buffer None, window 94
 del
 
@@ -4093,6 +4129,8 @@ with window 5
 SourceBuff.__init__: fish.C
 SelectWinGramDummy for buffer None, window 5
 init
+SymbolReformattingWinGramDummy for window = window 5
+init
 DictWinGramDummy for buffer = 'fish.C', window 5
 init
 DictThroughCmdGramDummy for buffer = 'fish.C', window 5
@@ -4123,6 +4161,8 @@ DictThroughCmdGramDummy for buffer = 'fowl.py', window 5
 deactivating
 SelectWinGramDummy for buffer 'fish.C', window 5
 activating:  5  
+SymbolReformattingWinGramDummy for window = window 5
+activating:  5  
 DictWinGramDummy for buffer = 'fish.C', window 5
 setting context: before = [ x, y)
 ], after = [{]
@@ -4132,6 +4172,8 @@ DictThroughCmdGramDummy for buffer = 'fish.C', window 5
 activating:  5  
 new window 7
 SelectWinGramDummy for buffer None, window 7
+init
+SymbolReformattingWinGramDummy for window = window 7
 init
 new buffer dog.pl
 with window 7
@@ -4167,6 +4209,8 @@ DictThroughCmdGramDummy for buffer = 'fish.h', window 7
 deactivating
 SelectWinGramDummy for buffer 'dog.pl', window 7
 activating:  7  
+SymbolReformattingWinGramDummy for window = window 7
+activating:  7  
 DictWinGramDummy for buffer = 'dog.pl', window 7
 setting context: before = [
     $dirSep = ], after = ['/';]
@@ -4185,6 +4229,8 @@ deactivating
 DictThroughCmdGramDummy for buffer = 'dog.pl', window 7
 deactivating
 SelectWinGramDummy for buffer 'fish.h', window 7
+activating:  7  
+SymbolReformattingWinGramDummy for window = window 7
 activating:  7  
 DictWinGramDummy for buffer = 'fish.h', window 7
 setting context: before = [ x, y);], after = [
@@ -4208,6 +4254,8 @@ DictThroughCmdGramDummy for buffer = 'fish.C', window 5
 deactivating
 SelectWinGramDummy for buffer 'fowl.py', window 5
 activating:  5  
+SymbolReformattingWinGramDummy for window = window 5
+activating:  5  
 DictWinGramDummy for buffer = 'fowl.py', window 5
 setting context: before = [ something(value):
     print ], after = [value]
@@ -4223,12 +4271,16 @@ del
 deactivate all for window 5
 SelectWinGramDummy for buffer 'fowl.py', window 5
 deactivating
+SymbolReformattingWinGramDummy for window = window 5
+deactivating
 DictWinGramDummy for buffer = 'fish.C', window 5
 deactivating
 DictThroughCmdGramDummy for buffer = 'fish.C', window 5
 deactivating
 delete window 7
 SelectWinGramDummy for buffer 'fish.h', window 7
+deactivating
+SymbolReformattingWinGramDummy for window = window 7
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', window 7
 deactivating
@@ -4239,6 +4291,8 @@ deactivating
 DictThroughCmdGramDummy for buffer = 'fish.h', window 7
 deactivating
 SelectWinGramDummy for buffer 'fish.h', window 7
+del
+SymbolReformattingWinGramDummy for window = window 7
 del
 DictWinGramDummy for buffer = 'fish.h', window 7
 del
@@ -4262,6 +4316,8 @@ activating buffer fish.C for window 5
   7:   horiz_pos = 0;
 SelectWinGramDummy for buffer 'fish.C', window 5
 activating:  5  
+SymbolReformattingWinGramDummy for window = window 5
+activating:  5  
 DictWinGramDummy for buffer = 'fish.C', window 5
 setting context: before = [ x, y)
 ], after = [{]
@@ -4271,6 +4327,8 @@ DictThroughCmdGramDummy for buffer = 'fish.C', window 5
 activating:  5  
 deactivate all
 SelectWinGramDummy for buffer 'fish.C', window 5
+deactivating
+SymbolReformattingWinGramDummy for window = window 5
 deactivating
 DictWinGramDummy for buffer = 'fish.C', window 5
 deactivating
@@ -4288,10 +4346,14 @@ EdSim.remove_other_references
 cleanup manager
 SelectWinGramDummy for buffer 'fish.C', window 5
 deactivating
+SymbolReformattingWinGramDummy for window = window 5
+deactivating
 DictWinGramDummy for buffer = 'fish.C', window 5
 deactivating
 DictThroughCmdGramDummy for buffer = 'fish.C', window 5
 deactivating
+SymbolReformattingWinGramDummy for window = window 5
+del
 SelectWinGramDummy for buffer 'fish.C', window 5
 del
 DictThroughCmdGramDummy for buffer = 'fish.C', window 5
@@ -4315,6 +4377,8 @@ new buffer fish.C
 with window 5
 SourceBuff.__init__: fish.C
 SelectWinGramDummy for buffer None, global
+init
+SymbolReformattingWinGramDummy for window = global
 init
 DictWinGramDummy for buffer = 'fish.C', global
 init
@@ -4347,6 +4411,9 @@ deactivating
 SelectWinGramDummy for buffer 'fish.C', global
 activating:  global  exclusive 
 
+SymbolReformattingWinGramDummy for window = global
+activating:  global  exclusive 
+
 DictWinGramDummy for buffer = 'fish.C', global
 setting context: before = [ x, y)
 ], after = [{]
@@ -4358,6 +4425,8 @@ activating:  global  exclusive
 
 new window 7
 SelectWinGramDummy for buffer None, global
+init
+SymbolReformattingWinGramDummy for window = global
 init
 new buffer dog.pl
 with window 7
@@ -4404,6 +4473,11 @@ activating:  global  exclusive
 
 SelectWinGramDummy for buffer 'fish.C', global
 deactivating
+SymbolReformattingWinGramDummy for window = global
+activating:  global  exclusive 
+
+SymbolReformattingWinGramDummy for window = global
+deactivating
 DictWinGramDummy for buffer = 'dog.pl', global
 setting context: before = [
     $dirSep = ], after = ['/';]
@@ -4435,6 +4509,11 @@ SelectWinGramDummy for buffer 'fish.h', global
 activating:  global  exclusive 
 
 SelectWinGramDummy for buffer 'fish.C', global
+deactivating
+SymbolReformattingWinGramDummy for window = global
+activating:  global  exclusive 
+
+SymbolReformattingWinGramDummy for window = global
 deactivating
 DictWinGramDummy for buffer = 'fish.h', global
 setting context: before = [ x, y);], after = [
@@ -4471,6 +4550,11 @@ activating:  global  exclusive
 
 SelectWinGramDummy for buffer 'fish.h', global
 deactivating
+SymbolReformattingWinGramDummy for window = global
+activating:  global  exclusive 
+
+SymbolReformattingWinGramDummy for window = global
+deactivating
 DictWinGramDummy for buffer = 'fowl.py', global
 setting context: before = [ something(value):
     print ], after = [value]
@@ -4488,11 +4572,15 @@ del
 deactivate all for window 5
 SelectWinGramDummy for buffer 'fowl.py', global
 deactivating
+SymbolReformattingWinGramDummy for window = global
+deactivating
 DictWinGramDummy for buffer = 'fish.C', global
 deactivating
 DictThroughCmdGramDummy for buffer = 'fish.C', global
 deactivating
 SelectWinGramDummy for buffer 'fish.h', global
+deactivating
+SymbolReformattingWinGramDummy for window = global
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', global
 deactivating
@@ -4505,6 +4593,8 @@ deactivating
 delete window 7
 SelectWinGramDummy for buffer 'fish.h', global
 deactivating
+SymbolReformattingWinGramDummy for window = global
+deactivating
 DictWinGramDummy for buffer = 'dog.pl', global
 deactivating
 DictThroughCmdGramDummy for buffer = 'dog.pl', global
@@ -4514,6 +4604,8 @@ deactivating
 DictThroughCmdGramDummy for buffer = 'fish.h', global
 deactivating
 SelectWinGramDummy for buffer 'fish.h', global
+del
+SymbolReformattingWinGramDummy for window = global
 del
 DictWinGramDummy for buffer = 'fish.h', global
 del
@@ -4538,6 +4630,9 @@ activating buffer fish.C for window 5
 SelectWinGramDummy for buffer 'fish.C', global
 activating:  global  exclusive 
 
+SymbolReformattingWinGramDummy for window = global
+activating:  global  exclusive 
+
 DictWinGramDummy for buffer = 'fish.C', global
 setting context: before = [ x, y)
 ], after = [{]
@@ -4549,6 +4644,8 @@ activating:  global  exclusive
 
 deactivate all
 SelectWinGramDummy for buffer 'fish.C', global
+deactivating
+SymbolReformattingWinGramDummy for window = global
 deactivating
 DictWinGramDummy for buffer = 'fish.C', global
 deactivating
@@ -4566,10 +4663,14 @@ EdSim.remove_other_references
 cleanup manager
 SelectWinGramDummy for buffer 'fish.C', global
 deactivating
+SymbolReformattingWinGramDummy for window = global
+deactivating
 DictWinGramDummy for buffer = 'fish.C', global
 deactivating
 DictThroughCmdGramDummy for buffer = 'fish.C', global
 deactivating
+SymbolReformattingWinGramDummy for window = global
+del
 SelectWinGramDummy for buffer 'fish.C', global
 del
 DictThroughCmdGramDummy for buffer = 'fish.C', global
@@ -10330,6 +10431,8 @@ new instance of emacs 1
 with window 14
 SelectWinGramDummy for buffer None, window 14
 init
+SymbolReformattingWinGramDummy for window = window 14
+init
 
 instance emacs(0)
 running in module emacs
@@ -10359,6 +10462,8 @@ emacs(0)
 starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
 SelectWinGramDummy for buffer None, window 20
 init
+SymbolReformattingWinGramDummy for window = window 20
+init
 DictWinGramDummy for buffer = 'fish.C', window 20
 init
 DictThroughCmdGramDummy for buffer = 'fish.C', window 20
@@ -10366,6 +10471,8 @@ init
 DictThroughCmdGramDummy for buffer = 'fish.C', window 20
 init
 SelectWinGramDummy for buffer 'fish.C', window 20
+activating:  20  
+SymbolReformattingWinGramDummy for window = window 20
 activating:  20  
 DictWinGramDummy for buffer = 'fish.C', window 20
 setting context: before = [ x, y)
@@ -10390,6 +10497,8 @@ Setting text mode on
 starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
 SelectWinGramDummy for buffer 'fish.C', window 20
 activating:  20  
+SymbolReformattingWinGramDummy for window = window 20
+deactivating
 DictWinGramDummy for buffer = 'fish.C', window 20
 deactivating
 DictThroughCmdGramDummy for buffer = 'fish.C', window 20
@@ -10398,6 +10507,8 @@ deactivating
 Setting text mode off
 starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
 SelectWinGramDummy for buffer 'fish.C', window 20
+activating:  20  
+SymbolReformattingWinGramDummy for window = window 20
 activating:  20  
 DictWinGramDummy for buffer = 'fish.C', window 20
 setting context: before = [ x, y)
@@ -10439,6 +10550,8 @@ known windows [14, 20]
 now specifying window
 SelectWinGramDummy for buffer None, window 5
 init
+SymbolReformattingWinGramDummy for window = window 5
+init
 success
 
 instance emacs(1)
@@ -10468,6 +10581,8 @@ DictThroughCmdGramDummy for buffer = 'bug.c', window 5
 init
 SelectWinGramDummy for buffer 'bug.c', window 5
 activating:  5  
+SymbolReformattingWinGramDummy for window = window 5
+activating:  5  
 DictWinGramDummy for buffer = 'bug.c', window 5
 setting context: before = [], after = []
 DictWinGramDummy for buffer = 'bug.c', window 5
@@ -10486,6 +10601,8 @@ emacs(1)
 suspending  emacs(1)
 starting recognition in  (5, 'ttssh - acappella', 'telnet')
 SelectWinGramDummy for buffer 'bug.c', window 5
+deactivating
+SymbolReformattingWinGramDummy for window = window 5
 deactivating
 DictWinGramDummy for buffer = 'bug.c', window 5
 deactivating
@@ -10518,6 +10635,8 @@ emacs(1)
 now specifying window
 SelectWinGramDummy for buffer None, window 5
 init
+SymbolReformattingWinGramDummy for window = window 5
+init
 success
 
 instance emacs(2)
@@ -10548,6 +10667,8 @@ DictThroughCmdGramDummy for buffer = 'dog.q', window 5
 init
 SelectWinGramDummy for buffer 'dog.q', window 5
 activating:  5  
+SymbolReformattingWinGramDummy for window = window 5
+activating:  5  
 DictWinGramDummy for buffer = 'dog.q', window 5
 setting context: before = [], after = []
 DictWinGramDummy for buffer = 'dog.q', window 5
@@ -10555,6 +10676,8 @@ activating:  5
 DictThroughCmdGramDummy for buffer = 'dog.q', window 5
 activating:  5  
 SelectWinGramDummy for buffer 'bug.c', window 5
+deactivating
+SymbolReformattingWinGramDummy for window = window 5
 deactivating
 DictWinGramDummy for buffer = 'bug.c', window 5
 deactivating
@@ -10584,11 +10707,15 @@ suspending  emacs(2)
 starting recognition in  (5, 'ttssh - acappella', 'telnet')
 SelectWinGramDummy for buffer 'dog.q', window 5
 deactivating
+SymbolReformattingWinGramDummy for window = window 5
+deactivating
 DictWinGramDummy for buffer = 'dog.q', window 5
 deactivating
 DictThroughCmdGramDummy for buffer = 'dog.q', window 5
 deactivating
 SelectWinGramDummy for buffer 'bug.c', window 5
+deactivating
+SymbolReformattingWinGramDummy for window = window 5
 deactivating
 DictWinGramDummy for buffer = 'bug.c', window 5
 deactivating
@@ -10618,6 +10745,8 @@ resuming  emacs(1)
 starting recognition in  (5, 'ttssh - acappella', 'telnet')
 SelectWinGramDummy for buffer 'bug.c', window 5
 activating:  5  
+SymbolReformattingWinGramDummy for window = window 5
+activating:  5  
 DictWinGramDummy for buffer = 'bug.c', window 5
 setting context: before = [], after = []
 DictWinGramDummy for buffer = 'bug.c', window 5
@@ -10625,6 +10754,8 @@ activating:  5
 DictThroughCmdGramDummy for buffer = 'bug.c', window 5
 activating:  5  
 SelectWinGramDummy for buffer 'dog.q', window 5
+deactivating
+SymbolReformattingWinGramDummy for window = window 5
 deactivating
 DictWinGramDummy for buffer = 'dog.q', window 5
 deactivating
@@ -10654,6 +10785,8 @@ new Vim instance in exceed window 15
 new instance of Vim 10
 with window 15
 SelectWinGramDummy for buffer None, window 15
+init
+SymbolReformattingWinGramDummy for window = window 15
 init
 new buffer dog.pl for instance 10
  10:     $dirSep = "\";
@@ -10699,6 +10832,8 @@ DictThroughCmdGramDummy for buffer = 'dog.pl', window 15
 init
 SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
+SymbolReformattingWinGramDummy for window = window 15
+activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
 setting context: before = [
     $dirSep = ], after = ['/';]
@@ -10718,6 +10853,8 @@ Vim(0)
 suspending  Vim(0)
 starting recognition in  (15, 'xterm - acappella', 'exceed')
 SelectWinGramDummy for buffer 'dog.pl', window 15
+deactivating
+SymbolReformattingWinGramDummy for window = window 15
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
@@ -10743,6 +10880,8 @@ windows:  []
 starting recognition in  (15, 'xterm - acappella', 'exceed')
 SelectWinGramDummy for buffer 'dog.pl', window 15
 deactivating
+SymbolReformattingWinGramDummy for window = window 15
+deactivating
 DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
 DictThroughCmdGramDummy for buffer = 'dog.pl', window 15
@@ -10754,6 +10893,8 @@ windows:  []
 
 now specifying window
 SelectWinGramDummy for buffer None, window 15
+init
+SymbolReformattingWinGramDummy for window = window 15
 init
 success
 
@@ -10775,6 +10916,8 @@ DictThroughCmdGramDummy for buffer = 'nothing.py', window 15
 init
 SelectWinGramDummy for buffer 'nothing.py', window 15
 activating:  15  
+SymbolReformattingWinGramDummy for window = window 15
+activating:  15  
 DictWinGramDummy for buffer = 'nothing.py', window 15
 setting context: before = [], after = []
 DictWinGramDummy for buffer = 'nothing.py', window 15
@@ -10782,6 +10925,8 @@ activating:  15
 DictThroughCmdGramDummy for buffer = 'nothing.py', window 15
 activating:  15  
 SelectWinGramDummy for buffer 'dog.pl', window 15
+deactivating
+SymbolReformattingWinGramDummy for window = window 15
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
@@ -10801,11 +10946,15 @@ suspending  emacs(3)
 starting recognition in  (15, 'xterm - acappella', 'exceed')
 SelectWinGramDummy for buffer 'nothing.py', window 15
 deactivating
+SymbolReformattingWinGramDummy for window = window 15
+deactivating
 DictWinGramDummy for buffer = 'nothing.py', window 15
 deactivating
 DictThroughCmdGramDummy for buffer = 'nothing.py', window 15
 deactivating
 SelectWinGramDummy for buffer 'dog.pl', window 15
+deactivating
+SymbolReformattingWinGramDummy for window = window 15
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
@@ -10825,6 +10974,8 @@ resuming  Vim(0)
 starting recognition in  (15, 'Vim - (Oldie 0) - dog.pl', 'exceed')
 SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
+SymbolReformattingWinGramDummy for window = window 15
+activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
 setting context: before = [
     $dirSep = ], after = ['/';]
@@ -10833,6 +10984,8 @@ activating:  15
 DictThroughCmdGramDummy for buffer = 'dog.pl', window 15
 activating:  15  
 SelectWinGramDummy for buffer 'nothing.py', window 15
+deactivating
+SymbolReformattingWinGramDummy for window = window 15
 deactivating
 DictWinGramDummy for buffer = 'nothing.py', window 15
 deactivating
@@ -10853,6 +11006,8 @@ new instance of emacs 9
 with window 25
 SelectWinGramDummy for buffer None, window 25
 init
+SymbolReformattingWinGramDummy for window = window 25
+init
 
 instance emacs(4)
 running in module exceed
@@ -10869,6 +11024,8 @@ init
 DictThroughCmdGramDummy for buffer = '.cshrc', window 25
 init
 SelectWinGramDummy for buffer '.cshrc', window 25
+activating:  25  
+SymbolReformattingWinGramDummy for window = window 25
 activating:  25  
 DictWinGramDummy for buffer = '.cshrc', window 25
 setting context: before = [], after = []
@@ -10887,6 +11044,8 @@ emacs(4)
 app reports new window (is current)
 current is (26, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer None, window 26
+init
+SymbolReformattingWinGramDummy for window = window 26
 init
 
 instance emacs(4)
@@ -10907,6 +11066,8 @@ init
 DictThroughCmdGramDummy for buffer = '.cshrc', window 26
 init
 SelectWinGramDummy for buffer '.cshrc', window 26
+activating:  26  
+SymbolReformattingWinGramDummy for window = window 26
 activating:  26  
 DictWinGramDummy for buffer = '.cshrc', window 26
 setting context: before = [], after = []
@@ -10953,6 +11114,8 @@ current is (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer None, window 27
 init
+SymbolReformattingWinGramDummy for window = window 27
+init
 DictWinGramDummy for buffer = '.cshrc', window 27
 init
 DictThroughCmdGramDummy for buffer = '.cshrc', window 27
@@ -10960,6 +11123,8 @@ init
 DictThroughCmdGramDummy for buffer = '.cshrc', window 27
 init
 SelectWinGramDummy for buffer '.cshrc', window 27
+activating:  27  
+SymbolReformattingWinGramDummy for window = window 27
 activating:  27  
 DictWinGramDummy for buffer = '.cshrc', window 27
 setting context: before = [], after = []
@@ -10986,6 +11151,8 @@ now it is on WaxEdit
 starting recognition in  (99, 'WaxEdit - (Floor 0) - large_buff.py', 'python')
 SelectWinGramDummy for buffer None, global
 init
+SymbolReformattingWinGramDummy for window = global
+init
 DictWinGramDummy for buffer = 'large_buff.py', global
 init
 DictThroughCmdGramDummy for buffer = 'large_buff.py', global
@@ -10993,6 +11160,9 @@ init
 DictThroughCmdGramDummy for buffer = 'large_buff.py', global
 init
 SelectWinGramDummy for buffer 'large_buff.py', global
+activating:  global  exclusive 
+
+SymbolReformattingWinGramDummy for window = global
 activating:  global  exclusive 
 
 DictWinGramDummy for buffer = 'large_buff.py', global
@@ -11014,6 +11184,9 @@ starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer 'large_buff.py', global
 activating:  global  exclusive 
 
+SymbolReformattingWinGramDummy for window = global
+activating:  global  exclusive 
+
 DictWinGramDummy for buffer = 'large_buff.py', global
 setting context: before = [], after = []
 DictWinGramDummy for buffer = 'large_buff.py', global
@@ -11023,6 +11196,8 @@ DictThroughCmdGramDummy for buffer = 'large_buff.py', global
 activating:  global  exclusive 
 
 SelectWinGramDummy for buffer '.cshrc', window 27
+deactivating
+SymbolReformattingWinGramDummy for window = window 27
 deactivating
 DictWinGramDummy for buffer = '.cshrc', window 27
 deactivating
@@ -11049,10 +11224,14 @@ windows:  []
 
 SelectWinGramDummy for buffer 'large_buff.py', global
 deactivating
+SymbolReformattingWinGramDummy for window = global
+deactivating
 DictWinGramDummy for buffer = 'large_buff.py', global
 deactivating
 DictThroughCmdGramDummy for buffer = 'large_buff.py', global
 deactivating
+SymbolReformattingWinGramDummy for window = global
+del
 SelectWinGramDummy for buffer 'large_buff.py', global
 del
 DictThroughCmdGramDummy for buffer = 'large_buff.py', global
@@ -11063,6 +11242,8 @@ and now the WaxEdit is gone
 current is (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer '.cshrc', window 27
+activating:  27  
+SymbolReformattingWinGramDummy for window = window 27
 activating:  27  
 DictWinGramDummy for buffer = '.cshrc', window 27
 setting context: before = [], after = []
@@ -11096,6 +11277,8 @@ new instance of emacs 1
 with window 14
 SelectWinGramDummy for buffer None, window 14
 init
+SymbolReformattingWinGramDummy for window = window 14
+init
 
 instance emacs(0)
 running in module emacs
@@ -11125,6 +11308,8 @@ emacs(0)
 starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
 SelectWinGramDummy for buffer None, window 20
 init
+SymbolReformattingWinGramDummy for window = window 20
+init
 DictWinGramDummy for buffer = 'fish.C', window 20
 init
 DictThroughCmdGramDummy for buffer = 'fish.C', window 20
@@ -11132,6 +11317,8 @@ init
 DictThroughCmdGramDummy for buffer = 'fish.C', window 20
 init
 SelectWinGramDummy for buffer 'fish.C', window 20
+activating:  20  
+SymbolReformattingWinGramDummy for window = window 20
 activating:  20  
 DictWinGramDummy for buffer = 'fish.C', window 20
 setting context: before = [ x, y)
@@ -11156,6 +11343,8 @@ Setting text mode on
 starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
 SelectWinGramDummy for buffer 'fish.C', window 20
 activating:  20  
+SymbolReformattingWinGramDummy for window = window 20
+deactivating
 DictWinGramDummy for buffer = 'fish.C', window 20
 deactivating
 DictThroughCmdGramDummy for buffer = 'fish.C', window 20
@@ -11164,6 +11353,8 @@ deactivating
 Setting text mode off
 starting recognition in  (20, 'emacs - (Yak 0) - fish.C', 'emacs')
 SelectWinGramDummy for buffer 'fish.C', window 20
+activating:  20  
+SymbolReformattingWinGramDummy for window = window 20
 activating:  20  
 DictWinGramDummy for buffer = 'fish.C', window 20
 setting context: before = [ x, y)
@@ -11188,6 +11379,8 @@ new instance in telnet window 5
 new instance of emacs 5
 with window 5
 SelectWinGramDummy for buffer None, window 5
+init
+SymbolReformattingWinGramDummy for window = window 5
 init
 
 instance emacs(1)
@@ -11239,6 +11432,8 @@ DictThroughCmdGramDummy for buffer = 'bug.c', window 5
 init
 SelectWinGramDummy for buffer 'bug.c', window 5
 activating:  5  
+SymbolReformattingWinGramDummy for window = window 5
+activating:  5  
 DictWinGramDummy for buffer = 'bug.c', window 5
 setting context: before = [], after = []
 DictWinGramDummy for buffer = 'bug.c', window 5
@@ -11257,6 +11452,8 @@ emacs(1)
 suspending  emacs(1)
 starting recognition in  (5, 'ttssh - acappella', 'telnet')
 SelectWinGramDummy for buffer 'bug.c', window 5
+deactivating
+SymbolReformattingWinGramDummy for window = window 5
 deactivating
 DictWinGramDummy for buffer = 'bug.c', window 5
 deactivating
@@ -11289,6 +11486,8 @@ emacs(1)
 now specifying window
 SelectWinGramDummy for buffer None, window 5
 init
+SymbolReformattingWinGramDummy for window = window 5
+init
 success
 
 instance emacs(2)
@@ -11319,6 +11518,8 @@ DictThroughCmdGramDummy for buffer = 'dog.q', window 5
 init
 SelectWinGramDummy for buffer 'dog.q', window 5
 activating:  5  
+SymbolReformattingWinGramDummy for window = window 5
+activating:  5  
 DictWinGramDummy for buffer = 'dog.q', window 5
 setting context: before = [], after = []
 DictWinGramDummy for buffer = 'dog.q', window 5
@@ -11326,6 +11527,8 @@ activating:  5
 DictThroughCmdGramDummy for buffer = 'dog.q', window 5
 activating:  5  
 SelectWinGramDummy for buffer 'bug.c', window 5
+deactivating
+SymbolReformattingWinGramDummy for window = window 5
 deactivating
 DictWinGramDummy for buffer = 'bug.c', window 5
 deactivating
@@ -11355,11 +11558,15 @@ suspending  emacs(2)
 starting recognition in  (5, 'ttssh - acappella', 'telnet')
 SelectWinGramDummy for buffer 'dog.q', window 5
 deactivating
+SymbolReformattingWinGramDummy for window = window 5
+deactivating
 DictWinGramDummy for buffer = 'dog.q', window 5
 deactivating
 DictThroughCmdGramDummy for buffer = 'dog.q', window 5
 deactivating
 SelectWinGramDummy for buffer 'bug.c', window 5
+deactivating
+SymbolReformattingWinGramDummy for window = window 5
 deactivating
 DictWinGramDummy for buffer = 'bug.c', window 5
 deactivating
@@ -11389,6 +11596,8 @@ resuming  emacs(1)
 starting recognition in  (5, 'ttssh - acappella', 'telnet')
 SelectWinGramDummy for buffer 'bug.c', window 5
 activating:  5  
+SymbolReformattingWinGramDummy for window = window 5
+activating:  5  
 DictWinGramDummy for buffer = 'bug.c', window 5
 setting context: before = [], after = []
 DictWinGramDummy for buffer = 'bug.c', window 5
@@ -11396,6 +11605,8 @@ activating:  5
 DictThroughCmdGramDummy for buffer = 'bug.c', window 5
 activating:  5  
 SelectWinGramDummy for buffer 'dog.q', window 5
+deactivating
+SymbolReformattingWinGramDummy for window = window 5
 deactivating
 DictWinGramDummy for buffer = 'dog.q', window 5
 deactivating
@@ -11425,6 +11636,8 @@ new Vim instance in exceed window 15
 new instance of Vim 10
 with window 15
 SelectWinGramDummy for buffer None, window 15
+init
+SymbolReformattingWinGramDummy for window = window 15
 init
 new buffer dog.pl for instance 10
  10:     $dirSep = "\";
@@ -11470,6 +11683,8 @@ DictThroughCmdGramDummy for buffer = 'dog.pl', window 15
 init
 SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
+SymbolReformattingWinGramDummy for window = window 15
+activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
 setting context: before = [
     $dirSep = ], after = ['/';]
@@ -11490,6 +11705,8 @@ suspending  Vim(0)
 starting recognition in  (15, 'xterm - acappella', 'exceed')
 SelectWinGramDummy for buffer 'dog.pl', window 15
 deactivating
+SymbolReformattingWinGramDummy for window = window 15
+deactivating
 DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
 DictThroughCmdGramDummy for buffer = 'dog.pl', window 15
@@ -11507,6 +11724,8 @@ new emacs instance in exceed window 15
 new instance of emacs 7
 with window 15
 SelectWinGramDummy for buffer None, window 15
+init
+SymbolReformattingWinGramDummy for window = window 15
 init
 
 instance emacs(3)
@@ -11527,6 +11746,8 @@ DictThroughCmdGramDummy for buffer = 'nothing.py', window 15
 init
 SelectWinGramDummy for buffer 'nothing.py', window 15
 activating:  15  
+SymbolReformattingWinGramDummy for window = window 15
+activating:  15  
 DictWinGramDummy for buffer = 'nothing.py', window 15
 setting context: before = [], after = []
 DictWinGramDummy for buffer = 'nothing.py', window 15
@@ -11534,6 +11755,8 @@ activating:  15
 DictThroughCmdGramDummy for buffer = 'nothing.py', window 15
 activating:  15  
 SelectWinGramDummy for buffer 'dog.pl', window 15
+deactivating
+SymbolReformattingWinGramDummy for window = window 15
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
@@ -11564,6 +11787,8 @@ Vim(0)
 starting recognition in  (15, 'xterm - acappella', 'exceed')
 SelectWinGramDummy for buffer 'nothing.py', window 15
 activating:  15  
+SymbolReformattingWinGramDummy for window = window 15
+activating:  15  
 DictWinGramDummy for buffer = 'nothing.py', window 15
 setting context: before = [], after = []
 DictWinGramDummy for buffer = 'nothing.py', window 15
@@ -11571,6 +11796,8 @@ activating:  15
 DictThroughCmdGramDummy for buffer = 'nothing.py', window 15
 activating:  15  
 SelectWinGramDummy for buffer 'dog.pl', window 15
+deactivating
+SymbolReformattingWinGramDummy for window = window 15
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
@@ -11590,11 +11817,15 @@ suspending  emacs(3)
 starting recognition in  (15, 'xterm - acappella', 'exceed')
 SelectWinGramDummy for buffer 'nothing.py', window 15
 deactivating
+SymbolReformattingWinGramDummy for window = window 15
+deactivating
 DictWinGramDummy for buffer = 'nothing.py', window 15
 deactivating
 DictThroughCmdGramDummy for buffer = 'nothing.py', window 15
 deactivating
 SelectWinGramDummy for buffer 'dog.pl', window 15
+deactivating
+SymbolReformattingWinGramDummy for window = window 15
 deactivating
 DictWinGramDummy for buffer = 'dog.pl', window 15
 deactivating
@@ -11614,6 +11845,8 @@ resuming  Vim(0)
 starting recognition in  (15, 'Vim - (Oldie 0) - dog.pl', 'exceed')
 SelectWinGramDummy for buffer 'dog.pl', window 15
 activating:  15  
+SymbolReformattingWinGramDummy for window = window 15
+activating:  15  
 DictWinGramDummy for buffer = 'dog.pl', window 15
 setting context: before = [
     $dirSep = ], after = ['/';]
@@ -11622,6 +11855,8 @@ activating:  15
 DictThroughCmdGramDummy for buffer = 'dog.pl', window 15
 activating:  15  
 SelectWinGramDummy for buffer 'nothing.py', window 15
+deactivating
+SymbolReformattingWinGramDummy for window = window 15
 deactivating
 DictWinGramDummy for buffer = 'nothing.py', window 15
 deactivating
@@ -11642,6 +11877,8 @@ new instance of emacs 9
 with window 25
 SelectWinGramDummy for buffer None, window 25
 init
+SymbolReformattingWinGramDummy for window = window 25
+init
 
 instance emacs(4)
 running in module exceed
@@ -11658,6 +11895,8 @@ init
 DictThroughCmdGramDummy for buffer = '.cshrc', window 25
 init
 SelectWinGramDummy for buffer '.cshrc', window 25
+activating:  25  
+SymbolReformattingWinGramDummy for window = window 25
 activating:  25  
 DictWinGramDummy for buffer = '.cshrc', window 25
 setting context: before = [], after = []
@@ -11676,6 +11915,8 @@ emacs(4)
 app reports new window (is current)
 current is (26, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer None, window 26
+init
+SymbolReformattingWinGramDummy for window = window 26
 init
 
 instance emacs(4)
@@ -11696,6 +11937,8 @@ init
 DictThroughCmdGramDummy for buffer = '.cshrc', window 26
 init
 SelectWinGramDummy for buffer '.cshrc', window 26
+activating:  26  
+SymbolReformattingWinGramDummy for window = window 26
 activating:  26  
 DictWinGramDummy for buffer = '.cshrc', window 26
 setting context: before = [], after = []
@@ -11742,6 +11985,8 @@ current is (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer None, window 27
 init
+SymbolReformattingWinGramDummy for window = window 27
+init
 DictWinGramDummy for buffer = '.cshrc', window 27
 init
 DictThroughCmdGramDummy for buffer = '.cshrc', window 27
@@ -11749,6 +11994,8 @@ init
 DictThroughCmdGramDummy for buffer = '.cshrc', window 27
 init
 SelectWinGramDummy for buffer '.cshrc', window 27
+activating:  27  
+SymbolReformattingWinGramDummy for window = window 27
 activating:  27  
 DictWinGramDummy for buffer = '.cshrc', window 27
 setting context: before = [], after = []
@@ -11775,6 +12022,8 @@ now it is on WaxEdit
 starting recognition in  (99, 'WaxEdit - (Floor 0) - large_buff.py', 'python')
 SelectWinGramDummy for buffer None, global
 init
+SymbolReformattingWinGramDummy for window = global
+init
 DictWinGramDummy for buffer = 'large_buff.py', global
 init
 DictThroughCmdGramDummy for buffer = 'large_buff.py', global
@@ -11782,6 +12031,9 @@ init
 DictThroughCmdGramDummy for buffer = 'large_buff.py', global
 init
 SelectWinGramDummy for buffer 'large_buff.py', global
+activating:  global  exclusive 
+
+SymbolReformattingWinGramDummy for window = global
 activating:  global  exclusive 
 
 DictWinGramDummy for buffer = 'large_buff.py', global
@@ -11803,6 +12055,9 @@ starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer 'large_buff.py', global
 activating:  global  exclusive 
 
+SymbolReformattingWinGramDummy for window = global
+activating:  global  exclusive 
+
 DictWinGramDummy for buffer = 'large_buff.py', global
 setting context: before = [], after = []
 DictWinGramDummy for buffer = 'large_buff.py', global
@@ -11812,6 +12067,8 @@ DictThroughCmdGramDummy for buffer = 'large_buff.py', global
 activating:  global  exclusive 
 
 SelectWinGramDummy for buffer '.cshrc', window 27
+deactivating
+SymbolReformattingWinGramDummy for window = window 27
 deactivating
 DictWinGramDummy for buffer = '.cshrc', window 27
 deactivating
@@ -11838,10 +12095,14 @@ windows:  []
 
 SelectWinGramDummy for buffer 'large_buff.py', global
 deactivating
+SymbolReformattingWinGramDummy for window = global
+deactivating
 DictWinGramDummy for buffer = 'large_buff.py', global
 deactivating
 DictThroughCmdGramDummy for buffer = 'large_buff.py', global
 deactivating
+SymbolReformattingWinGramDummy for window = global
+del
 SelectWinGramDummy for buffer 'large_buff.py', global
 del
 DictThroughCmdGramDummy for buffer = 'large_buff.py', global
@@ -11852,6 +12113,8 @@ and now the WaxEdit is gone
 current is (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 starting recognition in  (27, 'emacs - (Yak 4) - .cshrc', 'exceed')
 SelectWinGramDummy for buffer '.cshrc', window 27
+activating:  27  
+SymbolReformattingWinGramDummy for window = window 27
 activating:  27  
 DictWinGramDummy for buffer = '.cshrc', window 27
 setting context: before = [], after = []
@@ -12914,7 +13177,7 @@ Heard new statement
 
 ..
 ----------------------------------------------------------------------
-Ran 2 tests in 0.050s
+Ran 2 tests in 0.071s
 
 OK
 
@@ -13208,5 +13471,5 @@ OK
 
 
 -----------------------------------------------
-Test suite completed in:  453.161999941 secs
+Test suite completed in:  830.444000006 secs
 -----------------------------------------------
