@@ -755,7 +755,7 @@ class CorrectionBoxWX(wxDialog, ByeByeMixIn, possible_capture, Object.OwnerObjec
         self.text.SetInsertionPointEnd()
         self.text.SetSelection(0, self.text.GetLastPosition())
         self.text.SetFocus()
-        print 'text changing: text size is ', self.text.GetSize()
+#        print 'text changing: text size is ', self.text.GetSize()
 
     def on_selected(self, event):
         self.select_choice(event.GetString())

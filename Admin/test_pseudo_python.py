@@ -104,9 +104,9 @@ def dictate_pseudo_python(commands):
     
     commands.say(['for', 'loop', 'a', 'word', 'in', 'list', 'words', 'loop', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
-    commands.say(['first', 'equals', 'a', 'word', 'at', 'index', '0', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['first', 'equals', 'a', 'word', 'at', 'index', '0\\zero', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
-    commands.say(['rest', 'equals', 'a', 'word', 'at', 'index', '1', ':\\colon', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['rest', 'equals', 'a', 'word', 'at', 'index', '1\\one', ':\\colon', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
     commands.say(['regular', 'expression', 'this', 'word', 'equals', 'single', 'quotes'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     

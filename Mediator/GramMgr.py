@@ -63,6 +63,20 @@ class GramMgr(OwnerObject):
                             args)
         self.name_parent('recog_mgr')
 
+    def set_exclusive(self, exclusive = 1):
+        """makes the grammars exclusive (or not).  Generally used only
+        for background regression testing
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if the grammar should be exclusive
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('GramMgr.set_exclusive')
+
     def name(self):
         """returns the name of the AppState editor instance 
 
@@ -577,6 +591,43 @@ class WinGramMgr(GramMgrDictContext):
 # method, after performing their own duties
         self.deactivate_all()
 
+    def set_text_mode(self, set_to):
+        """Sets text mode on/off. In text mode, dictation utterances are
+        typed as regular text instead of being translated to code.
+
+        **INPUTS**
+
+        BOOL *set_to* -- Set text mode on or off depending on this argument.
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.recog_mgr.set_text_mode(set_to)
+  
+    def set_exclusive(self, exclusive = 1):
+        """makes the grammars exclusive (or not).  Generally used only
+        for background regression testing
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if the grammar should be exclusive
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.exclusive = exclusive
+        for buffers in self.dict_grammars.values():
+            for grammar in buffers.values():
+                grammar.set_exclusive(exclusive)
+        for grammar in self.sel_grammars.values():
+            grammar.set_exclusive(exclusive)
+        for grammar in self.correction_grammars.values():
+            grammar.set_exclusive(exclusive)
+        for grammar in self.text_mode_toggling_grammars.values():
+            grammar.set_exclusive(exclusive)
+
 
     def activate(self, buffer, window, is_in_text_mode = 0):
         """activate grammars for a buffer displayed in a particular
@@ -604,11 +655,8 @@ class WinGramMgr(GramMgrDictContext):
         if not self.dict_grammars[window].has_key(buffer):
             self.new_buffer(buffer, window)
             
-        if is_in_text_mode and self.correction_grammars.has_key(window):
-            self.correction_grammars[window].deactivate()          
-           
         for buff_name in self.dict_grammars[window].keys():
-            if buff_name != buffer or is_in_text_mode:
+            if buff_name != buffer:
                 self.dict_grammars[window][buff_name].deactivate()
 
 # if the dictation grammars are actually global, we need to deactivate 
@@ -627,26 +675,36 @@ class WinGramMgr(GramMgrDictContext):
             for a_window in self.sel_grammars.keys():
                 if a_window != window:
                     self.sel_grammars[a_window].deactivate()
+
         if self.correction:
-            self.correction_grammars[window].activate()
+            if is_in_text_mode:
+                self.correction_grammars[window].deactivate()
+            else:
+                self.correction_grammars[window].activate()
+
         if self.text_mode_toggling:
             self.text_mode_toggling_grammars[window].activate()            
+
 # if the grammars are actually global, we need to deactivate 
 # all the rest, even if they are stored under other windows
-        if self.global_grammars and (self.correction or self.text_mode_toggling):
-            for a_window in self.correction_grammars.keys():
-                if a_window != window:
-                    if self.correction:
+        if self.global_grammars:
+            if self.correction:
+                for a_window in self.correction_grammars.keys():
+                    if a_window != window:
                         self.correction_grammars[a_window].deactivate()
-                    if self.text_mode_toggling:
+            if self.text_mode_toggling:
+                for a_window in self.text_mode_toggling_grammars.keys():
+                    if a_window != window:
                         self.text_mode_toggling_grammars[a_window].deactivate()
                         
-#  set dictation context
-        before, after = self.find_context(buffer)
-        self.dict_grammars[window][buffer].set_context(before, after)
 
-        if not is_in_text_mode:
-           self.dict_grammars[window][buffer].activate()
+        if is_in_text_mode:
+            self.dict_grammars[window][buffer].deactivate()
+        else:
+#  set dictation context
+            before, after = self.find_context(buffer)
+            self.dict_grammars[window][buffer].set_context(before, after)
+            self.dict_grammars[window][buffer].activate()
     
     def activate_sink(self, window):
         """activate dummy dictation grammar as a sink to intercept
@@ -797,14 +855,15 @@ class WinGramMgr(GramMgrDictContext):
                 a_window = None
             debug.trace('WinGramMgr.new_window', 
                 'window, a_window: %s, %s' % (str(window), str(a_window)))
-            self.sel_grammars[window] = self.factory.make_selection(self, 
-                self.app, a_window, exclusive = self.exclusive)
+            self.sel_grammars[window] = \
+                self.factory.make_selection(manager = self, app = self.app, 
+                window = a_window, exclusive = self.exclusive)
         if self.correction and not self.correction_grammars.has_key(window):
             a_window = window
             if self.global_grammars:
                 a_window = None
             self.correction_grammars[window] = \
-                self.factory.make_correction(self, a_window, 
+                self.factory.make_correction(manager = self, window = a_window, 
                 exclusive = self.exclusive)
 #            print self.correction_grammars[window]
         if self.text_mode_toggling and not self.text_mode_toggling_grammars.has_key(window):
@@ -812,7 +871,8 @@ class WinGramMgr(GramMgrDictContext):
             if self.global_grammars:
                 a_window = None
             self.text_mode_toggling_grammars[window] = \
-                self.factory.make_text_mode(manager=self.app, window=a_window, exclusive=self.exclusive)
+                self.factory.make_text_mode(manager = self, window = a_window, 
+                exclusive=self.exclusive)
            
 
     def delete_window(self, window):

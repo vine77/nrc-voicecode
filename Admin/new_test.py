@@ -77,7 +77,7 @@ import auto_test, util
 def usage():
     print """
 
-Usage: python test.py -h -f fname [suite-name ...] -s
+Usage: python test.py -h suite-name -s
                       -d output1 output2
                       
 
@@ -85,16 +85,6 @@ OPTIONS
 -------
 
 -h       : print this help message
-
--f fname : evaluate the code in file fname before doing the tests. This is used
-           mainly to define or import a list of tests
-
--s       : when this option is 1, allows the user to switch to an other window
-           while the regression test is running. If at some point a particular
-           test requires that the regression test window be the active one,
-           the user will be asked to make it so by a voice prompt.
-
-           Default: 0
 
 -d       : instead of doing tests, compare the outputs of two tests runs.
            Typically used to compare output of a test run done on a new
@@ -109,8 +99,7 @@ OPTIONS
 ARGUMENTS
 ---------
 
-suite-name : name of a test or test suite, or regexp to be matched against
-             names of tests
+suite-name : name of a test or test suite
 
 output1, output2 :
              two test run ouput files to be compared
@@ -126,11 +115,8 @@ if (__name__ == '__main__'):
         raise err
     
     opts, args = util.gopt(('d', None, 
-        'f', posixpath.expandvars('$VCODE_HOME' + os.sep + 'Admin' + 
-            os.sep + 'tests_def.py'), 
         'bypass', None,
         'h', None, 
-        's', 0, 
         'p=', None))
 
     if (opts['h']) or len(args) == 0:
@@ -138,20 +124,16 @@ if (__name__ == '__main__'):
     elif (opts['d']):
         print "-d option not implemented yet.\n"
     else:
-        test_space = globals()
-        util.may_switch_win_during_tests = int(opts['s'])
-        sys.stderr.write('Loading test definitions...\n')
-        execfile(opts['f'], test_space)
         try:
             sr_interface.connect('off')
         except natlink.UnknownName:
-            print 'NatSpeak user \'%s\' not defined. \nDefine it and restart VoiceCode' % sr_interface.vc_user_name
+            print 'NatSpeak user VCTest not defined.'
+            print 'Define it and restart VoiceCode' 
         else:
             the_mediator = \
                 NewMediatorObject.NewMediatorObject(
-                    test_args = args,
-                    test_space = test_space, global_grammars = 1, 
-                    exclusive = 1, 
+                    test_or_suite = args[0],
+                    global_grammars = 1, exclusive = 1, 
                     profile_prefix = opts['p'],
                     bypass_sr_recog = opts['bypass'])
             sys.stderr.write('Configuring the mediator...\n')

@@ -576,7 +576,9 @@ class ServerMainThread(Object.OwnerObject):
             sleepy_time = 0.10
         a_msgr = messaging.messenger_factory(listen_sock, sleep = sleepy_time,
             sleeper = sleeper)
-        queue = Queue.Queue(10)
+        queue = Queue.Queue(-1)
+# a finite queue is causing problems for the text_mode regression test
+#        queue = Queue.Queue(10)
         broken_connection = ('connection_broken', {})
         thread = ListenAndQueueMsgsThread( a_msgr, queue, data_event,
             connection_ending, broken_connection)

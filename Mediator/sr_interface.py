@@ -236,11 +236,14 @@ def getWordInfo(word, *rest):
     #
     # First, fix the written form of the word
     #
+#    print "word info for raw [%s]" % word
     spoken, written = spoken_written_form(word)
+#    print "word info for spoken, written [%s, %s]" % (spoken, written)
     word = vocabulary_entry(spoken, written, clean_written=1)
 #    trace('sr_interface.getWordInfo', 'reformatted word=%s' % word)
 
     answer = None
+#    print "word info for processed [%s]" % word
     if len(rest) == 0:
         answer = natlink.getWordInfo(word)
     elif len(rest) == 1:
@@ -433,7 +436,15 @@ def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
         # ignore for now
         #
         written = a_match.group(1)
+# the try block handles the special case of selection grammar utterances which
+# select words with different written and spoken form, which, in
+# natspeak 7, get reported as written\spoken\t (That's backslash and t,
+# not a tab character) - DCF
         spoken = a_match.group(2)
+        extra = string.find(written, '\\')
+        if extra >= 0:
+            written = written[:extra]
+            spoken = written[extra+1:]
     else:
 #        trace('sr_interface.spoken_written_form', 'entry \'%s\' is just spoken ' % vocabulary_entry        )
         written = vocabulary_entry
@@ -538,7 +549,11 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
         """
         # local variables needed for initialization in deep_construct
         raw_words = results.getWords(0)
+        trace('SpokenUtteranceNL.__init__', 
+            "raw words = %s" % repr(raw_words))
         word_list = map(self.spoken_written_form, raw_words)
+        trace('SpokenUtteranceNL.__init__', 
+            "word list = %s" % repr(word_list))
         spoken_only = map(lambda x: x[0], word_list)
       
         self.deep_construct(SpokenUtteranceNL,

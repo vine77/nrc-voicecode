@@ -55,9 +55,9 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
-###################################################################
 #                        'ListenAndQueueMsgsThread': 1,
-#                        'sim_commands.say': 1,
+#                        'activate': 1,
+#                        'SimCmdsObj.say': 1,
 #                        'SB_ServiceFullState': 1,
 #                        'create_update': 1,
 #                        'StateStackBasic': 1,
@@ -72,6 +72,9 @@ debug.config_traces(status="on",
 #                        'RSMInfrastructure': 1,
 #                      'RecogStartMgr': 1,
 #                      'pop_breadcrumb': 1,
+#                       'WinGram.format_utterance_message': 1,
+#                       'SpokenUtteranceNL.__init__': 1,
+#                       'EnglishSmallNumbersSet': 1,
 #                      'SelectWinGram': 1,
 #                        'GramMgr': 1,
 #                        'DictWinGram': 1,
@@ -92,6 +95,7 @@ debug.config_traces(status="on",
 #                      'CmdInterp.is_spoken_LSA': 1,
 #                      'CmdInterp.is_spoken_CSC': 1,
 #                      'CmdInterp.add_lsa': 1,
+#                       'CmdInterp.index_csc': 1,
 #                      'sr_interface.addWord': 1,
 #                      'SinglePunctuation': 1,
 #                      'LeftRightPunctuation': 1,
@@ -379,17 +383,6 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
         testing = not (test_suite is None)
         self.the_server = self.create_server(testing)
 
-        test_args = None
-        test_space = None
-        if testing:
-            test_space = globals()
-            test_args = [test_suite]
-            sys.stderr.write('Loading test definitions...\n')
-            sys.stderr.flush()
-            tests_def_fname = posixpath.expandvars('$VCODE_HOME' + \
-                os.sep + 'Admin' + os.sep + 'tests_def.py')
-            execfile(tests_def_fname, test_space)        
-
         wxApp.__init__(self, 0)
 #        wxApp.__init__(self, 1, 'medcrash')
 
@@ -405,8 +398,8 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
                 console = console, wave_playback = WavePlaybackWX, 
                 correct_evt = correct_evt,
                 correct_recent_evt = correct_recent_evt,
-                test_args = test_args,
-                test_space = test_space, global_grammars = 1, exclusive = 1,
+                test_or_suite = test_suite,
+                global_grammars = 1, exclusive = 1,
                 profile_prefix = profile_prefix,
                 bypass_sr_recog = bypass_sr_recog)
 #        print self.the_mediator.server
@@ -795,8 +788,9 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
 
     def new_talk_conn(self, event):
         if not self.quitting:
-            if not self.the_server.handshake_talk_socks():
-# if we've just run regression tests, we quit now, without prompting
+            normal = self.the_server.handshake_talk_socks()
+# if we've just run regression tests, we quit now, without prompting,
+            if not normal:
                 self.quit_now(prompt = 0)
 
 

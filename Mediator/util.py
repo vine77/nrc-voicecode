@@ -238,35 +238,6 @@ def istuple(instance):
     return isinstance(instance, types.TupleType)
 
 
-may_switch_win_during_tests = 1
-
-def request_console_be(active=1):
-    """During regression testing, there are times where the console window
-    must absolutely be the active window (e.g. when processing a
-    NavigateByPseudoCode command).
-
-    In such cases, this method is called with active=1, to ask the
-    user to make it so.
-
-    Once we don't need the console to be the active window, the method is
-    called with active=0 to notify the user that he/she can make the window
-    inactive again"""
-
-    global may_switch_win_during_tests
-
-    if may_switch_win_during_tests:
-        if active:
-            sound_file = os.path.join(vc_globals.data, 'TestData', 'must_be_active.wav')
-            message = 'Please make the regression test window the active window and press <Enter>\n> '
-        else:
-            sound_file = os.path.join(vc_globals.data, 'TestData', 'may_be_inactive.wav')
-            message = 'You may now leave the regression test window.\nPress <Enter> to acknowledge this message.\n> '
-
-        if sys.platform =='win32':
-            winsound.PlaySound(sound_file, 0)    
-        sys.stdout.write(message)
-        sys.stdin.readline()
-        
 ###############################################################################
 # path manipulation 
 ###############################################################################
@@ -318,12 +289,12 @@ def within_VCode(path):
 
 def bell(length=3):
     """Plays a bell sound for a time proportional to INT length.
-    
-    Note: This function doesn't seem work if the output of the script 
-    is redirected to a file."""
+    """
     
     bell_string = ''
     for ii in range(length):
        bell_string = bell_string + '\a'
+# use sys.__stderr__ so that the user will hear the bell even if stderr
+# is redirected by regression testing
     sys.__stderr__.write(bell_string)
     sys.__stderr__.flush()

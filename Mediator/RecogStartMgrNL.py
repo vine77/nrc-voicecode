@@ -42,8 +42,12 @@ class RecogStartGram(GrammarBase):
         <start> exported = {emptyList};
     """
 
-    def __init__(self, **args):
-        apply(GrammarBase.__init__, [self], args)
+    def __init__(self):
+        GrammarBase.__init__(self)
+# GrammarBase is a natlinkutils class - it doesn't follow our
+# constructor convention, so you shouldn't pass keyword arguments
+# through to it.
+#        apply(GrammarBase.__init__, [self], args)
         debug.trace('RecogStartGram.__init__', '** invoked, self=%s' % self)        
 
     def initialize(self, callback = None):

@@ -352,12 +352,12 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         
         global sleep_before_recognitionMimic
         if self.should_exit:
-            trace('sim_commands.say', 'cancelling testing')
+            trace('SimCmdsObj.say', 'cancelling testing')
             raise mediator_exceptions.CancelTesting()
 
         if echo_cmd: self.echo_command('say', utterance, user_input, never_bypass_sr_recog, echo_utterance)
 
-        trace('sim_commands.say', 'utterance=%s' % utterance)
+        trace('SimCmdsObj.say', 'utterance=%s' % utterance)
 
 #    print 'Saying: %s' % utterance
         sys.stdout.flush()
@@ -386,7 +386,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
             
         try:
             if self.bypass_sr_recog and not never_bypass_sr_recog:
-                trace('sim_commands.say', 'bypassing NatSpeak')
+                trace('SimCmdsObj.say', 'bypassing NatSpeak')
                 sys.stdout.flush()
                 if util.islist(utterance) or util.istuple(utterance):
                     spoken = self.utterance_spoken_forms(utterance)
@@ -402,14 +402,14 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                 dictation_allowed = dictation_allowed and \
                     (active_field == None)
                 if self.testing and not dictation_allowed:
-                    trace('sim_commands.say', 'cancelling testing')
+                    trace('SimCmdsObj.say', 'cancelling testing')
                     raise mediator_exceptions.CancelTesting()
 
                 self.interp.interpret_NL_cmd(utterance, self.app)
                 self.app.recog_end()
                 self.show_buff()        
             else:
-                trace('sim_commands.say', 'NOT bypassing NatSpeak')
+                trace('SimCmdsObj.say', 'NOT bypassing NatSpeak')
                 if util.islist(utterance) or util.istuple(utterance):
                     words = []
                     #
@@ -431,11 +431,11 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                     words = re.split('\s+', utterance)
 
 
-                trace('mediator.say', 'words=%s' % words)
+                trace('SimCmdsObj.say', 'words=%s' % words)
 #            for word in words:
 #                print word, natlink.getWordInfo(word)
 #        print '-- mediator.say: words=%s' % words
-                sys.stdout.flush()
+                sys.stderr.flush()
 
 
                 #
@@ -447,23 +447,27 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                     print '\n\n********************\nPlease click on the editor window before I "say" your utterance.\nYou have %s seconds to do so.\n********************' % sleep_before_recognitionMimic
                     time.sleep(sleep_before_recognitionMimic)
                     
-                trace('sim_commands.say', 'invoking recognitionMimic')
-#        print '-- sim_commands.say: invoking recognitionMimic'
-                sys.stdout.flush()
+                trace('SimCmdsObj.say', 'invoking recognitionMimic')
+#        print '-- SimCmdsObj.say: invoking recognitionMimic'
+                sys.stderr.flush()
 #            print words
                 natlink.recognitionMimic(words)
                      
-                trace('sim_commands.say', 'DONE invoking recognitionMimic')
-#        print '-- sim_commands.say: DONE invoking recognitionMimic'        
+                trace('SimCmdsObj.say', 'DONE invoking recognitionMimic')
+                sys.stderr.flush()
+#        print '-- SimCmdsObj.say: DONE invoking recognitionMimic'        
                 if not self.app.alive:
+                    trace('SimCmdsObj.say', 'about to raise socket error')
+                    sys.stderr.flush()
                     raise \
                         SocketError("socket connection broken during callbacks")
                 if self.should_exit:
-                    trace('sim_commands.say', 'cancelling testing')
+                    trace('SimCmdsObj.say', 'cancelling testing')
+                    sys.stderr.flush()
                     raise mediator_exceptions.CancelTesting()
                 
         finally:
-            sys.stdout.flush()
+            sys.stderr.flush()
             #
             # Redirect stdin back to what it was
             #

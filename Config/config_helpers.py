@@ -33,7 +33,6 @@ import sr_interface
 import debug
 from SpacingState import *
 
-
 # US English military spelling
 
 alpha_bravo = {}
@@ -1196,7 +1195,7 @@ class EnglishSmallNumbersSet(Object):
        aliases.add_lsa(LSAlias(['oh X.'], 
                        {None: '0x'}, letters_and_digits))
     
-       for digit in range(9):
+       for digit in range(10):
           if digit == 0:
              spoken = 'oh oh'
              written = '00'
@@ -1223,7 +1222,7 @@ class EnglishSmallNumbersSet(Object):
                              description = 'dictating 2-digit numbers.')                             
         
                                      
-        for number in range(99):
+        for number in range(100):
            self._add_number(aliases, number)
            
         self._add_zero_prefixed_numbers(aliases)

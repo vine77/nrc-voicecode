@@ -20,11 +20,12 @@
 ##############################################################################
 
 import exceptions, os, sys
+import time
 import traceback
 import messaging
 import string
 import debug
-#import traceback
+import util
 import actions_gen, AppState, CmdInterp, cont_gen, CSCmd, Object, re, sr_interface, SymDict, vc_globals
 import tcp_server
 import AppMgr, RecogStartMgr, GramMgr
@@ -135,8 +136,6 @@ class NewMediatorObject(Object.OwnerObject):
     *CorrectRecentEvent correct_recent_evt* -- doorbell used to send an
     event to bring up the correct recent box asynchronously.
 
-    *{STR:ANY} test_args* -- list of test names to run
-
     *{STR:ANY} test_space* -- if the mediator is started in regression 
     testing mode, test_space is the namespace in which regression tests 
     have been defined and will run.  Otherwise, it should be None.
@@ -157,11 +156,14 @@ class NewMediatorObject(Object.OwnerObject):
     *BOOL bypass_sr_recog* -- when testing, bypass natlink for 
     dictation utterances (ignored if test_space is None) 
 
-    *BOOL test_next* -- flag to indicate that the mediator should run
-    regression tests using the next editor to connect
+    *TestSuite test_suite* -- test suite to run, or None if we are not going 
+    to run regression tests using the next test editor to connect
 
     *BOOL testing* -- flag indicating that the mediator is currently
     running regression tests.
+
+    *BOOL foreground_testing* -- flag indicating that the mediator is 
+    currently running foreground regression tests.
 
     *STR config_file* -- file which was used to configure the mediator.
     This file will also be the default to use if reconfigure is called
@@ -187,8 +189,8 @@ class NewMediatorObject(Object.OwnerObject):
                  wave_playback = None,
                  correct_evt = None,
                  correct_recent_evt = None,
-                 test_args = None,
-                 test_space = None, global_grammars = 0, exclusive = 0, 
+                 test_or_suite = None,
+                 global_grammars = 0, exclusive = 0, 
                  profile_prefix = None,
                  bypass_sr_recog = 0,
                  symdict_pickle_fname = None,
@@ -239,22 +241,20 @@ class NewMediatorObject(Object.OwnerObject):
         *CorrectUtteranceEvent correct_evt* -- doorbell used to send an
         event to bring up the correction box asynchronously.
 
-        *{STR:ANY} test_space* -- if the mediator is started in regression 
-        testing mode, test_space is the namespace in which regression tests 
-        have been defined and will run.  Otherwise, it should be None.
+        *STR test_or_suite* -- name of test or test suite to run
 
         *BOOL global_grammars* -- should this instance use global grammars for 
-        regression testing (ignored if test_space is None)
+        regression testing (ignored if test_or_suite is None)
 
         *BOOL exclusive* -- should this instance use exclusive grammars for 
-        regression testing (ignored if test_space is None or
+        regression testing (ignored if test_or_suite is None or
         global_grammars is false)
 
         *STR profile_prefix* -- prefix for filename for output of profiler,
-        or None if not profiling (ignored if test_space is None) 
+        or None if not profiling (ignored if test_or_suite is None) 
 
         *BOOL bypass_sr_recog* -- when testing, bypass natlink for 
-        dictation utterances (ignored if test_space is None) 
+        dictation utterances (ignored if test_or_suite is None) 
 
         STR *symdict_pickle_fname=None* -- Name of the file containing the
         persistent version of the symbols dictionnary.
@@ -270,8 +270,8 @@ class NewMediatorObject(Object.OwnerObject):
                              'correct_evt': correct_evt,
                              'correct_recent_evt': correct_recent_evt,
                              'interp': interp,
-                             'test_args': test_args,
-                             'test_space': test_space,
+                             'test_or_suite': test_or_suite,
+                             'test_space': None,
                              'global_grammars': global_grammars,
                              'symdict_pickle_fname': symdict_pickle_fname,
                              'symbol_match_dlg_regression': \
@@ -280,8 +280,9 @@ class NewMediatorObject(Object.OwnerObject):
                              'exclusive': exclusive,
                              'profile_prefix': profile_prefix,
                              'bypass_sr_recog': bypass_sr_recog,
-                             'test_next': 0,
+                             'test_suite': None,
                              'testing': 0, 
+                             'foreground_testing': 0, 
                              'pickled_interp': None,
                              'config_file': None,
                              'user_config_file': None
@@ -294,9 +295,21 @@ class NewMediatorObject(Object.OwnerObject):
         self.add_owned('interp')
         if self.the_console:
             self.the_console.set_mediator(self)
-        if self.test_args != [None] and self.test_space != None:
-            self.test_next = 1
-        if self.test_next:
+        if self.test_or_suite != None:
+            self.test_space = {}
+            tests = auto_test.SuiteFactory()
+            self.test_space['add_test'] = tests.add_test
+            self.test_space['define_suite'] = tests.define_suite
+            self.test_space['define_suite_by_range'] = \
+                tests.define_suite_by_range
+            self.test_space['sort_tests'] = \
+                tests.sort
+            sys.stderr.write('Loading test definitions...\n')
+            sys.stderr.flush()
+            tests_def_fname = os.path.join(vc_globals.admin, 'tests_def.py')
+            execfile(tests_def_fname, self.test_space)        
+            self.test_suite = tests.create_suite(self.test_or_suite)
+        if self.test_suite:
             user = 'VCTest'
         else:
 # for right now, leave this hard-coded.  Eventually, we want this to be
@@ -430,7 +443,7 @@ class NewMediatorObject(Object.OwnerObject):
         exclude = None
         if exclude_interp:
             exclude = ['interp']
-        testing = testing or self.test_next
+        testing = testing or self.test_suite
         okay = self._configure_from_file(config_file = config_file,
             user_config_file = user_config_file,
             symdict_pickle_fname = self.symdict_pickle_fname, 
@@ -573,10 +586,10 @@ class NewMediatorObject(Object.OwnerObject):
 #            print 'ERROR: in configuration file %s.\n' % file
 #            raise err
         user_file = user_config_file
-        debug.trace('NewMediatorObject._configure_from_file', 'initially, user_file="%s", self.test_next=%s, vc_globals.regression_user_config_file="%s", vc_globals.default_user_config_file="%s"' % 
-                    (user_file, self.test_next, vc_globals.regression_user_config_file, vc_globals.default_user_config_file))         
+        debug.trace('NewMediatorObject._configure_from_file', 'initially, user_file="%s", test_next=%s, vc_globals.regression_user_config_file="%s", vc_globals.default_user_config_file="%s"' % 
+                    (user_file, self.test_suite is not None, vc_globals.regression_user_config_file, vc_globals.default_user_config_file))         
         if not user_file:
-            if testing or self.test_next:
+            if testing or self.test_suite:
                 user_file = vc_globals.regression_user_config_file
             else:
                 user_file = vc_globals.default_user_config_file
@@ -701,7 +714,7 @@ class NewMediatorObject(Object.OwnerObject):
     def reset(self, config_file = None, user_config_file = None, 
         symdict_pickle_fname = None,
         symbol_match_dlg = None, add_sr_entries_for_LSAs_and_CSCs=1,
-        use_pickled_interp = 1):
+        use_pickled_interp = 1, exclusive = 0):
         """reset the mediator object to continue regression testing with
         a fresh interpreter
 
@@ -742,6 +755,7 @@ class NewMediatorObject(Object.OwnerObject):
             add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs,
             use_pickled_interp = use_pickled_interp)
         self.reset_results_mgr()
+        self.editors.set_exclusive(exclusive)
         self.interp.add_sr_entries_for_LSAs_and_CSCs = old_add_entries
         debug.trace('NewMediatorObject.reset', '** exited')        
 
@@ -987,15 +1001,8 @@ class NewMediatorObject(Object.OwnerObject):
 
         *BOOL* -- true if the regression tests were run
         """
-        instance_name = None
-        if self.global_grammars:
-            instance_name = self.editors.new_universal_instance(app, 
-                exclusive = self.exclusive)
-            print 'universal instance named "%s"' % instance_name
-        if not instance_name:
-            instance_name = self.editors.new_instance(app, 
-                check_window = check_window, window_info = window_info)
-            print 'ordinary instance named "%s"' % instance_name
+        instance_name = self.editors.new_instance(app, 
+            check_window = check_window, window_info = window_info)
         if not instance_name:
             return 0
         app = self.editors.app_instance(instance_name)
@@ -1017,10 +1024,32 @@ class NewMediatorObject(Object.OwnerObject):
         self.testing = 1
         if self.console():
             self.console().starting_tests()
+        start_time = time.time()
+        end_time = start_time
         try:
             try:
-                auto_test.run(self.test_args, 
-                    profile_prefix = self.profile_prefix)
+                if server and self.test_suite.foreground_count():
+                    self.foreground_testing = 1
+                    self.user_message('Starting foreground tests...')
+                    time.sleep(3)
+                    self.test_suite.run_foreground(profile_prefix =
+                        self.profile_prefix)
+                    self.user_message('Finished foreground tests...')
+                    self.foreground_testing = 0
+                else:
+                    msg = 'WARNING: Unable to run foreground tests with\n' \
+                        + 'an internal editor'
+                    sys.stderr.write(msg)
+                if self.test_suite.background_count():
+                    if self.global_grammars:
+                        time.sleep(3)
+                        ok = self.editors.make_universal(instance_name, exclusive =
+                        self.exclusive)
+                    util.bell()
+                    self.user_message('Starting background tests...')
+                    time.sleep(3)
+                    self.test_suite.run_background(profile_prefix =
+                        self.profile_prefix)
                 self.testing = 0
                 app.mediator_closing()
             except messaging.SocketError:
@@ -1028,7 +1057,13 @@ class NewMediatorObject(Object.OwnerObject):
                 pass
         except:
             traceback.print_exc()
+        end_time = time.time()
         self.testing = 0
+        self.test_suite = None
+        elapsed_time = end_time - start_time     
+        print '\n\n\n-----------------------------------------------'
+        print 'Test suite completed in:  %s secs' % elapsed_time
+        print '-----------------------------------------------'            
         if self.console():
             self.console().finished_tests()
         del self.test_space['testing']
@@ -1068,7 +1103,7 @@ class NewMediatorObject(Object.OwnerObject):
         if you want to add windows to the application in the future.
         """
         if test_editor:
-            if self.test_space != None and self.test_next:
+            if self.test_suite:
                 self._new_test_editor(app, server = server, 
                     check_window = check_window, window_info = window_info)
                 return None
