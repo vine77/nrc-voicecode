@@ -4,7 +4,7 @@
 ;;
 ;; Based on vr-deprecated Mode by Barry Jaspan
 ;;
-;; Copyright 1999 Barry Jaspan, <bjaspan@mit.edu>.  All rights reserved.
+;; Copyright 1999 Barry Jaspan, <bjaspan@mit>.  All rights reserved.
 ;;
 ;; $Id: vc.el,v 1.9 2002/08/05 22:59:58 alain_desilets Exp $
 ;;

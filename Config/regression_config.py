@@ -15,6 +15,7 @@ std_grouping = std_US_grouping
 std_quotes = std_US_quotes
 alt_grouping = alt_US_grouping
 alt_quotes = alt_US_quotes
+std_small_numbers = std_US_small_numbers
 
 #######################################
 # Include user-defined forms here
@@ -113,4 +114,9 @@ alt_quotes.create(interpreter, force = 1)
 std_quotes.create(interpreter)
 
 
+#######################################
+# add sets for dictating 2-digit numbers
+#######################################
 
+
+std_small_numbers.create(interpreter)

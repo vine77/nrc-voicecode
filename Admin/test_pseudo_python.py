@@ -267,7 +267,7 @@ def nested_if_then_else_test(commands):
    commands.say(['new', 'statement', 'if', 'some', 'flag', 'then'], user_input="1\n1\n")
    commands.say(['do', 'some', 'more', 'stuff', 'with', 'arguments', 'some', 'argument'], user_input="1\n1\n")
    commands.say(['else', 'do', 'some', 'stuff', 'again', 'with', 'arguments', 'some', 'other', 'argument'], user_input="1\n1\n")
-   commands.say(['bug', 'below', 'dot', 'following', 'one', 'will', 'not', 'be', 'inserted', 'at', 'the', 'right', 'level'], user_input="1\n1\n1\n")
+   commands.say(['bug', 'below', 'dot', 'following', 'one', 'will', 'not', 'be', 'inserted', 'at', 'the', 'right', 'level'], user_input="1\n1\n1\n1\n1\n1\n1\n1\n1\n")
    commands.say(['else', 'do', 'some', 'stuff', 'without', 'arguments'])
    
    

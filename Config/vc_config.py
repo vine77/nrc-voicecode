@@ -19,6 +19,7 @@
 #
 ##############################################################################
 
+
 #
 # Configuration script for VoiceCode
 #
@@ -363,7 +364,11 @@ acmd = CSCmd(spoken_forms=['back jump out', 'jump back out'],
              docstring='jump backwards out of innermost balanced expression')
 out_of_balance.add_csc(acmd)
 
+#############################################################################
+# Two digit numbers
+#############################################################################
 
+std_US_small_numbers = EnglishSmallNumbersSet()
 
 #############################################################################
 # Code indentation

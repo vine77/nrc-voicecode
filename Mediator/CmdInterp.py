@@ -790,7 +790,6 @@ class CmdInterp(OwnerObject):
         leading_spaces = a_match.group(1)
 
         trace('CmdInterp.match_untranslated_text', 'text_no_spaces=\'%s\', leading_spaces=\'%s\'' % (text_no_spaces, leading_spaces))
-#        print '-- CmdInterp.match_untranslated_text: text_no_spaces=\'%s\', leading_spaces=\'%s\'' % (text_no_spaces, leading_spaces)
                 
         #
         # Match untranslated text to new known symbol or a known symbol with
@@ -805,16 +804,14 @@ class CmdInterp(OwnerObject):
            not num_match:
             symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
             trace('CmdInterp.match_untranslated_text', 'symbol_matches=%s' % symbol_matches)
-#            print '-- CmdInterp.match_untranslated_text: symbol_matches=%s' % symbol_matches
             if symbol_matches:
                 self.dlg_select_symbol_match(untranslated_text, 
                     symbol_matches, app)
             else:
                 actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                
-#                app.insert_indent(untranslated_text, '')
         else:
+            untranslated_text = re.sub('\s', '', untranslated_text)        
             actions_gen.ActionInsert(code_bef=untranslated_text, code_after='').log_execute(app, None)                            
-#            app.insert_indent(untranslated_text, '')
         
 
     def enable_symbol_match_dlg(self, enable = 1):
