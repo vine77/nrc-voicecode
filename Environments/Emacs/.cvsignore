@@ -3,3 +3,4 @@
 *.TAGS
 *~
 TAGS
+#vcode-with-overlays.el#

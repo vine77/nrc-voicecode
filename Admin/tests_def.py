@@ -2160,7 +2160,7 @@ def test_temporary():
     mediator.init_simulator_regression()
     test_command("""open_file('blah.c')""")
     test_say(['for', 'loop'])
-
+#    test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'])
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
 auto_test.add_test('temp', test_temporary, desc='temporary test')
