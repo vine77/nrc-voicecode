@@ -172,7 +172,8 @@ def deleteWord(word, *rest):
     VoiceCode, i.e. if the word info has 'added by Vocabulary Builder'
     flag set and if the word is a phrase (single words might actually
     have ben added by the real Vocabulary Builder)"""
-    
+
+#    print '-- sr_interface.deleteWord: word=%s, rest=%s' % (word, rest)
     if speech_able():
         flag = getWordInfo(word, 4)
         num_words = len(re.split('\s+', word))

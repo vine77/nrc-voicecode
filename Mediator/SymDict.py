@@ -380,6 +380,9 @@ class SymDict(PickledObject.PickledObject):
     *[STR] standard_symbol_sources* -- List of files in which standard
      symbols for different languages are defined.
 
+     *BOOL* sr_symbols_cleansed = 1 -- If true, then all symbols have
+      been removed from the SR vocabulary.
+
      *STR* pickle_fname=None' -- Name
      of the file where dictionary object is to be saved/read from. If *None*,
      it means the object should never be saved to/read from file.
@@ -400,11 +403,12 @@ class SymDict(PickledObject.PickledObject):
                  **attrs):
 
         # These attributes can't be set at construction time
-        self.decl_attrs({'_cached_symbols_as_one_string': '', \
-                         'spoken_form_info': {}, \
-                         'symbol_info': {}, \
-                         'abbreviations': {}, \
-                         'standard_symbol_sources': [], \
+        self.decl_attrs({'_cached_symbols_as_one_string': '',
+                         'spoken_form_info': {},
+                         'symbol_info': {},
+                         'abbreviations': {},
+                         'standard_symbol_sources': [],
+                         'sr_symbols_cleansed': 1,
                          'unresolved_abbreviations': {}})
 
         # These attributes CAN be set at construction time
@@ -412,12 +416,8 @@ class SymDict(PickledObject.PickledObject):
                             {'pickle_fname': pickle_fname},
                             attrs)
 
-#          # Initialise the object from file
-#          self.unpickle()
+#        print '-- SymDict.__init__: returning self.__dict__=%s' % self.__dict__
 
-#          # Need to reset self.pickle_fname to override the value that might have
-#          # been saved in the pickle file
-#          self.pickle_fname = pickle_fname
 
 
     def add_abbreviation(self, abbreviation, expansions, user_added=1, resave=0):
@@ -605,13 +605,33 @@ class SymDict(PickledObject.PickledObject):
                 symbol_list = self.unresolved_abbreviations[an_abbreviation].keys()
                 print '\'%s\': appears in %s' % (an_abbreviation, str(symbol_list))
 
+
+
+    def parse_standard_symbols(self, add_sr_entries=1):
+        """Parse standard symbols for the various programming languages.
+        
+        **INPUTS**
+        
+        *BOOL* add_sr_entries = 1 -- If true, then add symbols to the
+         SR vocabulary.
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        self.parse_symbols_from_files(self.standard_symbol_sources, add_sr_entries)
+
     
-    def parse_symbols_from_files(self, file_list):
+    def parse_symbols_from_files(self, file_list, add_sr_entries=1):
         """Parse symbols from a series of source files
 
         **INPUTS**
 
         *[STR] file_list -- List of files to be compiled
+
+        *BOOL* add_sr_entries = 1 -- If true, add symbols to the SR vocabulary
 
         **OUTPUT**
 
@@ -619,25 +639,23 @@ class SymDict(PickledObject.PickledObject):
         """
 
 #        print '-- SymDict.parse_symbols_from_files: file_list=%s' % file_list
-#        print '-- SymDict.parse_symbols_from_files: abbreviations are: '; self.print_abbreviations()
         
         for a_file in file_list:
             print 'Compiling symbols for file \'%s\'' % a_file
-            self.parse_symbols(a_file)
+            self.parse_symbols(a_file, add_sr_entries=add_sr_entries)
 
         #
         # Save dictionary to file
         #
         self.pickle()
-
-#        print '-- SymDict.parse_symbols_from_files: upon exit, symbols are:'; self.print_symbols()
-#        print '-- SymDict.parse_symbols_from_files: upon exit, abbreviations are:'; self.print_abbreviations()
     
-    def parse_symbols(self, file_name):
+    def parse_symbols(self, file_name, add_sr_entries=1):
         """Parse symbols from a source file.
 
-        *STR file_name* is the path of the file.
+        *STR* file_name -- The path of the file.
 
+        *BOOL* add_sr_entries = 1 -- If true, add symbols to the SR vocabulary
+        
         Parsed symbols are stored in the *symbol_info* and
         *spoken_forms2symbol* attributes.
         """
@@ -656,6 +674,7 @@ class SymDict(PickledObject.PickledObject):
 #            print '-- SymDict.parse_symbols: \n*** START OF SOURCE ***\n%s\n*** END OF SOURCE ***' % source
 
             language_definition = self.get_language_definition(file_name)
+#            print '-- SymDict.parse_symbols: language_definition=%s' % language_definition
             source = self.strip_source(source, language_definition)
 
             #
@@ -664,7 +683,7 @@ class SymDict(PickledObject.PickledObject):
             while source != '':
                 a_match = re.search('(' + language_definition.regexp_symbol + ')', source)
                 if a_match:
-                    self.add_symbol(a_match.group(1))
+                    self.add_symbol(a_match.group(1), add_sr_entries=add_sr_entries)
                     source = source[a_match.end()+1:]
                 else:
                     source = ''
@@ -677,6 +696,8 @@ class SymDict(PickledObject.PickledObject):
         **INPUTS**
         
         *STR* source -- the source
+
+        *BOOL* add_sr_entries = 1 -- If true, add symbols to the SR vocabulary.
 
         [LangDef] language_definition -- the definition of the
         language that *source* is written in.
@@ -720,12 +741,15 @@ class SymDict(PickledObject.PickledObject):
         return stripped_source
                                 
 
-    def add_symbol(self, symbol, user_supplied_spoken_forms=[], resave=0):
+    def add_symbol(self, symbol, user_supplied_spoken_forms=[], \
+                   add_sr_entries=1, resave=0):
         """Add a symbol to the dictionary
 
         **INPUTS**
         
         *STR* symbol -- Symbol to add
+
+        *BOOL* add_sr_entries = 1 -- If true, adds symbol to the SR vocabulary.
 
         *BOOL resave* -- If true, resave the dictionary to disk after
          adding the symbol.
@@ -770,7 +794,7 @@ class SymDict(PickledObject.PickledObject):
             #
             # Update the symbol's spoken forms.
             #
-            self.update_spoken_forms(symbol)
+            self.update_spoken_forms(symbol, add_sr_entries=add_sr_entries)
 
             #
             # Add user supplied spoken forms
@@ -782,13 +806,16 @@ class SymDict(PickledObject.PickledObject):
             if resave: self.pickle()
             
 
-    def update_spoken_forms(self, symbol, resave=0):
+    def update_spoken_forms(self, symbol, resave=0, add_sr_entries=1):
         """Updates the spoken forms of a native symbol.
 
         **INPUTS**
         
         *STR* symbol -- Native symbol for which we want to update the
          spoken forms.
+
+         *BOOL* add_sr_entries = 1 -- If true, add written\spoken
+          symbols to the SR vocabulary.
 
         *BOOL resave* -- If true, resave dictionary to disk after the update.
         
@@ -808,8 +835,6 @@ class SymDict(PickledObject.PickledObject):
         forms_this_symbol = self.get_spoken_forms(symbol)
 #        print '-- SymDict.update_spoken_forms: spoken forms originally are:\'%s\'\nforms_this_symbol=%s' % (self.symbol_info[symbol].spoken_forms, forms_this_symbol)
         self.symbol_info[symbol].spoken_forms = forms_this_symbol
-
-#        print '-- SymDict.update_spoken_forms: after update: %s' % self.symbol_info[symbol].spoken_forms
            
         #
         # Store information about the symbol and its spoken forms
@@ -850,7 +875,7 @@ class SymDict(PickledObject.PickledObject):
                     #
                     entry = sr_interface.vocabulary_entry(a_form)
                     
-                sr_interface.addWord(entry)        
+                if add_sr_entries: sr_interface.addWord(entry)        
 
         if resave: self.pickle()
 
@@ -867,7 +892,8 @@ class SymDict(PickledObject.PickledObject):
         *[STR]* -- returns a list of spoken forms
         """
 
-#        print '-- SymDict.get_spoken_forms: symbol=%s' % symbol
+#        print '-- SymDict.get_spoken_forms: symbol=%s, abbreviations:' % symbol; self.print_abbreviations()
+
         
         #
         # First, split the symbol into words or abbreviations
@@ -1053,6 +1079,7 @@ class SymDict(PickledObject.PickledObject):
         global language_definitions
         definition = None
         language_name = SourceBuff().language_name(file_name)
+#        print '-- SymDict.get_language_definition: language_definitions=%s, language_name=%s' % (language_definitions, language_name)
         if language_definitions.has_key(language_name):
             definition = language_definitions[language_name]
         return definition
@@ -1315,25 +1342,29 @@ class SymDict(PickledObject.PickledObject):
 
 #        print '-- SymDict.accept_symbol_match: upon exit, known symbols are now:'; self.print_symbols()
             
-        
 
-    def vocabulary_cleanup(self, just_sr_vocab=0, resave=1):
-        """Removes symbols from the speech recognition vocabulary
+
+
+    def cleanup(self, clean_sr_voc=0, clean_symdict=1, resave=1):
+        """Cleans up the symbol dictionary.
         
         **INPUTS**
         
-        *BOOL just_sr_vocab = 0* -- If true, the symbols will be
-         removed from the SR's vocabulary, but not from the
-         interpreter's symbol dictionary.
+        *BOOL* clean_sr_voc=0 -- If true, then remove symbols from SR
+        vocabulary
 
-         *BOOL resave = 1* -- If true, symbol dictionary is
-          resaved to disk after cleanup.
+        *BOOL* clean_symdict=1 -- If true, then removes symbols from
+         the symbol dictionary.
+
+        *BOOL resave = 1* -- If true, symbol dictionary is
+        resaved to disk after cleanup.        
 
         **OUTPUTS**
         
         *none* -- 
         """
-#        print '-- SymDict.vocabulary_cleanup: called, self.standard_symbol_sources=%s' % self.standard_symbol_sources
+        
+#        print '-- SymDict.cleanup: called, self.standard_symbol_sources=%s' % self.standard_symbol_sources
 
         global vocabulary_symbols_with_written_form
 
@@ -1343,43 +1374,52 @@ class SymDict(PickledObject.PickledObject):
         #
         # Delete vocabulary entries for symbols
         #
-        for (a_form, a_form_info) in self.spoken_form_info.items():
+        if clean_sr_voc:
+            self.sr_symbols_cleansed = 1
+            for (a_form, a_form_info) in self.spoken_form_info.items():
         
-              #
-              # This spoken form was added specifically by VoiceCode.
-              # Remove it.
-              #
-#              print '-- SymDict.vocabulary_cleanup: removing word %s' % a_form
-              if not vocabulary_symbols_with_written_form:
-                  #
-                  # Just remove the spoken form
-                  #
-                  sr_interface.deleteWord(a_form)
-              else:
-                  #
-                  # Remove every spoken\written entry in the vocabulary
-                  #
-                  for a_written_form in self.spoken_form_info[a_form].symbols:
-                      entry = sr_interface.vocabulary_entry(a_form, a_written_form)
-                      sr_interface.deleteWord(entry)
+                #
+                # This spoken form was added specifically by VoiceCode.
+                # Remove it.
+                #
+#              print '-- SymDict.cleanup: removing word %s' % a_form
+                if not vocabulary_symbols_with_written_form:
+                    #
+                    # Just remove the spoken form
+                    #
+                    sr_interface.deleteWord(a_form)
+                else:
+                    #
+                    # Remove every spoken\written entry in the vocabulary
+                    #
+                    for a_written_form in self.spoken_form_info[a_form].symbols:
+                        entry = sr_interface.vocabulary_entry(a_form, a_written_form)
+                        sr_interface.deleteWord(entry)
 
         #
         # Possibly clean up the symbol dictionary itself
         #
-        if not just_sr_vocab:
-#            print '-- SymDict.vocabulary_cleanup: abbreviations are:'; self.print_abbreviations(show_unresolved=1)
+        if clean_symdict:
+#            print '-- SymDict.cleanup: abbreviations are:'; self.print_abbreviations(show_unresolved=1)
             self.spoken_form_info = {}
             self.symbol_info = {}
             for an_unresolved in self.unresolved_abbreviations.keys():
-#                print '-- SymDict.vocabulary_cleanup: removing unresolved abbreviation %s' % an_unresolved
+#                print '-- SymDict.cleanup: removing unresolved abbreviation %s' % an_unresolved
                 if self.abbreviations.has_key(an_unresolved):
                     del self.abbreviations[an_unresolved]
             self.unresolved_abbreviations = {}
 
         #
-        # Recompile sources of standard symbols
+        # Recompile sources of standard symbols.
+        # Add symbols to the SR vocabulary only if the SR vocabulary has been
+        # cleansed of symbols. This is because addition of thouasands of
+        # symbols to the SR vocabulary is slow.
         #
-        self.parse_symbols_from_files(self.standard_symbol_sources)
+        if clean_sr_voc:
+            add_sr_entries = 1
+        else:
+            add_sr_entries = 0
+        self.parse_symbols_from_files(self.standard_symbol_sources, add_sr_entries=add_sr_entries)
 
         #
         # Resave dictionary to disk
@@ -1433,8 +1473,10 @@ class SymDict(PickledObject.PickledObject):
         
         *none* -- 
         """
-        
+
+#        print '-- SymDict.init_from_file: self.pickle_fname=%s' % self.pickle_fname
         if self.pickle_fname != None:
+#            print '-- SymDict.init_from_file: unpickling'
             self.unpickle()
 
             #
@@ -1446,7 +1488,6 @@ class SymDict(PickledObject.PickledObject):
                 for spoken_as in a_symbol_info.spoken_forms:
                     sr_interface.addWord(sr_interface.vocabulary_entry(spoken_as, written_as))
                 
-
 
     def collapse_consec_single_chars(self, words, auxilliary_words=None):
         """Takes a list of words and collapse consecutive single-char words into single words

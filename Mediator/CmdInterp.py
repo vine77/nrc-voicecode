@@ -291,6 +291,17 @@ class CmdInterp(Object):
 
 #        print '-- CmdInterp.insert_untranslated_text: text=\'%s\',  ' % (text,  )
 
+#        if self.on_app.translation_is_off and \
+#            self._untranslated_text_start != None:
+#            #
+#            # translation has just been turned off and there is some
+#            # text that needs translation
+#            #
+#            self.match_untranslated_text()
+#            self._untranslated_text_start = None
+#            self._untranslated_text_end = None
+
+#       add condition not self.translation_is_off
         if self._untranslated_text_start != None:
             #
             # This is inserted in middle of an untranslated region.
@@ -301,6 +312,7 @@ class CmdInterp(Object):
             
         self.on_app.insert_indent(text, '')            
 
+#       add condition not self.translation_is_off
         if self._untranslated_text_start == None:
             #
             # This was the beginning of a sequence of
@@ -518,7 +530,10 @@ class CmdInterp(Object):
         """
 
 #        print '-- CmdInterp.chop_symbols: command=%s' % command
+#        if not self.on_app.translation_is_off:
         return self.chop_construct(command, CmdInterp.is_spoken_symbol)
+#        else:
+#            return None, 0, command
     
     def chop_word(self, command):
         """Removes a single word from a command.
@@ -625,6 +640,7 @@ class CmdInterp(Object):
         
         *BOOL* return value -- True iif *spoken_form* is the spoken form of a CSC.
         """
+#        print '-- CmdInterp.is_spoken_CSC: spoken_form=%s' % spoken_form
         chopped_CSC = None
         if self.cmd_index.has_key(spoken_form):
             chopped_CSC = spoken_form
@@ -656,20 +672,16 @@ class CmdInterp(Object):
             active_LSAs = active_LSAs + self.language_specific_aliases[self.on_app.active_language()]
         if self.language_specific_aliases.has_key(None):
             active_LSAs = active_LSAs + self.language_specific_aliases[None]
-#        print '-- CmdInterp.is_spoken_LSA: active_LSAs=%s' % active_LSAs
-
+            
         #
         # See if spoken_form is in the list of active LSAs
         #
         for an_active_LSA in active_LSAs:
             spoken, written = sr_interface.spoken_written_form(an_active_LSA)
 
-#            print '-- CmdInterp.is_spoken_LSA: spoken=\'%s\', spoken_form=\'%s\'' % (spoken, spoken_form)
             if spoken == spoken_form:
                 written_LSA = written
                 break
-
-#        print '-- CmdInterp.is_spoken_LSA: written_LSA=%s' % written_LSA
         
         return written_LSA
         
@@ -726,7 +738,6 @@ class CmdInterp(Object):
 
         global regexp_is_dirty
 
-#        print '-- CmdInterp.index_csc: acmd.spoken_forms=\'%s\', add_voc_entry=%s' % (acmd.spoken_forms, add_voc_entry)
         regexp_is_dirty = 1
 
         for a_spoken_form in acmd.spoken_forms:

@@ -118,7 +118,11 @@ quit()
 """
 
 import natlink
-import os, re, string, sys
+import os, profile, re, string, sys
+import vc_globals
+
+sys.path = sys.path + [vc_globals.config, vc_globals.admin]
+
 import CmdInterp, EdSim, MediatorObject, sr_interface, util, vc_globals
 from CSCmd import CSCmd
 
@@ -310,7 +314,7 @@ def clear_symbols():
     # Remove symbols from the Speech Recognition vocabulary
     #
     global the_mediator        
-    the_mediator.interp.known_symbols.vocabulary_cleanup()
+    the_mediator.interp.known_symbols.cleanup()
 
 def clear_abbreviations():
     #
@@ -320,7 +324,7 @@ def clear_abbreviations():
     the_mediator.interp.known_symbols.abbreviations_cleanup()
 
     
-def quit():
+def quit(clean_sr_voc=0):
     global quit_flag, the_mediator
     quit_flag = 1
 
@@ -329,7 +333,7 @@ def quit():
     # but don't save SymDict to file (we want the symbols and abbreviations to
     # still be there when we come back.
     #
-    the_mediator.interp.known_symbols.vocabulary_cleanup(resave=0)
+    the_mediator.interp.known_symbols.cleanup(clean_sr_voc=clean_sr_voc)
     if sr_interface.speech_able():
         the_mediator.mixed_grammar.unload()
         the_mediator.code_select_grammar.unload()
@@ -337,27 +341,33 @@ def quit():
 def init_simulator(symdict_pickle_fname=None):
     global the_mediator
 
+
     sr_interface.connect('off')
     if sr_interface.speech_able:
         if symdict_pickle_fname == None and the_mediator != None:
             #
             # Remove symbols from NatSpeak's dictionary 
             #
-            the_mediator.interp.known_symbols.vocabulary_cleanup(resave=0)
+#            print '-- mediator.init_simulator: before cleanup: the_mediator.interp.known_symbols.sr_symbols_cleansed=%s' % the_mediator.interp.known_symbols.sr_symbols_cleansed
+            the_mediator.interp.known_symbols.cleanup(resave=0)
+#            print '-- mediator.init_simulator: after cleanup: the_mediator.interp.known_symbols.sr_symbols_cleansed=%s' % the_mediator.interp.known_symbols.sr_symbols_cleansed            
 
-#        print '-- mediator.init_simulator: before creating MediatorObject'    
         the_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
+#        print '-- mediator.init_simulator: after MediatorObject(): the_mediator.interp.known_symbols.sr_symbols_cleansed=%s' % the_mediator.interp.known_symbols.sr_symbols_cleansed                    
 
         #
         # Read the symbol dictionary from file
         #
         the_mediator.interp.known_symbols.pickle_fname = symdict_pickle_fname
+
+#        print '-- mediator.init_simulator: before init_from_file: the_mediator.interp.known_symbols.sr_symbols_cleansed=%s' % the_mediator.interp.known_symbols.sr_symbols_cleansed                            
         the_mediator.interp.known_symbols.init_from_file()
+#        print '-- mediator.init_simulator: after init_from_file: the_mediator.interp.known_symbols.sr_symbols_cleansed=%s' % the_mediator.interp.known_symbols.sr_symbols_cleansed                                    
 
         #
         # Configure the mediator
         #
-        the_mediator.configure()        
+        the_mediator.configure()
 
 
     if sr_interface.speech_able:
@@ -407,13 +417,9 @@ def simulator_mode(options):
     #
     # e.g. compile_symbols(['D:/Temp/blah.py'])
     #
-    clear_symbols()        
-    compile_symbols(['D:/VoiceCode/VCode.vg3_trans/Data/TestData/small_buff.c'])
-    open_file('D:/blah.c')
-#     print_abbreviations()
-#      say('for loop index', user_input='1\n')
-#    say('this symbol is unresolved comma')
-#    quit()
+#    compile_symbols(['D:/VoiceCode/VCode.testing/Data/TestDatat/native_python.py'])
+#    open_file('D:/blah.py')
+#    say(['define', 'class', 'command', 'interpreter', 'sub', 'class', 'of', 'object', 'class', 'body'])
 
 
     while (not quit_flag):
@@ -434,7 +440,8 @@ if (__name__ == '__main__'):
         #
         # Run mediator using an editor simulator
         #
-        simulator_mode(opts)        
+        profile.run("""
+simulator_mode(opts)""")
 
     quit()
     sr_interface.disconnect()
