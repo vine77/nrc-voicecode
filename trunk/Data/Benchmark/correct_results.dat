@@ -1,13 +1,15 @@
 
-D:\VoiceCode\VCode.demo\Admin>rem  
+D:\VoiceCode\VCode.TCP_IP\Admin>rem  
 
-D:\VoiceCode\VCode.demo\Admin>rem Shortcut for invoking VoiceCode regression test 
+D:\VoiceCode\VCode.TCP_IP\Admin>rem Shortcut for invoking VoiceCode regression test 
 
-D:\VoiceCode\VCode.demo\Admin>rem
+D:\VoiceCode\VCode.TCP_IP\Admin>rem
 
-D:\VoiceCode\VCode.demo\Admin>cd D:\VoiceCode\VCode.demo\Admin 
+D:\VoiceCode\VCode.TCP_IP\Admin>d:
 
-D:\VoiceCode\VCode.demo\Admin>python test.py all 
+D:\VoiceCode\VCode.TCP_IP\Admin>cd D:\VoiceCode\VCode.TCP_IP\Admin 
+
+D:\VoiceCode\VCode.TCP_IP\Admin>python test.py all         
 
 
 *******************************************************************************
@@ -193,7 +195,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 8a1390>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at f00b80>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -208,9 +210,9 @@ Subclassing from non-standard class AnimatedCharacter.*
 * Description : self-test for SymDict.py
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-*** Compiling symbols from file: D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c ***
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+*** Compiling symbols from file: D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c ***
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 Parsed symbols are: 
@@ -239,8 +241,8 @@ Unresolved abbreviations are:
 
 *** End of compilation test ***
 
-*** Compiling symbols from file: D:\VoiceCode\VCode.demo\Data\TestData\large_buff.py ***
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+*** Compiling symbols from file: D:\VoiceCode\VCode.TCP_IP\Data\TestData\large_buff.py ***
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 Parsed symbols are: 
@@ -341,11 +343,11 @@ Unresolved abbreviations are:
 *** End of compilation test ***
 
 *** Pseudo symbol match test***
-   Source files are: ['D:\\VoiceCode\\VCode.demo\\Data\\TestData\\large_buff.py']
+   Source files are: ['D:\\VoiceCode\\VCode.TCP_IP\\Data\\TestData\\large_buff.py']
    Symbols are: ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
 
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 'set attribute' matches: [setattr, set_attribute, SetAttribute, setAttribute, SET_ATTRIBUTE, setattribute, SETATTRIBUTE, ]
 'expand variables' matches: [expandvars, expand_variables, ExpandVariables, expandVariables, EXPAND_VARIABLES, expandvariables, EXPANDVARIABLES, ]
 'execute file' matches: [execfile, execute_file, ExecuteFile, executeFile, EXECUTE_FILE, executefile, EXECUTEFILE, ]
@@ -356,8 +358,8 @@ Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 *** End of Pseudo Symbol Match test ***
 
 
-*** Accept symbol match test. source='D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c' ***
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+*** Accept symbol match test. source='D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c' ***
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 Parsed symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -416,7 +418,7 @@ Unresolved abbreviations are:
 
 *** End of accept symbol match test ***
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -424,7 +426,7 @@ Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 * Description : testing automatic creation of abbreviations
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.c')
@@ -436,9 +438,9 @@ WARNING: source file 'D:/blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1518,7 +1520,7 @@ List of unresolved abbreviations
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1526,12 +1528,12 @@ Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 * Description : testing changing direction of last command
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('D:\VoiceCode\VCode.demo\Data\TestData\large_buff.py')
+>>> Testing console command: open_file('D:\VoiceCode\VCode.TCP_IP\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -1611,14 +1613,14 @@ Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 * Description : testing mediator console commands
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 >>> Testing console command: clear_symbols()    
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.c')
@@ -1808,9 +1810,9 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1843,6 +1845,7 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: say(['select', 'horiz_pos\horizontal position', '=\equals'])
 
+
 *** Start of source buffer ***
   1: for (<SEL_START>horiz_pos=<SEL_END>0;  <= ; ++)
   2:    {
@@ -1852,7 +1855,7 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1860,9 +1863,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 * Description : Testing a series of miscellaneous bugs that might reoccur.
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.py')
@@ -1899,15 +1902,15 @@ natlink.UnknownName exception was sucessfully raised.
 
 
 >>> Starting mediator with persistence
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 960cf0> from file 'D:\VoiceCode\VCode.demo\Data\Tmp\tmp_symdict.pkl'
-[Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.demo\\Data\\Tmp\\tmp_symdict.pkl'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Error reading <SymDict.SymDict instance at 17dfbf0> from file 'D:\VoiceCode\VCode.TCP_IP\Data\Tmp\tmp_symdict.pkl'
+[Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.TCP_IP\\Data\\Tmp\\tmp_symdict.pkl'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1933,9 +1936,9 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -1950,10 +1953,10 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -1964,7 +1967,7 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1972,9 +1975,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 * Description : testing the various Python CSCs and LSAs
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3590,162 +3593,155 @@ Saying: ['variable', ' = \\equals', 'brackets', '0', ',\\comma', '1', ',\\comma'
  87:             variable = [0, 1, 3<CURSOR>]
 
 *** End of source buffer ***
-Saying: ['previous', 'previous comma']
-Associate 'previous' with symbol (Enter selection):
-
-  '0': no association
-  '1': previous (*new*)
-  '2': Previous (*new*)
-  '3': PREVIOUS (*new*)
-
->  84:             "\Y\Y"
+Saying: ['previous comma']
+ 84:             "\Y\Y"
  85:             "\Z\Z"
  86:             Index;variable;
- 87:             variable = [0, 1, <CURSOR>3Previous]
+ 87:             variable = [0, 1, <CURSOR>3]
 
 *** End of source buffer ***
 Saying: ['after comma']
  84:             "\Y\Y"
  85:             "\Z\Z"
  86:             Index;variable;
- 87:             variable = [0, 1, <CURSOR>3Previous]
+ 87:             variable = [0, 1, <CURSOR>3]
 
 *** End of source buffer ***
 Saying: ['before previous comma']
  84:             "\Y\Y"
  85:             "\Z\Z"
  86:             Index;variable;
- 87:             variable = [0, 1<CURSOR>, 3Previous]
+ 87:             variable = [0, 1<CURSOR>, 3]
 
 *** End of source buffer ***
 Saying: ['before next comma']
  84:             "\Y\Y"
  85:             "\Z\Z"
  86:             Index;variable;
- 87:             variable = [0, 1<CURSOR>, 3Previous]
+ 87:             variable = [0, 1<CURSOR>, 3]
 
 *** End of source buffer ***
 Saying: ['new statement']
  85:             "\Z\Z"
  86:             Index;variable;
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', '.\\dot', 'field', '.\\dot', 'value']
  85:             "\Z\Z"
  86:             Index;variable;
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.Value<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous dot', 'previous dot']
  85:             "\Z\Z"
  86:             Index;variable;
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.<CURSOR>Field.Value
 
 *** End of source buffer ***
 Saying: ['after dot']
  85:             "\Z\Z"
  86:             Index;variable;
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.<CURSOR>Value
 
 *** End of source buffer ***
 Saying: ['before previous dot']
  85:             "\Z\Z"
  86:             Index;variable;
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field<CURSOR>.Value
 
 *** End of source buffer ***
 Saying: ['before next dot']
  85:             "\Z\Z"
  86:             Index;variable;
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field<CURSOR>.Value
 
 *** End of source buffer ***
 Saying: ['new statement']
  86:             Index;variable;
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['braces', 'variable', ': \\colon', '0', 'value', ': \\colon', '0']
  86:             Index;variable;
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0<CURSOR>}
 
 *** End of source buffer ***
 Saying: ['previous colon', 'previous colon']
  86:             Index;variable;
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: <CURSOR>0 Value: 0}
 
 *** End of source buffer ***
 Saying: ['after colon']
  86:             Index;variable;
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: <CURSOR>0}
 
 *** End of source buffer ***
 Saying: ['before previous colon']
  86:             Index;variable;
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value<CURSOR>: 0}
 
 *** End of source buffer ***
 Saying: ['before next colon']
  86:             Index;variable;
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value<CURSOR>: 0}
 
 *** End of source buffer ***
 Saying: ['new statement']
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
  90:             <CURSOR>
 
 *** End of source buffer ***
 Saying: ['variable', ' = \\equals', '2', '*\\asterisk', '3', '*\\asterisk', '4']
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*4<CURSOR>
 
 *** End of source buffer ***
 Saying: ['previous asterisk', 'previous star']
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
  90:             variable = 2*<CURSOR>3*4
 
 *** End of source buffer ***
 Saying: ['after star']
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3*<CURSOR>4
 
 *** End of source buffer ***
 Saying: ['before previous asterisk']
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3<CURSOR>*4
 
 *** End of source buffer ***
 Saying: ['before next star']
- 87:             variable = [0, 1, 3Previous]
+ 87:             variable = [0, 1, 3]
  88:             variable.Field.Value
  89:             {variable: 0 Value: 0}
  90:             variable = 2*3<CURSOR>*4
@@ -4829,7 +4825,7 @@ Saying: ['new statement']
 113:             <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -4839,10 +4835,10 @@ Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 >>> Dictating Python when all symbols are known <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\\VoiceCode\\VCode.demo\\Data\\TestData\\native_python.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\\VoiceCode\\VCode.TCP_IP\\Data\\TestData\\native_python.py'
 >>> Known symbols are: 
 AppState: ['app state']
 CSC_consumes: ['csc consumes']
@@ -5704,13 +5700,13 @@ Saying: ['return', 'regular', 'expression', 'new', 'statement']
  32:          <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 >>> Dictating Python when only standard symbols are known <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 _cached_symbols_as_one_string is:
    
 WARNING: source file 'D:/blah.py' doesn't exist.
@@ -6442,7 +6438,7 @@ Associate 'regular expression' with symbol (Enter selection):
  32:          <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -6450,9 +6446,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 * Description : testing redundant translation of LSAs and symbols at SR and Mediator level
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.c')
@@ -6464,9 +6460,9 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -6538,7 +6534,7 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -6546,12 +6542,12 @@ Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 * Description : testing repetition of last command
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('D:\VoiceCode\VCode.demo\Data\TestData\large_buff.py')
+>>> Testing console command: open_file('D:\VoiceCode\VCode.TCP_IP\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -6649,9 +6645,9 @@ Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 * Description : testing mediator console commands
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.py')
@@ -6713,6 +6709,7 @@ Associate 'index' with symbol (Enter selection):
   6: <CURSOR>
 
 *** End of source buffer ***
+-- hello!
 
 
 >>> Testing console command: goto_line(2)
@@ -6726,6 +6723,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['go', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0<CURSOR>
   2: index = 1
@@ -6744,6 +6742,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['go after next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -6766,6 +6765,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['go after previous', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0<CURSOR>
   2: index = 1
@@ -6784,6 +6784,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['go before', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: <CURSOR>index = 0
   2: index = 1
@@ -6802,6 +6803,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['go before next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -6824,6 +6826,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['go before previous', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: <CURSOR>index = 0
   2: index = 1
@@ -6842,6 +6845,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['go next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -6864,6 +6868,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['go previous', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0<CURSOR>
   2: index = 1
@@ -6882,6 +6887,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['after next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -6904,6 +6910,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['after previous', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0<CURSOR>
   2: index = 1
@@ -6922,6 +6929,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['before', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: <CURSOR>index = 0
   2: index = 1
@@ -6940,6 +6948,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['before next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -6962,6 +6971,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['before previous', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: <CURSOR>index = 0
   2: index = 1
@@ -6980,6 +6990,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['correct', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: <SEL_START>index = 0<SEL_END>
   2: index = 1
@@ -6998,6 +7009,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['correct next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -7020,6 +7032,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['correct previous', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: <SEL_START>index = 0<SEL_END>
   2: index = 1
@@ -7038,6 +7051,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -7060,6 +7074,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['previous', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: <SEL_START>index = 0<SEL_END>
   2: index = 1
@@ -7078,6 +7093,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['select', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: <SEL_START>index = 0<SEL_END>
   2: index = 1
@@ -7096,6 +7112,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['select next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -7118,6 +7135,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['select previous', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: <SEL_START>index = 0<SEL_END>
   2: index = 1
@@ -7135,6 +7153,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['go next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0<CURSOR>
   2: index = 1
@@ -7143,6 +7162,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['go next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -7165,6 +7185,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['go previous', 'index', '=\\equals', '0'], user_input='None')
+
   2: index = 1
   3: index = 0
   4: index = 1
@@ -7175,6 +7196,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['go previous', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -7196,6 +7218,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['correct next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: <SEL_START>index = 0<SEL_END>
   2: index = 1
@@ -7204,6 +7227,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['correct next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -7226,6 +7250,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['correct previous', 'index', '=\\equals', '0'], user_input='None')
+
   2: index = 1
   3: index = 0
   4: index = 1
@@ -7236,6 +7261,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['correct previous', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -7257,6 +7283,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['select next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: <SEL_START>index = 0<SEL_END>
   2: index = 1
@@ -7265,6 +7292,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['select next', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -7287,6 +7315,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['select previous', 'index', '=\\equals', '0'], user_input='None')
+
   2: index = 1
   3: index = 0
   4: index = 1
@@ -7297,6 +7326,7 @@ Associate 'index' with symbol (Enter selection):
 
 
 >>> Testing console command: say(['select previous', 'index', '=\\equals', '0'], user_input='None')
+
 *** Start of source buffer ***
   1: index = 0
   2: index = 1
@@ -7310,4 +7340,4 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.TCP_IP\Config\py_std_sym.py'

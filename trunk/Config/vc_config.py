@@ -75,6 +75,7 @@ if (__name__ == '__main__'):
 for abbrev_file in ('user_abbrevs.py', 'py_abbrevs.py'):
     try:
         full_file = vc_globals.config + os.sep + abbrev_file
+#        print '-- vc_config.__main__: full_file=\'%s\'' % full_file
         execfile(full_file)
     except Exception, err:
         print 'ERROR: in abbreviations file: %s' % full_file

@@ -21,7 +21,7 @@
 
 """Various utility functions"""
 
-import getopt, os, re, stat, sys, types
+import getopt, os, re, stat, sys, time, types, winsound
 
 import vc_globals
 
@@ -230,3 +230,37 @@ def istuple(instance):
     """Returns true iif *instance* is a tuple."""
 
     return isinstance(instance, types.TupleType)
+
+
+may_switch_win_during_tests = 1
+
+def request_console_be(active=1):
+    """During regression testing, there are times where the console window
+    must absolutely be the active window (e.g. when processing a
+    NavigateByPseudoCode command).
+
+    In such cases, this method is called with active=1, to ask the
+    user to make it so.
+
+    Once we don't need the console to be the active window, the method is
+    called with active=0 to notify the user that he/she can make the window
+    inactive again"""
+
+    global may_switch_win_during_tests
+
+    if may_switch_win_during_tests:
+        if active:
+            sound_file = os.path.join(vc_globals.data, 'TestData', 'must_be_active.wav')
+            message = 'Please make the regression test window the active window and press <Enter>\n> '
+        else:
+            sound_file = os.path.join(vc_globals.data, 'TestData', 'may_be_inactive.wav')
+            message = 'You may now leave the regression test window.\nPress <Enter> to acknowledge this message.\n> '
+
+        winsound.PlaySound(sound_file, 0)    
+        sys.stdout.write(message)
+        sys.stdin.readline()
+        
+        
+        
+
+

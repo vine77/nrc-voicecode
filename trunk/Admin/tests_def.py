@@ -25,7 +25,8 @@ import os, sys
 import mediator, CmdInterp, EdSim, MediatorObject, Object, SymDict, test_pseudo_python
 
 
-small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'    
+small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'
+
 
 ##############################################################################
 # Testing SymDict
@@ -405,6 +406,8 @@ auto_test.add_test('no_sr_user', test_no_sr_user, desc='testing connect with ine
 ###############################################################################
 
 def test_command(command):
+
+    
     print '\n\n>>> Testing console command: %s\n' % command
     mediator.execute_command(command)
 
@@ -412,15 +415,18 @@ def test_say(utterance, user_input=None):
     print '\n\n>>> Testing console command: say(%s, user_input=\'%s\')' % (utterance, user_input)
     mediator.say(utterance, user_input)
 
-def test_mediator_console():    
-    mediator.init_simulator()
+def test_mediator_console():
+    mediator.init_simulator_regression()
     test_command("""clear_symbols()    """)
     test_command("""open_file('D:/blah.c')""")
     file = vc_globals.test_data + os.sep + 'small_buff.c'
     mediator.print_abbreviations()    
     test_command("""compile_symbols(['""" + file + """'])""")
     test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'])
+
+    util.request_console_be(active=1)    
     test_command("""say(['select', 'horiz_pos\\horizontal position', '=\equals'])""")
+    util.request_console_be(active=0)        
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
 
@@ -433,7 +439,9 @@ auto_test.add_test('mediator_console', test_mediator_console, desc='testing medi
 
 
 def test_select_pseudocode():
-    mediator.init_simulator()
+
+    
+    mediator.init_simulator_regression()
     test_command("""open_file('D:/blah.py')""")
     test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n')
     test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n')    
@@ -441,6 +449,9 @@ def test_select_pseudocode():
     test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n')        
     test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n')
 
+    print '-- hello!'
+    util.request_console_be(active=1)
+    
     #
     # Testing go commands
     #
@@ -471,7 +482,7 @@ def test_select_pseudocode():
     test_command("""goto_line(2)""")
     test_say(['before previous', 'index', '=\\equals', '0'])
     test_command("""goto_line(2)""")
-
+    
     #
     # Testing correct commands
     #
@@ -525,6 +536,8 @@ def test_select_pseudocode():
     test_command("""goto_line(6)""")
     test_say(['select previous', 'index', '=\\equals', '0'])
     test_say(['select previous', 'index', '=\\equals', '0'])
+
+    util.request_console_be(active=0)    
     
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
@@ -538,7 +551,7 @@ auto_test.add_test('select_pseudocode', test_select_pseudocode, desc='testing me
 ##############################################################################
 
 def test_auto_add_abbrevs():
-    mediator.init_simulator()
+    mediator.init_simulator_regression()
     test_command("""open_file('D:/blah.c')""")
     file = vc_globals.test_data + os.sep + 'small_buff.c'    
     test_command("""compile_symbols(['""" + file + """'])""")
@@ -585,6 +598,7 @@ auto_test.add_test('automatic_abbreviations', test_auto_add_abbrevs, desc='testi
 ##############################################################################
 
 def test_persistence():
+        
     #
     # Create make mediator console use an empty file for SymDict persistence
     #
@@ -596,7 +610,7 @@ def test_persistence():
         pass
 
     print '\n\n>>> Starting mediator with persistence'
-    mediator.init_simulator(symdict_pickle_fname=fname)
+    mediator.init_simulator_regression(symdict_pickle_fname=fname)
 
     #
     # Compile symbols
@@ -609,7 +623,7 @@ def test_persistence():
     #
     print '\n\n>>> Restarting mediator with persistence. Compiled symbols should still be in the dictionary.\n'
     test_command("""quit(save_speech_files=0, disconnect=0)""")
-    mediator.init_simulator(symdict_pickle_fname=fname)
+    mediator.init_simulator_regression(symdict_pickle_fname=fname)
     test_command("""print_symbols()""")
 
     #
@@ -618,7 +632,7 @@ def test_persistence():
     #
     print '\n\n>>> Restarting mediator WITHOUT persistence. There should be NO symbols in the dictionary.\n'
     test_command("""quit(save_speech_files=0, disconnect=0)""")
-    mediator.init_simulator(symdict_pickle_fname=None)
+    mediator.init_simulator_regression(symdict_pickle_fname=None)
     test_command("""print_symbols()""")
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
     
@@ -633,7 +647,7 @@ auto_test.add_test('persistence', test_persistence, desc='testing persistence be
 def test_redundant_translation():
     global small_buff_c
     
-    mediator.init_simulator()    
+    mediator.init_simulator_regression()    
     test_command("""open_file('blah.c')""")
     test_command("""compile_symbols(['""" + small_buff_c + """'])""")
     test_say(['index', ' != \\not equal to', '0'], '0\n0\n')
@@ -644,12 +658,13 @@ def test_redundant_translation():
 
 auto_test.add_test('redundant_translation', test_redundant_translation, desc='testing redundant translation of LSAs and symbols at SR and Mediator level')    
 
+
 ##############################################################################
 # Testing dictation and navigation of punctuation
 ##############################################################################
 
 def test_punctuation():
-    mediator.init_simulator()
+    mediator.init_simulator_regression()
     mediator.open_file('blah.py')
 
     mediator.say(['variable', ' \\blank space', ' = \\equals', ' \\space bar', 'index', '*\\asterisk', '2', '**\\double asterisk', '8', '\n\\newline'], user_input='1\n2\n1\n1\n1\n1\n1\n', echo_utterance=1)
@@ -709,6 +724,7 @@ def test_punctuation():
     mediator.say(['string', ' = \\equals', '\'\\open single quote', 'message', '\'\\close single quote', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     mediator.say(['string', ' = \\equals', 'single', 'quotes', 'message', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
     
     mediator.say(['\'\'\\empty single quotes', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -742,125 +758,125 @@ def test_punctuation():
     mediator.say(['\\d\\back slash d.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\d\\back slash delta'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\e\\back slash e.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\e\\back slash echo'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\f\\back slash f.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\f\\back slash foxtrot'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\g\\back slash g.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\g\\back slash golf'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\h\\back slash h.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\h\\back slash hotel'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\i\\back slash i.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\i\\back slash india'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\j\\back slash j.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\j\\back slash juliett'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\k\\back slash k.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\k\\back slash kilo'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\l\\back slash l.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\l\\back slash lima'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\m\\back slash m.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\m\\back slash mike'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\n\\back slash n.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\n\\back slash november'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\o\\back slash o.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\o\\back slash oscar'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\p\\back slash p.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\p\\back slash papa'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\q\\back slash q.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\q\\back slash quebec'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\r\\back slash r.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\r\\back slash romeo'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\s\\back slash s.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\s\\back slash sierra'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\t\\back slash t.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\t\\back slash tango'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\u\\back slash u.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\u\\back slash uniform'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\v\\back slash v.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\v\\back slash victor'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\w\\back slash w.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\w\\back slash whiskey'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\x\\back slash x.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\x\\back slash xray'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\y\\back slash y.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\y\\back slash yankee'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\z\\back slash z.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\z\\back slash zulu'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\A\\back slash cap a.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\A\\back slash cap alpha', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\B\\back slash cap b.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\B\\back slash cap bravo', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    #
 #BUG:    mediator.say(['quotes', '\\C\\back slash cap c.', '\\C\\back slash cap charlie', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -887,30 +903,37 @@ def test_punctuation():
     mediator.say(['\\I\\back slash cap i.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\I\\back slash cap india', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
+
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\J\\back slash cap j.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\J\\back slash cap juliett', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
 
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\K\\back slash cap k.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\K\\back slash cap kilo', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
+
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\L\\back slash cap l.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\L\\back slash cap lima', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
 
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\M\\back slash cap m.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\M\\back slash cap mike', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
+
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\N\\back slash cap n.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\N\\back slash cap november', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\O\\back slash cap o.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\O\\back slash cap oscar', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
+    
+    
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\P\\back slash cap p.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\P\\back slash cap papa', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -919,21 +942,26 @@ def test_punctuation():
     mediator.say(['\\Q\\back slash cap q.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\Q\\back slash cap quebec', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
+
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\R\\back slash cap r.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\R\\back slash cap romeo', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
 
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\S\\back slash cap s.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\S\\back slash cap sierra', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
+
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\T\\back slash cap t.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\T\\back slash cap tango', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
+
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\U\\back slash cap u.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\U\\back slash cap uniform', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
 
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\V\\back slash cap v.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -943,35 +971,39 @@ def test_punctuation():
     mediator.say(['\\W\\back slash cap w.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\W\\back slash cap whiskey', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
+
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\X\\back slash cap x.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\X\\back slash cap xray', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
 
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\Y\\back slash cap y.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\Y\\back slash cap yankee', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
+
     mediator.say(['quotes'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\Z\\back slash cap z.'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['\\Z\\back slash cap zulu', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)    
-    
+  
+
     mediator.say(['index', 'semi', 'variable', 'semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    
+  
     mediator.say(['previous semi', 'previous semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
 
     mediator.say(['after semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     mediator.say(['before previous semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     mediator.say(['after semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-#OK up to here            
     mediator.say(['before semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     mediator.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     mediator.say(['variable', ' = \\equals', 'brackets', '0', ',\\comma', '1', ',\\comma', '3'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    mediator.say(['previous', 'previous comma'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    mediator.say(['previous comma'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
     mediator.say(['after comma'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
@@ -1286,7 +1318,7 @@ auto_test.add_test('python', test_pseudo_python.run, 'testing the various Python
 
 
 def test_repeat_last():
-    mediator.init_simulator()    
+    mediator.init_simulator_regression()    
     file_name = vc_globals.test_data + os.sep + 'large_buff.py'
     test_command("""open_file('""" + file_name + """')""")
     test_command("""say(['after hyphen'])""")
@@ -1309,7 +1341,7 @@ auto_test.add_test('repeat_last', test_repeat_last, 'testing repetition of last 
 
 
 def test_change_direction():
-    mediator.init_simulator()    
+    mediator.init_simulator_regression()    
     file_name = vc_globals.test_data + os.sep + 'large_buff.py'
     test_command("""open_file('""" + file_name + """')""")
     test_command("""say(['after hyphen'])""")
@@ -1327,7 +1359,8 @@ auto_test.add_test('change_direction', test_change_direction, 'testing changing 
 
 
 def test_misc_bugs():
-    mediator.init_simulator()
+    
+    mediator.init_simulator_regression()
 
     test_command("""open_file('blah.py')""")
 
