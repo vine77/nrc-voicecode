@@ -89,7 +89,10 @@ def cleanup(clean_sr_voc=0):
 
     sim_commands.quit(clean_sr_voc=clean_sr_voc)
 
-def init_simulator(symdict_pickle_fname=None):
+def init_simulator(symdict_pickle_fname=None, disable_dlg_select_symbol_matches = None):
+
+#    print '-- mediator.init_simulator: disable_dlg_select_symbol_matches=%s' % disable_dlg_select_symbol_matches
+    
     global the_mediator
 
     try:
@@ -127,6 +130,11 @@ def init_simulator(symdict_pickle_fname=None):
         # Configure the mediator
         #
         the_mediator.configure()
+
+    #
+    # Possibly disable the symbol selection dialog
+    #
+    the_mediator.interp.disable_dlg_select_symbol_matches = disable_dlg_select_symbol_matches
 
     # define global variables accessible to the simulator commands
     # through the sim_commands module namespace
@@ -170,7 +178,7 @@ def simulator_mode(options):
     global the_mediator
 
     setmic('off')
-    init_simulator(symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl')
+    init_simulator(symdict_pickle_fname = vc_globals.state + os.sep + 'symdict.pkl', disable_dlg_select_symbol_matches = 1)
     
     #
     # For better error reporting, you can type some instructions here
@@ -181,19 +189,6 @@ def simulator_mode(options):
     #
     file_name = vc_globals.test_data + os.sep + 'large_buff.py'
     open_file(file_name)
-    print 'after hyphen'    
-    say(['after hyphen'])
-    print 'again'    
-    say(['again'])
-    print 'again'    
-    say(['again'])    
-    print 'previous one'    
-    say(['previous one'])
-    print 'previous one'    
-    say(['previous one'])
-    
-    print 'next one'    
-    say(['next one'])
     
     while (not sim_commands.quit_flag):
         sys.stdout.write('Command> ')
