@@ -1568,7 +1568,7 @@ class ReformatRecentSymbolsModel(DlgModel.DlgModel):
 
     **INSTANCE ATTRIBUTES**
 
-    *[InterpretedSymbol] symbols* -- the n most recently uttered symbols
+    *[SymbolResults] symbols* -- the n most recently uttered symbols
     sorted most recent last.
 
     *BOOL first* -- flag indicating whether this is the first time the
@@ -1610,7 +1610,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 
     **INSTANCE ATTRIBUTES**
 
-    *[InterpretedSymbol] symbols* -- A list of symbols that the user could
+    *[SymbolResults] symbols* -- A list of symbols that the user could
     reformat. It is assumed that all of those symbols CAN be reformatted
     (i.e. that we can reinterpret the utterances where these symbols 
     were spoken).
@@ -1636,7 +1636,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
 
         *wxWindow parent* -- the parent wxWindow
 
-        *[InterpretedSymbol] symbols* -- A list of symbols that the user could
+        *[SymbolResults] symbols* -- A list of symbols that the user could
         reformat. It is assumed that all of those symbols CAN be reformatted
         (i.e. that we can reinterpret the utterances where these symbols 
         were spoken).
@@ -1699,7 +1699,7 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
         recent.InsertColumn(2, "Written symbol") 
         recent.InsertColumn(3, "In utterance") 
                          
-        phrases = map(lambda x: string.join(x.utterance.spoken_forms()),
+        phrases = map(lambda x: string.join(x.in_utter.spoken_forms()),
                       symbols)
         index = range(len(phrases), 0, -1)            
 
@@ -1722,10 +1722,10 @@ class ReformatRecentSymbolsViewWX(wxDialog, ByeByeMixIn, possible_capture,
             
         for ii in range(len(symbols)):
            recent.InsertStringItem(ii, str(index[ii]))
-           recent.SetStringItem(ii, 1, self.symbols[ii].written)
-           recent.SetStringItem(ii, 2, self.symbols[ii].spoken)
+           recent.SetStringItem(ii, 1, self.symbols[ii].native_symbol())
+           recent.SetStringItem(ii, 2, string.join(self.symbols[ii].spoken_phrase()))
            recent.SetStringItem(ii, 3, 
-                                 self.symbols[ii].utterance.spoken_form_as_string())
+                                 self.symbols[ii].in_utter.spoken_form_as_string())
 
         recent.SetColumnWidth(0, wxLIST_AUTOSIZE_USEHEADER)
         recent.SetColumnWidth(1, wxLIST_AUTOSIZE_USEHEADER)

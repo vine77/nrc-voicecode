@@ -28,6 +28,7 @@ import re
 import string
 import threading
 import exceptions
+from SymbolResult import SymbolResult
 
 import CmdInterp, AppState
 from SpokenUtterance import *
@@ -195,11 +196,13 @@ class ResMgr(OwnerObject):
 
         **OUTPUTS**
 
-        *[(SpokenUtterance, INT, BOOL)]* -- the n most recent dictation 
+        *[(SpokenUtterance, INT, BOOL, InterpretedPhrase)]* -- the n most recent dictation 
         utterances (or all available if < n), sorted most recent last, 
-        each with a corresponding identifying number and a flag indicating 
-        if the utterance can be undone and re-interpreted, 
-        or None if no utterances are stored.
+        each with:
+          - a corresponding identifying number 
+          - a flag indicating if the utterance can be undone and re-interpreted
+            (or None if no utterances are stored)
+          - results of the interpretation of that utterance
 
         The utterance number is unique, within a given editor instance.
 
@@ -227,7 +230,7 @@ class ResMgr(OwnerObject):
 
         **OUTPUTS**
 
-        *[InterpretedSymbol]* -- the symbols spoken in the n most recent 
+        *[SymbolResults]* -- the symbols spoken in the n most recent 
         utterances (or all available if < n), sorted most recent last.
         
         Note:  These symbols should not be stored permanently, nor
@@ -480,12 +483,13 @@ class ResMgrStd(ResMgr):
 
         **OUTPUTS**
 
-        *[(SpokenUtterance, INT, BOOL)]* -- the n most recent dictation 
+        *[(SpokenUtterance, INT, BOOL, InterpretedPhrase)]* -- the n most recent dictation 
         utterances (or all available if < n), sorted most recent last, 
-        each with a corresponding identifying number and a flag indicating 
-        if the utterance can be undone and re-interpreted, 
-        or None if no utterances are stored.
-
+        each with:
+          - a corresponding identifying number 
+          - a flag indicating if the utterance can be undone and re-interpreted
+            (or None if no utterances are stored)
+          - results of the interpretation of that utterance
         The utterance number is unique, within a given editor instance.
 
         Note:  These utterances should not be stored permanently, nor
@@ -2213,6 +2217,7 @@ class ResMgrBasic(ResMgrStd):
         self.interpreted.append(interpreted)
         self.initial_buffers.append(initial_buffer)
         self.numbers.append(number)
+        result.id = number
 
     def interpret_dictation(self, result, initial_buffer = None,
         utterance_number = None):
@@ -2333,9 +2338,10 @@ class ResMgrBasic(ResMgrStd):
 
         **OUTPUTS**
 
-        *[(SpokenUtterance, INT)]* -- the n most recent reinterpretable dictation 
-        utterances (or all available if < n), sorted most recent last, 
-        each with a corresponding identifying number.
+        *[(SpokenUtterance, INT, InterpretedPhrase)]* -- the n most recent 
+        reinterpretable dictation utterances (or all available if < n), sorted most 
+        recent last, each with a corresponding identifying number and the result
+        of interpreting it.
 
         The utterance number is unique, within a given editor instance.
 
@@ -2351,7 +2357,8 @@ class ResMgrBasic(ResMgrStd):
         if utterances:
            for an_utter_info in utterances:
               if an_utter_info[2]:
-                 reinterpretable_utterances.append([an_utter_info[0], an_utter_info[1]])
+                 debug.trace('recent_correctable_dictation', '** an_utter_info=%s' % repr(an_utter_info))
+                 reinterpretable_utterances.append([an_utter_info[0], an_utter_info[1], an_utter_info[3]])
         return reinterpretable_utterances
 
     def recent_dictation(self, n = None):
@@ -2370,11 +2377,13 @@ class ResMgrBasic(ResMgrStd):
 
         **OUTPUTS**
 
-        *[(SpokenUtterance, INT, BOOL)]* -- the n most recent dictation 
+        *[(SpokenUtterance, INT, BOOL, InterpretedPhrase)]* -- the n most recent dictation 
         utterances (or all available if < n), sorted most recent last, 
-        each with a corresponding identifying number and a flag indicating 
-        if the utterance can be undone and re-interpreted, 
-        or None if no utterances are stored.
+        each with:
+          - a corresponding identifying number 
+          - a flag indicating if the utterance can be undone and re-interpreted
+            (or None if no utterances are stored)
+          - results of the interpretation of that utterance
 
         The utterance number is unique, within a given editor instance.
 
@@ -2413,7 +2422,7 @@ class ResMgrBasic(ResMgrStd):
         for i in range(m, 0, -1):
             debug.trace('ResMgrBasic.recent_dictation', 
                 'adding %s, number = %d, safe = %d' % (self.utterances[-i], self.numbers[-i], i <= safe))
-            utterances.append((self.utterances[-i], self.numbers[-i], i <= safe))
+            utterances.append((self.utterances[-i], self.numbers[-i], i <= safe, self.interpreted[-i]))
         return utterances
     
     def recent_symbols(self, n=None):
@@ -2432,7 +2441,7 @@ class ResMgrBasic(ResMgrStd):
 
         **OUTPUTS**
 
-        *[InterpretedSymbol]* -- the symbols spoken in the n most recent 
+        *[SymbolResults]* -- the symbols spoken in the n most recent 
         utterances (or all available if < n), sorted most recent last.
         
         Note:  These symbols should not be stored permanently, nor
@@ -2442,34 +2451,13 @@ class ResMgrBasic(ResMgrStd):
         """
         utterances = self.recent_correctable_dictation(n)
         debug.trace('ResMgrBasic.recent_symbols', '** utterances=%s' % repr(utterances))
-#TODO: Return the symbols computed from the utterances.
-        symbols = []
-        for an_utter in utterances:
-           pass
-        return symbols
+        rec_symbols = []
+        for an_utter_info in utterances:
+           an_utter = an_utter_info[0]
+           debug.trace('ResMgrBasic.recent_symbols', '** an_utter_info=%s' % repr(an_utter_info))
+           rec_symbols.extend(an_utter.symbols)
+        return rec_symbols
            
-    
-    def interpreted_symbols_for_utter(self, utter):
-        """returns a list of all symbols interpreted for utterance *utter*.
-        
-        **INPUTS**
-
-        *SpokenUtterance utter* -- The utterance.
-
-        **OUTPUTS**
-
-        *[InterpretedSymbol]* -- list of all the symbols that were interpreted 
-        for this utterance."""
-        
-        symbols = []
-        for a_symbol_info in utterance.symbols.items():
-            pass
-#           symbols.append(InterpretedSymbol(written=a_symbol_info[1],
-#                                            spoken=a_symbol_info[0], 
-#                                            utterance=utter,
-#                                            utter_id=???Where do I get this ID from???))
-           
-
     
     def scratch_recent(self, n = 1):
         """undo the effect of the most recent n utterances, if possible.

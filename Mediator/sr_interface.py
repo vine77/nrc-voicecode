@@ -582,15 +582,16 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
     information
     *[(STR, STR)]* word_list -- list of spoken, written forms,
     either originally recognized or corrected with set_words
+    
     *[STR]* spoken_only -- list of spoken forms,
     either originally recognized or corrected with set_words
+    
     *[[(STR, STR))]* choices -- list of alternative choices retrieved
     from ResObj (ResObj may have more choices than this - see
     alternatives method)
+    
     *INT* choices_available -- number of alternative choices available
     or -1 if unknown    
-
-    **CLASS ATTRIBUTES**
 
     *none*
     """

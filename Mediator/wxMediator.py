@@ -57,6 +57,10 @@ debug.config_traces(status="off",
                     active_traces={
 #################################     
                     
+                    'recent_correctable_dictation': 1,
+                    'ReformatRecentSymbolsViewWX.__init': 1,
+                    'tests_def.check_recent_symbols': 1,
+                    'ResMgrBasic.recent_symbols': 1,
                     'check_recent_symbols': 1,
                     'ResMgrBasic.recent_correctable_dictation': 1,
                     'ResMgrBasic.recent_symbols': 1,
