@@ -228,6 +228,22 @@ class wxCmdLog(CmdLog):
 
 #	self.log.ShowPosition(self.log.GetLastPosition())
 
+    def flush(self):
+	"""flush any buffered output to the command log.
+	Must be implemented by concrete subclass.
+	This interface allows CmdLog to be used to capture
+	standard output.
 
+	**INPUTS**
 
+	*STR* string -- message string to be logged (unlike
+	log_command, should include internal and trailing new-lines)
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# I don't think that wxTextCtrl is buffered, and
+# write already does ShowPosition	
+	pass
 

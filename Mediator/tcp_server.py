@@ -48,6 +48,10 @@ debug.config_traces(status="on",
 #                                   'AppState.synchronize_with_app': 1,
 #                                   'SourceBuff': 1,
 #                                   'SourceBuffMessaging.line_num_of': 1,
+#			            'delete_instance_cbk': 1,
+#				    'listen_one_transaction': 1,
+#				    'close_app_cbk': 1,
+#				    'AppState': 1
                                    },
                                    allow_trace_id_substrings = 1)
 
@@ -570,7 +574,7 @@ class ServerSingleThread(Object.Object):
     ..[ListenForNewTalkersThread] file:///./tcp_server.ListenForNewTalkersThread.html
     """
     
-    def __init__(self, editor_factory, test_suite=None, **args_super):
+    def __init__(self, editor_factory, test_suite=None, extra_opts = None, **args_super):
         self.deep_construct(ServerSingleThread, 
                             {'new_listen_socks': [],
                              'new_talk_socks': [],
@@ -1163,7 +1167,8 @@ class ServerMainThread(Object.OwnerObject):
 	"""
 	debug.virtual('ServerMainThread.data_event')
 
-    def new_data_thread(self, id, listen_sock, connection_ending):
+    def new_data_thread(self, id, listen_sock, connection_ending,
+	testing = 0):
         """creates a new ListenAndQueueMsgsThread to monitor the
 	listen_sock
         
@@ -1176,6 +1181,9 @@ class ServerMainThread(Object.OwnerObject):
 	Event *connection_ending* -- threading.Event 
 	used to signal to the data thread that the connection is 
 	ending, or the server is quitting
+
+	*BOOL testing* -- indicates whether we are running in regression
+	testing mode
         
         **OUTPUTS**
         
@@ -1185,10 +1193,10 @@ class ServerMainThread(Object.OwnerObject):
 	file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
 	data_event = self.data_event(id)
 	return self.new_data_thread_given_event(id, listen_sock, data_event, 
-	    connection_ending)
+	    connection_ending, testing = testing)
 
     def new_data_thread_given_event(self, id, listen_sock, data_event,
-	    connection_ending):
+	    connection_ending, testing = 0):
         """creates a new ListenAndQueueMsgsThread to monitor the
 	listen_sock
         
@@ -1204,6 +1212,9 @@ class ServerMainThread(Object.OwnerObject):
 	Event *connection_ending* -- threading.Event 
 	used to signal to the data thread that the connection is 
 	ending, or the server is quitting
+
+	*BOOL testing* -- indicates whether we are running in regression
+	testing mode
         
         **OUTPUTS**
         
@@ -1212,7 +1223,10 @@ class ServerMainThread(Object.OwnerObject):
         ..[ListenAndQueueMsgsThread] 
 	file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
 	sleeper = messaging.LightSleeper(connection_ending)
-	a_msgr = messaging.messenger_factory(listen_sock, sleep = 0.05,
+	sleepy_time = 0.05
+	if testing:
+	    sleepy_time = 0.10
+	a_msgr = messaging.messenger_factory(listen_sock, sleep = sleepy_time,
 	    sleeper = sleeper)
 	queue = Queue.Queue(10)
 	broken_connection = ('connection_broken', {})
@@ -1312,7 +1326,9 @@ class ServerMainThread(Object.OwnerObject):
         
 	disconnect_event = threading.Event()
 	self.connection_ending[id] = disconnect_event
-	data_thread = self.new_data_thread(id, listen_sock, disconnect_event)
+	testing = test_client and self.test_suite 
+	data_thread = self.new_data_thread(id, listen_sock, 
+	    disconnect_event, testing = testing)
 	messages = data_thread.message_queue()
 
         talk_msgr = messaging.messenger_factory(talk_sock)        
@@ -1577,18 +1593,22 @@ class ServerOldMediator(ServerMainThread):
     
     STR *test_suite=None* -- If not *None*, then upon connection by a
     new editor run regression test suite *test_suite*.
+
+    {STR: ANY} *extra_opts* -- additional options
     """
     
-    def __init__(self, test_suite = None, **args_super):
+    def __init__(self, test_suite = None, extra_opts = None, **args_super):
         self.deep_construct(ServerOldMediator, 
                             {'active_meds': {},
-			     'test_suite': test_suite
+			     'test_suite': test_suite,
+			     'extra_opts': extra_opts
                              }, 
                             args_super)
 #	self.add_owned('active_meds')
 #       for now, MediatorObject is not a standard OwnerObject, and uses
 #       quit rather than cleanup, so we have to do this manually in
 #       remove_other_references
+#	print extra_opts
       
     def remove_other_references(self):
 	"""Perform any cleanup prior to quitting.  Called when the main 
@@ -1673,7 +1693,7 @@ class ServerOldMediator(ServerMainThread):
 	    return 0
         else:
 	    sys.stderr.write("new instance, not testing: %d\n" % test_client)
-            exclusive = 1
+            exclusive = 0
             allResults = 0
             mediator.init_simulator(on_app=instance, 
 	        disable_dlg_select_symbol_matches=1, window=window, 
@@ -1724,11 +1744,32 @@ class ServerOldMediator(ServerMainThread):
 	if self.active_meds.has_key(id):
 	    self.deactivate_data_thread(id)
 	    self._destroy_mediator(id)
+	debug.trace('ServerOldMediator.delete_instance_cbk', 
+	    'server received delete instance callback')
+#	print self.extra_opts
+	if self.extra_opts and self.extra_opts.has_key('0'):
+# if the -0 option was specified, we will quit once the last client
+# editor connection has closed
+#	    print 'should we quit?'
+	    debug.trace('ServerOldMediator.delete_instance_cbk', 
+		'server was started with -0')
+	    if len(self.active_meds.keys()) == 0: 
+		debug.trace('ServerOldMediator.delete_instance_cbk', 
+		    'no more clients, so quitting')
+		win32event.SetEvent(self.evt_quit)            
+	     
 # now done by _destroy_mediator
 #	    del active_meds[id]
 #	    if unexpected:
 #	        sys.stderr.write('Mediator %d disconnected unexpectedly\n' \ % id)
 
+
+    def old_quit(self):
+	"""have ServerOldMediator quit the event loop
+	"""
+# ServerOldMediator actually doesn't know anything about the event loop,
+# so we have to define this in a subclass
+	debug.virtual('ServerOldMediator.old_quit')
 
     def _destroy_mediator(self, id):
 	"""private method to destroy one the old MediatorObject
@@ -1844,78 +1885,83 @@ class ServerOldMediatorIntLoop(ServerOldMediator):
         counter = 0
 	events = [self.evt_new_listen_conn, self.evt_new_talk_conn,
                          self.evt_sockets_ready, self.evt_quit] 
-        while 1:		
-            rc = win32event.MsgWaitForMultipleObjects(events,
+	try:
+	    while 1:		
+		rc = win32event.MsgWaitForMultipleObjects(events,
 #		        (self.evt_new_listen_conn, self.evt_new_talk_conn,
 #                         self.evt_sockets_ready), 
 #                         self.evt_sockets_ready, self.evt_quit), 
-                        0, # wait for all = false
-			win32event.QS_ALLEVENTS, # type of input
-			TIMEOUT) #  (or win32event.INFINITE)
+			    0, # wait for all = false
+			    win32event.QS_ALLEVENTS, # type of input
+			    TIMEOUT) #  (or win32event.INFINITE)
 
 
-            if rc == win32event.WAIT_OBJECT_0:
-                #
-                # A new VC_LISTEN connection was opened
-                #
-                debug.trace('ServerSingleThread.run', 'got evt_new_listen_conn')
-                self.handshake_listen_socks()
+		if rc == win32event.WAIT_OBJECT_0:
+		    #
+		    # A new VC_LISTEN connection was opened
+		    #
+		    debug.trace('ServerSingleThread.run', 'got evt_new_listen_conn')
+		    self.handshake_listen_socks()
 
-            elif rc == win32event.WAIT_OBJECT_0+1:
-                #
-                # A new VC_TALK connection was opened
-                #
-                debug.trace('ServerSingleThread.run', 'got evt_new_talk_conn')
-                if not self.handshake_talk_socks():
+		elif rc == win32event.WAIT_OBJECT_0+1:
+		    #
+		    # A new VC_TALK connection was opened
+		    #
+		    debug.trace('ServerSingleThread.run', 'got evt_new_talk_conn')
+		    if not self.handshake_talk_socks():
 #		    sys.stderr.write("got 0 from handshake_talk_socks\n")
-		    break
+			break
 
-                
-            elif rc == win32event.WAIT_OBJECT_0+2:
-                #
-                # Some of the active VC_LISTEN sockets have received data
-                #
-                debug.trace('ServerSingleThread.run', 'got evt_sockets_ready')
+		    
+		elif rc == win32event.WAIT_OBJECT_0+2:
+		    #
+		    # Some of the active VC_LISTEN sockets have received data
+		    #
+		    debug.trace('ServerSingleThread.run', 'got evt_sockets_ready')
 # ServerMainThread.process_ready_socks takes a list of sockets to check,
 # but win32event.Event doesn't seem to provide any way of sending data
 # with the event.  Really, I should add a ready_socks list and lock,
 # like in ServerSingleThread.  However, for now, just check all sockets.
 # process_ready_socks uses Queue's and avoids blocking if there are no
 # messages, so this is safe, if slightly inefficient.
-                self.process_ready_socks()
+		    self.process_ready_socks()
 
-            elif rc == win32event.WAIT_OBJECT_0+3:
-                #
-                # Server is shutting down. Exit the event loop.
-                #
-                debug.trace('ServerSingleThread.run', 'got evt_quit')
-                break
-                
-            elif rc == win32event.WAIT_OBJECT_0 + len(events):
-                # A windows message is waiting - take care of it.
-                # (Don't ask me why a WAIT_OBJECT_MSG isn't defined < WAIT_OBJECT_0)
-                # Note: this must be done for COM and other windowsy
-                #   things to work.
+		elif rc == win32event.WAIT_OBJECT_0+3:
+		    #
+		    # Server is shutting down. Exit the event loop.
+		    #
+		    debug.trace('ServerSingleThread.run', 'got evt_quit')
+		    break
+		    
+		elif rc == win32event.WAIT_OBJECT_0 + len(events):
+		    # A windows message is waiting - take care of it.
+		    # (Don't ask me why a WAIT_OBJECT_MSG isn't defined < WAIT_OBJECT_0)
+		    # Note: this must be done for COM and other windowsy
+		    #   things to work.
 #                debug.trace('ServerSingleThread.run', 'forwarding unknown message')
-                if pythoncom.PumpWaitingMessages():
-                    break # wm_quit
-                
-            elif rc == win32event.WAIT_TIMEOUT:
-                # Our timeout has elapsed.
-                # Do some work here (e.g, poll something can you can't thread)
-                #   or just feel good to be alive.
-                # Good place to call watchdog(). (Editor's note: See my "thread lifetime" recepie.)
-                pass
+		    if pythoncom.PumpWaitingMessages():
+			break # wm_quit
+		    
+		elif rc == win32event.WAIT_TIMEOUT:
+		    # Our timeout has elapsed.
+		    # Do some work here (e.g, poll something can you can't thread)
+		    #   or just feel good to be alive.
+		    # Good place to call watchdog(). (Editor's note: See my "thread lifetime" recepie.)
+		    pass
 #                debug.trace('ServerSingleThread.run', 'nothing to do, counter=%s' % counter)
-            else:
-                raise RuntimeError( "unexpected win32wait return value")
+		else:
+		    raise RuntimeError( "unexpected win32wait return value")
 
-            counter = counter + 1
-
+		counter = counter + 1
+        finally:
 #	sys.stderr.write("cleaning up int loop\n")
-	self.cleanup()
+	    self.cleanup()
 #	sys.stderr.write("done cleaning up int loop\n")
 
+    def old_quit(self):
+	"""have ServerOldMediator quit the event loop
+	"""
+	win32event.SetEvent(self.evt_quit)            
 
 
 
@@ -1955,10 +2001,14 @@ class ServerOldMediatorExtLoop(ServerOldMediator):
 
     *ExtLoop owner* -- the owner of the server
 
+    *PyHandle evt_quit* -- Win32 event to raise to exit the message loop
+    and shut down the server.
+
     """
-    def __init__(self, owner, **args_super):
+    def __init__(self, owner, evt_quit, **args_super):
         self.deep_construct(ServerOldMediatorExtLoop, 
-                            {'owner': owner}, 
+                            {'owner': owner,
+			     'evt_quit': evt_quit}, 
                             args_super)
 	self.name_parent('owner')
 
@@ -1976,6 +2026,11 @@ class ServerOldMediatorExtLoop(ServerOldMediator):
 	data thread to ensure that process_ready_socks is called.
 	"""
 	return self.owner.data_event(id)
+
+    def old_quit(self):
+	"""have ServerOldMediator quit the event loop
+	"""
+	win32event.SetEvent(self.evt_quit)            
 
 class ExtLoopWin32(Object.OwnerObject):
     """class providing an external win32 message message loop for
@@ -1997,7 +2052,7 @@ class ExtLoopWin32(Object.OwnerObject):
     STR *test_suite=None* -- If not *None*, then upon connection by a
     new editor run regression test suite *test_suite*.
     """
-    def __init__(self, test_suite = None, **args_super):
+    def __init__(self, test_suite = None, extra_opts = None, **args_super):
         self.deep_construct(ExtLoopWin32, 
                             {'test_suite': test_suite,
 			     'server': None,
@@ -2013,7 +2068,9 @@ class ExtLoopWin32(Object.OwnerObject):
 	factory = AppStateFactorySimple()
 	self.server = ServerOldMediatorExtLoop(owner = self,
 			     test_suite = test_suite, 
-			     editor_factory = factory)
+			     editor_factory = factory, evt_quit =
+			     self.evt_quit, extra_opts =
+			     extra_opts)
 	self.add_owned('server')
 
     def data_event(self, id):
@@ -2085,79 +2142,82 @@ class ExtLoopWin32(Object.OwnerObject):
         counter = 0
 	events = [self.evt_new_listen_conn, self.evt_new_talk_conn,
                          self.evt_sockets_ready, self.evt_quit]
-        while 1:		
-            rc = win32event.MsgWaitForMultipleObjects(events,
+	try:
+	    while 1:		
+		rc = win32event.MsgWaitForMultipleObjects(events,
 #		        (self.evt_new_listen_conn, self.evt_new_talk_conn,
 #                         self.evt_sockets_ready), 
 #                         self.evt_sockets_ready, self.evt_quit), 
-                        0, # wait for all = false
-			win32event.QS_ALLEVENTS, # type of input
-			TIMEOUT) #  (or win32event.INFINITE)
+			    0, # wait for all = false
+			    win32event.QS_ALLEVENTS, # type of input
+			    TIMEOUT) #  (or win32event.INFINITE)
 
 
-            if rc == win32event.WAIT_OBJECT_0:
-                #
-                # A new VC_LISTEN connection was opened
-                #
-                debug.trace('ExtLoopWin32.run', 'got evt_new_listen_conn')
-                self.server.handshake_listen_socks()
+		if rc == win32event.WAIT_OBJECT_0:
+		    #
+		    # A new VC_LISTEN connection was opened
+		    #
+		    debug.trace('ExtLoopWin32.run', 'got evt_new_listen_conn')
+		    self.server.handshake_listen_socks()
 
-            elif rc == win32event.WAIT_OBJECT_0+1:
-                #
-                # A new VC_TALK connection was opened
-                #
-                debug.trace('ExtLoopWin32.run', 'got evt_new_talk_conn')
-                if not self.server.handshake_talk_socks():
+		elif rc == win32event.WAIT_OBJECT_0+1:
+		    #
+		    # A new VC_TALK connection was opened
+		    #
+		    debug.trace('ExtLoopWin32.run', 'got evt_new_talk_conn')
+		    if not self.server.handshake_talk_socks():
 #		    sys.stderr.write("got 0 from handshake_talk_socks\n")
-		    break
+			break
 
-                
-            elif rc == win32event.WAIT_OBJECT_0+2:
-                #
-                # Some of the active VC_LISTEN sockets have received data
-                #
-                debug.trace('ExtLoopWin32.run', 'got evt_sockets_ready')
+		    
+		elif rc == win32event.WAIT_OBJECT_0+2:
+		    #
+		    # Some of the active VC_LISTEN sockets have received data
+		    #
+		    debug.trace('ExtLoopWin32.run', 'got evt_sockets_ready')
 # ServerMainThread.process_ready_socks takes a list of sockets to check,
 # but win32event.Event doesn't seem to provide any way of sending data
 # with the event.  Really, I should add a ready_socks list and lock,
 # like in ServerSingleThread.  However, for now, just check all sockets.
 # process_ready_socks uses Queue's and avoids blocking if there are no
 # messages, so this is safe, if slightly inefficient.
-                self.server.process_ready_socks()
+		    self.server.process_ready_socks()
 
-            elif rc == win32event.WAIT_OBJECT_0+3:
-                #
-                # Server is shutting down. Exit the event loop.
-                #
-                debug.trace('ExtLoopWin32.run', 'got evt_quit')
-                break
-                
-            elif rc == win32event.WAIT_OBJECT_0 + len(events):
-                # A windows message is waiting - take care of it.
-                # (Don't ask me why a WAIT_OBJECT_MSG isn't defined < WAIT_OBJECT_0)
-                # Note: this must be done for COM and other windowsy
-                #   things to work.
+		elif rc == win32event.WAIT_OBJECT_0+3:
+		    #
+		    # Server is shutting down. Exit the event loop.
+		    #
+		    debug.trace('ExtLoopWin32.run', 'got evt_quit')
+		    break
+		    
+		elif rc == win32event.WAIT_OBJECT_0 + len(events):
+		    # A windows message is waiting - take care of it.
+		    # (Don't ask me why a WAIT_OBJECT_MSG isn't defined < WAIT_OBJECT_0)
+		    # Note: this must be done for COM and other windowsy
+		    #   things to work.
 #                debug.trace('ExtLoopWin32.run', 'forwarding unknown message')
-                if pythoncom.PumpWaitingMessages():
-                    break # wm_quit
-                
-            elif rc == win32event.WAIT_TIMEOUT:
-                # Our timeout has elapsed.
-                # Do some work here (e.g, poll something can you can't thread)
-                #   or just feel good to be alive.
-                # Good place to call watchdog(). (Editor's note: See my "thread lifetime" recepie.)
-                pass
+		    if pythoncom.PumpWaitingMessages():
+			break # wm_quit
+		    
+		elif rc == win32event.WAIT_TIMEOUT:
+		    # Our timeout has elapsed.
+		    # Do some work here (e.g, poll something can you can't thread)
+		    #   or just feel good to be alive.
+		    # Good place to call watchdog(). (Editor's note: See my "thread lifetime" recepie.)
+		    pass
 #                debug.trace('ExtLoopWin32.run', 'nothing to do, counter=%s' % counter)
-            else:
-                raise RuntimeError( "unexpected win32wait return value")
+		else:
+		    raise RuntimeError( "unexpected win32wait return value")
 
-            counter = counter + 1
+		counter = counter + 1
 
+        finally:
 #	sys.stderr.write("cleaning up server from ext loop\n")
-	self.server.cleanup()
+	    self.server.cleanup()
 #	sys.stderr.write("done cleaning up server from ext loop\n")
-	self.server = None
+	    self.server = None
 #	sys.stderr.write("server = None")
+
 
 
 
@@ -2165,7 +2225,7 @@ class ExtLoopWin32(Object.OwnerObject):
 ##############################################################################
 # start test standalone server
 ##############################################################################
-def run_int_server(test_suite=None):
+def run_int_server(test_suite=None, extra_opts = None):
     """Start a ServerMainThread with internal message loop using
     win32event and the old MediatorObject.
     """
@@ -2174,36 +2234,36 @@ def run_int_server(test_suite=None):
     print 'running ServerOldMediatorIntLoop'
     factory = AppStateFactorySimple()
     a_server = ServerOldMediatorIntLoop(test_suite = test_suite,
-	editor_factory = factory)
+	editor_factory = factory, extra_opts = extra_opts)
         
     a_server.run()
 #    sys.stderr.write("run_int_server finishing\n")
     
-def run_ext_server(test_suite=None):
+def run_ext_server(test_suite=None, extra_opts = None):
     """Start a ServerMainThread with external message loop using
     win32event and the old MediatorObject.
     """
 
     sys.stderr.write('running ExtLoopWin32 with ServerOldMediator\n')
     print 'running ExtLoopWin32 with ServerOldMediator'
-    a_loop = ExtLoopWin32(test_suite)
+    a_loop = ExtLoopWin32(test_suite, extra_opts = extra_opts)
 
     a_loop.run()
 #    sys.stderr.write("run_ext_server finishing\n")
     
-def run_smt_server(test_suite=None):
+def run_smt_server(test_suite=None, extra_opts = None):
     """Start a ServerMainThread with internal message loop using
     win32event and the old MediatorObject.
     """
-    run_ext_server(test_suite)
+    run_ext_server(test_suite, extra_opts = extra_opts)
 #    sys.stderr.write("run_smt_server finishing\n")
     
-def run_server(test_suite=None):
+def run_server(test_suite=None, extra_opts = None):
     """Start a single thread, single process server.
     """
 
     factory = AppStateFactorySimple()
-    a_server = ServerSingleThread(editor_factory = factory)
+    a_server = ServerSingleThread(editor_factory = factory, extra_opts = extra_opts)
     a_server.test_suite = test_suite
         
     a_server.run()
@@ -2234,6 +2294,10 @@ OPTIONS
 
    (Default: None)
 
+-0:
+   Close the server when the last external editor disconnects.
+   Currently ignored except for ServerOldMediator
+
 --sst :
    Use ServerSingleThread (default)
 
@@ -2251,10 +2315,10 @@ OPTIONS
 
 
 if __name__ == '__main__':
-    opts, args = util.gopt(['h', None, 't=', None, 
-                            'd', None,
+    opts, args = util.gopt(['h', None, 't=', None, '0', None,
 			    'int', None, 'sst', None,
                             'ext', None, 'smt', None])
+    non_exclusive_opts = ['0']
     if opts['t'] != None:        
         #
         # Load definition of regression tests
@@ -2276,14 +2340,20 @@ if __name__ == '__main__':
     #
     # Start servers on the VC_LISTEN and VC_TALK ports
     #
+    extra_opts = {}
+    for opt in non_exclusive_opts:
+	try:
+	    extra_opts[opt] = opts[opt]
+	except KeyError:
+	    pass
     if opts['int'] != None:
-	run_int_server(test_suite=opts['t'])
+	run_int_server(test_suite=opts['t'], extra_opts = extra_opts)
     elif opts['ext'] != None:
-	run_ext_server(test_suite=opts['t'])
+	run_ext_server(test_suite=opts['t'], extra_opts = extra_opts)
     elif opts['smt'] != None:
-	run_smt_server(test_suite=opts['t'])
+	run_smt_server(test_suite=opts['t'], extra_opts = extra_opts)
     else:
-	run_server(test_suite=opts['t'])
+	run_server(test_suite=opts['t'], extra_opts = extra_opts)
 
 #    sys.stderr.write("run finished\n")
     sr_interface.disconnect()

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Apr 12 11:40:34 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Aug 31 13:25:53 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -37,6 +37,7 @@
 
     <SPAN CLASS="InheritsHead"># Inherited from CmdPrompt.CmdLog</SPAN>
     <A CLASS="DocLink" HREF="#CmdPrompt.CmdLog.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdLog.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">prompt=None</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#CmdPrompt.CmdLog.flush"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdLog.flush</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#CmdPrompt.CmdLog.log_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdLog.log_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # log a command.</SPAN>
     <A CLASS="DocLink" HREF="#CmdPrompt.CmdLog.log_message"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdLog.log_message</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">message</SPAN>)<SPAN CLASS="OneLiner"> # log output/message.  </SPAN>
     <A CLASS="DocLink" HREF="#CmdPrompt.CmdLog.write"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdPrompt.CmdLog.write</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">string</SPAN>)
@@ -261,6 +262,29 @@ Attributes are only set if they already exist in
 <DD>prompt string to prepend to commands        
 
 </DL>
+<H2 ID="CmdPrompt.CmdLog.flush" CLASS="Method">CmdPrompt.CmdLog.flush(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+flush any buffered output to the command log.
+Must be implemented by concrete subclass.
+This interface allows CmdLog to be used to capture
+standard output.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> string
+<DD>message string to be logged (unlike
+log_command, should include internal and trailing new-lines)
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
 <H2 ID="CmdPrompt.CmdLog.log_command" CLASS="Method">CmdPrompt.CmdLog.log_command(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)</H2>
 <P>log a command.</P>
 

@@ -422,6 +422,23 @@ class CmdLog(Object):
 	"""
 	self.write(self.prompt + command + '\n')
     
+    def flush(self):
+	"""flush any buffered output to the command log.
+	Must be implemented by concrete subclass.
+	This interface allows CmdLog to be used to capture
+	standard output.
+
+	**INPUTS**
+
+	*STR* string -- message string to be logged (unlike
+	log_command, should include internal and trailing new-lines)
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	debug.virtual('cmd_line.flush')
+
     def write(self, string):
 	"""add a string to the command log.
 	Must be implemented by concrete subclass.

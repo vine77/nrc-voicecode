@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Aug 28 14:40:22 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Aug 31 13:26:56 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -31,8 +31,8 @@
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.handshake_listen_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.handshake_listen_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Invoked when a new socket connection was opened on VC_LISTEN port.</SPAN>
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.handshake_talk_socks"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.handshake_talk_socks</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.known_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.known_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_data_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_data_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>)
-    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_data_thread_given_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_data_thread_given_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_data_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_data_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>, <SPAN CLASS="Argument">testing=0</SPAN>)
+    <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_data_thread_given_event"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_data_thread_given_event</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>, <SPAN CLASS="Argument">testing=0</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_listener_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_listener_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.new_talker_thread"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.new_talker_thread</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#tcp_server.ServerMainThread.package_sock_pair"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">tcp_server.ServerMainThread.package_sock_pair</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">talk_sock</SPAN>, <SPAN CLASS="Argument">test_client=0</SPAN>)
@@ -326,7 +326,7 @@ the id is unknown
 <P>
 <EM>none</EM>
 </P>
-<H2 ID="tcp_server.ServerMainThread.new_data_thread" CLASS="Method">tcp_server.ServerMainThread.new_data_thread(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>)</H2>
+<H2 ID="tcp_server.ServerMainThread.new_data_thread" CLASS="Method">tcp_server.ServerMainThread.new_data_thread(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>, <SPAN CLASS="Argument">testing=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -348,6 +348,10 @@ Event <EM>connection_ending</EM>
 <DD>threading.Event 
 used to signal to the data thread that the connection is 
 ending, or the server is quitting
+<DT>
+<EM>BOOL testing</EM>
+<DD>indicates whether we are running in regression
+testing mode
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
@@ -361,7 +365,7 @@ ending, or the server is quitting
 <P>
 ..[ListenAndQueueMsgsThread] 
 tcp_server.ListenAndQueueMsgsThread.html</P>
-<H2 ID="tcp_server.ServerMainThread.new_data_thread_given_event" CLASS="Method">tcp_server.ServerMainThread.new_data_thread_given_event(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>)</H2>
+<H2 ID="tcp_server.ServerMainThread.new_data_thread_given_event" CLASS="Method">tcp_server.ServerMainThread.new_data_thread_given_event(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">id</SPAN>, <SPAN CLASS="Argument">listen_sock</SPAN>, <SPAN CLASS="Argument">data_event</SPAN>, <SPAN CLASS="Argument">connection_ending</SPAN>, <SPAN CLASS="Argument">testing=0</SPAN>)</H2>
 <P>None</P>
 
 <P>
@@ -387,6 +391,10 @@ Event <EM>connection_ending</EM>
 <DD>threading.Event 
 used to signal to the data thread that the connection is 
 ending, or the server is quitting
+<DT>
+<EM>BOOL testing</EM>
+<DD>indicates whether we are running in regression
+testing mode
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>

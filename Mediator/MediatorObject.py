@@ -23,6 +23,7 @@ import sys
 #import traceback
 import actions_gen, AppState, CmdInterp, cont_gen, CSCmd, Object, re, sr_interface, SymDict, vc_globals
 
+import debug
 """Defines main class for the mediator.
 
 **MODULE VARIABLES**
@@ -288,6 +289,7 @@ class MediatorObject(Object.Object):
                 allResults = allResults)
         if self.owns_app and self.app:
 	    self.app.set_manager(self.cbk_filter)
+	    self.app.set_name('dummy')
 #	print 'Mediator constructor: allResults = %d\n' % allResults
 #	print traceback.extract_stack()
 
@@ -438,7 +440,11 @@ class MediatorObject(Object.Object):
 
 	*none*
 	"""
+	debug.trace('MediatorObject.close_app_cbk', 
+	    'Mediator Object received close app callback')
 	if self.owner and self.id:
+	    debug.trace('MediatorObject.close_app_cbk', 
+		'sending delete instance callback to owner')
 	    self.owner.delete_instance_cbk(self.id, 
 		unexpected = unexpected)
 

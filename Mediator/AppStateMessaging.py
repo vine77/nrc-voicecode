@@ -239,8 +239,12 @@ class AppStateMessaging(AppStateCached.AppStateCached):
 		'updates %s' % str(upd_list))
             self.apply_updates(upd_list)
 	elif mess_name == 'editor_disconnecting':
+	    debug.trace('AppStateMessaging.listen_one_transaction',
+		'received editor_disconnecting')
 	    self.close_app_cbk()
-	elif mess_name == 'broken_connection':
+	elif mess_name == 'connection_broken':
+	    debug.trace('AppStateMessaging.listen_one_transaction',
+		'data thread sent connection')
 	    self.close_app_cbk(unexpected = 1)
 
 
