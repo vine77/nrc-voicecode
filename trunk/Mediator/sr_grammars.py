@@ -289,7 +289,7 @@ class SelectWinGram(WinGram):
     *STR* buff_name -- name of buffer to which to tie this 
     selection grammar (can also be set by activate)
 
-    *[STR]* select_words -- words (or phrases) which introduces a
+    *[STR]* select_phrases -- words (or phrases) which introduces a
     selection utterance
 
     *STR* through_word -- word which separates the beginning and end of
@@ -299,7 +299,7 @@ class SelectWinGram(WinGram):
 
     *none*
     """
-    def __init__(self, app, buff_name = None, select_words = ['select'],
+    def __init__(self, app, buff_name = None, select_phrases = ['select'],
         through_word = 'through', **attrs):
         """
         **INPUTS**
@@ -311,7 +311,7 @@ class SelectWinGram(WinGram):
         """
         self.deep_construct(SelectWinGram,
             {'app': app, 'buff_name' : buff_name, 
-            'select_words' : select_words, 'through_word' : through_word}, 
+            'select_phrases' : select_phrases, 'through_word' : through_word}, 
             attrs)
 
     def remove_other_references(self):
@@ -587,33 +587,36 @@ class WinGramFactory(Object):
 
     **INSTANCE ATTRIBUTES**
 
-    *[STR]* select_words -- list of words which can precede the
-    phrase from the visible text in selection grammars
+    [STR] *select_verbs = ['go', 'select', 'insert', 'correct', '']* -- list 
+    of verbs to specify the action to be done by a SelectPseudocode utterance.
 
-    *STR* through_word -- word for selecting a range with the 
+    [STR] *select_cursor_position_words = ['before', 'after', '']* -- list of words that can be 
+    used to specify the position of the cursor in a SelectPseudocode utterance.
+    
+    [STR] *select_direction_words = ['next', 'previous', '']* -- list of words that
+    can be used to specify the direction in which the search will be done
+    for a SelectPseudocode utterance.
+
+    STR *through_word* -- word for selecting a range with the 
     selection grammars
 
-    *[STR]* scratch_words -- list of synonyms for Scratch in "Scratch
+    [STR] *scratch_words* -- list of synonyms for Scratch in "Scratch
     That" and "Scratch n" in basic correction grammars
 
-    *[STR]* correct_words -- list of synonyms for Correct in "Correct
+    [STR] *correct_words* -- list of synonyms for Correct in "Correct
     That" and "Correct Recent"  in basic correction grammars
 
-    *[STR]* recent_words -- *[STR]* correct_words -- list of synonyms for 
+    [STR] *recent_words* -- *[STR]* correct_words -- list of synonyms for 
     Recent in "Correct Recent" in basic correction grammars
 
     **CLASS ATTRIBUTES**
 
     *none*
     """
-    def __init__(self, select_words = ['go', 'go after next', 
-        'go after previous', 'go before',
-        'go before next', 'go before previous', 'go next',
-        'go previous', 'after next', 'after previous', 'before',
-        'before next', 'before previous', 
-#        'correct', 'correct next', 'correct previous', 
-        'next', 'previous',
-        'select', 'select next', 'select previous', 'after'], 
+    def __init__(self, 
+        select_verbs = ['go', 'select', 'insert', 'correct', ''], 
+        select_cursor_position_words = ['before', 'after', ''],
+        select_direction_words = ['next', 'previous', ''],
         through_word = 'through',
         scratch_words = None,
         correct_words = None,
@@ -622,8 +625,16 @@ class WinGramFactory(Object):
         """
         **INPUTS**
 
-        *[STR]* select_words -- list of words which can precede the
-        phrase from the visible text in selection grammars
+        [STR] *select_verbs = ['go', 'select', 'insert', 'correct']* -- list 
+        of verbs to specify the action to be done by a SelectPseudocode utterance.
+
+        [STR] *select_cursor_position_words = ['before', 'after']* -- list of words that can be 
+        used to specify the position of the cursor in a SelectPseudocode utterance.
+    
+        [STR] *select_direction_words = ['next', 'previous']* -- list of words that
+        can be used to specify the direction in which the search will be done
+        for a SelectPseudocode utterance.
+
 
         *STR* through_word -- word for selecting a range with the 
         selection grammars
@@ -642,7 +653,10 @@ class WinGramFactory(Object):
         *none*
         """
         self.deep_construct(WinGramFactory,
-            {'select_words' : select_words, 
+            {'select_verbs': select_verbs,
+
+             'select_cursor_position_words': select_cursor_position_words,
+             'select_direction_words': select_direction_words,
              'through_word' : through_word,
              'scratch_words': scratch_words,
              'correct_words': correct_words,
@@ -702,6 +716,35 @@ class WinGramFactory(Object):
         *SelectWinGram* -- new selection grammar
         """
         debug.virtual('WinGramFactory.make_selection')
+
+    def _select_phrases(self):
+       """Gnerates phrases that can be used to select a portion of code."""
+       phrases = []
+       for verb in self.select_verbs:
+          for put_cursor in self.select_cursor_position_words:
+             for direction in self.select_direction_words:
+                if (verb == 'correct' and put_cursor != ''):
+                   #
+                   # Correction utterances can't contain words for putting the cursor
+                   # at either end of 
+                   #
+                   continue
+                if (verb == '' and put_cursor == ''):
+                   #
+                   # Utterance that only specify the direction are not allowed because they 
+                   # cause undesirable ambiguities. For example "next one" could mean either:
+                   #   - select next occurence of the digit 1 or word "one"
+                   #   - repeat last bidirectional command in forward direction
+                   #
+                   continue
+                this_phrase = '%s %s %s' % (verb, put_cursor, direction)
+                this_phrase = re.sub(' +', ' ', this_phrase)
+                this_phrase = re.sub('^ +', '', this_phrase)
+                this_phrase = re.sub(' +$', '', this_phrase)
+                phrases.append(this_phrase)
+                
+       debug.trace('WinGramFactory._select_phrases', 'returning phrases=%s' % repr(phrases))
+       return phrases
 
     def make_correction(self, manager, window = None, exclusive = 0):
         """create a new basic correction grammar
@@ -773,7 +816,7 @@ class WinGramFactory(Object):
         debug.virtual('WinGramFactory.make_military_spelling')
 
     def make_simple_selection(self, get_visible_cbk, get_selection_cbk, 
-        select_cbk, alt_select_words = None):
+        select_cbk, alt_select_phrases = None):
         """create a new SimpleSelection grammar
 
         **INPUTS**
@@ -787,7 +830,7 @@ class WinGramFactory(Object):
         range to be selected (relative to the start of the visible range 
         passed to the get_visible_cbk), or None if text wasn't found
 
-        *[STR]* alt_select_words -- words (or phrases) which introduces a
+        *[STR]* alt_select_phrases -- words (or phrases) which introduces a
         selection utterance, or None to use the same value as
         make_selection does.  (Warning: once we add correct xyz, this
         won't be wise any more).
@@ -1343,7 +1386,7 @@ class SimpleSelection(WinGram):
 
     **INSTANCE ATTRIBUTES**
 
-    *[STR]* select_words -- words (or phrases) which introduces a
+    *[STR]* select_phrases -- words (or phrases) which introduces a
     selection utterance
 
     *STR* through_word -- word which separates the beginning and end of
@@ -1365,11 +1408,11 @@ class SimpleSelection(WinGram):
     *INT* window -- window handle (unique identifier) for the window to
     which the grammar is specific
     """
-    def __init__(self, select_words = ['select'],
+    def __init__(self, select_phrases = ['select'],
         through_word = 'through', get_visible_cbk = None,
         get_selection_cbk = None, select_cbk = None, **attrs):
         self.deep_construct(SimpleSelection,
-            {'select_words' : select_words, 'through_word' : through_word,
+            {'select_phrases' : select_phrases, 'through_word' : through_word,
             'get_visible_cbk': get_visible_cbk,
             'get_selection_cbk': get_selection_cbk,
             'select_cbk': select_cbk,

@@ -504,8 +504,7 @@ class CmdInterp(OwnerObject):
         # left
         #
         while len(cmd) > 0:
-             trace('CmdInterp.interpret_NL_cmd', 'now, cmd=%s' % cmd)
-#             print '-- CmdInterp.interpret_NL_cmd: now, cmd=%s' % cmd
+             trace('CmdInterp.interpret_massaged', 'now, cmd=%s' % cmd)
 
              #
              # Identify leading CSC, LSA, symbol and ordinary word
@@ -519,9 +518,8 @@ class CmdInterp(OwnerObject):
              chopped_word, word_consumes, cmd_without_word = self.chop_word(cmd)             
              most_consumed = max((LSA_consumes, symbol_consumes, CSC_consumes, word_consumes))
 
-             trace('CmdInterp.interpret_NL_cmd', 
+             trace('CmdInterp.interpret_massaged', 
              'chopped_CSC=%s, CSC_consumes=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (chopped_CSC, CSC_consumes, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes))
-#             print '-- CmdInterp.interpret_NL_cmd: chopped_CSC=%s, CSC_consumes=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (chopped_CSC, CSC_consumes, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes)
              head_was_translated = 0
 
              #
@@ -547,9 +545,9 @@ class CmdInterp(OwnerObject):
                  # Try all the CSCs with this spoken form until find
                  # one that applies in current context
                  #
-                 trace('CmdInterp.interpret_NL_cmd', 'processing leading CSC=\'%s\'' % chopped_CSC)
-#                 print '-- CmdInterp.interpret_NL_cmd: processing leading CSC=\'%s\'' % chopped_CSC
+                 trace('CmdInterp.interpret_massaged', 'processing leading CSC=\'%s\'' % chopped_CSC)
                  CSCs = self.cmd_index[chopped_CSC]
+                 trace('CmdInterp.interpret_massaged', '** CSCs=%s' % repr(CSCs))                 
                  csc_applies = 0
 # DCF: why is self.cmd_index[a_spoken_form] a list of CSCs each with
 # multiple meanings?  The meanings are a dictionary, so there is no way
@@ -560,6 +558,7 @@ class CmdInterp(OwnerObject):
 # undefined.  This seems like a very bad design.
                  for aCSC in CSCs:
                      csc_applies = aCSC.applies(app)
+                     trace('CmdInterp.interpret_massaged', '** aCSC=%s, csc_applies=%s' % (aCSC, csc_applies))
                      if (csc_applies):
 # flush untranslated words before executing action
                          if untranslated_words:
@@ -589,8 +588,7 @@ class CmdInterp(OwnerObject):
                  #
                  # LSA consumed the most words from command. Insert it.
                  #
-                 trace('CmdInterp.interpret_NL_cmd', 'processing leading LSA=\'%s\'' % chopped_LSA)
-#                 print '-- CmdInterp.interpret_NL_cmd: processing leading LSA=\'%s\'' % chopped_LSA
+                 trace('CmdInterp.interpret_massaged', 'processing leading LSA=\'%s\'' % chopped_LSA)
 # flush untranslated words before inserting LSA
                  if untranslated_words:
                      self.match_untranslated_text(untranslated_words, app)
@@ -611,8 +609,7 @@ class CmdInterp(OwnerObject):
                  #       class SomeClass you may name the new class
                  #       SomeprefixSomeClass or SomeClassSomepostfix.
                  #
-                 trace('CmdInterp.interpret_NL_cmd', 'processing leading symbol=\'%s\'' % chopped_symbol)
-#                 print '-- CmdInterp.interpret_NL_cmd: processing leading symbol=\'%s\'' % chopped_symbol                     
+                 trace('CmdInterp.interpret_massaged', 'processing leading symbol=\'%s\'' % chopped_symbol)
                  untranslated_words.append( chopped_symbol)
                  cmd = cmd_without_symbol
                  head_was_translated = 1
@@ -624,8 +621,7 @@ class CmdInterp(OwnerObject):
                  # Just chop off the first word and insert it, marking
                  # it as untranslated text.
                  #                 
-                 trace('CmdInterp.interpret_NL_cmd', 'processing leading word=\'%s\'' % chopped_word)
-#                 print '-- CmdInterp.interpret_NL_cmd: processing leading word=\'%s\'' % chopped_word                                                  
+                 trace('CmdInterp.interpret_massaged', 'processing leading word=\'%s\'' % chopped_word)
                  untranslated_words.append( chopped_word)
                  cmd = cmd_without_word
                  head_was_translated = 1
@@ -642,8 +638,7 @@ class CmdInterp(OwnerObject):
                  # text. Try to match untranslated text to a known (or new)
                  # symbol.
                  #
-                 trace('CmdInterp.interpret_NL_cmd', 'found the end of some untranslated text')
-#                 print '-- CmdInterp.interpret_NL_cmd: found the end of some untranslated text'
+                 trace('CmdInterp.interpret_massaged', 'found the end of some untranslated text')
                  self.match_untranslated_text(untranslated_words, app)
                  untranslated_words = []
 
@@ -651,8 +646,7 @@ class CmdInterp(OwnerObject):
                  untranslated_text = string.join(untranslated_words)
              else:
                  untranslated_text = None
-             trace('CmdInterp.interpret_NL_cmd', 'End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos()))
-#             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos())
+             trace('CmdInterp.interpret_massaged', 'End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos()))
 
         # make sure to unbind the buffer before returning
         app.unbind_from_buffer()
@@ -1115,8 +1109,6 @@ class CmdInterp(OwnerObject):
         *BOOL* return value -- True iif *spoken_form* is the spoken form of a CSC.
         """
         trace('CmdInterp.is_spoken_CSC', 'spoken_form=%s' % spoken_form)
-#        print '-- CmdInterp.is_spoken_CSC: spoken_form=%s' % spoken_form
-#        print '--** CmdInterp.is_spoken_CSC:self.cmd_index        
         chopped_CSC = None
         if self.cmd_index.has_key(spoken_form):
             chopped_CSC = spoken_form
@@ -1221,6 +1213,7 @@ class CmdInterp(OwnerObject):
 
         .. [CSCmd] file:///./CSCmd.CSCmd.html"""
 
+        debug.trace('CmdInterp.index_csc', 'acmd=%s, acmd.spoken_forms=%s, =%s' % (acmd, acmd.spoken_forms, acmd.meanings))
         for a_spoken_form in acmd.spoken_forms:
             #
             # Remove leading, trailing and double blanks from the spoken form

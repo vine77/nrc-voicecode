@@ -125,7 +125,7 @@ class ContLastActionWas(Context):
                 if isinstance(last_action, a_class):
                     answer = 1
                     break
-#        print '-- cont_gen.ContLastActionWas.applies: last_cont=%s, last_action=%s, self.types=%s, answer=%s' % (last_cont, last_action, self.types, answer)
+        debug.trace('ContLastActionWas.applies', 'last_cont=%s, last_action=%s, self.types=%s, answer=%s' % (last_cont, last_action, self.types, answer))
         return answer
 
 

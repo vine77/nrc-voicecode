@@ -354,12 +354,12 @@ out_of_balance = CSCmdSet("balanced expression navigation",
 # All balanced expressions
 #
 acmd = CSCmd(spoken_forms=['jump out'],
-             meanings={ContAny(): ActionSearchRepeat(regexp='[\]\)\}\'\"] {0,1}')},
+             meanings={ContAny(): ActionSearchBidirectionalRepeat(regexp='[\]\)\}\'\"] {0,1}')},
              docstring='jump out of innermost balanced expression')
 out_of_balance.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['back jump out', 'jump back out'],
-             meanings={ContAny(): ActionSearchRepeat(regexp=' {0,1}[\[\(\{\'\"]',direction=-1, where=-1)},
+             meanings={ContAny(): ActionSearchBidirectionalRepeat(regexp=' {0,1}[\[\(\{\'\"]',direction=-1, where=-1)},
              docstring='jump backwards out of innermost balanced expression')
 out_of_balance.add_csc(acmd)
 
@@ -432,17 +432,17 @@ change_direction = CSCmdSet(name = 'change direction of last command',
                   "in the opposite direction.")
 
 acmd = CSCmd(spoken_forms=['reverse', 'reverse direction'],
-             meanings={ContLastActionWas([ActionRepeatable, ActionBidirectional]): ActionRepeatBidirectCmd(n_times=1, direction=None)},
+             meanings={ContLastActionWas([ActionBidirectionalRepeat]): ActionRepeatBidirectCmd(n_times=1, direction=None)},
              docstring='Reverses the direction of previous command')
 change_direction.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['backward', 'upward', 'leftward', 'previous one'],
-             meanings={ContLastActionWas([ActionRepeatable, ActionBidirectional]): ActionRepeatBidirectCmd(n_times=1, direction=-1)},
+             meanings={ContLastActionWas([ActionBidirectionalRepeat]): ActionRepeatBidirectCmd(n_times=1, direction=-1)},
              docstring='Repeats the previous command in backward/up/left direction.')
 change_direction.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['forward', 'downward', 'rightward', 'next one'],
-             meanings={ContLastActionWas([ActionRepeatable, ActionBidirectional]): ActionRepeatBidirectCmd(n_times=1, direction=1)},
+             meanings={ContLastActionWas([ActionBidirectionalRepeat]): ActionRepeatBidirectCmd(n_times=1, direction=1)},
              docstring='Repeats the previous command in forward/down/right direction.')
 change_direction.add_csc(acmd)
 

@@ -20,12 +20,7 @@ alt_quotes = alt_US_quotes
 # Include user-defined forms here
 #######################################
 
-# Alain's odd forms
-# alt_US_punc.add('&', ['and percent'])
-# alt_US_punc.add('<', ['less-sign'], spacing =
-#     no_spaces)
-# alt_US_punc.add('>', ['greater-sign'], spacing =
-#     no_spaces)
+
 
 #######################################
 # add standard command and alias sets

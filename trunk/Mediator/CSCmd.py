@@ -80,7 +80,7 @@ class CSCmd(Object):
             trace('CSCmd.interpret', 'cont=%s, cont.applies=%s, ameaning=%s, action=%s' % 
                                      (cont, cont.applies, ameaning, str(action)))
             if (cont == None or cont.applies(app)):
-                trace('CSCmd.interpret', 'this context applies')
+                trace('CSCmd.applies', 'this context applies')
                 return ameaning
 
         return None
@@ -102,15 +102,13 @@ class CSCmd(Object):
         # Try each of the contextual meanings in turn until find one that
         # applies
         #
-#        print '-- CSCmd.interpret: self.meanings=%s' % self.meanings
+        trace('CSCmd.interpret', 'self=%s, self.meanings=%s' % (self, self.meanings))
         ameaning = self.applies(app)
         if ameaning:
             cont, action = ameaning
-#            print '-- CSCmd.interpret: cont=%s' % cont
-#            print '-- CSCmd.interpret: ameaning=%s, cont=%s, action=%s, action.doc()=%s' % (ameaning, cont, str(action), action.doc())
-#                print '-- CSCmd.interpret: this context applies'
+            trace('CSCmd.interpret', 'ameaning=%s, cont=%s, action=%s' % 
+                                     (ameaning, cont, action))
             action.log_execute(app, cont)
-#                print '-- CSCmd.interpret: current buffer is now:'
 #                app.print_buff_content()
             applied = 1
 
