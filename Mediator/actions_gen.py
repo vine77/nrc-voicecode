@@ -1133,6 +1133,10 @@ gen_parens_pair = \
     ActionInsert(code_bef='(', code_after=')',
                  docstring="""Insert parens and puts cursor in between""")
 
+gen_empty_parens_pair = \
+    ActionInsert(code_bef='()', code_after='',
+                 docstring="""Insert parens and puts cursor after them.""")
+
 gen_brackets_pair = \
     ActionInsert(code_bef='[', code_after=']',
                  docstring="""Insert brackets""")

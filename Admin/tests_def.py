@@ -866,10 +866,11 @@ fake_words = {
               'O': 0,
               'ST': 0,
               'CMP': 0,
-              'co-': 1,
+              'co-\\co': 1,
               'CRC': 0,
               'HSV': 0,
               'IM': 0,
+              'multi-\\multi': 1,
               'NI': 0,
               'TTY': 1,
               'UU': 0

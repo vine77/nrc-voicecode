@@ -1330,3 +1330,131 @@ class EnglishSmallNumbersSet(Object):
                    
         interp.add_lsa_set(aliases)
         
+
+        
+#class StandardFunctionSet(Object):
+#    """Helper class for creating a CSC set for standard functions and method
+#    names.
+#    
+#    The standard functions set is used to allow:
+#    
+#    - Distinction between a function name an possible homophonic variable names.      
+#      For example in Python, the utterance "string with arguments" would refer
+#      to the function str(), while the utterance "string" by itself might refer
+#      to a variable "string".
+#      
+#    - Provide different written forms for the same function in different 
+#      languages. For example, the function "string with arguments" might
+#      translate to str() in Python but to string() in a different language.
+#      
+#    - Provide pronunciation for the standard function or method which could
+#      not be automatically matched to its spoken form. For example, you might
+#      want to say "absolute value with arguments" to type abs(), eventhough
+#      the symbol matching algorithm does not allow "absolute value" to match abs.    
+#      
+#    - Allow the user to employ the "of" suffix with standard function. For example
+#      you might want "cosine of" to type "cos()". But you wouldn't want to
+#      define a CSC "of" that types "()" because the word "of" by itself is 
+#      much too ambiguous. But the utterance "cosine of" may be OK.            
+#    """
+#
+#    **INSTANCE ATTRIBUTES**
+#
+#    *[STR] with_arguments_suffixes* -- List of suffixes that can be appended
+#    to the function or method name to invoke it with a non-empty arguments list
+#    (eg: in Python, that means: type () and put the cursor IN BETWEEN).
+#    
+#    *[STR] without_arguments_suffixes* -- List of suffixes that can be appended
+#    to the function or method name to invoke it with an empty arguments list
+#    (eg: in Python, that means: type () and put the cursor AFTER).
+#    
+#    *Action default_with_arguments_action* -- Action to be invoked
+#    to print a non-empty argument list for the function or method name.
+#    Can be overriden on a language specific basis through *with_arguments_action*.
+#    
+#    *Action default_without_arguments_action* -- Action to be invoked
+#    to print a non-empty argument list for the function or method name.
+#    Can be overriden on a language specific basis through *without_arguments_action*.
+#    
+#    *{STR: Action} with_arguments_actions* -- The key is a string defining 
+#    a programming language and the value is an Action to be invoked
+#    to print a non-empty argument list for the function or method name.
+#    
+#    *{STR: Action} without_arguments_actions* -- The key is a string defining 
+#    a programming language and the value is an Action to be invoked
+#    to print an empty argument list for the function or method name.      
+#    """
+#    
+#    def __init__(self, with_arguments_suffixes=
+#                           ['with arguments', 'with argument', 'call with',
+#                           'called with', 'function of'], 
+#                       without_arguments_suffixes=
+#                           ['with no arguments', 'without argument',
+#                            'with no argument', 'empty function'], 
+#                       default_with_arguments_action=gen_parens_pair,
+#                       default_without_arguments_action=gen_empty_parens_pair,                       
+#                       default_without_arguments_action=
+#                       with_arguments_actions={},
+#                       without_arguments_actions={},     
+#                       **args):
+#        self.deep_construct(Object,
+#                            {'with_arguments_suffixes': with_arguments_suffixes,
+#                             'without_arguments_suffixes': without_arguments_suffixes,
+#                             'default_without_arguments_action': default_without_arguments_action,
+#                             'default_without_arguments_action': default_without_arguments_action,
+#                             'with_arguments_action': with_arguments_action,
+#                             'without_arguments_action': without_arguments_action}
+#                            args)
+#                            
+#    def add_function_name(self, spoken_forms, written_forms):
+#       """Add a definition for a standard function or method name to the set.
+#               
+#        **INPUTS**
+#        
+#        *[STR] spoken_forms -- List of spoken forms for the function. 
+#        
+#        *{STR: STR} written_forms* -- Key is the name of a programming language and value 
+#        is the written form of that function in the specified language. If 
+#        a key is None, it means the associated value is a default written 
+#        form to be used if there are no specific keys for a given language in 
+#        *writen_forms*.        
+#       """
+#       
+#       self._add_function_with_arguments_cscs(spoken_forms, written_forms)
+#       self._add_function_without_arguments_cscs(spoken_forms, written_forms)
+#       
+#    def _add_function_with_arguments_cscs(self, spoken_forms, written_forms):
+#       """Add CSCs for calling the function with a non-empty list of arguments.
+#               
+#        **INPUTS**
+#        
+#        *[STR] spoken_forms -- List of spoken forms for the function. 
+#        
+#        *{STR: STR} written_forms* -- Key is the name of a programming language and value 
+#        is the written form of that function in the specified language. If 
+#        a key is None, it means the associated value is a default written 
+#        form to be used if there are no specific keys for a given language in 
+#        *writen_forms*.        
+#       """
+#       
+#       call_spoken_forms = []
+#       for a_spoken_form in spoken_forms:
+#          for a_suffix in self.with_arguments_suffixes:
+#             spoken_call = "%s %s" % (a_spoken_form, a_suffix)
+#             call_spoken_forms.append(spoken_call)
+#          
+#       cont_meaning = {}   
+#       for a_language in written_forms.keys():
+#          cont_meaning[a_language] = self._with_arguments_action(a_language)
+#          
+#       aCSC = CSCmd(spoken_forms = call_spoken_forms, 
+#                    meanings = cont_meanings,
+#                   docstring = 'call function/method "%s" with non empty argument list' % spoken_forms[0])
+#          
+#       self.csc_set.add_csc(aCSC)
+#                            
+#    def _with_arguments_action(self, language): 
+#       if self.with_arguments_actions.has_key(language):
+#          return self.with_arguments_actions[language]
+#       else:
+#          return self.default_with_arguments_action
