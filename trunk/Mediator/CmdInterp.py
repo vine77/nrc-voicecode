@@ -125,7 +125,7 @@ class CmdInterp(Object):
         #
         while len(cmd) > 0:
 #             print '-- CmdInterp.interpret_NL_cmd: now, cmd=%s' % cmd
-#             print '-- CmdInterp.interpret_NL_cmd: cur_pos()=%s' % self.on_app.curr_buffer.cur_pos(); self.on_app.print_buff()
+#             print '-- CmdInterp.interpret_NL_cmd: cur_pos()=%s' % self.on_app.curr_buffer.cur_pos(); 
 
              #
              # Identify leading CSC, LSA, symbol and ordinary word
@@ -181,7 +181,6 @@ class CmdInterp(Object):
                      #
                      cmd = cmd_without_CSC
                      head_was_translated = 1
-#                     print '-- CmdInterp.interpret_NL_cmd: after translating CSC, buffer is:'; self.on_app.print_buff()                                                  
                  else:
                      #
                      # As it turns out, none of the CSCs with this
@@ -204,7 +203,6 @@ class CmdInterp(Object):
                  actions_gen.ActionInsert(code_bef=chopped_LSA, code_after='').log_execute(self.on_app, None)
                  cmd = cmd_without_LSA
                  head_was_translated = 1
-#                 print '-- CmdInterp.interpret_NL_cmd: after translating LSA, buffer is:'; self.on_app.print_buff()                 
 
 
              if not head_was_translated and symbol_consumes == most_consumed:
@@ -222,7 +220,6 @@ class CmdInterp(Object):
 		 untranslated_words.append( chopped_symbol)
                  cmd = cmd_without_symbol
                  head_was_translated = 1
-#                 print '-- CmdInterp.interpret_NL_cmd: after translating symbol, buffer is:'; self.on_app.print_buff()                     
                                           
                     
              if not head_was_translated and word_consumes == most_consumed:
@@ -235,7 +232,6 @@ class CmdInterp(Object):
 		 untranslated_words.append( chopped_word)
                  cmd = cmd_without_word
                  head_was_translated = 1
-#                 print '-- CmdInterp.interpret_NL_cmd: after translating ordinary word, buffer is:'; self.on_app.print_buff()
 
              #
              # Finished translating head of command.

@@ -213,7 +213,7 @@ def addedByVC(flag):
 def getWordInfo(word, *rest):
     
 #    print '-- sr_interface.getWordInfo: word=%s, rest=%s' % (word, rest)
-
+    
     #
     # First, fix the written form of the word
     #
@@ -719,7 +719,7 @@ class CodeSelectGrammar(SelectGramBase):
                   'go previous', 'after next', 'after previous', 'before',
                   'before next', 'before previous', 'correct',
                   'correct next', 'correct previous', 'next', 'previous',
-                  'select', 'select next', 'select previous'])
+                  'select', 'select next', 'select previous', 'after'])
 #       self.load(['select', 'correct'])       
        
     def deactivate(self):

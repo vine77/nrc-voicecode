@@ -1,13 +1,13 @@
 
-D:\VoiceCode\VCode.auto_indent\Admin>rem  
+D:\VoiceCode\VCode.demo\Admin>rem  
 
-D:\VoiceCode\VCode.auto_indent\Admin>rem Shortcut for invoking VoiceCode regression test 
+D:\VoiceCode\VCode.demo\Admin>rem Shortcut for invoking VoiceCode regression test 
 
-D:\VoiceCode\VCode.auto_indent\Admin>rem
+D:\VoiceCode\VCode.demo\Admin>rem
 
-D:\VoiceCode\VCode.auto_indent\Admin>cd D:\VoiceCode\VCode.auto_indent\Admin 
+D:\VoiceCode\VCode.demo\Admin>cd D:\VoiceCode\VCode.demo\Admin 
 
-D:\VoiceCode\VCode.auto_indent\Admin>python test.py all 
+D:\VoiceCode\VCode.demo\Admin>python test.py all 
 
 
 *******************************************************************************
@@ -193,7 +193,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 89d830>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 8a1390>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -208,9 +208,9 @@ Subclassing from non-standard class AnimatedCharacter.*
 * Description : self-test for SymDict.py
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-*** Compiling symbols from file: D:\VoiceCode\VCode.auto_indent\Data\TestData\small_buff.c ***
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+*** Compiling symbols from file: D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c ***
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 Parsed symbols are: 
@@ -239,8 +239,8 @@ Unresolved abbreviations are:
 
 *** End of compilation test ***
 
-*** Compiling symbols from file: D:\VoiceCode\VCode.auto_indent\Data\TestData\large_buff.py ***
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+*** Compiling symbols from file: D:\VoiceCode\VCode.demo\Data\TestData\large_buff.py ***
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 Parsed symbols are: 
@@ -341,11 +341,11 @@ Unresolved abbreviations are:
 *** End of compilation test ***
 
 *** Pseudo symbol match test***
-   Source files are: ['D:\\VoiceCode\\VCode.auto_indent\\Data\\TestData\\large_buff.py']
+   Source files are: ['D:\\VoiceCode\\VCode.demo\\Data\\TestData\\large_buff.py']
    Symbols are: ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
 
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 'set attribute' matches: [setattr, set_attribute, SetAttribute, setAttribute, SET_ATTRIBUTE, setattribute, SETATTRIBUTE, ]
 'expand variables' matches: [expandvars, expand_variables, ExpandVariables, expandVariables, EXPAND_VARIABLES, expandvariables, EXPANDVARIABLES, ]
 'execute file' matches: [execfile, execute_file, ExecuteFile, executeFile, EXECUTE_FILE, executefile, EXECUTEFILE, ]
@@ -356,8 +356,8 @@ Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
 *** End of Pseudo Symbol Match test ***
 
 
-*** Accept symbol match test. source='D:\VoiceCode\VCode.auto_indent\Data\TestData\small_buff.c' ***
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+*** Accept symbol match test. source='D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c' ***
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 Parsed symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -416,7 +416,7 @@ Unresolved abbreviations are:
 
 *** End of accept symbol match test ***
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -424,22 +424,21 @@ Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
 * Description : testing automatic creation of abbreviations
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.c')
 
 WARNING: source file 'D:/blah.c' doesn't exist.
---** sim_commands.open_file: the_mediator.interp.on_app.curr_buffer=<SourceBuffEdSim.SourceBuffEdSim instance at 9f2580>
 *** Start of source buffer ***
   1: <CURSOR>
 
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.auto_indent\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1519,7 +1518,7 @@ List of unresolved abbreviations
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1527,14 +1526,13 @@ Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
 * Description : testing changing direction of last command
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('D:\VoiceCode\VCode.auto_indent\Data\TestData\large_buff.py')
+>>> Testing console command: open_file('D:\VoiceCode\VCode.demo\Data\TestData\large_buff.py')
 
---** sim_commands.open_file: the_mediator.interp.on_app.curr_buffer=<SourceBuffEdSim.SourceBuffEdSim instance at 8e2ca0>
 *** Start of source buffer ***
   1: <CURSOR>
   2: # This symbol is here because it is homophonic with auto_test. Just checking
@@ -1613,20 +1611,19 @@ Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
 * Description : testing mediator console commands
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 >>> Testing console command: clear_symbols()    
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.c')
 
 WARNING: source file 'D:/blah.c' doesn't exist.
---** sim_commands.open_file: the_mediator.interp.on_app.curr_buffer=<SourceBuffEdSim.SourceBuffEdSim instance at a25a60>
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -1811,9 +1808,9 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.auto_indent\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1855,7 +1852,7 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1863,15 +1860,14 @@ Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
 * Description : Testing a series of miscellaneous bugs that might reoccur.
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.py')
 
 WARNING: source file 'blah.py' doesn't exist.
---** sim_commands.open_file: the_mediator.interp.on_app.curr_buffer=<SourceBuffEdSim.SourceBuffEdSim instance at 8b5e50>
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -1903,15 +1899,15 @@ natlink.UnknownName exception was sucessfully raised.
 
 
 >>> Starting mediator with persistence
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 8c7850> from file 'D:\VoiceCode\VCode.auto_indent\Data\Tmp\tmp_symdict.pkl'
-[Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.auto_indent\\Data\\Tmp\\tmp_symdict.pkl'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Error reading <SymDict.SymDict instance at 960cf0> from file 'D:\VoiceCode\VCode.demo\Data\Tmp\tmp_symdict.pkl'
+[Errno 2] No such file or directory: 'D:\\VoiceCode\\VCode.demo\\Data\\Tmp\\tmp_symdict.pkl'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.auto_indent\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -1937,9 +1933,9 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -1954,10 +1950,10 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -1968,7 +1964,7 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -1976,11 +1972,10 @@ Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
 * Description : testing the various Python CSCs and LSAs
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 WARNING: source file 'blah.py' doesn't exist.
---** sim_commands.open_file: the_mediator.interp.on_app.curr_buffer=<SourceBuffEdSim.SourceBuffEdSim instance at 8a98f0>
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -4834,7 +4829,7 @@ Saying: ['new statement']
 113:             <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -4844,10 +4839,10 @@ Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
 
 >>> Dictating Python when all symbols are known <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\\VoiceCode\\VCode.auto_indent\\Data\\TestData\\native_python.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\\VoiceCode\\VCode.demo\\Data\\TestData\\native_python.py'
 >>> Known symbols are: 
 AppState: ['app state']
 CSC_consumes: ['csc consumes']
@@ -5186,7 +5181,6 @@ written_as: ['written as']
 _cached_symbols_as_one_string is:
     import  os  re  string  sys  auto_test  natlink  vc_globals  from  actions_C_Cpp  actions_py  AppState  cont_gen  ContC  ContPy  CSCmd  EdSim  Object  SymDict  sr_interface  class  CmdInterp  def  __init__  self  on_app  None  symdict_pickle_file  attrs  decl_attrs  deep_construct  spoken_form_regexp  spoken_form  words  split  regexp  for  aword  in  first  rest  regexp_this_word  lower  upper  if  not  return  interpret_NL_cmd  cmd  print  _untranslated_text_start  _untranslated_text_end  massage_command  while  len  curr_buffer  cur_pos  print_buff_content  chopped_CSC  CSC_consumes  cmd_without_CSC  chop_CSC  chopped_LSA  LSA_consumes  cmd_without_LSA  chop_LSA  chopped_symbol  symbol_consumes  cmd_without_symbol  chop_symbol  chopped_word  word_consumes  cmd_without_word  chop_word  most_consumed  max  head_was_translated  s  CSCs  cmd_index  csc_applied  aCSC  interpret  break  else  and  insert_indent  insert_untranslated_text  or  match_untranslated_text  untranslated_text  content  command  mod_command  a_word  spoken  written  spoken_written_form  clean_written_form  clean_for  sub  vocabulary_entry  clean_written  text  a_match  match  text_no_spaces  group  leading_spaces  reg  num_match  known_symbols  symbol_info  has_key  symbol_matches  match_pseudo_symbol  dlg_select_symbol_match  good_answer  ii  stdout  write  native_symbol  is_new  answer  stdin  readline  answer_match  choice_index  int  chosen_match  accept_symbol_match  old_pos  start  end  new_pos  move_to  consumed  dummy  upto  a_spoken_form  join  leading_word  active_language_LSAs  language_specific_aliases  active_language  all_language_LSAs  spoken_form_info  choose_best_symbol  symbols  choices  index_csc  acmd  add_voc_entry  global  regexp_is_dirty  spoken_forms  cmds_this_spoken_form  environ  addWord  load_language_specific_aliases  language  last_language  last_loaded_language  deleteWord  spoken_as  written_as 
 WARNING: source file 'D:/blah.py' doesn't exist.
---** sim_commands.open_file: the_mediator.interp.on_app.curr_buffer=<SourceBuffEdSim.SourceBuffEdSim instance at a1dcb0>
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -5598,6 +5592,7 @@ Saying: ['attributes', 'new', 'statement', 'new', 'statement']
  21:       <CURSOR>
 
 *** End of source buffer ***
+Saying: ['back indent']
  18:       'symdict_pickle_file': symdict_pickle_file}, \
  19:       attrs)
  20:       
@@ -5695,6 +5690,7 @@ Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 're
  31:             <CURSOR>
 
 *** End of source buffer ***
+Saying: ['back indent']
  28:          if not regexp == '':
  29:             regexp = regexp + '\s*'
  30:             regexp = regexp + regexp_this_word
@@ -5708,17 +5704,16 @@ Saying: ['return', 'regular', 'expression', 'new', 'statement']
  32:          <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 >>> Dictating Python when only standard symbols are known <<<
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 _cached_symbols_as_one_string is:
    
 WARNING: source file 'D:/blah.py' doesn't exist.
---** sim_commands.open_file: the_mediator.interp.on_app.curr_buffer=<SourceBuffEdSim.SourceBuffEdSim instance at 9bca90>
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -6168,6 +6163,7 @@ Saying: ['attributes', 'new', 'statement', 'new', 'statement']
  21:       <CURSOR>
 
 *** End of source buffer ***
+Saying: ['back indent']
  18:       'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
  19:       attributes)
  20:       
@@ -6421,6 +6417,7 @@ Associate 'regular expression' with symbol (Enter selection):
  31:             <CURSOR>
 
 *** End of source buffer ***
+Saying: ['back indent']
  28:          if not re == '':
  29:             re = re + '\s*'
  30:             re = re + regular_expression_this_word
@@ -6445,7 +6442,7 @@ Associate 'regular expression' with symbol (Enter selection):
  32:          <CURSOR>
 
 *** End of source buffer ***
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -6453,24 +6450,23 @@ Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
 * Description : testing redundant translation of LSAs and symbols at SR and Mediator level
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.c')
 
 WARNING: source file 'blah.c' doesn't exist.
---** sim_commands.open_file: the_mediator.interp.on_app.curr_buffer=<SourceBuffEdSim.SourceBuffEdSim instance at 9b8a60>
 *** Start of source buffer ***
   1: <CURSOR>
 
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.auto_indent\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols(['D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'])
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Data\TestData\small_buff.c'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Data\TestData\small_buff.c'
 >>> Known symbols are: 
 API_function: ['api function']
 f_name: ['f name']
@@ -6542,7 +6538,7 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -6550,14 +6546,13 @@ Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
 * Description : testing repetition of last command
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
->>> Testing console command: open_file('D:\VoiceCode\VCode.auto_indent\Data\TestData\large_buff.py')
+>>> Testing console command: open_file('D:\VoiceCode\VCode.demo\Data\TestData\large_buff.py')
 
---** sim_commands.open_file: the_mediator.interp.on_app.curr_buffer=<SourceBuffEdSim.SourceBuffEdSim instance at a1bdf0>
 *** Start of source buffer ***
   1: <CURSOR>
   2: # This symbol is here because it is homophonic with auto_test. Just checking
@@ -6654,15 +6649,14 @@ Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
 * Description : testing mediator console commands
 *******************************************************************************
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('D:/blah.py')
 
 WARNING: source file 'D:/blah.py' doesn't exist.
---** sim_commands.open_file: the_mediator.interp.on_app.curr_buffer=<SourceBuffEdSim.SourceBuffEdSim instance at 8c7510>
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -7316,4 +7310,4 @@ Associate 'index' with symbol (Enter selection):
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file 'D:\VoiceCode\VCode.auto_indent\Config\py_std_sym.py'
+Compiling symbols for file 'D:\VoiceCode\VCode.demo\Config\py_std_sym.py'

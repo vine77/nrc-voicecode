@@ -69,7 +69,7 @@ class AppState(Object):
     
     *[(STR,* [Context], [Action]*) *] history=[]* -- Array of recent
     commands that have been executed. Each is entry is a 2ple. The first
-    entry is the context in which the command was applied. The third
+    entry is the context in which the command was applied. The second
     entry is the action that was executed.
     
     *{STR: * [SourceBuff] *} open_buffers={}* -- List of source buffers that
@@ -297,7 +297,9 @@ class AppState(Object):
         .. [Context] file:///./Context.Context.html
         .. [Action] files:///./Action.Action.html"""
 
+#        print '-- AppState.get_history: nth=%s' % nth
         hist_entry = None
         if nth <= len(self.history):
-            hist_entry = self.history[len(self.history) - nth - 1]
+            entry_pos = len(self.history) - nth
+            hist_entry = self.history[entry_pos]
         return hist_entry

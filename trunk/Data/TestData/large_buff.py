@@ -655,6 +655,7 @@ def prof_test():
 
     sys.stdout.write("Profiling speed of Object constructor/get/set.\n\n")
     profile.run("profObject(1000)")
+#    profile.run("profObject(5000)")
 #    profObject(1000)
 
 def self_test():
