@@ -429,11 +429,15 @@ auto_test.add_test('no_sr_user', test_no_sr_user, desc='testing connect with ine
 def test_command(command):
     
     print '\n\n>>> Testing console command: %s\n' % command
+    sys.stdout.flush()
     mediator.execute_command(command)
+    sys.stdout.flush()
 
 def test_say(utterance, user_input=None):
     print '\n\n>>> Testing console command: say(%s, user_input=\'%s\')' % (utterance, user_input)
+    sys.stdout.flush()
     mediator.say(utterance, user_input)
+    sys.stdout.flush()
 
 def test_mediator_console():
     mediator.init_simulator_regression()
