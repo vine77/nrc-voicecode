@@ -84,9 +84,6 @@ class MediatorObject(Object.Object):
     
     **INSTANCE ATTRIBUTES**
 
-    [AppState] *app = AppState.AppState()* -- Application being run
-    through the mediator.
-    
     [CmdInterp] *interp=CmdInterp.CmdInterp()* -- Command interpreter used to
     translate pseudo-code to native code.
     
@@ -150,8 +147,10 @@ class MediatorObject(Object.Object):
         **OUTPUTS**
         
         *none* -- 
-        """
+        """        
 #        global to_configure
+
+#        print '-- MediatorObject.configure: config_file=%s' % config_file
         
 #        to_configure = self
         
@@ -159,6 +158,7 @@ class MediatorObject(Object.Object):
 #            print '-- MediatorObject.configure: loading grammars'
             self.mixed_grammar.load(allResults=self.mixed_grammar.allResults)
 	    if self.window == 0:
+#                print '-- MediatorObject.configure: activating self.mixed_grammar'
 		self.mixed_grammar.activate()
             self.code_select_grammar.load_with_verbs()
 	    if self.window == 0:

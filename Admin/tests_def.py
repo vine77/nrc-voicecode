@@ -356,18 +356,6 @@ def test_Object():
     result = Employee1(name='Alain', salary='not enough')    
     print "Testing inheritance of constructor arguments\n   Employee1(name='Alain', salary='not enough') -> %s\n" % result.__dict__
 
-    #
-    # This raises an exception because we don't give a value for
-    # compulsory argument name, which is inherited from Person.__init__
-    #
-    sys.stdout.write("Omitting an inherited compulsory argument\n   Employee1(salary='not enough') -> ")
-    try:
-        result = Employee1(salary='not enough')
-        print 'Test failed! An exception should have been raised, but wasn\'t\n'
-    except Object.BadConstrCall, mess:
-        print 'Test OK. Correct exception was raised: \'%s\'' % mess
-
-    result = MyPerson(name='Alain')
     print "\nRedefining default value of *citizenship*\n   MyPerson(name='Alain') -> result=%s" % result.__dict__
 
     result = MyPerson(name='Alain', citizenship='US citizen')

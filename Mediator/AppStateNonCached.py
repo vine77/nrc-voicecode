@@ -21,7 +21,7 @@
 
 """Interface to a fast programming environment (i.e. no need for caching)"""
 
-import AppState
+import AppState, SourceBuffNonCached
 
 class AppStateNonCached(AppState.AppState):
     """Interface to a fast programming environment (i.e. no need for caching)
@@ -44,9 +44,31 @@ class AppStateNonCached(AppState.AppState):
     def __init__(self, **args_super):
         self.deep_construct(AppStateNonCached, 
                             {}, 
-                            args_super, 
+                            args_super,
                             {})
 
+
+    def new_compatible_sb(self, fname):
+        """Creates a new instance of [SourceBuff].
+
+        Note: The class used to instantiate the [SourceBuff] needs to
+        be compatible with the class of *self*. With a few exceptions
+        (if any), each subclass of *AppState* will have to redefine
+        *new_compatible_sb* in order to generate a [SourceBuff] of the
+        appropriate class.
+        
+        **INPUTS**
+                
+        STR *fname* -- Name of the source buffer.
+        
+        **OUTPUTS**
+        
+        *none* -- 
+
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+        
+        return SourceBuffNonCached.SourceBuffnonCached(app=self, fname=fname)
+    
 
     #
     # Here will be 'pass' versions of the various editor callback functions

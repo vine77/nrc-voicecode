@@ -424,8 +424,7 @@ class SB_ServiceIndent(SB_Service):
 	**OUTPUTS**
 
 	*none*
-	"""
-        
+	"""        
 	if range == None:
 	    range = self.buff.get_selection()
 	range = self.buff.make_valid_range(range)
@@ -538,7 +537,6 @@ class SB_ServiceIndent(SB_Service):
         #
         # Unindent the code using a regexp
         #
-        print '-- SB_ServiceIndent.decr_indent_level: levels=%s, self.indent_level=%s' % (levels, self.indent_level)
         regexp = '(^|%s) {0,%s}' % (self.buff.newline_regexp(), levels * self.indent_level)
         unindented_code = re.sub(regexp, '\\1', code_to_unindent)
         
@@ -604,8 +602,7 @@ class SB_ServiceIndent(SB_Service):
         
         *INT* num_spaces -- Number of spaces before the start of line at *pos*
         """
-        
-        
+
         content = self.buff.contents()
         pos_newline = None
         pos_line_start = pos

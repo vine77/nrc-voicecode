@@ -22,11 +22,12 @@
 """Interface to the programming environment."""
 
 
-import debug, sys
+import debug, messaging, sys
 from Object import Object
 
 
 """can we auto-forward stuff from App to buff"""
+
 
 # (C)2000 David C. Fox
 
@@ -75,7 +76,11 @@ def use_update_class(action):
     
     ..[AS_Update] file:///./AppState.AS_Update.html"""
         
-    use_class = {'delete': AS_Delete}
+    use_class = {'delete': SB_UpdDelete, 'insert': SB_UpdInsert,
+                 'set_selection': SB_UpdSetSelection, 'goto': SB_UpdGoto
+                }
+
+    
     return use_class[action]
 
 
@@ -95,9 +100,9 @@ def updates_factory(upd_descr):
     
     *none* -- 
     """
-   
+
     upd_class = use_update_class(upd_descr['action'])
-    upd_object = upd_class.__init__(upd_object, descr=upd_descr)
+    upd_object = upd_class(descr=upd_descr)
     return upd_object
 
 
@@ -121,7 +126,7 @@ class AS_Update(Object):
                             {'descr': descr}, 
                             args_super, 
                             {})
-
+        
 class SB_Update(AS_Update):
             
     """An object describing an update to be done on a source buffer or
@@ -138,7 +143,7 @@ class SB_Update(AS_Update):
     """
     
     def __init__(self, **args_super):
-        self.deep_construct(AS_Update, 
+        self.deep_construct(SB_Update, 
                             {}, 
                             args_super, 
                             {})
@@ -146,8 +151,6 @@ class SB_Update(AS_Update):
     def on_buff_named(self):
         """Returns name of the buffer on which to do the update."""
         return self.descr['buff_name']
-
-
 
 
     def apply(self, on_app):
@@ -203,6 +206,153 @@ class SB_Update(AS_Update):
 
         debug.virtual('SB_Update.apply_to_VE_map')
         
+
+class SB_UpdDelete(SB_Update):
+    """Update class for a deletion.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *none*-- 
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(SB_UpdDelete, 
+                            {}, 
+                            args_super, 
+                            {})
+
+    def apply_to_buff(self, on_buff):
+        
+        """Carry out a delete update on a specific buffer.
+        
+        **INPUTS**
+        
+        [SourceBuff] *on_buff* -- The buffer on which to do the update. 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        range = messaging.messarg2intlist(self.descr['range'])
+        on_buff.delete_cbk(range=range)
+
+
+class SB_UpdInsert(SB_Update):
+    """Update class for an insertion.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *none*-- 
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(SB_UpdInsert,
+                            {}, 
+                            args_super, 
+                            {})
+
+    def apply_to_buff(self, on_buff):
+        
+        """Carry out an insertion update on a specific buffer.
+        
+        **INPUTS**
+        
+        [SourceBuff] *on_buff* -- The buffer on which to do the update. 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        range = messaging.messarg2intlist(self.descr['range'])
+        on_buff.insert_cbk(range=range, text=self.descr['text'])
+
+
+class SB_UpdSetSelection(SB_Update):
+    """Update class for setting the selection.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *none*-- 
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(SB_UpdSetSelection,
+                            {}, 
+                            args_super, 
+                            {})
+
+    def apply_to_buff(self, on_buff):
+        
+        """Carry out a set selection update on a specific buffer.
+        
+        **INPUTS**
+        
+        [SourceBuff] *on_buff* -- The buffer on which to do the update. 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        cursor_at = None
+        if self.descr.has_key('cursor_at'):
+            cursor_at = int(self.descr['cursor_at'])
+        range = messaging.messarg2intlist(self.descr['range'])
+        if cursor_at != None:
+            on_buff.set_selection_cbk(range=range, cursor_at=cursor_at)
+        else:
+            on_buff.set_selection_cbk(range)
+
+
+class SB_UpdGoto(SB_Update):
+    """Update class for moing the cursor.
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *none*-- 
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(SB_UpdGoto,
+                            {}, 
+                            args_super, 
+                            {})
+
+    def apply_to_buff(self, on_buff):
+        
+        """Carry out a cursor movementupdate on a specific buffer.
+        
+        **INPUTS**
+        
+        [SourceBuff] *on_buff* -- The buffer on which to do the update. 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        on_buff.goto_cbk(pos=int(self.descr['pos']))
+            
 	
 class AppState(Object):
     """Interface to the programming environment.    
@@ -271,8 +421,9 @@ class AppState(Object):
 	    return ForwardToBuffer(self, name)
 	raise AttributeError(name)
     
-    def __init__(self, app_name=None, translation_is_off=0, max_history=100,
-                 **attrs):
+    def __init__(self, app_name=None, translation_is_off=0,
+                 max_history=100, **attrs):
+        
         self.init_attrs({'breadcrumbs': [], 'history': []})
         self.deep_construct(AppState, 
                             {'app_name': app_name,
@@ -282,8 +433,6 @@ class AppState(Object):
                              'max_history': max_history, 
                              'translation_is_off': translation_is_off},
                             attrs)
-
-
 
     def recog_begin(self):
         """Invoked at the beginning of a recognition event.
@@ -467,6 +616,7 @@ class AppState(Object):
         """
         if updates == None:
             updates = self.updates_from_app(what, exclude)
+        self.apply_updates(updates)
 
 
 
@@ -787,17 +937,16 @@ class AppState(Object):
         """
 
         if (buff_name == None):
-	    current_name = self.curr_buffer_name()
-	    if ((current_name != None) and 
-		(self.open_buffers.has_key(current_name))):
-	      return self.open_buffers[current_name]
-	    return None
-        elif (self.open_buffers.has_key(buff_name)):
-            return self.open_buffers[buff_name]
-        #
-        # Buffer not found
-        #
-        return None
+            buff_name = self.curr_buffer_name()
+            
+        if buff_name != None:
+            if self.open_buffers.has_key(buff_name):
+                return self.open_buffers[buff_name]
+            else:
+                new_buff = self.new_source_buffer(buff_name)
+                return new_buff
+        else:
+            return None
 
 
     def drop_breadcrumb(self, buffname=None, pos=None):
@@ -824,6 +973,69 @@ class AppState(Object):
         debug.virtual('AppState.pop_breadcrumbs')        
 
 
+
+
+    def open_file_cbk(self, name):
+        """Editor invokes this method to notify VoiceCode that it opened a new source file.
+        
+        **INPUTS**
+        
+        STR *name* -- Name of the buffer         
+
+        **OUTPUTS**
+        
+        [SourceBuff] *new_buff* -- The [SourceBuff] instance created
+        to represent this new file.
+        
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+        
+        #
+        # First make sure we don't already have a buffer by that name
+        #
+        if not self.find_buff(buff_name=name):
+            new_buff = self.new_source_buffer(name)
+        return new_buff
+            
+
+
+    def new_compatible_sb(self, fname):
+        """Creates a new instance of [SourceBuff].
+
+        Note: The class used to instantiate the [SourceBuff] needs to
+        be compatible with the class of *self*. With a few exceptions
+        (if any), each subclass of *AppState* will have to redefine
+        *new_compatible_sb* in order to generate a [SourceBuff] of the
+        appropriate class.
+        
+        **INPUTS**
+                
+        STR *fname* -- Name of the source buffer.
+        
+        **OUTPUTS**
+        
+        *none* -- 
+
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+        
+        return SourceBuff.SourceBuff(self, fname=fname)
+
+
+    def new_source_buffer(self, fname):
+        
+        """Creates a new [SourceBuff] instances and adds it to the
+        list of open buffers.
+        
+        **INPUTS**
+        
+        STR *fname* -- Name of the new buffer
+        
+
+        **OUTPUTS**
+        
+        """
+
+        new_buff = self.new_compatible_sb(fname=fname)
+        self.open_buffers[fname] = new_buff
 
     def open_file(self, name, lang = None):
         """Tell the external editor to open a file.

@@ -23,8 +23,7 @@
 
 import os, posixpath, re, sys
 import auto_test, debug
-import AppState, AppStateNonCached, as_services
-from SourceBuffEdSim import SourceBuffEdSim
+import AppState, AppStateNonCached, as_services, SourceBuffEdSim
 
 class EdSim(AppStateNonCached.AppStateNonCached):
     """VoiceCode editor simulator.
@@ -51,11 +50,35 @@ class EdSim(AppStateNonCached.AppStateNonCached):
     
     def __init__(self, **attrs):
         self.init_attrs({'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(app=self)})
-        self.deep_construct(EdSim, {'only_buffer': None,
-	    'only_buffer_name': ""}, attrs)
-	self.only_buffer = SourceBuffEdSim(app = self, fname = "",
+        self.deep_construct(EdSim,
+                            {'only_buffer': None,
+                             'only_buffer_name': ""},
+                            attrs)
+	self.only_buffer = SourceBuffEdSim.SourceBuffEdSim(app = self, fname = "",
 	    language =None)
         self.open_buffers[self.only_buffer_name] = self.only_buffer
+
+    def new_compatible_sb(self, fname):
+        """Creates a new instance of [SourceBuff].
+
+        Note: The class used to instantiate the [SourceBuff] needs to
+        be compatible with the class of *self*. With a few exceptions
+        (if any), each subclass of *AppState* will have to redefine
+        *new_compatible_sb* in order to generate a [SourceBuff] of the
+        appropriate class.
+        
+        **INPUTS**
+                
+        STR *fname* -- Name of the source buffer.
+        
+        **OUTPUTS**
+        
+        *none* -- 
+
+        ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
+        
+        return SourceBuffEdSim.SourceBuffEdSim(app=self, fname=fname)
+
 
     def stop_responding(self):
         
@@ -178,7 +201,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
 	    del self.open_buffers[self.curr_buffer_name()]
 
 
-        self.only_buffer =  SourceBuffEdSim(app = self, fname=name, language=lang, 
+        self.only_buffer =  SourceBuffEdSim.SourceBuffEdSim(app = self, fname=name, language=lang, 
 	    initial_contents = source)
 	self.only_buffer_name = name
 

@@ -610,6 +610,8 @@ class Object:
         .. [EnforcedConstrArg] file:///./Object.EnforcedConstrArg.html
         .. [Object] file:///./Object.Object.html"""
 
+#        print '-- Object.deep_construct: self=%s, this_class=%s, attrs_this_class.keys()=%s, args_super.keys()=%s' % (self, this_class, repr(attrs_this_class.keys()), repr(args_super.keys()))
+        
         #
         # Redefine the default value of some ancestor constructor
         # arguments.
@@ -651,12 +653,7 @@ class Object:
         #
         for a_base in this_class.__bases__:
             if not exclude_bases.has_key(a_base):
-#                print '-- Object.deep_construct: creating instance of %s' % repr(a_base)
-                try:
-                    apply(a_base.__init__, [self], args_super)
-                except TypeError:
-                    mess = 'Bad call to %s.__init__.\nCalled with arguments: %s\nDid you forget to specify the value of a compulsory  argument inherited from %s.__init__?' % (a_base, args_super, a_base)
-                    raise BadConstrCall, mess
+                apply(a_base.__init__, [self], args_super)
 
                     
 

@@ -138,13 +138,9 @@ class CmdInterp(Object):
              #
              # Identify leading CSC, LSA, symbol and ordinary word
              #
-#             print '-- CmdInterp.interpret_NL_cmd: before chop_CSC'
              chopped_CSC, CSC_consumes, cmd_without_CSC = self.chop_CSC(cmd)
-#             print '-- CmdInterp.interpret_NL_cmd: before chop_LSA'
              chopped_LSA, LSA_consumes, cmd_without_LSA = self.chop_LSA(cmd)
-#             print '-- CmdInterp.interpret_NL_cmd: before chop_symbol'
              chopped_symbol, symbol_consumes, cmd_without_symbol = self.chop_symbol(cmd)
-#             print '-- CmdInterp.interpret_NL_cmd: before chop_word'
              chopped_word, word_consumes, cmd_without_word = self.chop_word(cmd)             
              most_consumed = max((LSA_consumes, symbol_consumes, CSC_consumes, word_consumes))
 
@@ -645,12 +641,9 @@ class CmdInterp(Object):
         #
 
 	aliases = self.language_specific_aliases
-
-#        print '-- CmdInterp.is_spoken_LSA: after aliases'
-        
+#        print '-- CmdInterp.is_spoken_LSA: self.on_app=%s' % self.on_app
 	language = self.on_app.active_language()
-
-#        print '-- CmdInterp.is_spoken_LSA: after language'
+#        print '-- CmdInterp.is_spoken_LSA: language=%s' % language
         
         if aliases.has_key(language):
 	    if aliases[language].has_key(spoken_form):
