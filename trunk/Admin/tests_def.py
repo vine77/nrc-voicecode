@@ -3166,15 +3166,86 @@ add_test('number_dictation', test_number_dictation, desc='Test number dictation'
 def test_new_statement():
    testing.init_simulator_regression()
    temp_config = temp_factory.new_config()   
+      
    commands.open_file('blah1.py')
+      
+   commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
+   commands.say(['below', 'when', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)
    
+   commands.goto(0, echo_cmd=1)
    commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
-   commands.say(['tested', 'statement', 'below', 'when', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)      
+   commands.say(['below', 'when', 'at', 'first',
+                 'line', 'of', 'non', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)
+
+   commands.goto(commands.app.len(), echo_cmd=1)   
    commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
-   commands.say(['tested', 'statement', 'below', 'when', 'at', 'last', 
-                 'character', 'of', 'the', 'buffer'], user_input='1\n', echo_utterance=1)
+   commands.say(['below', 'when', 'at', 'last', 
+                 'character', 'of', 'non', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)
                  
+   commands.goto_line(2, echo_cmd=1)
+   commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
+   commands.say(['below', 'when', 'on', 'middle', 
+                 'line', 'of', 'buffer'], user_input='1\n', echo_utterance=1)
+                 
+   commands.goto_line(3, echo_cmd=1)
+   commands.goto_end_of_line()
+   commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
+   commands.say(['below', 'when', 'at', 'end', 'of', 'line'], 
+                 user_input='1\n', echo_utterance=1)
+
+   commands.goto_line(3, echo_cmd=1)
+   commands.goto_beginning_of_line()
+   commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
+   commands.say(['below', 'when', 'at', 'beginning', 'of', 'line'], 
+                 user_input='1\n', echo_utterance=1)
+                 
+
+   commands.goto(10, echo_cmd=1)
+   commands.say(['new', 'statement', 'below'] , user_input="0\n", echo_utterance=1)
+   commands.say(['below', 'when', 'at', 'middle', 
+                 'of', 'a', 'line'], user_input='1\n', echo_utterance=1)
+
+
+   commands.open_file('blah2.py')
+      
+   commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)
+   commands.say(['above', 'when', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)
    
+   commands.goto(0, echo_cmd=1)
+   commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)
+   commands.say(['above', 'when', 'at', 'first',
+                 'line', 'of', 'non', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)
+
+   commands.goto(commands.app.len(), echo_cmd=1)   
+   commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)
+   commands.say(['bug', 'above', 'when', 'at', 'last', 
+                 'character', 'of', 'non', 'empty', 'buffer'], user_input='1\n', echo_utterance=1)
+                 
+   commands.goto_line(2, echo_cmd=1)
+   commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)
+   commands.say(['bug', 'above', 'when', 'on', 'middle', 
+                 'line', 'of', 'buffer'], user_input='1\n', echo_utterance=1)
+
+   commands.goto_line(3, echo_cmd=1)
+   commands.goto_end_of_line()
+   commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)
+   commands.say(['above', 'when', 'at', 'end', 'of', 'line'], 
+                 user_input='1\n', echo_utterance=1)
+
+   commands.goto_line(3, echo_cmd=1)
+   commands.goto_beginning_of_line()
+   commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)
+   commands.say(['above', 'when', 'at', 'beginning', 'of', 'line'], 
+                 user_input='1\n', echo_utterance=1)
+
+
+   commands.goto(10, echo_cmd=1)
+   commands.say(['new', 'statement', 'above'] , user_input="0\n", echo_utterance=1)
+   commands.say(['above', 'when', 'at', 'middle', 
+                 'of', 'a', 'line'], user_input='1\n', echo_utterance=1)
+
+# goto_beginning_of_line() doesn't work correctly in above tests                
+# add_test('new_statement', test_new_statement, desc='Test creation of new statements above/below current line')   
 
    
 
@@ -3248,13 +3319,8 @@ def test_temporary():
    temp_config = temp_factory.new_config()   
    commands.open_file('blah.py')
    commands.say(['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)   
-   commands.say(['new', 'statement', 'above'] , user_input="0\n")   
-   commands.say(['results', 'at', 'index', 'zero'], user_input='0\n')
-   commands.say(['new', 'statement', 'below'] , user_input="0\n")
-   commands.say(['results', 'at', 'index', 'two'], user_input='0\n')
-#   commands.say(['new', 'statement', 'three'] , user_input="0\n")
-#   commands.say(['new', 'statement', 'above'] , user_input="0\n")         
-#   commands.say(['new', 'statement', 'four'] , user_input="0\n")      
+   commands.goto(2, echo_cmd=1)
+   commands.goto_beginning_of_line(echo_cmd=1)
    
 #add_test('temp', test_temporary, desc='temporary test')
 
