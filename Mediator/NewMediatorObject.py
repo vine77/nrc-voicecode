@@ -33,6 +33,7 @@ import ResMgr
 import sr_grammarsNL
 import auto_test
 import regression
+import cPickle
 
 """Defines main class for the mediator.
 
@@ -107,7 +108,7 @@ class NewMediatorObject(Object.OwnerObject):
     testing, and even then, the persistent mediator object should
     be created symbol_match_dlg = 0, because if
     symbol_match_dlg_regression is set, the mediator object will 
-    automatically the dialog when regression testing starts 
+    automatically enable the dialog when regression testing starts 
     and disable it afterwards.  
 
     *BOOL symbol_match_dlg_regression* -- use a CmdInterp with symbol match 
@@ -140,6 +141,9 @@ class NewMediatorObject(Object.OwnerObject):
     *{STR:ANY} test_space* -- if the mediator is started in regression 
     testing mode, test_space is the namespace in which regression tests 
     have been defined and will run.  Otherwise, it should be None.
+
+    *STR pickled_interp* -- CmdInterp as originally configured,
+    pickled to speed up regression testing
 
     *BOOL global_grammars* -- should this instance use global grammars for 
     regression testing (ignored if test_space is None)
@@ -274,6 +278,7 @@ class NewMediatorObject(Object.OwnerObject):
                              'bypass_for_dictation': bypass_for_dictation,
                              'test_next': 0,
                              'testing': 0, 
+                             'pickled_interp': None,
                              'config_file': None
                             },
                             attrs,
@@ -284,6 +289,8 @@ class NewMediatorObject(Object.OwnerObject):
         self.add_owned('interp')
         if self.the_console:
             self.the_console.set_mediator(self)
+        if self.test_args != None and self.test_space != None:
+            self.test_next = 1
         if self.interp == None:
             self.new_interpreter(symdict_pickle_fname = symdict_pickle_fname,
                 symbol_match_dlg = symbol_match_dlg)
@@ -294,8 +301,6 @@ class NewMediatorObject(Object.OwnerObject):
             self.new_app_mgr()
         if server:
             server.set_mediator(self)
-        if self.test_args != None and self.test_space != None:
-            self.test_next = 1
 
     def new_app_mgr(self):
         """create a new AppMgr if one was not supplied to  the
@@ -334,7 +339,7 @@ class NewMediatorObject(Object.OwnerObject):
         return 1
     
     def new_interpreter(self, symdict_pickle_fname = None,
-        symbol_match_dlg = 0):
+        symbol_match_dlg = 0, no_circle = 0):
         """create a new interpreter
 
         **INPUTS**
@@ -347,10 +352,13 @@ class NewMediatorObject(Object.OwnerObject):
         """
         if self.interp:
             self.interp.cleanup()
+        m = self
+        if no_circle:
+            m = None
         self.interp = \
             CmdInterp.CmdInterp(symdict_pickle_file = symdict_pickle_fname, 
                 disable_dlg_select_symbol_matches = not symbol_match_dlg, 
-                mediator = self)
+                mediator = m)
 
     def console(self):
         """returns a reference to the MediatorConsole which provides the
@@ -379,7 +387,7 @@ class NewMediatorObject(Object.OwnerObject):
         """
         return self.interp
    
-    def configure(self, config_file = None):
+    def configure(self, config_file = None, exclude_interp = 0):
         """Configures a mediator object based on a configuration file.
         Must be called before (and only before) run.
         
@@ -388,6 +396,9 @@ class NewMediatorObject(Object.OwnerObject):
         *STR* config_file -- Full path of the config file.  Defaults to
         vc_globals.default_config_file 
 
+        *BOOL* exclude_interp -- if true, don't re-configure the
+        interpreter
+
         **OUTPUTS**
         
         *none* -- 
@@ -395,8 +406,22 @@ class NewMediatorObject(Object.OwnerObject):
 
 #        print 'Mediator configure:\n'
 #        print traceback.extract_stack()
+        exclude = None
+        if exclude_interp:
+            exclude = ['interp']
         self._configure_from_file(config_file = config_file,
-            symdict_pickle_fname = self.symdict_pickle_fname)
+            symdict_pickle_fname = self.symdict_pickle_fname, 
+            exclude = exclude)
+        if self.test_next:
+# remove the reference to ourselves before pickling
+            self.interp.set_mediator(None)
+# pickled interpreter is used only for regression testing, so 
+# use symbol_match_dlg setting appropriate for regression testing
+            old_setting = self.interp.disable_dlg_select_symbol_matches
+            self.interp.disable_dlg_select_symbol_matches = not self.symbol_match_dlg_regression
+            self.pickled_interp = cPickle.dumps(self.interp)
+            self.interp.set_mediator(self)
+            self.interp.disable_dlg_select_symbol_matches = old_setting
 
     def define_config_functions(self, names, exclude = None,
             reset = 0,
@@ -437,7 +462,7 @@ class NewMediatorObject(Object.OwnerObject):
         if symbol_match_dlg != None:
            sym_dlg = symbol_match_dlg
         self.before_interp_config(names, ignore = 'interp' in exclude,
-            reset = reset,
+            reset = reset and ('interp' not in exclude),
             symdict_pickle_fname = symdict_pickle_fname,
             symbol_match_dlg = sym_dlg, 
             add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs)
@@ -446,7 +471,8 @@ class NewMediatorObject(Object.OwnerObject):
     def _configure_from_file(self, exclude = None, config_file = None,
         reset = 0,
         symdict_pickle_fname = None, symbol_match_dlg = None,
-        add_sr_entries_for_LSAs_and_CSCs = 1):
+        add_sr_entries_for_LSAs_and_CSCs = 1,
+        use_pickled_interp = 0):
         """private method used by configure and reconfigure to perform
          actual configuration.
 
@@ -469,6 +495,10 @@ class NewMediatorObject(Object.OwnerObject):
         dialog/prompt.  Normally disabled except during regression
         testing.  If None, use current setting.
 
+        *BOOL use_pickled_interp* -- if true, reset the interpreter by
+        unpickling it from the copy pickled on initialization (if one is
+        available)
+
         **OUTPUTS**
         
         *none*
@@ -479,6 +509,14 @@ class NewMediatorObject(Object.OwnerObject):
         sym_dlg = self.symbol_match_dlg
         if symbol_match_dlg != None:
            sym_dlg = symbol_match_dlg
+        if not 'interp' in exclude:
+            if use_pickled_interp and self.pickled_interp:
+                self.interp.cleanup(clean_sr_voc = 0, clean_symdict = 0, 
+                    resave = 0)
+                self.interp = cPickle.loads(self.pickled_interp)
+                self.interp.set_mediator(self)
+                exclude.append('interp')
+# if we've unpickled the interpreter, we don't need to re-configure it
         self.define_config_functions(config_dict, exclude,
             reset = reset,
             symdict_pickle_fname = symdict_pickle_fname,
@@ -582,7 +620,8 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['print_abbreviations'] = self.print_abbreviations
 
     def reset(self, config_file = None, symdict_pickle_fname = None,
-        symbol_match_dlg = None, add_sr_entries_for_LSAs_and_CSCs=1):
+        symbol_match_dlg = None, add_sr_entries_for_LSAs_and_CSCs=1,
+        use_pickled_interp = 1):
         """reset the mediator object to continue regression testing with
         a fresh interpreter
 
@@ -599,6 +638,9 @@ class NewMediatorObject(Object.OwnerObject):
         
         *BOOL add_sr_entries_for_LSAs_and_CSCs=1* -- see [CmdInterp] attribute 
         by the same name.
+
+        *BOOL use_pickled_interp* -- if true, reset the interpreter by
+        unpickling it from the copy pickled on initialization
         
         ..[CmdInterp] file:///./CmdInterp.CmdInterp.html"""
         
@@ -611,14 +653,16 @@ class NewMediatorObject(Object.OwnerObject):
             config_file, reset = 1, 
             symdict_pickle_fname = symdict_pickle_fname,
             symbol_match_dlg = sym_dlg, 
-            add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs)
+            add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs,
+            use_pickled_interp = use_pickled_interp)
         self.reset_results_mgr()
         self.interp.add_sr_entries_for_LSAs_and_CSCs = old_add_entries
 
     def reconfigure(self, exclude = None, config_file=None,
         reset = 0,
         symdict_pickle_fname = None, symbol_match_dlg = None,
-        add_sr_entries_for_LSAs_and_CSCs = 1):
+        add_sr_entries_for_LSAs_and_CSCs = 1,
+        use_pickled_interp = 1):
         """reconfigure an existing mediator object.  Unlike configure,
         reconfigure may be called while the mediator object is already
         running.  By default, reconfigure will use the same file used by
@@ -646,6 +690,9 @@ class NewMediatorObject(Object.OwnerObject):
         dialog/prompt.  Normally disabled except during regression
         testing.  If None, use current setting.
 
+        *BOOL use_pickled_interp* -- if true, reset the interpreter by
+        unpickling it from the copy pickled on initialization
+
         **OUTPUTS**
         
         *none* -- 
@@ -660,7 +707,8 @@ class NewMediatorObject(Object.OwnerObject):
             reset = reset,
             symdict_pickle_fname = symdict_pickle_fname,
             symbol_match_dlg = sym_dlg, 
-            add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs)
+            add_sr_entries_for_LSAs_and_CSCs = add_sr_entries_for_LSAs_and_CSCs,
+            use_pickled_interp = use_pickled_interp)
 
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
@@ -837,7 +885,8 @@ class NewMediatorObject(Object.OwnerObject):
         self.interp.enable_symbol_match_dlg(self.symbol_match_dlg_regression)
         self.test_space['temp_factory'] = \
              regression.TempConfigNewMediatorFactory(symbol_match_dlg = \
-             self.symbol_match_dlg_regression)
+             self.symbol_match_dlg_regression, 
+             pickled_interp = self.pickled_interp)
         self.testing = 1
         auto_test.run(self.test_args, profile_prefix = self.profile_prefix)
         self.testing = 0

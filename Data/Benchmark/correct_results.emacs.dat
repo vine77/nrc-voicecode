@@ -329,7 +329,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 246b430>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 9bb6b0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -715,8 +715,6 @@ known windows []
 * Description : testing automatic creation of abbreviations
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.c')
@@ -1807,8 +1805,6 @@ List of unresolved abbreviations
 * Description : Testing basic correction infrastructure with ResMgr.
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -2407,8 +2403,6 @@ were reinterpreted, as expected
 * Description : testing changing direction of last command
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
@@ -2497,8 +2491,6 @@ Heard next one
 * Description : Testing voice command for compiling symbols
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 *** Start of source buffer ***
   1: <CURSOR># This is a small test buffer for Python
   2: 
@@ -2912,8 +2904,6 @@ EdSim.__del__
 * Description : Testing insertion and deletion commands
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3040,8 +3030,6 @@ Heard back space 2
 * Description : Send a message that has more than 1024 character (length of a message chunk)
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 WARNING: source file 'tmp.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -3059,8 +3047,6 @@ WARNING: source file 'tmp.py' doesn't exist.
 * Description : testing mediator console commands
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: clear_symbols()    
@@ -3308,8 +3294,6 @@ Heard select horizontal position equals
 * Description : Testing a series of miscellaneous bugs that might reoccur.
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file(r'blah.py')
@@ -3338,10 +3322,6 @@ Heard less than greater than equal sign
 
 
 >>> Starting mediator with persistence
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 2770860> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
-[Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: compile_symbols([r'H:\Projects\VoiceCode\VCode\Data\TestData\small_buff.c'])
@@ -3372,8 +3352,6 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -3388,8 +3366,6 @@ _cached_symbols_as_one_string is:
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: print_symbols()
@@ -3407,8 +3383,6 @@ _cached_symbols_as_one_string is:
 * Description : profiling configuration
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 *******************************************************************************
@@ -3416,8 +3390,6 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 * Description : testing the various Python CSCs and LSAs
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -6669,8 +6641,6 @@ Heard new statement
 
 >>> Dictating Python when all symbols are known <<<
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\native_python.py'
 >>> Known symbols are: 
 AppState: ['app state']
@@ -7704,8 +7674,6 @@ Associate 'all right' with symbol (Enter selection):
 
 >>> Dictating Python when only standard symbols are known <<<
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 _cached_symbols_as_one_string is:
    
 WARNING: source file 'blah.py' doesn't exist.
@@ -8591,8 +8559,6 @@ Associate 'all right' with symbol (Enter selection):
 * Description : testing the various CSCs and LSAs for editing Python
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\edit_this_buff.py'
 >>> Known symbols are: 
 AClass: ['a class']
@@ -9180,8 +9146,6 @@ Heard catch exceptions
 * Description : testing redundant translation of LSAs and symbols at SR and Mediator level
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.c')
@@ -9278,8 +9242,6 @@ Heard move horizontally
 * Description : testing repetition of last command
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file(r'H:\Projects\VoiceCode\VCode\Data\TestData\large_buff.py')
@@ -10713,8 +10675,6 @@ emacs(4)
 * Description : testing select pseudocode commands
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 >>> Testing console command: open_file('blah.py')
@@ -11302,8 +11262,6 @@ Heard select previous index equals 0
 * Description : Testing set_text.
 *******************************************************************************
 
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 *** Start of source buffer ***
   1: <CURSOR># This is a small test buffer for Python
   2: 
@@ -11325,7 +11283,7 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 -----------------------------------------------
-Test suite completed in:  1053.47000003 secs
+Test suite completed in:  560.620000005 secs
 -----------------------------------------------
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
