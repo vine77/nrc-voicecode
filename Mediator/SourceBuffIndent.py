@@ -224,9 +224,7 @@ class SourceBuffIndent(SourceBuff.SourceBuff):
 
         fixed_code = code
         if self.indent_level != None:
-            spaces = ''
-            for ii in range(self.indent_level):
-                spaces = spaces + ' '
+            spaces = ' ' * self.indent_level
             fixed_code = re.sub('\t', spaces, fixed_code)
         return fixed_code
 
@@ -248,9 +246,7 @@ class SourceBuffIndent(SourceBuff.SourceBuff):
 
 #        print '-- SourceBuffIndent.indent_by_spaces: num_spaces=%s' % num_spaces
         indented_code = code
-        spaces = ''
-        for ii in range(num_spaces):
-            spaces = spaces + ' '
+        spaces = ' ' * num_spaces
         indented_code = re.sub('\n', '\n' + spaces, indented_code)
         return indented_code
 

@@ -49,6 +49,10 @@ class AppStateWaxEdit(AppState.AppState):
     
     def __init__(self, editor, **attrs):
         self.deep_construct(AppStateWaxEdit, {'the_editor': editor}, attrs)
+        self.curr_buffer =  SourceBuffTB(app = self, file_name="", \
+	    underlying_buffer = self.the_editor.editor_buffer(),
+	    language=None)
+        self.open_buffers[""] = self.curr_buffer
       
     def active_field(self):
 	"""indicates what part of the editor has the focus.
