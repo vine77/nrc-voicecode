@@ -30,11 +30,17 @@
 
 
 
+
+
+
+
+
+
 >>> Buffer is now:
 *** Start of source buffer ***
   1: /* This is a small test buffer for C */
   2: 
-  3:    for (index=0; <= ; ++)
+  3:    for (index=0;  <= ; ++)
   4:    {
   5: <CURSOR>   
   5:    }
@@ -223,6 +229,10 @@
 
 
 >>> Testing code indentation. Inserting for loop.
+
+
+
+
 
 
 

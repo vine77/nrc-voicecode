@@ -105,15 +105,20 @@ class EdSim(AppState):
         #
         # Check to see if first bit is in the middle of a line
         #
-        a_line = lines_to_indent[0]; lines_to_indent = lines_to_indent[1:]
-        if (buff.content[start - 1] == '\n'):
-            self.insert(padding + a_line, f_name=f_name)
-        else:
-            self.insert(a_line, f_name=f_name)
-        for a_line in lines_to_indent:
-            self.insert('\n   ' + a_line, f_name=f_name)
-        if (len(code_to_indent) > 0 and code_to_indent[len(code_to_indent) - 1] == '\n'):
-            print '\n'
+        if len(lines_to_indent) > 0:
+            a_line = lines_to_indent[0]
+            if len(lines_to_indent) > 1:
+                lines_to_indent = lines_to_indent[1:]
+            else:
+                lines_to_indent = []
+            if len(buff.content) == 0 or buff.content[start - 1] == '\n':
+                self.insert(padding + a_line, f_name=f_name)
+            else:
+                self.insert(a_line, f_name=f_name)
+            for a_line in lines_to_indent:
+                self.insert('\n   ' + a_line, f_name=f_name)
+                if (len(code_to_indent) > 0 and code_to_indent[len(code_to_indent) - 1] == '\n'):
+                    print '\n'
 
 
     def delete(self, start=None, end=None, f_name=None):
@@ -198,7 +203,6 @@ class EdSim(AppState):
         
         .. [self.curr_buffer] file:///AppState.AppState.html"""
 
-#        print '-- EdSim.number_lines: numbering \'%s\'' % astring
         lines = re.split('\n', astring)
         result = []
 

@@ -1,6 +1,13 @@
 """Regression testing script"""
 
+
 import os, natlink, posixpath
+
+#
+# Make sure we run this without connecting to NatLink
+#
+os.environ['VCODE_NOSPEECH'] = '1'
+
 import auto_test, debug, EdSim, util
 
 def usage():

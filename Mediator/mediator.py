@@ -73,7 +73,7 @@ from cont_gen import ContC, ContPy
 from actions_gen import *
 
 # for C support
-from actions_C_C++ import *
+from actions_C_Cpp import *
 
 # for Python support
 from actions_py import *

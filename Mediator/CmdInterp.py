@@ -1,7 +1,7 @@
 import config, os, re, string
 
 import auto_test, natlink, vc_globals
-from actions_C_C++ import *
+from actions_C_Cpp import *
 from actions_py import *
 from AppState import AppState
 from cont_gen import ContC, ContPy
@@ -61,16 +61,16 @@ class CmdInterp(Object, VoiceDictation):
 #        self.dictation_object.setVisibleText(vis_start,vis_end)
 
         #
-        # Second call to setLock(0) raises a natlink.WrongState
-        # exception.  But if I don't do it, for some reason,
-        # refresh_editor_buff doesn't get called for all but the first
-        # utterance (although refresh_dict_buff gets called everytime)
+        # For some reason, need to repeatadly call setLock(0) until it raises
+        # a natlink.WrongState exception. If don't do that, refresh_editor_buff
+        # doesn't get called for all but the first utterance (although
+        # refresh_dict_buff gets called everytime)
         #
-        self.dictation_object.setLock(0)
-        try:
-            self.dictation_object.setLock(0)
-        except natlink.WrongState:
-            pass
+        while (1):
+            try:
+                self.dictation_object.setLock(0)
+            except natlink.WrongState:
+                break
 
     def refresh_editor_buff(self,del_start,del_end,newText,sel_start,sel_end):
         """Refresh the editor's internal buffer after a recognition
