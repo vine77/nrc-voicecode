@@ -40,13 +40,13 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
     def _bidirectional_selection_from_app(self):
         return 1
 
-    def new_compatible_sb(self, buff_id):
+    def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuffEmacs] which is compatible
         with [AppStateEmacs].
         
         **INPUTS**
                 
-        STR *buff_id* -- ID of the source buffer.
+        STR *buff_name* -- ID of the source buffer.
         
         **OUTPUTS**
         
@@ -55,4 +55,4 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
         ..[SourceBuffEmacs] file:///./SourceBuffEmacs.SourceBuffEmacs.html
         ..[AppStateEmacs] file:///./AppStateEmacs.AppStateEmacs.html"""
         
-        return SourceBuffEmacs.SourceBuffEmacs(app=self, buff_id=buff_id)
+        return SourceBuffEmacs.SourceBuffEmacs(app=self, buff_name=buff_name)

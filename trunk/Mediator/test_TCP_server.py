@@ -179,9 +179,6 @@ class ListenThread(threading.Thread, Object.Object):
             #
             self.xed.vc_talk_msgr.send_mess('recog_end_resp')
             self.xed.ed.refresh()
-        elif action == 'refresh_if_necessary':
-            self.xed.ed.refresh()
-            self.xed.vc_talk_msgr.send_mess('refresh_if_necessary_resp')
         elif action == 'open_file':
             print '-- execute_request: action=\'open_file\''
             self.xed.ed.open_file(file_name=args['file_name'])            
@@ -212,7 +209,7 @@ class ListenThread(threading.Thread, Object.Object):
         while 1:
 #            print '--  ListenThread.run: polling VoiceCode'
             try:
-                request = self.xed.vc_talk_msgr.get_mess(expect=['recog_begin', 'recog_end', 'cur_pos', 'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 'set_selection', 'get_text', 'make_position_visible', 'len', 'insert', 'delete', 'goto', 'active_buffer_name', 'multiple_buffers', 'bidirectional_selection', 'get_visible', 'language_name', 'newline_conventions', 'pref_newline_convention', 'open_file', 'refresh_if_necessary', 'close_buffer', 'terminating'])
+                request = self.xed.vc_talk_msgr.get_mess(expect=['recog_begin', 'recog_end', 'cur_pos', 'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 'set_selection', 'get_text', 'make_position_visible', 'len', 'insert', 'delete', 'goto', 'active_buffer_name', 'multiple_buffers', 'bidirectional_selection', 'get_visible', 'language_name', 'newline_conventions', 'pref_newline_convention', 'open_file', 'close_buffer', 'terminating'])
                 
                 if not request:
                     print '.. Connection to VoiceCode closed!!!'

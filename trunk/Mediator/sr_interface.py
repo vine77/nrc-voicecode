@@ -970,7 +970,7 @@ class CommandDictGrammar(DictGramBase):
                 self.last = SpokenUtteranceNL(results)
                 words = results.getWords(0)
                 self.interpreter.interpret_NL_cmd(words, self.app)
-                self.app.curr_buffer().refresh_if_necessary()
+                self.app.curr_buffer().print_buff_if_necessary()
 
 #        print '-- CommandDictGramm.gotResults: exited'
         
@@ -1156,9 +1156,9 @@ class CodeSelectGrammar(SelectGramBase):
 # refresh at the end of interpretation of a whole utterance, not with 
 # every change to the buffer.  Other editors will usually refresh
 # instantly and automatically, so their AppState/SourceBuff
-# implementations can simply ignore the refresh_if_necessary message.
+# implementations can simply ignore the print_buff_if_necessary message.
 
-                self.app.curr_buffer().refresh_if_necessary()
+                self.app.curr_buffer().print_buff_if_necessary()
 
                 #
                 # Log the selected occurence so that if the user repeats the

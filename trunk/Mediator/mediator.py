@@ -234,6 +234,8 @@ def init_simulator_regression(symdict_pickle_fname=None, disable_dlg_select_symb
 
     if the_mediator and on_app == None:
         on_app = the_mediator.app
+
+    on_app.print_buff_when_changed = 1
     
     init_simulator(on_app=on_app, symdict_pickle_fname=symdict_pickle_fname,
                    window=0, exclusive=1, allResults=0, reuse_mediator=1,

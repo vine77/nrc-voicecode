@@ -489,7 +489,7 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
 	    return 0
 	self.set_text(cookie.contents())
 	self.set_selection(cookie.get_selection())
-	self.refresh_if_necessary()
+	self.print_buf_if_necessary()
 	return 1
 
 
