@@ -508,7 +508,27 @@ class CmdInterp(OwnerObject):
         will be used.
         
         """
-        trace('CmdInterp.interpret_NL_cmd', 'cmd=%s' % cmd)
+        trace('CmdInterp.interpret_massaged', 'command=%s' % cmd)
+        spoken_list = map(lambda word: process_initials(word[0]), cmd)
+        trace('CmdInterp.interpret_massaged', 'spoken=%s' % spoken_list)
+        self.interpret_spoken(spoken_list, app, initial_buffer = initial_buffer)
+        return
+
+    def interpret_spoken(self, spoken_list, app, initial_buffer = None):
+        """Interprets a natural language command and executes
+        corresponding instructions.
+
+        *[STR]* spoken_list -- The list of spoken forms in the command
+
+        *AppState app* -- the AppState interface to the editor
+        
+        *[STR] initial_buffer* -- The name of the target buffer at the 
+        start of the utterance.  Some CSCs may change the target buffer of 
+        subsequent parts of the command.  If None, then the current buffer 
+        will be used.
+        
+        """
+        trace('CmdInterp.interpret_spoken', 'spoken_list = %s' % spoken_list)
 
         if initial_buffer == None:
             app.bind_to_buffer(app.curr_buffer_name())
@@ -526,157 +546,142 @@ class CmdInterp(OwnerObject):
         # left
         #
 
-        while len(cmd) > 0:
-             trace('CmdInterp.interpret_massaged', 'now, cmd=%s' % cmd)
+        while len(spoken_list) > 0:
+            trace('CmdInterp.interpret_spoken', 
+                'now, spoken_list = %s' % spoken_list)
 
-             #
-             # Identify leading CSC, LSA, symbol and ordinary word
-             #
-             possible_CSCs = self.chop_CSC(cmd, app)
-             chopped_LSA, LSA_consumes = self.chop_LSA(cmd, app)
-             chopped_symbol, symbol_consumes = self.chop_symbol(cmd, app)
-             chopped_word, word_consumes = self.chop_word(cmd)             
-             most_definite = max((LSA_consumes, symbol_consumes, word_consumes))
+            #
+            # Identify leading CSC, LSA, symbol and ordinary word
+            #
+            possible_CSCs = self.chop_spoken_CSC(spoken_list, app)
 
-             trace('CmdInterp.interpret_massaged', 
-             'possible_CSCs=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (possible_CSCs, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes))
-             trace('CmdInterp.interpret_massaged', 
-                 'most_definite = %d' % most_definite)
-             head_was_translated = 0
+            aliases = self.language_specific_aliases
+            language = app.active_language()
+            chopped_LSA = ""
+            LSA_consumes = 0
+            if aliases.has_key(language):
+                chopped_LSA, LSA_consumes = self.chop_spoken_LSA(spoken_list, 
+                    aliases[language])
+            chopped_generic_LSA, generic_LSA_consumes = \
+                self.chop_spoken_LSA(spoken_list, aliases[None])
 
-             #
-             # Translate CSC, LSA, symbol or ordinary word at head of command.
-             #
-             # If more than one translations are possible, choose the one
-             # that consumes the most words from the command.
-             #
-             # In case of ties, use this order of priority: CSC, LSA, symbol,
-             # ordinary words. This order goes from most specific to least
-             # specific, i.e.
-             #
-             # - CSCs usually apply in very restricted contexts only
-             # - LSAs usually apply for a specific language only
-             # - Symbols are restricted to sequences of words that are the
-             #   spoken form of a known symbol
-             # - ordinary words can be anything
-             #
-             csc_applies = 0
+            if LSA_consumes < generic_LSA_consumes:
+                chopped_LSA = chopped_generic_LSA
+                LSA_consumes = generic_LSA_consumes
 
-             preceding_symbol = 0
-             if untranslated_words:
-                 preceding_symbol = 1
-             
-             for match in possible_CSCs:
-                 meanings, CSC_consumes = match
-                 trace('CmdInterp.interpret_massaged', 
-                     'possible CSC %s, consumes %d' % \
-                     (meanings, CSC_consumes))
-                 if CSC_consumes < most_definite:
-# LSA or symbol consumes more than the rest of the CSCs, so defer to
-# them
-                     break
-                 applicable = meanings.applies(app, preceding_symbol)
-                 if not applicable:
-                     continue
-                 context, action = applicable[0]
-                 trace('CmdInterp.interpret_massaged', 
-                     'len(applicable) = %d' % len(applicable))
-                 if len(applicable) > 1:
-                     msg = 'Configuration Warning: phrase %s\n' \
-                         % cmd[:CSC_consumes]
-                     msg = msg + \
-                         'has more than one applicable context with the same'
-                     msg = msg + '\nscope %s:\n' % context.scope()
-                     for context, action in applicable:
-                         msg = msg + 'context: %s, action: %s\n' \
-                             % (context, action)
-                     msg = msg + 'Applying the first context'
-                     config_warning(msg)
-                 csc_applies = 1
-# flush untranslated words before executing action
-                 if untranslated_words:
-                     self.match_untranslated_text(untranslated_words, 
-                         app, exact_symbol)
-                     untranslated_words = []
-                     exact_symbol = 0
-                 action.log_execute(app, context)
-                 cmd = cmd[CSC_consumes:]
-                 head_was_translated = 1
-                 break
+            chopped_symbol, symbol_consumes = \
+                self.chop_spoken_symbol(spoken_list)
 
-             if not head_was_translated and LSA_consumes == most_definite:
-                 #
-                 # LSA consumed the most words from command. Insert it.
-                 #
-                 trace('CmdInterp.interpret_massaged', 'processing leading LSA=\'%s\'' % chopped_LSA)
+            chopped_word = spoken_list[0]
+            word_consumes = 1
+
+            most_definite = max((LSA_consumes, symbol_consumes, word_consumes))
+
+            trace('CmdInterp.interpret_massaged', 
+            'possible_CSCs=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (possible_CSCs, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes))
+            trace('CmdInterp.interpret_massaged', 
+                'most_definite = %d' % most_definite)
+            head_was_translated = 0
+
+            #
+            # Translate CSC, LSA, symbol or ordinary word at head of command.
+            #
+            # If more than one translations are possible, choose the one
+            # that consumes the most words from the command.
+            #
+            # In case of ties, use this order of priority: CSC, LSA, symbol,
+            # ordinary words. This order goes from most specific to least
+            # specific, i.e.
+            #
+            # - CSCs usually apply in very restricted contexts only
+            # - LSAs usually apply for a specific language only
+            # - Symbols are restricted to sequences of words that are the
+            #   spoken form of a known symbol
+            # - ordinary words can be anything
+            #
+            csc_applies = 0
+
+            CSC_consumes = self.apply_CSC(app, possible_CSCs, most_definite,
+                untranslated_words, exact_symbol)
+            if CSC_consumes:
+                spoken_list = spoken_list[CSC_consumes:]
+                head_was_translated = 1
+                untranslated_words = []
+                exact_symbol = 0
+
+            if not head_was_translated and LSA_consumes == most_definite:
+                #
+                # LSA consumed the most words from command. Insert it.
+                #
+                trace('CmdInterp.interpret_massaged', 'processing leading LSA=\'%s\'' % chopped_LSA)
 # flush untranslated words before inserting LSA
-                 if untranslated_words:
-                     self.match_untranslated_text(untranslated_words, app, 
-                         exact_symbol)
-                     untranslated_words = []
-                     exact_symbol = 0
-                 actions_gen.ActionInsert(code_bef=chopped_LSA, code_after='').log_execute(app, None)
-                 cmd = cmd[LSA_consumes:]
-                 head_was_translated = 1
+                if untranslated_words:
+                    self.match_untranslated_text(untranslated_words, app, 
+                        exact_symbol)
+                    untranslated_words = []
+                    exact_symbol = 0
+                actions_gen.ActionInsert(code_bef=chopped_LSA, code_after='').log_execute(app, None)
+                spoken_list = spoken_list[LSA_consumes:]
+                head_was_translated = 1
 
 
-             if not head_was_translated and symbol_consumes == most_definite:
-                 #
-                 # Symbol consumed the most words from command. Insert it.
-                 #
-                 # Note: known symbols are inserted as untranslated
-                 #       text because often, the user will create new
-                 #       symbols by prefixing/postfixing existing ones.
-                 #       For example, if you define a subclass of a known
-                 #       class SomeClass you may name the new class
-                 #       SomeprefixSomeClass or SomeClassSomepostfix.
-                 #
-                 trace('CmdInterp.interpret_massaged', 'processing leading symbol=\'%s\'' % chopped_symbol)
-                 if untranslated_words:
-                     exact_symbol = 0
-                 else:
-                     exact_symbol = 1
-                 untranslated_words.append(chopped_symbol)
+            if not head_was_translated and symbol_consumes == most_definite:
+                #
+                # Symbol consumed the most words from command. Insert it.
+                #
+                # Note: known symbols are inserted as untranslated
+                #       text because often, the user will create new
+                #       symbols by prefixing/postfixing existing ones.
+                #       For example, if you define a subclass of a known
+                #       class SomeClass you may name the new class
+                #       SomeprefixSomeClass or SomeClassSomepostfix.
+                #
+                trace('CmdInterp.interpret_massaged', 'processing leading symbol=\'%s\'' % chopped_symbol)
+                if untranslated_words:
+                    exact_symbol = 0
+                else:
+                    exact_symbol = 1
+                untranslated_words.append(chopped_symbol)
 
-                 cmd = cmd[symbol_consumes:]
-                 head_was_translated = 1
-                                          
-                    
-             if not head_was_translated and word_consumes == most_definite:
-                 #
-                 # Nothing special translated at begining of command.
-                 # Just chop off the first word and insert it, marking
-                 # it as untranslated text.
-                 #                 
-                 trace('CmdInterp.interpret_massaged', 'processing leading word=\'%s\'' % chopped_word)
-                 untranslated_words.append( chopped_word)
-                 exact_symbol = 0
-                 cmd = cmd[word_consumes:]
-                 head_was_translated = 1
+                spoken_list = spoken_list[symbol_consumes:]
+                head_was_translated = 1
+                                         
+                   
+            if not head_was_translated and word_consumes == most_definite:
+                #
+                # Nothing special translated at begining of command.
+                # Just chop off the first word and insert it, marking
+                # it as untranslated text.
+                #                 
+                trace('CmdInterp.interpret_massaged', 'processing leading word=\'%s\'' % chopped_word)
+                untranslated_words.append( chopped_word)
+                exact_symbol = 0
+                spoken_list = spoken_list[word_consumes:]
+                head_was_translated = 1
 
-             #
-             # Finished translating head of command.
-             #
-             # Check if it marked the end of some untranslated text
-             #
-             if (len(cmd) == 0) and untranslated_words:
-                 #
-                 # A CSC or LSA was translated, or we reached end of the
-                 # command, thus marking the end of a sequence of untranslated
-                 # text. Try to match untranslated text to a known (or new)
-                 # symbol.
-                 #
-                 trace('CmdInterp.interpret_massaged', 'found the end of some untranslated text')
-                 self.match_untranslated_text(untranslated_words, app,
-                     exact_symbol)
-                 untranslated_words = []
-                 exact_symbol = 0
+            #
+            # Finished translating head of command.
+            #
+            # Check if it marked the end of some untranslated text
+            #
+            if (len(spoken_list) == 0) and untranslated_words:
+                #
+                # A CSC or LSA was translated, or we reached end of the
+                # command, thus marking the end of a sequence of untranslated
+                # text. Try to match untranslated text to a known (or new)
+                # symbol.
+                #
+                trace('CmdInterp.interpret_massaged', 'found the end of some untranslated text')
+                self.match_untranslated_text(untranslated_words, app,
+                    exact_symbol)
+                untranslated_words = []
+                exact_symbol = 0
 
-             if untranslated_words:
-                 untranslated_text = string.join(untranslated_words)
-             else:
-                 untranslated_text = None
-             trace('CmdInterp.interpret_massaged', 'End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos()))
+            if untranslated_words:
+                untranslated_text = string.join(untranslated_words)
+            else:
+                untranslated_text = None
+            trace('CmdInterp.interpret_massaged', 'End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos()))
 
         # make sure to unbind the buffer before returning
         app.unbind_from_buffer()
@@ -685,6 +690,71 @@ class CmdInterp(OwnerObject):
         # Notify external editor of the end of recognition
         #
         app.recog_end()
+
+    def apply_CSC(self, app, possible_CSCs, most_definite, untranslated_words, 
+        exact_symbol):
+        """check which CSCs apply and execute the greediest one
+
+        **INPUTS**
+
+        *AppState app* -- the target application
+
+        *[(CSCmdDict, INT)] possible_CSCs* -- the possible CSCmds which
+        might apply, together with the number of words they consume, in
+        order of descending greediness
+
+        *INT most_definite* -- the most words which would be consumed by
+        those constructs which definitely apply (i.e. LSAs in the
+        current language and known symbols)
+
+        *[STR] untranslated_words -- list of untranslated words which
+        would need to be flushed before the CSC
+
+        *BOOL exact_symbol* -- true if the untranslated words are an
+        exact match to a known symbol
+
+        **OUTPUTS**
+
+        *INT* -- the number of words actually consumed (0 if no CSC
+        consuming more than most_definite applies)
+        """
+        preceding_symbol = 0
+        if untranslated_words:
+            preceding_symbol = 1
+        for match in possible_CSCs:
+            meanings, CSC_consumes = match
+            trace('CmdInterp.apply_CSC', 
+                'possible CSC %s, consumes %d' % \
+                (meanings, CSC_consumes))
+            if CSC_consumes < most_definite:
+# LSA or symbol consumes more than the rest of the CSCs, so defer to
+# them
+                return 0
+            applicable = meanings.applies(app, preceding_symbol)
+            if not applicable:
+                continue
+            context, action = applicable[0]
+            trace('CmdInterp.apply_CSC', 
+                'len(applicable) = %d' % len(applicable))
+            if len(applicable) > 1:
+                msg = 'Configuration Warning: phrase %s\n' \
+                    % spoken_list[:CSC_consumes]
+                msg = msg + \
+                    'has more than one applicable context with the same'
+                msg = msg + '\nscope %s:\n' % context.scope()
+                for context, action in applicable:
+                    msg = msg + 'context: %s, action: %s\n' \
+                        % (context, action)
+                msg = msg + 'Applying the first context'
+                config_warning(msg)
+            csc_applies = 1
+# flush untranslated words before executing action
+            if untranslated_words:
+                self.match_untranslated_text(untranslated_words, 
+                    app, exact_symbol)
+            action.log_execute(app, context)
+            return CSC_consumes
+        return 0
 
 
     def interpret_NL_cmd(self, cmd, app, initial_buffer = None):
@@ -949,7 +1019,7 @@ class CmdInterp(OwnerObject):
         **OUTPUTS**
 
         Returns a list of tuples, each of the form 
-        *(chopped_CSC, consumed)*,  where:
+        *(meanings, consumed)*,  where:
         
         *CSCmdDict meanings* -- the meanings corresponding to the spoken
         form chopped off.
