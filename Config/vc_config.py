@@ -20,7 +20,7 @@ from natlinkutils import *
 #
 # Import configuration functions
 #
-from MediatorObject import associate_language, define_language, add_abbreviation, add_csc, add_lsa
+from MediatorObject import associate_language, define_language, add_abbreviation, add_csc, add_lsa, standard_symbols_in
 
 from CSCmd import CSCmd
 from LangDef import LangDef
@@ -30,6 +30,7 @@ from actions_C_Cpp import *
 from actions_py import *
 
 import sr_interface
+
 
 if (__name__ == '__main__'):
     import MediatorObject
@@ -71,7 +72,6 @@ define_language('python',
                         regexps_no_symbols=['#[^\n]*\n', '"""[\s\S]*?"""', \
                                             '"([^"]|\\")*?"', \
                                             '\'([^\']|\\\')*?\'']))
-
 
 ###############################################################################
 # Define abbreviations
@@ -145,7 +145,6 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['then', 'if body'], meanings=[[ContPy(), py_goto_body]])
 add_csc(acmd)
 
-
 acmd = CSCmd(spoken_forms=['after ;', 'after semi', 'after semicolon', 'goto semi', 'goto semicolon', 'goto ;', 'go semi', 'go semicolon', 'go ;', 'go after semi', 'go after semicolon', 'go after ;'], meanings=[[ContAny(), lambda app, cont: app.search_for(';\s{0,1}')]])
 add_csc(acmd)
 
@@ -179,6 +178,10 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['and', 'logical and', 'and also'], meanings=[[ContPy(), py_logical_and]])
 add_csc(acmd)
 
+acmd = CSCmd(spoken_forms=['define class', 'declare class', 'class definition'], meanings=[[ContC, c_class_definition], [ContPy(), py_class_definition]])
+add_csc(acmd)
+
+
 #
 # This is now a language specific abbreviation
 #
@@ -199,8 +202,18 @@ add_csc(acmd)
 acmd = CSCmd(spoken_forms=['with superclasses'], meanings=[[ContPy(), gen_parens_pair]])
 add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['in'], meanings=[[ContPy(), lambda app, cont: app.insert_indent(' in ', '')]])
+acmd = CSCmd(spoken_forms=['in list'], meanings=[[ContPy(), lambda app, cont: app.insert_indent(' in ', '')]])
 add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['new statement'], meanings=[[ContPy(), py_new_statement]])
+add_csc(acmd)
+
+
+
+
+###############################################################################
+# Language sensitive aliases (LSAs)
+###############################################################################
 
 #
 # Non-Language Specific Aliases (LSA)
@@ -217,6 +230,18 @@ add_lsa(None, ['dot'], '.')
 #
 add_lsa(['C', 'python'], ['equals', 'equal', 'is assigned', 'assign value'], ' = ')
 add_lsa(['C', 'python'], ['not equal to', 'not equal', 'is not equal', 'is not equal to'], ' != ')
+
+#
+# Python specific aliases
+#
+# add_lsa(['python'], ['import', 'import module'], 'import ')
+# add_lsa(['python'], ['import all'], ' import all ')
+# add_lsa(['python'], ['from module'], 'from ')
+
+###############################################################################
+# Compile standard symbols for various languages
+###############################################################################
+standard_symbols_in([vc_globals.config + os.sep + 'py_std_sym.py'])
 
 
 if (__name__ == '__main__'): natlink.natDisconnect()

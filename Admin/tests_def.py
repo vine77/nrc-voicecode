@@ -9,10 +9,11 @@ import mediator, CmdInterp, EdSim, MediatorObject, Object, SymDict
 ##############################################################################
 
 def compilation_test(a_mediator, source):
+    
     """Does a compilation test on file *source*        
     """
     print '*** Compiling symbols from file: %s ***' % source
-    a_mediator.interp.known_symbols.vocabulary_cleanup()            
+    a_mediator.interp.known_symbols.vocabulary_cleanup()
     a_mediator.interp.known_symbols.parse_symbols(source)
     print '\n\nParsed symbols are: '
     a_mediator.interp.known_symbols.print_symbols()
@@ -144,11 +145,23 @@ def test_CmdInterp():
     a_mediator.interp.on_app.open_file(vc_globals.test_data + os.sep + 'small_buff.c')
     a_mediator.interp.on_app.goto(41)
     print '\n\n>>> Testing command interpreter\n\n'
-    print '\n>>> Interpreting \'for loop index loop body\' in a C buffer'    
+    print '\n>>> Interpreting in a C buffer'    
     print '\n>>> Current buffer is:\n'
     a_mediator.interp.on_app.print_buff_content()
     old_stdin = util.stdin_read_from_string('1\n')
-    a_mediator.interp.interpret_NL_cmd('for loop index loop body')
+
+    #
+    # Test if spoken form of CSC is recognised as a single SR vocabulary entry
+    # e.g. 'for loop' recognised as: ['for loop\for loop']
+    #
+    print '>>> Interpreting: %s' % ['for loop', 'loop body']
+    a_mediator.interp.interpret_NL_cmd(['for loop', 'loop body'])
+
+    #
+    # Test if spoken form of CSC is recognised as multiple vocabulary entries
+    # e.g. 'for loop' recognised as ['for', 'loop']
+    print '>>> Interpreting: %s' % ['for', 'loop', 'loop', 'body']
+    a_mediator.interp.interpret_NL_cmd(['for', 'loop', 'loop', 'body'])                                       
     sys.stdin = old_stdin
     print '\n>>> Buffer is now:'
     a_mediator.interp.on_app.print_buff_content()
@@ -157,10 +170,12 @@ def test_CmdInterp():
     a_mediator.interp.on_app.open_file(vc_globals.test_data + os.sep + 'small_buff.py')
     a_mediator.interp.on_app.goto(43)
     a_mediator.interp.on_app.curr_buffer.language = 'python'
-    print '\n>>> Interpreting \'for loop index loop body\' in a Python buffer'    
+    print '\n>>> Interpreting in a Python buffer'    
     print '\n>>> Current buffer is:\n'
     a_mediator.interp.on_app.print_buff_content()
-    a_mediator.interp.interpret_NL_cmd('for loop index loop body')
+
+    print '>>> Interpreting: %s' % ['for loop', 'loop body']
+    a_mediator.interp.interpret_NL_cmd(['for loop', 'loop body'])
     print '\n>>> Buffer is now:'
     a_mediator.interp.on_app.print_buff_content()
         
@@ -345,14 +360,18 @@ def test_command(command):
     print '\n\n>>> Testing console command: %s\n' % command
     mediator.execute_command(command)
 
+def test_say(utterance, user_input=None):
+    print '\n\n>>> Testing console command: say(%s, user_input=\'%s\')' % (utterance, user_input)
+    mediator.say(utterance, user_input)
+
 def test_mediator_console():
     mediator.init_simulator()
     test_command("""clear_symbols()    """)
     test_command("""open_file('D:/blah.c')""")
     file = vc_globals.test_data + os.sep + 'small_buff.c'    
     test_command("""compile_symbols(['""" + file + """'])""")
-    test_command("""say('for loop horizontal position loop body')""")
-    test_command("""say_select(['select', 'horiz_pos\horizontal position', '=\equals'])""")
+    test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'])
+    test_command("""say_select(['select', 'horiz_pos\\horizontal position', '=\equals'])""")
 
 
 auto_test.add_test('mediator_console', test_mediator_console, desc='testing mediator console commands')
@@ -373,20 +392,22 @@ def test_auto_add_abbrevs():
     # Match selection dialog should be invoked, and abbreviation
     # unres->unresolved should be added
     #
-    test_command("""say('this symbol is unresolved comma', user_input='1\\n')""")
+    test_say(['this', 'symbol', 'is', 'unresolved', ', \\comma'], user_input='1\\n')
     test_command("""print_abbreviations(1)""")
 
     #
     # Match selection dialog should NOT be invoked 
     #
-    test_command("""say('this symbol is unresolved too comma')""")
+    test_say(['this_sym_is_unres_too\\this symbol is unresolved too', ', \\comma'])
+    test_command("""print_symbols()""")    
     test_command("""print_abbreviations(1)""")
 
     #
     # Match selection dialog should be invoked, and abbreviation
     # f->file should NOT be added (too short)
     #
-    test_command("""say('file name comma', user_input='1\\n')""")
+    test_say(['file', 'name', ', \\comma'], user_input='1\\n')
+    test_command("""print_symbols()""")    
     test_command("""print_abbreviations(1)""")
 
     #
@@ -395,7 +416,7 @@ def test_auto_add_abbrevs():
     # a single abbreviation instead of three separate ones (A->applicaiton,
     # P->programming, I->interface).
     #
-    test_command("""say('application programming interface function comma', user_input='1\\n')""")
+    test_say(['application', 'programming', 'interface', 'function', ', \\comma'], user_input='1\\n')
     test_command("""print_abbreviations(1)""")
 
 auto_test.add_test('automatic_abbreviations', test_auto_add_abbrevs, desc='testing automatic creation of abbreviations')
@@ -404,8 +425,6 @@ auto_test.add_test('automatic_abbreviations', test_auto_add_abbrevs, desc='testi
 ##############################################################################
 # Testing persistence between VoiceCode sessions
 ##############################################################################
-
-
 
 def test_persistence():
     #
@@ -446,3 +465,16 @@ def test_persistence():
     
 
 auto_test.add_test('persistence', test_persistence, desc='testing persistence between VoiceCode sessions')    
+
+
+##############################################################################
+# Testing redundant translation of LSAs
+##############################################################################
+
+def test_redundant_LSA_translation():
+    mediator.init_simulator()
+    test_command("""open_file('blah.c')""")
+    test_say(['index', ' != \\not equal to', '0'], '0\n0\n')
+    test_say(['index', 'not', 'equal', 'to', '0'], '0\n0\n')
+
+auto_test.add_test('redundant_LSA_translation', test_redundant_LSA_translation, desc='testing redundant translation of LSAs at SR and Mediator level')    

@@ -1,6 +1,6 @@
 """Various utility functions"""
 
-import getopt, os, re, stat, sys
+import getopt, os, re, stat, sys, types
 
 import vc_globals
 
@@ -200,4 +200,12 @@ def stdin_read_from_string(string):
 
 
 
+def islist(instance):
+    """Returns true iif *instance* is a list."""
 
+    return isinstance(instance, types.ListType)
+    
+def istuple(instance):
+    """Returns true iif *instance* is a tuple."""
+
+    return isinstance(instance, types.TupleType)

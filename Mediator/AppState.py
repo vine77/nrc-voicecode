@@ -353,3 +353,24 @@ class AppState(Object):
         sys.stdout.write("\n*** End of source buffer ***\n")
         
 
+
+
+    def active_language(self):
+        """Returns name of active programming language.
+
+        If no active programming language, then returns *None*.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+        **OUTPUTS**
+        
+        *STR* language -- Name of active programming language (*None*
+        if no programming language is active).
+        """
+        
+        language = None
+        if self.curr_buffer != None:
+            language = self.curr_buffer.language
+        return language

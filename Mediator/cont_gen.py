@@ -8,7 +8,7 @@ class ContLanguage(Context):
     
     **INSTANCE ATTRIBUTES**
     
-    *ANY language=None* -- Name of the programming language for this context.
+    *ANY language=None* -- Name of the programming language for this context. If *None*, then this context always applies.
 
     CLASS ATTRIBUTES**
     
@@ -23,7 +23,7 @@ class ContLanguage(Context):
 
     def applies(self, app):
         buff = app.curr_buffer
-        return (buff != None and  buff.language == self.language)
+        return (self.language == None or (buff != None and  buff.language == self.language))
         
 
 class ContC(ContLanguage):

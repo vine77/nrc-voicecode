@@ -4,30 +4,53 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
-Symbol translation
-------------------
+Interpreter
+-----------
 
 -- Alain
 
-   a) addAbbreviation shouldn't add abbrevs that are less than 2 (or
-      3?) chars long.  should maybe print a warning also.
+Switch to an interpret_NL_cmd that uses a list of written\spoken words
+instead of a string. That's what we will migrate to in the future anyways.
 
-   b) when a sequence of words is abbreviated by single letters, should create 
-      an abbreviation for the sequence instead of individaul words.
-      e.g. CSCmd: C->context, S->sensitive, Cmd->command.
-           should create abbreviations cs->"context sensitive" and cmd->command
-           instead of c->context, s->sensitive, cmd->command
+In the mean time, David can write a preprocessor that will take a
+string and split it into words in some "smart" way.
 
-   c) Need to save the automaticly created abbreviations on disk (use pickler?)
+Standard symbols
+----------------
 
-   NOTE: there could be more than one MediatorObject modifying the
-   abbreviations file at the same time... how to keep them in sync?
+-- Alain 
+
+Seems to be a bug because the same standard symbols files
+py_std_sym.py keeps getting recompiled many times (seems unnecessary).
+
+Locked SymDict
+--------------
+
+-- Alain
+
+Because the SymDict is persistent, we have to make sure that the
+SymDict used by all the MediatorObject instances are in sync. Otherwise, they might undo each other's changes to the pickled SymDict.
 
    Solution: when creating a MediatorObject, the Mediator server would
    pass it a central SymDict instance. This SymDict instance would
    have a lock, which means that only one MediatorObject instance at a
    time could update it.
 
+
+Symbol translation
+------------------
+
+-- Alain
+
+
+   d) add_abbreviation: when abbrev has less than 3 characters, then
+      even if the abbrev is added automaticly, then it should add an
+      expansion that consists of the spelled characters. E.g. 'os' ->
+      'O. S.'  Also, add_abbreviation should have an argument
+      user_added=1 which indicates that the abbrev is added by the
+      user in the config file as opposed to being added automaticly by
+      the interpreter. In such cases, the abbrev should be added even if it is
+      too short.
 
 Make actions into objects
 -------------------------
