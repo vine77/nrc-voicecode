@@ -824,11 +824,6 @@ function_definitions.add_csc(acmd)
 ###############################################################################
 
 #
-# Python standard symbols
-#
-standard_symbols_in([vc_globals.config + os.sep + 'py_std_sym.py'])
-
-#
 # Define the native syntax of Python
 #
 define_language('python',

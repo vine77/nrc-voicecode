@@ -179,13 +179,13 @@ class BadConverter(RuntimeError):
     def __init__(self, message):
         RuntimeError.__init__(self, message)
 
-class WrongClass(BadConverter)
+class WrongClass(BadConverter):
     def __init__(self, wrong, right):
         message = "Converter's dictionary class %s\n" % str(wrong)\
                 + "is not a subclass of %s" % str(right)
         BadConverter.__init__(self, message)
 
-class UnknownFinalVersion(BadConverter)
+class UnknownFinalVersion(BadConverter):
     def __init__(self, version):
         message = "Converter's final version %s is unknown" % version
         BadConverter.__init__(self, message)
@@ -288,9 +288,9 @@ class CompoundDictConverter(Object):
         *BOOL* -- true if the single-version converter was successfully 
         added to the compound converter
         """
-        target = converter.dict_class()
-        if not issubclass(new_target, self.target)
-            raise WrongClass(target, self.target)
+        dict_class = converter.dict_class()
+        if not issubclass(dict_class, self.d_class):
+            raise WrongClass(dict_class, self.d_class)
         version = converter.final_version()
         if version != self.final_version() \
             and not self.known_version(version):
