@@ -1721,6 +1721,32 @@ class SourceBuff(OwnerObject):
         """
         self.insert(value, (start,end))
 
+
+###################################################################
+# Methods for simulating user kbd and mouse input. Those methods
+# are only used by the regression test, in order to test mixed mode
+# (i.e. voice + mouse + kbd) editing scenarios.
+###################################################################
+    
+    def set_selection_by_kbd(self, start, end):
+       debug.virtual('SourceBuff.simulate_set_selection_by_kbd')
+        
+    def move_cursor_by_kbd(self, direction, num_steps):
+       debug.virtual('SourceBuff.simulate_set_selection_by_kbd')
+        
+    def type_text(self, text):
+       debug.virtual('SourceBuff.simulate_set_selection_by_kbd')
+    
+    def set_selection_by_kbd(self, start, end):
+       debug.virtual('SourceBuff.simulate_set_selection_by_kbd')
+       
+    def move_cursor_by_kbd(self, direction, num_steps):
+       debug.virtual('SourceBuff.simulate_move_cursor_by_kbd')
+        
+    def type_text(self, text):
+       debug.virtual('SourceBuff.simulate_type_text')
+
+
     
 class BackspaceMixIn(Object):
     """implements the backspace method by deletion.
@@ -1751,7 +1777,7 @@ class BackspaceMixIn(Object):
         start = max(0, start)
         self.delete(range = (start, end))
         
-class SourceBuffWithServices(
+class SourceBuffWithServices(sb_mixins.WithKbdService,
 #    sb_mixins.WithStateService, 
     SourceBuff):
     """partial implementation of SourceBuff using sb_mixins to implement
@@ -1773,6 +1799,7 @@ class SourceBuffWithServices(
                             {}, attrs
                             )
     def remove_other_references(self):
+        sb_mixins.WithKbdService.remove_other_references(self)
 #        sb_mixins.WithStateService.remove_other_references(self)
         SourceBuff.remove_other_references(self)
 

@@ -172,11 +172,11 @@ def new_simulator(symdict_pickle_fname=None,
         return None
 #        cleanup()        
         
-
+    if sr_interface.speech_able:
 #   new_simulator doesn't have a pre-existing mediator (it is not used
 #   for re-initialization, so init_simulator_regression cannot call
 #   new_simulator the way it calls init_simulator)
-#    if symdict_pickle_fname == None and the_mediator != None:
+#        if symdict_pickle_fname == None and the_mediator != None:
             #
             # Remove symbols from NatSpeak's dictionary 
             #
@@ -188,18 +188,18 @@ def new_simulator(symdict_pickle_fname=None,
 #        if the_mediator:
 #            the_mediator.quit(save_speech_files=0, disconnect=0)            
         
-    interp = \
-        CmdInterp.CmdInterp(symdict_pickle_file = symdict_pickle_fname, 
-            disable_dlg_select_symbol_matches = \
-                disable_dlg_select_symbol_matches)
-    the_mediator = MediatorObject.MediatorObject(app = on_app,
-        interp = interp,
-        window = window, 
-        owns_app = owns_app,
-        exclusive = exclusive, 
-        allResults = allResults, 
-        owner = owner,
-        id = id)
+        interp = \
+            CmdInterp.CmdInterp(symdict_pickle_file = symdict_pickle_fname, 
+                disable_dlg_select_symbol_matches = \
+                    disable_dlg_select_symbol_matches)
+        the_mediator = MediatorObject.MediatorObject(app = on_app,
+            interp = interp,
+            window = window, 
+            owns_app = owns_app,
+            exclusive = exclusive, 
+            allResults = allResults, 
+            owner = owner,
+            id = id)
 
         #
         # Read the symbol dictionary from file
@@ -212,8 +212,8 @@ def new_simulator(symdict_pickle_fname=None,
         #
         # Configure the mediator
         #
-    the_mediator.configure()
-    return the_mediator
+        the_mediator.configure()
+        return the_mediator
 
     return None
 
@@ -312,46 +312,47 @@ def init_simulator(symdict_pickle_fname=None,
         print 'SR user \'%s\' not defined. \nDefine it and restart VoiceCode' % sr_interface.vc_user_name
         cleanup()        
         
-    if symdict_pickle_fname == None and the_mediator != None:
-        #
-        # Remove symbols from NatSpeak's dictionary 
-        #
-        the_mediator.interp.cleanup(resave=0)
+    if sr_interface.speech_able:
+        if symdict_pickle_fname == None and the_mediator != None:
+            #
+            # Remove symbols from NatSpeak's dictionary 
+            #
+            the_mediator.interp.cleanup(resave=0)
 
-    #
-    # It could be that the_mediator has previously been initiated (e.g. if
-    # we are running multiple regression tests). If so, must unload the
-    # SR grammars otherwise they will continue to exist and to recognise
-    # utterances.
-    #
-    if the_mediator:
-        the_mediator.quit(save_speech_files=0, disconnect=0)            
-     
-    interp = \
-        CmdInterp.CmdInterp(symdict_pickle_file = symdict_pickle_fname, 
-            disable_dlg_select_symbol_matches = \
-                disable_dlg_select_symbol_matches)
-    the_mediator = MediatorObject.MediatorObject(app = on_app,
-        interp = interp,
-        window = window, 
-        owns_app = owns_app,
-        exclusive = exclusive, 
-        allResults = allResults, 
-        owner = owner,
-        id = id)
+        #
+        # It could be that the_mediator has previously been initiated (e.g. if
+        # we are running multiple regression tests). If so, must unload the
+        # SR grammars otherwise they will continue to exist and to recognise
+        # utterances.
+        #
+        if the_mediator:
+            the_mediator.quit(save_speech_files=0, disconnect=0)            
+        
+        interp = \
+            CmdInterp.CmdInterp(symdict_pickle_file = symdict_pickle_fname, 
+                disable_dlg_select_symbol_matches = \
+                    disable_dlg_select_symbol_matches)
+        the_mediator = MediatorObject.MediatorObject(app = on_app,
+            interp = interp,
+            window = window, 
+            owns_app = owns_app,
+            exclusive = exclusive, 
+            allResults = allResults, 
+            owner = owner,
+            id = id)
 
-    #
-    # Read the symbol dictionary from file
-    #
+        #
+        # Read the symbol dictionary from file
+        #
 # DCF: this is now done automatically by passing the pickle filename to
 # the CmdInterp constructor
 #        the_mediator.interp.known_symbols.pickle_fname = symdict_pickle_fname
 #        the_mediator.interp.known_symbols.init_from_file()
 
-    #
-    # Configure the mediator
-    #
-    the_mediator.configure()
+        #
+        # Configure the mediator
+        #
+        the_mediator.configure()
 
     #
     # Possibly disable the symbol selection dialog

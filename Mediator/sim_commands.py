@@ -41,7 +41,7 @@ clear_symbols()
 clear_abbreviations()
    Removes all defined abbreviations from VoiceCode's symbol dictionary
 
-say(STR utterance, never_bypass_sr_recog=0, user_input=None)
+say(STR utterance, bypass_NatLink=1, user_input=None)
    Interprets string *utterance* as though it had been said by a user.
 
    Note that this command will not work with *Select XYZ* utterances.
@@ -76,8 +76,8 @@ say(STR utterance, never_bypass_sr_recog=0, user_input=None)
     testing, if the *say* command requires user additional user input
     (e.g. confirmation of a symbol match).
      
-    If argument *never_bypass_sr_recog* is true, the interpretation will always be done
-    through NatLink's recognitionMimic function, even if the 'bypass' switch was on.
+    If argument *bypass_NatLink* is true, the interpretation will be done
+    withouth going through NatLink's recognitionMimic function.
 
 goto(INT pos)
    Moves cursor to position *pos*
@@ -240,7 +240,8 @@ def compile_symbols(file_list):
     the_mediator.interp.known_symbols.pickle()
 
     
-def say(utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0):
+def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0,
+    selection = 0):
     """Simulate an utterance *STR utterance*
 
     *STR utterance* -- The utterance. This can be a string with the
@@ -258,11 +259,19 @@ def say(utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0):
      standard input. Use in automated regression testing, if the *say*
      command requires user additional user input (e.g. confirmation of
      a symbol match).
-     
-    BOOL *never_bypass_sr_recog* -- If *TRUE*, then the interpretation will always be done
-    through NatLink's recognitionMimic function, even if the 'bypass' command line switch was set.
     
+    *BOOL bypass_NatLink* -- if true, the interpretation will be done
+    withouth going through NatLink's recognitionMimic function.
+
     *BOOL echo_utterance=0* -- If true, echo the utterance on STDOUT.
+
+    *BOOL selection = 0* -- if true, the utterance should be recognized
+    by a selection grammar.  Normally, this flag is optional.  However,
+    if you are running with Natspeak connected, but bypassing natlink
+    for dictation recognition in order to profile the interpretation code, 
+    you will need to specify selection = 1 for selection utterances to
+    be handled properly.
+      
 
     Examples: say('x not equal to') -> 'x != '
               say(['x', ' != \\not equal to'] -> 'x != '
@@ -270,7 +279,7 @@ def say(utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0):
     
     global the_mediator, sleep_before_recognitionMimic
 
-    trace('sim_commands.say', 'utterance=%s, never_bypass_sr_recog=%s' % (utterance, never_bypass_sr_recog))
+    trace('sim_commands.say', 'utterance=%s, bypass_NatLink=%s' % (utterance, bypass_NatLink))
 
 #    print 'Saying: %s' % utterance
     sys.stdout.flush()
@@ -284,15 +293,18 @@ def say(utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0):
         old_stdin = sys.stdin
         temp_file_name = vc_globals.tmp + os.sep + 'user_input.dat'
         temp_file = open(temp_file_name, 'w')
+#        print 'temp file opened for writing'
         sys.stdout.flush()
         temp_file.write(user_input)
         temp_file.close()
         temp_file = open(temp_file_name, 'r')
+#        print 'temp file opened for reading'
         sys.stdout.flush()
         sys.stdin = temp_file
-
-    if self.bypass_sr_recog and not never_bypass_sr_recog:
+        
+    if bypass_NatLink or os.environ.has_key('VCODE_NOSPEECH'):
         trace('sim_commands.say', 'bypassing natlink')
+#        print 'bypass'
         sys.stdout.flush()
         print "Heard  %s" % repr(utterance)
         the_mediator.interp.interpret_NL_cmd(utterance, the_mediator.app)
@@ -382,9 +394,10 @@ def move(steps):
 
 
 def listen():
-    natlink.setMicState('on')
-    natlink.waitForSpeech(0)
-    natlink.setMicState('off')
+    if not os.environ.has_key('VCODE_NOSPEECH'):
+        natlink.setMicState('on')
+        natlink.waitForSpeech(0)
+        natlink.setMicState('off')
 
 def print_error(message):
     sys.stderr.write(message)
@@ -468,11 +481,11 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
     *BOOL* disconnect = 1 -- Indicates whether or not to disconnect from
     the SR system.
 
-    *BOOL* bypass_sr_recog -- Indicates that, for profiling
+    *BOOL* bypass_for_dictation -- Indicates that, for profiling
     purposes, we should bypass natlink for dictation utterances
     """
     help_string = __doc__
-    def __init__(self, app, interp, names, bypass_sr_recog = 0, **args):
+    def __init__(self, app, interp, names, bypass_for_dictation = 0, **args):
         self.deep_construct(SimCmdsObj,
                             {
                              'app': app,
@@ -481,7 +494,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                              'quit_flag': 0,
                              'clean_sr_voc' : 0,
                              'save_speech_files' : None,
-                             'bypass_sr_recog': bypass_sr_recog,
+                             'bypass_for_dictation': bypass_for_dictation,
                              'disconnect_flag': 1
                             }, args, 
                             exclude_bases = {InstanceSpace.InstanceSpace: 1})
@@ -562,15 +575,9 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         #
         self.interp.known_symbols.pickle()
 
-    def utterance_spoken_forms(self, utterance):
-        spoken_forms = []
-        for a_word in utterance:
-           spoken, written = sr_interface.spoken_written_form(a_word)
-           spoken_forms.append(spoken)
-        return spoken_forms
-
         
-    def say(self, utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0):
+    def say(self, utterance, user_input=None, bypass_NatLink=0, 
+        echo_utterance=0, selection = 0):
         """Simulate an utterance *STR utterance*
 
         *STR utterance* -- The utterance. This can be a string with the
@@ -589,12 +596,17 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
          command requires user additional user input (e.g. confirmation of
          a symbol match).
         
+        *BOOL bypass_NatLink* -- if true, the interpretation will be done
+        withouth going through NatLink's recognitionMimic function.
+
         *BOOL echo_utterance=0* -- If true, echo the utterance on STDOUT.
-        
-        BOOL *never_bypass_sr_recog* -- If *TRUE*, the interpretation will always be done
-        through NatLink's recognitionMimic function, even if the 'bypass' switch was on.
 
-
+        *BOOL selection = 0* -- if true, the utterance should be recognized
+        by a selection grammar.  Normally, this flag is optional.  However,
+        if you are running with Natspeak connected, but bypassing natlink
+        for dictation recognition in order to profile the interpretation code, 
+        you will need to specify selection = 1 for selection utterances to
+        be handled properly.
 
         Examples: say('x not equal to') -> 'x != '
                   say(['x', ' != \\not equal to'] -> 'x != '
@@ -629,10 +641,10 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                 sys.stdin = StringIO(user_input)
             sys.stdout.flush()
             
-        if self.bypass_sr_recog and not never_bypass_sr_recog:
+        if bypass_NatLink or os.environ.has_key('VCODE_NOSPEECH') \
+            or (self.bypass_for_dictation and not selection):
             trace('sim_commands.say', 'bypassing natlink')
 #        print 'bypass'
-            utterance = self.utterance_spoken_forms(utterance)
             sys.stdout.flush()
             if util.islist(utterance) or util.istuple(utterance):
                 words = []
@@ -652,9 +664,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                 words = re.split('\s+', utterance)
 
             print "Heard %s" % string.join(words)
-            self.app.recog_begin(window_id=None, block = 0)
             self.interp.interpret_NL_cmd(words, self.app)
-            self.app.recog_end()
             self.show_buff()        
         else:
             if util.islist(utterance) or util.istuple(utterance):
@@ -736,9 +746,10 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         self.show_buff()
 
     def listen(self):
-        natlink.setMicState('on')
-        natlink.waitForSpeech(0)
-        natlink.setMicState('off')
+        if not os.environ.has_key('VCODE_NOSPEECH'):
+            natlink.setMicState('on')
+            natlink.waitForSpeech(0)
+            natlink.setMicState('off')
 
     def print_error(self, message):
         sys.stderr.write(message)

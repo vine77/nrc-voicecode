@@ -60,28 +60,29 @@ def disconnect_from_sr(disconnect, save_speech_files):
     """
 
 #    print '-- MediatorObject.disconnect_from_sr: disconnect=%s, save_speech_files=%s' % (disconnect, save_speech_files)
-    #
-    # Ask the user if he wants to save speech files
-    #
-    while save_speech_files == None:
-        sys.stdout.write('Would you like to save your speech files (y/n)?\n> ')
-        answer = sys.stdin.readline()
-        answer = answer[:len(answer)-1]
+    if sr_interface.speech_able():
+        #
+        # Ask the user if he wants to save speech files
+        #
+        while save_speech_files == None:
+            sys.stdout.write('Would you like to save your speech files (y/n)?\n> ')
+            answer = sys.stdin.readline()
+            answer = answer[:len(answer)-1]
        
-        if answer == 'y':
-            save_speech_files = 1
-        elif answer == 'n':
-            save_speech_files = 0
+            if answer == 'y':
+                save_speech_files = 1
+            elif answer == 'n':
+                save_speech_files = 0
            
-        if save_speech_files == None:
-            print "\nPlease answer 'y' or 'n'."
+            if save_speech_files == None:
+                print "\nPlease answer 'y' or 'n'."
 
-    if save_speech_files and sr_interface.sr_user_needs_saving:
-        print 'Saving speech files. This may take a moment ...'
-        sr_interface.saveUser()
-        print 'Speech files saved.'
+        if save_speech_files and sr_interface.sr_user_needs_saving:
+            print 'Saving speech files. This may take a moment ...'
+            sr_interface.saveUser()
+            print 'Speech files saved.'
 
-    if disconnect: sr_interface.disconnect()
+        if disconnect: sr_interface.disconnect()
             
         
 
@@ -154,7 +155,7 @@ class NewMediatorObject(Object.OwnerObject):
     *STR profile_prefix* -- prefix for filename for output of profiler,
     or None if not profiling (ignored if test_space is None) 
 
-    *BOOL bypass_sr_recog* -- when testing, bypass natlink for 
+    *BOOL bypass_for_dictation* -- when testing, bypass natlink for 
     dictation utterances (ignored if test_space is None) 
 
     *BOOL test_next* -- flag to indicate that the mediator should run
@@ -185,7 +186,7 @@ class NewMediatorObject(Object.OwnerObject):
                  test_args = None,
                  test_space = None, global_grammars = 0, exclusive = 0, 
                  profile_prefix = None,
-                 bypass_sr_recog = 0,
+                 bypass_for_dictation = 0,
                  symdict_pickle_fname = None,
                  symbol_match_dlg_regression = 1,
                  symbol_match_dlg = 0,
@@ -248,7 +249,7 @@ class NewMediatorObject(Object.OwnerObject):
         *STR profile_prefix* -- prefix for filename for output of profiler,
         or None if not profiling (ignored if test_space is None) 
 
-        *BOOL bypass_sr_recog* -- when testing, bypass natlink for 
+        *BOOL bypass_for_dictation* -- when testing, bypass natlink for 
         dictation utterances (ignored if test_space is None) 
 
         STR *symdict_pickle_fname=None* -- Name of the file containing the
@@ -274,7 +275,7 @@ class NewMediatorObject(Object.OwnerObject):
                              'symbol_match_dlg': symbol_match_dlg,
                              'exclusive': exclusive,
                              'profile_prefix': profile_prefix,
-                             'bypass_sr_recog': bypass_sr_recog,
+                             'bypass_for_dictation': bypass_for_dictation,
                              'test_next': 0,
                              'testing': 0, 
                              'pickled_interp': None,
@@ -780,7 +781,8 @@ class NewMediatorObject(Object.OwnerObject):
             self.editors.cleanup()
             self.editors = None
 
-        disconnect_from_sr(disconnect, save_speech_files)
+        if sr_interface.speech_able():
+            disconnect_from_sr(disconnect, save_speech_files)
 
 #        self.cleanup()
                 
@@ -878,7 +880,7 @@ class NewMediatorObject(Object.OwnerObject):
             regression.PersistentConfigNewMediator(mediator = self,
             editor_name = instance_name, names = self.test_space,
             symbol_match_dlg = self.symbol_match_dlg_regression,
-            bypass_sr_recog = self.bypass_sr_recog,
+            bypass_for_dictation = self.bypass_for_dictation,
             correction = 'basic')
         self.interp.enable_symbol_match_dlg(self.symbol_match_dlg_regression)
         self.test_space['temp_factory'] = \

@@ -175,6 +175,27 @@ class MediatorConsole(Object.OwnerObject):
         """
         return 0
 
+    def heard_utterance(self, instance, words, gram_type = None):
+        """callback from mediator to provide feedback to the user 
+        that an utterance was heard
+
+        **INPUTS**
+
+        *STR instance* -- name of the instance whose grammar
+        recognized the utterance
+
+        *[(STR, STR)]* words -- list of spoken, written forms 
+        representing the recognition results
+
+        *STR gram_type* -- type of grammar 
+        ('dictation', 'selection', or 'correction')
+
+        **OUTPUTS**
+
+        *none*
+        """
+        pass
+
     def set_gram_factory(self, gram_factory):
         """assigns a parent mediator to the console
 

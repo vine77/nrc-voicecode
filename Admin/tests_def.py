@@ -49,20 +49,6 @@ small_buff_py = vc_globals.test_data + os.sep + 'small_buff.py'
 #                     desc='run a series of unit tests through PyUnit')
 
 
-############################################################################
-# Check that tests are sorted in order of priority
-############################################################################
-
-def test_should_be_first_test_to_execute():
-   print "This test should always be the very first one to be executed!"
-
-def test_should_be_last_test_to_execute():
-   print "This test should always be the very last one to be executed!"
-
-   
-auto_test.add_test('test_done_first', test_should_be_first_test_to_execute, 'check that regression tests are executed in order of priority', -999)
-auto_test.add_test('test_done_last', test_should_be_last_test_to_execute, 'check that regression tests are executed in order of priority', 999)
-
 
 ##############################################################################
 # Testing SymDict
@@ -180,7 +166,13 @@ def test_SymDict():
     """Self test for SymDict"""
 
     temp_config = temp_factory.new_config()
-    interp = temp_config.interpreter() 
+    interp = temp_config.interpreter()
+#    a_mediator = MediatorObject.MediatorObject(app = EdSim.EdSim(),
+#        interp=CmdInterp.CmdInterp())
+#    a_mediator.configure()
+    
+#  temporary check
+#    print repr(vc_globals.test_data)
     compilation_test(interp, vc_globals.test_data + os.sep + 'small_buff.c')
     compilation_test(interp, vc_globals.test_data + os.sep + 'large_buff.py')
     pseudo_symbols = ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
@@ -189,6 +181,7 @@ def test_SymDict():
     a_match = SymDict.SymbolMatch(pseudo_symbol='this symbol is unresolved', native_symbol='this_sym_is_unres', words=['this', 'symbol', 'is', 'unresolved'], word_matches=['this', 'sym', 'is', 'unres'])    
     accept_symbol_match_test(interp, vc_globals.test_data + os.sep + 'small_buff.c', [a_match])
 
+#    a_mediator.quit(save_speech_files=0, disconnect=0)    
     temp_config.quit()    
 
 auto_test.add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
@@ -462,10 +455,10 @@ def test_command(command):
     testing.execute_command(command)
     sys.stdout.flush()
 
-def test_say(utterance, user_input=None, never_bypass_sr_recog=0):
+def test_say(utterance, user_input=None, selection = 0):
     print '\n\n>>> Testing console command: say(%s, user_input=\'%s\')' % (utterance, user_input)
     sys.stdout.flush()
-    commands.say(utterance, user_input, never_bypass_sr_recog=never_bypass_sr_recog)
+    commands.say(utterance, user_input, selection = selection)
     sys.stdout.flush()
     
 
@@ -479,7 +472,7 @@ def test_mediator_console():
     test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'])
 
     test_command("say(['select', 'horiz_pos\\horizontal position'," + \
-        " '=\equals'],  never_bypass_sr_recog=1)")
+        " '=\equals'], selection = 1)")
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
 
@@ -497,11 +490,11 @@ def test_select_pseudocode():
     
     testing.init_simulator_regression()
     test_command("""open_file('blah.py')""")
-    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
-    test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)    
-    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
-    test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)        
-    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
+    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n')
+    test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n')    
+    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n')
+    test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n')        
+    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n')
 
 #    util.request_console_be(active=1)
     
@@ -509,32 +502,32 @@ def test_select_pseudocode():
     # Testing go commands
     #
     test_command("""goto_line(2)""")
-    test_say(['go', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['go after next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go after next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['go after previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go after previous', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['go before', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go before', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['go before next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go before next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
     test_say(['go before previous', 'index', '=\\equals', '0'],
-        never_bypass_sr_recog=1)
+        selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['go next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['go previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go previous', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['after next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['after next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['after previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['after previous', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['before', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['before', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['before next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['before next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['before previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['before previous', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
     
     #
@@ -555,25 +548,25 @@ def test_select_pseudocode():
     # Testing selectionn commands
     #
     test_command("""goto_line(2)""")
-    test_say(['next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['previous', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['select', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['select', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['select next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['select next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(2)""")
-    test_say(['select previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['select previous', 'index', '=\\equals', '0'], selection = 1)
 
     #
     # Testing repeated go commands in both directions
     #
     test_command("""goto_line(1)""")
-    test_say(['go next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
-    test_say(['go next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go next', 'index', '=\\equals', '0'], selection = 1)
+    test_say(['go next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(6)""")
-    test_say(['go previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
-    test_say(['go previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['go previous', 'index', '=\\equals', '0'], selection = 1)
+    test_say(['go previous', 'index', '=\\equals', '0'], selection = 1)
     
 
     #
@@ -595,11 +588,11 @@ def test_select_pseudocode():
     # Testing repeated selection in both directions
     #
     test_command("""goto_line(1)""")
-    test_say(['select next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
-    test_say(['select next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['select next', 'index', '=\\equals', '0'], selection = 1)
+    test_say(['select next', 'index', '=\\equals', '0'], selection = 1)
     test_command("""goto_line(6)""")
-    test_say(['select previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
-    test_say(['select previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
+    test_say(['select previous', 'index', '=\\equals', '0'], selection = 1)
+    test_say(['select previous', 'index', '=\\equals', '0'], selection = 1)
 
 #    util.request_console_be(active=0)    
     
@@ -2485,7 +2478,7 @@ def test_basic_correction():
     status.append(1)
 
     for i in range(len(utterances)):
-        test_say(utterances[i], user_input = input[i], never_bypass_sr_recog=1)
+        test_say(utterances[i], user_input = input[i])
 
     print '\n***Testing state***\n'
 
@@ -2524,12 +2517,12 @@ def test_basic_correction():
     input.append('0\n2\n')
     status.append(1)
 
-    test_say(utterances[-1], user_input = input[-1], never_bypass_sr_recog=1)
+    test_say(utterances[-1], user_input = input[-1])
 
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
-    test_say(['select', 'clown'], never_bypass_sr_recog=1)
+    test_say(['select', 'clown'], selection = 1)
     editor = the_mediator.editors.app_instance(instance_name)
     buffer = editor.curr_buffer()
 
@@ -2574,7 +2567,7 @@ def test_basic_correction():
     status.append(1)
 
     for i in range(len(utterances)):
-        test_say(utterances[i], user_input = input[i], never_bypass_sr_recog=1)
+        test_say(utterances[i], user_input = input[i])
 
     print '\n***Testing state***\n'
 
@@ -2619,7 +2612,7 @@ def test_basic_correction():
     new_status.append(1)
 
     for i in range(len(new_utterances)):
-        test_say(new_utterances[i], user_input = new_input[i], never_bypass_sr_recog=1)
+        test_say(new_utterances[i], user_input = new_input[i])
 
     editor = the_mediator.editors.app_instance(instance_name)
     buffer = editor.curr_buffer()
@@ -2675,11 +2668,11 @@ def test_basic_correction():
 
     for i in range(len(new_utterances)):
 #        if new_utterances[i] == 'back indent':
-#            test_say([new_utterances[i]], user_input = new_input[i], never_bypass_sr_recog=1)
+#            test_say([new_utterances[i]], user_input = new_input[i])
 #        else:
 #            split = string.split(new_utterances[i])
-#            test_say(split, user_input = new_input[i], never_bypass_sr_recog=1)
-        test_say(new_utterances[i], user_input = new_input[i], never_bypass_sr_recog=1)
+#            test_say(split, user_input = new_input[i])
+        test_say(new_utterances[i], user_input = new_input[i])
 
     utterances.extend(new_utterances)
     input.extend(new_input)
@@ -2767,10 +2760,10 @@ def test_insert_delete_commands():
    else:
        editor = mediator.app
    editor.set_text('some additional text')
-   test_say(['select', 'additional'], never_bypass_sr_recog=1)
+   test_say(['select', 'additional'], selection = 1)
    test_say(['back space'])
    editor.set_text('some additional text')
-   test_say(['select', 'additional'], never_bypass_sr_recog=1)
+   test_say(['select', 'additional'], selection = 1)
    test_say(['back space 2'])
 
 auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands')
@@ -2788,38 +2781,34 @@ def test_mixed_kbd_and_voice_editing():
         app = the_mediator.editors.app_instance(instance_name)
     else:
         app = the_mediator.app    
-        
-    kbd_evt_sim = testing.kbd_event_sim_factory(app)
 
-    test_cursor_moved_by_kbd(app, commands, kbd_evt_sim)
-    test_selection_set_by_kbd(app, commands, kbd_evt_sim)
-    test_search_for_typed_text(app, commands, kbd_evt_sim)
-    test_select_typed_text_by_voice(app, commands, kbd_evt_sim)
+    test_cursor_moved_by_kbd(app, commands)
+    test_selection_set_by_kbd(app, commands)
+    test_search_for_typed_text(app, commands)
+    test_select_typed_text_by_voice(app, commands)
    
-def test_cursor_moved_by_kbd(app, commands, kbd_evt_sim):
+def test_cursor_moved_by_kbd(app, commands):
    commands.open_file(edit_this_buff_py)
-   app.curr_buffer.goto(1)
-   kbd_evt_sim.move_cursor_by_kbd('Right', 10)
+   app.curr_buffer().move_cursor_by_kbd('Right', 10)
    commands.say(['hello'], user_input="0\n")
 
-def test_selection_set_by_kbd(app, commands, kbd_evt_sim):
+def test_selection_set_by_kbd(app, commands):
    commands.open_file(edit_this_buff_py)
-   app.curr_buffer.goto(1)
-   kbd_evt_sim.set_selection_by_kbd('Right', 10)
+   app.curr_buffer().set_selection_by_kbd(1, 10)
    commands.say(['hello'], user_input="0\n")
    
-def test_search_for_typed_text(app, commands, kbd_evt_sim):
+def test_search_for_typed_text(app, commands):
    commands.open_file(edit_this_buff_py)
    commands.goto_line(2)
-   kbd_evt_sim.type_text(',')
-   kbd_evt_sim.move_cursor_by_kbd('Left', 2)
+   app.curr_buffer().type_text(',')
+   app.curr_buffer().move_cursor_by_kbd('Left', 2)
    commands.say(['next', 'comma'])
    
-def test_select_typed_text_by_voice(app, commands, kbd_evt_sim):
+def test_select_typed_text_by_voice(app, commands):
    commands.open_file(edit_this_buff_py)
    commands.goto_line(2)
-   kbd_evt_sim.type_text('hello')   
-   commands.say(['select', 'hello'], never_bypass_sr_recog=1)
+   app.curr_buffer().type_text('hello')   
+   commands.say(['select', 'hello'], selection = 1)
 
 #auto_test.add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Testing mixed mode (kbd + voice) editing')
 
@@ -2833,7 +2822,7 @@ def test_compile_symbols():
    commands.clear_symbols()
    print "Before compiling symbols, symbols are:\n"
    commands.print_symbols()
-   commands.say(['compile symbols'], never_bypass_sr_recog=1)
+   commands.say(['compile symbols'])
    print "After compiling symbols, symbols are:\n"
    commands.print_symbols()
    

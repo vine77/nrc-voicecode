@@ -71,6 +71,18 @@ debug.config_traces(status="on",
                                    allow_trace_id_substrings = 1)
 
 
+
+#
+# Make sure we run tests without connecting to NatSpeak
+#
+# Must do this before importing other VoiceCode files because creation and
+# initialisation of VoiceDictation may try to link with NatSpeak
+#
+# NOTE: This is commented out because it causes problems with say_select
+#       Don't know why.
+#
+# os.environ['VCODE_NOSPEECH'] = '1'
+
 import auto_test, util
 
 
@@ -153,7 +165,7 @@ if (__name__ == '__main__'):
                     test_space = test_space, global_grammars = 1, 
                     exclusive = 1, 
                     profile_prefix = opts['p'],
-                    bypass_sr_recog = opts['bypass'])
+                    bypass_for_dictation = opts['bypass'])
             sys.stderr.write('Configuring the mediator...\n')
             the_mediator.configure()
             sys.stderr.write('Finished configuring...\n')

@@ -53,6 +53,7 @@ class SourceBuffNonCached(sb_mixins.WithStateService,
                             args_super, 
                             {})
     def remove_other_references(self):
+        sb_mixins.WithKbdService.remove_other_references(self)
 #        sb_mixins.WithStateService.remove_other_references(self)
         SourceBuff.SourceBuffWithServices.remove_other_references(self)
 

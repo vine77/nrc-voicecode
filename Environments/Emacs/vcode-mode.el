@@ -1,3 +1,7 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; New of vc.el which uses after-change-functions which is much simpler and
+;; more robust than overlays as per Barry Jaspan's vr.el
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Vcode Mode - integration of GNU Emacs and VoiceCode 
 ;;    http://voicecode.iit.nrc.ca/VoiceCode
