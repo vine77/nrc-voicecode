@@ -490,7 +490,7 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
         *none*
         """
 
-#        print '-- SourceBuffMessaging.insert: text=%s, range=%s' % (text, range)
+        trace('SourceBuffMessaging.insert', 'text=%s, range=%s, self.name()=%s' % (text, range, self.name()))
         
         args = {'text': text, 'range': range,
             'buff_name': self.name()}

@@ -562,15 +562,23 @@ class KbdEventSim(Object.Object):
         self.deep_construct(TempConfigNewMediatorFactory, 
             {}, args)
 
-    def set_selection_by_kbd(self, direction, length):
+    def echo_kbd_event(self, evt_name, *args):
+       echo_msg = "Got simulated kbd event: %s(" % evt_name
+       for an_arg in args:
+           echo_msg = echo_msg + "%s," % an_arg
+       echo_msg = echo_msg + ")"
+       print echo_msg
+
+
+    def set_selection_by_kbd(self, direction, length, echo_evt=1):
         debug.virtual('KbdEventSim.set_selection_by_kbd')
         
-    def move_cursor_by_kbd(self, direction, num_steps):
+    def move_cursor_by_kbd(self, direction, num_steps, echo_evt=1):
         debug.virtual('KbdEventSim.move_cursor_by_kbd')    
         
-    def type_text(self, text):
-        debug.virtual('KbdEventSim.type_text')    
-
+    def type_text(self, text, echo_evt=1):
+        debug.virtual('KbdEventSim.type_text')
+        
 
 class KbdEventSimWindowsStyle(KbdEventSim):
     """Class for simulating keyboard user actions (e.g. typing text, 
@@ -591,14 +599,7 @@ class KbdEventSimWindowsStyle(KbdEventSim):
                             {}, 
                             args_super, 
                             {})
-                            
-    def echo_kbd_event(self, evt_name, *args):
-       echo_msg = "Got simulated kbd event: %s(" % evt_name
-       for an_arg in args:
-           echo_msg = echo_msg + "%s," % an_arg
-       echo_msg = echo_msg + ")"
-       print echo_msg
-    
+                                
                             
     def move_cursor_by_kbd(self, direction, num_steps, echo_evt=1):
         if echo_evt: self.echo_kbd_event('move_cursor_by_kbd', direction, num_steps)
@@ -617,8 +618,9 @@ class KbdEventSimWindowsStyle(KbdEventSim):
         
         
     def type_text(self, text, echo_evt=1):
-        if echo_evt: self.echo_kbd_event('stype_text', text)
+        if echo_evt: self.echo_kbd_event('type_text', text)
         sr_interface.send_keys(text)
+        
 
 
 class KbdEventSimEmacs (KbdEventSimWindowsStyle):
@@ -649,8 +651,6 @@ class KbdEventSimEmacs (KbdEventSimWindowsStyle):
         changing the selection.
         """
         if echo_evt: self.echo_kbd_event('set_selection_by_kbd', direction, length)
-#        sr_interface.send_keys('{Esc}xset-mark-command{Enter}', 1)
-#        sr_interface.send_keys('{Esc}xset-mark{Enter}', 1)
         sr_interface.send_keys('{Ctrl+Space}', 1)
         self.move_cursor_by_kbd(direction, length, echo_evt=0)
         time.sleep(5)

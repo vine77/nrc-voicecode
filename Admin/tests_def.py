@@ -3061,6 +3061,48 @@ def test_select_typed_text_by_voice(app, commands, kbd_evt_sim, init_line):
 add_test('mixed_mode_editing', test_mixed_kbd_and_voice_editing, 'Testing mixed mode (kbd + voice) editing', foreground = 1)
 
 ##############################################################################
+# Test dictation in split window.
+##############################################################################
+
+def test_Emacs_split_window():
+    testing.init_simulator_regression()
+    commands = testing.namespace()['commands']    
+    instance_name = testing.instance_name()
+    the_mediator = testing.mediator()    
+    if instance_name: 
+        app = the_mediator.editors.app_instance(instance_name)
+    else:
+        app = the_mediator.app    
+        
+    kbd_evt_sim = testing.kbd_event_sim_factory(app)
+    
+    commands.open_file(foreground_py, echo_cmd=1)
+    commands.say(['dictated', 'in', 'foreground', 'buffer'], user_input="0\n", echo_cmd=1)
+
+    #
+    # Split the window in two and display a second buffer
+    #    
+    kbd_evt_sim.type_text('{Esc}xsplit-window-vertically{Enter}')
+    kbd_evt_sim.type_text('{Esc}xother-window{Enter}')    
+
+    time.sleep(5)
+
+    commands.open_file('buf2.py', echo_cmd=1)
+    commands.say(['dictated', 'in', 'buffer', 'two'], user_input="0\n", echo_cmd=1)
+
+    time.sleep(5)
+    
+    commands.say(['dictated', 'in', 'buffer', 'two'], user_input="0\n", echo_cmd=1)    
+            
+    kbd_evt_sim.type_text('{Esc}xdelete-other-window{Enter}')
+
+
+    
+
+
+add_test('emacs_split_window', test_Emacs_split_window, 'Testing dictation into Emacs with two buffers displayed in same window.', foreground = 1)
+
+##############################################################################
 # Test normal text dictation.
 ##############################################################################
 
@@ -3429,26 +3471,8 @@ add_test('profile_config', test_profile_config,
 ##############################################################################
 
 def test_temporary():  
+   pass
 
-   testing.init_simulator_regression()
-   temp_config = temp_factory.new_config()   
-      
-   commands.open_file('blah.py')
-        
-   commands.say(['import\\import modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
-   commands.say(['import\\import modules', 'auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'V.', 'C.', 'globals', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-   
-   commands.say(['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', 'import all', 'new', 'statement'] , user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-   
-   commands.say(['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
-   commands.say(['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
-   commands.say(['from', 'module', 'context', 'sensitive', 'command', 'import', 'symbols', 'context', 'sensitive', 'command', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
-
-   
 #add_test('temp', test_temporary, desc='temporary test')
 
 
