@@ -43,6 +43,7 @@ debug.config_traces(status="on",
 #                      'CmdInterp': 1
 #                      'CmdInterp': 1
 #                      'DictWinGramNL': 1,
+#                      'SourceBuff.print_buff': 1, 
 #                      'ResMgr': 1,
 #                      'mediator.say': 1
 #                      'StateStack': 1,

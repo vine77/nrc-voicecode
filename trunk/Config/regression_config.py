@@ -128,6 +128,7 @@ add_lsa_set(python_imports)
 add_csc_set(python_imports_cscs)
 add_lsa_set(python_comparisons)
 add_lsa_set(python_operators)
+add_lsa_set(python_string_qualifiers)
 add_csc_set(python_functional)
 
 # C-specific

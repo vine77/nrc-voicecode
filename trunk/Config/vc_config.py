@@ -1059,6 +1059,17 @@ python_quotes.add("'''", ['triple-single-quote', 'three-single-quote', 'three-si
     no_empty = 1)
 python_quotes.create(interpreter, force = 1)
 
+# Python-specific string variants
+
+python_string_qualifiers = LSAliasSet('Python-specific string qualifiers',
+   description = 'Qualifiers for Python-specific string types\n' +
+                 '("r" for raw strings, "u" for Unicode strings)')
+
+python_string_qualifiers.add_lsa(LSAlias(['raw string'], 
+    {'python': 'r'}, no_space_after))
+python_string_qualifiers.add_lsa(LSAlias(['Unicode string'], {'python': 'u' },
+                                 no_space_after))
+
 # Python-specific operators
 
 python_operators = LSAliasSet('Python operators', 

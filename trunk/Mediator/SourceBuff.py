@@ -599,12 +599,13 @@ class SourceBuff(OwnerObject):
         return position
 
 
-    def beginning_of_line(self, pos):
+    def beginning_of_line(self, pos = None):
         """Returns the position of the beginning of line at position *pos*
         
         **INPUTS**
         
-        *INT* pos -- Position for which we want to know the beginning of line.
+        *INT* pos -- Position for which we want to know the beginning of
+        line, or none for the current position.
         
 
         **OUTPUTS**
@@ -614,12 +615,13 @@ class SourceBuff(OwnerObject):
         debug.virtual('SourceBuff.beginning_of_line')
 
 
-    def end_of_line(self, pos):
+    def end_of_line(self, pos = None):
         """Returns the position of the end of line at position *pos*
         
         **INPUTS**
         
-        *INT* pos -- Position for which we want to know the end of line.
+        *INT* pos -- Position for which we want to know the end of
+        line, or none for the current position.
         
 
         **OUTPUTS**
@@ -887,10 +889,15 @@ class SourceBuff(OwnerObject):
         *INT pos* -- cursor position of the line we want to go to. If
         *None*, then use cur_pos().
         """
-        if pos != None:
-           self.goto(pos)
-        self.search_for(regexp="($|%s)" % self.newline_regexp(), direction=1,
-                        where=-1, ignore_left_of_cursor=1, unlogged=1)
+        self.goto(self.end_of_line(pos))
+# what's wrong with the implementation above, which takes advantage of
+# any editor-specific optimizations for finding the end of the line (and
+# doesn't do a regex search on the entire contents of the file)?
+#
+#        if pos != None:
+#           self.goto(pos)
+#        self.search_for(regexp="($|\n)", direction=1,
+#                        where=-1, ignore_left_of_cursor=1, unlogged=1)
 
     def goto_beginning_of_line(self, pos=None):
         """Go to beginning of the line at a particular cursor position.
@@ -898,12 +905,17 @@ class SourceBuff(OwnerObject):
         *INT pos* -- cursor position of the line we want to go to. If
         *None*, then use cur_pos().
         """
-        if pos != None:
-           self.goto(pos)
-        
-        self.search_for(regexp="(^|%s)" % self.newline_regexp(), direction=-1,
-                        where=1, ignore_right_of_cursor=1, unlogged=1)
-        
+        self.goto(self.beginning_of_line(pos))
+# what's wrong with the implementation above, which takes advantage of
+# any editor-specific optimizations for finding the end of the line (and
+# doesn't do a regex search on the entire contents of the file)?
+#
+#        if pos != None:
+#           self.goto(pos)
+#        
+#        self.search_for(regexp="(^|\n)", direction=-1,
+#                        where=1, ignore_right_of_cursor=1, unlogged=1)
+
     def goto_range(self, range, where):
         """Goes to one extremity of a range
         
@@ -918,7 +930,6 @@ class SourceBuff(OwnerObject):
             pos = range[0]
         self.goto(pos)
         
-
                 
     def print_buff_if_necessary(self):
         """Prints content of current buffer if necessary.
@@ -1209,14 +1220,7 @@ class SourceBuff(OwnerObject):
         # We use (?: form so that the order of groups on the original
         # regexp is not screwed up.
         #
-        regexp = '(?:'
-        first_one = 1
-
-        for a_nl_form in self.newline_conventions():
-            if not first_one:
-                regexp = regexp + '|'
-            regexp = regexp + a_nl_form
-            first_one = 1                
+        regexp = '(?:' + string.join(self.newline_conventions(), '|')
         regexp = regexp + ')'
 
         return regexp
@@ -1703,19 +1707,16 @@ class SourceBuff(OwnerObject):
         """
         pass
 
-    def print_buff(self, from_line=None, to_line=None):
-        """Prints buffer to STDOUT.
+    def print_buff(self):
+        """Prints lines around the cursor to STDOUT.
 
         This is mostly used when running regression test on an
         external editor (or the EdSim simulation editor).
         
         **INPUTS**
+
+        *none*
         
-        *INT* from_line = None -- First line to be printed. If *None*, then
-        print *print_nlines* lines around cursor.
-
-        *INT* to_line = None -- Last line to be printed.
-
         **OUTPUTS**
         
         *none* -- 
@@ -1726,19 +1727,82 @@ class SourceBuff(OwnerObject):
         #
         selection_start, selection_end = self.get_selection()
 
+        debug.trace('SourceBuff.print_buff',
+            'selection_start, selection_end = %d, %d' % \
+            (selection_start, selection_end))
         #
         # Figure out the first and last line to be printed
         #
-        if from_line == None or to_line == None:
-           from_line, to_line = self.lines_around_cursor()
-           trace('SourceBuff.print_buff', '** now, from_line=%s, to_line=%s' % (from_line, to_line))           
+#        from_line, to_line = self.lines_around_cursor()
+#        trace('SourceBuff.print_buff', 
+#            '** now, from_line=%s, to_line=%s' % (from_line, to_line))           
         
 
-        before_content = self.get_text(0, selection_start)
+        at_start = 0
+        at_end = 0
+        start = self.beginning_of_line(selection_start)
+        if start == 0:
+            at_start = 1
+        else:
+            for i in range(self.print_nlines):
+                start = self.beginning_of_line(start - 1)
+                if start <= 0:
+                    start = 0
+                    at_start = 1
+                    break
+
+# selection_end is actually the character after the end of the selection
+        if selection_end == selection_start:
+            end = self.end_of_line(selection_start)
+        else:
+            end = self.end_of_line(selection_end - 1)
+        debug.trace('SourceBuff.print_buff',
+            'end of current line, line # = %d %d' % \
+            (end, self.line_num_of(end)))
+        debug.trace('SourceBuff.print_buff',
+            'char there is %s' % repr(self.get_text(end, end+1)))
+        length = self.len()
+        text = self.get_text()
+        eol = re.compile('$|(%s)' % self.newline_regexp())
+        if end == length:
+            debug.trace('SourceBuff.print_buff',
+                'this is end of buffer')
+            at_end = 1
+        else:
+            for i in range(self.print_nlines):
+                match = eol.search(text, end)
+                check = max(match.end(), match.start() + 1)
+# workaround for bizarre fact that match.end won't go beyond len(text) - 1
+                debug.trace('SourceBuff.print_buff',
+                    'next line is %d' % self.line_num_of(check))
+                if check >= length:
+                    end = length
+                    at_end = 1
+                    break
+                end = self.end_of_line(check)
+                debug.trace('SourceBuff.print_buff',
+                    'its end is %d %d' % (end, self.line_num_of(end)))
+                if end >= length:
+                    end = length
+                    at_end = 1
+                    break
+                debug.trace('SourceBuff.print_buff',
+                    'char there is %s' % repr(text[end]))
+
+        debug.trace('SourceBuff.print_buff',
+            'selection_start, selection_end = %d, %d' % \
+            (selection_start, selection_end))
+        debug.trace('SourceBuff.print_buff',
+            'start, end = %d, %d' % (start, end))
+        before_content = self.get_text(start, selection_start)
         selection_content = self.get_text(selection_start, selection_end)
-        after_content = self.get_text(selection_end)
-        
-
+        after_content = self.get_text(selection_end, end)
+        debug.trace('SourceBuff.print_buff',
+            'before_content:\n%s\n' % before_content)
+        debug.trace('SourceBuff.print_buff',
+            'after_content:\n%s\n' % after_content)
+        debug.trace('SourceBuff.print_buff',
+            'selection_content:\n%s\n' % selection_content)
         
         printed = before_content
         if selection_content == '':
@@ -1750,13 +1814,15 @@ class SourceBuff(OwnerObject):
         printed = printed + after_content
 
 
-        lines_with_num = self.number_lines(printed, startnum = 1)
+        from_line = self.line_num_of(start)
+        lines_with_num = self.number_lines(printed, startnum =
+            from_line)
         
-        if from_line == 0:
+        if at_start:
             sys.stdout.write("*** Start of source buffer ***\n")
-        for aline in lines_with_num[from_line:to_line+1]:
-            sys.stdout.write('%3i: %s\n' % (aline[0], aline[1]))
-        if to_line == len(lines_with_num) - 1:
+        for number, line in lines_with_num:
+            sys.stdout.write('%3i: %s\n' % (number, line))
+        if at_end:
             sys.stdout.write("\n*** End of source buffer ***\n")
                 
         return

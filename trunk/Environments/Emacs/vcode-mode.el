@@ -3128,11 +3128,6 @@ buffer"
     )
 )
 
-(defun line-num-at (pos)
-;;;  (1+ (count-lines 1 pos))
-  (count-lines 1 pos)
-)
-
 (defun vcode-cmd-line-num-of (vcode-request)
   (let ((mess-cont (nth 1 vcode-request))
 	(response (make-hash-table :test 'string=))
@@ -3144,8 +3139,7 @@ buffer"
     (save-excursion
       (set-buffer buff-name)
       (goto-char opoint)
-      (beginning-of-line)
-      (setq line-num (line-num-at (point)))
+      (setq line-num (what-line (point)))
       )
 
     (cl-puthash "value" line-num response)
@@ -3810,7 +3804,6 @@ change reports it sends to VCode.
 	(response (make-hash-table :test 'string=)))
     (setq pos (cl-gethash "pos" mess-cont))
     (setq buff-name (vcode-get-buff-name-from-message mess-cont))
-    (setq line-num (line-num-at pos))
     (if (< which-end 0)
 	(setq which-end-as-text "beginning")
       (setq which-end-as-text "end")
@@ -3822,7 +3815,8 @@ change reports it sends to VCode.
        (condition-case err     
 	   (progn 
 	     (set-buffer buff-name)
-	     (goto-line line-num)
+             (if (not (equal pos nil))
+                 (goto-char pos))
    	     (if (<  which-end 0) 
 	         (beginning-of-line)
 	       (end-of-line)
