@@ -111,12 +111,15 @@ class CmdInterp(Object):
             regexp = regexp + regexp_this_word
         return regexp
 
-    def interpret_NL_cmd(self, cmd, app, initial_buffer = None):
-        
+    def interpret_massaged(self, cmd, app, initial_buffer = None):
+
         """Interprets a natural language command and executes
         corresponding instructions.
 
-        *[STR] cmd* -- The command. It is a list of written\spoken words.
+        *[(STR, STR)] cmd* -- The command, already massaged into a 
+        list of tuples of cleaned spoken_form, written_form
+
+        *AppState app* -- the AppState interface to the editor
         
         *[STR] initial_buffer* -- The name of the target buffer at the 
 	start of the utterance.  Some CSCs may change the target buffer of 
@@ -124,17 +127,14 @@ class CmdInterp(Object):
 	will be used.
         
         """
-        
         trace('CmdInterp.interpret_NL_cmd', 'cmd=%s' % cmd)
-        
+
         if initial_buffer == None:
             app.bind_to_buffer(app.curr_buffer_name())
         else:
             app.bind_to_buffer(initial_buffer)
 
         untranslated_words = []
-
-        cmd = self.massage_command(cmd)
         
         #
         # Process the beginning of the command until there is nothing
@@ -293,6 +293,70 @@ class CmdInterp(Object):
         app.recog_end()
 
 
+    def interpret_NL_cmd(self, cmd, app, initial_buffer = None):
+        
+        """Interprets a natural language command and executes
+        corresponding instructions.
+
+        *[STR] cmd* -- The command. It is a list of written\spoken words.
+
+        *AppState app* -- the AppState interface to the editor
+        
+        *[STR] initial_buffer* -- The name of the target buffer at the 
+	start of the utterance.  Some CSCs may change the target buffer of 
+	subsequent parts of the command.  If None, then the current buffer 
+	will be used.
+        
+        """
+        cmd = self.massage_command(cmd)
+        self.interpret_massaged(cmd, app, initial_buffer = initial_buffer)
+
+    def interpret_cmd_tupes(self, cmd, app, initial_buffer = None):
+        
+        """Interprets a natural language command and executes
+        corresponding instructions.
+
+        *[(STR, STR)]* cmd -- The command to be massaged. It's a list of
+         tuples of (spoken_form, written_form).
+        
+        *AppState app* -- the AppState interface to the editor
+        
+        *[STR] initial_buffer* -- The name of the target buffer at the 
+	start of the utterance.  Some CSCs may change the target buffer of 
+	subsequent parts of the command.  If None, then the current buffer 
+	will be used.
+        
+        """
+        cmd = self.massage_command_tuples(cmd)
+        self.interpret_massaged(cmd, app, initial_buffer = initial_buffer)
+
+    def massage_command_tuples(self, command_tuples):
+        """Massages a command to prepare it for interpretation.
+
+        Makes sure to substitute special characters (e.g. {Spacebar})
+        in the written form of words in the command. Also, makes sure
+        that the spoken forms are all lowercase, and contain no
+        multiple, leading or trailing blanks.
+        
+        **INPUTS**
+        
+        *[(STR, STR)]* command_tuples -- The command to be massaged. It's a list of
+         tuples of (spoken_form, written_form).
+        
+        **OUTPUTS**
+        
+        *[STR] mod_command* -- The massaged command
+        """
+        mod_command = []
+        for a_word in command_tuples:
+            spoken, written = a_word
+            written = sr_interface.clean_written_form(written, clean_for='vc')
+            spoken = re.sub('\s+', ' ', spoken)
+            spoken = re.sub('(^\s+|\s+$)', '', spoken)
+            mod_command = mod_command + [sr_interface.vocabulary_entry(spoken, written, clean_written=0)]
+        return mod_command
+
+
     def massage_command(self, command):
         """Massages a command to prepare it for interpretation.
 
@@ -310,15 +374,11 @@ class CmdInterp(Object):
         
         *[STR] mod_command* -- The massaged command
         """
-        
-        mod_command = []
+        command_tuples = []
         for a_word in command:
             spoken, written = sr_interface.spoken_written_form(a_word)
-            written = sr_interface.clean_written_form(written, clean_for='vc')
-            spoken = re.sub('\s+', ' ', spoken)
-            spoken = re.sub('(^\s+|\s+$)', '', spoken)
-            mod_command = mod_command + [sr_interface.vocabulary_entry(spoken, written, clean_written=0)]
-        return mod_command
+            command_tuples.append((spoken, written))
+        return self.massage_command_tuples(command_tuples)
 
     def match_untranslated_text(self, untranslated_words, app):
         """Tries to match last sequence of untranslated text to a symbol.

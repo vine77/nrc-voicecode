@@ -33,6 +33,7 @@ from Object import Object, OwnerObject
 import GramMgr
 
 import TargetWindow, KnownTargetModule, WinIDClient
+import ResMgr
 
 class KnownInstance(Object):
     """class which stores data about instances known to RecogStartMgr
@@ -192,9 +193,6 @@ class RecogStartMgr(OwnerObject):
 
 	**INPUTS**
 
-	*AppMgr* editors -- the editors AppMgr object, which provides
-	information about editor application instances
-
 	*BOOL* trust_current_window -- 1 if RSM should trust that the current
 	window corresponds to the editor when the editor first connects to
 	VoiceCode, or when it notifies VoiceCode of a new window.
@@ -220,6 +218,44 @@ class RecogStartMgr(OwnerObject):
 	"""
         self.editors = manager
     
+    def app_instance(self, instance):
+        """return a reference to the AppState object corresponding to a
+	particular instance. **Note:** Use only temporarily.  Storing 
+	this reference is unsafe, and may lead to mediator crashes on 
+	calls to its methods, and to failure to free resources.
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	**OUTPUTS**
+
+	*AppState* -- temporary reference to the corresponding AppState
+	object
+	"""
+        return self.editors.app_instance(instance)
+
+    def interpret_dictation(self, instance, result, initial_buffer = None):
+        """interpret the result of recognition by a dictation grammar,
+        and store the relevant information to allow for correction.
+
+        **INPUTS**
+
+        *STR instance* -- name of the editor instance whose grammar received 
+        the recognition
+
+        *SpokenUtterance result* -- a SpokenUtterance object
+        representing the recognition results
+
+        *STR initial_buffer* -- the name of the initial buffer which was
+        active at recognition-starting
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('RecogStartMgr.interpret_dictation')
+
     def interpreter(self):
         """return a reference to the mediator's current CmdInterp object
 
@@ -458,6 +494,24 @@ class RecogStartMgr(OwnerObject):
 	*none*
 	"""
         debug.virtual('RecogStartMgr.new_instance')
+    
+    def rename_buffer_cbk(self, instance, old_buff_name, new_buff_name):
+        """callback from AppMgr which notifies us that the given editor
+        instance has renamed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the editor instance 
+
+	*STR* old_buff_name -- old name of the buffer 
+
+	*STR* new_buff_name -- new name of the buffer 
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        debug.virtual('RecogStartMgr.rename_buffer_cbk')
 
     def new_universal_instance(self, instance, exclusive = 1):
         """method called by AppMgr to notify RecogStartMgr that a new
@@ -597,6 +651,10 @@ class RSMInfrastructure(RecogStartMgr):
     *{STR : KnownTargetModule}* modules -- map from currently known
     module names to KnownTargetModule objects
 
+    *{STR : ResMgr}* results -- map from instance names to
+    ResMgr objects which manage results of the dictation
+    grammars for that editor instance
+
     *{STR : [INT]}* instances -- map from instance names to 
     KnownInstance objects
 
@@ -628,11 +686,13 @@ class RSMInfrastructure(RecogStartMgr):
                              'GM_factory': GM_factory,
                              'grammars': {},
                              'windows': {},
+                             'results': {},
                              'modules': {},
                              'instances': {}
                             },
                             args)
         self.add_owned('grammars')
+        self.add_owned('results')
         
     def activate(self):
         """activate the RecogStartMgr
@@ -831,6 +891,29 @@ class RSMInfrastructure(RecogStartMgr):
             return None
         return self.instances[instance].module()
     
+    def interpret_dictation(self, instance, result, initial_buffer = None):
+        """interpret the result of recognition by a dictation grammar,
+        and store the relevant information to allow for correction.
+
+        **INPUTS**
+
+        *STR instance* -- name of the editor instance whose grammar received 
+        the recognition
+
+        *SpokenUtterance result* -- a SpokenUtterance object
+        representing the recognition results
+
+        *STR initial_buffer* -- the name of the initial buffer which was
+        active at recognition-starting
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if self.known_instance(instance):
+            self.results[instance].interpret_dictation(result,
+                initial_buffer = initial_buffer)
+
     def _add_instance(self, instance, window_id = None, module = None):
         """private method to add a new instance with a given target
 	window and module
@@ -854,10 +937,13 @@ class RSMInfrastructure(RecogStartMgr):
         if self.known_instance(instance):
             return 0
         self.instances[instance] = KnownInstance(window_id, module)
-        app = self.editors.app_instance(instance)
-        debug.trace('RecogStartMgr._add_instance', 
-            'new manager')
-        self.grammars[instance] = self.GM_factory.new_manager(app, self)
+        app = self.app_instance(instance)
+        debug.trace('RecogStartMgr._add_instance', 'new manager')
+        self.grammars[instance] = \
+            self.GM_factory.new_manager(app, instance_name = instance, 
+                recog_mgr = self)
+        self.results[instance] = ResMgr.ResMgrStd(recog_mgr = self,
+            instance_name = instance)
         return 1
 
     def _add_known_window(self, window_id, window, instance):
@@ -883,7 +969,7 @@ class RSMInfrastructure(RecogStartMgr):
         old_module = self.instances[instance].module()
         success = self.instances[instance].add_window(window_id)
         if success and old_module == None:
-            app = self.editors.app_instance(instance)
+            app = self.app_instance(instance)
             module_name = window.module_name()
             self.instances[instance].set_module(module_name)
             module = self.modules[module_name]
@@ -918,7 +1004,7 @@ class RSMInfrastructure(RecogStartMgr):
         self.instances[instance].add_window(window)
         old_module = self.instances[instance].module()
         if old_module == None:
-            app = self.editors.app_instance(instance)
+            app = self.app_instance(instance)
             module_name = self.windows[window].module_name()
             self.instances[instance].set_module(module_name)
             module = self.modules[module_name]
@@ -1017,6 +1103,26 @@ class RSMInfrastructure(RecogStartMgr):
                 debug.trace('RecogStartMgr.new_instance', 
                     'neither window nor module is known')
 
+    def rename_buffer_cbk(self, instance, old_buff_name, new_buff_name):
+        """callback from AppMgr which notifies us that the given editor
+        instance has renamed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the editor instance 
+
+	*STR* old_buff_name -- old name of the buffer 
+
+	*STR* new_buff_name -- new name of the buffer 
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        if not self.known_instance(instance):
+            return 
+        self.grammars[instance].rename_buffer_cbk(old_buff_name, new_buff_name)
+
     def delete_instance(self, instance):
         """method called by AppMgr to notify RecogStartMgr that an
 	editor instance has been deleted
@@ -1038,7 +1144,9 @@ class RSMInfrastructure(RecogStartMgr):
                 del self.windows[window]
         del self.instances[instance]
         self.grammars[instance].cleanup()
+        self.results[instance].cleanup()
         del self.grammars[instance]
+        del self.results[instance]
 
     def specify_window(self, instance, window_id = None):
         """called to indicate that user has manually identified a
@@ -1236,7 +1344,7 @@ class RSMInfrastructure(RecogStartMgr):
         if instance == None:
             self._deactivate_grammars(window)
             return
-        app = self.editors.app_instance(instance)
+        app = self.app_instance(instance)
         if app == None:
             debug.trace('RecogStartMgr._recognition_starting_known_window',
                 'unknown instance')
@@ -1376,7 +1484,7 @@ class RSMBasic(RSMInfrastructure):
         if not win.shared():
 # window is known and dedicated, so it cannot belong to the new instance
             return 0
-        app = self.editors.app_instance(instance)
+        app = self.app_instance(instance)
         if win.single_display() or app.shared_window():
             verified = win.verify_new_instance(title, instance, self.editors)
             if verified == 1 or (trust and verified == None):
@@ -1480,7 +1588,7 @@ class RSMBasic(RSMInfrastructure):
             debug.trace('RecogStartMgr._recognition_starting_known_module',
                 'checking instance "%s"' % instance)
             info = self.instances[instance]
-            editor = self.editors.app_instance(instance)
+            editor = self.app_instance(instance)
             instance_module = info.module()
             if module.dedicated():
 #                print 'rs known module: dedicated'
@@ -1546,15 +1654,19 @@ class RSMBasic(RSMInfrastructure):
             return 0
         if self.universal == None:
             self.instances[instance] = KnownInstance()
-            app = self.editors.app_instance(instance)
+            app = self.app_instance(instance)
             debug.trace('RecogStartMgr.new_universal_instance', 
                 'new global manager')
             self.grammars[instance] = \
-                self.GM_factory.new_global_manager(app, self, 
-                exclusive = exclusive)
+                self.GM_factory.new_global_manager(app, 
+                    instance_name = instance, 
+                    recog_mgr = self, exclusive = exclusive)
+            self.results[instance] = ResMgr.ResMgrStd(recog_mgr = self,
+                instance_name = instance)
             self.universal = instance
             return 1
         self.new_instance(instance)
+        return 0
 
     def delete_instance(self, instance):
         """method called by AppMgr to notify RecogStartMgr that an
@@ -1598,7 +1710,7 @@ class RSMBasic(RSMInfrastructure):
             RSMInfrastructure._recognition_starting(self, window, title,
                 module_name)
         else:
-            app = self.editors.app_instance(self.universal)
+            app = self.app_instance(self.universal)
             self._activate_universal_grammars(app, self.universal, window)
 
     def _activate_universal_grammars(self, app, instance_name, window):

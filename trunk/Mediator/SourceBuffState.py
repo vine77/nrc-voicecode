@@ -51,6 +51,21 @@ class SourceBuffState(SourceBuffCookie):
                             'selection_range': selection},
                             attrs
                             )
+
+    def rename_buffer_cbk(self, new_buff_name):
+        """callback which notifies us that the application
+	has renamed the buffer corresponding to this cookie
+
+	**INPUTS**
+
+	*STR* new_buff_name -- new name of the buffer 
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        self.buff_name = new_buff_name
+
     def name(self):
         """returns buff_name
 

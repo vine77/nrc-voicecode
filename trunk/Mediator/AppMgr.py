@@ -401,7 +401,7 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
         if self.recog_mgr.new_universal_instance(new_name, exclusive):
             return new_name
         else:
-            self._delete_instance(new_name)
+            self.delete_instance(new_name)
             return None
 
     def delete_instance(self, instance):
@@ -506,19 +506,18 @@ class AppMgr(OwnerObject, AppState.AppCbkHandler):
 
 	*STR* instance -- name of the application instance 
 
-	**OUTPUTS**
-
 	*STR* old_buff_name -- old name of the buffer 
 
 	*STR* new_buff_name -- new name of the buffer 
 
+	**OUTPUTS**
+
 	*none*
 	"""
-        # this should call NewMediatorObject, unless all buffer-specific
-        # information is stored under AppMgr.  Since I haven't decided
-        # yet where that information will be stored, do nothing for now
-        pass
-
+        # this should also call NewMediatorObject, unless all buffer-specific
+        # information is stored under AppMgr.  For now, that is the
+        # case.
+        self.recog_mgr.rename_buffer_cbk(instance, old_buff_name, new_buff_name)
 
     def new_window(self, instance):
         """called when the editor notifies us of a new window for the 

@@ -34,6 +34,8 @@ class GramMgr(OwnerObject):
 
     *AppState* app -- the application to which the buffers belong
     
+    *STR instance_name* -- the name of this AppState instance 
+    
     *RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
     grammar manager
 
@@ -42,7 +44,7 @@ class GramMgr(OwnerObject):
     *none*
     """
 
-    def __init__(self, recog_mgr, app, **args):
+    def __init__(self, recog_mgr, app, instance_name, **args):
         """constructor
 	
 	**INPUTS**
@@ -51,11 +53,52 @@ class GramMgr(OwnerObject):
 	grammar manager
 	
 	*AppState* app -- the application to which the buffers belong
+
+        *STR instance_name* -- the name of this AppState instance 
 	"""
         self.deep_construct(GramMgr,
-                            {'recog_mgr': recog_mgr, 'app': app},
+                            {'recog_mgr': recog_mgr, 'app': app,
+                             'instance_name': instance_name},
                             args)
         self.name_parent('recog_mgr')
+
+    def name(self):
+        """returns the name of the AppState editor instance 
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+        
+        *STR* -- the instance name
+        """
+        return self.instance_name
+
+    def rename_buffer_cbk(self, old_buff_name, new_buff_name):
+        """callback which notifies us that the application
+	has renamed a buffer
+
+	**INPUTS**
+
+	*STR* old_buff_name -- old name of the buffer 
+
+	*STR* new_buff_name -- new name of the buffer 
+
+	**OUTPUTS**
+
+	*none*
+	"""
+        if old_buff_name == new_buff_name:
+            return
+        for window, buffer_grammars in self.dict_grammars.items():
+            try:
+                grammar = buffer_grammars['old_buff_name']
+                grammar.rename_buffer_cbk(new_buff_name)
+                buffer_grammars['new_buff_name'] = grammar
+                del buffer_grammars['old_buff_name']
+            except KeyError:
+                pass
 
     def interpreter(self):
         """return a reference to the mediator's current CmdInterp object
@@ -70,6 +113,24 @@ class GramMgr(OwnerObject):
 	"""
         return self.recog_mgr.interpreter()
     
+    def interpret_dictation(self, result, initial_buffer = None):
+        """interpret the result of recognition by a dictation grammar,
+        and store the relevant information to allow for correction.
+
+        **INPUTS**
+
+        *SpokenUtterance result* -- a SpokenUtterance object
+        representing the recognition results
+
+        *STR initial_buffer* -- the name of the initial buffer which was
+        active at recognition-starting
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.virtual('GramMgr.interpret_dictation')
+
     def remove_other_references(self):
         """additional cleanup to ensure that this object's references to
 	its owned objects are the last remaining references
@@ -230,13 +291,15 @@ class GramMgrFactory(Object):
 	"""
         self.deep_construct(GramMgrFactory, {}, args)
 
-    def new_manager(self, editor, recog_mgr):
+    def new_manager(self, editor, instance_name, recog_mgr):
         """creates a new GramMgr
 
 	**INPUTS**
 
 	*AppState* editor -- AppState object for which to manage
 	grammars
+
+        *STR instance_name* -- the name of this AppState instance 
 
 	*RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
 	grammar manager
@@ -247,7 +310,8 @@ class GramMgrFactory(Object):
 	"""
         debug.virtual('GramMgrFactory.new_manager')
 
-    def new_global_manager(self, editor, recog_mgr, exclusive = 1):
+    def new_global_manager(self, editor, instance_name, 
+        recog_mgr, exclusive = 1):
         """creates a new GramMgr using global grammars (regardless of
 	the value of self.global_grammars)
 
@@ -255,6 +319,8 @@ class GramMgrFactory(Object):
 
 	*AppState* editor -- AppState object for which to manage
 	grammars
+
+        *STR instance_name* -- the name of this AppState instance 
 
 	*RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
 	grammar manager
@@ -277,6 +343,26 @@ class GramMgrDictContext(GramMgr):
     
     *none*
     """
+    def interpret_dictation(self, result, initial_buffer = None):
+        """interpret the result of recognition by a dictation grammar,
+        and store the relevant information to allow for correction.
+
+        **INPUTS**
+
+        *SpokenUtterance result* -- a SpokenUtterance object
+        representing the recognition results
+
+        *STR initial_buffer* -- the name of the initial buffer which was
+        active at recognition-starting
+
+        **OUTPUTS**
+
+        *none*
+        """
+        name = self.name()
+        self.recog_mgr.interpret_dictation(self, name, result,
+            initial_buffer = initial_buffer)
+
     def find_context(self, buffer):
         """Find context for dictation grammar
 
@@ -510,6 +596,24 @@ class WinGramMgr(GramMgrDictContext):
                     buffer, window = a_window, 
                     exclusive = self.exclusive)
 
+    def rename_buffer_cbk(self, old_buff_name, new_buff_name):
+        """callback which notifies us that the application
+	has renamed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	**OUTPUTS**
+
+	*STR* old_buff_name -- old name of the buffer 
+
+	*STR* new_buff_name -- new name of the buffer 
+
+	*none*
+	"""
+        debug.virtual('GramMgr.rename_buffer_cbk')
+
     def new_window(self, window, buffer = None):
         """add a new window
 
@@ -648,13 +752,15 @@ class WinGramMgrFactory(GramMgrFactory):
 	"""
         return self.global_grammars
 
-    def new_manager(self, editor, recog_mgr):
+    def new_manager(self, editor, instance_name, recog_mgr):
         """creates a new GramMgr
 
 	**INPUTS**
 
 	*AppState* editor -- AppState object for which to manage
 	grammars
+
+        *STR instance_name* -- the name of this AppState instance 
     
 	*RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
 	grammar manager
@@ -665,11 +771,13 @@ class WinGramMgrFactory(GramMgrFactory):
 	"""
         debug.trace('WinGramMgrFactory.new_manager', 
             'new manager: global = ' + str(self.global_grammars))
-        return WinGramMgr(app = editor, recog_mgr = recog_mgr,
+        return WinGramMgr(app = editor, instance_name = instance_name,
+            recog_mgr = recog_mgr,
             factory = self.gram_factory,
             global_grammars = self.global_grammars, exclusive = self.exclusive)
 
-    def new_global_manager(self, editor, recog_mgr, exclusive = 1):
+    def new_global_manager(self, editor, instance_name, recog_mgr, 
+        exclusive = 1):
         """creates a new GramMgr using global grammars (regardless of
 	the value of self.global_grammars)
 
@@ -677,6 +785,8 @@ class WinGramMgrFactory(GramMgrFactory):
 
 	*AppState* editor -- AppState object for which to manage
 	grammars
+
+        *STR instance_name* -- the name of this AppState instance 
     
 	*RecogStartMgr recog_mgr* -- the RecogStartMgr which owns this
 	grammar manager
@@ -687,7 +797,8 @@ class WinGramMgrFactory(GramMgrFactory):
 	"""
         debug.trace('WinGramMgrFactory.new_global_manager', 
             'new global manager')
-        return WinGramMgr(app = editor, recog_mgr = recog_mgr,
+        return WinGramMgr(app = editor, instance_name = instance_name,
+            recog_mgr = recog_mgr,
             factory = self.gram_factory,
             global_grammars = 1, exclusive = exclusive)
 
