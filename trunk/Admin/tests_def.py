@@ -2726,11 +2726,17 @@ auto_test.add_test('set_text', test_set_text,
 def test_temporary():
     testing.init_simulator_regression()
     commands.open_file('blah.py')
-
-    commands.say(['variable', ' \\blank space', ' = \\equals', ' \\space bar', 'index', '*\\asterisk', '2', '**\\double asterisk', '8', '\n\\newline'], user_input='1\n2\n1\n1\n1\n1\n1\n', echo_utterance=1)
-
-    commands.say(['if', 'index', '&\\and percent', 'variable', 'then'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
-    commands.say(['variable', ' = \\equals', 'index', '%\\percent', '2', ' + \\plus', 'index', '%\\percent sign', '3', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+        
+    
+    commands.say(['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'of', 'object', 'class', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+    commands.say(['define', 'method', 'initialize', 'add', 'argument', 'on', 'application', 'equals', 'none', 'method', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
+    commands.say(['back indent'], echo_utterance=1)
+   
+   # the method below gets indented one level from the previous one.
+   # it should be at the same level instead.
+    commands.say(['define', 'method', 'spoken', 'form', 'regular', 'expression', 'add', 'argument', 'spoken', 'form', 'method', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    
 
 auto_test.add_test('temp', test_temporary, desc='temporary test')
