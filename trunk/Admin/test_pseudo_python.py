@@ -118,4 +118,3 @@ def run():
     mediator.init_simulator()
     mediator.print_symbols()
     dictate_pseudo_python()    
-    

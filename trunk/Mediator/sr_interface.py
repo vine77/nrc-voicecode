@@ -402,7 +402,7 @@ class CommandDictGrammar(DictGramBase):
 
     def gotBegin(self, moduleInfo):
 #        print '-- CommandDictGrammar.gotBegin: called'
-        self.interpreter.load_language_specific_aliases()        
+        pass
         
     def gotResults(self, words):
         #
@@ -439,7 +439,6 @@ class CodeSelectGrammar(SelectGramBase):
 
     def gotBegin(self, moduleInfo):
 #        print '-- CodeSelectGrammar.gotBegin: called'
-        self.interpreter.load_language_specific_aliases()
 #        print '-- CodeSelectGrammar.gotBegin: calling self.setSelectText with bufer content:\n*** Start of buffer content ***\n%s\n*** End of buffer content ***' % self.interpreter.on_app.curr_buffer.contents()
         self.setSelectText(self.interpreter.on_app.curr_buffer.contents())
 
