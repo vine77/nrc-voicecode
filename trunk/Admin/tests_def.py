@@ -3,4 +3,5 @@
 #
 # These modules define their own regression tests
 #
-import CmdInterp, EdSim, Object, SourceBuff
+import CmdInterp, EdSim, Object, SourceBuff, SymDict
+

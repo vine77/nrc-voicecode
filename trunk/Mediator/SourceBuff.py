@@ -40,16 +40,40 @@ class SourceBuff(Object):
                             attrs \
                             )
 
-        global file_language        
 
         #
         # Set the language name if it hasn't been set already
         #
         if self.language == None and self.file_name != None:
-            a_match = re.match('^.*?\.([^\.]*)$', self.file_name)
+            self.language = self.language_name(file_name)
+            
+
+
+    #
+    # Note: this method can be called even if *self* is not an actual
+    #       class.
+    #
+    def language_name(self, file_name):
+        """Returns the name of the language a file is written in
+        
+        **INPUTS**
+        
+        *STR* file_name -- name of the file 
+        
+
+        **OUTPUTS**
+
+        *STR* -- the name of the language
+        """
+        global file_language
+
+        language = None
+        if file_name != None:
+            a_match = re.match('^.*?\.([^\.]*)$', file_name)
             extension = a_match.group(1)
             if file_language.has_key(extension):
-                self.language = file_language[extension]
+                language =  file_language[extension]
+        return language
 
 
     def is_language(self, lang):

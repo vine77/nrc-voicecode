@@ -44,22 +44,126 @@
 # keystroke.
 #
 
-#  import re, sys
-#  import string
 
-#  # Pythonwin imports
-#  from pywin.mfc import dialog
-#  import win32ui
-#  import win32api
-#  import win32con
-#  import win32gui
-
-# Speech imports
+import re
 import natlink, vc_globals
 from natlinkutils import *
 from Object import Object
 
+#
+# Flag used to add a word to NatSpeak
+# 0x40000000 -> added by VoiceCode (i.e. alias Vocabulary Builder)
+# 0x00000001 -> added by user
+#
 
+#
+# Words added by VoiceCode to NatSpeak's vocabulary can be added either
+# as 'user' or as 'vocabulary builder'.
+#
+# If added as 'user', then the a-priori probabibility of the words is very
+# high which may improve accuracy for coding, but decrease accuracy for
+# regular dictation. Also, words added by VoiceCode are indistinguishable from
+# words added by the user.
+#
+# If added as 'vocabulary builder', a-priori probability of the words is
+# low, which decreases accuracy for programming, but doesn't affect accuracy
+# of regular dictation. However, this makes the symbols distinguishable from
+# user added symbols (but not distinguishable from vocabulary builder added
+# symbol, but that doesn't matter because we only remove multi word vocabulary
+# entries, and vocabulary builder entries are all single words.
+#
+add_words_as = 'user'
+if add_words_as == 'user':
+    word_info_flag = 0x00000001
+else:
+    word_info_flag = 0x40000000
+
+# The following functions are just wrappers on top of natlink ones.
+# They check for value of environment variable *VCODE_NOSPEECH* before
+# calling the corresponding natlink functions
+
+def speech_able():
+    return not os.environ.has_key('VCODE_NOSPEECH')
+
+def addedByVC(flag):
+    
+    """Returns *true* iif word information *flag* indicates that word
+    was added by VoiceCode"""
+
+    print '-- VoiceDictation.addedByVC: flag=%s' % str(flag)
+    if flag == None:
+        indicator = 0
+    elif (add_words_as == 'user'):
+        indicator = (flag % int(0x00000010))        
+    else:
+        indicator = (flag / int(0x40000000))
+    print '-- VoiceDictation.addedByVC: indicator=%s' % indicator
+    return indicator
+
+def getWordInfo(word, *rest):
+    
+    if speech_able():
+        if len(rest) == 0:
+            return natlink.getWordInfo(word)
+        elif len(rest) == 1:
+            return natlink.getWordInfo(word, rest[0])
+    else:
+        return None
+
+
+def addWord(word, *rest):
+    """Add a word to NatSpeak's vocabulary.
+
+    We only add the word if it doesn't already exist in the vocabulary
+    and if speech is enabled (i.e. environment variable
+    $VCODE_NOSPEECH undefined).
+
+    We add the word with flag of 0x40000000 which means 'added by
+    Vocabulary  Builder'. This has the effect of decreasing the 
+    a-priori probability of those words (so as to not affect  performance of  
+    the vocabulary for regular dictation). It also  allows us to
+    distinguish between words added by  VoiceCode and those added by the
+    user which makes  it possible to clean up the vocabulary 
+    VoiceDictation.addWord(a_form)"""
+    
+#VoiceDictation.addWord: word=%s' % word
+    
+    global word_info_flag
+
+    if speech_able():
+        if getWordInfo(word) == None:
+#            print '-- VoiceDictation.addWord: this word is new to NatSpeak'
+                   
+            if len(rest) == 0:
+                natlink.addWord(word, word_info_flag)
+            elif len(rest) == 1:
+                natlink.addWord(word, rest[0])
+            else:
+                return None
+
+
+
+def deleteWord(word, *rest):
+    """Delete a word from NatSpeak's vocabulary.
+
+    We only delete it if speech is enabled (i.e. environment variable
+    $VCODE_NOSPEECH undefined).
+
+    Also, we only remove it if the word was added to the vocabulary by
+    VoiceCode, i.e. if the word info has 'added by Vocabulary Builder'
+    flag set and if the word is a phrase (single words might actually
+    have ben added by the real Vocabulary Builder)"""
+    
+    if speech_able():
+        flag = getWordInfo(word, 4)
+        num_words = len(re.split('\s+', word))
+#        print '-- VoiceDictation.deleteWord: word=%s, flag=%s, num_words=%s, word_info_flag=%s' % (word, flag, num_words, word_info_flag)        
+        if addedByVC(flag) and num_words > 1:
+#            print '-- VoiceDictation.deleteWord: actually deleting word %s' % word
+            return natlink.deleteWord(word)
+        else:
+#            print '-- VoiceDictation.deleteWord: word not added by VoiceCode %s' % word
+            return None
 
 
 #---------------------------------------------------------------------------
