@@ -1147,6 +1147,8 @@ class RSMInfrastructure(RecogStartMgr):
 
 	*none*
 	"""
+# ensure that AppState is synchronized with the editor
+	app.synchronize_with_app()
 	self.activate_instance_window(instance_name, window)
 	buff_name = app.curr_buffer_name()
 	dictation_allowed = app.recog_begin(window)

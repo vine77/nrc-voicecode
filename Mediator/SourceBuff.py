@@ -102,7 +102,30 @@ class SourceBuff(OwnerObject):
         STR -- name of the buffer."""
 	return self.buff_name
         
+    def on_change(self, start, end, text, program_initiated):
+	"""method which should be called after the contents of a buffer
+	is changed.  If the SourceBuff represents a buffer in an 
+	external editor which does not support change notification, then 
+	on_change may only be called for mediator-initiated changes 
+	(including responses from the external editor to 
+	mediator-initiated changes).
 
+	**INPUTS**
+
+	*INT* start -- start of the modified range
+
+	*INT* end -- end of the modified range
+
+	*STR* text -- the new text replacing this range
+
+	*BOOL* program_initiated -- true if the change was initiated by
+	the mediator
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.app.on_change(self.name(), start, end, text, program_initiated)
 
     def rename_buffer_cbk(self, new_buff_name):
         
@@ -1294,7 +1317,7 @@ class SourceBuff(OwnerObject):
         *none* -- 
         """
         
-        debug.virtual('SourceBuff.delete_cbk')
+	self.on_change(range[0], range[1], "", 0)
 
     def insert_cbk(self, range, text):
         
@@ -1316,7 +1339,7 @@ class SourceBuff(OwnerObject):
         *none* -- 
         """
         
-        debug.virtual('SourceBuff.insert_cbk')
+	self.on_change(range[0], range[1], text, 0)
 
     def set_selection_cbk(self, range, cursor_at=1):
         

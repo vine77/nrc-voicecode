@@ -183,6 +183,8 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	before = self.content[0:start]
         after = self.content[end:]
         self.content = before + text + after
+	self.goto(start + len(text))
+	self.on_change(start, end, text, 1)
 
     def get_visible(self):
 	if self.global_selection:
@@ -307,6 +309,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
 	after = self.get_text(end)
 	self.content = before + text + after
 	self.goto(start + len(text))
+	self.on_change(start, end, text, 1)
 
     def insert_indent(self, code_bef, code_after, range = None):
         """Insert code into source buffer and indent it.
@@ -407,6 +410,7 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
         after = self.content[end:]
         self.content = before + after
         self.goto(start)
+	self.on_change(start, end, "", 1)
 
         
     def goto(self, pos):

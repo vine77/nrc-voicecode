@@ -1150,7 +1150,8 @@ class ServerMainThread(Object.Object):
 	messages = data_thread.message_queue()
 
         talk_msgr = messenger_factory(talk_sock)        
-        listen_msgr = messaging.MixedMessenger(talk_msgr, messages)
+        listen_response_msgr = messenger_factory(listen_sock)        
+        listen_msgr = messaging.MixedMessenger(listen_response_msgr, messages)
         an_app_state = app_state_factory(app_name, id, listen_msgr, talk_msgr)
 
 	data_thread.setDaemon(1)

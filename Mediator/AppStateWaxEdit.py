@@ -26,8 +26,7 @@ import auto_test, debug
 import AppState, AppStateNonCached, as_services
 from SourceBuffTB import SourceBuffTB
 
-class AppStateWaxEdit(AppStateNonCached.AppStateNonCached,
-	AppState.AppChangeSpec):
+class AppStateWaxEdit(AppStateNonCached.AppStateNonCached):
     """This class is a an AppState wrapper on top of WaxEdit.
 
     It is used to decouple from any external editor so that we can
@@ -66,7 +65,7 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached,
         self.open_buffers[self.active_buffer_name] =  \
 	    SourceBuffTB(app = self, buff_name="", \
 	    underlying_buffer = self.the_editor.editor_buffer(),
-	    language=None)
+	    language=None, change_specification = 1)
 
     def new_compatible_sb(self, buff_name):
         """Creates a new instance of [SourceBuff].
@@ -87,10 +86,11 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached,
 
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
         
-        return SourceBuffTB.SourceBuffTB(app=self, buff_name=buff_name)
+        return SourceBuffTB.SourceBuffTB(app=self, buff_name=buff_name,
+	    change_specification = 1)
 
         
-    def recog_begin(self, window_id):
+    def recog_begin(self, window_id, block = 0):
         
         """Haven't figured out how to make WaxEdit block user input"""
 
@@ -277,7 +277,8 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached,
             self.open_buffers[file_name] = SourceBuffTB(app = self, 
 		buff_name=file_name, 
 		underlying_buffer = self.the_editor.editor_buffer(),
-		indent_level=3, indent_to_curr_level=1)
+		indent_level=3, indent_to_curr_level=1,
+		change_specification = 1)
 	    self.active_buffer_name = file_name
 	    self.the_editor.set_name(short)
             buff_name = self.active_buffer_name
@@ -597,33 +598,4 @@ class AppStateWaxEdit(AppStateNonCached.AppStateNonCached,
 	*[STR]* -- list of the names of open buffers
 	"""
 	return self.open_buffers.keys()
-
-    def set_change_callback(self, change_callback = None):
-	"""changes the callback to a new function
-
-	**INPUTS**
-      
-	*FCT* change_callback --
-	change_callback( *INT* start, *INT* end, *STR* text, 
-	*INT* selection_start, *INT* selection_end, 
-	*STR* buff_name)
-
-	The arguments to the change callback specify the character offsets
-	of the start and end of the changed region (before the change),
-	the text with which this region was replaced, the start and end
-	of the selected region (after the change), and the name of the
-	buffer reporting the change
-
-	Note the difference between this change_callback and the
-	TextBufferWX one: here the name of the buffer is returned,
-	rather than a reference to the underlying TextBufferWX.  Also,
-	this change callback is called only when the change is
-	initiated by the editor, not when the mediator calls a method
-	which makes a change.
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	self.the_editor.set_change_callback(change_callback)
 

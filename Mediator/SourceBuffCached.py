@@ -173,7 +173,7 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
-	SourceBuff.rename_buff_cbk(new_buff_name)
+	SourceBuff.SourceBuff.rename_buff_cbk(new_buff_name)
         self.cache['language_name'] = None
         self.cache['file_name'] = None
 
@@ -447,12 +447,17 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         *none* -- 
         """
 
-        if range == None:
-            range = self.get_selection()
+#        if range == None:
+#            range = self.get_selection()
+# bad: if this gets the selection from the application, it will be all
+# screwed up because the application will already have made the change.
+# Basically, callbacks should never use defaults for the range
+
+        self.uncache_data_after_buffer_change()
+	SourceBuff.SourceBuff.delete_cbk(self, range)
         old_text = self.get_text()
         self.cache['get_text'] = old_text[:range[0]] + old_text[range[1]+1:]
 
-        self.uncache_data_after_buffer_change()
         
 
     def insert_cbk(self, range, text):
@@ -477,8 +482,13 @@ class SourceBuffCached(SourceBuff.SourceBuff):
         trace('SourceBuffCached.insert_cbk', 'range=%s, text=\'%s\'' % (range, text))
         trace('SourceBuffCached.insert_cbk', '** upon entry, self.cache["get_text"]="%s"' % self.cache["get_text"])        
 
-        if range == None:
-            range = self.get_selection()     
+#        if range == None:
+#            range = self.get_selection()
+# bad: if this gets the selection from the application, it will be all
+# screwed up because the application will already have made the change.
+# Basically, callbacks should never use defaults for the range
+        self.uncache_data_after_buffer_change()
+	SourceBuff.SourceBuff.insert_cbk(self, range, text)
         old_text = self.get_text()
         self.cache['get_text'] = old_text[:range[0]] + text + old_text[range[1]:]
 

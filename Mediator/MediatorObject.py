@@ -78,6 +78,93 @@ def disconnect_from_sr(disconnect, save_speech_files):
 def do_nothing(*positional, **keywords):
     pass
 
+class AppCbkFilter(Object.OwnerObject):
+    """object which filters callbacks from a MediatorObject's AppState
+
+    **INSTANCE ATTRIBUTES**
+
+    *MediatorObject mediator* -- reference to the parent MediatorObject
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, the_mediator, **args):
+	self.deep_construct(AppCbkFilter,
+	                    {
+			     'mediator': the_mediator
+			    }, args)
+	self.name_parent('mediator')
+
+    def close_app_cbk(self, instance):
+	"""callback from AppState which indicates that the application has 
+	closed or disconnected from the mediator
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance to be removed
+    
+	**OUTPUTS**
+
+	*none*
+	"""
+# for now at least, this does the same thing as delete_instance
+	self.mediator.close_app_cbk(instance)
+
+    def close_buffer_cbk(self, instance, buff_name):
+	"""callback from AppState which notifies us that the application
+	has closed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	*STR* buff_name -- name of the buffer which was closed
+
+	**OUTPUTS**
+
+	*none*
+	"""
+# ignored by MediatorObject
+	pass
+
+    def rename_buffer_cbk(self, instance, old_buff_name, new_buff_name):
+	"""callback from AppState which notifies us that the application
+	has renamed a buffer
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance 
+
+	**OUTPUTS**
+
+	*STR* old_buff_name -- old name of the buffer 
+
+	*STR* new_buff_name -- new name of the buffer 
+
+	*none*
+	"""
+# ignored by MediatorObject
+	pass
+
+
+    def new_window(self, instance):
+	"""called when the editor notifies us of a new window for the 
+	specified instance
+
+	**INPUTS**
+
+	*STR* instance -- name of the application instance
+
+	**OUTPUTS**
+
+	*BOOL* -- true if window is added
+	"""
+# ignored by MediatorObject
+	pass
+    
+
+
 class MediatorObject(Object.Object):
     """Main object for the mediator.
 
@@ -99,6 +186,9 @@ class MediatorObject(Object.Object):
     Normally, this should be true, except if the mediator is created for
     regression testing purposes with an editor which is reused by the
     next test.
+
+    *AppCbkFilter cbk_filter* -- object which filters callbacks from
+    AppState and passes only close_app_cbk to us.
 
     [CmdInterp] *interp=CmdInterp.CmdInterp()* -- Command interpreter used to
     translate pseudo-code to native code.
@@ -144,7 +234,8 @@ class MediatorObject(Object.Object):
                              'code_select_grammar': None,
 			     'window': window,
 			     'owner': owner,
-			     'id': id},
+			     'id': id,
+			     'cbk_filter': AppCbkFilter(self)},
                             attrs,
                             {})
         self.mixed_grammar = \
@@ -279,6 +370,9 @@ class MediatorObject(Object.Object):
 	if self.owns_app and self.app:
 	    self.app.cleanup()
 	    del self.app
+	if self.cbk_filter:
+	    self.cbk_filter.cleanup()
+	    self.cbk_filter = None
                 
     def close_app_cbk(self, instance_name):
 	"""method called by our AppState to tell us that it is closing, or
@@ -302,24 +396,6 @@ class MediatorObject(Object.Object):
 	if self.owner and self.id:
 	    self.owner.delete_instance_cbk(self.id)
 
-    def new_window(self, instance_name):
-	"""method called by our AppState to tell us that the editor has 
-	opened a new window.  This version of MediatorObject doesn't
-	support multiple windows, so we just ignore it.
-	
-	**INPUTS**
-
-	*STR* instance_name -- name of the instance.  This parameter is
-	included only for compatibility with the usual call from
-	AppState to the AppMgr.  This implementation of MediatorObject
-	has only one editor instance, so it ignores this parameter
-
-	**OUTPUTS**
-
-	*none*
-	"""
-	pass
-	
     def add_csc(self, acmd, add_voc_entry=1):
 	"""Add a new Context Sensitive Command.
 

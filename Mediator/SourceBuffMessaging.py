@@ -83,7 +83,8 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 
         *STR* -- the name of the language
         """
-	self.app.talk_msgr.send_mess('language_name')
+	self.app.talk_msgr.send_mess('language_name',
+	    {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['language_name_resp'])
         return response[1]['value']
 
@@ -100,7 +101,8 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 	*INT* pos -- offset into buffer of current cursor position
 	"""
 
-	self.app.talk_msgr.send_mess('cur_pos')
+	self.app.talk_msgr.send_mess('cur_pos',
+	    {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['cur_pos_resp'])
         return messaging.messarg2int(response[1]['value'])
 
@@ -120,7 +122,8 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 	following the selection (this matches Python's slice convention).
 	"""
 
-	self.app.talk_msgr.send_mess('get_selection')
+	self.app.talk_msgr.send_mess('get_selection',
+	    {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['get_selection_resp'])
         range = messaging.messarg2intlist(response[1]['value'])
         return range
@@ -151,14 +154,17 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         #
         # Set the selection and get updates from the editor
         #
-        args = {'range': range, 'cursor_at': cursor_at}
+        args = {'range': range, 'cursor_at': cursor_at,
+	    'buff_name': self.name()}
 	self.app.talk_msgr.send_mess('set_selection', args)
         response = self.app.talk_msgr.get_mess(expect=['set_selection_resp'])
 
         #
         # Apply the updates
         #
+        self.app.update_response = 1
         self.app.apply_upd_descr(response[1]['updates'])
+        self.app.update_response = 0
 
     def _get_text_from_app(self, start = None, end = None):
 	"""retrieves a portion of the buffer
@@ -179,7 +185,8 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 
 #        print '-- SourceBuffMessaging._get_text_from_app: start=%s, end=%s' % (start, end)
         
-        args = {'start': start, 'end': end}
+        args = {'start': start, 'end': end,
+	    'buff_name': self.name()}
 	self.app.talk_msgr.send_mess('get_text', args)
         response = self.app.talk_msgr.get_mess(expect=['get_text_resp'])
         
@@ -199,7 +206,8 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 
 	*INT* (start, end)
 	"""
-	self.app.talk_msgr.send_mess('get_visible')
+	self.app.talk_msgr.send_mess('get_visible',
+	    {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['get_visible_resp'])
         return messaging.messarg2intlist(response[1]['value'])        
         
@@ -218,11 +226,14 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 	*none*
 	"""
 
-        args = {'pos': position}
+        args = {'pos': position,
+	    'buff_name': self.name()}
 	self.app.talk_msgr.send_mess('make_position_visible', args)
         response = self.app.talk_msgr.get_mess(expect=['make_position_visible_resp'])
 
+        self.app.update_response = 1
         self.app.apply_upd_descr(response[1]['updates'])
+        self.app.update_response = 0
         
 
     def _len_from_app(self):
@@ -236,7 +247,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 
 	*INT* length 
 	"""
-	self.app.talk_msgr.send_mess('len', {})
+	self.app.talk_msgr.send_mess('len', {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['len_resp'])
 
         return messaging.messarg2int(response[1]['value'])
@@ -257,7 +268,8 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         *none* -- 
         """
         
-        self.app.talk_msgr.send_mess('newline_conventions')
+        self.app.talk_msgr.send_mess('newline_conventions',
+	    {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['newline_conventions_resp'])
         return response[1]['value']
 
@@ -276,7 +288,8 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         *none* -- 
         """
 
-        self.app.talk_msgr.send_mess('pref_newline_convention')
+        self.app.talk_msgr.send_mess('pref_newline_convention',
+	    {'buff_name': self.name()})
         response = self.app.talk_msgr.get_mess(expect=['pref_newline_convention_resp'])
         return response[1]['value']
 
@@ -296,11 +309,14 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         
         *none* -- 
         """
-        args = {'direction': direction, 'num': num}
+        args = {'direction': direction, 'num': num,
+	    'buff_name': self.name()}
         self.app.talk_msgr.send_mess('move_relative_page', args)
         response = self.app.talk_msgr.get_mess(expect=['move_relative_page_resp'])
 
+        self.app.update_response = 1
         self.app.apply_upd_descr(response[1]['updates'])
+        self.app.update_response = 0
         
 
     def insert(self, text, range = None):
@@ -321,10 +337,13 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 
 #        print '-- SourceBuffMessaging.insert: text=%s, range=%s' % (text, range)
         
-        args = {'text': text, 'range': range}
+        args = {'text': text, 'range': range,
+	    'buff_name': self.name()}
         self.app.talk_msgr.send_mess('insert', args)
         response = self.app.talk_msgr.get_mess(expect=['insert_resp'])        
+        self.app.update_response = 1
         self.app.apply_upd_descr(response[1]['updates'])
+        self.app.update_response = 0
         
 
     def delete(self, range = None):
@@ -343,11 +362,14 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         #
         # Ask external editor to delete the region
         #
-        args = {'range': range}
+        args = {'range': range,
+	    'buff_name': self.name()}
         self.app.talk_msgr.send_mess('delete', args)
         response = self.app.talk_msgr.get_mess(expect=['delete_resp'])
 
+        self.app.update_response = 1
         self.app.apply_upd_descr(response[1]['updates'])        
+        self.app.update_response = 0
         
         
     def goto(self, pos):
@@ -359,17 +381,21 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
         #
         # Ask external editor to delete the region
         #
-        args = {'pos': pos}
+        args = {'pos': pos,
+	    'buff_name': self.name()}
         self.app.talk_msgr.send_mess('goto', args)
         response = self.app.talk_msgr.get_mess(expect=['goto_resp'])
 
+        self.app.update_response = 1
         self.app.apply_upd_descr(response[1]['updates'])
+        self.app.update_response = 0
         
     def line_num_of(self, position = None):
 	"""Ask external editor to return line number of a cursor position"""
 
 
-        args = {'pos': position}
+        args = {'pos': position,
+	    'buff_name': self.name()}
         self.app.talk_msgr.send_mess('line_num_of', args)
         response = self.app.talk_msgr.get_mess(expect=['line_num_of_resp'])
 
