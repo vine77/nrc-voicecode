@@ -11,36 +11,8 @@ py_simple_for = ActionInsert(code_bef='for ', code_after=':\n',
                              docstring="""Insert template code for a simple Python for loop""")
 
 py_goto_body = \
-    ActionSearch(regexp=':\s*\n[ \t]*\n*',
+    ActionSearch(regexp=':[ \t]*(\n|$)[ \t]*',
                  docstring="""Move cursor to the body of a Python compound statement""")
-
-py_if = \
-    ActionInsert(code_bef='if ', code_after=':\n',
-                 docstring="""Types template code for an if statement""")
-
-py_else_if = \
-    ActionInsert(code_bef='elif ', code_after=':\n',
-                 docstring="""Types template code for an else if statement""")
-
-py_else = \
-    ActionInsert(code_bef='else:\n', code_after='',
-                 docstring="""Types template code for an else clause.""")
-
-py_logical_and = \
-    ActionInsert(code_bef=' and ', code_after='',
-                 docstring="""Types a logical and with spaces""")
-
-py_logical_equal = \
-    ActionInsert(code_bef=' == ', code_after='',
-                 docstring="""Types a logical equality operator with spaces""")
-
-py_logical_not_equal = \
-    ActionInsert(code_bef=' != ', code_after='',
-                 docstring="""Types a logical inequality operator with spaces""")
-    
-py_assignment = \
-    ActionInsert(code_bef=' = ', code_after='',
-                 docstring="""Types an assignment operator with spaces""")
 
 py_new_statement = \
     ActionSearchInsert(regexp='(\n|$)', code_bef='\n', code_after='',
@@ -107,8 +79,3 @@ py_function_add_argument = \
 py_function_body = \
     ActionSearch(regexp=':\s*',
                  docstring="""Moves cursor to the body of a Python method or function""")
-
-py_continue_statement = \
-    ActionInsert(code_bef='\\\n', code_after='',
-                 docstring="""Continues a Python statement on the next line (i.e. inserts \\\\n""")
-

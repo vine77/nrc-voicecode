@@ -4,24 +4,230 @@ Todo list for VoiceCode
 To do before 1st release
 ========================
 
-Testing
--------
-Test redundant translation of symbols NOT JUST LSAs
+"Not what I said" correction
+----------------------------
 
-LSAs
-----
+-- Alain:
+
+Need to be able to correct errors where an utterance was translated in
+the wrong way.
+
+The table below shows all the possible kinds of errors. The first
+column gives the type of utterance the user meant. The 2nd column
+gives the type of utterance it was interpreted to be. The third column
+descirbes circumstances when this may happen.
+
+User	Interpreter
+Meant   understood      Happens when
+-----   -----------	------------
+
+text	CSC		if user didn't turn off interpretation when he 
+			should have
+
+	LSA		if user didn't turn off interpretation when he 
+			should have
+
+	sym		if user didn't turn off interpretation when he 
+			should have
+
+sym	CSC		if spoken symbol is same or substring of spoken CSC
+
+	LSA		if spoken symbol is same or substring of spoken LSA
+
+	text		if interpretation was turned off when it shouldn't have
+
+        wrong sym       happens if two symbols have same spoken form and
+                        interpreter chose the wrong one
+
+LSA	CSC		if spoken LSA is same or substring of spoken CSC
+
+	sym		if spoken LSA is STRICT SUBSTRING of spoken symbol 
+			(otherwise, the LSA will take precedence).
+
+	text		if interpretation was turned off when it shouldn't have
+
+CSC	LSA		if spoken CSC is STRICT SUBSTRING of spoken LSA 
+			(otherwise, the CSC will take precedence)
+
+	sym		if spoken symbol is STRICT SUBSTRING of spoken LSA 
+			(otherwise, the CSC will take precedence)
+
+	text		if interpretation was turned off when it shouldn't have
+
+
+A full fledge correction dialog might allow the user to select a
+misinterpreted portion of the utterance which was meant as a SINGLE
+symbol, CSC, LSA or textual phrase. In other words, if two consecutive
+LSA, CSC, symbols or phrase were misinterpreted, the user can't
+correct both at the same time. That's because things become very
+complicated to display (need to show the possible interpretations of
+both, with possibly different separation points of the utteranace for
+where the first command ends and the second one starts).
+
+So for example, if the user said:
+
+"items for sale equals 0" meaning "itemsForSale = 0" and the "for" got
+interpreted as a for loop, the user would say: "correct items for
+sale".
+
+He would then get a dialog box which among other things, would have 3 buttons:
+
+"meant symbol"
+"meant text"
+"meant command"
+
+The user would say: "meant symbol", at which point the system would
+display all the possible ways that "items for sale" might be
+interpreted as a symbol. When the user selects one, the system undo
+and redo the interpretation to take that into account (more on how
+that would be done later).
+
+An other example, suppose the user meant "items for (sale = 0^=0; <= ;
+++){\n}" (i.e. "for" really meant a for loop, doesn't make syntactic
+sense but nevermind ) but it got recognised as "itemsForSale = 0". The
+user would say: "correct for" and then "meant command". The system
+would then display the docstring of all the LSAs and CSCs that "for"
+might translate to. When the user picks one, the system would again undo and redo the interpretation accordingly.
+
+If the user meant the text "items for sales equals 0", then he would
+say: "correct from items up to 0" and then say: "meant text".
+
+The undo/redo gets a bit complicated, if the misinterpretation caused an
+incorrect segmentation of the utterance. In the above example where a
+for loop gets interpreted as being part of a symbol, the utterance was
+segmented as:
+
+'items for sale' | 'equals' | '0'
+
+but the correct segmentation is:
+
+'items' | 'for' | 'sale' | 'equals' | '0'
+
+So this means that we need to undo the interpretation up to before
+'items', eventhough it's not part of what the user selected when he
+said "correct for". Moreover, when we reinterpret 'items for sale
+etc...', the interpreter will just repeat the mistake it did.
+
+So the way to go is to undo every thing up to the end of the last
+correctly interpreted part of the utterance (just before 'items' in
+this case), then remove the portion of the utterance selected by the
+user for correction as well as everything that followed it (in this
+case: 'for sale equals 0') from the utterance before reinterpreting
+it. This will force a segmentation point at the start of the portion
+selected by the user (in this case: 'for'). Then, we execute whatever
+action/symbol/text/LSA was selected by the user in the correction
+dialog (in this case: CSC 'for') and finally, reinterpret everything
+that followed the portion of the utterance selected by the user (in
+this case: 'sale equals 0').
+
+Note that when reinterpreting the misinterpreted portion that preceded
+the portion selected by the user, there may be problems in cases where
+the meaning of reinterpreted portion is different when it is at the
+end of an utterance than when it is in the middle of one (can't think
+of an example right now). But if that's the case, we can insert some
+dummy part of speech (e.g. '@#$$%$%@#') whose interpretation is to do
+absolutely nothing. This utterance shouldn't be logged in the command
+history. Bit of a hack.
+
+
+Python support
+--------------
+
+For some reason, py_std_symbols.py seems to be missing some important
+symbols. For example, "os" is not in there. Take a look at
+py_parse_tex_files.py.
+
+
+Turning off translation
+-----------------------
+
+-- Alain:
+
+Need to support 3 modes:
+
+coding mode
+
+    everything gets interpreted
+
+string mode
+
+    only limited set of CSCs and LSAs are interpreted. Symbols aren't.
+    All global LSAs are interpreted. Navigational CSCs and non-coding
+    ones (e.g. open file)' are enabled, especially, CSCs for jumping out of
+    a string.
+
+comment mode
+
+    only limited set of CSCs and LSAs are interpreted. Symbols aren't.
+    All global LSAs are interpreted. Navigational CSCs and non-coding
+    ones (e.g. open file)' are enabled, especially those for creating new
+    comment lines.
+
+dictation
+    
+    only global LSAs are interpreted. Everything else is typed as dictated
+    text.
+
+Some commands would automatically change the system's mode. For
+example, 'between quotes' would put the system in 'string' mode. CSC
+'jump out' or 'out of quote' would put it in coding mode. Etc...
+
+One way to support this would be for AppState to have an attribute
+cur_mode in ('code', 'string', 'comment', 'dictation'). Method
+chop_symbol would only chop a symbol if mode was 'code'. Method
+chop_LSA would not chop a non-global LSA, unless mode was
+'code'. Method chop_CSC would always chop the CSC because the context
+of the CSC itself would determine in what modes they are enabled.
+
+There would be a class ContModes with attribute mode_list, which would
+list the modes in which the context applies. ContLanguages would be
+descendants of ContModes with mode_list = ['code'].
+
+There would be CSCs 'coding mode', 'string mode', 'comment mode' and
+'dictation mode' which would always be active and turn the mode to the
+right value.
+
+Eventually, those modes will be determined automatically based on the
+code context.
+
+Maybe string and comment modes are really the same thing?
+
+
+Symbol compilation
+------------------
 
 -- Alain
 
-Creation of CSC for redundant translation of LSAs at Mediator level is not necessary anymore because CmdInterp.chop_LSA does the redundant translation directly now.
+Compiling py_std_symbols.py is very slow. This is a real problem with
+regression testing since we regenerate the mediator object before
+every test.
 
-Standard symbols
-----------------
+Why is that? If it can't be
+made faster, maybe we should not recompile it everytime we start
+Mediator, but only if it has changed since the last time compiled.
 
--- Alain 
+Actually, the problem is the time spent adding words to the
+vocabulary. Also, checking if a word exists in the vocabulary is slow
+(but much less so than adding words). So one fix is to change the
+std_lib recompilation method so that it always recompiles the symbols,
+but only updates the sr vocabulary if a flag
+sr_voc_was_cleansed=1. That way, the regression testing procedure
+could clean the SymDict (but not the the SR vocabulary) before every
+test, without having to update the SR vocabulary every time.
 
-Seems to be a bug because the same standard symbols files
-py_std_sym.py keeps getting recompiled many times (seems unnecessary).
+Note that the reason we clean the SymDict before every test in the
+regression testing procedure is that we want to avoid interaction
+effects between tests. For example, it could be that a test A succeeds
+only if test B was done before it. By starting afresh for every test
+we avoid that. If we don't clean the SR vocabulary between tests,
+there is a danger of interaction effects. But that doesn't to be a
+real problem. The only possible interaction is that test A succeeds
+only on account that B has added a symbol to the voc (which A itself
+doesn't add). But in such a case, the problem would likely be visible
+because A wouldn't have that symbol in its SymDict and therefore the
+mediator would not recognise it as a known symbol (even though the SR
+system did recognise it).
+
 
 Locked SymDict
 --------------
@@ -35,27 +241,6 @@ SymDict used by all the MediatorObject instances are in sync. Otherwise, they mi
    pass it a central SymDict instance. This SymDict instance would
    have a lock, which means that only one MediatorObject instance at a
    time could update it.
-
-
-Symbol translation
-------------------
-
-
-Make actions into objects
--------------------------
-
-DO BEFORE HAVE DEFINED TOO MANY ACTION FUNCTIONS IN CONFIG FILE (IN
-PARTICULAR BEFORE HEAVY TESTING).
-
-This will be needed in the future for commands like "N times", "do
-that again", "keep doing that", "previous one", "next one", etc...
-
-If actions are just functions, we will be able to repeat them with "N
-times", but or "keep doing that", but we won't be able to modify the
-action with commands like "previous one" etc...
-
-If actions are objects, they can store the values of arguments that
-they were invoked with (e.g. "direction").
 
 
 Symbol compilation
@@ -160,7 +345,9 @@ Interpreter
 Should it take into account the word property (space adding?) or is
 that done automatically by VDct?
 
-If we start using word properties, then we don't need the hack where addWord adds redundant spoken form for words that start/end with blanks.
+If we start using word properties, then we don't need the hack where
+addWord adds redundant spoken form for words that start/end with
+blanks.
 
 Symbol compilation
 ------------------
@@ -181,19 +368,6 @@ before or after an LSA.
 
 Should modify add_lsa so it allows to specify the word info (full word
 info or just spacing?)
-
-
--- Alain
-
-In vc_config.py, there are many commands which are implemented as CSCs
-but would be better implemented as LSAs.
-
--- Alain
-
-At the moment, if the same words mean different things in different
-langauges, you need to define them as two separate add_lsa
-commands. It would be better if a single command allowed you to define
-different written forms for different languages.
 
 
 Can wait after 1st release
@@ -517,4 +691,13 @@ often the user recently accepted a new symbol formatted in that way in
 the current language.
 
 
-SymDict
+Symbol Compilation
+------------------
+
+-- Alain
+
+Python standard libraries have lots of symbols of the form: getenv
+which can't be split into their constituents. So when expand_word
+finds a word that's neither in-vocab or known abbreviation, it should
+try to expand it as a concatenation of abbreviations and in-vocab
+words.

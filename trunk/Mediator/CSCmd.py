@@ -17,18 +17,18 @@ class CSCmd(Object):
     *STR spoken_forms=[]* -- list of alternatives ways that this
      command can be spoken out. They can be regular expressions.
     
-    *meanings=[[* [Context] *, FCT]]* -- list of possible contextual
-      meanings for this command. Each element is a pair with 1st
-      element being a context and the 2nd element being an action
-      function to be fired if that context applies.
+    *meanings=*{* [Context] *: * [Action] *}* -- Dictionary of
+    possible contextual meanings for this command. Key is a context
+    and value is an action object to be fired if that context applies.
 
     CLASS ATTRIBUTES**
         
     *none* --
 
-    .. [Context] file:///./Context.Context.html"""
+    .. [Context] file:///./Context.Context.html
+    .. [Action] file:///./Action.Action.html"""
         
-    def __init__(self, spoken_forms=[], meanings=[], **attrs):
+    def __init__(self, spoken_forms=[], meanings={}, docstring=None, **attrs):
         self.deep_construct(CSCmd,
                             {'spoken_forms': spoken_forms,\
                              'meanings': meanings},
@@ -50,9 +50,9 @@ class CSCmd(Object):
         # Try each of the contextual meanings in turn until find one that
         # applies
         #
-#        print '-- CSCmd.interpret: self.meanings%s' % self.meanings
-        for ameaning in self.meanings:
-            cont, action = ameaning[0], ameaning[1]
+#        print '-- CSCmd.interpret: self.meanings=%s' % self.meanings
+        for ameaning in self.meanings.items():
+            cont, action = ameaning
 #            print '-- CSCmd.interpret: cont=%s' % cont
 #            print '-- CSCmd.interpret: ameaning=%s, cont=%s, action=%s, action.doc()=%s' % (ameaning, cont, str(action), action.doc())
             if (cont == None or cont.applies(app)):
@@ -65,3 +65,17 @@ class CSCmd(Object):
 
         return applied
 
+    def doc(self):
+        """Returns the documentation for that CSC.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        return self.docstring

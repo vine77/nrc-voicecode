@@ -223,6 +223,38 @@ class ActionSearchInsert(Action):
         app.insert_indent(code_bef=self.code_bef, code_after=self.code_after)
 
 
+class ActionSwitchTranslation(Action):
+    """Turns translation on/off
+        
+    **INSTANCE ATTRIBUTES**
+        
+    *BOOL* on -- If true, set translation to 'on'
+        
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+        
+    def __init__(self, on=None, **args_super):
+        self.deep_construct(ActionSearchInsert, \
+                            {'on': on}, \
+                                args_super, \
+                            {})
+
+    def execute(self, app, cont):
+        """See [Action.execute] for details.
+        
+        .. [Action.execute] file:///./Action.Action.html#execute"""
+        
+        app.translation_is_off = not on
+
+
+    def doc(self):
+        if self.on:
+            state = 'on'
+        else:
+            state = 'off'
+        return 'turns translation \'%s\'' % state
 
 
 #
@@ -306,3 +338,8 @@ gen_single_quotes_pair_after = \
     ActionInsert(code_bef='\'\'', code_after='',
                  docstring="""Insert single quotes and moves cursor after""")
 
+gen_translation_off = \
+    ActionSwitchTranslation(0)
+
+gen_translation_on = \
+    ActionSwitchTranslation(1)

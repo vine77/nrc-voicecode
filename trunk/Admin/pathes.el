@@ -2,6 +2,10 @@
 ;;; Macros for quickly moving to various directories of VoiceCode
 ;;;
 
+(defun vchome ()
+  (interactive)
+  (cd (substitute-in-file-name "$VCODE_HOME"))
+)
 (defun vcmed ()
   (interactive)
   (cd (substitute-in-file-name "$VCODE_HOME/Mediator"))

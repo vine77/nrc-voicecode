@@ -14,40 +14,6 @@ suite_reg = {'all': ['.*']}
 test_header_fmt = '\n\n******************************************************************************\n* Test       : %s\n* Description : %s\n******************************************************************************\n\n'
 
 
-#  def setup_todo(todo):
-#      """Sets up the list of tests to do.
-
-#      Each element in *[STR] todo* is the name of a test or test suite,
-#      or a regexp to be matched against test names.
-#      """
-#      global tests_todo
-#      tests_todo = []
-#      for a_todo in todo:
-#          if suite_reg.has_key(a_todo):
-#              tests_todo = tests_todo + suite_reg[a_todo]
-#          else:
-#              tests_todo = tests_todo + [a_todo]
-#      print "-- auto_test.setup_todo: tests_todo=%s" % str(tests_todo)
-
-#  def check_todo(name, desc=""):
-#      """Check to see if a test should be done.
-
-#      Returns *true* iif test with name *STR name* should be invoked.
-
-#      If so, it also prints a test header with *name* and description *desc*.
-#      """
-    
-#      print "-- auto_test.check_todo: name=%s, desc=%s, tests_todo=%s" % (name, desc, str(tests_todo))
-#      todo = 0
-#      for a_todo in tests_todo:
-#          print "-- auto_test.check_todo: a_toto=%s" % a_todo
-#          patt = '^' + a_todo + '$'
-#          if (name == a_todo or re.match(patt, name)):
-#              todo = 1
-#              print test_header(name, desc)
-#              break
-#      return todo
-
 def add_test(name, fct, desc=""):
     """Add a test to the test registry.
 
@@ -93,6 +59,7 @@ def run(to_run):
     test_names = tests_to_do.keys()
     test_names.sort()
 #    print "-- run: test_names=%s\n" % str(test_names)
+
     for a_test_name in test_names:
 #        print "-- run: a_test_name=%s\n" % a_test_name
         [fct, desc] = tests_to_do[a_test_name]

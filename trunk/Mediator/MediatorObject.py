@@ -67,14 +67,21 @@ class MediatorObject(Object.Object):
         *none* -- 
         """
         global to_configure
-
         
         to_configure = self
+        
         try:
             execfile(config_file)
         except Exception, err:
             print 'ERROR: in configuration file %s.\n' % config_file
             raise err
+
+        #
+        # Compile standard symbols for the different languages
+        #
+        to_configure.interp.known_symbols.parse_standard_symbols(add_sr_entries=to_configure.interp.known_symbols.sr_symbols_cleansed)
+        to_configure.interp.known_symbols.sr_symbols_cleansed = 0
+        
         to_configure = None
 
     
@@ -97,7 +104,7 @@ def add_csc(acmd, add_voc_entry=1):
     to_configure.interp.index_csc(acmd, add_voc_entry)
 
 
-def add_lsa(language_list, spoken_as_list, written_as):
+def add_lsa(spoken_forms, meanings):
     """Add a language specific word.
 
     These words get added and removed dynamically from the SR
@@ -111,12 +118,13 @@ def add_lsa(language_list, spoken_as_list, written_as):
     
     **INPUTS**
     
-    *[STR]* language_list -- Names of the languages for which this
-    new word applies. If None, then add this for all languages.
-        
-    *STR* spoken_as_list -- List of spoken form of the word.
+    *STR* spoken_forms -- List of spoken form of the word.
 
-    *STR* written_as -- Written form of the word.
+    *{STR: STR}* meanings -- Dictionary of language specific
+     meanings. Key is the language name and value is the written form
+     of the LSA for that langugage. If language name is *None*, then
+     it means that this LSA applies for all languages (I know, it
+     doesn't make much sense syntactically).
     
     **OUTPUTS**
     
@@ -125,21 +133,14 @@ def add_lsa(language_list, spoken_as_list, written_as):
     
     global to_configure
 
-#    print '-- MediatorObject.add_lsa: language_list=%s, spoken_as_list=%s, written_as=\'%s\'' % (repr(language_list), repr(spoken_as_list), written_as)
-
-    #
-    # For user, it's easier to use language_list = None, to mean no specific
-    # language, but for the purpose of this method, it is easier to deal with
-    # language_list = [None]
-    #
-    if language_list == None:
-        language_list = [None]
+#    print '-- MediatorObject.add_lsa: spoken_forms=%s' % spoken_forms
     
-    for language in language_list:
-        for spoken_as in spoken_as_list:
+    for a_meaning in meanings.items():
+        language, written_as = a_meaning
+        for spoken_as in spoken_forms:
             entry = sr_interface.vocabulary_entry(spoken_as, written_as)
             vc_entry = sr_interface.vocabulary_entry(spoken_as, written_as, clean_written=0)
-#            print '-- MediatorObject.add_lsa: processing language=%s, spoken_as=%s, written_as=%s, entry=%s, vc_entry=%s' % (language, spoken_as, written_as, entry, vc_entry)
+            
             if to_configure.interp.language_specific_aliases.has_key(language):
                 to_configure.interp.language_specific_aliases[language] = to_configure.interp.language_specific_aliases[language] + [vc_entry]
             else:
@@ -150,43 +151,7 @@ def add_lsa(language_list, spoken_as_list, written_as):
                 # doesn't have to be dynamically added/removed
                 # Add it once and for all
                 #
-                sr_interface.addWord(entry)                    
-        
-# DEAD CODE BELOW
-#      #
-#      # Generate an anonymous action function that types the appropriate text
-#      #
-#      the_action = actions_gen.anonymous_action('app.insert(\'%s\')' % written_as, 'Inserts \'%s\'' % written_as)                    
-
-#      #
-#      # Add a CSC for translating the LSA at the mediator level.
-#      # This redundant translation is necessary because if the spoken form of
-#      # the LSA looks too much like dictated text (e.g. "is equal to"), NatSpeak
-#      # will tend to always recognise it as dictated text instead of a
-#      # spoken form/written form word. So Mediator must be able to translate
-#      # it also in case NatSpeak screws up
-#      #
-#      # Note that if language_list=[None], then the CSC will have a
-#      # ContLanguage(language=None) context, which always applies no matter
-#      # what the active language is.
-#      #
-#      the_meanings = []
-#      for a_language in language_list:
-#          the_meanings = the_meanings + [[cont_gen.ContLanguage(language=a_language), the_action]]
-
-#      aCSC = CSCmd.CSCmd(spoken_forms=spoken_as_list, meanings=the_meanings)
-    
-#      #
-#      # Note: we add this CSC with add_voc_entry=0 because we don't want to
-#      #       reenforce NatSpeak's tendancy to recognise the LSA as a dictated
-#      #       sentence
-#      #
-#      add_csc(aCSC, add_voc_entry=0)
-
-#    print '-- MediatorObject.add_lsa: known LSAs are: '
-#    for a_lang in to_configure.interp.language_specific_aliases.keys():
-#        print '-- %s: %s' % (a_lang, to_configure.interp.language_specific_aliases[a_lang])
-
+                sr_interface.addWord(entry)
         
 def associate_language(extension, language):
     """Add an association between a file extension and a programming
@@ -222,17 +187,15 @@ def add_abbreviation(abbreviation, expansions):
     """
     global to_configure
     to_configure.interp.known_symbols.add_abbreviation(abbreviation, expansions, user_added=1)
-#    print '-- MediatorObject.add_abbreviation: abbreviations are now: '; to_configure.interp.known_symbols.print_abbreviations()
+
 
 def standard_symbols_in(file_list):
     """Compile symbols defined in a series of source files"""
     global to_configure
-#    print '-- MediatorObject.standard_symbols_in: file_list=%s' % file_list
 
     for a_file in file_list:
         if not a_file in to_configure.interp.known_symbols.standard_symbol_sources:
             to_configure.interp.known_symbols.standard_symbol_sources = to_configure.interp.known_symbols.standard_symbol_sources + [a_file]
-    to_configure.interp.known_symbols.parse_symbols_from_files(file_list)
     
 
 def define_language(name, definition):
@@ -255,3 +218,6 @@ def define_language(name, definition):
     SymDict.language_definitions[name] = definition
 
 
+def print_abbreviations():
+    global to_configure
+    to_configure.interp.known_symbols.print_abbreviations()

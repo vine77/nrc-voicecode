@@ -45,6 +45,11 @@ class AppState(Object):
      source buffer and the second is the position in that buffer where
      the crumb was dropped.
 
+    *BOOL* translation_is_off -- If true, then translation of CSCs and
+     LSAs isturned off for that applications. Everything should be
+     typed as dictated text, except for commands that turn the
+     translation back on.
+
     **CLASSS ATTRIBUTES**
     
     *none* --
@@ -53,19 +58,19 @@ class AppState(Object):
     .. [SourceBuff] file:///SourceBuff.SourceBuff.html
     .. [self.curr_buffer] file:///AppState.AppState.html"""
     
-    def __init__(self, app_name=None, rec_utterances=[], open_buffers={},\
-                 curr_dir=None, active_field=None, curr_buffer=None, breadcrumbs = [], **attrs):
-        self.deep_construct(AppState, \
-                            {'app_name': app_name,\
-                             'rec_utterances': rec_utterances, \
-                             'open_buffers': open_buffers,\
-                             'curr_dir': curr_dir, \
-                             'active_field': active_field, \
-                             'curr_buffer': curr_buffer,\
-                             'breadcrumbs': breadcrumbs},
+    def __init__(self, app_name=None, translation_is_off=0, curr_dir=None,
+                 active_field=None, curr_buffer=None, breadcrumbs = [],
+                 **attrs):
+        self.deep_construct(AppState, 
+                            {'app_name': app_name,
+                             'rec_utterances': [], 
+                             'open_buffers': {},
+                             'curr_dir': curr_dir, 
+                             'active_field': active_field,
+                             'curr_buffer': curr_buffer,
+                             'breadcrumbs': breadcrumbs,
+                             'translation_is_off': translation_is_off},
                             attrs)
-
-
 
 
     def focus_is_source(self, lang_name):

@@ -1,6 +1,9 @@
 """Regression testing script"""
 
-import os, natlink, posixpath
+import os, natlink, posixpath, sys
+import MediatorObject, vc_globals
+
+sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
 #
 # Make sure we run tests without connecting to NatSpeak
@@ -14,7 +17,6 @@ import os, natlink, posixpath
 # os.environ['VCODE_NOSPEECH'] = '1'
 
 import auto_test, util
-import auto_test, util, vc_globals
 
 
 def usage():
@@ -49,15 +51,12 @@ output1, output2 :
 
 
 if (__name__ == '__main__'):
-
-#    print '-- test: before configuration'
     config_file = vc_globals.config + os.sep + 'vc_config.py'
     try:
         execfile(config_file)
     except Exception, err:
         print 'ERROR: in configuration file %s.\n' % config_file
         raise err
-#    print '-- test: after configuration'    
 
     opts, args = util.gopt(('d', None, 'f', posixpath.expandvars('$VCODE_HOME' + os.sep + 'Admin' + os.sep + 'tests_def.py'), 'h', None))
     

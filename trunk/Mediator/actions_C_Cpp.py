@@ -1,3 +1,4 @@
+
 """Action functions for C language """
 
 from actions_gen import Action, ActionInsert, ActionSearch, ActionSearchInsert
@@ -5,6 +6,10 @@ from actions_gen import Action, ActionInsert, ActionSearch, ActionSearchInsert
 c_simple_for = \
     ActionInsert(code_bef='for (',
                  code_after='=0;  <= ; ++)\n{\n\n}\n',
+                 docstring = """Insert template code for a simple C for loop""")
+
+c_simple_while = \
+    ActionInsert(code_bef='while (', code_after=')\n{\n}',
                  docstring = """Insert template code for a simple C for loop""")
 
 c_goto_body = \
@@ -39,3 +44,14 @@ c_function_body = \
                  code_after='',
                  docstring = """Moves cursor to the body of a C/C++ method or function""")
 
+c_new_statement = \
+    ActionInsert(code_bef='\n*** Action c_new_statement not implemented yet ***\n',
+                 docstring = """Start a new C statement on next line""")
+
+c_else_if = \
+    ActionInsert(code_bef='*** action c_else_if not implemeted yet ***',
+                 docstring='else if clause of a C conditional')
+
+c_else = \
+    ActionInsert(code_bef='*** action c_else_if not implemeted yet ***',
+                 docstring='else clause of a C conditional')

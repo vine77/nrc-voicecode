@@ -36,8 +36,17 @@ class ContC(ContLanguage):
         self.deep_construct(ContC, {}, args_super, enforce_value={'language': 'C'})
 
 
+class ContPerl(ContLanguage):
+    """This context applies if current source buffer is in Perl.
+
+    It is essentially a shortcut for ContLanguage(language='perl')
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(ContPerl, {}, args_super, enforce_value={'language': 'perl'})
+
 class ContPy(ContLanguage):
-    """This context applies if current source buffer is in C.
+    """This context applies if current source buffer is in Python.
 
     It is essentially a shortcut for ContLanguage(language='python')
     """
@@ -46,12 +55,42 @@ class ContPy(ContLanguage):
         self.deep_construct(ContPy, {}, args_super, enforce_value={'language': 'python'})
 
 
-
 class ContAny(Context):
-    """This context always applies."""
+    """This context always applies, UNLESS translation is off."""
 
     def __init__(self, **attrs):
         self.deep_construct(ContAny, {}, attrs)
         
     def applies(self, app):
+        return not app.translation_is_off
+
+class ContAnyEvenOff(Context):
+    """This context always applies, EVEN IF translation is off."""
+
+    def __init__(self, **attrs):
+        self.deep_construct(ContAnyEvenOff, {}, attrs)
+        
+    def applies(self, app):
         return 1
+
+
+class ContTranslationOff(Context):
+    """This context only applies when translation of commands is 'off'
+    
+    **INSTANCE ATTRIBUTES**
+    
+    *none*-- 
+    
+    CLASS ATTRIBUTES**
+    
+    *none* -- 
+    """
+    
+    def __init__(self, **args_super):
+        self.deep_construct(ContTranslationOff, \
+                            {}, \
+                            args_super, \
+                            {})
+    def applies(self, app):
+        return app.translation_is_off
+

@@ -14,7 +14,7 @@ def compilation_test(a_mediator, source):
     """Does a compilation test on file *source*        
     """
     print '*** Compiling symbols from file: %s ***' % source
-    a_mediator.interp.known_symbols.vocabulary_cleanup()
+    a_mediator.interp.known_symbols.cleanup()
     a_mediator.interp.known_symbols.parse_symbols(source)
     print '\n\nParsed symbols are: '
     a_mediator.interp.known_symbols.print_symbols()
@@ -32,7 +32,7 @@ def accept_symbol_match_test(a_mediator, source, symbol_matches):
     """Does a test on SymDict.accept_symbol_match.
     """
     print '\n\n*** Accept symbol match test. source=\'%s\' ***' % source
-    a_mediator.interp.known_symbols.vocabulary_cleanup()            
+    a_mediator.interp.known_symbols.cleanup()            
     a_mediator.interp.known_symbols.parse_symbols(source)
     print 'Parsed symbols are: '
     a_mediator.interp.known_symbols.print_symbols()
@@ -87,7 +87,7 @@ def symbol_match_test(a_mediator, sources, pseudo_symbols):
         #
         # Compile symbols
         #
-        a_mediator.interp.known_symbols.vocabulary_cleanup()        
+        a_mediator.interp.known_symbols.cleanup()        
         for a_source in sources:
             a_mediator.interp.known_symbols.parse_symbols(a_source)
 #        print '\n Known symbols are: \n'
@@ -137,9 +137,9 @@ def test_CmdInterp():
     natlink.natConnect()
     a_mediator = MediatorObject.MediatorObject(interp=CmdInterp.CmdInterp(on_app=EdSim.EdSim()))
     MediatorObject.to_configure = a_mediator
-    acmd = CSCmd(spoken_forms=['for', 'for loop'], meanings=[[ContC(), c_simple_for], [ContPy(), py_simple_for]])
+    acmd = CSCmd(spoken_forms=['for', 'for loop'], meanings={ContC(): c_simple_for, ContPy(): py_simple_for})
     MediatorObject.add_csc(acmd)
-    acmd = CSCmd(spoken_forms=['loop body', 'goto body'], meanings=[[ContC(), c_goto_body], [ContPy(), py_goto_body]])
+    acmd = CSCmd(spoken_forms=['loop body', 'goto body'], meanings={ContC(): c_goto_body, ContPy(): py_goto_body})
     MediatorObject.add_csc(acmd)
 
     
@@ -369,7 +369,8 @@ def test_mediator_console():
     mediator.init_simulator()
     test_command("""clear_symbols()    """)
     test_command("""open_file('D:/blah.c')""")
-    file = vc_globals.test_data + os.sep + 'small_buff.c'    
+    file = vc_globals.test_data + os.sep + 'small_buff.c'
+    mediator.print_abbreviations()    
     test_command("""compile_symbols(['""" + file + """'])""")
     test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'loop', 'body'])
     test_command("""say_select(['select', 'horiz_pos\\horizontal position', '=\equals'])""")
