@@ -221,7 +221,7 @@ class MediatorObject(Object.Object):
     ..[CommandDictGrammar] file:///./sr_interface.CommandDictGrammar.html
     ..[CodeSelectGrammar] file:///./sr_interface.CodeSelectGrammar.html"""
     
-    def __init__(self, app = None, interp=CmdInterp.CmdInterp(), 
+    def __init__(self, app = None, interp=None,
 		 window = 0, owns_app = 1, exclusive=0,
                  allResults = 0, owner = None, id = None, **attrs):
 #        print '-- MediatorObject.__init__: called, window=%s' % window
@@ -238,6 +238,8 @@ class MediatorObject(Object.Object):
 			     'cbk_filter': AppCbkFilter(self)},
                             attrs,
                             {})
+        if self.interp == None:
+	    interp = CmdInterp.CmdInterp()
         self.mixed_grammar = \
 	    sr_interface.CommandDictGrammar(app = self.app,
 		interpreter=self.interp, 

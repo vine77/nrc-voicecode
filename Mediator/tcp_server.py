@@ -40,6 +40,7 @@ from tcp_threads import *
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
 #debug.config_traces(status="on", active_traces={'get_mess':1, 'send_mess': 1})
+#debug.config_traces(status="on", active_traces={'CmdInterp':1, 'sr_interface': 1, 'get_mess':1, 'send_mess': 1, 'sim_commands': 1}, allow_trace_id_substrings = 1)
 #debug.config_traces(status="on", active_traces = 'all')
 #debug.config_traces(status="on", active_traces = {'sr_interface':1},
 #allow_trace_id_substrings = 1)
@@ -86,6 +87,7 @@ class SB_MessExtEdSim(SourceBuffMessaging.SourceBuffMessaging):
                              'lines_srv': sb_services.SB_ServiceLineManip(buff=self)}, 
                             args_super, 
                             {})
+	self.add_owned_list(['indent_srv', 'lines_srv'])
 
     def insert_indent(self, code_bef, code_after, range = None):
         self.indent_srv.insert_indent(code_bef, code_after, range)
@@ -142,66 +144,114 @@ class AS_MessExtEdSim(AppStateMessaging.AppStateMessaging):
         
 
 
-def messenger_factory(sock):
-    """Creates a messenger from proper compenents
-    
-    **INPUTS**
-    
-    *socket sock* -- Socket to use for creating the messenger
-    
-    
-    **OUTPUTS**
-    
-    [Messenger] *a_messenger* -- The created [Messenger] instance
+class AppStateFactory(Object.Object):
+    """factory which produces new instances of concrete subclasses of 
+    AppState for the TCP server
 
-    ..[Messenger] file:///./messaging.Messenger.html"""
-    
+    **INSTANCE ATTRIBUTES**
 
-    #
-    # Create a messenger
-    #
-    packager = messaging.MessPackager_FixedLenSeq()
-    transporter = messaging.MessTransporter_Socket(sock=sock)
-    encoder = messaging.MessEncoderWDDX()
-    a_messenger = messaging.MessengerBasic(packager=packager, 
-	transporter=transporter, encoder=encoder)        
-    return a_messenger
+    *none*
 
-def app_state_factory(app_name, id, listen_msgr, talk_msgr):
+    **CLASS ATTRIBUTES**
+
+    *none*
     """
-        
-    **INPUTS**
-        
-    STR *app_name* -- Name of the editor for which we want to
-    create an [AppStateMessaging].
+    def __init__(self, **args):
+	self.deep_construct(AppStateFactory,
+			    {
+			    },
+			    args)
 
-    STR *id* -- Unique ID of external editor connected to the [AppState]
+    def new_instance(self, app_name, id, listen_msgr, talk_msgr):
+	"""create a new AppState of the subclass appropriate to the given
+	app_name.
+
+	**INPUTS**
+	    
+	STR *app_name* -- Name of the editor for which we want to
+	create an [AppStateMessaging].
+
+	STR *id* -- Unique ID of external editor connected to the [AppState]
+	
+	[Messenger] *listen_msgr* -- [Messenger] instance to use for the
+	VC listener side of the connection.
+
+	[Messenger] *talk_msgr* -- [Messenger] instance to use for the
+	VC talker side of the connection.
+        
     
-    [Messenger] *listen_msgr* -- [Messenger] instance to use for the
-    VC listener side of the connection.
+	**OUTPUTS**
+	
+	*AppStateMessaging* -- the new AppStateMessaging representing the
+	editor instance 
 
-    [Messenger] *talk_msgr* -- [Messenger] instance to use for the
-    VC talker side of the connection.
+	..[AppState] file:///./AppState.AppState.html"""
+
+	debug.virtual('AppStateFactory.new_instance')
+
+class AppStateFactorySimple(AppStateFactory):
+    """simple implementation of AppStateFactory for testing purposes
+
+    **INSTANCE ATTRIBUTES**
+
+    *BOOL use_local_srv* -- flag indicating whether we should use 
+    local indent_srv and line_num_srv for external EdSim
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, use_local_srv = 1, **args):
+	self.deep_construct(AppStateFactorySimple,
+			    {
+			     'use_local_srv': use_local_srv
+			    },
+			    args)
+    
+    def new_instance(self, app_name, id, listen_msgr, talk_msgr):
+	"""create a new AppState of the subclass appropriate to the given
+	app_name.
+
+	**INPUTS**
+	    
+	STR *app_name* -- Name of the editor for which we want to
+	create an [AppStateMessaging].
+
+	STR *id* -- Unique ID of external editor connected to the [AppState]
+	
+	[Messenger] *listen_msgr* -- [Messenger] instance to use for the
+	VC listener side of the connection.
+
+	[Messenger] *talk_msgr* -- [Messenger] instance to use for the
+	VC talker side of the connection.
         
     
-    **OUTPUTS**
-    
-    *AppStateMessaging* -- the new AppStateMessaging representing the
-    editor instance 
+	**OUTPUTS**
+	
+	*AppStateMessaging* -- the new AppStateMessaging representing the
+	editor instance 
 
-    ..[AppState] file:///./AppState.AppState.html"""
+	..[AppState] file:///./AppState.AppState.html"""
 
-    if re.match('EdSim', app_name):
-        app = AS_MessExtEdSim(app_name=app_name, id=id, listen_msgr=listen_msgr, talk_msgr=talk_msgr)
-    elif re.match('emacs', app_name):
-        app = AppStateEmacs.AppStateEmacs(app_name=app_name, id=id, listen_msgr=listen_msgr, talk_msgr=talk_msgr)        
-    else:
-        print "WARNING: Unknown editor '%s'" % app_name
-        print "Connection refused"
-	return None
+
+	if re.match('dumbEdSim', app_name):
+	    as_class = AS_MessExtEdSim
+	elif re.match('EdSim', app_name):
+	    if self.use_local_srv:
+		as_class = AS_MessExtEdSim
+            else:
+		as_class = AppStateMessaging.AppStateMessaging
+	elif re.match('emacs', app_name):
+	    as_class = AppStateEmacs.AppStateEmacs
+	else:
+	    print "WARNING: Unknown editor '%s'" % app_name
+	    print "Connection refused"
+	    return None
         
-    app.app_name = app_name
-    return app
+	app = as_class(app_name=app_name, id=id, 
+	    listen_msgr=listen_msgr, talk_msgr=talk_msgr)
+	app.app_name = app_name
+	return app
 
 
 
@@ -490,6 +540,9 @@ class ServerSingleThread(Object.Object):
     *PyHandle evt_quit* -- Win32 event raised when we are shutting
      down the server.
 
+    *AppStateFactory editor_factory* -- factory for creating new
+    AppStateMessaging instances
+
     {STR : MediatorObject} *active_meds* -- map from unique socket IDs
     to active mediators driving external edtiors.
 
@@ -505,7 +558,7 @@ class ServerSingleThread(Object.Object):
     ..[ListenForNewTalkersThread] file:///./tcp_server.ListenForNewTalkersThread.html
     """
     
-    def __init__(self, test_suite=None, **args_super):
+    def __init__(self, editor_factory, test_suite=None, **args_super):
         self.deep_construct(ServerSingleThread, 
                             {'new_listen_socks': [],
                              'new_talk_socks': [],
@@ -518,6 +571,7 @@ class ServerSingleThread(Object.Object):
                              'evt_sockets_ready': win32event.CreateEvent(None, 0, 0, None),
                              'evt_quit': win32event.CreateEvent(None, 0, 0, None),
                              'active_meds': {},
+			     'editor_factory': editor_factory,
                              'test_suite': None
                              }, 
                             args_super, 
@@ -549,9 +603,10 @@ class ServerSingleThread(Object.Object):
 
         ..[AppStateMessaging] file:///./messaging.AppStateMessaging.html"""        
         
-        listen_msgr = messenger_factory(listen_sock)
-        talk_msgr = messenger_factory(talk_sock)        
-        an_app_state = app_state_factory(app_name, id, listen_msgr, talk_msgr)
+        listen_msgr = messaging.messenger_factory(listen_sock)
+        talk_msgr = messaging.messenger_factory(talk_sock)        
+        an_app_state = self.editor_factory.new_instance(app_name, id, 
+	    listen_msgr, talk_msgr)
 
         #
         # Give external editor a chance to configure the AppStateMessaging
@@ -640,7 +695,7 @@ class ServerSingleThread(Object.Object):
         #
         # Create a temporary messenger for handshaking
         #
-        a_messenger = messenger_factory(most_rec_sock)
+        a_messenger = messaging.messenger_factory(most_rec_sock)
                
         #
         # Get the external application name
@@ -698,7 +753,7 @@ class ServerSingleThread(Object.Object):
             # Shake hands with that VC_TALK socket.
             # Get the ID of external editor that started this VC_TALK socket
             #
-            a_msgr = messenger_factory(talk_sock)
+            a_msgr = messaging.messenger_factory(talk_sock)
             a_msgr.send_mess('send_id')
             mess = a_msgr.get_mess(expect=['my_id_is'])
             id = mess[1]['value']
@@ -935,20 +990,18 @@ class ServerMainThread(Object.Object):
     listen_one_transaction on the appropriate AppStateMessaging.
     AppStateMessaging will also get messages from the editor off of the
     queue when it synchronizes with the editor at recognition starting
-     
-    Much of the above behaviour depends on a set of virtual 
-    functions which will be implemented by a concrete subclass of
-    ServerMainThread.  In particular, the mechanism by which 
-    InterThreadEvent and SocketHasDataEvent events ensure that the main 
-    mediator message loop calls the appropriate methods of ServerMainThread
-    will vary from one concrete subclass to another.  A necessary
-    consequence of this fact is that ServerMainThread relies on
-    virtual functions to create the subsidiary threads.
 
-    Even more drastically, in some cases ServerMainThread will contain the 
-    main message loop of the mediator, while in others, the message loop
-    which routes the events to the appropriate ServerMainThread methods
-    will reside in the GUI console.
+    The communication between the subsidiary threads and the main
+    thread requires the event objects described above and a message loop 
+    which receives messages from these event objects and calls the proper 
+    ServerMainThread methods.  Some subclasses of ServerMainThread
+    (ServerOldMediatorWin32Evt) supply these events themselves, and 
+    have an internal message loop.  Others require an external object,
+    which owns ServerMainThread (directly or indirectly), to supply the 
+    event objects and the message loop.  the events to be 
+    
+    This flexibility means that ServerMainThread relies on
+    virtual functions to create the subsidiary threads.
 
     **INSTANCE ATTRIBUTES**
 
@@ -984,6 +1037,9 @@ class ServerMainThread(Object.Object):
 
     {STR : ListenAndQueueMsgsThread} *data_threads* -- map from unique 
     socket IDs to threads which poll for data from the listen messenger
+
+    *AppStateFactory editor_factory* -- factory for creating new
+    AppStateMessaging instances
     
     **CLASS ATTRIBUTES**
     
@@ -994,7 +1050,7 @@ class ServerMainThread(Object.Object):
     ..[ListenForNewTalkersThread] file:///./tcp_server.ListenForNewTalkersThread.html
     """
     
-    def __init__(self, **args_super):
+    def __init__(self, editor_factory, **args_super):
         self.deep_construct(ServerMainThread, 
                             {'pending_listen_socks': [],
                              'new_talk_socks': [],
@@ -1002,7 +1058,8 @@ class ServerMainThread(Object.Object):
 			     'new_listen_socks': Queue.Queue(5),
 			     'data_threads': {},
 			     'new_listener_server': None,
-			     'new_talker_server': None
+			     'new_talker_server': None,
+			     'editor_factory': editor_factory
                              }, 
                             args_super)
 
@@ -1044,6 +1101,21 @@ class ServerMainThread(Object.Object):
 	debug.virtual('ServerMainThread.new_listener_thread')
 
 
+    def data_event(self, id):
+	"""virtual method which supplies a data_event for ServerMainThread 
+	subclasses 
+        
+        **INPUTS**
+
+        STR *id* -- The unique ID of the listen socket
+        
+        **OUTPUTS**
+        
+        *SocketHasDataEvent* -- the data event which will allow the
+	data thread to ensure that process_ready_socks is called.
+	"""
+	debug.virtual('ServerMainThread.data_event')
+
     def new_data_thread(self, id, listen_sock):
         """creates a new ListenAndQueueMsgsThread to monitor the
 	listen_sock
@@ -1060,7 +1132,8 @@ class ServerMainThread(Object.Object):
 
         ..[ListenAndQueueMsgsThread] 
 	file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
-	debug.virtual('ServerMainThread.new_data_thread')
+	data_event = self.data_event(id)
+	return self.new_data_thread_given_event(id, listen_sock, data_event)
 
     def new_data_thread_given_event(self, id, listen_sock, data_event):
         """creates a new ListenAndQueueMsgsThread to monitor the
@@ -1081,7 +1154,7 @@ class ServerMainThread(Object.Object):
 
         ..[ListenAndQueueMsgsThread] 
 	file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
-	a_msgr = messenger_factory(listen_sock)
+	a_msgr = messaging.messenger_factory(listen_sock, sleep = 0.05)
 	queue = Queue.Queue(10)
 	thread = ListenAndQueueMsgsThread( a_msgr, queue, data_event)
 	return thread
@@ -1149,10 +1222,11 @@ class ServerMainThread(Object.Object):
 	self.data_threads[id] = data_thread
 	messages = data_thread.message_queue()
 
-        talk_msgr = messenger_factory(talk_sock)        
-        listen_response_msgr = messenger_factory(listen_sock)        
+        talk_msgr = messaging.messenger_factory(talk_sock)        
+        listen_response_msgr = messaging.messenger_factory(listen_sock)        
         listen_msgr = messaging.MixedMessenger(listen_response_msgr, messages)
-        an_app_state = app_state_factory(app_name, id, listen_msgr, talk_msgr)
+        an_app_state = self.editor_factory.new_instance(app_name, id, 
+	    listen_msgr, talk_msgr)
 
 	data_thread.setDaemon(1)
 #	data_thread.start()
@@ -1162,7 +1236,9 @@ class ServerMainThread(Object.Object):
         #
         an_app_state.config_from_external()
 
-	self._new_instance(id, an_app_state)
+	stay_alive = self._new_instance(id, an_app_state)
+	
+	return stay_alive
 
     def handshake_listen_socks(self):
         """Invoked when a new socket connection was opened on VC_LISTEN port.
@@ -1200,7 +1276,7 @@ class ServerMainThread(Object.Object):
         #
         # Create a temporary messenger for handshaking
         #
-        a_messenger = messenger_factory(most_rec_sock)
+        a_messenger = messaging.messenger_factory(most_rec_sock)
                
         #
         # Get the external application name
@@ -1266,7 +1342,7 @@ class ServerMainThread(Object.Object):
             # Shake hands with that VC_TALK socket.
             # Get the ID of external editor that started this VC_TALK socket
             #
-            a_msgr = messenger_factory(talk_sock)
+            a_msgr = messaging.messenger_factory(talk_sock)
             a_msgr.send_mess('send_id')
             mess = a_msgr.get_mess(expect=['my_id_is'])
             id = mess[1]['value']
@@ -1317,8 +1393,8 @@ class ServerMainThread(Object.Object):
 	    if an_app_state != None:
 		an_app_state.listen_one_transaction()
 
-    def _start_other_threads(self, listener_evt, talker_evt):
-        """private method called to start the secondary threads which
+    def start_other_threads(self, listener_evt, talker_evt):
+        """method called to start the secondary threads which
 	monitor the VC_TALK and VC_LISTEN ports.  These threads communicate
         with the main thread by means of InterThreadEvent objects, to
 	let the main thread know to initialize them.
@@ -1452,7 +1528,7 @@ class ServerOldMediator(ServerMainThread):
 	    return self.active_meds[id].app
 	return None
 
-class ServerOldMediatorWin32Evt(ServerOldMediator):
+class ServerOldMediatorIntLoop(ServerOldMediator):
     """concrete subclass of ServerOldMediator(ServerMainThread) which uses 
     win32event events to communicate with an internal Windows
     message loop.
@@ -1465,9 +1541,11 @@ class ServerOldMediatorWin32Evt(ServerOldMediator):
     *PyHandle evt_new_talk_conn* -- Win32 event raised when a new
      socket connection is opened on VC_TALK port.
     
+    *PyHandle evt_sockets_ready* -- Win32 event raised when one of the
+     active VC_LISTEN sockets has unread data.
     """
     def __init__(self, **args_super):
-        self.deep_construct(ServerOldMediatorWin32Evt, 
+        self.deep_construct(ServerOldMediatorIntLoop, 
                             {'evt_new_listen_conn': 
 			         win32event.CreateEvent(None, 0, 0, None),
                              'evt_new_talk_conn': 
@@ -1477,24 +1555,21 @@ class ServerOldMediatorWin32Evt(ServerOldMediator):
                              }, 
                             args_super)
 
-    def new_data_thread(self, id, listen_sock):
-        """creates a new ListenAndQueueMsgsThread to monitor the
-	listen_sock
+    def data_event(self, id):
+	"""virtual method which supplies a data_event for ServerMainThread 
+	subclasses 
         
         **INPUTS**
 
         STR *id* -- The unique ID of the listen socket
         
-        socket *listen_sock* -- The listen socket
-        
         **OUTPUTS**
         
-        [ListenAndQueueMsgsThread] -- the new threading.Thread object
+        *SocketHasDataEvent* -- the data event which will allow the
+	data thread to ensure that process_ready_socks is called.
+	"""
+	return Win32SomeSocketHasDataEvent(self.evt_sockets_ready)
 
-        ..[ListenAndQueueMsgsThread] 
-	file:///./tcp_server.ListenAndQueueMsgsThread.html"""        
-	data_event = Win32SomeSocketHasDataEvent(self.evt_sockets_ready)
-	return self.new_data_thread_given_event(id, listen_sock, data_event)
 
     def run(self):
         """Start the server
@@ -1538,7 +1613,7 @@ class ServerOldMediatorWin32Evt(ServerOldMediator):
 
 	listener_evt = Win32InterThreadEvent(self.evt_new_listen_conn)
 	talker_evt = Win32InterThreadEvent(self.evt_new_talk_conn)
-	self._start_other_threads(listener_evt, talker_evt)
+	self.start_other_threads(listener_evt, talker_evt)
 
         #
         # This is the event loop. It is based on a recipe found at:
@@ -1617,27 +1692,278 @@ class ServerOldMediatorWin32Evt(ServerOldMediator):
             counter = counter + 1
 
 
+class DataEvtSource(Object.Object):
+    """abstract class which supplies a data_event for ServerMainThread 
+    subclasses with external message loops.
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **args_super):
+        self.deep_construct(DataEvtSource, 
+                            {}, 
+                            args_super)
+    def data_event(self, id):
+	"""virtual method which supplies a data_event for ServerMainThread 
+	subclasses 
+        
+        **INPUTS**
+
+        STR *id* -- The unique ID of the listen socket
+        
+        **OUTPUTS**
+        
+        *SocketHasDataEvent* -- the data event which will allow the
+	data thread to ensure that process_ready_socks is called.
+	"""
+	debug.virtual('DataEvtSource.data_event')
+
+
+class ServerOldMediatorExtLoop(ServerOldMediator):
+    """partial implementation of ServerOldMediator(ServerMainThread) which
+    uses an external message loop and queries its owner for data events
+
+    **INSTANCE ATTRIBUTES**
+
+    *ExtLoop owner* -- the owner of the server
+
+    """
+    def __init__(self, owner, **args_super):
+        self.deep_construct(ServerOldMediatorExtLoop, 
+                            {'owner': owner}, 
+                            args_super)
+
+    def data_event(self, id):
+	"""virtual method which supplies a data_event for ServerMainThread 
+	subclasses 
+        
+        **INPUTS**
+
+        STR *id* -- The unique ID of the listen socket
+        
+        **OUTPUTS**
+        
+        *SocketHasDataEvent* -- the data event which will allow the
+	data thread to ensure that process_ready_socks is called.
+	"""
+	return self.owner.data_event(id)
+
+class ExtLoopWin32(Object.Object):
+    """class providing an external win32 message message loop for
+    ServerOldMediator using win32event
+
+    **INSTANCE ATTRIBUTES**
+
+    *ServerOldMediator server* -- the underlying server
+
+    *PyHandle evt_new_listen_conn* -- Win32 event raised when a new
+     socket connection is opened on VC_LISTEN port.
+    
+    *PyHandle evt_new_talk_conn* -- Win32 event raised when a new
+     socket connection is opened on VC_TALK port.
+    
+    *PyHandle evt_sockets_ready* -- Win32 event raised when one of the
+     active VC_LISTEN sockets has unread data.
+
+    STR *test_suite=None* -- If not *None*, then upon connection by a
+    new editor run regression test suite *test_suite*.
+    """
+    def __init__(self, test_suite = None, local_srv = 0, **args_super):
+        self.deep_construct(ExtLoopWin32, 
+                            {'test_suite': test_suite,
+			     'server': None,
+			     'evt_new_listen_conn': 
+			         win32event.CreateEvent(None, 0, 0, None),
+                             'evt_new_talk_conn': 
+			         win32event.CreateEvent(None, 0, 0, None),
+                             'evt_sockets_ready': 
+			         win32event.CreateEvent(None, 0, 0, None)
+                             }, 
+                            args_super)
+	factory = AppStateFactorySimple(use_local_srv = local_srv)
+	self.server = ServerOldMediatorExtLoop(owner = self,
+			     test_suite = test_suite, 
+			     editor_factory = factory)
+
+    def data_event(self, id):
+	"""virtual method which supplies a data_event for ServerMainThread 
+	subclasses 
+        
+        **INPUTS**
+
+        STR *id* -- The unique ID of the listen socket
+        
+        **OUTPUTS**
+        
+        *SocketHasDataEvent* -- the data event which will allow the
+	data thread to ensure that process_ready_socks is called.
+	"""
+	return Win32SomeSocketHasDataEvent(self.evt_sockets_ready)
+
+    def run(self):
+        """Start the server as well as the ExtLoopWin32 message loop.
+
+	The server will run 2 threads that raise Win32 events respectively 
+	when:
+
+        - a request for a new connections on VC_LISTEN port is
+          received (*self.evt_new_listen_conn* event).
+
+        - a request for a new connections on VC_PORT port is received
+          (*self.evt_new_talk_conn* event)
+
+	It will also runs an additional thread for each connected editor,
+	once both the listen and talk sockets have been created and
+	packaged by package_sock_pair, which uses the
+	self.evt_sockets_ready event.
+
+        These events (plus *self.evt_quit*) are handled inside an
+        event loop run by this method.
+
+        We need this event loop so that speech events can be processed
+        (actually, I think the speech events are just forwarded to
+        NatSpeak by calling pythoncom.PumpWaitingMessages()).
+
+        Also, the reason why the above four events are not processed
+        directly in the threads that raise them, is that processing
+        the events involves invoking some natlink methods, and Natlink
+        does not behave well outside of the main thread.
+        
+        **INPUTS**
+        
+        *none* -- 
+        
+
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+
+        # Start threads for monitoring socket connections.
+
+	listener_evt = Win32InterThreadEvent(self.evt_new_listen_conn)
+	talker_evt = Win32InterThreadEvent(self.evt_new_talk_conn)
+	self.server.start_other_threads(listener_evt, talker_evt)
+
+        #
+        # This is the event loop. It is based on a recipe found at:
+        # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/82236        
+        #
+        TIMEOUT = 200  #msecs
+#        TIMEOUT = 5000  #msecs
+        counter = 0
+	events = (self.evt_new_listen_conn, self.evt_new_talk_conn,
+                         self.evt_sockets_ready), 
+        while 1:		
+            rc = win32event.MsgWaitForMultipleObjects(
+		        (self.evt_new_listen_conn, self.evt_new_talk_conn,
+                         self.evt_sockets_ready), 
+#                         self.evt_sockets_ready, self.evt_quit), 
+                        0, # wait for all = false
+			win32event.QS_ALLEVENTS, # type of input
+			TIMEOUT) #  (or win32event.INFINITE)
+
+
+            if rc == win32event.WAIT_OBJECT_0:
+                #
+                # A new VC_LISTEN connection was opened
+                #
+                debug.trace('ExtLoopWin32.run', 'got evt_new_listen_conn')
+                self.server.handshake_listen_socks()
+
+            elif rc == win32event.WAIT_OBJECT_0+1:
+                #
+                # A new VC_TALK connection was opened
+                #
+                debug.trace('ExtLoopWin32.run', 'got evt_new_talk_conn')
+                if not self.server.handshake_talk_socks():
+		    break
+
+                
+            elif rc == win32event.WAIT_OBJECT_0+2:
+                #
+                # Some of the active VC_LISTEN sockets have received data
+                #
+                debug.trace('ExtLoopWin32.run', 'got evt_sockets_ready')
+# ServerMainThread.process_ready_socks takes a list of sockets to check,
+# but win32event.Event doesn't seem to provide any way of sending data
+# with the event.  Really, I should add a ready_socks list and lock,
+# like in ServerSingleThread.  However, for now, just check all sockets.
+# process_ready_socks uses Queue's and avoids blocking if there are no
+# messages, so this is safe, if slightly inefficient.
+                self.server.process_ready_socks(self.data_threads.keys())
+
+            elif rc == win32event.WAIT_OBJECT_0+3:
+                #
+                # Server is shutting down. Exit the event loop.
+                #
+                debug.trace('ExtLoopWin32.run', 'got evt_quit')
+                break
+                
+            elif rc == win32event.WAIT_OBJECT_0 + len(events):
+                # A windows message is waiting - take care of it.
+                # (Don't ask me why a WAIT_OBJECT_MSG isn't defined < WAIT_OBJECT_0)
+                # Note: this must be done for COM and other windowsy
+                #   things to work.
+#                debug.trace('ExtLoopWin32.run', 'forwarding unknown message')
+                if pythoncom.PumpWaitingMessages():
+                    break # wm_quit
+                
+            elif rc == win32event.WAIT_TIMEOUT:
+                # Our timeout has elapsed.
+                # Do some work here (e.g, poll something can you can't thread)
+                #   or just feel good to be alive.
+                # Good place to call watchdog(). (Editor's note: See my "thread lifetime" recepie.)
+                pass
+#                debug.trace('ExtLoopWin32.run', 'nothing to do, counter=%s' % counter)
+            else:
+                raise RuntimeError( "unexpected win32wait return value")
+
+            counter = counter + 1
+
+
+
 
 ##############################################################################
 # start test standalone server
 ##############################################################################
-def run_smt_server(test_suite=None):
+def run_int_server(test_suite=None, local_srv = 1):
     """Start a ServerMainThread with internal message loop using
     win32event and the old MediatorObject.
     """
 
-    sys.stderr.write('running ServerOldMediatorWin32Evt')
-    print 'running ServerOldMediatorWin32Evt'
-    a_server = ServerOldMediatorWin32Evt()
-    a_server.test_suite = test_suite
+    sys.stderr.write('running ServerOldMediatorIntLoop\n')
+    print 'running ServerOldMediatorIntLoop'
+    factory = AppStateFactorySimple(use_local_srv = local_srv)
+    a_server = ServerOldMediatorIntLoop(test_suite = test_suite,
+	editor_factory = factory)
         
     a_server.run()
     
-def run_server(test_suite=None):
+def run_ext_server(test_suite=None, local_srv = 1):
+    """Start a ServerMainThread with external message loop using
+    win32event and the old MediatorObject.
+    """
+
+    sys.stderr.write('running ExtLoopWin32 with ServerOldMediator\n')
+    print 'running ExtLoopWin32 with ServerOldMediator'
+    a_loop = ExtLoopWin32(test_suite, local_srv = local_srv)
+
+    a_loop.run()
+    
+def run_smt_server(test_suite=None, local_srv = 1):
+    """Start a ServerMainThread with internal message loop using
+    win32event and the old MediatorObject.
+    """
+    run_int_server(test_suite, local_srv = local_srv)
+    
+def run_server(test_suite=None, local_srv = 1):
     """Start a single thread, single process server.
     """
 
-    a_server = ServerSingleThread()
+    factory = AppStateFactorySimple(use_local_srv = local_srv)
+    a_server = ServerSingleThread(editor_factory = factory)
     a_server.test_suite = test_suite
         
     a_server.run()
@@ -1646,7 +1972,7 @@ def run_server(test_suite=None):
 
 def help():
     print """
-Usage: python tcp_server.py -ht
+Usage: python tcp_server.py [OPTIONS]
 
 Runs the VoiceCode TCP server.
 
@@ -1667,12 +1993,31 @@ OPTIONS
    *testSuite* on that external editor.
 
    (Default: None)
+
+-r :
+   Let remote editor handle indentation, line-numbering (if it can)
+
+--sst :
+   Use ServerSingleThread (default)
+
+--int : 
+   Run ServerOldMediatorIntLoop, which uses old MediatorObject, and 
+   an internal win32event message loop
+
+--ext :
+   Run ExtLoopWin32 and ServerOldMediatorExtLoop, which uses old 
+   MediatorObject and an external win32event message loop
+
+--smt :
+   Use the latest ServerMainThread version (currently --ext)
     """
 
 if __name__ == '__main__':
 
 
-    opts, args = util.gopt(['h', None, 't=', None, 'smt', None])
+    opts, args = util.gopt(['h', None, 't=', None, 'r', None,
+			    'int', None, 'sst', None,
+                            'ext', None, 'smt', None])
 
     if opts['t'] != None:        
         #
@@ -1691,9 +2036,16 @@ if __name__ == '__main__':
     #
     # Start servers on the VC_LISTEN and VC_TALK ports
     #
-    if opts['smt'] != None:
-	run_smt_server(test_suite=opts['t'])
+    local_srv = 1
+    if opts['r'] != None:
+	local_srv = 0
+    if opts['int'] != None:
+	run_int_server(test_suite=opts['t'], local_srv = local_srv)
+    elif opts['ext'] != None:
+	run_ext_server(test_suite=opts['t'], local_srv = local_srv)
+    elif opts['smt'] != None:
+	run_smt_server(test_suite=opts['t'], local_srv = local_srv)
     else:
-	run_server(test_suite=opts['t'])
+	run_server(test_suite=opts['t'], local_srv = local_srv)
 
     sr_interface.disconnect()

@@ -137,7 +137,7 @@ def trace(trace_id, message):
     # The problem there is that if we write "from debug import trace_fct",
     # then we import whatever function trace_fct happens to refer to at the
     # time of import, NOT AT THE TIME OF EXECUTION. So even if we invoke
-    # config_trafces() to change trace_fct afte import, we will still be
+    # config_traces() to change trace_fct after import, we will still be
     # invoking the old trace_fct(), not the new one.
     #
     trace_fct(trace_id, message)

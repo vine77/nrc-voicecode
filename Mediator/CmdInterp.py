@@ -22,6 +22,7 @@
 import os, re, string, sys
 
 import actions_gen, auto_test, vc_globals
+from debug import trace
 from actions_C_Cpp import *
 from actions_py import *
 from AppState import AppState
@@ -117,7 +118,7 @@ class CmdInterp(Object):
         
         """
         
-#        print '-- CmdInterp.interpret_NL_cmd: cmd=%s' % cmd
+        trace('CmdInterp.interpret_NL_cmd', 'cmd=%s' % cmd)
         
 	if initial_buffer == None:
 	    app.bind_to_buffer(app.curr_buffer_name())
@@ -133,6 +134,7 @@ class CmdInterp(Object):
         # left
         #
         while len(cmd) > 0:
+	     trace('CmdInterp.interpret_NL_cmd', 'now, cmd=%s' % cmd)
 #             print '-- CmdInterp.interpret_NL_cmd: now, cmd=%s' % cmd
 
              #
@@ -147,6 +149,8 @@ class CmdInterp(Object):
              chopped_word, word_consumes, cmd_without_word = self.chop_word(cmd)             
              most_consumed = max((LSA_consumes, symbol_consumes, CSC_consumes, word_consumes))
 
+	     trace('CmdInterp.interpret_NL_cmd', 
+	     'chopped_CSC=%s, CSC_consumes=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (chopped_CSC, CSC_consumes, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes))
 #             print '-- CmdInterp.interpret_NL_cmd: chopped_CSC=%s, CSC_consumes=%s, chopped_LSA=%s, LSA_consumes=%s, chopped_symbol=%s, symbol_consumes=%s, chopped_word=%s, word_consumes=%s' % (chopped_CSC, CSC_consumes, chopped_LSA, LSA_consumes, chopped_symbol, symbol_consumes, chopped_word, word_consumes)
              head_was_translated = 0
 
@@ -173,6 +177,7 @@ class CmdInterp(Object):
                  # Try all the CSCs with this spoken form until find
                  # one that applies in current context
                  #
+                 trace('CmdInterp.interpret_NL_cmd', 'processing leading CSC=\'%s\'' % chopped_CSC)
 #                 print '-- CmdInterp.interpret_NL_cmd: processing leading CSC=\'%s\'' % chopped_CSC
                  CSCs = self.cmd_index[chopped_CSC]
                  csc_applies = 0
@@ -207,6 +212,7 @@ class CmdInterp(Object):
                  #
                  # LSA consumed the most words from command. Insert it.
                  #
+                 trace('CmdInterp.interpret_NL_cmd', 'processing leading LSA=\'%s\'' % chopped_LSA)
 #                 print '-- CmdInterp.interpret_NL_cmd: processing leading LSA=\'%s\'' % chopped_LSA
 # flush untranslated words before inserting LSA
 		 if untranslated_words:
@@ -228,6 +234,7 @@ class CmdInterp(Object):
                  #       class SomeClass you may name the new class
                  #       SomeprefixSomeClass or SomeClassSomepostfix.
                  #
+                 trace('CmdInterp.interpret_NL_cmd', 'processing leading symbol=\'%s\'' % chopped_symbol)
 #                 print '-- CmdInterp.interpret_NL_cmd: processing leading symbol=\'%s\'' % chopped_symbol                     
 		 untranslated_words.append( chopped_symbol)
                  cmd = cmd_without_symbol
@@ -240,6 +247,7 @@ class CmdInterp(Object):
                  # Just chop off the first word and insert it, marking
                  # it as untranslated text.
                  #                 
+                 trace('CmdInterp.interpret_NL_cmd', 'processing leading word=\'%s\'' % chopped_word)
 #                 print '-- CmdInterp.interpret_NL_cmd: processing leading word=\'%s\'' % chopped_word                                                  
 		 untranslated_words.append( chopped_word)
                  cmd = cmd_without_word
@@ -257,6 +265,7 @@ class CmdInterp(Object):
                  # text. Try to match untranslated text to a known (or new)
                  # symbol.
                  #
+                 trace('CmdInterp.interpret_NL_cmd', 'found the end of some untranslated text')
 #                 print '-- CmdInterp.interpret_NL_cmd: found the end of some untranslated text'
                  self.match_untranslated_text(untranslated_words, app)
 	 	 untranslated_words = []
@@ -265,6 +274,7 @@ class CmdInterp(Object):
                  untranslated_text = string.join(untranslated_words)
              else:
                  untranslated_text = None
+             trace('CmdInterp.interpret_NL_cmd', 'End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos()))
 #             print '-- CmdInterp.interpret_NL_cmd: End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos())
 
         # make sure to unbind the buffer before returning
@@ -318,6 +328,8 @@ class CmdInterp(Object):
         
         untranslated_text = string.join(untranslated_words)
 
+        trace('CmdInterp.match_untranslated_text', 'untranslated_text=\'%s\'' % (untranslated_text))
+#        trace('CmdInterp.match_untranslated_text', 'symbols are: %s' % self.known_symbols.print_symbols())
 #        print '-- CmdInterp.match_untranslated_text: untranslated_text=\'%s\'' % (untranslated_text);
 #        print '-- CmdInterp.match_untranslated_text: symbols are: '; self.known_symbols.print_symbols()
         
@@ -332,6 +344,7 @@ class CmdInterp(Object):
         
         leading_spaces = a_match.group(1)
 
+        trace('CmdInterp.match_untranslated_text', 'text_no_spaces=\'%s\', leading_spaces=\'%s\'' % (text_no_spaces, leading_spaces))
 #        print '-- CmdInterp.match_untranslated_text: text_no_spaces=\'%s\', leading_spaces=\'%s\'' % (text_no_spaces, leading_spaces)
                 
         #
@@ -346,6 +359,7 @@ class CmdInterp(Object):
         if not self.known_symbols.symbol_info.has_key(text_no_spaces) and \
            not num_match:
             symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
+            trace('CmdInterp.match_untranslated_text', 'symbol_matches=%s' % symbol_matches)
 #            print '-- CmdInterp.match_untranslated_text: symbol_matches=%s' % symbol_matches
             if symbol_matches:
                 self.dlg_select_symbol_match(untranslated_text, 
@@ -376,6 +390,7 @@ class CmdInterp(Object):
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
         
 
+        trace('CmdInterp.dlg_select_symbol_match', 'self.disable_dlg_select_symbol_matches=%s' % self.disable_dlg_select_symbol_matches)
 #        print '-- CmdInterp.dlg_select_symbol_match: self.disable_dlg_select_symbol_matches=%s' % self.disable_dlg_select_symbol_matches
 
         if self.disable_dlg_select_symbol_matches:
@@ -395,6 +410,7 @@ class CmdInterp(Object):
                 sys.stdout.write('\n> ')
                 answer = sys.stdin.readline()
                 answer_match = re.match('\s*([\d])+\s*', answer)
+                trace('CmdInterp.dlg_select_symbol_match', 'answer=%s, answer_match=%s, answer_match.groups()=%s' % (answer, answer_match, answer_match.groups()))
 #                print '-- CmdInterp.dlg_select_symbol_match: answer=%s, answer_match=%s, answer_match.groups()=%s' % (answer, answer_match, answer_match.groups())
                 if answer_match:
                     choice_index = int(answer_match.group(1)) - 1
@@ -406,6 +422,7 @@ class CmdInterp(Object):
         #
         # Accept the match
         #
+        trace('CmdInterp.dlg_select_symbol_match', 'choice_index=%s' % choice_index)
 #        print '-- CmdInterp.dlg_select_symbol_match: choice_index=%s' % choice_index
         if choice_index >= 0:
             #
@@ -448,6 +465,7 @@ class CmdInterp(Object):
          was chopped off.        
         """
         
+        trace('CmdInterp.chop_CSC', 'cmd=%s' % cmd)
 #        print '-- CmdInterp.chop_CSC: cmd=%s' % cmd
 
         return self.chop_construct(cmd, CmdInterp.is_spoken_CSC, app)
@@ -476,6 +494,7 @@ class CmdInterp(Object):
          was chopped off.
         """
         
+        trace('CmdInterp.chop_LSA', 'command=%s' % command)
 #        print '-- CmdInterp.chop_LSA: command=%s' % command
         return self.chop_construct(command, CmdInterp.is_spoken_LSA, app)
 
@@ -501,6 +520,7 @@ class CmdInterp(Object):
          was chopped off.        
         """
 
+        trace('CmdInterp.chop_symbols', 'command=%s' % command)
 #        print '-- CmdInterp.chop_symbols: command=%s' % command
 #        if not app.translation_is_off:
         return self.chop_construct(command, CmdInterp.is_spoken_symbol, app)
@@ -565,6 +585,7 @@ class CmdInterp(Object):
         *[STR]* rest -- The remaining of *cmd* after the construct has been
         chopped"""
 
+        trace('CmdInterp.chop_construct', 'construct_check=%s' % repr(construct_check))
 #        print '-- CmdInterp.chop_construct: construct_check=%s' % repr(construct_check)
 
         chopped_construct, consumed, rest = None, 0, cmd
@@ -585,21 +606,25 @@ class CmdInterp(Object):
         while upto:
             a_spoken_form = string.join(words[:upto], ' ')
             a_spoken_form = sr_interface.clean_spoken_form(a_spoken_form)
+            trace('CmdInterp.chop_construct', 'upto=%s, a_spoken_form=%s' % (upto, a_spoken_form))
 #            print '-- CmdInterp.chop_construct: upto=%s, a_spoken_form=%s' % (upto, a_spoken_form)
 
             chopped_construct = construct_check(self, a_spoken_form, app)
+            trace('CmdInterp.chop_construct', 'after construct_check')
 #            print '-- CmdInterp.chop_construct: after construct_check'
             if chopped_construct != None:
                 #
                 # This corresponds to the spoken form of a construct and it's
                 # the longest one we'll ever find.
                 #
+                trace('CmdInterp.chop_construct', 'matches known construct \'%s\'' % a_spoken_form)
 #                print '-- CmdInterp.chop_construct: matches known construct \'%s\'' % a_spoken_form
                 rest = cmd[upto:]
                 consumed = upto
                 break
             upto = upto - 1
 
+        trace('CmdInterp.chop_construct', 'returning chopped_construct=%s, consumed=%s, rest=%s' % (repr(chopped_construct), repr(consumed), repr(rest)))
 #        print '-- CmdInterp.chop_construct: returning chopped_construct=%s, consumed=%s, rest=%s' % (repr(chopped_construct), repr(consumed), repr(rest))
         return chopped_construct, consumed, rest
         
@@ -617,6 +642,7 @@ class CmdInterp(Object):
         
         *BOOL* return value -- True iif *spoken_form* is the spoken form of a CSC.
         """
+        trace('CmdInterp.is_spoken_CSC', 'spoken_form=%s' % spoken_form)
 #        print '-- CmdInterp.is_spoken_CSC: spoken_form=%s' % spoken_form
 #        print '--** CmdInterp.is_spoken_CSC:self.cmd_index        
         chopped_CSC = None
@@ -637,6 +663,7 @@ class CmdInterp(Object):
 
         *BOOL* return value -- True iif *spoken_form* is the spoken form of a LSA.
         """
+        trace('CmdInterp.is_spoken_LSA', 'spoken_form = \'%s\'' % spoken_form)
 #        print '-- CmdInterp.is_spoken_LSA: spoken_form = \'%s\'' % spoken_form
 
         written_LSA = None
@@ -647,6 +674,7 @@ class CmdInterp(Object):
 
 	aliases = self.language_specific_aliases
 	language = app.active_language()
+        trace('CmdInterp.is_spoken_LSA', 'language=%s' % language)
 #        print '-- CmdInterp.is_spoken_LSA: language=%s' % language
         
         if aliases.has_key(language):
@@ -673,12 +701,14 @@ class CmdInterp(Object):
         known symbol.
         """
 
+        trace('CmdInterp.is_spoken_symbol', 'spoken_form=%s, self.known_symbols.spoken_form_info=%s' % (spoken_form, self.known_symbols.spoken_form_info))
 #        print '-- CmdInterp.is_spoken_symbol: spoken_form=%s, self.known_symbols.spoken_form_info=%s' % (spoken_form, self.known_symbols.spoken_form_info)
         
         written_symbol = None
         if self.known_symbols.spoken_form_info.has_key(spoken_form):
             written_symbol = self.choose_best_symbol(spoken_form, self.known_symbols.spoken_form_info[spoken_form].symbols)
 
+        trace('CmdInterp.is_spoken_symbol', 'returning written_symbol=\'%s\'' % written_symbol)
 #        print '-- CmdInterp.is_spoken_symbol: returning written_symbol=\'%s\'' % written_symbol
         
         return written_symbol

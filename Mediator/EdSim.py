@@ -51,7 +51,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
     ..[AS_ServiceBreadcrumbs] file:///./AppState.AS_ServiceBreadcrumbs.html"""
 
     buffer_methods = AppState.AppState.buffer_methods[:]
-    buffer_methods.append('print_buff')
+#    buffer_methods.append('print_buff')
     
     def __init__(self, multiple = 0, instance_reporting = 0, **attrs):
         self.init_attrs({'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(app=self)})
@@ -125,7 +125,7 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         pass
 
 
-    def updates_from_app(self, what=[], exclude=1):
+    def updates_from_app(self, what = None, exclude=1):
         """For EdSim, no need to get updates from external editor.
 
         We always get the state from EdSim directly, and every EdSim
@@ -146,6 +146,8 @@ class EdSim(AppStateNonCached.AppStateNonCached):
         
         ..[AS_Update] file:///./AppState.AS_Update.html"""
         
+	if what == None:
+	    what = []
         return []
 
     def mediator_closing(self):

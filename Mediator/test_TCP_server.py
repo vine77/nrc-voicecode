@@ -266,7 +266,16 @@ class ListenThread(threading.Thread, Object.Object):
 
         while 1:
             try:
-                request = self.xed.vc_talk_msgr.get_mess(expect=['recog_begin', 'recog_end', 'cur_pos', 'confirm_buffer_exists', 'list_open_buffers', 'get_selection', 'set_selection', 'get_text', 'make_position_visible', 'len', 'insert', 'delete', 'goto', 'active_buffer_name', 'multiple_buffers', 'bidirectional_selection', 'get_visible', 'language_name', 'newline_conventions', 'pref_newline_convention', 'open_file', 'close_buffer', 'terminating', 'mediator_closing', 'updates'])
+                request = \
+		    self.xed.vc_talk_msgr.get_mess(expect = ['recog_begin', 
+		    'recog_end', 'cur_pos', 'confirm_buffer_exists', 
+		    'list_open_buffers', 'get_selection', 'set_selection', 
+		    'get_text', 'make_position_visible', 'len', 'insert', 
+		    'delete', 'goto', 'active_buffer_name', 
+		    'multiple_buffers', 'bidirectional_selection', 
+		    'get_visible', 'language_name', 'newline_conventions', 
+		    'pref_newline_convention', 'open_file', 'close_buffer', 
+		    'terminating', 'mediator_closing', 'updates'])
                 
                 if not request:
                     print '.. Connection to VoiceCode closed!!!'
@@ -340,7 +349,7 @@ class ExternalEdSim(Object.Object):
         # Send name of editor
         #
         self.vc_listen_msgr.get_mess(expect=['send_app_name'])
-        self.vc_listen_msgr.send_mess('app_name', {'value': 'EdSim'})
+        self.vc_listen_msgr.send_mess('app_name', {'value': 'dumbEdSim'})
 
 
         trace('test_TCP_server.open_vc_listener_conn',

@@ -146,6 +146,8 @@ import natlink
 import os, profile, re, string, sys, time
 import vc_globals
 
+from debug import trace
+
 sys.path = sys.path + [vc_globals.config, vc_globals.admin]
 
 import CmdInterp, EdSim, MediatorObject, sr_interface, util, vc_globals
@@ -265,8 +267,10 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
     
     global the_mediator, sleep_before_recognitionMimic
 
-#    print '-- sim_commands.say: utterance=%s' % utterance
+    trace('sim_commands.say', 'utterance=%s' % utterance)
 
+#    print 'Saying: %s' % utterance
+    sys.stdout.flush()
     if echo_utterance:
         print 'Saying: %s' % utterance
 
@@ -277,12 +281,19 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
         old_stdin = sys.stdin
         temp_file_name = vc_globals.tmp + os.sep + 'user_input.dat'
         temp_file = open(temp_file_name, 'w')
+#	print 'temp file opened for writing'
+	sys.stdout.flush()
         temp_file.write(user_input)
         temp_file.close()
         temp_file = open(temp_file_name, 'r')
+#	print 'temp file opened for reading'
+	sys.stdout.flush()
         sys.stdin = temp_file
         
     if bypass_NatLink or os.environ.has_key('VCODE_NOSPEECH'):
+	trace('sim_commands.say', 'bypassing natlink')
+#	print 'bypass'
+	sys.stdout.flush()
         the_mediator.interp.interpret_NL_cmd(utterance, the_mediator.app)
         show_buff()        
     else:
@@ -304,7 +315,9 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
             words = re.split('\s+', utterance)
 
 
+        trace('mediator.say', 'words=%s' % words)
 #        print '-- mediator.say: words=%s' % words
+	sys.stdout.flush()
 	global gui_sim
 	if gui_sim:
 	    the_mediator.mixed_grammar.activate()
@@ -320,9 +333,13 @@ def say(utterance, user_input=None, bypass_NatLink=0, echo_utterance=0):
             print '\n\n********************\nPlease click on the editor window before I "say" your utterance.\nYou have %s seconds to do so.\n********************' % sleep_before_recognitionMimic
             time.sleep(sleep_before_recognitionMimic)
             
+        trace('sim_commands.say', 'invoking recognitionMimic')
 #        print '-- sim_commands.say: invoking recognitionMimic'
+	sys.stdout.flush()
         natlink.recognitionMimic(words)
+        trace('sim_commands.say', 'DONE invoking recognitionMimic')
 #        print '-- sim_commands.say: DONE invoking recognitionMimic'        
+	sys.stdout.flush()
         
 	if gui_sim:
 	    the_mediator.mixed_grammar.deactivate()
