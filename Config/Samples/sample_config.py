@@ -178,8 +178,3 @@ std_quotes.create(interpreter)
 std_small_numbers.create(interpreter)
 
 
-#######################################
-# add Emacs-specific sets
-#######################################
-
-add_csc_set(emacs_cscs)

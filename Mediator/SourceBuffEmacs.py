@@ -22,7 +22,8 @@
 """State information for an external source buffer connected to
 VoiceCode via a messaging protocol."""
 
-import messaging, sb_services, SourceBuffMessaging
+import messaging, sb_services, SourceBuffMessaging, cont_gen, debug, sr_interface
+import re
 
 class SourceBuffEmacs(SourceBuffMessaging.SourceBuffInsertIndentMess):
     
@@ -68,4 +69,70 @@ class SourceBuffEmacs(SourceBuffMessaging.SourceBuffInsertIndentMess):
 
         return self.lang_srv.language_name()
 
+
+    def insert_indent(self, code_bef, code_after, range = None):
+        """Send an insert_indent message, unless we are in the minibuffer and the code
+        contains newlines.
         
+        For some reason, if we send an insert_indent to the minibuffer and the code to
+        be inserted contains some newlines, Emacs never replies with insert_indent_resp 
+        (although it does not crash).
+        
+        As a temporary workaround for this, we do the following:
+        
+           * if the code is just a \n, then send it through playString instead.
+           * if the code contains \n plus more, substitute the \n by spaces and
+             send the code through a regular message."""
+
+        debug.trace('SourceBuffEmacs.insert_indent', '** invoked')                
+        
+        if cont_gen.ContEmacsInMinibuffer().applies(self.app):
+           debug.trace('SourceBuffEmacs.insert_indent', '** IN minibuff')                
+           if (re.match('^\s*\n\s*$', code_bef) and re.match('^\s*$', code_after) or
+               re.match('^\s*$', code_bef) and re.match('^\s*\n\s*$', code_after)):
+              #
+              # Code to be inserted is just '\n'. Play that key sequence directly
+              # into the current window
+              #
+              debug.trace('SourceBuffEmacs.insert_indent', '** playing newline in minibuff')        
+              sr_interface.send_keys('\n')                                       
+              return
+           else:
+              debug.trace('SourceBuffEmacs.insert_indent', '** substituting newlines in code')                           
+              code_bef = re.sub('\n', ' ', code_bef)
+              code_after = re.sub('\n', ' ', code_after)           
+        
+              
+        SourceBuffMessaging.SourceBuffInsertIndentMess.insert_indent(self, code_bef, code_after, range)                      
+
+           
+    def insert(self, text, range = None):            
+        """Send an insert message, unless we are in the minibuffer and the code
+        contains ewlines.
+        
+        For some reason, if we send an insert_indent to the minibuffer and the code to
+        be inserted contains some newlines, Emacs never replies with insert_indent_resp         (although it does not crash).
+        
+        As a temporary workaround for this, we do the following:
+        
+           * if the code is just a \n, then send it through playString instead.
+           * if the code contains \n plus more, substitute the \n by spaces and
+             send the code through a regular message."""
+
+
+        if cont_gen.ContEmacsInMinibuffer().applies(self.app):
+           debug.trace('SourceBuffEmacs.insert', '** IN minibuff')                
+           if re.match('^\s*\n\s*$', text):
+              #
+              # Code to be inserted is just '\n'. Play that key sequence directly
+              # into the current window
+              #
+              debug.trace('SourceBuffEmacs.insert', '** playing newline in minibuff')        
+              sr_interface.send_keys('\n')                                       
+              return
+           else:
+              debug.trace('SourceBuffEmacs.insert', '** substituting newlines in code')                           
+              text = re.sub('\n', ' ', text)
+
+        SourceBuffMessaging.SourceBuffInsertIndentMess.insert(self, text, range)
+           
