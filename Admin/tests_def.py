@@ -2696,9 +2696,8 @@ def test_basic_correction():
 # without interference
 #
 
-# Alain -- Temporarily disabled this test cause I'm having difficulty passing it.
-#auto_test.add_test('basic_correction', test_basic_correction, 
-#    'Testing basic correction infrastructure with ResMgr.')
+auto_test.add_test('basic_correction', test_basic_correction, 
+    'Testing basic correction infrastructure with ResMgr.')
 
 ##############################################################################
 # Testing set_text 

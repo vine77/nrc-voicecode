@@ -1,4 +1,4 @@
-test buffer for Python
+# This is a small test buffer for Python
 
 
 

@@ -236,16 +236,20 @@ custom vr-voice-command-list.")
 in the 'vr-log-buff-name buffer.")
 (setq vr-log-do nil)
 
+(defvar vcode-traces-on (make-hash-table :test 'string=)
+"Set entries in this hashtable, to activate traces with that name.")
+(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
+(cl-puthash "vcode-cmd-get-text" 1 vcode-traces-on)
+
 (defvar vr-log-send nil "*If non-nil, VR mode logs all data sent to the VR
 subprocess in the 'vr-log-buff-name buffer.")
 
 (defvar vr-log-read nil "*If non-nil, VR mode logs all data received
 from the VR subprocess in the 'vr-log-buff-name buffer.")
 
-(defvar vr-log-buff-name "*vr*" "Name of the buffer where VR log messages are 
+(defvar vr-log-buff-name "*Messages*" "Name of the buffer where VR log messages are 
 sent."
 )
-(setq vr-log-buff-name "*Messages*")
 (setq message-log-max 100000)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -790,6 +794,30 @@ Changes are put in a changes queue `vr-queued-changes.
 ;; Subprocess communication.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun vcode-trace (trace-name format-string &rest s)
+   (let ((buf) (win))
+     (setq buf (get-buffer-create vr-log-buff-name))
+     (message "-- vcode-trace: buf=%S" buf)
+     (setq win (get-buffer-window buf 't))
+     (if (or (not trace-name) (is-in-hash trace-name vcode-traces-on))
+        (progn
+          (setq format-string (concat "-- " trace-name ": " format-string "\n"))
+          (save-excursion
+            (set-buffer buf)
+            (goto-char (point-max))
+
+            (if s
+                (insert (apply 'format (append (list format-string) s)))
+              (insert format-string)
+              )
+            (if win
+                (set-window-point win (point-max)))
+           )
+        )
+     )
+   )
+)
+ 
 (defun vr-log (&rest s)
   (if vr-log-do
       (let* (
@@ -2225,32 +2253,35 @@ Also converts from VCode's 0-based positions to Emacs 1-based positions."
   pos
 )
 
-(defun vcode-fix-range (range for-who)
+(defun vcode-fix-range (range for-who default-range)
   "Fixes a position range received from VCode server. This range
 may contain nil or string values, and the 1st element may be
-greater than the 2nd element."
+greater than the 2nd element. If one of the values in 'rage is nil, 
+then use values in 'default-range."
 
   (let ((start (nth 0 range)) (end (nth 1 range)) (tmp))
     (setq start (wddx-coerce-int start))
     (setq end (wddx-coerce-int end))
 
     ;;;
-    ;;; If nil start position was received from VCode, set it to 1. No
-    ;;; need to convert it to 1-based counting because we do that
-    ;;; explicitely.
+    ;;; If nil start position was received from VCode, set it to the lower
+    ;;; bound of the default range
+    ;;; No need to convert it to 1-based counting because it is already
+    ;;; in 1-based value.
     ;;;
     (if (and (eq 'emacs for-who) (not start))
-	(setq start 0)
+	(setq start (nth 0 default-range))
       ;;; Else, convert start position to appropriate count base
       (setq start (vcode-convert-pos start for-who)))
 
     ;;;
-    ;;; If nil end position was received from VCode, set it to end of buffer. 
-    ;;; No need to convert it to 1-based counting because (point-max) already
-    ;;; returns a 1-based value.
+    ;;; If nil end position was received from VCode, set it to upper bound
+    ;;; of default-range.
+    ;;; No need to convert it to 1-based counting because it is already
+    ;;; a 1-based value.
     ;;;
     (if (and (eq 'emacs for-who) (not end))
-	(setq end (point-max))
+	(setq end (nth 1 default-range))
       ;;; Else, convert end position to appropriate count base
       (setq end (vcode-convert-pos end for-who)))
 
@@ -2286,13 +2317,28 @@ to the other"
    (not (eq (cl-gethash key table 'entrywasnotintable) 'entrywasnotintable))
 )
 
+
+(defun vcode-bounds-of-buff-in-message (mess)
+  "Identifies the start and end of the buffer to which VCode message 
+'mess applies. If no buffer listed in the message, return bounds of current 
+buffer"
+  (let ((buff-name))
+    (save-excursion
+      (setq buff-name (cl-gethash "buff_name" mess nil))
+      (if buff-name
+	  (set-buffer buff-name)
+      )	  
+      (list (point-min) (point-max))
+    )
+  )
+)  
+
 ;;;
 ;;; Fix possibly nil positions in messages, and convert them between 0-based 
 ;;; and 1-based counting
 ;;;
 (defun vcode-fix-positions-in-message (message fix-for-who)
    (let ((pos) (range) (default-pos))
-;     (dolist (position-field '("pos" "position" "start" "end" "linenum")) 
      (dolist (position-field '("pos" "position" "start" "end")) 
        (if (is-in-hash position-field message)
 	   (progn
@@ -2300,10 +2346,12 @@ to the other"
                      (string= "position" position-field))
 		 (setq default-pos (point)))
 	     (if (string= "start" position-field)
-		 (setq default-pos 1)
+		 (setq default-pos 
+		       (nth 0 (vcode-bounds-of-buff-in-message message)))
 	     )
 	     (if (string= "end" position-field)
-		 (setq default-pos (point-max))
+		 (setq default-pos 
+		       (nth 1 (vcode-bounds-of-buff-in-message message)))
 	     )
 	     (setq pos (cl-gethash position-field message))
 	     (setq pos (vcode-fix-pos pos fix-for-who default-pos))
@@ -2319,7 +2367,9 @@ to the other"
              ;;; Fix possibly nil positions received from VCode
              ;;;
 	     (if (eq fix-for-who 'emacs)
-	         (setq range (vcode-fix-range range fix-for-who)))
+	         (setq range (vcode-fix-range 
+			      range fix-for-who 
+			      (vcode-bounds-of-buff-in-message message))))
 	     (cl-puthash "range" range  message)
 	 )
      )
@@ -2385,7 +2435,14 @@ to the other"
 	)
     (setq start (cl-gethash "start" vcode-request-cont))
     (setq end (cl-gethash "end" vcode-request-cont))
-    (cl-puthash "value" (buffer-substring start end) mess-cont)
+    (setq buff-name (cl-gethash "buff_name" vcode-request-cont))
+    (vcode-trace "vcode-cmd-get-text" "(current-buffer)=%S, buff-name=%S, start=%S, end=%S" 
+		 (current-buffer) buff-name start end)
+
+    (save-excursion
+      (set-buffer buff-name)
+      (cl-puthash "value" (buffer-substring start end) mess-cont)
+    )
 
     (vr-send-reply 
      (run-hook-with-args 
@@ -2712,8 +2769,24 @@ tabs.
 
 
 (defun vcode-cmd-delete (vcode-request)
-  (vr-log "WARNING: function vcode-cmd-delete not implemented!!!\n")
-  )
+  (let ((mess-name (elt vcode-request 0)) 
+	(mess-cont (elt vcode-request 1))
+	(text) (range) (vr-request) 
+	(delete-start) (delete-end))
+
+	(setq buff-name (cl-gethash "buff_name" mess-cont))
+	(setq range (cl-gethash "range" mess-cont))
+	(setq delete-start (elt range 0))
+	(setq delete-end (elt range 1))
+	(set-buffer buff-name)
+	(kill-region delete-start delete-end)
+        (set-mark nil)
+
+	(vr-send-queued-changes)
+    )
+)
+
+
 
 (defun vcode-cmd-goto (vcode-request)
   (let ((mess-cont (nth 1 vcode-request))
