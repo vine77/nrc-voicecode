@@ -1,0 +1,918 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+
+<head>
+
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Jun 27 09:50:31 2002)">
+
+<link rel="stylesheet" href="pythondoc.css" type="text/css">
+
+<title>Class AppMgr</title>
+</head>
+
+<body>
+<P><A HREF="index.html">Table of contents</A> <A HREF="indices.html">Index</A></P>
+
+
+<H1 CLASS="ClassName">class AppMgr</H1>
+<P CLASS="DeclaredIn">Declared in module <A HREF="AppMgr.html">AppMgr</A></P>
+
+<H2 CLASS="ClassHierarchy">Inheritance hierarchy:</H2><P CLASS="ClassHierarchy">AppMgr.AppMgr<BR>
+&nbsp;&nbsp;Object.OwnerObject<BR>
+</P>
+
+<H2>Synopsis</H2>
+<PRE CLASS="ClassDeclaration">
+<SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">AppMgr</SPAN>(<A CLASS="DocLink" HREF="Object.OwnerObject.html">OwnerObject</A>):
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.__init__"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.__init__</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr._add_new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr._add_new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>)
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr._assign_ID_client"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr._assign_ID_client</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>)
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.add_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.add_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module</SPAN>)<SPAN CLASS="OneLiner"> # add a new KnownTargetModule object to the RecogStartMgr</SPAN>
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.add_prefix"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.add_prefix</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">title_prefix</SPAN>)<SPAN CLASS="OneLiner"> # add a title prefix for an editor application</SPAN>
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.app_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.app_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.app_instances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.app_instances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>)
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.app_name"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.app_name</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)<SPAN CLASS="OneLiner"> # names of application corresponding to an instance</SPAN>
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.app_names"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.app_names</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.delete_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.delete_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)<SPAN CLASS="OneLiner"> # remove named instance from management</SPAN>
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.delete_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.delete_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.instance_module"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.instance_module</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)<SPAN CLASS="OneLiner"> # returns the module associated with the given instance</SPAN>
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.known_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.known_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)<SPAN CLASS="OneLiner"> # checks whether a specific instance name is known</SPAN>
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.known_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.known_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)<SPAN CLASS="OneLiner"> # is window a known window ID?</SPAN>
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.known_windows"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.known_windows</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.new_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.new_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">check_window=1</SPAN>, <SPAN CLASS="Argument">window_info=None</SPAN>)<SPAN CLASS="OneLiner"> # add a new application instance</SPAN>
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.new_universal_instance"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.new_universal_instance</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)<SPAN CLASS="OneLiner"> # add a new application instance</SPAN>
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.new_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.new_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.remove_other_references</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.specify_window"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.specify_window</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.trust_current"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.trust_current</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">trust=1</SPAN>)
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.window_info"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.window_info</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # find the window id, title, and module of the current window</SPAN>
+    <A CLASS="DocLink" HREF="#AppMgr.AppMgr.window_instances"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">AppMgr.AppMgr.window_instances</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)
+
+    <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.Object.decl_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.decl_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Define new attributes for <EM>self</EM></SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.deep_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.deep_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)<SPAN CLASS="OneLiner"> # Build an instance of a class.</SPAN>
+    <A CLASS="DocLink" HREF="#Object.Object.init_attrs"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.init_attrs</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)<SPAN CLASS="OneLiner"> # Initialises existing attributes</SPAN>
+
+    <SPAN CLASS="InheritsHead"># Inherited from Object.OwnerObject</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject._cleanup_object"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject._cleanup_object</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)<SPAN CLASS="OneLiner"> # attempt to call cleanup on object</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append a new attribute name to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.add_owned_list"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.add_owned_list</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)<SPAN CLASS="OneLiner"> # append new attribute names to the list of owned objects</SPAN>
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.name_parent"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.name_parent</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)
+    <A CLASS="DocLink" HREF="#Object.OwnerObject.remove_other_references"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.OwnerObject.remove_other_references</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
+
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">list</SPAN> <SPAN CLASS="VariableName">unknown_app_prefixes</SPAN> = <SPAN CLASS="VariableValue">['Walther', 'Thomas', 'Steven', 'Roger', 'Peter', 'Oscar', ...]</SPAN></SPAN>
+</PRE><H2>Description</H2><P>
+class defining basic interface for keeping track of 
+target applications and windows</P>
+<P>
+<STRONG>INSTANCE ATTRIBUTES</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>RecogStartMgr</EM> recog_mgr
+<DD>reference to a RecogStartMgr object
+<DT>
+<EM>{STR : [STR]}</EM> instance_names
+<DD>map from editor application name 
+to currently managed instance names
+<DT>
+<EM>{STR : INT}</EM> past_instances
+<DD>map from editor application name 
+to number of current and past instances
+<DT>
+<EM>{STR : STR}</EM> title_prefixes
+<DD>map from editor application name 
+to title prefix for that application.  A title prefix is a unique 
+string for each application, used as the prefix of the title 
+string (which is in turn included as a substring of the window 
+title, if the editor can do so)
+<DT>
+<EM>{INT : [STR]}</EM> windows
+<DD>map from currently known windows to
+lists of associated instance names, sorted in the order of instances
+most recently known to be active
+<DT>
+<EM>{STR : InstanceInfo}</EM> instance_data 
+<DD>map from instance names to
+corresponding instance-specific data
+<DT>
+<EM>{STR : AppState}</EM> instances
+<DD>map from instance names to
+corresponding AppState interfaces
+</DL>
+<P>
+<STRONG>CLASS ATTRIBUTES</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM> unknown_app_prefixes
+<DD>list of title prefixes to use with
+editors without predefined title_prefixes
+</DL>
+<H2 ID="AppMgr.AppMgr.__init__" CLASS="Method">AppMgr.AppMgr.__init__(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recog_mgr</SPAN>, <SPAN CLASS="Argument">**args</SPAN>)</H2>
+<P>None</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>RecogStartMgr</EM> recog_mgr
+<DD>reference to a RecogStartMgr object
+</DL>
+<H2 ID="AppMgr.AppMgr._add_new_instance" CLASS="Method">AppMgr.AppMgr._add_new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>)</H2>
+<P>None</P>
+
+<P>
+private method called internally to do the work of
+new_instance, except for notifying the recog_mgr.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>AppState</EM> app
+<DD>AppState interface corresponding to the new
+instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>name of the application instance.  Necessary
+if you want to add windows to the application in the future.
+
+</DL>
+<H2 ID="AppMgr.AppMgr._assign_ID_client" CLASS="Method">AppMgr.AppMgr._assign_ID_client(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module_name</SPAN>, <SPAN CLASS="Argument">window</SPAN>, <SPAN CLASS="Argument">title</SPAN>)</H2>
+<P>None</P>
+
+<P>
+check if there is a WinIDClient not yet assigned to a window.
+If so, attempt to assign it to the specified window, and return
+a TargetWindow object.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> module_name
+<DD>the name of the module corresponding to the
+window
+<DT>
+<EM>INT</EM> window
+<DD>the window handle of the window
+<DT>
+<EM>STR</EM> title
+<DD>the title of the window
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>TargetWindow</EM>
+<DD>an object of subclass of TargetWindow managed
+by the unassigned WinIDClient, or None if there is no unassigned 
+client, or the given window is not managed by that client.
+
+</DL>
+<H2 ID="AppMgr.AppMgr.add_module" CLASS="Method">AppMgr.AppMgr.add_module(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">module</SPAN>)</H2>
+<P>add a new KnownTargetModule object to the RecogStartMgr</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>KnownTargetModule</EM> module
+<DD>the new module
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true unless a module of the same name already exists
+
+</DL>
+<H2 ID="AppMgr.AppMgr.add_prefix" CLASS="Method">AppMgr.AppMgr.add_prefix(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name</SPAN>, <SPAN CLASS="Argument">title_prefix</SPAN>)</H2>
+<P>add a title prefix for an editor application</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> app_name
+<DD>name of the editor application
+<DT>
+<EM>STR</EM> title_prefix 
+<DD>a unique string for each application, 
+used as the prefix of the title string (which is in turn 
+included as a substring of the window title, if the editor 
+can do so).  The prefix should be entirely alphabetic and
+contain no spaces or punctuation.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>false if app_name was already known, or prefix wasn't
+unique
+
+</DL>
+<H2 ID="AppMgr.AppMgr.app_instance" CLASS="Method">AppMgr.AppMgr.app_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+return a reference to the AppState object corresponding to a
+particular instance. <STRONG>Note:</STRONG> Use only temporarily.  Storing 
+this reference is unsafe, and may lead to mediator crashes on 
+calls to its methods, and to failure to free resources.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>AppState</EM>
+<DD>temporary reference to the corresponding AppState
+object
+
+</DL>
+<H2 ID="AppMgr.AppMgr.app_instances" CLASS="Method">AppMgr.AppMgr.app_instances(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app_name=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+names of application instances being managed
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> app_name
+<DD>list names of instances corresponding only to
+this application name (or list all instances if app_name is
+None)
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM>
+<DD>list of names of applications being managed (e.g.
+"Emacs (Win)", "jEdit")
+
+</DL>
+<H2 ID="AppMgr.AppMgr.app_name" CLASS="Method">AppMgr.AppMgr.app_name(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>names of application corresponding to an instance</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>name of corresponding application, or None if the
+instance is unknown
+
+</DL>
+<H2 ID="AppMgr.AppMgr.app_names" CLASS="Method">AppMgr.AppMgr.app_names(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+names of applications being managed
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM> </P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM>
+<DD>list of names of applications being managed (e.g.
+"Emacs (Win)", "jEdit")
+
+</DL>
+<H2 ID="AppMgr.AppMgr.delete_instance" CLASS="Method">AppMgr.AppMgr.delete_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>remove named instance from management</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance to be removed
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppMgr.AppMgr.delete_window" CLASS="Method">AppMgr.AppMgr.delete_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
+<P>None</P>
+
+<P>
+remove window from list of known windows
+corresponding to an editor application instance.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance 
+<DT>
+<EM>INT</EM> window
+<DD>window handle of the window
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if window and instance are known (otherwise, does
+nothing)
+
+</DL>
+<H2 ID="AppMgr.AppMgr.instance_module" CLASS="Method">AppMgr.AppMgr.instance_module(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>returns the module associated with the given instance</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>the name of the instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>the name of the module associated with the instance, or
+None if it is unknown (because the instance has not yet been
+associated with any windows)
+
+</DL>
+<H2 ID="AppMgr.AppMgr.known_instance" CLASS="Method">AppMgr.AppMgr.known_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>checks whether a specific instance name is known</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if an instance by that name is being managed
+
+</DL>
+<H2 ID="AppMgr.AppMgr.known_window" CLASS="Method">AppMgr.AppMgr.known_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
+<P>is window a known window ID?</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> window
+<DD>window handle of the window
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if window is a known window associated with one or more
+editor instances
+
+</DL>
+<H2 ID="AppMgr.AppMgr.known_windows" CLASS="Method">AppMgr.AppMgr.known_windows(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+list of windows known to be associated with  a particular
+named application instance.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>list names of windows corresponding to this
+instance name (or list all known windows if instance is
+None)
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[INT]</EM>
+<DD>list of window handles
+
+</DL>
+<H2 ID="AppMgr.AppMgr.new_instance" CLASS="Method">AppMgr.AppMgr.new_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">check_window=1</SPAN>, <SPAN CLASS="Argument">window_info=None</SPAN>)</H2>
+<P>add a new application instance</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>AppState</EM> app
+<DD>AppState interface corresponding to the new
+instance
+<DT>
+<EM>BOOL</EM> check_window
+<DD>should we check to see if the
+current window belongs to this instance?
+<DT>
+<EM>(INT, STR, STR) window_info</EM> 
+<DD>window id, title, and module of 
+the current window as detected by the TCP server when it
+originally processed the new editor connection, or None to let
+RSM.new_instance check now.  Ignored unless check_window is
+true.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>name of the application instance.  Necessary
+if you want to add windows to the application in the future.
+
+</DL>
+<H2 ID="AppMgr.AppMgr.new_universal_instance" CLASS="Method">AppMgr.AppMgr.new_universal_instance(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">exclusive=1</SPAN>)</H2>
+<P>add a new application instance</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>AppState</EM> app
+<DD>AppState interface corresponding to the new
+instance
+<DT>
+<EM>BOOL</EM> exclusive
+<DD>use exclusive grammars?
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>name of the application instance.  Necessary
+if you want to add windows to the application in the future.
+
+</DL>
+<H2 ID="AppMgr.AppMgr.new_window" CLASS="Method">AppMgr.AppMgr.new_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+called when the editor notifies us of a new window for the 
+specified instance</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if window is added
+
+</DL>
+<H2 ID="AppMgr.AppMgr.specify_window" CLASS="Method">AppMgr.AppMgr.specify_window(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">instance</SPAN>)</H2>
+<P>None</P>
+
+<P>
+called to indicate that user has manually identified a
+known instance with the current window </P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> instance
+<DD>name of the application instance
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM>
+<DD>true if window is added
+
+</DL>
+<H2 ID="AppMgr.AppMgr.trust_current" CLASS="Method">AppMgr.AppMgr.trust_current(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">trust=1</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specifies whether the RecogStartMgr should trust that the current
+window corresponds to the editor when the editor first connects to
+VoiceCode, or when it notifies VoiceCode of a new window.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM> trust
+<DD>1 if RSM should trust that the current
+window corresponds to the editor when the editor first connects to
+VoiceCode, or when it notifies VoiceCode of a new window.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="AppMgr.AppMgr.window_info" CLASS="Method">AppMgr.AppMgr.window_info(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>find the window id, title, and module of the current window</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>(INT, STR, STR)</EM>
+<DD>the window id, title, and module name
+
+</DL>
+<H2 ID="AppMgr.AppMgr.window_instances" CLASS="Method">AppMgr.AppMgr.window_instances(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window</SPAN>)</H2>
+<P>None</P>
+
+<P>
+returns the list of known instances corresponding to a given
+window handle, in the order of most recent activation</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>INT</EM> window
+<DD>the window handle 
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR]</EM>
+<DD>list of names of instances associated with the
+window, or None if the window is unknown
+
+</DL>
+<H2 ID="Object.Object.decl_attrs" CLASS="Method">Object.Object.decl_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Define new attributes for <EM>self</EM></P>
+
+<P>
+Attributes are directly through self.__dict__, thus bypassing safe
+__setattr__.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ initial values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.Object.deep_construct" CLASS="Method">Object.Object.deep_construct(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">this_class</SPAN>, <SPAN CLASS="Argument">attrs_this_class</SPAN>, <SPAN CLASS="Argument">args_super</SPAN>, <SPAN CLASS="Argument">new_default={}</SPAN>, <SPAN CLASS="Argument">enforce_value={}</SPAN>, <SPAN CLASS="Argument">exclude_bases={}</SPAN>)</H2>
+<P>Build an instance of a class.</P>
+
+<P>
+Basically, this method:
+- declares and initialise all attributes listed in <EM>attrs_this_class</EM>
+- invokes the <EM>__init__</EM> of all superclasses (with the exclusion of those listed in *exclude_bases*), passing them arguments in <EM>args_super</EM></P>
+
+<DL>
+
+<DT>
+<EM>CLASS</EM> this_class
+<DD>Class that we want to build. This is a
+ class object as opposed to the name of a class. Constructors
+ of immediate superclasses of <EM>this_class</EM> are called
+ automatically, except if they are listed in *{CLASS: 1}
+ exclude_bases*.
+<DT>
+<EM>{STR: ANY}</EM> attrs_this_class
+<DD>New attributes (and their
+ values) defined by class <EM>this_class</EM>. The keys are the names
+ of the attributes and the values are the values of the
+ attributes (either default values or values passed to
+ *this_class.__init__*). An attribute with the appropriate
+ name will be declared automatically and initialsed to the
+ value specified in <EM>attrs_this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> args_super
+<DD>Arguments received by
+<EM>this_class.__init__</EM> but not recognised by it. These are
+assumed to be arguments defined in the <EM>__init__</EM> of some
+ancestor class and are just passed up the construction
+chain. Keys of <EM>args_super</EM> correspond to the names of the
+arguments and the values corresponds to the values received
+for them by <EM>this_class.__init__</EM>
+<DT>
+<EM>{STR: ANY}</EM> new_default={}
+<DD>Used to change the default
+ value of an ancestor constructor argument. In other words, if
+ <EM>this_class.__init__</EM> was called without specifying a value
+ for an argument that's listed in <EM>new_default</EM>, the default
+ value defined in <EM>new_default</EM> will be used instead of
+ whatever default might be defined in the constructor
+ of an ancestor class. However, if the constructor was called
+ WITH a specific value for that argument, that specific value
+ will be used instead of both the defaults defined in
+ <EM>new_default</EM> and the constructor of ancestor classes. Keys
+ of <EM>new_default</EM> correspond to argument names, and values
+ correspond to the new default values. If you don't specify a
+ value of <EM>new_default</EM>, it defaults to <EM>{}</EM>, which means that
+ the defaults of none of the ancestor constructor arguments
+ are redefined by <EM>this_class</EM>.
+<DT>
+<EM>{STR: ANY}</EM> enforce_value={}
+<DD>Lists of arguments with
+ enforced values. If the constructor is called with a value
+ for an argument that is different from the value specified
+ for it in <EM>enforce_value</EM>, then an <A HREF="Object.EnforcedConstrArg.html">EnforcedConstrArg</A>
+ exception will be raised. Also, if the constructor is called
+ without specifying a value for a particular argument, then
+ the value defined in <EM>enforce_value</EM> (if it exists) will be
+ used instead of whatever default might be defined in an
+ ancestor class. Keys of <EM>enforce_value</EM> correspond to
+ argument names and values correspond to the enforced
+ values. If you don't specify a value for <EM>enforce_value</EM>, it
+ defaults to <EM>{}</EM>, which means that <EM>this_class.__init__</EM> does
+ not enforce the value of any argument.
+<DT>
+<EM>{CLASS: BOOL}</EM> exclude_bases
+<DD>Immediate base classes whose
+constructors should not be called automatically. If an
+immediate superclass of <EM>this_class</EM> is listed in
+<EM>exclude_bases</EM>, then we don't automatically call its
+constructor. It is assumed that the programmer will call the
+constructor manually in <EM>this_class.__init__</EM>. If you do not
+specify a value for <EM>exclude_bases</EM>, it will default to <EM>{}</EM>,
+which means that the constructor of all immediate super
+classes will be called automatically.
+</DL>
+<H2 ID="Object.Object.init_attrs" CLASS="Method">Object.Object.init_attrs(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">attrs</SPAN>)</H2>
+<P>Initialises existing attributes</P>
+
+<P>
+Attributes are only set if they already exist in
+ <EM>self.__dict__</EM>. Otherwise, an <EM>AttributeError</EM> exception is
+ raised (provided PY_DEBUG_OBJECT=1).</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>{STR: ANY}</EM> attrs
+<DD>dictionary with attribute name as the keys and
+ default values as the values.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="Object.OwnerObject._cleanup_object" CLASS="Method">Object.OwnerObject._cleanup_object(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">object</SPAN>)</H2>
+<P>attempt to call cleanup on object</P>
+
+<P>
+<STRONG>INPUTS*</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>OwnerObject object</EM>
+<DD>note: class of object is the expected
+class, but _cleanup_object doesn't assume this is correct, nor
+does it check whether the object is a subclass of
+OwnerObject, only that it is a class instance and that it
+has a cleanup attribute
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM>
+<DD>reason for error (or None if no error).
+
+</DL>
+<H2 ID="Object.OwnerObject.add_owned" CLASS="Method">Object.OwnerObject.add_owned(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append a new attribute name to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.add_owned_list" CLASS="Method">Object.OwnerObject.add_owned_list(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">owned</SPAN>)</H2>
+<P>append new attribute names to the list of owned objects</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>[STR] owned</EM>
+<DD>names of owned attributes
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.cleanup" CLASS="Method">Object.OwnerObject.cleanup(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+method to cleanup circular references by cleaning up 
+any children, and then removing the reference to the parent</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.name_parent" CLASS="Method">Object.OwnerObject.name_parent(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">parent=None</SPAN>)</H2>
+<P>None</P>
+
+<P>
+specify the name of the attribute containing a reference to 
+this object's parent.</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR owned</EM>
+<DD>name of the parent, or None if none
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+<H2 ID="Object.OwnerObject.remove_other_references" CLASS="Method">Object.OwnerObject.remove_other_references(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<P>None</P>
+
+<P>
+additional cleanup to ensure that this object's references to
+its owned objects are the last remaining references</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+<P>
+<EM>none</EM></P>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+<P>
+<EM>none</EM>
+</P>
+
+<HR>
+<TABLE ALIGN="LEFT">
+<TR><TD>
+  <A HREF="http://validator.w3.org/check/referer" TARGET="validate">
+    <IMG BORDER=0 SRC="http://validator.w3.org/images/vh40.gif"
+     ALT="Valid HTML 4.0!" HEIGHT=31 WIDTH=88></A>
+  <A HREF="http://www.w3.org/Style/CSS/Buttons">
+    <IMG ALT="Made with CSS" BORDER=0 WIDTH=88 HEIGHT=31 
+     SRC="http://www.w3.org/Style/CSS/Buttons/mwcos"></A>
+
+</TD>
+<TD STYLE="padding-left: 10">
+  <SPAN CLASS="AUTHOR"></SPAN><BR>
+  <SPAN CLASS="VERSION"></SPAN>
+</TD>
+</TABLE>
+
+</body>
+</html>
