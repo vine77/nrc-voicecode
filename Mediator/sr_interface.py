@@ -202,15 +202,17 @@ def clean_written_form(written_form, clean_for=None):
     *STR cleansed_form* -- The clean written form
     """
 
-#    print '-- sr_interface.clean_written_form: written_form=\'%s\'' % written_form
+#    print '-- sr_interface.clean_written_form: written_form=\'%s\', clean_for=%s' % (written_form, clean_for)
     cleansed_form = written_form
     if clean_for == 'sr': 
         cleansed_form = re.sub('\n', '{Enter}', cleansed_form)
         cleansed_form = re.sub('\s', '{Spacebar}', cleansed_form)
+        cleansed_form = re.sub('\\\\', '{Backslash}', cleansed_form)
     elif clean_for == 'vc':
         cleansed_form = re.sub('\\{Enter\\}', '\n', cleansed_form)
         cleansed_form = re.sub('\\{Spacebar\\}', ' ', cleansed_form)
-
+        cleansed_form = re.sub('\\{Backslash\\}', '\\\\', cleansed_form)        
+#    print '-- sr_interface.clean_written_form: cleansed_form=\'%s\'' % cleansed_form
     return cleansed_form
     
 
@@ -226,7 +228,7 @@ def spoken_written_form(vocabulary_entry):
     
     *STR* (spoken, written) -- written and spoken forms of the vocabulary entry.
     """
-    a_match = re.match('^([^\\\\]*)\\\\([\s\S]*)$', vocabulary_entry)
+    a_match = re.match('^([\s\S]*)\\\\([^\\\\]*)$', vocabulary_entry)
     if a_match:
 #        print '-- sr_interface.spoken_written_form: entry \'%s\' is spoken/written form' % vocabulary_entry
         
@@ -271,7 +273,7 @@ def vocabulary_entry(spoken_form, written_form, clean_written=1):
     *entry* -- the entry to be added to the SR vocabulary
     """
 
-#    print '-- sr_interface.vocabulary_entry: spoken_form=\'%s\', written_form=%s' % (spoken_form, repr(written_form))
+#    print '-- sr_interface.vocabulary_entry: spoken_form=\'%s\', written_form=%s, clean_written=%s' % (spoken_form, repr(written_form), clean_written)
 
     entry = spoken_form
     if spoken_form != written_form:
@@ -284,7 +286,8 @@ def vocabulary_entry(spoken_form, written_form, clean_written=1):
 
         if len(written_form) > 0:
             entry = written_form + '\\' + entry
-            
+
+#    print '-- sr_interface.vocabulary_entry: returning entry=\'%s\'' % entry
     return entry
 
 class CommandDictGrammar(DictGramBase):

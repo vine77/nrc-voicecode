@@ -152,36 +152,36 @@ def add_lsa(language_list, spoken_as_list, written_as):
                 #
                 sr_interface.addWord(entry)                    
         
+# DEAD CODE BELOW
+#      #
+#      # Generate an anonymous action function that types the appropriate text
+#      #
+#      the_action = actions_gen.anonymous_action('app.insert(\'%s\')' % written_as, 'Inserts \'%s\'' % written_as)                    
 
-    #
-    # Generate an anonymous action function that types the appropriate text
-    #
-    the_action = actions_gen.anonymous_action('app.insert(\'%s\')' % written_as, 'Inserts \'%s\'' % written_as)                    
+#      #
+#      # Add a CSC for translating the LSA at the mediator level.
+#      # This redundant translation is necessary because if the spoken form of
+#      # the LSA looks too much like dictated text (e.g. "is equal to"), NatSpeak
+#      # will tend to always recognise it as dictated text instead of a
+#      # spoken form/written form word. So Mediator must be able to translate
+#      # it also in case NatSpeak screws up
+#      #
+#      # Note that if language_list=[None], then the CSC will have a
+#      # ContLanguage(language=None) context, which always applies no matter
+#      # what the active language is.
+#      #
+#      the_meanings = []
+#      for a_language in language_list:
+#          the_meanings = the_meanings + [[cont_gen.ContLanguage(language=a_language), the_action]]
 
-    #
-    # Add a CSC for translating the LSA at the mediator level.
-    # This redundant translation is necessary because if the spoken form of
-    # the LSA looks too much like dictated text (e.g. "is equal to"), NatSpeak
-    # will tend to always recognise it as dictated text instead of a
-    # spoken form/written form word. So Mediator must be able to translate
-    # it also in case NatSpeak screws up
-    #
-    # Note that if language_list=[None], then the CSC will have a
-    # ContLanguage(language=None) context, which always applies no matter
-    # what the active language is.
-    #
-    the_meanings = []
-    for a_language in language_list:
-        the_meanings = the_meanings + [[cont_gen.ContLanguage(language=a_language), the_action]]
-
-    aCSC = CSCmd.CSCmd(spoken_forms=spoken_as_list, meanings=the_meanings)
+#      aCSC = CSCmd.CSCmd(spoken_forms=spoken_as_list, meanings=the_meanings)
     
-    #
-    # Note: we add this CSC with add_voc_entry=0 because we don't want to
-    #       reenforce NatSpeak's tendancy to recognise the LSA as a dictated
-    #       sentence
-    #
-    add_csc(aCSC, add_voc_entry=0)
+#      #
+#      # Note: we add this CSC with add_voc_entry=0 because we don't want to
+#      #       reenforce NatSpeak's tendancy to recognise the LSA as a dictated
+#      #       sentence
+#      #
+#      add_csc(aCSC, add_voc_entry=0)
 
 #    print '-- MediatorObject.add_lsa: known LSAs are: '
 #    for a_lang in to_configure.interp.language_specific_aliases.keys():

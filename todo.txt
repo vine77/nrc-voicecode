@@ -15,25 +15,6 @@ LSAs
 
 Creation of CSC for redundant translation of LSAs at Mediator level is not necessary anymore because CmdInterp.chop_LSA does the redundant translation directly now.
 
-Module documentation
---------------------
-Move all module documentation to a new directory Doc/Modules
-
-That way, one can easily erase all Module documentation by doing rm
-Doc/Modules/*.html. When all doc in Doc, can't do that because user
-and installation documentation is in there also.
-
-Interpreter
------------
-
--- Alain
-
-Switch to an interpret_NL_cmd that uses a list of written\spoken words
-instead of a string. That's what we will migrate to in the future anyways.
-
-In the mean time, David can write a preprocessor that will take a
-string and split it into words in some "smart" way.
-
 Standard symbols
 ----------------
 
@@ -59,17 +40,6 @@ SymDict used by all the MediatorObject instances are in sync. Otherwise, they mi
 Symbol translation
 ------------------
 
--- Alain
-
-
-   d) add_abbreviation: when abbrev has less than 3 characters, then
-      even if the abbrev is added automaticly, then it should add an
-      expansion that consists of the spelled characters. E.g. 'os' ->
-      'O. S.'  Also, add_abbreviation should have an argument
-      user_added=1 which indicates that the abbrev is added by the
-      user in the config file as opposed to being added automaticly by
-      the interpreter. In such cases, the abbrev should be added even if it is
-      too short.
 
 Make actions into objects
 -------------------------
@@ -241,13 +211,21 @@ would have two advantages:
 
 a) The interpreter's job would be made easier, because any word that's
 not of the form "*XYZ*" or "ABC\XYZ" is considered to be part of a
-natural language symbol.
+natural language symbol. 
+
+ACTUALLY, THAT'S NOT TRUE BECAUSE NATSPEAK
+MAY INSIST ON SENDING US THE UTTERANCE AS DICTATED TEXT INSTEAD OF A
+SINGLE WRITTEN\\SPOKEN WORD.
 
 b) If user really meant the phrase "for loop", not the CSC, he could
 use NatSpeak correction dialog and select "for loop" from the
 selection box, instead of "*for-loop*". One problem here though is
 that the interpreter will then ask if he wants to create a new symbol
 for_loop, which would be a bit of a pain.
+
+THAT'S NOT TRUE EITHER BECAUSE THE MEDIATOR WOULD HAVE TO TRANSLATE
+THE SENTENCE IN CASE NATSPEAK INSISTED ON SENDING US THE UTTERANCE AS
+RECOGNISED TEXT INSTEAD OF A SINGLE WRITTEN\SPOKEN WORD.
 
 Note that even if we eventually allow the spoken form of CSCs to be
 simple grammar rules like: "goto <char> on <num>", we can generate voc
@@ -259,6 +237,12 @@ entries for semicolon: "semicolon", ";\semicolon", "*semicolon*".
 
 Hum... need to think some more about this.
 
+
+"What can I say" generator
+--------------------------
+
+A command that would generate HTML files that describe what can be
+said for different languages in different contexts.
 
 addWord
 -------
