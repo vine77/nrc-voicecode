@@ -4,7 +4,7 @@
 class AClass(ASuper):
     """This is a dummy class"""
     
-    def a_method(self, x):
+    def a_method(self, some_argument):
         some_variable = some_array[0]
         if some_variable:
            do_some_stuff(some_array)
@@ -22,4 +22,8 @@ class AClass(ASuper):
 class SomeOtherClass():
 
 	def some_other_method(self):
-	    pass
+	   try:
+	      do_some_stuff()
+	       
+	def yet_another_method(self):
+	   pass

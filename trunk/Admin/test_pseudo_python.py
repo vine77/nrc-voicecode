@@ -168,21 +168,41 @@ def test_dictate_from_scratch(testing):
 
 
 def do_edit_test(testing, edit_file, test_fct, descr=None):
-   testing.init_simulator_regression()
    names = testing.namespace()
    commands = names['commands']
+   
+   print '\n*********************\n*** Executing edit test: %s ***\n*********************\n' % descr
+	
    commands.open_file(edit_file)
    test_fct(commands)
-   commands.close_file(edit_file)
+   
+   a_match = re.search("([^\\\/]*$)", edit_file)
+   commands.close_buffer(a_match.group(1), save=-1)
+   
+   print '\n*********************\n*** DONE with edit test: %s ***\n*********************\n' % descr
     
 def test_editing(testing):
    #
    # This file contains code that will be edited in different ways
    #
    edit_file = vc_globals.test_data + os.sep + 'edit_this_buff.py'
+   testing.init_simulator_regression()
+   commands = testing.namespace()['commands']
+   commands.compile_symbols([edit_file])   
    
-   do_edit_test(testing, edit_file, insert_import_statement, 'insert an import statement in middle of a file')
-   do_edit_test(testing, edit_file, )   
+   do_edit_test(testing, edit_file, insert_import_statement_test, 'insert an import statement in middle of a file')
+   do_edit_test(testing, edit_file, create_new_class_test, 'create new class')
+   do_edit_test(testing, edit_file, change_subclass_of_existing_class, 'change subclass of existing class')
+   do_edit_test(testing, edit_file, add_method_to_existing_class_test, 'add_method_to_existing_class_test')
+   do_edit_test(testing, edit_file, add_argument_to_existing_method_test, 'add_argument_to_existing_method_test')   
+   do_edit_test(testing, edit_file, change_existing_argument_of_a_method_test, 'change_existing_argument_of_a_method_test')      
+   do_edit_test(testing, edit_file, insert_line_of_code_in_method_test, 'insert_line_of_code_in_method_test')   
+   do_edit_test(testing, edit_file, change_arguments_in_method_call_test, 'change_arguments_in_method_call_test')   
+   do_edit_test(testing, edit_file, nested_if_then_else_test, 'nested_if_then_else_test')   
+   do_edit_test(testing, edit_file, add_else_clause_test, 'add_else_clause_test')
+   do_edit_test(testing, edit_file, add_except_clause_test, 'add_except_clause_test')
+   
+   
    
 # To create an edit test scenario, just   define a test function and invoke 
 # it through do_edit_test as below.
@@ -192,5 +212,61 @@ def test_editing(testing):
 # Python editing test functions
 ###################################################################
 
-def insert_import(commands):
+def insert_import_statement_test(commands):
+   commands.goto_line(2)
+   commands.say(['import', 'some', 'module'], user_input="1\n")
    
+   
+def create_new_class_test(commands):   
+   commands.goto_line(20)
+   commands.say(['there', 'is', 'a', 'bug', 'below'], user_input='0\n0\n0\n0\n0\n')
+   commands.say(['class', 'new', 'class', 'class', 'body'], user_input="1\n")
+   commands.say(['define', 'method', 'new', 'method', 'method', 'body', 'pass'], user_input="1\n")
+
+def change_subclass_of_existing_class(commands):
+   commands.goto_line(4)
+   commands.say(['select', 'ASuper\\A Super'])
+   commands.say(['new', 'super', 'class'], user_input="1\n")
+   
+def add_method_to_existing_class_test(commands):
+   commands.goto_line(19)
+   commands.say(['add', 'method', 'some', 'method', 'method', 'body', 'pass'], user_input="1\n")
+
+def add_argument_to_existing_method_test(commands):
+   commands.goto_line(7)
+   commands.say(['add', 'argument', 'extra', 'argument'], user_input="1\n")
+   
+def change_existing_argument_of_a_method_test(commands):
+   commands.goto_line(7)
+   commands.say(['select', 'some_argument\\some argument'])
+   commands.say(['new', 'argument'], user_input="1\n")
+   
+def insert_line_of_code_in_method_test(commands):
+   commands.goto_line(8)   
+   commands.say(['new', 'statement'])
+   commands.say(['some', 'array', 'equals', 'none'])
+   
+def change_arguments_in_method_call_test(commands):
+   pass   
+   commands.goto_line(10)
+   commands.say(['select', 'some_array\\some array'])
+   commands.say(['none'])
+   commands.goto_line(11)
+   commands.say(['after', 'paren', 'none'])
+
+def nested_if_then_else_test(commands):
+   commands.goto_line(11)
+   commands.say(['new', 'statement', 'if', 'some', 'flag', 'then'], user_input="1\n1\n")
+   commands.say(['do', 'some', 'more', 'stuff', 'with', 'arguments', 'some', 'argument'], user_input="1\n1\n")
+   commands.say(['else', 'do', 'some', 'stuff', 'again', 'with', 'arguments', 'some', 'other', 'argument'], user_input="1\n1\n")
+   commands.say([';bug', 'below', 'dot', 'following', 'one', 'will', 'not', 'be', 'inserted', 'at', 'the', 'right', 'level'], user_input="1\n1\n1\n")
+   commands.say(['else', 'do', 'some', 'stuff', 'without', 'arguments'])
+   
+   
+def add_else_clause_test(commands):
+   commands.goto_line(11)
+   commands.say(['else', 'clause'])
+
+def add_except_clause_test(commands):   
+   commands.goto_line(26)
+   commands.say(['catch', 'exceptions'])

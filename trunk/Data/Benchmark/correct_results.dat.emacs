@@ -350,7 +350,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1ae7460>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1a111c8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -3436,7 +3436,7 @@ Heard less than greater than equal sign
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 1b2bb18> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 1ba12f8> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'C:\\Eclipse\\workspace\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -3589,7 +3589,7 @@ Associate 'function' with symbol (Enter selection):
   '2': Function (*new*)
   '3': FUNCTION (*new*)
 
-  5:    if Index|variable|Index|Value:
+>   5:    if Index|variable|Index|Value:
   6:       Index = 0;variable = 0;
   7:       Index.Function()
   8:       <CURSOR>
@@ -3612,7 +3612,7 @@ Associate 'python' with symbol (Enter selection):
   '2': Python (*new*)
   '3': PYTHON (*new*)
 
-  7:       Index.Function()
+>   7:       Index.Function()
   8:       variable = [0...10]
   9:       #!Python
  10:       <CURSOR>
@@ -3643,7 +3643,7 @@ Associate 'field' with symbol (Enter selection):
   '2': Field (*new*)
   '3': FIELD (*new*)
 
- 10:       #!Python
+>  10:       #!Python
  11:       if ~Index and ~variable:
  12:          variable::Index::Field
  13:          <CURSOR>
@@ -3698,7 +3698,7 @@ Associate 'list' with symbol (Enter selection):
   '2': List (*new*)
   '3': LIST (*new*)
 
- 16:             Function(0)
+>  16:             Function(0)
  17:             Function()
  18:             List[0]
  19:             <CURSOR>
@@ -3729,7 +3729,7 @@ Associate 'dictionary' with symbol (Enter selection):
   '2': Dictionary (*new*)
   '3': DICTIONARY (*new*)
 
- 19:             List[0]
+>  19:             List[0]
  20:             List[]
  21:             Dictionary{0}
  22:             <CURSOR>
@@ -3744,7 +3744,7 @@ Associate 'head' with symbol (Enter selection):
   '2': Head (*new*)
   '3': HEAD (*new*)
 
- 20:             List[]
+>  20:             List[]
  21:             Dictionary{0}
  22:             <Head>
  23:             <CURSOR>
@@ -3782,7 +3782,7 @@ Associate 'string' with symbol (Enter selection):
   '2': Message (*new*)
   '3': MESSAGE (*new*)
 
- 23:             <Head>
+>  23:             <Head>
  24:             <>
  25:             String = 'Message'
  26:             <CURSOR>
@@ -7111,7 +7111,7 @@ Associate 'R. E.' with symbol (Enter selection):
   '2': Re (*new*)
   '3': RE (*new*)
 
-*** Start of source buffer ***
+> *** Start of source buffer ***
   1: import os, re, string, sys
   2: <CURSOR>
 
@@ -7139,7 +7139,7 @@ Associate 'natural link' with symbol (Enter selection):
   '5': vcglobals (*new*)
   '6': VCGLOBALS (*new*)
 
-*** Start of source buffer ***
+> *** Start of source buffer ***
   1: import os, re, string, sys
   2: import auto_test, natlink, vc_globals
   3: <CURSOR>
@@ -7158,7 +7158,7 @@ Associate 'actions C. C. P. P.' with symbol (Enter selection):
   '6': actionsccpp (*new*)
   '7': ACTIONSCCPP (*new*)
 
-*** Start of source buffer ***
+> *** Start of source buffer ***
   1: import os, re, string, sys
   2: import auto_test, natlink, vc_globals
   3: from actions_C_Cpp import all
@@ -7189,7 +7189,7 @@ Associate 'application state' with symbol (Enter selection):
   '6': applicationstate (*new*)
   '7': APPLICATIONSTATE (*new*)
 
-  2: import auto_test, natlink, vc_globals
+>   2: import auto_test, natlink, vc_globals
   3: from actions_C_Cpp import all
   4: from AppState import AppState
   5: <CURSOR>
@@ -7231,7 +7231,7 @@ Associate 'context python' with symbol (Enter selection):
   '6': contextpython (*new*)
   '7': CONTEXTPYTHON (*new*)
 
-  3: from actions_C_Cpp import all
+>   3: from actions_C_Cpp import all
   4: from AppState import AppState
   5: from cont_gen import ContC, ContPy
   6: <CURSOR>
@@ -7261,7 +7261,7 @@ Associate 'context sensitive cmd' with symbol (Enter selection):
   '6': contextsensitivecmd (*new*)
   '7': CONTEXTSENSITIVECMD (*new*)
 
-  4: from AppState import AppState
+>   4: from AppState import AppState
   5: from cont_gen import ContC, ContPy
   6: from CSCmd import CSCmd
   7: <CURSOR>
@@ -7291,7 +7291,7 @@ Associate 'Ed simulator' with symbol (Enter selection):
   '6': edsimulator (*new*)
   '7': EDSIMULATOR (*new*)
 
-  5: from cont_gen import ContC, ContPy
+>   5: from cont_gen import ContC, ContPy
   6: from CSCmd import CSCmd
   7: from EdSim import EdSim
   8: <CURSOR>
@@ -7318,7 +7318,7 @@ Associate 'Ed simulator' with symbol (Enter selection):
   '6': edsimulator (*new*)
   '7': EDSIMULATOR (*new*)
 
-  7: from EdSim import EdSim
+>   7: from EdSim import EdSim
   8: from Object import Object
   9: import EdSim, SymDict
  10: <CURSOR>
@@ -7336,7 +7336,7 @@ Associate 'S. R. interface' with symbol (Enter selection):
   '5': srinterface (*new*)
   '6': SRINTERFACE (*new*)
 
-  8: from Object import Object
+>   8: from Object import Object
   9: import EdSim, SymDict
  10: import sr_interface
  11: <CURSOR>
@@ -7428,7 +7428,7 @@ Associate 'un translated text end' with symbol (Enter selection):
   '6': untranslatedtextend (*new*)
   '7': UNTRANSLATEDTEXTEND (*new*)
 
- 11: class CmdInterp(Object):
+>  11: class CmdInterp(Object):
  12:    def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:       self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:       <CURSOR>
@@ -7710,7 +7710,7 @@ Associate 'greetings' with symbol (Enter selection):
   '2': Greetings (*new*)
   '3': GREETINGS (*new*)
 
- 34:       elif this_word == hi:
+>  34:       elif this_word == hi:
  35:          this_word = greetings
  36:       else:
  37:          <CURSOR>
@@ -7725,7 +7725,7 @@ Associate 'done' with symbol (Enter selection):
   '2': Done (*new*)
   '3': DONE (*new*)
 
- 35:          this_word = greetings
+>  35:          this_word = greetings
  36:       else:
  37:          this_word = 'done'
  38:          <CURSOR>
@@ -7824,7 +7824,7 @@ Associate 'O. S.' with symbol (Enter selection):
   '2': System (*new*)
   '3': SYSTEM (*new*)
 
-*** Start of source buffer ***
+> *** Start of source buffer ***
   1: import os, re, string, system
   2: <CURSOR>
 
@@ -7861,7 +7861,7 @@ Associate 'auto test' with symbol (Enter selection):
   '5': vcglobals (*new*)
   '6': VCGLOBALS (*new*)
 
-*** Start of source buffer ***
+> *** Start of source buffer ***
   1: import os, re, string, system
   2: import auto_test, natural_link, vc_globals
   3: <CURSOR>
@@ -7879,7 +7879,7 @@ Associate 'actions C. C. P. P.' with symbol (Enter selection):
   '5': actionsccpp (*new*)
   '6': ACTIONSCCPP (*new*)
 
-*** Start of source buffer ***
+> *** Start of source buffer ***
   1: import os, re, string, system
   2: import auto_test, natural_link, vc_globals
   3: from actions_ccpp import all
@@ -7898,7 +7898,7 @@ Associate 'application state' with symbol (Enter selection):
   '5': applicationstate (*new*)
   '6': APPLICATIONSTATE (*new*)
 
-  2: import auto_test, natural_link, vc_globals
+>   2: import auto_test, natural_link, vc_globals
   3: from actions_ccpp import all
   4: from application_state import application_state
   5: <CURSOR>
@@ -7936,7 +7936,7 @@ Associate 'context generic' with symbol (Enter selection):
   '5': contextpython (*new*)
   '6': CONTEXTPYTHON (*new*)
 
-  3: from actions_ccpp import all
+>   3: from actions_ccpp import all
   4: from application_state import application_state
   5: from context_generic import context_c, context_python
   6: <CURSOR>
@@ -7954,7 +7954,7 @@ Associate 'context sensitive command' with symbol (Enter selection):
   '5': contextsensitivecommand (*new*)
   '6': CONTEXTSENSITIVECOMMAND (*new*)
 
-  4: from application_state import application_state
+>   4: from application_state import application_state
   5: from context_generic import context_c, context_python
   6: from context_sensitive_command import context_sensitive_command
   7: <CURSOR>
@@ -7972,7 +7972,7 @@ Associate 'Ed simulator' with symbol (Enter selection):
   '5': edsimulator (*new*)
   '6': EDSIMULATOR (*new*)
 
-  5: from context_generic import context_c, context_python
+>   5: from context_generic import context_c, context_python
   6: from context_sensitive_command import context_sensitive_command
   7: from ed_simulator import ed_simulator
   8: <CURSOR>
@@ -7987,7 +7987,7 @@ Associate 'object' with symbol (Enter selection):
   '2': Object (*new*)
   '3': OBJECT (*new*)
 
-  6: from context_sensitive_command import context_sensitive_command
+>   6: from context_sensitive_command import context_sensitive_command
   7: from ed_simulator import ed_simulator
   8: from object import object
   9: <CURSOR>
@@ -8005,7 +8005,7 @@ Associate 'symbol dictionary' with symbol (Enter selection):
   '5': symboldictionary (*new*)
   '6': SYMBOLDICTIONARY (*new*)
 
-  7: from ed_simulator import ed_simulator
+>   7: from ed_simulator import ed_simulator
   8: from object import object
   9: import ed_simulator, symbol_dictionary
  10: <CURSOR>
@@ -8023,7 +8023,7 @@ Associate 'S. R. interface' with symbol (Enter selection):
   '5': srinterface (*new*)
   '6': SRINTERFACE (*new*)
 
-  8: from object import object
+>   8: from object import object
   9: import ed_simulator, symbol_dictionary
  10: import sr_interface
  11: <CURSOR>
@@ -8066,17 +8066,10 @@ Associate 'initialize' with symbol (Enter selection):
   '5': onapplication (*new*)
   '6': ONAPPLICATION (*new*)
 
-> Associate 'none' with symbol (Enter selection):
-
-  '0': no association
-  '1': none (*new*)
-  '2': None (*new*)
-  '3': NONE (*new*)
-
 >   9: import ed_simulator, symbol_dictionary
  10: import sr_interface
  11: class command_interpreter(object):
- 12:    def initialize(self, on_application = none, <CURSOR>):
+ 12:    def initialize(self, on_application = None, <CURSOR>):
  13:       
 
 *** End of source buffer ***
@@ -8101,7 +8094,7 @@ Associate 'symbol_dictionary pickle file' with symbol (Enter selection):
 
 >  10: import sr_interface
  11: class command_interpreter(object):
- 12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
+ 12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:       <CURSOR>
 
 *** End of source buffer ***
@@ -8119,7 +8112,7 @@ Associate 'declare attributes' with symbol (Enter selection):
 
 >  10: import sr_interface
  11: class command_interpreter(object):
- 12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
+ 12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:       self.declare_attributes({<CURSOR>})
 
 *** End of source buffer ***
@@ -8137,8 +8130,8 @@ Associate 'un translated text start' with symbol (Enter selection):
 
 >  10: import sr_interface
  11: class command_interpreter(object):
- 12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
- 13:       self.declare_attributes({'un_translated_text_start': none, <CURSOR>})
+ 12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
+ 13:       self.declare_attributes({'un_translated_text_start': None, <CURSOR>})
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement']
@@ -8153,9 +8146,9 @@ Associate 'un translated text end' with symbol (Enter selection):
   '5': untranslatedtextend (*new*)
   '6': UNTRANSLATEDTEXTEND (*new*)
 
- 11: class command_interpreter(object):
- 12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
- 13:       self.declare_attributes({'un_translated_text_start': none, 'un_translated_text_end': none})
+>  11: class command_interpreter(object):
+ 12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
+ 13:       self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:       <CURSOR>
 
 *** End of source buffer ***
@@ -8171,16 +8164,16 @@ Associate 'deep construct' with symbol (Enter selection):
   '5': deepconstruct (*new*)
   '6': DEEPCONSTRUCT (*new*)
 
->  12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
- 13:       self.declare_attributes({'un_translated_text_start': none, 'un_translated_text_end': none})
+>  12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
+ 13:       self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:       self.deep_construct(command_interpreter, \
  15:                           <CURSOR>)
 
 *** End of source buffer ***
 Saying: ['brace', 'pair', 'single', 'quotes', 'on', 'application', 'jump', 'out', ':\\colon', 'on', 'application', 'comma']
 Heard brace pair single quotes on application jump out colon on application comma
- 12:    def initialize(self, on_application = none, symbol_dictionary_pickle_file = none, **attributes):
- 13:       self.declare_attributes({'un_translated_text_start': none, 'un_translated_text_end': none})
+ 12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
+ 13:       self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:       self.deep_construct(command_interpreter, \
  15:                           {'on_application': on_application, <CURSOR>})
 
@@ -8197,7 +8190,7 @@ Associate 'known symbols' with symbol (Enter selection):
   '5': knownsymbols (*new*)
   '6': KNOWNSYMBOLS (*new*)
 
->  13:       self.declare_attributes({'un_translated_text_start': none, 'un_translated_text_end': none})
+>  13:       self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:       self.deep_construct(command_interpreter, \
  15:                           {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
  16:                            <CURSOR>})
@@ -8235,14 +8228,14 @@ Associate 'last loaded language' with symbol (Enter selection):
 
 >  15:                           {'on_application': on_application, 'known_symbols': symbol_dictionary.symbol_dictionary(), \
  16:                            'language_specific_aliases': {}, \
- 17:                            'last_loaded_language': none, \
+ 17:                            'last_loaded_language': None, \
  18:                            <CURSOR>})
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', ':\\colon', 'symbol', 'dictionary', 'pickle', 'file', 'jump', 'out', 'comma', 'continue', 'statement']
 Heard single quotes symbol dictionary pickle file jump out colon symbol dictionary pickle file jump out comma continue statement
  16:                            'language_specific_aliases': {}, \
- 17:                            'last_loaded_language': none, \
+ 17:                            'last_loaded_language': None, \
  18:                            'symbol_dictionary_pickle_file': symbol_dictionary_pickle_file}, \
  19:                           <CURSOR>)
 
@@ -8342,7 +8335,7 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
- 21:    def spoken_form_regular_expression(self, spoken_form):
+>  21:    def spoken_form_regular_expression(self, spoken_form):
  22:       words = re.split('\s+', spoken_form)
  23:       re = ''
  24:       <CURSOR>
@@ -8375,7 +8368,7 @@ Associate 'first' with symbol (Enter selection):
   '2': First (*new*)
   '3': FIRST (*new*)
 
- 23:       re = ''
+>  23:       re = ''
  24:       for a_word in words:
  25:          first = a_word[0]
  26:          <CURSOR>
@@ -8391,7 +8384,7 @@ Associate 'rest' with symbol (Enter selection):
   '3': Rest (*new*)
   '4': REST (*new*)
 
- 24:       for a_word in words:
+>  24:       for a_word in words:
  25:          first = a_word[0]
  26:          re = a_word[1: ]
  27:          <CURSOR>
@@ -8439,7 +8432,7 @@ Associate 'upper' with symbol (Enter selection):
   '2': Upper (*new*)
   '3': UPPER (*new*)
 
- 25:          first = a_word[0]
+>  25:          first = a_word[0]
  26:          re = a_word[1: ]
  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
  28:          <CURSOR>
@@ -8488,7 +8481,7 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
- 27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
+>  27:          regular_expression_this_word = '[' + string.lower(first) + string.upper(first)
  28:          if not re == '':
  29:             re = re + '\s*'
  30:             <CURSOR>
@@ -8518,7 +8511,7 @@ Associate 'regular expression' with symbol (Enter selection):
   '6': regularexpression (*new*)
   '7': REGULAREXPRESSION (*new*)
 
- 28:          if not re == '':
+>  28:          if not re == '':
  29:             re = re + '\s*'
  30:             re = re + regular_expression_this_word
  31:             <CURSOR>
@@ -8600,7 +8593,7 @@ Associate 'greetings' with symbol (Enter selection):
   '2': Greetings (*new*)
   '3': GREETINGS (*new*)
 
- 34:       elif this_word == hi:
+>  34:       elif this_word == hi:
  35:          this_word = greetings
  36:       else:
  37:          <CURSOR>
@@ -8615,7 +8608,7 @@ Associate 'done' with symbol (Enter selection):
   '2': Done (*new*)
   '3': DONE (*new*)
 
- 35:          this_word = greetings
+>  35:          this_word = greetings
  36:       else:
  37:          this_word = 'done'
  38:          <CURSOR>
@@ -8675,9 +8668,571 @@ Associate 'all right' with symbol (Enter selection):
 
 
 *******************************************************************************
-* Name        : python editing
+* Name        : python_editing
 * Description : testing the various CSCs and LSAs for editing Python
 *******************************************************************************
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\edit_this_buff.py'
+>>> Known symbols are: 
+AClass: ['a class']
+ASuper: ['a super']
+SomeOtherClass: ['some other class']
+a_method: ['a method']
+a_method_with_no_arguments: ['a method with no arguments', 'a method with number arguments']
+class: ['class']
+def: ['def', 'definition', 'default', 'define', 'defined', 'deaf']
+do_some_more: ['do some more']
+do_some_stuff: ['do some stuff']
+if: ['if']
+pass: ['pass']
+self: ['self']
+some_argument: ['some argument']
+some_array: ['some array']
+some_other_method: ['some other method']
+some_variable: ['some variable']
+try: ['try']
+yet_another_method: ['yet another method']
+_cached_symbols_as_one_string is:
+    class  AClass  ASuper  def  a_method  self  some_argument  some_variable  some_array  if  do_some_stuff  do_some_more  try  a_method_with_no_arguments  pass  SomeOtherClass  some_other_method  yet_another_method 
+
+*********************
+*** Executing edit test: insert an import statement in middle of a file ***
+*********************
+
+*** Start of source buffer ***
+  1: <CURSOR># This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(ASuper):
+*** Start of source buffer ***
+  1: # This is a small buffer for testing editing of Python code
+  2: <CURSOR>
+  3: 
+  4: class AClass(ASuper):
+  5:     """This is a dummy class"""
+Heard import some module
+Associate 'some module' with symbol (Enter selection):
+
+  '0': no association
+  '1': some_module (*new*)
+  '2': SomeModule (*new*)
+  '3': someModule (*new*)
+  '4': SOME_MODULE (*new*)
+  '5': somemodule (*new*)
+  '6': SOMEMODULE (*new*)
+
+> *** Start of source buffer ***
+  1: # This is a small buffer for testing editing of Python code
+  2: import some_module<CURSOR>
+  3: 
+  4: class AClass(ASuper):
+  5:     """This is a dummy class"""
+
+*********************
+*** DONE with edit test: insert an import statement in middle of a file ***
+*********************
+
+
+*********************
+*** Executing edit test: create new class ***
+*********************
+
+*** Start of source buffer ***
+  1: <CURSOR># This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(ASuper):
+ 17:         pass
+ 18:            
+ 19: 
+ 20: <CURSOR>
+ 21: 
+ 22: class SomeOtherClass():
+ 23: 
+Heard there is a bug below
+Associate 'there' with symbol (Enter selection):
+
+  '0': no association
+  '1': there (*new*)
+  '2': There (*new*)
+  '3': THERE (*new*)
+
+> Associate 'a bug below' with symbol (Enter selection):
+
+  '0': no association
+  '1': a_bug_below (*new*)
+  '2': ABugBelow (*new*)
+  '3': aBugBelow (*new*)
+  '4': A_BUG_BELOW (*new*)
+  '5': abugbelow (*new*)
+  '6': ABUGBELOW (*new*)
+
+>  17:         pass
+ 18:            
+ 19: 
+ 20: there is a bug below<CURSOR>
+ 21: 
+ 22: class SomeOtherClass():
+ 23: 
+Heard class new class class body
+ 19: 
+ 20: there is a bug belowclass class :
+ 21:    :
+ 22:    <CURSOR>
+ 23: 
+ 24: class SomeOtherClass():
+ 25: 
+Heard define method new method method body pass
+Associate 'new method' with symbol (Enter selection):
+
+  '0': no association
+  '1': new_method (*new*)
+  '2': NewMethod (*new*)
+  '3': newMethod (*new*)
+  '4': NEW_METHOD (*new*)
+  '5': newmethod (*new*)
+  '6': NEWMETHOD (*new*)
+
+>  21:    :
+ 22:    def new_method(self):
+ 23:       pass
+ 24:    <CURSOR>
+ 25: 
+ 26: class SomeOtherClass():
+ 27: 
+
+*********************
+*** DONE with edit test: create new class ***
+*********************
+
+
+*********************
+*** Executing edit test: change subclass of existing class ***
+*********************
+
+*** Start of source buffer ***
+  1: <CURSOR># This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(ASuper):
+*** Start of source buffer ***
+  1: # This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: <CURSOR>class AClass(ASuper):
+  5:     """This is a dummy class"""
+  6:     
+  7:     def a_method(self, some_argument):
+Heard select a super
+*** Start of source buffer ***
+  1: # This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(<SEL_START>ASuper<SEL_END>):
+  5:     """This is a dummy class"""
+  6:     
+  7:     def a_method(self, some_argument):
+Heard new super class
+Associate 'new super' with symbol (Enter selection):
+
+  '0': no association
+  '1': new_super (*new*)
+  '2': NewSuper (*new*)
+  '3': newSuper (*new*)
+  '4': NEW_SUPER (*new*)
+  '5': newsuper (*new*)
+  '6': NEWSUPER (*new*)
+
+> *** Start of source buffer ***
+  1: # This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(new_superclass <CURSOR>:
+  5:              ):
+  6:     """This is a dummy class"""
+  7:     
+
+*********************
+*** DONE with edit test: change subclass of existing class ***
+*********************
+
+
+*********************
+*** Executing edit test: add_method_to_existing_class_test ***
+*********************
+
+*** Start of source buffer ***
+  1: <CURSOR># This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(ASuper):
+ 16:     def a_method_with_no_arguments():
+ 17:         pass
+ 18:            
+ 19: <CURSOR>
+ 20: 
+ 21: 
+ 22: class SomeOtherClass():
+Heard add method some method method body pass
+Associate 'some method' with symbol (Enter selection):
+
+  '0': no association
+  '1': some_method (*new*)
+  '2': SomeMethod (*new*)
+  '3': someMethod (*new*)
+  '4': SOME_METHOD (*new*)
+  '5': somemethod (*new*)
+  '6': SOMEMETHOD (*new*)
+
+>  18:            
+ 19: def some_method(self):
+ 20:    pass
+ 21: <CURSOR>
+ 22: 
+ 23: 
+ 24: class SomeOtherClass():
+
+*********************
+*** DONE with edit test: add_method_to_existing_class_test ***
+*********************
+
+
+*********************
+*** Executing edit test: add_argument_to_existing_method_test ***
+*********************
+
+*** Start of source buffer ***
+  1: <CURSOR># This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(ASuper):
+  4: class AClass(ASuper):
+  5:     """This is a dummy class"""
+  6:     
+  7: <CURSOR>    def a_method(self, some_argument):
+  8:         some_variable = some_array[0]
+  9:         if some_variable:
+ 10:            do_some_stuff(some_array)
+Heard add argument extra argument
+Associate 'extra argument' with symbol (Enter selection):
+
+  '0': no association
+  '1': extra_argument (*new*)
+  '2': ExtraArgument (*new*)
+  '3': extraArgument (*new*)
+  '4': EXTRA_ARGUMENT (*new*)
+  '5': extraargument (*new*)
+  '6': EXTRAARGUMENT (*new*)
+
+>   4: class AClass(ASuper):
+  5:     """This is a dummy class"""
+  6:     
+  7:     def a_method(self, some_argument, extra_argument<CURSOR>):
+  8:         some_variable = some_array[0]
+  9:         if some_variable:
+ 10:            do_some_stuff(some_array)
+
+*********************
+*** DONE with edit test: add_argument_to_existing_method_test ***
+*********************
+
+
+*********************
+*** Executing edit test: change_existing_argument_of_a_method_test ***
+*********************
+
+*** Start of source buffer ***
+  1: <CURSOR># This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(ASuper):
+  4: class AClass(ASuper):
+  5:     """This is a dummy class"""
+  6:     
+  7: <CURSOR>    def a_method(self, some_argument):
+  8:         some_variable = some_array[0]
+  9:         if some_variable:
+ 10:            do_some_stuff(some_array)
+Heard select some argument
+  4: class AClass(ASuper):
+  5:     """This is a dummy class"""
+  6:     
+  7:     def a_method(self, <SEL_START>some_argument<SEL_END>):
+  8:         some_variable = some_array[0]
+  9:         if some_variable:
+ 10:            do_some_stuff(some_array)
+Heard new argument
+Associate 'new argument' with symbol (Enter selection):
+
+  '0': no association
+  '1': new_argument (*new*)
+  '2': NewArgument (*new*)
+  '3': newArgument (*new*)
+  '4': NEW_ARGUMENT (*new*)
+  '5': newargument (*new*)
+  '6': NEWARGUMENT (*new*)
+
+>   4: class AClass(ASuper):
+  5:     """This is a dummy class"""
+  6:     
+  7:     def a_method(self, new_argument<CURSOR>):
+  8:         some_variable = some_array[0]
+  9:         if some_variable:
+ 10:            do_some_stuff(some_array)
+
+*********************
+*** DONE with edit test: change_existing_argument_of_a_method_test ***
+*********************
+
+
+*********************
+*** Executing edit test: insert_line_of_code_in_method_test ***
+*********************
+
+*** Start of source buffer ***
+  1: <CURSOR># This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(ASuper):
+  5:     """This is a dummy class"""
+  6:     
+  7:     def a_method(self, some_argument):
+  8: <CURSOR>        some_variable = some_array[0]
+  9:         if some_variable:
+ 10:            do_some_stuff(some_array)
+ 11:            do_some_more()
+Heard new statement
+  6:     
+  7:     def a_method(self, some_argument):
+  8:         some_variable = some_array[0]
+  9:         <CURSOR>
+ 10:         if some_variable:
+ 11:            do_some_stuff(some_array)
+ 12:            do_some_more()
+Heard some array equals none
+  6:     
+  7:     def a_method(self, some_argument):
+  8:         some_variable = some_array[0]
+  9:         some_array = None<CURSOR>
+ 10:         if some_variable:
+ 11:            do_some_stuff(some_array)
+ 12:            do_some_more()
+
+*********************
+*** DONE with edit test: insert_line_of_code_in_method_test ***
+*********************
+
+
+*********************
+*** Executing edit test: change_arguments_in_method_call_test ***
+*********************
+
+*** Start of source buffer ***
+  1: <CURSOR># This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(ASuper):
+  7:     def a_method(self, some_argument):
+  8:         some_variable = some_array[0]
+  9:         if some_variable:
+ 10: <CURSOR>           do_some_stuff(some_array)
+ 11:            do_some_more()
+ 12:            
+ 13:         try:
+Heard select some array
+  7:     def a_method(self, some_argument):
+  8:         some_variable = some_array[0]
+  9:         if some_variable:
+ 10:            do_some_stuff(<SEL_START>some_array<SEL_END>)
+ 11:            do_some_more()
+ 12:            
+ 13:         try:
+Heard none
+  7:     def a_method(self, some_argument):
+  8:         some_variable = some_array[0]
+  9:         if some_variable:
+ 10:            do_some_stuff(None<CURSOR>)
+ 11:            do_some_more()
+ 12:            
+ 13:         try:
+  8:         some_variable = some_array[0]
+  9:         if some_variable:
+ 10:            do_some_stuff(None)
+ 11: <CURSOR>           do_some_more()
+ 12:            
+ 13:         try:
+ 14:            do_some_stuff()
+Heard after paren none
+  8:         some_variable = some_array[0]
+  9:         if some_variable:
+ 10:            do_some_stuff(None)
+ 11:            do_some_more(None<CURSOR>)
+ 12:            
+ 13:         try:
+ 14:            do_some_stuff()
+
+*********************
+*** DONE with edit test: change_arguments_in_method_call_test ***
+*********************
+
+
+*********************
+*** Executing edit test: nested_if_then_else_test ***
+*********************
+
+*** Start of source buffer ***
+  1: <CURSOR># This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(ASuper):
+  8:         some_variable = some_array[0]
+  9:         if some_variable:
+ 10:            do_some_stuff(some_array)
+ 11: <CURSOR>           do_some_more()
+ 12:            
+ 13:         try:
+ 14:            do_some_stuff()
+Heard new statement if some flag then
+Associate 'some flag' with symbol (Enter selection):
+
+  '0': no association
+  '1': some_flag (*new*)
+  '2': SomeFlag (*new*)
+  '3': someFlag (*new*)
+  '4': SOME_FLAG (*new*)
+  '5': someflag (*new*)
+  '6': SOMEFLAG (*new*)
+
+>  10:            do_some_stuff(some_array)
+ 11:            do_some_more()
+ 12:            if some_flag:
+ 13:               <CURSOR>
+ 14:            
+ 15:         try:
+ 16:            do_some_stuff()
+Heard do some more stuff with arguments some argument
+Associate 'do_some_more stuff' with symbol (Enter selection):
+
+  '0': no association
+  '1': do_some_stuff
+  '2': do_some_more_stuff (*new*)
+  '3': DoSomeMoreStuff (*new*)
+  '4': doSomeMoreStuff (*new*)
+  '5': DO_SOME_MORE_STUFF (*new*)
+  '6': dosomemorestuff (*new*)
+  '7': DOSOMEMORESTUFF (*new*)
+
+>  10:            do_some_stuff(some_array)
+ 11:            do_some_more()
+ 12:            if some_flag:
+ 13:               do_some_stuff(some_argument<CURSOR>)
+ 14:            
+ 15:         try:
+ 16:            do_some_stuff()
+Heard else do some stuff again with arguments some other argument
+Associate 'do_some_stuff again' with symbol (Enter selection):
+
+  '0': no association
+  '1': do_some_stuff_again (*new*)
+  '2': DoSomeStuffAgain (*new*)
+  '3': doSomeStuffAgain (*new*)
+  '4': DO_SOME_STUFF_AGAIN (*new*)
+  '5': dosomestuffagain (*new*)
+  '6': DOSOMESTUFFAGAIN (*new*)
+
+> Associate 'some other argument' with symbol (Enter selection):
+
+  '0': no association
+  '1': some_other_argument (*new*)
+  '2': SomeOtherArgument (*new*)
+  '3': someOtherArgument (*new*)
+  '4': SOME_OTHER_ARGUMENT (*new*)
+  '5': someotherargument (*new*)
+  '6': SOMEOTHERARGUMENT (*new*)
+
+>  12:            if some_flag:
+ 13:               do_some_stuff(some_argument)
+ 14:            else:
+ 15:               do_some_stuff_again(some_other_argument<CURSOR>)
+ 16:            
+ 17:         try:
+ 18:            do_some_stuff()
+Heard else do some stuff without arguments
+ 14:            else:
+ 15:               do_some_stuff_again(some_other_argument)
+ 16:            else:
+ 17:               do_some_stuff()<CURSOR>
+ 18:            
+ 19:         try:
+ 20:            do_some_stuff()
+
+*********************
+*** DONE with edit test: nested_if_then_else_test ***
+*********************
+
+
+*********************
+*** Executing edit test: add_else_clause_test ***
+*********************
+
+*** Start of source buffer ***
+  1: <CURSOR># This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(ASuper):
+  8:         some_variable = some_array[0]
+  9:         if some_variable:
+ 10:            do_some_stuff(some_array)
+ 11: <CURSOR>           do_some_more()
+ 12:            
+ 13:         try:
+ 14:            do_some_stuff()
+Heard else clause
+ 10:            do_some_stuff(some_array)
+ 11:            do_some_more()
+ 12:         else:
+ 13:            <CURSOR>
+ 14:            
+ 15:         try:
+ 16:            do_some_stuff()
+
+*********************
+*** DONE with edit test: add_else_clause_test ***
+*********************
+
+
+*********************
+*** Executing edit test: add_except_clause_test ***
+*********************
+
+*** Start of source buffer ***
+  1: <CURSOR># This is a small buffer for testing editing of Python code
+  2: 
+  3: 
+  4: class AClass(ASuper):
+ 23: 
+ 24: 	def some_other_method(self):
+ 25: 	   try:
+ 26: <CURSOR>	      do_some_stuff()
+ 27: 	       
+ 28: 	def yet_another_method(self):
+ 29: 	   pass
+
+*** End of source buffer ***
+Heard catch exceptions
+ 24: 	def some_other_method(self):
+ 25: 	   try:
+ 26: 	      do_some_stuff()
+ 27: 	   except <CURSOR>:
+ 28: 	      
+ 29: 	       
+ 30: 	def yet_another_method(self):
+
+*********************
+*** DONE with edit test: add_except_clause_test ***
+*********************
 
 
 
@@ -10249,7 +10804,7 @@ Associate 'index' with symbol (Enter selection):
   '2': Index (*new*)
   '3': INDEX (*new*)
 
-*** Start of source buffer ***
+> *** Start of source buffer ***
   1: index = 0
   2: <CURSOR>
 
@@ -10829,78 +11384,12 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 *** End of source buffer ***
 
 
-*******************************************************************************
-* Name        : temp
-* Description : temporary test
-*******************************************************************************
-
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-WARNING: source file 'blah.py' doesn't exist.
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
-Saying: ['if', 'statement', 'not', 'regular', 'expression', 'equal', 'to', 'empty', 'single', 'quotes', 'if', 'body']
-Heard if statement not regular expression equal to empty single quotes if body
-Associate 'regular expression' with symbol (Enter selection):
-
-  '0': no association
-  '1': regular_expression (*new*)
-  '2': RegularExpression (*new*)
-  '3': regularExpression (*new*)
-  '4': REGULAR_EXPRESSION (*new*)
-  '5': regularexpression (*new*)
-  '6': REGULAREXPRESSION (*new*)
-
-> *** Start of source buffer ***
-  1: if not regular_expression == '':
-  2:    <CURSOR>
-
-*** End of source buffer ***
-Saying: ['regular', 'expression', 'equals', 'regular', 'expression', 'plus', 'regular', 'expression', 'this', 'word', 'new', 'statement']
-Heard regular expression equals regular expression plus regular expression this word new statement
-Associate 'regular_expression this word' with symbol (Enter selection):
-
-  '0': no association
-  '1': regular_expression_this_word (*new*)
-  '2': RegularExpressionThisWord (*new*)
-  '3': regularExpressionThisWord (*new*)
-  '4': REGULAR_EXPRESSION_THIS_WORD (*new*)
-  '5': regularexpressionthisword (*new*)
-  '6': REGULAREXPRESSIONTHISWORD (*new*)
-
-*** Start of source buffer ***
-  1: if not regular_expression == '':
-  2:    regular_expression = regular_expression + regular_expression_this_word
-  3:    <CURSOR>
-
-*** End of source buffer ***
-Heard else clause some variable
-Associate 'some variable' with symbol (Enter selection):
-
-  '0': no association
-  '1': some_variable (*new*)
-  '2': SomeVariable (*new*)
-  '3': someVariable (*new*)
-  '4': SOME_VARIABLE (*new*)
-  '5': somevariable (*new*)
-  '6': SOMEVARIABLE (*new*)
-
->   2:    regular_expression = regular_expression + regular_expression_this_word
-  3: 
-  4: else:
-  5:    some variable<CURSOR>
-
-*** End of source buffer ***
-
-
 
 -----------------------------------------------
-Test suite completed in:  1062.227 secs
+Test suite completed in:  767.524000049 secs
 -----------------------------------------------
 Message loop ended, cleaning up
-cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at c38150>
+cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at c38320>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 ExtLoopWin32.run returning

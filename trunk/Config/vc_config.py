@@ -1389,7 +1389,7 @@ acmd = CSCmd(spoken_forms=['class body'],
              meanings={ContC(): cpp_class_body, ContPy(): py_class_body},
              docstring='move to body of class definition')
 add_csc(acmd)
-acmd = CSCmd(spoken_forms=['define method', 'declare method'],
+acmd = CSCmd(spoken_forms=['define method', 'declare method', 'add method'],
              meanings={ContC(): c_function_declaration,
                        ContPy(): py_method_declaration},
              docstring='method definition')
@@ -1431,6 +1431,7 @@ define_language('python',
 #
 # CSCs and LSAs specific to Python
 #
+add_lsa(['none'], {'python': 'None'})
 add_lsa(['self dot'], {'python': 'self.'})
 add_lsa(['continue statement'], {'python': '\\\n'})
 add_lsa(['assert'], {'python': 'assert '})
@@ -1457,7 +1458,7 @@ acmd = CSCmd(spoken_forms=['try'],
              meanings={ContPy(): ActionInsert('try:\n\t', '')},
              docstring='python try statement')
 add_csc(acmd)
-acmd = CSCmd(spoken_forms=['except', 'except for', 'catch exceptions'],
+acmd = CSCmd(spoken_forms=['except', 'except for', 'catch exceptions', 'except when', 'except clause'],
              meanings={ContPy(): ActionInsertNewClause('($|\n)', 'except ', ': \n\t')},
              docstring='python except statement')
 add_csc(acmd)
