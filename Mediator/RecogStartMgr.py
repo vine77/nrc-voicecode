@@ -938,6 +938,26 @@ class RSMInfrastructure(RecogStartMgr):
         elif self.known_instance(instance):
             self.grammars[instance].set_exclusive(exclusive)
 
+    def capitalize_rules(self, capitalize):
+        """specifies whether words in rules for context-free grammars 
+        should be capitalized.
+        
+        Note: This is important for ensuring that the correction grammar
+        overrides the corresponding built-in grammars.  capitalize_rules
+        should be true for NaturallySpeaking 5 or earlier, but false for
+        NaturallySpeaking 6 or later (have to check about v. 5)
+
+        **INPUTS**
+
+        *BOOL* capitalize -- if true, then words in rules like "scratch
+        that" should be capitalized.
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.GM_factory.capitalize_rules(capitalize)
+
     def add_module(self, module):
         """add a new KnownTargetModule object
 

@@ -30,7 +30,37 @@ import actions_gen
 
 import CmdInterp, AppState
 
-class WinGram(OwnerObject):
+
+class GramCommon(Object):
+    """abstract base class for all grammars
+
+    **INSTANCE ATTRIBUTES**
+
+    *BOOL* capitalize_rules -- if true, capitalize words in the rules.
+    Ignored for dictation grammars
+    """
+    def __init__(self, capitalize_rules = 0, **args):
+        self.deep_construct(GramCommon, {'capitalize_rules':
+            capitalize_rules}, args)
+
+    def capitalize_rule(self, rule):
+        """adjusts case of rule, if necessary
+
+        **INPUTS**
+
+        *STR rule* -- the rule
+
+        **OUTPUTS**
+
+        *STR* -- the rule, with the proper case
+        """
+        if self.capitalize_rules:
+            return string.capwords(rule)
+        else:
+            return string.lower(rule)
+
+
+class WinGram(GramCommon, OwnerObject):
     """abstract base class for window-specific grammar interfaces
 
     **INSTANCE ATTRIBUTES**
@@ -50,10 +80,14 @@ class WinGram(OwnerObject):
 
     *none*
     """
-    def __init__(self, manager, window = None, exclusive = 0, **attrs):
+    def __init__(self, manager, window = None, exclusive = 0,
+                 **attrs):
         self.deep_construct(WinGram,
-            {'manager': manager, 'window' : window, 'exclusive' : exclusive, 
-            'active' : 0}, attrs)
+            {
+             'manager': manager, 'window' : window,
+             'exclusive' : exclusive,
+             'active' : 0
+            }, attrs)
         self.name_parent('manager')
 
     def _set_exclusive_when_active(self, exclusive = 1):
@@ -345,8 +379,10 @@ class SelectWinGram(WinGram):
         """
         self.deep_construct(SelectWinGram,
             {'app': app, 'buff_name' : buff_name, 
-            'select_phrases' : select_phrases, 'through_word' : through_word}, 
+            'select_phrases' : None, 'through_word' : None}, 
             attrs)
+        self.select_phrases = map(self.capitalize_rule, select_phrases)
+        self.through_word = self.capitalize_rule(through_word)
 
     def remove_other_references(self):
 # not necessary, but can't hurt
@@ -447,20 +483,21 @@ class SelectWinGram(WinGram):
         debug.trace('SelectWinGram.find_closest', 'verb=%s, spoken_form=%s, ranges=%s' % 
                                                    (verb, spoken_form, repr(ranges)))
         direction = None
-        if re.search('previous', verb, 1):
+        if re.search('previous', verb, re.IGNORECASE):
             direction = -1
-        if re.search('next', verb, 1):                
+        if re.search('next', verb, re.IGNORECASE):                
             direction = 1
 
         mark_selection = 1
-        if re.search('go', verb, 1) or re.search('before', verb, 1) or \
-           re.search('after', verb, 1):
+        if re.search('go', verb, re.IGNORECASE) or \
+                re.search('before', verb, re.IGNORECASE) or \
+                re.search('after', verb, re.IGNORECASE):
             mark_selection = 0
 
         where = 1
-        if re.search('before', verb, 1):
+        if re.search('before', verb, re.IGNORECASE):
             where = -1
-        if re.search('after', verb, 1):
+        if re.search('after', verb, re.IGNORECASE):
             where = 1
 
 
@@ -482,10 +519,12 @@ class SelectWinGram(WinGram):
         # Mark selection and/or move cursor  to the appropriate end of
         # the selection.
         #
-        debug.trace('SelectWinGram.find_closest', '** mark_selection=%s' % mark_selection)
-        a = actions_gen.ActionNavigateByPseudoCode(possible_ranges = ranges, select_range_no = closest_range_index,
-                                               buff_name = self.buff_name, cursor_at=where, 
-                                               mark_selection=mark_selection)
+        debug.trace('SelectWinGram.find_closest', 
+            '** mark_selection=%s' % mark_selection)
+        a = actions_gen.ActionNavigateByPseudoCode(possible_ranges = ranges, 
+            select_range_no = closest_range_index,
+            buff_name = self.buff_name, cursor_at=where, 
+            mark_selection=mark_selection)
         a.log_execute(self.app, None)
 
 # this is needed for the EdSim mediator simulator.  We want EdSim to
@@ -542,16 +581,19 @@ class BasicCorrectionWinGram(WinGram):
         Recent in "Correct Recent" or None for the dfault of 'Recent
         """
         self.deep_construct(BasicCorrectionWinGram,
-            {'scratch_words': scratch_words,
-             'correct_words': correct_words,
-             'recent_words': recent_words
+            {'scratch_words': None,
+             'correct_words': None,
+             'recent_words': None
             }, attrs)
         if scratch_words is None:
-            self.scratch_words = ['Scratch']
+            scratch_words = ['Scratch']
         if correct_words is None:
-            self.correct_words = ['Correct']
+            correct_words = ['Correct']
         if recent_words is None:
-            self.recent_words = ['Recent']
+            recent_words = ['Recent']
+        self.scratch_words = map(self.capitalize_rule, scratch_words)
+        self.correct_words = map(self.capitalize_rule, correct_words)
+        self.recent_words = map(self.capitalize_rule, recent_words)
 
     def gram_type(self):
         """returns a subclass-dependent string describing the type of grammar
@@ -644,6 +686,9 @@ class WinGramFactory(Object):
     [STR] *recent_words* -- *[STR]* correct_words -- list of synonyms for 
     Recent in "Correct Recent" in basic correction grammars
 
+    *BOOL* capitalize_rules -- if true, capitalize words in the rules
+    for all command grammars.  Ignored for dictation grammars.
+
     **CLASS ATTRIBUTES**
 
     *none*
@@ -660,6 +705,7 @@ class WinGramFactory(Object):
         scratch_words = None,
         correct_words = None,
         recent_words = None,
+        capitalize_rules = 0,
         **attrs):
         """
         **INPUTS**
@@ -699,8 +745,29 @@ class WinGramFactory(Object):
              'through_word' : through_word,
              'scratch_words': scratch_words,
              'correct_words': correct_words,
-             'recent_words': recent_words}, 
+             'recent_words': recent_words,
+             'capitalize': capitalize_rules}, 
             attrs)
+
+    def capitalize_rules(self, capitalize):
+        """specifies whether words in rules for context-free grammars 
+        should be capitalized.
+        
+        Note: This is important for ensuring that the correction grammar
+        overrides the corresponding built-in grammars.  capitalize_rules
+        should be true for NaturallySpeaking 5 or earlier, but false for
+        NaturallySpeaking 6 or later (have to check about v. 5)
+
+        **INPUTS**
+
+        *BOOL* capitalize -- if true, then words in rules like "scratch
+        that" should be capitalized.
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.capitalize = capitalize
 
     def make_dictation(self, manager, app, buff_name, window = None,
         exclusive = 0):
@@ -1256,7 +1323,7 @@ class WinGramFactoryDummy(Object):
             exclusive = exclusive)
     
     
-class ChoiceGram(Object):
+class ChoiceGram(GramCommon):
     """abstract base class for correction window Choose n grammar
 
     **INSTANCE ATTRIBUTES**
@@ -1268,8 +1335,9 @@ class ChoiceGram(Object):
     def __init__(self, choice_words, **attrs):
         self.deep_construct(ChoiceGram,
             {'active' : 0,
-             'choice_words': choice_words
+             'choice_words': None
             }, attrs)
+        self.choice_words = map(self.capitalize_rule, choice_words)
 
     def activate(self, n, window, choice_cbk):
         """activates the grammar for recognition tied to a window
@@ -1309,7 +1377,7 @@ class ChoiceGram(Object):
         """
         debug.virtual('ChoiceGram.deactivate')
 
-class NaturalSpelling(Object):
+class NaturalSpelling(GramCommon):
     """abstract base class for natural spelling grammar (i.e. a b c, not
     alpha bravo charlie)
 
@@ -1328,9 +1396,10 @@ class NaturalSpelling(Object):
     def __init__(self, spell_words = None, spelling_cbk = None, **attrs):
         self.deep_construct(NaturalSpelling,
             {'active' : 0,
-             'spell_words': spell_words,
+             'spell_words': None,
              'spelling_cbk': spelling_cbk
             }, attrs)
+        self.spell_words = map(self.capitalize_rule, spell_words)
 
     def activate(self, window):
         """activates the grammar for recognition tied to a window
@@ -1366,7 +1435,7 @@ class NaturalSpelling(Object):
         """
         debug.virtual('NaturalSpelling.deactivate')
 
-class MilitarySpelling(Object):
+class MilitarySpelling(GramCommon):
     """abstract base class for military (alpha-bravo-charlie) spelling grammar 
 
     **INSTANCE ATTRIBUTES**
@@ -1382,9 +1451,10 @@ class MilitarySpelling(Object):
     def __init__(self, spell_words = None, spelling_cbk = None, **attrs):
         self.deep_construct(MilitarySpelling,
             {'active' : 0,
-             'spell_words': spell_words,
+             'spell_words': None,
              'spelling_cbk': spelling_cbk
             }, attrs)
+        self.spell_words = map(self.capitalize_rule, spell_words)
 
     def activate(self, window):
         """activates the grammar for recognition tied to a window
@@ -1549,20 +1619,21 @@ class SimpleSelection(WinGram):
         # Analyse the verb used by the user in the Select utterance
         #
         direction = None
-        if re.search('previous', verb, 1):
+        if re.search('previous', verb, re.IGNORECASE):
             direction = -1
-        if re.search('next', verb, 1):                
+        if re.search('next', verb, re.IGNORECASE):                
             direction = 1
 
         mark_selection = 1
-        if re.search('go', verb, 1) or re.search('before', verb, 1) or \
-           re.search('after', verb, 1):
+        if re.search('go', verb, re.IGNORECASE) or \
+                re.search('before', verb, re.IGNORECASE) or \
+                re.search('after', verb, 1):
             mark_selection = 0
 
         where = 1
-        if re.search('before', verb, 1):
+        if re.search('before', verb, re.IGNORECASE):
             where = -1
-        if re.search('after', verb, 1):
+        if re.search('after', verb, re.IGNORECASE):
             where = 1
 
         selection = self.selection
@@ -1698,7 +1769,8 @@ class TextModeTogglingGram(WinGram):
 
         **OUTPUTS**
 
-        *STR* -- type of grammar ('dictation', 'selection', 'correction', or 'text_mode')
+        *STR* -- type of grammar ('dictation', 'selection', 
+        'correction', or 'text_mode')
         """
         return 'text_mode'
     

@@ -148,7 +148,9 @@ class DictWinGramNL(DictWinGram, DictGramBase):
         self.setContext(before, after)
 
     def gotResultsObject(self, recogType, results):
-            debug.trace('DictWinGramNL.gotResultsObject', 'recogType=%s, results=%s, self.exclusive=%s' % (recogType, repr(results), self.exclusive))
+            debug.trace('DictWinGramNL.gotResultsObject', 
+                'recogType=%s, results=%s, self.exclusive=%s' % \
+                (recogType, repr(results), self.exclusive))
             if recogType == 'self':
                 utterance = \
                     sr_interface.SpokenUtteranceNL(results, self.wave_playback)
@@ -162,7 +164,8 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 #                self.app.print_buff_if_necessary(buff_name
 #                    = self.buff_name)
             else:
-                 debug.trace('DictWinGramNL.gotResultsObject, results=%s', repr(results))
+                 debug.trace('DictWinGramNL.gotResultsObject, results=%s', 
+                     repr(results))
              
 
 class SelectWinGramNL(SelectWinGram, SelectGramBase):
@@ -398,16 +401,6 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
         *none*
         """
         self.rules = []
-        if 0:
-            if self.scratch_words:
-                for i in range(len(self.scratch_words)):
-                    self.scratch_words[i] = string.lower(self.scratch_words[i])
-            if self.correct_words:
-                for i in range(len(self.correct_words)):
-                    self.correct_words[i] = string.lower(self.correct_words[i])
-            if self.recent_words:
-                for i in range(len(self.recent_words)):
-                    self.recent_words[i] = string.lower(self.recent_words[i])
         self.rules.extend(self.scratch_rule())
         self.rules.extend(self.correct_rule())
         self.rules.extend(self.correct_recent_rule())
@@ -428,8 +421,11 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
             return []
         scratch = compose_alternatives(self.scratch_words)
         rules = []
-        rules.append("<scratch_that> exported = %s That;" % scratch)
-        rules.append("<scratch_n> exported = %s Last {count};" % scratch)
+        that = self.capitalize_rule('that')
+        last = self.capitalize_rule('last')
+        rules.append("<scratch_that> exported = %s %s;" % (scratch, that))
+        rules.append("<scratch_n> exported = %s %s {count};" % \
+            (scratch, last))
         self.lists['count'] = ['1', '2', '3', '4', '5']
         return rules
 
@@ -449,7 +445,8 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
             return []
         correct = compose_alternatives(self.correct_words)
         rules = []
-        rules.append("<correct_that> exported = %s That;" % correct)
+        that = self.capitalize_rule('that')
+        rules.append("<correct_that> exported = %s %s;" % (correct, that))
         return rules
 
     def correct_recent_rule(self):
@@ -641,7 +638,8 @@ class WinGramFactoryNL(WinGramFactory):
         return SelectWinGramNL(manager = manager, app = app, 
             buff_name = buff_name, select_phrases =
             self._select_phrases(), through_word = self.through_word, 
-            window = window, exclusive = exclusive) 
+            window = window, exclusive = exclusive, 
+            capitalize_rules = self.capitalize) 
     
     def make_correction(self, manager, window = None, exclusive = 0):
         """create a new basic correction grammar
@@ -663,7 +661,8 @@ class WinGramFactoryNL(WinGramFactory):
         return BasicCorrectionWinGramNL(manager = manager, scratch_words =
             self.scratch_words, correct_words = self.correct_words, 
             recent_words = self.recent_words, 
-            window = window, exclusive = exclusive) 
+            window = window, exclusive = exclusive, 
+            capitalize_rules = self.capitalize) 
 
 #NEW
     def make_text_mode(self, manager, on_spoken_as, off_spoken_as,
@@ -696,7 +695,8 @@ class WinGramFactoryNL(WinGramFactory):
         """
         return TextModeTogglingGramNL(on_spoken_as, off_spoken_as,
             off_sets_nat_text_to, manager = manager, window = window, 
-            exclusive=exclusive)
+            exclusive=exclusive,
+            capitalize_rules = self.capitalize) 
             
 #ORIG            
     def make_text_mode_ORIG(self, manager, window = None, exclusive = 0,
@@ -728,7 +728,8 @@ class WinGramFactoryNL(WinGramFactory):
         
         """
         return TextModeTogglingGramNL(manager = manager, window = window, 
-            exclusive=exclusive)
+            exclusive=exclusive,
+            capitalize_rules = self.capitalize) 
             
             
     def make_choices(self, choice_words):
@@ -742,7 +743,8 @@ class WinGramFactoryNL(WinGramFactory):
 
         *ChoiceGram* -- new choice grammar
         """
-        return ChoiceGramNL(choice_words = choice_words)
+        return ChoiceGramNL(choice_words = choice_words,
+            capitalize_rules = self.capitalize) 
 
     def make_natural_spelling(self, spell_words = None, spelling_cbk = None):
         """create a new NaturalSpelling grammar
@@ -762,7 +764,7 @@ class WinGramFactoryNL(WinGramFactory):
         *NaturalSpelling* -- the spelling grammar
         """
         return NaturalSpellingNL(spell_words = spell_words, spelling_cbk =
-            spelling_cbk)
+            spelling_cbk, capitalize_rules = self.capitalize) 
    
     def make_military_spelling(self, spell_words = None, spelling_cbk = None):
         """create a new MilitarySpelling grammar
@@ -782,7 +784,7 @@ class WinGramFactoryNL(WinGramFactory):
         *MilitarySpelling* -- the spelling grammar
         """
         return MilitarySpellingNL(spell_words = spell_words, spelling_cbk =
-            spelling_cbk)
+            spelling_cbk, capitalize_rules = self.capitalize) 
    
     def make_simple_selection(self, get_visible_cbk, get_selection_cbk, 
         select_cbk, alt_select_phrases = None):
@@ -815,7 +817,8 @@ class WinGramFactoryNL(WinGramFactory):
         return SimpleSelectionNL(select_phrases = select_phrases,
             get_visible_cbk = get_visible_cbk,
             get_selection_cbk = get_selection_cbk, 
-            select_cbk = select_cbk)
+            select_cbk = select_cbk,
+            capitalize_rules = self.capitalize) 
             
 
 class ChoiceGramNL(ChoiceGram, GrammarBase):
@@ -1469,12 +1472,14 @@ class TextModeTogglingGramNL(TextModeTogglingGram, GrammarBase):
                        window=None, **attrs):
         debug.trace('TextModeTogglingGramNL.__init__', 'window=%s, attrs=%s' % (window, repr(attrs)))
         self.deep_construct(TextModeTogglingGramNL,
-            {'on_spoken_as': on_spoken_as, 
-             'off_spoken_as': off_spoken_as, 
+            {'on_spoken_as': None, 
+             'off_spoken_as': None, 
               'off_sets_nat_text_to': off_sets_nat_text_to}, 
             attrs, 
             exclude_bases = {GrammarBase:1})
         GrammarBase.__init__(self)
+        self.on_spoken_as = map(self.capitalize_rule, on_spoken_as)
+        self.off_spoken_as = map(self.capitalize_rule, off_spoken_as)
         self.load(self.gram_spec())
 
     def _set_exclusive_when_active(self, exclusive = 1):

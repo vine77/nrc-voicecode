@@ -394,7 +394,9 @@ class SymDict(OwnerObject):
                          'min_chars_run_together': 4,
                          'min_non_consec_chars_for_approx_match': 3,
                          'max_auto_acronym': 3,
-                         'word_exists': sr_interface.getWordInfo
+                         'word_exists': sr_interface.getWordInfo,
+                         'common_hyphenated': {'un': 0 , 'co': 0, 'non': 0, 
+                             're': 0}
                         })
         
         self.deep_construct(SymDict,
@@ -1927,7 +1929,8 @@ class SymDict(OwnerObject):
             #
             # word is the plural of an abbreviation
             #
-            expansions = map(lambda an_expansion: pluralize(an_expansion), self.expansions[single_form])
+            expansions = map(lambda an_expansion: pluralize(an_expansion), 
+                self.expansions[single_form])
         else:
             #
             # Word is not a known abbreviation nor plural of a known
@@ -1966,7 +1969,8 @@ class SymDict(OwnerObject):
         hyphenated = word + '-'
         hyphenated_pron = \
             sr_interface.vocabulary_entry(word, hyphenated)
-        if not ((self.word_exists)(hyphenated_pron) is None):
+        if self.common_hyphenated.has_key(word) or \
+            not ((self.word_exists)(hyphenated_pron) is None):
             return [hyphenated]
         if len(word) > 1:
             capped =  word.capitalize()

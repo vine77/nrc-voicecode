@@ -95,21 +95,6 @@ class WordTrie(Object):
             return None, phrase
         return value, rest
 
-    def all_matches(self, phrase):
-        """returns a list of all complete or partial matches to the phrase
-
-        **INPUTS**
-
-        *[STR] phrase* -- list of words to match
-
-        **OUTPUTS**
-
-        *[(ANY, [STR])]* -- a list of matches in order of decreasing
-        completeness.  Each match is a tuple containing the value 
-        corresponding to the partial phrase, together with any remaining 
-        unmatched words from the phrase
-        """
-
     def _remove_path(self, phrase):
         """private method which recursively descends the path to the
         value of a given phrase, and, on the way back up, removes those
@@ -180,31 +165,6 @@ class WordTrie(Object):
             return None
         return self.branches[word].complete_match(rest)
 
-    def match_phrase(self, phrase):
-        """looks for complete or partial matches to the phrase, and
-        returns the value corresponding to the longest prefix of the
-        given phrase which appears in the WordTrie
-
-        **INPUTS**
-
-        *[STR] phrase* -- list of words to match
-
-        **OUTPUTS**
-
-        *(ANY, [STR])* -- the value corresponding to the partial phrase,
-        together with any remaining unmatched words from the phrase
-        """
-        if not phrase:
-            return self.value, []
-        word = phrase[0]
-        rest = phrase[1:]
-        if not self.branches.has_key(word):
-            return self.value, phrase
-        value, rest = self.branches[word].match_phrase(rest)
-        if value is None:
-            return None, phrase
-        return value, rest
-
     def all_matches(self, phrase):
         """returns a list of all complete or partial matches to the phrase
 
@@ -249,8 +209,8 @@ class WordTrie(Object):
         if prefix:
             word = prefix[0]
             rest = prefix[1:]
-            if not (self.value is None):
-                results.append(([], self.value))
+            if not rest and not (self.value is None):
+                results.append(([word], self.value))
             if self.branches.has_key(word):
                 branch_results = self.branches[word].all_phrase_values(rest)
                 for phrase, value in branch_results:
