@@ -1,6 +1,6 @@
 """Define a series of regression tests for VoiceCode"""
 
-import sys
+import os, sys
 import mediator, CmdInterp, EdSim, MediatorObject, Object, SymDict
 
 
@@ -117,10 +117,8 @@ def test_SymDict():
     pseudo_symbols = ['set attribute', 'expand variables', 'execute file', 'profile Constructor Large Object', 'profile construct large object', 'auto test']
     symbol_match_test(a_mediator, [vc_globals.test_data + os.sep + 'large_buff.py'], pseudo_symbols)
 
-    a_match = SymDict.SymbolMatch(pseudo_symbol='this symbol is unresolved', native_symbol='this_sym_is_unres', words=['this', 'symbol', 'is', 'unresolved'], word_matches=['this', 'sym', 'is', 'unres'])
-    accept_symbol_match_test(a_mediator, vc_globals.test_data + os.sep + 'small_buff.c', [a_match])
-
-    
+    a_match = SymDict.SymbolMatch(pseudo_symbol='this symbol is unresolved', native_symbol='this_sym_is_unres', words=['this', 'symbol', 'is', 'unresolved'], word_matches=['this', 'sym', 'is', 'unres'])    
+    accept_symbol_match_test(a_mediator, vc_globals.test_data + os.sep + 'small_buff.c', [a_match])    
 
 auto_test.add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
 
@@ -149,7 +147,9 @@ def test_CmdInterp():
     print '\n>>> Interpreting \'for loop index loop body\' in a C buffer'    
     print '\n>>> Current buffer is:\n'
     a_mediator.interp.on_app.print_buff_content()
+    old_stdin = util.stdin_read_from_string('1\n')
     a_mediator.interp.interpret_NL_cmd('for loop index loop body')
+    sys.stdin = old_stdin
     print '\n>>> Buffer is now:'
     a_mediator.interp.on_app.print_buff_content()
     
@@ -342,7 +342,7 @@ auto_test.add_test('Object', test_Object, desc='self-test for Object.py')
 ###############################################################################
 
 def test_command(command):
-    print '\n\n>>> Testing console command: %s <<<\n' % command
+    print '\n\n>>> Testing console command: %s\n' % command
     mediator.execute_command(command)
 
 def test_mediator_console():
@@ -356,3 +356,93 @@ def test_mediator_console():
 
 
 auto_test.add_test('mediator_console', test_mediator_console, desc='testing mediator console commands')
+
+
+##############################################################################
+# Testing automatic addition of abbreviations
+##############################################################################
+
+def test_auto_add_abbrevs():
+    mediator.init_simulator()
+    test_command("""open_file('D:/blah.c')""")
+    file = vc_globals.test_data + os.sep + 'small_buff.c'    
+    test_command("""compile_symbols(['""" + file + """'])""")
+    test_command("""print_abbreviations(1)""")    
+
+    #
+    # Match selection dialog should be invoked, and abbreviation
+    # unres->unresolved should be added
+    #
+    test_command("""say('this symbol is unresolved comma', user_input='1\\n')""")
+    test_command("""print_abbreviations(1)""")
+
+    #
+    # Match selection dialog should NOT be invoked 
+    #
+    test_command("""say('this symbol is unresolved too comma')""")
+    test_command("""print_abbreviations(1)""")
+
+    #
+    # Match selection dialog should be invoked, and abbreviation
+    # f->file should NOT be added (too short)
+    #
+    test_command("""say('file name comma', user_input='1\\n')""")
+    test_command("""print_abbreviations(1)""")
+
+    #
+    # Case with abbreviations which are the first letter of every word
+    # (API->"Application Programming Interface"). Should be added as
+    # a single abbreviation instead of three separate ones (A->applicaiton,
+    # P->programming, I->interface).
+    #
+    test_command("""say('application programming interface function comma', user_input='1\\n')""")
+    test_command("""print_abbreviations(1)""")
+
+auto_test.add_test('automatic_abbreviations', test_auto_add_abbrevs, desc='testing automatic creation of abbreviations')
+
+
+##############################################################################
+# Testing persistence between VoiceCode sessions
+##############################################################################
+
+
+
+def test_persistence():
+    #
+    # Create make mediator console use an empty file for SymDict persistence
+    #
+    fname = vc_globals.tmp + os.sep + 'tmp_symdict.pkl'
+    try:
+        os.remove(fname)
+    except:
+        # Never mind if file doesn't exist
+        pass
+
+    print '\n\n>>> Starting mediator with persistence'
+    mediator.init_simulator(symdict_pickle_fname=fname)
+
+    #
+    # Compile symbols
+    #
+    test_command("""compile_symbols(['""" + vc_globals.test_data + os.sep + """small_buff.c'])""")
+
+    #
+    # Restart the mediator, with saved SymDict. The symbols should still be
+    # there
+    #
+    print '\n\n>>> Restarting mediator with persistence. Compiled symbols should still be in the dictionary.\n'
+    test_command("""quit()""")
+    mediator.init_simulator(symdict_pickle_fname=fname)
+    test_command("""print_symbols()""")
+
+    #
+    # Restart the mediator without saved SymDict. The symbols should not be
+    # there anymore.
+    #
+    print '\n\n>>> Restarting mediator WITHOUT persistence. There should be NO symbols in the dictionary.\n'
+    test_command("""quit()""")
+    mediator.init_simulator(symdict_pickle_fname=None)
+    test_command("""print_symbols()""")
+    
+
+auto_test.add_test('persistence', test_persistence, desc='testing persistence between VoiceCode sessions')    

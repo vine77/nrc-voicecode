@@ -123,6 +123,9 @@ clear_symbols()
    vocabulary. Spoken forms which consist of a single word are however left
    there.
 
+clear_abbreviations()
+   Removes all defined abbreviations from VoiceCode's symbol dictionary
+
 say(STR utterance)
    Interprets string *utterance* as though it had been said by a user.
 
@@ -167,6 +170,12 @@ listen()
    Once in 'listen' mode, you cannot type console commands until you
    have clicked the 'OK' button on the 'Natlink/ Python Subsystem'
    window.
+
+print_abbreviations()
+   Prints the list of known abbreviations and their expansions
+
+print_symbols()
+   Prints the list of symbols in the known symbols dictionary
 
 unresolved_abbreviations()
    Prints out a list of the unresolved abbreviations in symbols that were

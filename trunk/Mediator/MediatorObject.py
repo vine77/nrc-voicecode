@@ -162,7 +162,7 @@ def add_lsa(language_list, spoken_as_list, written_as):
         #
         # If no language was specified, the CSC applies in all contexts
         #
-        the_meanings = [cont_gen.ContAny(), the_action]
+        the_meanings = [[cont_gen.ContAny(), the_action]]
     else:
         #
         # Applicable contexts are the language contexts for each of the
