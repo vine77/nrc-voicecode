@@ -110,7 +110,7 @@
      (setq descr-start (point))
      (insert (concat "... Terse 1 line description here ...\n\n" py-indent-padding "... Detailed description here ..."))
      (setq descr-end (point))
-     (insert (concat "\n" py-indent-padding "\"\"\""))
+     (insert (concat "\n\n" py-indent-padding "**INSTANCE ATTRIBUTE**\n\n" py-indent-padding "*none* -- \n\n" py-indent-padding "**CLASS ATTRIBUTE**\n\n" py-indent-padding "*none* -- \n" py-indent-padding "\"\"\""))
     
      ;;;
      ;;; Mark description placeholders
