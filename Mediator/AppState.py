@@ -1051,7 +1051,17 @@ class AppState(OwnerObject):
         """Gets a list of updates from the external app.
 
         Note: the list of updates must ALWAYS include the name of the
-        external app's active buffer.
+        external app's active buffer, and the current position and
+        selection information for that buffer.
+
+        Change updates for buffers with more than one change must be
+        included in the order in which the change occurred (most recent
+        last)
+        
+        Also note that position and selection information for any buffer 
+        will be discarded if a subsequent update indicates changes in 
+        the buffer contents, so position and selection updates should 
+        generally be at the end of the list.
         
         **INPUTS**
         

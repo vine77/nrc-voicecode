@@ -104,3 +104,35 @@ class AppStateCached(AppState.AppState):
         
         self.cache = {}
 
+    def synchronize_with_app(self, what = None, exclude=1, updates=None):
+        """Make sure that VoiceCode is in sync with the state of the
+        external editor.
+        
+        **INPUTS**
+        
+        [STR] *what=[]* -- List of what is to be synchronised. Valid
+        entries are: 'buff_name', 'content', 'cur_pos', 'selection'.
+        *exclude=1*, this should be interpreted as a list of items that
+        don't need to be synchronised. If *exclude=0*, then it should be
+        interpreted as a list of items that need to be syncrhonized.
+
+        [ [AS_Update] ] updates -- Updates to be applied in the
+        synchronisation. If *None*, get updates from the external
+        editor.
+                
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+# During synchronization, the editor may send position and selection 
+# information only for the current buffer.  Cached position and selection 
+# information may be unreliable for other buffers, so we clear the 
+# position and selection information for all buffers (but NOT the 
+# buffer contents) from the cache before processing the updates from 
+# the application.  That way, this information will be uncached except 
+# for those buffers for which the application explicitly 
+# sends updated values.
+        for buffer in self.open_buffers.values():
+            buffer.uncache_data_after_buffer_change(what_changed = 'get_text')
+        AppState.AppState.synchronize_with_app(self, what = what, exclude=exclude, 
+            updates=updates)
