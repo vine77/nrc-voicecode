@@ -117,7 +117,6 @@ add_csc_set(compound_statements)
 add_csc_set(ctrl_structures)
 add_csc_set(data_structures)
 add_csc_set(function_definitions)
-add_csc_set(standard_function_calls)
 
 # Python-specific
 
@@ -131,6 +130,7 @@ add_lsa_set(python_comparisons)
 add_lsa_set(python_operators)
 add_lsa_set(python_string_qualifiers)
 add_csc_set(python_functional)
+add_csc_set(py_standard_function_calls)
 
 # C-specific
 

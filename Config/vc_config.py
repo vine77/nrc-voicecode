@@ -908,18 +908,6 @@ function_definitions.add_csc(acmd)
 
 
 ###############################################################################
-# CSCs for calling standard functions and methods
-###############################################################################
-
-
-standard_function_calls = CSCmdSet('standard function calls', 
-    description = 'CSCs for calling predefined functions and methods definitions')    
-std_func_call_helper = StandardFunctionCalls(standard_function_calls)
-std_func_call_helper.add_function_name(['abs', 'absolute', 'absolute value'], {'python': 'abs'}, standard_function_calls)
-
-
-
-###############################################################################
 # Python specific stuff
 ###############################################################################
 
@@ -1114,6 +1102,24 @@ acmd = CSCmd(spoken_forms=['in range of'],
                                      spacing = no_space_after)},
              docstring='types range(^)')             
 python_functional.add_csc(acmd)
+
+# CSCs for calling standard python functions and methods
+
+py_standard_function_calls = CSCmdSet('standard function calls', 
+    description = 'CSCs for calling predefined functions and methods definitions')    
+std_func_call_helper = StandardFunctionCallsHelper('python')
+std_func_call_helper.add_function_name(['A. two B. base sixty four'], 'a2b_base64', py_standard_function_calls)
+std_func_call_helper.add_function_name(['A. two B. H. Q. X.'], 'a2b_hqx', py_standard_function_calls)
+std_func_call_helper.add_function_name(['A. two B. U. U.'], 'a2b_uu', py_standard_function_calls)
+std_func_call_helper.add_function_name(['abs', 'absolute', 'absolute value'], 'abs', py_standard_function_calls)
+std_func_call_helper.add_function_name(['underscore abs', 'underscore absolute', 'underscore absolute value'], '__abs__', py_standard_function_calls)
+std_func_call_helper.add_function_name(['abs path', 'absolute path'], 'abspath', py_standard_function_calls)
+std_func_call_helper.add_function_name(['accept'], 'accept', py_standard_function_calls)
+std_func_call_helper.add_function_name(['accept two D. year'], 'accept2dyear', py_standard_function_calls)
+std_func_call_helper.add_function_name(['access'], 'access', py_standard_function_calls)
+std_func_call_helper.add_function_name(['A. cos', 'arc cos', 'arc cosine'], 'acos', py_standard_function_calls)
+std_func_call_helper.add_function_name(['A. cos H.', 'arc cos H.', 'arc cosine H.', 'hyperbolic arc cosine'], 'acosh', py_standard_function_calls)
+std_func_call_helper.add_function_name(['acquire'], 'acquire', py_standard_function_calls)
 
 
 
