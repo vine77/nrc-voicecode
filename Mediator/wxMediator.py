@@ -55,6 +55,14 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                        'SourceBuffCached._not_cached_multiple': 1,
+#                        'SourceBuffCached._get_cache_element_multiple': 1,
+#                        'SourceBuff._get_selection': 1,
+#                        'SourceBuffCached._get_pos_selection': 1,
+#                       'SourceBuffCached._put_cache_multiple': 1,
+#                          'SourceBuffCached.insert_cbk': 1,
+#                          'send_mess': 1,
+#                          'get_mess': 1,
 #                         'ActionEmacsListBuffers.execute': 1,
 #                         'ContEmacs._applies': 1,
 #                         'CmdInterp._cmd_spoken_forms': 1,

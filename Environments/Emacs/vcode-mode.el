@@ -265,6 +265,7 @@ in the 'vr-deprecated-log-buff-name buffer.")
 "Set entries in this hashtable, to activate traces with that name.")
 
 
+;(cl-puthash  "vr-deprecated-report-insert-delete-change" 1 vcode-traces-on)
 ;(cl-puthash  "vcode-language-for-file" 1 vcode-traces-on)
 ;(cl-puthash  "vcode-language-for-buff" 1 vcode-traces-on)
 ;(cl-puthash  "vcode-cmd-insert-indent" 1 vcode-traces-on)
@@ -881,12 +882,12 @@ executing.
   (let ((the-change nil))
     (if (vr-deprecated-activate-buffer-p (current-buffer))
 	(progn 
-	  (vr-deprecated-log "--** vr-deprecated-report-insert-delete-change: inserted-start=%S inserted-end=%S deleted-len=%S\n" inserted-start inserted-end deleted-len)
+	  (vcode-trace "vr-deprecated-report-insert-delete-change" "inserted-start=%S inserted-end=%S deleted-len=%S\n" inserted-start inserted-end deleted-len)
 	  (setq the-change
 		(vr-deprecated-generate-raw-change-description 'change-is-insert (list (buffer-name) inserted-start inserted-end deleted-len))
 		)
 	  
-	  (vr-deprecated-log "--** vr-deprecated-report-insert-delete-change: the-change=%S" the-change)
+	  (vcode-trace "vr-deprecated-report-insert-delete-change" "the-change=%S" the-change)
 	  
           (vcode-merge-or-prepend-change the-change)
 ;	  (setq vr-deprecated-queued-changes (cons the-change vr-deprecated-queued-changes))
@@ -938,7 +939,11 @@ Changes are put in a changes queue `vr-deprecated-queued-changes.
 	(set-buffer buff-name)
 ; shouldn't this be set-buffer?  -- DCF
 ;	(switch-to-buffer buff-name)
-	(setq inserted-text (buffer-substring inserted-start inserted-end))
+;;; AD: We use 'buffer-substring-no-properties because VCode wouldn't know
+;;;     what to do with character properties like font, color, etc...
+;;;
+	(setq inserted-text (buffer-substring-no-properties 
+			     inserted-start inserted-end))
       )
       (setq change-desc (list change-type (list buff-name deleted-start deleted-end inserted-text)))
     )
