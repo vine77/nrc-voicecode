@@ -267,12 +267,16 @@ def getWordInfo(word, *rest):
     word = vocabulary_entry(spoken, written, clean_written=1)
 #    trace('sr_interface.getWordInfo', 'reformatted word=%s' % word)
 
-    answer = None
 #    print "word info for processed [%s]" % word
-    if len(rest) == 0:
-        answer = natlink.getWordInfo(word)
-    elif len(rest) == 1:
-        answer = natlink.getWordInfo(word, rest[0])
+    try:
+       if len(rest) == 0:
+           answer = natlink.getWordInfo(word)
+       elif len(rest) == 1:
+           answer = natlink.getWordInfo(word, rest[0])
+    except:
+       # In case the word's spelling is not allowed by
+       # NatSpeak
+       answer = None       
 
 #    trace('sr_interface.getWordInfo', 'answer is %s' % answer)
     return answer
@@ -292,6 +296,9 @@ def addWord(word, *rest):
     """Add a word to NatSpeak's vocabulary.
 
     We only add the word if it doesn't already exist in the vocabulary.
+    
+    Returns *TRUE* iif the word was successfully added.
+    
     """
         
     global word_info_flag
@@ -322,8 +329,13 @@ def addWord(word, *rest):
         else:
             return None
                
-        natlink.addWord(word, flag)
-        sr_user_needs_saving = 1
+        try:
+           natlink.addWord(word, flag)        
+           sr_user_needs_saving = 1
+        except:
+           # In case the word's spoken form is rejected by
+           # NatSpeak
+           return None
 
         #
         # Note: Need to add redundant entry without special
@@ -339,7 +351,12 @@ def addWord(word, *rest):
         word_no_special_chars = re.sub('{Spacebar}', '', word)
         if word_no_special_chars != word:
 #            trace('sr_interface.addWord', 'adding redundant form with no spaces \'%s\'' % word_no_special_chars)
-            natlink.addWord(word_no_special_chars, flag)
+            try:
+               natlink.addWord(word_no_special_chars, flag)
+            except:
+               return None
+               
+    return 1
  
 
 def deleteWord(word, *rest):

@@ -3002,7 +3002,6 @@ def test_normal_text_dictation():
    testing.init_simulator_regression(exclusive = 0)
  
    mediator = testing.mediator()
-   recog_mgr = mediator.editors.recog_mgr
    app = testing.editor()
    init_line = 10
    
@@ -3014,7 +3013,6 @@ def test_normal_text_dictation():
 
    print 'Setting VCode in text mode.'
    commands.say(['text', 'mode', 'on'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
-#   recog_mgr.set_text_mode(1)
    commands.say(['this', 'should', 'be', 'typed', 'as', 'normal', 'text'], 
        never_bypass_sr_recog=1, user_input="1\n1\n", echo_cmd=1)
    time.sleep(3)
@@ -3027,13 +3025,34 @@ def test_normal_text_dictation():
 
    print 'Setting VCode in code dictation mode.'   
    commands.say(['text', 'mode', 'off'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)   
-#   recog_mgr.set_text_mode(0)
    commands.say(['jump', 'out'])
    commands.say(['new', 'statement', 'print'], echo_cmd = 1)
    commands.say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
    app.print_buff()
-
    
+   commands.say(['new', 'statement', 'print', 'quotes'])
+   app.print_buff()
+
+   print 'Setting VCode in text mode using alternative spoken form.' 
+#   commands.say(['alternative', 'test', 'text', 'mode', 'on'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
+   commands.say(['text', 'mode', 'on'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
+   commands.say(['this', 'should', 'be', 'typed', 'as', 'normal', 'text'], 
+       never_bypass_sr_recog=1, user_input="1\n1\n", echo_cmd=1)
+   time.sleep(3)
+# see if adding this makes any difference
+   app.process_pending_updates()
+   time.sleep(3)
+   app.process_pending_updates()
+   app.print_buff()
+   
+   print 'Setting VCode in code dictation mode using alternative spoken form.'   
+   commands.say(['alternative', 'test', 'text', 'mode', 'off'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)   
+   commands.say(['jump', 'out'])
+   commands.say(['new', 'statement', 'print'], echo_cmd = 1)
+   commands.say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
+   app.print_buff()
+   
+
   
 add_test('text_mode', test_normal_text_dictation, 'Test dictation of normal text.', foreground = 1)   
 
