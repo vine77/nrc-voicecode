@@ -21,7 +21,8 @@
 
 """Interface to the Emacs editor."""
 
-import AppStateMessaging, SourceBuffEmacs
+import as_services, AppStateMessaging, SourceBuffEmacs
+from debug import trace
 
         
 class AppStateEmacs(AppStateMessaging.AppStateMessaging):
@@ -29,10 +30,12 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
     """
 
     def __init__(self, **attrs):
-        
         self.deep_construct(AppStateEmacs, 
-                            {},
+                            {'breadcrumbs_srv': as_services.AS_ServiceBreadcrumbs(app=self)},
+#                            {'breadcrumbs_srv': None},
                             attrs, new_default = {'app_name': 'emacs'})
+#        self.breadcrumbs_srv = as_services.AS_ServiceBreadcrumbs(app=self)                            
+        self.add_owned('breadcrumbs_srv')                            
 
     def _multiple_buffers_from_app(self):
         return 1
@@ -66,3 +69,42 @@ class AppStateEmacs(AppStateMessaging.AppStateMessaging):
 
     def config_from_external(self):
         pass
+        
+        
+    #
+    # Note: If and when we support Emacs in single shell mode (with process
+    #       suspension), we will have to modify the methods below to use
+    #       the AppStateMessaging version. Emacs will then have to respon
+    #       to those messages. It will respond to them differently depending
+    #       on whether it is operating in single shell window or multi window
+    #       environment, and whether it is in a suspended state or not.
+    #
+    def _multiple_windows_from_app(self):
+        return 0
+    
+    def _shared_window_from_app(self):
+        return 0
+
+    def _is_active_from_app(self):
+        return 1
+        
+    def suspendable(self):
+        return 0
+
+    def suspend_notification(self):
+        return 0
+        
+    def shared_window(self):
+        return 0
+        
+
+    def drop_breadcrumb(self, buffname=None, pos=None):
+        self.breadcrumbs_srv.drop_breadcrumb(buffname, pos)
+
+
+    def pop_breadcrumbs(self, num=1, gothere=1):
+        self.breadcrumbs_srv.pop_breadcrumbs(num, gothere)
+
+        
+        
+        

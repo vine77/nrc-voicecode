@@ -1701,6 +1701,7 @@ generated while executing VCode request 'vcode-req."
    (let ((resp-cont (make-hash-table :test 'string=)))
 
    (setq vcode-instance-string (cl-gethash "instance_string" (nth 1 vcode-req)))
+   (cl-puthash "value" vcode-instance-string resp-cont)
 
    (setq frame-title-format 
 	 `(multiple-frames "%b" (,vcode-instance-string invocation-name "@" system-name)))
@@ -2044,7 +2045,7 @@ message.
     (cl-puthash "value" buffer-names response)
     (vr-send-reply
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "confirm_buffer_exists_resp" response))
+      'vr-serialize-message-hook (list "list_open_buffers_resp" response))
     )
   )
   (vr-log "-- vcode-cmd-list-open-buffers: exited\n")
@@ -2547,9 +2548,9 @@ change reports it sends to VCode.
 ;;; Eventually, put call to function for doing the indentation below this
 ;;; commment, and before (vr-send-queued-changes)
 ;;;
+    (vcode-indent-region indent-start indent-end)
 
     (vr-send-queued-changes)
-    (vr-log "--** vcode-cmd-indent: upon exit, (point)=%S, (mark)=%S\n" (point) (mark))
     (vr-log "-- vcode-cmd-indent: exited\n")
   )
 )
@@ -2586,6 +2587,23 @@ change reports it sends to VCode.
     (vr-send-queued-changes)
   )    
 )
+
+(defun vcode-indent-region (start end)
+  ;;;
+  ;;; For some reason, when I invoke (indent-region start end) it doesn't 
+  ;;; work. If I mark the region and then invoke (indent-region) without
+  ;;; arguments, it doesn't work either. The only way I found to make it
+  ;;; work is to mark the region, and then simulate an interactive call to
+  ;;; indent-region
+  ;;; 
+  (save-excursion
+    (set-mark start)
+    (goto-char end)
+    (call-interactively 'indent-region)
+;    (indent-region start end)
+  )
+)
+
 
 (defun vcode-unindent-region (start end n-levels)
   "Deindents region from START to END by N-LEVELS levels."
