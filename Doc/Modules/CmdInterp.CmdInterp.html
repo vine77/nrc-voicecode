@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Oct 07 17:46:50 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Nov 08 00:37:37 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -25,6 +25,9 @@
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CmdInterp</SPAN>(<A CLASS="DocLink" HREF="Object.Object.html">Object</A>):
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">on_app=None</SPAN>, <SPAN CLASS="Argument">symdict_pickle_file=None</SPAN>, <SPAN CLASS="Argument">disable_dlg_select_symbol_matches=None</SPAN>, <SPAN CLASS="Argument">**attrs</SPAN>)
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.add_abbreviation"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.add_abbreviation</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">abbreviation</SPAN>, <SPAN CLASS="Argument">expansions</SPAN>, <SPAN CLASS="Argument">user_added=1</SPAN>)<SPAN CLASS="OneLiner"> # Add an abbreviation to VoiceCode's abbreviations dictionary.</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.add_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.add_csc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)<SPAN CLASS="OneLiner"> # Add a new Context Sensitive Command. (synonym for index_csc)</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.add_lsa"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.add_lsa</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms</SPAN>, <SPAN CLASS="Argument">meanings</SPAN>)<SPAN CLASS="OneLiner"> # Add a language specific word.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.choose_best_symbol"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.choose_best_symbol</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">choices</SPAN>)<SPAN CLASS="OneLiner"> # Chooses the best match for a spoken form of a symbol.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.chop_CSC"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.chop_CSC</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>)<SPAN CLASS="OneLiner"> # Chops the start of a command if it starts with a CSC.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.chop_LSA"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.chop_LSA</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # Chops off the first word of a command if it is an LSA.</SPAN>
@@ -39,7 +42,9 @@
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.is_spoken_symbol"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.is_spoken_symbol</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)<SPAN CLASS="OneLiner"> # Checks if a string is the spoken form of a known symbol.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.massage_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.massage_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # Massages a command to prepare it for interpretation.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.match_untranslated_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.match_untranslated_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">untranslated_words</SPAN>)<SPAN CLASS="OneLiner"> # Tries to match last sequence of untranslated text to a symbol.</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.print_abbreviations</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.spoken_form_regexp"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.spoken_form_regexp</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)<SPAN CLASS="OneLiner"> # Returns a regexp that matches a spoken form of a command.</SPAN>
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.standard_symbols_in</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_list</SPAN>)<SPAN CLASS="OneLiner"> # Compile symbols defined in a series of source files</SPAN>
 
     <SPAN CLASS="InheritsHead"># Inherited from Object.Object</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">Object.Object.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">**args_super</SPAN>)
@@ -85,6 +90,80 @@ do not prompt the user for confirmation of new symbols.
 CLASS ATTRIBUTES**</P>
 <P>
 <EM>none</EM> --</P>
+<H2 ID="CmdInterp.CmdInterp.add_abbreviation" CLASS="Method">CmdInterp.CmdInterp.add_abbreviation(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">abbreviation</SPAN>, <SPAN CLASS="Argument">expansions</SPAN>, <SPAN CLASS="Argument">user_added=1</SPAN>)</H2>
+<P>Add an abbreviation to VoiceCode's abbreviations dictionary.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> abbreviation
+<DD>the abbreviation 
+<DT>
+<EM>[STR]</EM> expansions
+<DD>list of possible expansions
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="CmdInterp.CmdInterp.add_csc" CLASS="Method">CmdInterp.CmdInterp.add_csc(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)</H2>
+<P>Add a new Context Sensitive Command. (synonym for index_csc)</P>
+
+<P>
+<A HREF="CSCmd.CSCmd.html">CSCmd</A> <EM>acmd</EM> is the command to add.</P>
+
+<DL>
+
+<DT>
+<EM>BOOL add_voc_entry = 1</EM>
+<DD>if true, add a SR vocabulary entry
+for the CSC's spoken forms
+</DL>
+<H2 ID="CmdInterp.CmdInterp.add_lsa" CLASS="Method">CmdInterp.CmdInterp.add_lsa(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_forms</SPAN>, <SPAN CLASS="Argument">meanings</SPAN>)</H2>
+<P>Add a language specific word.</P>
+
+<P>
+These words get added and removed dynamically from the SR
+vocabulary, depending on the language of the active buffer.</P>
+<P>
+A redundant CSC is also added to allow translation of the LSA at
+the level of the Mediator, in cases where NatSpeak prefers to
+recognise the LSA as dictated text instead of a spoken/written
+word (this often happens if the spoken form looks to much like
+dictated text, e.g. "is not equal to").</P>
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>STR</EM> spoken_forms
+<DD>List of spoken form of the word.
+<DT>
+<EM>{STR: STR}</EM> meanings
+<DD>Dictionary of language specific
+ meanings. Key is the language name and value is the written form
+ of the LSA for that langugage. If language name is <EM>None</EM>, then
+ it means that this LSA applies for all languages (I know, it
+ doesn't make much sense syntactically).
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="CmdInterp.CmdInterp.choose_best_symbol" CLASS="Method">CmdInterp.CmdInterp.choose_best_symbol(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">choices</SPAN>)</H2>
 <P>Chooses the best match for a spoken form of a symbol.</P>
 

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Feb 22 10:52:27 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Nov 08 00:38:35 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -20,9 +20,11 @@
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">islist</SPAN>(<SPAN CLASS="Argument">instance</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Returns true iif <EM>instance</EM> is a list.</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">istuple</SPAN>(<SPAN CLASS="Argument">instance</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Returns true iif <EM>instance</EM> is a tuple.</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#last_mod"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">last_mod</SPAN></A>(<SPAN CLASS="Argument">f_name</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Returns the time at which a file was last modified.</SPAN>
+<SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#request_console_be"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">request_console_be</SPAN></A>(<SPAN CLASS="Argument">active=1</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#stdin_read_from_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">stdin_read_from_string</SPAN></A>(<SPAN CLASS="Argument">string</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Redirects process' own stdin so it reads from a string</SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">__file__</SPAN> = <SPAN CLASS="VariableValue">'e:\\Projects\\VoiceCode\\VCode\\Mediator\\util.pyc'</SPAN></SPAN>
-<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">file</SPAN> <SPAN CLASS="VariableName">redirected_stdin</SPAN> = <SPAN CLASS="VariableValue">&lt;open fi...t 7c1470&gt;</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">int</SPAN> <SPAN CLASS="VariableName">may_switch_win_during_tests</SPAN> = <SPAN CLASS="VariableValue">1</SPAN></SPAN>
+<SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">file</SPAN> <SPAN CLASS="VariableName">redirected_stdin</SPAN> = <SPAN CLASS="VariableValue">&lt;open fi...t 7f0630&gt;</SPAN></SPAN>
 <SPAN CLASS="VariableHead"><SPAN CLASS="VariableType">string</SPAN> <SPAN CLASS="VariableName">redirected_stdin_fname</SPAN> = <SPAN CLASS="VariableValue">'e:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\user_input.dat'</SPAN></SPAN>
 </PRE><H2 ID="dict_merge" CLASS="Function">dict_merge(<SPAN CLASS="Argument">dict1</SPAN>, <SPAN CLASS="Argument">dict2</SPAN>)</H2>
 <P>Merges two dictionaries</P>
@@ -84,6 +86,20 @@ values. <EM>args</EM> is the list of arguments.
 <P>
 if <EM>f_name</EM> doesn't exist, returns 0.
 </P>
+<H2 ID="request_console_be" CLASS="Function">request_console_be(<SPAN CLASS="Argument">active=1</SPAN>)</H2>
+<P></P>
+
+<P>
+During regression testing, there are times where the console window
+must absolutely be the active window (e.g. when processing a
+NavigateByPseudoCode command).</P>
+<P>
+In such cases, this method is called with active=1, to ask the
+user to make it so.</P>
+<P>
+Once we don't need the console to be the active window, the method is
+called with active=0 to notify the user that he/she can make the window
+inactive again</P>
 <H2 ID="stdin_read_from_string" CLASS="Function">stdin_read_from_string(<SPAN CLASS="Argument">string</SPAN>)</H2>
 <P>Redirects process' own stdin so it reads from a string</P>
 

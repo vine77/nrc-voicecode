@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Oct 07 16:31:19 2001)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Nov 08 00:38:38 2001)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -24,8 +24,8 @@
 <H2>Synopsis</H2>
 <PRE CLASS="ClassDeclaration">
 <SPAN CLASS="PyKeyword">class</SPAN> <SPAN CLASS="ClassName">CodeSelectGrammar</SPAN>(<A CLASS="DocLink" HREF="natlinkutils.SelectGramBase.html">SelectGramBase</A>):
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.CodeSelectGrammar.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interpreter=None</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>)
-    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.CodeSelectGrammar.activate</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">exclusive=None</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.CodeSelectGrammar.__init__</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">interpreter=None</SPAN>, <SPAN CLASS="Argument">window=0</SPAN>, <SPAN CLASS="Argument">exclusive=0</SPAN>, <SPAN CLASS="Argument">allResults=0</SPAN>)
+    <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.CodeSelectGrammar.activate</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.CodeSelectGrammar.deactivate</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.CodeSelectGrammar.gotBegin</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">moduleInfo</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">sr_interface.CodeSelectGrammar.gotResultsObject</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">recogType</SPAN>, <SPAN CLASS="Argument">resObj</SPAN>)
@@ -63,8 +63,21 @@ recognised dictation utterances.</P>
 <EM>INT window</EM>
 <DD>MSW window handle of the window which must be in the
 foreground for the grammar to be activated, or 0 to make the grammar
-global 
-CLASS ATTRIBUTES**
+global
+<DT>
+<EM>0-1 exclusive=0</EM>
+<DD>Indicates whether the grammar should be activated as
+an exclusive (1) or non-exclusive (1) grammar
+<DT>
+<EM>0-1 allResults = 0</EM>
+<DD>Indicates if the grammar should be loaded so as
+to get all results (even those intercepted by other grammars)    
+</DL>
+<P>
+CLASS ATTRIBUTES**</P>
+
+<DL>
+
 <DT>
 <EM>none</EM>
 <DD>
