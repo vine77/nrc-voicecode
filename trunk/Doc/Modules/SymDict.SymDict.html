@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sat Feb 01 16:31:45 2003)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Thu Feb 13 17:17:25 2003)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -46,7 +46,7 @@
     <A CLASS="DocLink" HREF="#SymDict.SymDict.parse_symbols_from_files"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.parse_symbols_from_files</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_list</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)<SPAN CLASS="OneLiner"> # Parse symbols from a series of source files</SPAN>
     <A CLASS="DocLink" HREF="#SymDict.SymDict.peek_at_unresolved"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.peek_at_unresolved</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.print_abbreviations</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">show_unresolved=0</SPAN>)<SPAN CLASS="OneLiner"> # Prints the known and unresolved abbreviations.</SPAN>
-    <A CLASS="DocLink" HREF="#SymDict.SymDict.print_symbols"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.print_symbols</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Print the content of the symbols dictionary.</SPAN>
+    <A CLASS="DocLink" HREF="#SymDict.SymDict.print_symbols"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.print_symbols</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">symbols=None</SPAN>)<SPAN CLASS="OneLiner"> # Print the content of the symbols dictionary.</SPAN>
     <A CLASS="DocLink" HREF="#SymDict.SymDict.reg_pseudo_to_native_symbol"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.reg_pseudo_to_native_symbol</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">words</SPAN>)
     <A CLASS="DocLink" HREF="#SymDict.SymDict.strip_source"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.strip_source</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">source</SPAN>, <SPAN CLASS="Argument">language_definition</SPAN>)<SPAN CLASS="OneLiner"> # Removes all parts of a source file that don't contain symbols.</SPAN>
     <A CLASS="DocLink" HREF="#SymDict.SymDict.symbols_as_one_string"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">SymDict.SymDict.symbols_as_one_string</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>)<SPAN CLASS="OneLiner"> # Returns a string that lists all the native known symbols.</SPAN>
@@ -690,7 +690,7 @@ dictionnaries that list the symbols containing the unresolved
 abbreviation.
 
 </DL>
-<H2 ID="SymDict.SymDict.print_symbols" CLASS="Method">SymDict.SymDict.print_symbols(<SPAN CLASS="Argument">self</SPAN>)</H2>
+<H2 ID="SymDict.SymDict.print_symbols" CLASS="Method">SymDict.SymDict.print_symbols(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">symbols=None</SPAN>)</H2>
 <P>Print the content of the symbols dictionary.</P>
 
 <P>
@@ -699,8 +699,9 @@ abbreviation.
 <DL>
 
 <DT>
-<EM>none</EM>
-<DD>
+<EM>[STR] symbols</EM>
+<DD>list of symbols to print, or None to print
+the whole dictionary
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
