@@ -1002,6 +1002,7 @@ class ServerSingleThread(Object.Object):
 #        TIMEOUT = 5000  #msecs
         counter = 0
         while 1:
+            debug.trace('ServerSingleThread.run', 'waiting for an event')        
             rc = win32event.MsgWaitForMultipleObjects(
                         (self.evt_new_listen_conn, self.evt_new_talk_conn,
                          self.evt_sockets_ready, self.evt_quit), 
@@ -2341,6 +2342,7 @@ class ExtLoopWin32(Object.OwnerObject):
             sys.stderr.write('Starting message loop...\n')
             try:
                 while 1:
+                    debug.trace('ExtLoopWin32.run', 'waiting for an event')
                     rc = win32event.MsgWaitForMultipleObjects(events,
 #                        (self.evt_new_listen_conn, self.evt_new_talk_conn,
 #                         self.evt_sockets_ready), 

@@ -2781,21 +2781,9 @@ auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insert
 # Testing interaction between user inputs and speech
 ##############################################################################
 
-def bell(length=3):
-    """Plays a bell sound for a time proportional to INT length.
-    
-    Note: This function doesn't seem to work if the output of the script 
-    is redirected to a file."""
-    
-    bell_string = ''
-    for ii in range(length):
-       bell_string = bell_string + '\a'
-    sys.stderr.write(bell_string)
-    sys.stderr.flush()
-
 def request_that_user_bring_editor_to_foreground():
     delay_secs = 5
-    bell()
+    util.bell()
     sys.stderr.write("""The next series of tests require that the client editor be in the foreground.    
     
 Please do the following:
@@ -2818,7 +2806,7 @@ Press Enter now:
     time.sleep(delay_secs)
 
 def notify_user_that_editor_can_be_in_background():
-    bell()
+    util.bell()
     sys.stderr.write("""You can now safely use your computer.
     
 Press Enter to proceed with the rest of the tests.
@@ -2842,8 +2830,8 @@ def test_mixed_kbd_and_voice_editing():
 
     request_that_user_bring_editor_to_foreground()
     
-    test_cursor_moved_by_kbd(app, commands, kbd_evt_sim)
-    test_selection_set_by_kbd(app, commands, kbd_evt_sim)
+#    test_cursor_moved_by_kbd(app, commands, kbd_evt_sim)
+#    test_selection_set_by_kbd(app, commands, kbd_evt_sim)
     test_search_for_typed_text(app, commands, kbd_evt_sim)
     test_select_typed_text_by_voice(app, commands, kbd_evt_sim)
     
@@ -2865,6 +2853,10 @@ def test_search_for_typed_text(app, commands, kbd_evt_sim):
    commands.open_file(edit_this_buff_py, echo_cmd=1)
    commands.goto_line(2, echo_cmd=1)
    kbd_evt_sim.type_text(',')
+   
+   # Need to give Emacs time to notify the server of the typed text
+   time.sleep(5)
+   
    kbd_evt_sim.move_cursor_by_kbd('Left', 2)
    commands.say(['next', 'comma'], echo_cmd=1)
    

@@ -43,6 +43,12 @@ import sr_interface, util
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+#                    'AppStateMessaging.listen_one_transaction': 1,
+#                    'AppStateMessaging.updates_from_app': 1,
+#                    'ListenAndQueueMsgsThread': 1,
+#                    'ServerSingleThread': 1,
+#                    'ExtLoopWin32': 1, 
+#                    'SourceBuffCached.insert_cbk': 1,
 #########################################################################
 #                       'recent_dictation': 1,
 #                       'safe_depth': 1,

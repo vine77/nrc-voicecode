@@ -112,6 +112,8 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
 
         *Queue.Queue* -- the message queue
         """
+        debug.trace('ListenAndQueueMsgsThread.message_queue', '** invoked, call stack is:')
+        debug.trace_call_stack('ListenAndQueueMsgsThread.message_queue', '**')
         return self.completed_msgs
 
     def get_mess(self):
@@ -128,6 +130,7 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
          from external editor in *(mess_name, {arg:val})* format, or
          None if no message is available."""
 
+        debug.trace('ListenAndQueueMsgsThread.get_mess', 'invoked')
         return self.underlying.get_mess()
         
     def notify_main(self):
@@ -140,6 +143,8 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
 
         *none*
         """
+        debug.trace('ListenAndQueueMsgsThread.notify_main', 'self.event=%s' % self.event)
+        debug.trace_call_stack('ListenAndQueueMsgsThread.notify_main', '**')
         self.event.notify()
 
     def run(self):
@@ -155,6 +160,7 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
         """
         while 1:
             try: 
+                debug.trace('ListenAndQueueMsgsThread.run', '** getting a message')
                 data = self.get_mess()
             except messaging.SocketError, err:
                 if self.connection_ending.isSet():
@@ -169,7 +175,9 @@ class ListenAndQueueMsgsThread(threading.Thread, Object.Object):
             except messaging.WokenUp:
                 break
 
+            debug.trace('ListenAndQueueMsgsThread.run', '** data=%s' % repr(data))                
             if data:
+                debug.trace('ListenAndQueueMsgsThread.run', '** sending notification message that data was received.')
                 self.completed_msgs.put(data)
                 self.notify_main()
 #            time.sleep(0.01)
@@ -221,6 +229,7 @@ class ListenNewConnThread(threading.Thread, Object.Object):
 
         *none*
         """
+        debug.trace_call_stack('ListenNewConnThread.notify_main', '**')
         self.event.notify()
 
     def run(self):

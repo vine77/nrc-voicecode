@@ -395,6 +395,7 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         
         ..[AS_Update] file:///./AppState.AS_Update.html"""
 
+        debug.trace('AppStateMessaging.updates_from_app', 'invoked')
         if what == None:
             what = []
         self.talk_msgr.send_mess('updates')
@@ -913,8 +914,6 @@ class AppStateMessaging(AppStateCached.AppStateCached):
         *BOOL* -- true if the editor does close the buffer
         """
 
-#        print 'someone is calling app_close_buffer "%s":' % buff_name
-#        debug.print_call_stack()
         self.talk_msgr.send_mess('close_buffer', {'buff_name': buff_name, 'save': save})
         response = self.talk_msgr.get_mess(expect=['close_buffer_resp'])
         success = response[1]['value']

@@ -602,7 +602,6 @@ class WaxClientBase(ClientBase):
         *GenEditFrame* -- the new frame 
         """
 #        print 'i.s. is "%s"' % instance_string
-#        debug.print_call_stack()
         if self.cmd_line:
             return WaxCmdClientFrame(owner = self, app_name = self.app_name,
                 ID = wxNewId(), size = self.frame_size, 

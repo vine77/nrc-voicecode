@@ -231,7 +231,7 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
     def close_window(self):
         debug.trace('wxMediatorMainFrame.close_window',
             'calling Close')
-#        debug.print_call_stack()
+#        debug.trace_call_stack()
         self.Close()
 
     def on_close(self, event):

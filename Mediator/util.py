@@ -314,3 +314,16 @@ def within_VCode(path):
     return relative_name(path, vc_globals.home, prefix = '%VCODE_HOME%')
 #    return relative_name(path, vc_globals.home, 
 #        prefix = os.path.basename(vc_globals.home))
+
+
+def bell(length=3):
+    """Plays a bell sound for a time proportional to INT length.
+    
+    Note: This function doesn't seem to work if the output of the script 
+    is redirected to a file."""
+    
+    bell_string = ''
+    for ii in range(length):
+       bell_string = bell_string + '\a'
+    sys.stderr.write(bell_string)
+    sys.stderr.flush()

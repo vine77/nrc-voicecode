@@ -57,6 +57,12 @@ def print_call_stack(print_to_file=sys.stdout):
     except exceptions.Exception, err:        
         traceback.print_stack(file=print_to_file)
 
+def trace_call_stack(trace_id, location_id=None, print_to_file=sys.stdout):
+    if trace_is_active(trace_id):
+       print_to_file.write("-- %s: call stack at location '%s' is:\n" % 
+       (trace_id, location_id))
+       print_call_stack(print_to_file)
+
 
 def what_class(instance):
     """Returns a string describing the class of an instance.
