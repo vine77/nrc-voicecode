@@ -27,6 +27,7 @@ import debug
 from debug import trace
 
 import SourceBuff
+import util
 
 from Object import Object
 
@@ -144,6 +145,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
     def _put_cache_multiple(self, names, values):
         trace('SourceBuffCached._put_cache_multiple', 'names=%s, values=%s' % (repr(names), repr(values)))
         for ii in range(len(names)):
+          trace('SourceBuffCached._put_cache_multiple', '** ii=%s: caching values[ii]=%s for element named names[ii]=%s' % (ii, repr(values[ii]), repr(names[ii])))
           self._put_cache(names[ii], values[ii])
            
     def _get_cache(self, name):
@@ -153,9 +155,12 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
            return None
            
     def _get_cache_multiple(self, names):
+        debug.trace('SourceBuffCached._get_cache_multiple', 'names=%s' % repr(names))
         values = []
         for a_name in names:
            values.append(self._get_cache(a_name))
+           trace('SourceBuffCached._get_cache_multiple', '** after a_name=%s, values=%s' % (a_name, repr(values)))
+        debug.trace('SourceBuffCached._get_cache_multiple', 'returning values=%s' % repr(values))
         return values
 
     def _get_cache_element(self, elt_name, get_from_app_method):
@@ -163,16 +168,16 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         
         **INPUTS**
         
-        STR *elt_name* -- name of the elements in the cache.
+        STR *elt_name* -- name of the element in the cache.
         
         METHOD *get_from_app_method* -- the method to invoke in order to get the value of the 
         element directly from the client application instead of from the cache. 
         
         **OUTPUTS**
         
-        [ANY] *values* -- values of each of the elements.
+        ANY -- value of the element.
         """                 
-        return self._get_cache_element_multiple([elt_name], get_from_app_method)           
+        return self._get_cache_element_multiple([elt_name], get_from_app_method)[0]           
 
 
     def _get_cache_element_multiple(self, elt_names, get_from_app_method):
@@ -193,10 +198,18 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         trace('SourceBuffCached._get_cache_element_multiple', 'elt_names=%s, get_from_app_method=%s, self.use_cache=%s' % 
                                                               (repr(elt_names), get_from_app_method, self.use_cache))
         if not self.use_cache:
+           debug.trace('SourceBuffCached._get_cache_element_multiple', 'not using cache')        
            values = apply(get_from_app_method)
         else:  
            if self._not_cached_multiple(elt_names):
-              self._put_cache_multiple(elt_names, apply(get_from_app_method))
+              debug.trace('SourceBuffCached._get_cache_element_multiple', 'cache is dirty... retrieving from app')                   
+              values_from_app = apply(get_from_app_method)
+              if len(elt_names) == 1:
+                 # if only one element, assume that get_from_app_method returns a single
+                 # value for that element, as opposed to a list of values for earch
+                 # element
+                 values_from_app = [values_from_app]
+              self._put_cache_multiple(elt_names, values_from_app)
            values = self._get_cache_multiple(elt_names)
            
         debug.trace('SourceBuffCached._get_cache_element_multiple', 'returning values=%s' % repr(values))
@@ -336,17 +349,8 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         *STR* -- contents of specified range of the buffer
         """
         trace('SourceBuffCached.get_text', 'start=%s, end=%s' % (start, end))
-            
-        
-        if self._not_cached('get_text'):
-            trace('SourceBuffCached.get_text.short', 
-                    'no cache - getting text')
-            self._put_cache('get_text', self._get_text_from_app())
-            trace('SourceBuffCached.get_text.short', 
-                    'len(text) = %d, text = "%s..."' % \
-                    (len(self._get_cache('get_text')),
-                    self._get_cache('get_text')[0:60]))
-
+                    
+        text = self._get_cache_element('get_text', self._get_text_from_app)
 
         #
         # Note: cannot invoke self.make_valid_range() because it causes
@@ -355,14 +359,14 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         #      | _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ | 
         #             
         if start == None: start = 0
-        if end == None: end = len(self._get_cache('get_text'))
+        if end == None: end = len(text)
         if end < start:
             tmp = end
             end = start
             start = tmp
             
-        trace('SourceBuffCached.get_text', '** before returning, start=%s, end=%s, self._get_cache("get_text")[start:end]="%s"' % (start, end, self._get_cache('get_text')[start:end]))
-        trace('SourceBuffCached.get_text', '** before returning, len(self._get_cache(\'get_text\'))=%s, self._get_cache(\'get_text\')="%s"' % (len(self._get_cache('get_text')), self._get_cache('get_text')))
+        trace('SourceBuffCached.get_text', '** before returning, start=%s, end=%s, text[start:end]="%s"' % (start, end, text[start:end]))
+        trace('SourceBuffCached.get_text', '** before returning, len(text)=%s, text="%s"' % (len(text), text))
 
         return self._get_cache('get_text')[start:end]
 
@@ -398,9 +402,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
 
         *INT* (start, end)
         """
-        if self._not_cached('get_visible'):
-            self._put_cache('get_visible', self._get_visible_from_app())
-        return self._get_cache('get_visible')
+        return self._get_cache_element('get_visible', self._get_visible_from_app)
 
     def _get_visible_from_app(self):
         
@@ -445,9 +447,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         
         *none* -- 
         """
-        if self._not_cached('newline_conventions'):
-            self._put_cache('newline_conventions', self._newline_conventions_from_app())
-        return self._get_cache('newline_conventions')
+        return self._get_cache_element('newline_conventions', self._newline_conventions_from_app)
 
     def _newline_conventions_from_app(self):
         
@@ -480,9 +480,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         
         *none* -- 
         """
-        if self._not_cached('pref_newline_convention'):
-            self._put_cache('pref_newline_convention', self._pref_newline_convention_from_app())
-        return self._get_cache('pref_newline_convention')
+        return self._get_cache_element('pref_newline_convention', self._pref_newline_convention_from_app)
 
     def _pref_newline_convention_from_app(self):
         
