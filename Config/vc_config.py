@@ -721,7 +721,8 @@ acmd = CSCmd(spoken_forms=['for', 'for loop'],
 ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['while', 'while loop'],
              meanings={ContC(): c_simple_while,
-                       ContPy(): ActionInsert('while ', ':\n\t'),
+#                       ContPy(): ActionInsert('while ', ':\n\t'),             
+                       ContBlankLine('python'): ActionInsert('while ', ':\n\t'),
                        ContPerl(): c_simple_while},
              docstring='while loop')
 ctrl_structures.add_csc(acmd)
@@ -732,7 +733,7 @@ acmd = CSCmd(spoken_forms=['do', 'do the following', 'loop body', 'for body',
              docstring = 'move to body of loop')
 ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['if', 'if statement'],
-             meanings={ContPy(): ActionInsert('if ', ':\n\t'),
+             meanings={ContBlankLine('python'): ActionInsert('if ', ':\n\t'),
                        ContC(): ActionInsert('if (', ')\n\t{\n\t}',
                            spacing = no_space_after),
                        ContPerl(): ActionInsert('if (', ') {\n\t}',
@@ -781,7 +782,7 @@ acmd = CSCmd(spoken_forms=['class', 'define class', 'declare class',
                            'class definition', 'class declaration',
                            'new class'],
              meanings={ContC(): cpp_class_definition,
-                       ContPy(): py_class_definition},
+                       ContBlankLine('python'): py_class_definition},
              docstring='class definition')
 data_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['sub class of', 'inherits from', 'is subclass',
@@ -906,7 +907,7 @@ acmd = CSCmd(spoken_forms=['lambda'],
 python_compound.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['try'],
-             meanings={ContPy(): ActionInsert('try:\n\t', '', 
+             meanings={ContBlankLine('python'): ActionInsert('try:\n\t', '', 
                  spacing = no_space_after)},
              docstring='python try statement')
 python_compound.add_csc(acmd)
@@ -989,6 +990,10 @@ acmd = CSCmd(spoken_forms=['range of'],
              meanings={ContPy(): ActionInsert('range(', ')', 
                                      spacing = no_space_after)},
              docstring='types range(^)')
+acmd = CSCmd(spoken_forms=['in range of'],
+             meanings={ContPy(): ActionInsert('in range(', ')', 
+                                     spacing = no_space_after)},
+             docstring='types range(^)')             
 python_functional.add_csc(acmd)
 
 

@@ -137,17 +137,21 @@ class ContBlankLine(Context):
                             attrs)
        
     def applies(self, app):
+
        answer = 0
        lang_cont = ContLanguage(language=self.language)
+     
        if lang_cont.applies(app):
           old_pos = app.cur_pos()
           app.goto_beginning_of_line()
+         
           if app.looking_at('\s*($|%s)' % app.newline_regexp()):
              answer = 1
           else:
              answer = 0
           app.goto(old_pos)
           
+ 
        return answer        
 
 

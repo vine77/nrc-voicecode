@@ -491,6 +491,12 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         if echo_cmd: self.echo_command('goto_beginning_of_line', pos)
         self.app.goto_beginning_of_line(pos)
         self.show_buff()
+        
+    def move_relative(self, rel_movement, echo_cmd=0):
+        """Goes to position *INT pos* of the current buffer"""
+        if echo_cmd: self.echo_command('move_relative', rel_movement)
+        self.app.move_relative(rel_movement)
+        self.show_buff()        
 
     def make_position_visible(self, pos, echo_cmd=0):
         if echo_cmd: self.echo_command('make_position_visible', pos)

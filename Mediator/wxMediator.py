@@ -55,6 +55,7 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="on", 
                     active_traces={
+                         "ContBlankLine.applies": 1,
 #                        'ActionInsertNewClause.execute': 1,
 #                        'SourceBuff.closest_occurence_to_cursor': 1,
 #                        'SourceBuff.ignore_occurence': 1,

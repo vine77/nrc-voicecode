@@ -595,7 +595,15 @@ class CmdInterp(OwnerObject):
                                  app, exact_symbol)
                              untranslated_words = []
                              exact_symbol = 0
-                         aCSC.interpret(app)
+                         applied = aCSC.interpret(app)
+                         if not applied:
+                            #
+                            # AD: Ideally, this should never happen, but right now
+                            #     it does (ex: if an applies() changes the
+                            #     the state of AppState in such a way that the
+                            #     context does not apply anymore
+                            #
+                            self.user_message("WARNING: tried to interpret a '%s' command without valid context" % CSC_consumes)
                          break
                  if csc_applies:
                      #
@@ -646,7 +654,7 @@ class CmdInterp(OwnerObject):
                      exact_symbol = 0
                  else:
                      exact_symbol = 1
-                 untranslated_words.append( chopped_symbol)
+                 untranslated_words.append(chopped_symbol)
 
                  cmd = cmd_without_symbol
                  head_was_translated = 1

@@ -3280,8 +3280,24 @@ def test_blank_line_context():
    testing.init_simulator_regression()   
       
    commands.open_file('blah1.py')      
+   
    commands.say(['for', 'do', 'the', 'following'] , user_input="0\n", echo_utterance=1)   
-   commands.say(['security', 'level', 'equals', 'for', 'your', 'eyes', 'only'] , user_input="1\n1\n", echo_utterance=1)   
+   commands.say(['security', 'level', 'equals', 'for', 'your', 'eyes', 'only', 'new', 'statement', 'back', 'indent'] , user_input="1\n1\n", echo_utterance=1)   
+   
+   commands.say(['while', 'loop', 'one', 'do', 'the', 'following'] , user_input="0\n", echo_utterance=1)   
+   commands.say(['when', 'equals', 'while', 'processing', 'new', 'statement'] , user_input="1\n1\n", echo_utterance=1)   
+   
+   commands.say(['if', 'condition', 'do', 'the', 'following'] , user_input="1\n", echo_utterance=1)   
+   commands.say(['check', 'equals', 'if', 'all', 'right', 'without', 'arguments', 'new', 'statement'] , user_input="1\n1\n", echo_utterance=1)      
+
+   commands.say(['back', 'indent', 'back', 'indent'] , user_input="1\n", echo_utterance=1)   
+   commands.say(['class', 'some', 'class', 'class', 'body'] , user_input="1\n", echo_utterance=1)      
+   
+   commands.say(['try'] , user_input="1\n", echo_utterance=1)         
+   commands.say(['flag', 'equals', 'did', 'try', 'new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   
+   commands.say(['the', 'next', 'ones', 'still', 'present', 'bugs', 'new', 'statement'], user_input="1\n1\n", echo_utterance=1)
+   commands.say(['check', 'if', 'was', 'done', 'without', 'arguments', 'new', 'statement'] , user_input="1\n1\n", echo_utterance=1)      
    
 add_test('blank_line_context', test_blank_line_context, 'Testing commands that have a special meaning only a a blank line')
 
@@ -3310,6 +3326,39 @@ def test_looking_at():
    
 add_test('looking_at', test_looking_at, 'Testing the looking at method.')
 
+
+##############################################################################
+# Testing AppState beginning/end of line
+##############################################################################    
+
+
+def test_beginning_end_of_line():
+   testing.init_simulator_regression()   
+      
+   commands.open_file('blah1.py')
+   commands.say(['line', 'one', 'new', 'statement', 'line', 'two', 'new', 'statement', 'line', 'three'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.goto_beginning_of_line(echo_cmd=1)
+   commands.goto_beginning_of_line(echo_cmd=1)
+   commands.move_relative(-1, echo_cmd=1)
+   commands.goto_beginning_of_line(echo_cmd=1)
+   commands.move_relative(3, echo_cmd=1)   
+   commands.goto_beginning_of_line(echo_cmd=1)
+   commands.goto(0, echo_cmd=1)   
+   commands.goto_beginning_of_line(echo_cmd=1)   
+   
+   commands.open_file('blah2.py')
+   commands.say(['line', 'one', 'new', 'statement', 'line', 'two', 'new', 'statement', 'line', 'three'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.goto(0, echo_cmd=1)
+   commands.goto_end_of_line(echo_cmd=1)
+   commands.goto_end_of_line(echo_cmd=1)
+   commands.move_relative(1, echo_cmd=1)
+   commands.goto_end_of_line(echo_cmd=1)
+   commands.move_relative(-3, echo_cmd=1)   
+   commands.goto_end_of_line(echo_cmd=1)
+   commands.goto(commands.app.len(), echo_cmd=1)   
+   commands.goto_end_of_line(echo_cmd=1)   
+      
+add_test('beg_end_of_line', test_beginning_end_of_line, 'Testing methods for going to the beginning or end of a line.')
 
 ##############################################################################
 # Sending a large message to the client
