@@ -28,7 +28,7 @@ def not_implemented(name):
     """Prints warning message when a stub function is called."""
     print "WARNING: stub function %s is not implemented yet!!!" % name
     if traces_are_on():
-       print_call_stack()
+       trace_call_stack(name)
 
 def virtual(name, instance=None):
     """Prints warning message when a virtual method is called."""
@@ -76,7 +76,7 @@ def print_call_stack(print_to_file=sys.stdout):
         raise exceptions.Exception()
     except exceptions.Exception, err:        
         traceback.print_stack(file=print_to_file)
-        print_to_file.write("\n")
+        print_to_file.write("\n\n")
 
 def trace_call_stack(trace_id, location_id=None, print_to_file=sys.stdout):
     if not location_id:

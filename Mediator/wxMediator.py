@@ -53,13 +53,15 @@ import WinSystemMSW
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="off", 
+debug.config_traces(status="on", 
                     active_traces={
 #################################  
-                    'CmdInterp.match_untranslated_text': 1,
-                    'SymbolConstruction.insert_existing_symbol': 1,
-                    'SymbolConstruction.insert_new_symbol': 1,
-                    'SymbolResult.suggestions_list': 1,
+                    'CorrectionBoxViewWX.simulate_OK': 1,
+                    'CorrectionBoxViewWX.on_dismiss': 1,
+#                    'CmdInterp.match_untranslated_text': 1,
+#                    'SymbolConstruction.insert_existing_symbol': 1,
+#                    'SymbolConstruction.insert_new_symbol': 1,
+#                    'SymbolResult.suggestions_list': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)

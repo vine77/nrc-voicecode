@@ -75,5 +75,25 @@ class MockListSelectionEvent(wxListEvent):
     def GetIndex(self):
        return self.nth
        
+class wxDialogWithHelpers(wxDialog):
+    """a frame subclass with methods for simulating user events being
+    done on elements of the frame (ex: button clicks)"""
+    
+    def __init__(self, parent, id, title, pos, size, style):
+       wxDialog.__init__(self, parent, id, title, pos, size, style)
+       
+    def ClickButton(self, button):
+        """simulate the event of a user clicking on a button
+        
+        **INPUTS**
+        
+        *wxButton button* -- the button to be clicked.
+        """
+        button_event = wxCommandEvent(wxEVT_COMMAND_BUTTON_CLICKED, button.GetId())
+        self.ProcessEvent(button_event)
+       
+    
+   
+       
 # defaults for vim - otherwise ignore
 # vim:sw=4
