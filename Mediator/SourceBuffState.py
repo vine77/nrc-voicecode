@@ -47,12 +47,14 @@ class SourceBuffState(SourceBuffCookie):
     
     """
     
-    def __init__(self, buff_name, contents, selection, cursor_at = 1, **attrs):
+    def __init__(self, buff_name, contents, selection, cursor_at = 1,
+                 last_search = None, **attrs):
         self.deep_construct(SourceBuffState,
                             {'text': contents,
                             'buff_name': buff_name,
                             'selection_range': selection,
-                            'cursor_at_end': cursor_at},
+                            'cursor_at_end': cursor_at,
+                             'last_search': logged_search},
                             attrs
                             )
 
@@ -139,4 +141,32 @@ class SourceBuffState(SourceBuffCookie):
         *STR* -- contents of the buffer
         """
         return self.text
+    def last_search(self):
+        """returns last logged search
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *(regex, direction, where, match)*
+
+        where
+
+        *STR* regexp -- Regular expreesion used for the search.
+        
+        *BOOL* direction -- If negative, then we were looking
+         backwards. Forward if positive. If *None*, then we were doing
+         a *Select Pseudocode* operation and we didn't care about
+         direction.
+        
+        *INT* where -- If positive, then we wanted to put cursor after
+         occurence. Before occurence if negative.
+        
+        *(INT, INT)* match -- Start and end position of the match that was
+        used.
+        """
+        return self.logged_search
+        
       

@@ -260,7 +260,13 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
             
         
         if self.cache['get_text'] == None:
+            trace('SourceBuffCached.get_text.short', 
+                    'no cache - getting text')
             self.cache['get_text'] = self._get_text_from_app()
+            trace('SourceBuffCached.get_text.short', 
+                    'len(text) = %d, text = "%s..."' % \
+                    (len(self.cache['get_text']),
+                    self.cache['get_text'][0:60]))
 
 
         #
@@ -460,9 +466,8 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         
 
     def insert_cbk(self, range, text):
-        
         """External editor invokes that callback to notify VoiceCode
-        of a deletion event.
+        of an insertion event.
 
         NOTE: This method should NOT update the V-E map, because that is
         already taken care of outside of the method.
@@ -478,6 +483,9 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         
         *none* -- 
         """
+        trace('SourceBuffCached.insert_cbk.short', 
+            'range=%s, len(text) = %d, text="%s..."' \
+            % (range, len(text), text[0:60]))
         trace('SourceBuffCached.insert_cbk', 'range=%s, text=\'%s\'' % (range, text))
         trace('SourceBuffCached.insert_cbk', '** upon entry, self.cache["cur_pos"]=%s, self.cache["get_text"]="%s"' % (self.cache["cur_pos"], self.cache["get_text"]))        
 
@@ -492,6 +500,8 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
 # if we don't have the buffer contents cached, just get the entire
 # current contents (which should already include the insertion), thereby
 # caching it
+            trace('SourceBuffCached.insert_cbk.short', 
+                'no cache - getting text')
             self.get_text()
         else:
             old_text = self.get_text()

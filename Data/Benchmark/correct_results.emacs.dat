@@ -647,7 +647,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CB1998>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CF26A0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2192,7 +2192,7 @@ recent dictation is empty, as expected
 ')
 Heard class clown inherits from student
 *** Start of source buffer ***
-  1: class clown(student<CURSOR>):
+  1: class Clown(student<CURSOR>):
   2:    
 
 *** End of source buffer ***
@@ -2201,7 +2201,7 @@ Heard class clown inherits from student
 >>> Testing console command: say(['class', 'body'], user_input='')
 Heard class body
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    <CURSOR>
 
 *** End of source buffer ***
@@ -2211,7 +2211,7 @@ Heard class body
 ')
 Heard define method popularity method body
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    def popularity(self):
   3:       <CURSOR>
 
@@ -2221,7 +2221,7 @@ Heard define method popularity method body
 >>> Testing console command: say(['return', 'eight'], user_input='')
 Heard return eight
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    def popularity(self):
   3:       return 8<CURSOR>
 
@@ -2241,7 +2241,7 @@ Heard return eight
 scratching 1
 
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    def popularity(self):
   3:       <CURSOR>
 
@@ -2257,7 +2257,7 @@ scratch 1 succeeded as expected
 ***Moving cursor manually***
 
 *** Start of source buffer ***
-  1: <CURSOR>class clown(student):
+  1: <CURSOR>class Clown(student):
   2:    def popularity(self):
   3:       
 
@@ -2268,7 +2268,7 @@ scratch 1 succeeded as expected
 scratching 1
 
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    <CURSOR>
 
 *** End of source buffer ***
@@ -2286,7 +2286,7 @@ scratch 1 succeeded as expected
 ')
 Heard define method grades method body return B.
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    def grades(self):
   3:       return b<CURSOR>
 
@@ -2302,7 +2302,7 @@ Heard define method grades method body return B.
 >>> Testing console command: say(['select', 'clown'], user_input='None')
 Heard select clown
 *** Start of source buffer ***
-  1: class <SEL_START>clown<SEL_END>(student):
+  1: class <SEL_START>Clown<SEL_END>(student):
   2:    def grades(self):
   3:       return b
 
@@ -2334,7 +2334,7 @@ WARNING: source file 'blahblah.py' doesn't exist.
 ')
 Heard class cloud inherits from student
 *** Start of source buffer ***
-  1: class cloud(student<CURSOR>):
+  1: class Cloud(student<CURSOR>):
   2:    
 
 *** End of source buffer ***
@@ -2343,7 +2343,7 @@ Heard class cloud inherits from student
 >>> Testing console command: say(['class', 'body'], user_input='')
 Heard class body
 *** Start of source buffer ***
-  1: class cloud(student):
+  1: class Cloud(student):
   2:    <CURSOR>
 
 *** End of source buffer ***
@@ -2353,7 +2353,7 @@ Heard class body
 ')
 Heard fine method popularity method body
 *** Start of source buffer ***
-  1: class cloud(student):
+  1: class Cloud(student):
   2:    fine_method_popularity<CURSOR>
 
 *** End of source buffer ***
@@ -2362,7 +2362,7 @@ Heard fine method popularity method body
 >>> Testing console command: say(['return', 'eight'], user_input='')
 Heard return eight
 *** Start of source buffer ***
-  1: class cloud(student):
+  1: class Cloud(student):
   2:    fine_method_popularityreturn 8<CURSOR>
 
 *** End of source buffer ***
@@ -2385,18 +2385,18 @@ utterance 2 was changed
 utterance 2 was corrected
 about to reinterpret
 *** Start of source buffer ***
-  1: class cloud(student):
+  1: class Cloud(student):
   2:    <CURSOR>
 
 *** End of source buffer ***
 *** Start of source buffer ***
-  1: class cloud(student):
+  1: class Cloud(student):
   2:    def popularity(self):
   3:       <CURSOR>
 
 *** End of source buffer ***
 *** Start of source buffer ***
-  1: class cloud(student):
+  1: class Cloud(student):
   2:    def popularity(self):
   3:       return 8<CURSOR>
 
@@ -2428,23 +2428,23 @@ about to reinterpret
 
 *** End of source buffer ***
 *** Start of source buffer ***
-  1: class clown(student<CURSOR>):
+  1: class Clown(student<CURSOR>):
   2:    
 
 *** End of source buffer ***
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    <CURSOR>
 
 *** End of source buffer ***
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    def popularity(self):
   3:       <CURSOR>
 
 *** End of source buffer ***
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    def popularity(self):
   3:       return 8<CURSOR>
 
@@ -2467,7 +2467,7 @@ were reinterpreted, as expected
 >>> Testing console command: say(['new', 'line'], user_input='')
 Heard new line
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    def popularity(self):
   3:       return 8
   4:    <CURSOR>
@@ -2478,7 +2478,7 @@ Heard new line
 >>> Testing console command: say(['back indent'], user_input='')
 Heard back indent
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    def popularity(self):
   3:       return 8
   4: <CURSOR>
@@ -2490,7 +2490,7 @@ Heard back indent
 ')
 Heard excess equals zero
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    def popularity(self):
   3:       return 8
   4: excess = 0<CURSOR>
@@ -2500,7 +2500,7 @@ Heard excess equals zero
 ***Manually changing text
 
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    def popularity(self):
   3:       return 8
   4: excess<CURSOR>
@@ -2527,7 +2527,7 @@ reinterpretation failed, as expected
 ***Fixing error manually***
 
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    def popularity(self):
   3:       return 8
   4: <CURSOR>
@@ -2614,7 +2614,7 @@ utterance 2 was changed
 utterance 2 was corrected
 about to reinterpret
 *** Start of source buffer ***
-  1: class clown(student):
+  1: class Clown(student):
   2:    def popularity(self):
   3:       return 8
   4: <CURSOR>
@@ -2869,21 +2869,21 @@ Saying: ['class', 'some', 'class', 'class', 'body']
 Heard class some class class body
   5:    if condition:
   6:       check = if_all_right()
-  7: class some_class:
+  7: class SomeClass:
   8:    <CURSOR>
 
 *** End of source buffer ***
 Saying: ['try']
 Heard try
   6:       check = if_all_right()
-  7: class some_class:
+  7: class SomeClass:
   8:    try:
   9:       <CURSOR>
 
 *** End of source buffer ***
 Saying: ['flag', 'equals', 'did', 'try', 'new', 'statement']
 Heard flag equals did try new statement
-  7: class some_class:
+  7: class SomeClass:
   8:    try:
   9:       flag = did_try
  10:       <CURSOR>
@@ -7622,41 +7622,41 @@ WARNING: source file 'blah.py' doesn't exist.
 *** End of source buffer ***
 Heard define class some variable class body
 *** Start of source buffer ***
-  1: class some_variable:
+  1: class SomeVariable:
   2:    <CURSOR>
 
 *** End of source buffer ***
 Heard define method some method add arguments
 *** Start of source buffer ***
-  1: class some_variable:
+  1: class SomeVariable:
   2:    def some_method(self, <CURSOR>):
   3:       
 
 *** End of source buffer ***
 Heard collect arguments positional arguments comma
 *** Start of source buffer ***
-  1: class some_variable:
+  1: class SomeVariable:
   2:    def some_method(self, *positional_arguments, <CURSOR>):
   3:       
 
 *** End of source buffer ***
 Heard collect keyword arguments keyword arguments
 *** Start of source buffer ***
-  1: class some_variable:
+  1: class SomeVariable:
   2:    def some_method(self, *positional_arguments, **keyword_arguments<CURSOR>):
   3:       
 
 *** End of source buffer ***
 Heard class body
 *** Start of source buffer ***
-  1: class some_variable:
+  1: class SomeVariable:
   2:    def some_method(self, *positional_arguments, **keyword_arguments):
   3:       <CURSOR>
 
 *** End of source buffer ***
 Heard some array equals some other array sliced at one colon five new statement
 *** Start of source buffer ***
-  1: class some_variable:
+  1: class SomeVariable:
   2:    def some_method(self, *positional_arguments, **keyword_arguments):
   3:       some_array = some_other_array[1: 5]
   4:       <CURSOR>
@@ -7664,7 +7664,7 @@ Heard some array equals some other array sliced at one colon five new statement
 *** End of source buffer ***
 Heard some dictionary item with key zero jump out equals one
 *** Start of source buffer ***
-  1: class some_variable:
+  1: class SomeVariable:
   2:    def some_method(self, *positional_arguments, **keyword_arguments):
   3:       some_array = some_other_array[1: 5]
   4:       some_dictionary[0] = 1<CURSOR>
@@ -7672,7 +7672,7 @@ Heard some dictionary item with key zero jump out equals one
 *** End of source buffer ***
 Heard comment above
 *** Start of source buffer ***
-  1: class some_variable:
+  1: class SomeVariable:
   2:    def some_method(self, *positional_arguments, **keyword_arguments):
   3:       some_array = some_other_array[1: 5]
   4:       # <CURSOR>
@@ -7681,7 +7681,7 @@ Heard comment above
 *** End of source buffer ***
 Heard this is a commented out
 *** Start of source buffer ***
-  1: class some_variable:
+  1: class SomeVariable:
   2:    def some_method(self, *positional_arguments, **keyword_arguments):
   3:       some_array = some_other_array[1: 5]
   4:       # this_is_a_commented_out<CURSOR>
@@ -8507,7 +8507,7 @@ Saying: ['define', 'class', 'command', 'interpreter', 'sub class\\sub class', 'o
 Heard define class command interpreter sub class of object class body
   9: import ed_simulator, symbol_dictionary
  10: import sr_interface
- 11: class command_interpreter(object):
+ 11: class CommandInterpreter(object):
  12:    <CURSOR>
 
 *** End of source buffer ***
@@ -8515,7 +8515,7 @@ Saying: ['define', 'method', 'initialize', 'add', 'argument', 'on', 'application
 Heard define method initialize add argument on application equals none comma
   9: import ed_simulator, symbol_dictionary
  10: import sr_interface
- 11: class command_interpreter(object):
+ 11: class CommandInterpreter(object):
  12:    def initialize(self, on_application = None, <CURSOR>):
  13:       
 
@@ -8523,7 +8523,7 @@ Heard define method initialize add argument on application equals none comma
 Saying: ['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'double', 'asterisk', 'attributes', 'method', 'body']
 Heard symbol dictionary pickle file equals none comma double asterisk attributes method body
  10: import sr_interface
- 11: class command_interpreter(object):
+ 11: class CommandInterpreter(object):
  12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:       <CURSOR>
 
@@ -8531,7 +8531,7 @@ Heard symbol dictionary pickle file equals none comma double asterisk attributes
 Saying: ['self', 'dot', 'declare', 'attributes', 'with', 'arguments', 'brace', 'pair']
 Heard self dot declare attributes with arguments brace pair
  10: import sr_interface
- 11: class command_interpreter(object):
+ 11: class CommandInterpreter(object):
  12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:       self.declare_attributes({<CURSOR>})
 
@@ -8539,14 +8539,14 @@ Heard self dot declare attributes with arguments brace pair
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'start', 'jump', 'out', ':\\colon', 'none', 'comma']
 Heard single quotes un translated text start jump out colon none comma
  10: import sr_interface
- 11: class command_interpreter(object):
+ 11: class CommandInterpreter(object):
  12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:       self.declare_attributes({'un_translated_text_start': None, <CURSOR>})
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement']
 Heard single quotes un translated text end jump out colon none new statement
- 11: class command_interpreter(object):
+ 11: class CommandInterpreter(object):
  12:    def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:       self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:       <CURSOR>
@@ -8913,13 +8913,13 @@ Heard import some module
 Heard class dummy class body
  18:            
  19: 
- 20: class dummy:
+ 20: class Dummy:
  21:    <CURSOR>
  22: 
  23: class SomeOtherClass():
  24: 
 Heard define method new method method body pass
- 20: class dummy:
+ 20: class Dummy:
  21:    def new_method(self):
  22:       pass
  23:    <CURSOR>
@@ -11473,6 +11473,173 @@ Heard previous one
 
 
 *******************************************************************************
+* Name        : symbol_formatting
+* Description : Testing styling and manual formatting of new symbols.
+*******************************************************************************
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Testing styles
+
+
+
+>>> Testing console command: say(['ordinary', 'formatting', 'equals', 'one'], user_input='None')
+Heard ordinary formatting equals one
+*** Start of source buffer ***
+  1: ordinary_formatting = 1<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+*** Start of source buffer ***
+  1: ordinary_formatting = 1
+  2: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['lower', 'Hungarian', 'ugly', 'Java', 'convention'], user_input='None')
+Heard lower Hungarian ugly Java convention
+*** Start of source buffer ***
+  1: ordinary_formatting = 1
+  2: uglyJavaConvention<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+*** Start of source buffer ***
+  1: ordinary_formatting = 1
+  2: uglyJavaConvention
+  3: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['animal', 'equals', 'Hungarian', 'friendly', 'dolphin', 'empty', 'function'], user_input='None')
+Heard animal equals Hungarian friendly dolphin empty function
+*** Start of source buffer ***
+  1: ordinary_formatting = 1
+  2: uglyJavaConvention
+  3: animal = FriendlyDolphin()<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+*** Start of source buffer ***
+  1: ordinary_formatting = 1
+  2: uglyJavaConvention
+  3: animal = FriendlyDolphin()
+  4: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['\\All-Caps', 'style', 'W.', 'M.', 'user'], user_input='None')
+Heard All-Caps style W. M. user
+*** Start of source buffer ***
+  1: ordinary_formatting = 1
+  2: uglyJavaConvention
+  3: animal = FriendlyDolphin()
+  4: WM_USER<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  2: uglyJavaConvention
+  3: animal = FriendlyDolphin()
+  4: WM_USER
+  5: <CURSOR>
+
+*** End of source buffer ***
+Testing manual formatting
+
+
+
+>>> Testing console command: say(['no', 'space', 'style', 'W.', 'X.', 'cap', 'python'], user_input='None')
+Heard no space style W. X. cap python
+  2: uglyJavaConvention
+  3: animal = FriendlyDolphin()
+  4: WM_USER
+  5: wxPython<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  3: animal = FriendlyDolphin()
+  4: WM_USER
+  5: wxPython
+  6: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['send', 'to', '\\Caps-On', 'the', 'boss'], user_input='None')
+Heard send to Caps-On the boss
+  3: animal = FriendlyDolphin()
+  4: WM_USER
+  5: wxPython
+  6: send_to_The_Boss<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  4: WM_USER
+  5: wxPython
+  6: send_to_The_Boss
+  7: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['caps', 'on', 'matters', '\\No-Caps', 'of', 'state'], user_input='None')
+Heard caps on matters No-Caps of state
+  4: WM_USER
+  5: wxPython
+  6: send_to_The_Boss
+  7: Matters_of_State<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  5: wxPython
+  6: send_to_The_Boss
+  7: Matters_of_State
+  8: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['inter', 'caps', 'fish', '_\\underscore', 'food'], user_input='None')
+Heard inter caps fish underscore food
+  5: wxPython
+  6: send_to_The_Boss
+  7: Matters_of_State
+  8: Fish_Food<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  6: send_to_The_Boss
+  7: Matters_of_State
+  8: Fish_Food
+  9: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['Hungarian', 'notation', '\\No-Caps', 'dog', 'food'], user_input='None')
+Heard Hungarian notation No-Caps dog food
+  6: send_to_The_Boss
+  7: Matters_of_State
+  8: Fish_Food
+  9: dogFood<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  7: Matters_of_State
+  8: Fish_Food
+  9: dogFood
+ 10: <CURSOR>
+
+*** End of source buffer ***
+
+
+*******************************************************************************
 * Name        : unusual_symbols
 * Description : compilation and dictation of unusual symbols
 *******************************************************************************
@@ -11642,5 +11809,5 @@ Heard select previous index equals zero
 
 
 -----------------------------------------------
-Test suite completed in:  1407.58399999 secs
+Test suite completed in:  1540.58500004 secs
 -----------------------------------------------

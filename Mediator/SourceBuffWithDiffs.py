@@ -171,8 +171,11 @@ class CookieData(Object):
     or end (1) of the selection_range
 
     *(INT, INT)* selection_range -- range of the selection
+
+    *last_search* -- last logged search (see SourceBuff.log_search)
     """
-    def __init__(self, level, selection, cursor_at = 1, **args):
+    def __init__(self, level, selection, cursor_at = 1,
+                 last_search = None, **args):
         """
         **INPUTS**
 
@@ -186,12 +189,15 @@ class CookieData(Object):
 
         *INT* cursor_at -- indicates whether the cursor is at the start (0)
         or end (1) of the selection_range
+
+        *last_search* -- last logged search (see SourceBuff.log_search)
         """
         self.deep_construct(CookieData,
                             {
                              'level': level,
                              'selection_range': selection,
-                             'cursor_at_end': cursor_at
+                             'cursor_at_end': cursor_at,
+                             'logged_search': last_search
                             }, args)
 
     def get_selection(self):
@@ -237,6 +243,9 @@ class CookieData(Object):
         at the start
         """
         return self.cursor_at_end
+    
+    def last_search(self):
+        return self.logged_search
 
 
 class SourceBuffWithDiffs(SourceBuffCached):
@@ -613,7 +622,8 @@ class SourceBuffWithDiffs(SourceBuffCached):
             cursor_at = 0
         else:
             cursor_at = 1
-        data = CookieData(level, selection, cursor_at = cursor_at)
+        data = CookieData(level, selection, cursor_at = cursor_at,
+                          last_search = self.last_search)
         key = self.push_cookie(data)
         debug.trace('SourceBuffWithDiffs.store_current_state',
             'key is %s' % key)
@@ -702,6 +712,7 @@ class SourceBuffWithDiffs(SourceBuffCached):
             if success:
                 self.set_selection(data.get_selection(), 
                     cursor_at = data.cursor_at())
+                self.last_search = data.last_search()
             self.print_buff_if_necessary()
             return success
 

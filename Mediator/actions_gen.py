@@ -471,6 +471,9 @@ class ActionInsert(Action):
     *STR code_after=''* -- code to be inserted after the cursor
     *INT spacing=0* -- spacing flags governing spacing before and after
     code_bef, from SpacingState (CURRENTLY IGNORED)
+    *STR prefer* -- name of SymBuilder preferred for a symbol following code_bef
+    *STR expect* -- identifier type expected for a symbol following code_bef
+        (ignored if prefer is specified)  
 
     
     CLASS ATTRIBUTES**
@@ -478,11 +481,14 @@ class ActionInsert(Action):
     *none* -- 
     """
         
-    def __init__(self, code_bef='', code_after='', spacing = 0, **args_super):
+    def __init__(self, code_bef='', code_after='', spacing = 0,
+                 prefer = None, expect = None, **args_super):
         self.deep_construct(ActionInsert, \
                             {'code_bef': code_bef, \
                              'code_after': code_after,
-                             'spacing': spacing}, \
+                             'spacing': spacing,
+                             'prefer': prefer,
+                             'expect': expect}, \
                             args_super, \
                             {})
         
@@ -494,6 +500,12 @@ class ActionInsert(Action):
 
         debug.trace('ActionInsert.execute' ,'self.code_bef=%s, self.code_after=%s' % (self.code_bef, self.code_after))
         app.insert_indent(self.code_bef, self.code_after)
+        if state:
+            styling_state = state.styling_state()
+            if self.prefer:
+                styling_state.prefer(self.prefer)
+            elif self.expect:
+                styling_state.expect(self.expect)
 
 
     def doc(self):
@@ -691,6 +703,7 @@ class ActionSearch(ActionBidirectional):
     def __init__(self, regexp=None, num=1, where=1, 
                  ignore_overlapping_with_cursor = 0,
                  ignore_left_of_cursor = 0, ignore_right_of_cursor = 0,
+                 unlogged = 0,
                  **args_super):
         self.deep_construct(ActionSearch, 
                             {'regexp': regexp, 
@@ -698,7 +711,8 @@ class ActionSearch(ActionBidirectional):
                              'where': where,
                              'ignore_overlapping_with_cursor':  ignore_overlapping_with_cursor,
                              'ignore_left_of_cursor': ignore_left_of_cursor,
-                             'ignore_right_of_cursor': ignore_right_of_cursor}, 
+                             'ignore_right_of_cursor': ignore_right_of_cursor,
+                             'unlogged': 0}, 
                             args_super, 
                             {})
 
@@ -713,7 +727,8 @@ class ActionSearch(ActionBidirectional):
                        num=self.num, where=self.where,
                        ignore_overlapping_with_cursor = self.ignore_overlapping_with_cursor,
                        ignore_left_of_cursor = self.ignore_left_of_cursor, 
-                       ignore_right_of_cursor = self.ignore_right_of_cursor)
+                       ignore_right_of_cursor = self.ignore_right_of_cursor,
+                       unlogged  = self.unlogged)
 
 
 
