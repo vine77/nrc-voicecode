@@ -1,0 +1,686 @@
+<HTML>
+<HEAD>
+<TITLE>VoiceCode User Manual</TITLE>
+</HEAD>
+
+<BODY   BGCOLOR="#ffffff">
+
+
+<MAP NAME="banner_top">
+    <AREA SHAPE="rect" COORDS="588,14,620,40" HREF="http://www.iit.nrc.ca/english.html">
+    <AREA SHAPE="rect" COORDS="538,14,583,37" HREF="http://www.nrc.ca/corporate/english/">
+    <AREA SHAPE="rect" COORDS="86,4,421,37" HREF="http://www.iit.nrc.ca/II_public/index.html">
+</MAP>
+<table cellpadding="5" cellspacing="0" border="0" width="100%">
+<tr>
+<td valign="bottom" align="left">
+<IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_top.jpg" width="620" height="37" alt="II Group Banner" USEMAP="#banner_top"
+ISMAP border="0"><BR><IMG SRC="http://www.iit.nrc.ca/II_public/images/banner_voicecode.gif" width="230" height="50" alt="II VoiceGrip"></td>
+</tr>
+<tr><td>&nbsp;</td></tr>
+</table>
+
+
+<H1><FONT COLOR="#400080">VoiceCode User manual</FONT></H1>
+
+
+<UL>
+<LI><A HREF="#warning">WARNING: Use a special test user or vocabulary</A>
+<LI><A HREF="#simulation">Simulation mode</A>
+    <UL>
+    <LI><A HREF="#shellCommands">Simulation shell commands</A>
+    <LI><A HREF="#VCODE_NOSPEECH">Running the simulation shell without NatSpeak</A>
+    <LI><A HREF="#CSCs">Context Sensitive Commands (CSCs)</A>
+    <LI><A HREF="#aliases">Language Specific Aliases (LSAs)</A>
+    <LI><A HREF="#symbols">Dictating symbols</A>
+    <LI><A HREF="#select">Selecting code</A>
+    </UL>
+<LI><A HREF="#config">Configuring VoiceCode</A>
+    <UL>
+    <LI><A HREF="#configFile">The VoiceCode configuration file</A>
+    <LI><A HREF="#debugConfig">Debugging the configuration file</A>
+    <LI><A HREF="#customeCSCs">Customising CSCs</A>
+    <LI><A HREF="#customLSAs">Customising LSAs</A>
+    <LI><A HREF="#abbreviations">Adding/modifying abbreviations</A>
+    </UL>
+<LI><A HREF="#trouble">Trouble shooting</A>
+   <UL>
+   <LI><A HREF="#noDictation">Dictation fails</A>
+   </UL>
+</UL>
+
+<HR>
+
+<H2><A NAME="warning">WARNING: Use a special test user or vocabulary</A></H2>
+
+VoiceCode is currently at the prototype stage and as such, it has many
+bugs. Some of those bugs may cause your Naturally Speaking vocabulary
+to become "polluted" with thouasands of words. It may also delete or
+replace some vocabulary words which you have defined.
+
+<P>
+
+Therefore, it is strongly recommended that you use a special purpose
+test vocabulary when running VoiceCode. That way, if VoiceCode screws
+up, it will only affect that test user and/or vocabulary.
+
+<P>
+
+Note that since there is a bug in VoiceCode that prevents it from working properly when
+<A
+HREF="#noDictation">NatSpeak is already running</A>, you must:
+
+<UL>
+<LI>open NatSpeak
+<LI>make sure to select the test user and/or vocabulary
+<LI>close NatSpeak
+</UL> 
+
+
+<H2><A NAME="simulation">Simulation mode</A></H2>
+
+This prototype version of VoiceCode cannot be used in an actual
+operational setting. You can however test some of the functionality of
+the system by running it in simulation mode. This simulation mode
+allows you to dictate code and commands, and see the result of those
+operations.
+
+<P>
+
+To run VoiceCode in simulation mode, just type:
+
+
+<PRE>
+cd %VCODE_HOME%\Mediator
+python mediator.py -s
+</PRE>
+
+VoiceCode will then prompt your for commands and execute them. After
+executing each command, the content of the simulator's current buffer
+will be output to the screen. The tag <EM>&lt;CURSOR&gt;</EM> is used to
+denote the position of the cursor.
+
+<P>
+
+Note that because of <A HREF="#noDictation">a bug in the current version</A>, you must make sure
+that NatSpeak is not already running when you start the mediator. Make sure you choose the test user and/or vocabulary before exiting NatSpeak, <A HREF="#warning">to avoid thrashing your real vocabulary</A>.
+
+<H3><A NAME="shellCommands">Simulation shell commands</A></H3>
+
+
+The following commands are available in the VoiceCode simulation shell:
+
+<PRE>
+open_file(STR fname)
+   Opens file with path name *fname* in the editor
+   simulator. It also compiles a list of symbols for that file.
+
+compile_symbols([STR] file_list)
+   Compiles symbols for all source files in list *file_list*.
+
+clear_symbols()
+   Removes all spoken forms of symbols added by VoiceCode to NatSpeak's 
+   vocabulary. Spoken forms which consist of a single word are however left
+   there.
+
+say(STR utterance)
+   Interprets string *utterance* as though it had been said by a user.
+
+   When called in this way, the system will simulate a recognition
+   event using NatLink's <EM>recognitionMimic</EM> function.
+
+   Note that this command will not work with Select XYZ
+   utterances. For those, you must use the say_select command
+   described below.
+
+say(STR utterance, bypass_NatLink=1)
+   Same as above, except that the interpretation process will bypass
+   NatLink's <EM>recognitionMimic</EM> function.
+
+say_select([STR] utterrance)
+   Simulates a Select XYZ utterance.
+
+   Elements of list *utterance* are the individual NatSpeak vocabulary
+   entries that make the utterance. For vocabulary entries of the form
+   written\spoken form, you must specify both the written and spoken
+   form of the entry.
+
+   e.g. say_select(['Select', '!=\\not equal to'])
+
+goto(INT pos)
+   Moves cursor to position *pos*
+
+goto_line(INT linenum)
+   Moves cursor to the beginning of line number *linenum*
+
+select(INT start, end)
+   Selects from position *start* to position *end* in current buffer
+
+show_buff()
+   Prints the content of the current buffer
+
+listen()
+   Throws the mediator into a dictation loop. It will listen for
+   dictation utterances and interpret and execute any part of the
+   utterance that corresponds to a Context Sensitive Command.
+
+   Once in 'listen' mode, you cannot type console commands until you
+   have clicked the 'OK' button on the 'Natlink/ Python Subsystem'
+   window.
+
+unresolved_abbreviations()
+   Prints out a list of the unresolved abbreviations in symbols that were
+   parsed so far. An unresolved abbreviation is an abbreviation that appeared
+   in a symbol and is neither a speech vocabulary word nor a known
+   abbreviation.
+
+   The unresolved abbreviations are printed in increasing order of length, 
+   to make it easier to spot the ones that are actually abbreviations (they
+   will tend to be short and appear at the beginning).
+
+quit()
+   Quit the simulator.
+
+   Note that if you don't quit using this command
+   (e.g. *Ctrl-C*), your DOS window will hang up.   
+</PRE>
+
+
+For example, if you do the following:
+
+<UL>
+<LI>python mediator.py -s
+<LI>open_file('C:/blah.c')
+<LI>listen()
+<LI>say: <EM>"for loop index after semi index after equal function with arguments xray comma yankee at index 0 after semi index loop body"</EM>
+</UL>
+
+then you should end up with the following code:
+
+<PRE>
+1:   for (index=0; index &lt;= function(x, y[0]); index++)
+2:   {
+3: &lt;CURSOR&gt;
+4:   }
+</PRE>
+
+<H3><A NAME="VCODE_NOSPEECH">Running the simulation shell without NatSpeak</A></H3>
+
+You can run VoiceCode in simulation mode, even if you don't have
+NatSpeak installed.
+
+<P>
+
+Simply set environment variable <EM>VCODE_NOSPEECH</EM> before
+invoking <EM>mediator.py</EM> (the actual value you set it to is
+irrelevant).
+
+<P>
+
+You can then simulate utterances using the <A
+HREF="#shellCommands">say</A> shell command.
+
+
+<H3><A NAME="CSCs">Context Sensitive Commands (CSCs)</A></H3>
+
+At the center of VoiceCode is a concept called <EM>Context Sensitive
+Command (CSC)</EM>. A CSC is an utterance which may fire particular
+actions in particular contexts. A CSC has the following attributes:
+
+<DL>
+
+<DT><EM>Spoken forms:</EM>
+
+<DD>This is a list of all the different ways in which the CSC might be
+pronouced.
+
+<P>
+
+<DT><EM>Contextual meanings:</EM>
+
+<DD>This is a list of the different meanings that the CSC can take in
+different contexts. Each contextual meaning is a pair consisting of a
+<EM>context</EM> and an <EM>action</EM> to be taken if that context
+applies.
+
+</DL>
+
+For example, suppose you want to create a CSC to dictate hash table access in Perl and Python, so that saying:
+
+<P>
+
+<EM>"x at key y"</EM> or<BR>
+<EM>"x with key y"</EM>
+
+
+<P>
+
+types:
+
+<P>
+
+<PRE>x{y}</PRE> in Perl<BR>
+<PRE>x[y]</PRE> in Python
+
+<P>
+
+All you have to do is to define a CSC with <EM>spoken form</EM> "at
+key" (and possibly other forms like "with key") and two <EM>contextual
+meanings</EM>. The first meaning would consist of a context object
+that applies iif the current buffer is in Perl, and its action would
+be to type "{}" and put the cursor in the middle. Similarly, the
+second meaning would have a context object that applies iif the
+current buffer is in Python, and its action would be to type "[]" and
+put the cursor in the middle.
+
+<P>
+
+CSCs can also be used for implementing more complex behavior. For example, suppose you want to be able to change the following C for loop:
+
+<P>
+
+<PRE>
+for (x = 0; x <= max; x++)
+</PRE>
+
+<P>
+
+to:
+
+<P>
+
+<PRE>
+for (x = 0; x >= max; x--)
+</PRE>
+
+
+by positioning the cursor on that line and saying:
+
+<P>
+
+<EM>"decreasing"</EM> or
+<EM>"make that decreasing"</EM> or
+<EM>"make it decreasing"</EM>
+
+<P>
+
+All you have to do is to implement a CSC with <EM>["decreasing", "make
+that decreasing", "make it decreasing"]</EM> as its spoken form. The
+command would have a contextual meaning with a context that applies
+iif the cursor is on the first line of a for loop in a C file. The
+action would be to change appropriate parts of the loop so that it is
+decreasing instead of increasing.
+
+<P>
+
+Note that for commands that only type text and position the cursor at
+the end of that text, it is usually more convenient to define them as
+<A HREF="#aliases">Language Specific Aliases (LSAs)</A> instead of
+CSCs.
+
+
+<P>
+
+VoiceCode comes bundled with a series of CSCs for doing common tasks
+in various languages. If you do not like the way a particular CSC is
+implemented (for example, if you don't like the way it is said) or if
+you want to add your own CSC, you can do that by <A
+HREF="#config">modifying the VoiceCode configuration file</A>.
+
+<P>
+
+Note that for commands that only type text and position the cursor at
+the end of that text, it is usually more convenient to define them as
+<A HREF="#aliases">Language Specific Aliases (LSAs)</A> instead of
+CSCs.
+
+
+<H3><A NAME="aliases">Language Specific Aliases (LSAs)</A></H3>
+
+<A HREF="#CSCs">Context Sensitive Commands</A> are meant to provide the user with enough flexibility to define very sophisticated commands and are consequently relatively complex. In most cases however, you can define a command using a simpler concept called Language Specific Alias (LSA). You can define a command as an LSA if:
+
+<UL>
+<LI>the command only inserts text at the current cursor location and puts the cursor at the end of that text
+<LI>the inserted text only depends on the programming language of the current buffer
+</UL>
+
+Besides being <A HREF="#config">simpler to define</A> than CSCs, LSAs
+also have the advantage that they can be used for <A
+HREF="#select">selecting code by voice</A>.
+
+<P>
+
+Like for CSCs, VoiceCode comes bundled with a series of LSAs for doing
+common tasks in various languages. If you do not like the way a
+particular CSC is implemented (for example, if you don't like the way
+it is said) or if you want to add your own LSA, you can do that by <A
+HREF="#config">modifying the VoiceCode configuration file</A>.
+
+
+<H3><A NAME="symbols">Dictating symbols</A></H3>
+
+VoiceCode also allows you to dictate symbols by saying their "natural"
+spoken form. For example, to dictate a symbol:
+
+<P>
+
+<PRE>
+a_pref_table
+</PRE>
+
+you might say:
+
+<P>
+
+<EM>a preference table</EM>
+
+<P>
+
+and VoiceCode would type the desired symbol. This of course assumes
+that you have compiled a source file where symbol
+<EM>a_pref_table</EM> was defined (using shell command <A
+HREF="#shellCommands">compile_symbols</A>), and that you have defined
+<EM>'preference'</EM> as the <A HREF="#abbreviations">expansion for
+abbreviation</A> 'pref'.
+
+
+<H2><A NAME="select">Selecting code</A></H2>
+
+
+VoiceCode supports a type of command which we call: <EM>Select
+pseudo-code</EM> grammar. This allows you to select a portion of
+visible code by saying <EM>"Select"</EM> followed by a pseudo code
+dictation of the code you want to select. You must not pause between
+<EM>"Select"</EM> and the pseudo-code. This command will select the
+closest occurence of the native code corresponding to the dictated
+pseudo-code you dictated.
+
+For example, do:
+
+<PRE>
+open_file('C:/Temp/blah.c')
+compile_symbols(['D:/VoiceCode/VCode/Data/TestData/small_buff.c'])
+listen()
+</PRE>
+
+(note that the exact path of file <EM>small_buff.c</EM> may differ) and say:
+
+<P>
+
+<EM>"for loop horizontal position after semi horizontal position after equal"</EM>
+
+<P>
+
+to get code:
+
+<PRE>
+for (horiz_pos = 0; horiz_pos <= <CURSOR>; ++)
+{
+
+}
+</PRE>
+
+
+Then say:
+
+<EM>"select horizontal position equals zero"</EM>
+
+<P>
+
+to get:
+
+<P>
+
+<PRE>
+for(<SEL_START>horiz_pos = 0<SEL_END>; horiz_pos <= ; ++)
+{
+
+}
+</PRE>
+
+As the example shows, <EM>Select pseudo-code</EM> works even if the
+pseudo-code you dictate contains pseudo-symbols (e.g. <EM>"horizontal
+position"</EM> for <EM>horiz_pos</EM>) and <A HREF="#aliases">LSAs</A>
+(e.g. <EM>"equals"</EM> for <EM>' = '</EM>). However, it may not
+always work if if the code to be selected spreads across more than one
+line. For example, if you have the following code:
+
+<PRE>
+x =
+0
+</PRE>
+
+and say: <EM>"Select x equals zero"</EM>, the selection will not
+work. To select code that spreads across several lines, you must use
+the <EM>"Select from X up to Y"</EM> command. In the above example,
+this would be: <EM>"Select from x equals up to 0"</EM>
+
+<P>
+
+Also, the selection does not work if the
+pseudo-code contains some <A HREF="#CSCs">CSCs</A>. For example, if
+you have code:
+
+<PRE>
+x[0] = 1
+</PRE>
+
+then saying <EM>"Select x at index 0"</EM> will not work. This is because <EM>"at index"</EM> is not an LSA since it types <EM>[]</EM> but doesn't put the cursor at the end of it.
+
+<H2><A NAME="config">Configuring VoiceCode</A></H2>
+
+
+<H3><A NAME="configFile">The VoiceCode configuration file</A></H3>
+
+To change the behaviour of VoiceCode, simply edit the VoiceCode
+configuration file. This is a file written in Python, but you don't need to know the details of the Python syntax nor of VoiceCode to edit it.
+
+<P>
+
+The VoiceCode configuration file has the following path:
+
+<P>
+
+<PRE>
+%VCODE_HOME%\Config\vc_config.py
+</PRE>
+
+<H3><A NAME="debugConfig">Debugging the configuration file</A></H3>
+
+The file <EM>vc_config.py</EM> is evaluated at run time by VoiceCode. If there are syntax errors in that file, the error reporting will therefore not be as precise as usual. You will probably get a message like:
+
+<PRE>
+ERROR: in configuration file D:\VoiceCode\VCode\Config\vc_config.py.
+
+Traceback (innermost last):
+  File "mediator.py", line 89, in ?
+    raise err
+</PRE>
+
+with no indication of the line in <EM>vc_config.py</EM> where the
+error occurred. You can however get better error reporting by running
+<EM>vc_config.py </EM>directly from python as follows:
+
+<PRE>
+python %VCODE_HOME%\Config\vc_config.py
+</PRE>
+
+
+<H3><A NAME="customeCSCs">Customising CSCs</A></H3>
+
+
+To modify the implementation of a <A HREF="#CSCs">Context Sensitive
+Command (CSC)</A>, you must locate the statements that define that CSC
+in the <A HREF="#configFile">VoiceCode configuration file</A>. The
+statements that define CSCs look something like this:
+
+
+<PRE>
+acmd = CSCmd(spoken_forms=['at index'], 
+             meanings=[[ContC(), gen_brackets_pair], 
+                       [ContPy(), gen_brackets_pair]])
+add_csc(acmd)
+</PRE>
+
+
+Basically, these two statements create a new instance of <A
+HREF="CSCmd.CSCmd.html">CSCmd</A> which defines a CSC, and then
+register that instance with VoiceCode through the <EM>add_csc</EM>
+function.
+
+<P>
+
+The <EM>CSCmd</EM> constructor has the following named arguments:
+
+<DL>
+<DT><STRONG>[STR] spoken_forms</STRONG> 
+<DD>the <EM>spoken_form</EM> argument
+is a list defining the various ways that the command can be invoked by
+voice. If you prefer to use a different voice command, just add your
+own to that list. 
+
+<P>
+
+<DT><STRONG>[[Context, FCT]] meanings</STRONG>  
+<DD>the <EM>meanings</EM> argument is a list of contextual meanings for the command. Each contextual meaning is a pair consisting of a context object (which is used to determine if a particular context applies) and an action function to be fired if the context applies.
+
+</DL>
+
+In the above example, the command has only one spoken form <EM>'at
+index'</EM>. The command can be used in one of two contexts,
+<EM>ContC</EM> and <EM>ContPy</EM> (which respectively apply iif the
+current source buffer is in <EM>C</EM> or <EM>Python</EM>). In both
+contexts, the action function is <EM>gen_brackets_pair</EM> which
+simply inserts a pair of square brackets and positions the cursor in
+between.
+
+<P>
+
+The various <A HREF="Context.Context.html">Context</A> object and the
+various <EM>action</EM> functions that can be used to build <A
+HREF="CSCmd.CSCmd.html">CSCmd</A> objects are defined in the following
+files:
+
+<P>
+
+<UL>
+<LI><STRONG>$VCODE_HOME/Mediator/cont_gen.py: </STRONG> defines context objects which are not specific to a particular programming language
+<LI><STRONG>$VCODE_HOME/Mediator/actions_gen.py:</STRONG> defines action functions which are relevant across different programming languages.
+<LI><STRONG>$VCODE_HOME/Mediator/actions_C_Cpp.py:</STRONG> defines action functions relevant only for the <EM>C</EM> and <EM>C++</EM> languages.
+<LI><STRONG>$VCODE_HOME/Mediator/actions_py.py:</STRONG> defines action functions relevant only for the <EM>Python</EM> language.
+</UL>
+
+Of course, you are not limited to those contexts and actions. You can add your own and then use them to build <A HREF="CSCmd.CSCmd.html">CSCmd</A> objects in <EM>vc_config.py</EM>.
+
+
+<H3><A NAME="customLSAs">Customising LSAs</A></H3>
+
+To modify the implementation of a <A HREF="#aliases">Language Sensitive Alias (LSA)</A>, you must locate the statements that define that LSA
+in the <A HREF="#configFile">VoiceCode configuration file</A>. The
+statements that define LSAs look something like this:
+
+<PRE>
+add_lsa(['C', 'python'], 
+        ['not equal to', 'not equal', 'is not equal', 'is not equal to'], 
+        ' != ')
+</PRE>
+
+The first argument of <EM>add_lsa</EM> is the list of languages for
+which the LSA applies. The LSA will be active iif the current buffer
+is written in one of those languages.
+
+<P>
+
+The second argument of <EM>add_lsa</EM> is the list of spoken forms
+for the LSA. The LSA will be invoked when any of those spoken forms is
+uttered in a file of an appropriate language.
+
+<P>
+
+Finally, the third argument of <EM>add_lsa</EM> is the written form of
+the LSA. This text gets inserted at the current cursor location when
+the LSA is invoked. The cursor is then put at the end of the inserted
+text.
+
+
+<H3><A NAME="abbreviations">Adding/modifying abbreviations</A></H3>
+
+When compiling symbols from source files (<A
+HREF="#shellCommands">compile_symbols</A> command), VoiceCode
+automatically generates a spoken form for each symbol. The spoken form
+is a phrase obtained by splitting the symbol into a sequence of parts that are
+either in-vocabulary words or known abbreviation. For parts that
+correspond to a known abbreviation, VoiceCode will substitute the
+abbreviation's expansion. Abbreviations and their expansions are
+defined in the <A HREF="#configFile">VoiceCode configuration file</A>.
+
+<P>
+
+For example, suppose that the following statements are included in the
+configuration file:
+
+<PRE>
+add_abbreviation('horiz', ['horizontal', 'horizontally'])
+add_abbreviation('pos', ['position', 'positive'])
+</PRE>
+
+Then VoiceCode would create the following spoken forms for symbol <EM>
+horiz_pos</EM>:
+
+<EM>
+<UL>
+<LI>horizontal position
+<LI>horizontal positive
+<LI>horizontally position
+<LI>horizontally positive
+</UL>
+</EM>
+
+Obviously, <EM>horizontal position</EM> is probably the only one that makes sense for that symbol, but VoiceCode can't tell and will generate all of them.
+
+<P>
+
+Note that you don't need to define plural forms of abbreviations
+because VoiceCode automatically pluralises abbreviations when needed. For example suppose you define:
+
+<P>
+
+<PRE>
+add_abbreviation('cmd', ['command'])
+</PRE>
+
+then for symbol <EM>all_cmds</EM>, VoiceCode would still be able to
+generate spoken form <EM>'all commands'</EM>.
+
+<H2><A NAME="trouble">Trouble shooting</A></H2>
+
+<H3><A NAME="noDictation">Dictation fails</A></H3>
+
+There is a bug in the current version that prevents it from working when NatSpeak is already running.
+
+<P>
+
+The exact symptoms of this problem is that if you issue a
+<EM>listen()</EM> command and then talk, you will hear a beep and
+control will be returned to the console.
+
+
+
+<hr>
+<center>
+<TABLE  border="1" >
+    <tr><td><font size=2>
+    [<A HREF="http://ii2.ai.iit.nrc.ca/VoiceCode/">VoiceCode Home</A> |
+    <A HREF="http://ii2.ai.iit.nrc.ca/VoiceCode/contact.html">Contact</A> |
+    <A HREF="http://ii2.ai.iit.nrc.ca/VoiceCode/pbvResources.html">PBV Resources</A> |
+    <A HREF="http://www.iit.nrc.ca/english.html">IIT</A> |
+    <A HREF="http://www.nrc.ca/corporate/english/">NRC</A> |
+    <A HREF="mailto:alain.desilets@nrc.ca">Feedback</A> ]
+    </FONT></td>
+   </tr>
+</table>
+</center>
+
+
+</BODY>
+</HTML>
