@@ -87,6 +87,19 @@ class EdSim(AppState.AppState):
 
         self.open_buffers[name] = self.only_buffer
 
+    def multiple_buffers(self):
+      	"""does editor support multiple open buffers?
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if editor supports having multiple buffers open 
+	at the same time"""
+	return 0
+
     def bidirectional_selection(self):
       	"""does editor support selections with cursor at left?
 

@@ -24,6 +24,7 @@
 import os, sys
 import mediator, CmdInterp, EdSim, MediatorObject, Object, SymDict, test_pseudo_python
 import util
+import RecogStartMgr, GramMgr, sr_grammars
 
 
 small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'
@@ -1390,3 +1391,140 @@ def test_misc_bugs():
 auto_test.add_test('misc_bugs', test_misc_bugs, 'Testing a series of miscellaneous bugs that might reoccur.')
 
 
+##############################################################################
+# Testing RecogStartMgr dictionaries
+##############################################################################
+
+def manager_state(manager):
+    print ''
+    print 'state {'
+    apps = manager.app_names()
+    for app in apps:
+	print 'application: ', app
+	instances =  manager.app_instances(app)
+	for instance in instances:
+	    print 'instance: ', instance
+	    a_name = manager.instance_apps[instance]
+	    if a_name != app:
+		print 'Warning: app names %s and %s do not match' \
+		    % (app, a_name)
+	    windows = manager.known_windows(instance)
+	    for window in windows:
+		print 'window %d' % (window)
+		i_name = manager.windows[window]
+		if i_name != instance:
+		    print 'Warning: instance names %s and %s do not match' \
+		        % (instance, i_name)
+    print 'known windows', manager.known_windows()
+    print '} state'
+    print ''
+
+def new_instance(manager, app_name, app, window = None):
+    print 'new instance of %s %d' % (app_name, app)
+    if window != None:
+	 print 'with window %d' % (window)
+    i_name = manager.new_instance(app_name, app, window)
+    a_name = manager.instance_apps[i_name]
+    if a_name != app_name:
+	print 'Warning: app names %s and %s do not match' \
+	    % (app_name, a_name)
+    a = manager.instances[i_name]
+    if a != app:
+	print 'Warning: AppStates %d and %d do not match' \
+	    % (app, a)
+    return i_name
+
+def test_rsm_dictionaries():
+    manager = RecogStartMgr.RecogStartMgr()
+
+    Emacs = 1
+    another_Emacs = 2
+    yet_another_Emacs = 4
+    Vim = 3
+    new_instance
+    i = new_instance(manager, 'Emacs', Emacs)
+    manager_state(manager)
+    print 'new window 14'
+    manager.new_window(i, 14)
+    print 'new window 20'
+    manager.new_window(i, 20)
+    manager_state(manager)
+
+    j = new_instance(manager, 'Emacs', another_Emacs, 10)
+    manager_state(manager)
+
+    k = new_instance(manager, 'Vim for Windows', Vim)
+    print 'delete window 20'
+    manager.delete_window(20)
+    manager_state(manager)
+
+    print 'delete instance ' + j
+    manager.delete_instance(j)
+    l = new_instance(manager, 'Emacs', yet_another_Emacs, 7)
+    manager_state(manager)
+    print 'delete instance ' + i
+    manager.delete_instance(i)
+    manager_state(manager)
+    print 'delete instance ' + k
+    manager.delete_instance(k)
+    print 'delete instance ' + l
+    manager.delete_instance(l)
+    manager_state(manager)
+
+
+auto_test.add_test('rsm_dictionaries', test_rsm_dictionaries, 
+    'Testing RecogStartMgr dictionary management.')
+
+##############################################################################
+# Testing WinGramMgr with dummy grammars
+##############################################################################
+
+def activate_for(manager, buffer, window):
+    print 'activating buffer %s for window %d' % (buffer, window)
+    manager.activate(buffer, window)
+
+def new_buffer(manager, buffer, window = None):
+    print 'new buffer %s' % (buffer)
+    if window != None:
+	 print 'with window %d' % (window)
+    manager.new_buffer(buffer, window)
+
+def new_window(manager, window):
+    print 'new window %d' % (window) 
+    manager.new_window(window)
+
+def delete_window(manager, window):
+    print 'delete window %d' % (window) 
+    manager.delete_window(window)
+
+def buffer_closed(manager, buffer):
+    print 'close buffer %s' % (buffer) 
+    manager.buffer_closed(buffer)
+
+def test_gram_manager():
+    factory = sr_grammars.WinGramFactoryDummy()
+    app = EdSim.EdSim()
+    manager = GramMgr.WinGramMgr(factory, app = app)
+    w = 5
+    w2 = 7
+    new_buffer(manager, 'fish.C', w)
+    new_buffer(manager, 'fowl.py', w)
+    activate_for(manager, 'fish.C', w)
+    new_window(manager, w2)
+    new_buffer(manager, 'dog.pl', w2)
+    activate_for(manager, 'dog.pl', w2)
+    activate_for(manager, 'fish.h', w2)
+    activate_for(manager, 'fowl.py', w)
+    buffer_closed(manager, 'fowl.py')
+    print 'deactivate all for window %d' % (w)
+    manager.deactivate_all(w)
+    delete_window(manager, w2)
+    buffer_closed(manager,  'dog.pl')
+    activate_for(manager,'fish.C', w)
+    print 'deactivate all'
+    manager.deactivate_all()
+
+# this test requires a dummy editor with support for multiple buffers,
+# so I have commented it out until one is available - DCF
+# auto_test.add_test('dummy_grammars', test_gram_manager, 
+#    'Testing WinGramMgr grammar management with dummy grammars.')

@@ -191,6 +191,19 @@ class AppState(Object):
             return 1
 	return 0
 
+    def multiple_buffers(self):
+      	"""does editor support multiple open buffers?
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+	
+	*BOOL* -- true if editor supports having multiple buffers open 
+	at the same time"""
+	debug.virtual('AppState.multiple_buffers')
+
     def bidirectional_selection(self):
       	"""does editor support selections with cursor at left?
 

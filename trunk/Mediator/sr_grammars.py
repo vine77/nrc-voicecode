@@ -203,7 +203,7 @@ class DictWinGram(WinGram):
 	debug.virtual('DictWinGram.set_context')
 
 
-class SelectWinGram(Object):
+class SelectWinGram(WinGram):
     """abstract base class for dictation grammar interfaces
 
     **INSTANCE ATTRIBUTES**
@@ -322,7 +322,7 @@ class WinGramFactory(Object):
 	"""
 	debug.virtual('WinGramFactory.make_dictation')
     
-    def make_selection(self, app, buff_name = None):
+    def make_selection(self, app, window = None, buff_name = None):
 	"""create a new selection grammar
 
 	**INPUTS**
@@ -340,4 +340,300 @@ class WinGramFactory(Object):
 	*SelectWinGram* -- new selection grammar
 	"""
 	debug.virtual('WinGramFactory.make_selection')
+    
+class DictWinGramDummy(DictWinGram):
+    """dummy implementation of window-specific dictation grammar 
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **attrs):
+	self.deep_construct(DictWinGramDummy,
+	    {}, attrs)
+	self.identify_grammar()
+	print "init"
+
+    def __del__(self):
+	self.identify_grammar()
+	print "del"
+
+    def identify_grammar(self):
+        """print information identifying the grammar by buffer and
+	window
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	print "DictWinGramDummy for window %d" % (self.window)
+
+    def set_context(self, before = "", after = ""):
+	"""set the context to improve dictation accuracy
+
+	**INPUTS**
+
+	*STR* before -- one or more words said immediately before the
+	next utterance, or found in the text immediately before the
+	utterance
+
+	*STR* after -- one or more words found in the text
+	immediately after the utterance def activate(self, window =
+	None, exclusive = 0)
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.identify_grammar()
+	print "setting context: before = [%s], after = [%s]" % (before,
+	    after)
+
+    def activate(self, window = None, exclusive = 0, all_results = 0):
+	"""activates the grammar for recognition
+	tied to the current window.
+
+	**INPUTS**
+
+	*INT* window -- make grammar window-specific.  Specify None 
+	to make the grammar global
+
+	*BOOL* exclusive -- make grammar exclusive?  (prevents other
+	non-exclusive grammars from getting results.  Use with caution)
+
+	*BOOL* all_results -- make grammar intercept all results, even for
+	other grammars
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.window = window
+	self.exclusive = exclusive
+	self.all_results = all_results
+	self.identify_grammar()
+	print "activating: ",
+	if window == None:
+	    print "global ",
+	else:
+	    print "%d " % (window),
+	if exclusive:
+	    print "exclusive "
+	if all_results:
+	    print "all_results"
+	print ""
+	self.active = 1
+    
+    def deactivate(self):
+	"""disable recognition from this grammar
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.identify_grammar()
+	self.active = 0
+	print "deactivating"
+
+    def reactivate(self):
+	"""reactivate recognition using the same buffer name and
+	same window (or globally).
+
+	**INPUTS**
+
+	*none*
+    
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.identify_grammar()
+	self.active = 1
+	print "reactivating"
+
+class SelectWinGramDummy(SelectWinGram):
+    """dummy implementation of window-specific selection grammar 
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **attrs):
+	"""
+	**INPUTS**
+
+	*none*
+	"""
+	self.deep_construct(SelectWinGramDummy,
+	    {}, attrs)
+	self.identify_grammar()
+	print "init"
+
+    def __del__(self):
+	self.identify_grammar()
+	print "del"
+
+    def identify_grammar(self):
+        """print information identifying the grammar by buffer and
+	window
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	print "SelectWinGramDummy for buffer %s, window %d" % \
+	    (self.buff_name, self.window)
+
+    def activate(self, buff_name, window = None, exclusive = 0, 
+	all_results = 0):
+	"""activates the grammar for recognition tied to the current window,
+	and checks with buffer for the currently visible range.
+
+	**INPUTS**
+
+	*STR* buff_name -- name of currently active buffer
+
+	*INT* window -- make grammar window-specific.  Specify None 
+	to make the grammar global
+
+	*BOOL* exclusive -- make grammar exclusive?  (prevents other
+	non-exclusive grammars from getting results.  Use with caution)
+
+	*BOOL* all_results -- make grammar intercept all results, even for
+	other grammars
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.buff_name = buff_name
+	self.window = window
+	self.exclusive = exclusive
+	self.all_results = all_results
+	self.identify_grammar()
+	self.active = 1
+	print "activating: ",
+	if window == None:
+	    print "global ",
+	else:
+	    print "%d " % (window),
+	if exclusive:
+	    print "exclusive "
+	if all_results:
+	    print "all_results"
+	print ""
+    
+    def reactivate(self):
+	"""reactivate recognition using the same buffer name and
+	same window (or globally).
+
+	**INPUTS**
+
+	*none*
+    
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.identify_grammar()
+	self.active = 1
+	print "reactivating"
+
+    def deactivate(self):
+	"""disable recognition from this grammar
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.identify_grammar()
+	self.active = 0
+	print "deactivating"
+
+class WinGramFactoryDummy(Object):
+    """implementation fo WinGramFactory with dummy grammars for
+    regression testing.
+
+    **INSTANCE ATTRIBUTES**
+
+    *none*
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **attrs):
+	"""no arguments: abstract base class
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*none*
+	"""
+	self.deep_construct(WinGramFactoryDummy,
+	    {}, attrs)
+
+    def make_dictation(self, app, buff_name, window = None):
+	"""create a new dictation grammar
+
+	**INPUTS**
+
+	*AppState* app -- application to which to forward results
+
+	*STR* buff_name -- name of the buffer corresponding to this
+	grammar.  Buff_name will be passed to
+	CmdInterp.interpret_NL_cmd as the initial buffer.
+
+	*INT* window -- make grammar specific to a particular window
+
+	**OUTPUTS**
+
+	*DictWinGram* -- new dictation grammar
+	"""
+	return DictWinGramDummy(window = window)
+    
+    def make_selection(self, app, window = None, buff_name = None):
+	"""create a new selection grammar
+
+	**INPUTS**
+
+	*AppState* app -- application corresponding to the selection
+	grammar, which is queried with buff_name for the currently
+	visible range, and is notified of selection changes
+
+	*STR* buff_name -- name of the buffer corresponding to this
+	grammar.  Can also be set later in the activate call to the
+	grammar.
+
+	**OUTPUTS**
+
+	*SelectWinGram* -- new selection grammar
+	"""
+	return SelectWinGramDummy(window = window, buff_name = buff_name)
     
