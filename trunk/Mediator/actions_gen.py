@@ -331,7 +331,7 @@ class ActionSelect(Action):
     *INT cursor_at=1* -- If positive, put cursor at end of
      selection. Otherwise, put it at beginning.
 
-    *STR f_name=None* -- Name of file where to set selection. If
+    *STR buff_name=None* -- Name of file where to set selection. If
      *None*, selectin current buffer.
     
      **CLASS ATTRIBUTES**
@@ -339,10 +339,10 @@ class ActionSelect(Action):
     *none* -- 
     """
     
-    def __init__(self, range, cursor_at=1, f_name=None, **args_super):
+    def __init__(self, range, cursor_at=1, buff_name=None, **args_super):
         self.deep_construct(ActionSelect,
                             {'range': range, 'cursor_at': cursor_at,
-                             'f_name': f_name},
+                             'buff_name': buff_name},
                             args_super,
                             {})
 
@@ -354,7 +354,7 @@ class ActionSelect(Action):
         .. [Action.execute] file:///./actions_gen.Action.html#execute
         .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
         
-        app.set_selection(range=self.range, cursor_at=self.cursor_at, f_name=self.f_name)
+        app.set_selection(range=self.range, cursor_at=self.cursor_at, buff_name=self.buff_name)
 
         
 class ActionInsert(Action):

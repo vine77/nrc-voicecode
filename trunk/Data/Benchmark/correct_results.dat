@@ -1935,7 +1935,6 @@ DictWinGramDummy for buffer = 'fowl.py', global
 deactivating
 SelectWinGramDummy for buffer 'fish.C', global
 activating:  global  exclusive 
-all_results
 
 DictWinGramDummy for buffer = 'fish.C', global
 setting context: before = [ x, y)
@@ -1944,7 +1943,6 @@ setting context: before = [ x, y)
   ]
 DictWinGramDummy for buffer = 'fish.C', global
 activating:  global  exclusive 
-all_results
 
 new window 7
 SelectWinGramDummy for buffer None, global
@@ -1977,7 +1975,6 @@ DictWinGramDummy for buffer = 'fowl.py', global
 deactivating
 SelectWinGramDummy for buffer 'dog.pl', global
 activating:  global  exclusive 
-all_results
 
 SelectWinGramDummy for buffer 'fish.C', global
 deactivating
@@ -1987,7 +1984,6 @@ setting context: before = [
     $curDirCom ]
 DictWinGramDummy for buffer = 'dog.pl', global
 activating:  global  exclusive 
-all_results
 
 activating buffer fish.h for window 7
 *** Start of source buffer ***
@@ -2003,7 +1999,6 @@ DictWinGramDummy for buffer = 'fowl.py', global
 deactivating
 SelectWinGramDummy for buffer 'fish.h', global
 activating:  global  exclusive 
-all_results
 
 SelectWinGramDummy for buffer 'fish.C', global
 deactivating
@@ -2011,7 +2006,6 @@ DictWinGramDummy for buffer = 'fish.h', global
 setting context: before = [ x, y);], after = []
 DictWinGramDummy for buffer = 'fish.h', global
 activating:  global  exclusive 
-all_results
 
 activating buffer fowl.py for window 5
 *** Start of source buffer ***
@@ -2030,7 +2024,6 @@ DictWinGramDummy for buffer = 'fish.h', global
 deactivating
 SelectWinGramDummy for buffer 'fowl.py', global
 activating:  global  exclusive 
-all_results
 
 SelectWinGramDummy for buffer 'fish.h', global
 deactivating
@@ -2041,7 +2034,6 @@ setting context: before = [ something(value):
 if ]
 DictWinGramDummy for buffer = 'fowl.py', global
 activating:  global  exclusive 
-all_results
 
 SourceBuff.remove_other_references: fowl.py
 SourceBuff.__del__: fowl.py
@@ -2080,7 +2072,6 @@ activating buffer fish.C for window 5
   7:   horiz_pos = 0;
 SelectWinGramDummy for buffer 'fish.C', global
 activating:  global  exclusive 
-all_results
 
 DictWinGramDummy for buffer = 'fish.C', global
 setting context: before = [ x, y)
@@ -2089,7 +2080,6 @@ setting context: before = [ x, y)
   ]
 DictWinGramDummy for buffer = 'fish.C', global
 activating:  global  exclusive 
-all_results
 
 deactivate all
 SelectWinGramDummy for buffer 'fish.C', global
@@ -2410,7 +2400,7 @@ natlink.UnknownName exception was sucessfully raised.
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at a91540> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at a688f0> from file 'H:\Projects\VoiceCode\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'H:\\Projects\\VoiceCode\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -8133,5 +8123,5 @@ Associate 'index' with symbol (Enter selection):
 
 
 -----------------------------------------------
-Test suite completed in:  946.699999928 secs
+Test suite completed in:  984.639999986 secs
 -----------------------------------------------

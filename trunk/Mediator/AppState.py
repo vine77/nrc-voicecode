@@ -50,11 +50,11 @@ class ForwardToBuffer:
 	self.application = application
 	self.method = method
     def __call__(self, *positional, **keys):
-	f_name = None
-	if keys.has_key("f_name"):
-	    f_name = keys["f_name"]
-	    del keys["f_name"]
-	buffer = self.application.find_buff(f_name)
+	buff_name = None
+	if keys.has_key("buff_name"):
+	    buff_name = keys["buff_name"]
+	    del keys["buff_name"]
+	buffer = self.application.find_buff(buff_name)
 	if buffer:
 	    return apply(getattr(buffer, self.method), positional, keys)
 
@@ -481,9 +481,9 @@ class AppState(OwnerObject):
     'make_position_visible', 'line_num_of', 'len', 'make_within_range', 
     'move_relative', 'insert', 'indent', 'insert_indent', 
     'delete', 'goto', 'goto_line', 'move_relative_line',
-    'move_relative_page', 'search_for',
+    'move_relative_page', 'search_for', 'log_search',
     'print_buff_if_necessary', 'refresh', 'incr_indent_level',
-    'decr_indent_level', 'print_buff']
+    'decr_indent_level', 'print_buff', 'closest_occurence_to_cursor']
 
     def __getattr__( self, name):
 	if name in self.buffer_methods:
