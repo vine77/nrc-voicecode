@@ -442,7 +442,6 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         none were corrected
         """
         debug.trace('MediatorConsoleWX.show_recent_symbols', 'symbols=%s' % repr(symbols))
-        print "This will eventually show the recent symbols, but it is not implemented yet."
         box = ReformatRecentSymbols(self, self.main_frame, 
                     symbols, self.gram_factory)
                     
@@ -1777,6 +1776,7 @@ class ReformatRecentSymbols(DlgModelViewWX):
         
     def do_choose(self, nth):
         return self.view().do_choose(nth)
+             
        
     def selected_symbol_index(self):
        """returns index (in the list of displayed symbols) of the currently selected
@@ -1819,8 +1819,8 @@ class ReformatRecentSymbols(DlgModelViewWX):
           self.dlg_reformat_from_recent.reset(symbol)
        else:
           self.dlg_reformat_from_recent = \
-              MockReformatFromRecentWX(console = self.console, parent = self.view(), 
-                                       symbol = symbol)
+              ReformatFromRecentWX(console = self.console, parent = self.view(), 
+                                   symbol = symbol)
        return self.dlg_reformat_from_recent
        
        
@@ -1973,6 +1973,8 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_
         EVT_CHAR(self, self.on_char)
 
         EVT_LIST_ITEM_ACTIVATED(self.recent, self.recent.GetId(), self.on_choose)
+        
+        
         self.SetAutoLayout(true)
         self.SetSizer(main_sizer)
         self.Layout()
@@ -1998,7 +2000,7 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_
         debug.trace('ReformatRecentSymbolsViewWX.__init__', '** EXITED')
         
     def on_ok(self, event):
-        debug.not_implemented('ReformatRecentSymbolsViewWX.on_ok')
+        pass
 
     def on_activate(self, event):
         debug.not_implemented('ReformatRecentSymbolsViewWX.on_activate')
@@ -2017,8 +2019,8 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialog, possible_
 
         - None -
         """
-        dummy = self.model()
-        self.model().reformat_nth(event.nth)
+        debug.trace('ReformatRecentSymbolsViewWX.on_choose', '** event=%s' % event)
+        self.model().reformat_nth(event.GetIndex())
         
     def reformat_symbol(self, symbol):   
        # cloned from correct_nth()     
@@ -2107,8 +2109,24 @@ class ReformatFromRecentWX(DlgModelViewWX):
        
        self.symbol = symbol
        self.view().reset(symbol)
+       
+    def chosen_form(self):
+       """returns the written form of the symbol being displayed by the 
+       view layer"""
+       return self.view().chosen_form()
+       
+    def displayed_list_of_alternate_forms(self):
+       """returns the list of alternate forms for the symbol that are 
+       displayed by the view"""
+       return self.view().displayed_list_of_alternate_forms()
 
-
+    def do_select_nth_form(self, nth):
+       """click on the nth alternate form for the symbol"""
+       self.view().do_select_nth_form(nth)
+       
+    def on_select_alternate_form(self, nth):
+       form = self.symbol.alternate_forms[nth]
+       self.view().set_alternate_form(form)
 
 class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture, 
                               Object.ChildObject):
@@ -2140,11 +2158,6 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
         were spoken).
 
         """
-        debug.trace('ReformatFromRecentViewWX.__init__', 'parent=%s, args=%s' % (parent, args))
-        wxDialog.__init__(self, parent, wxNewId(), "Reformat symbol", wxDefaultPosition,
-            (600, 400),
-            style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
-            
         possible_capture.__init__(self)
         self.deep_construct(ReformatFromRecentViewWX,
                             {
@@ -2155,7 +2168,143 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
                            )
                            
         
+
+        wxDialog.__init__(self, parent, wxNewId(), "Reformat symbol", wxDefaultPosition,
+            (600, 400),
+            style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+        
         self.name_parent('console')
+        
+        self.set_layout(symbol)
+        return
+        
+
+    def set_layout(self, symbol):
+        main_sizer = wxBoxSizer(wxVERTICAL)
+
+        intro = wxStaticText(self, wxNewId(), 
+            "&Choose or type the correct format for this symbol",
+            wxDefaultPosition, wxDefaultSize)
+        set_text_font(intro)
+        main_sizer.Add(intro, 0, wxEXPAND | wxALL)
+
+        # AD: Will have to add a validator for this text field later.
+        self.txt_chosen_form = wxTextCtrl(self, wxNewId(), "", wxDefaultPosition,
+            (550, 20), style = wxTE_NOHIDESEL)
+        set_text_font(self.txt_chosen_form)
+        self.txt_chosen_form.SetValue(symbol.native_symbol())
+        main_sizer.Add(self.txt_chosen_form, 0, wxEXPAND | wxALL)
+
+        
+        formats_pick_list = wxWindowsWithHelpers.wxListCtrlWithHelpers(self, wxNewId(), wxDefaultPosition,
+            wxDefaultSize, 
+            style = wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL)
+        set_text_font(formats_pick_list)
+        
+        formats_pick_list.InsertColumn(0, "#")
+        formats_pick_list.InsertColumn(1, "Written form")
+
+        for ii in range(len(self.symbol.alternate_forms)):
+           formats_pick_list.InsertStringItem(ii, "%d" % (ii+1))
+           formats_pick_list.SetStringItem(ii, 1, self.symbol.alternate_forms[ii])
+
+        formats_pick_list.SetColumnWidth(0, wxLIST_AUTOSIZE_USEHEADER)
+        formats_pick_list.SetColumnWidth(1, wxLIST_AUTOSIZE_USEHEADER)
+
+        formats_pick_list.ScrollList(0, len(self.symbol.alternate_forms))
+        self.formats_pick_list = formats_pick_list
+        main_sizer.Add(formats_pick_list, 1, wxEXPAND | wxALL)
+        okb = wxButton(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
+        cancelb = wxButton(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)
+        EVT_BUTTON(self, okb.GetId(), self.on_ok)
+        b_sizer = wxBoxSizer(wxHORIZONTAL)
+        b_sizer.Add(okb, 0, 0)
+        b_sizer.Add(cancelb, 0, 0)
+        main_sizer.Add(b_sizer, 0, wxEXPAND | wxALL)
+        okb.SetDefault()
+# note: neither of these handlers gets called if a child control 
+# has the focus.
+# I thought they would be called if the focused control didn't have a
+# handler
+        EVT_ACTIVATE(self, self.on_activate)
+        EVT_CHAR(self, self.on_char)
+        
+        EVT_LIST_ITEM_ACTIVATED(self.formats_pick_list, self.formats_pick_list.GetId(), self.on_choose)
+        self.SetAutoLayout(true)
+        self.SetSizer(main_sizer)
+        self.Layout()
+        actual = main_sizer.GetSize()
+        minimum = main_sizer.GetMinSize()
+        list_size = self.formats_pick_list.GetSize()
+        list_client_size = self.formats_pick_list.GetClientSize()
+        h = list_client_size.GetHeight()
+        w = list_client_size.GetWidth()
+        main_sizer.SetItemMinSize(self.formats_pick_list, w, h)
+        main_sizer.SetMinSize(wxSize(0, actual.GetHeight()))
+        q = main_sizer.GetMinSize()
+        main_sizer.Fit(self)
+        main_sizer.SetMinSize(wxSize(q.GetWidth(), 0))
+        resize_last_column(self.formats_pick_list)
+        last = len(self.symbol.alternate_forms)-1
+        self.formats_pick_list.EnsureVisible(last)
+        self.formats_pick_list.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
+        self.formats_pick_list.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
+
+        return
+
+############## REST 
+
+        
+        middle_sizer = wxFlexGridSizer(3, 2, 5, 5)
+# three rows, two columns, 5 pixels between rows and columns
+        number_sizer = wxBoxSizer(wxVERTICAL)
+        ID_CHOICES = wxNewId()
+        ID_NUMBERS = wxNewId()
+        for i in range(1, 10):
+            st = wxStaticText(self, ID_NUMBERS + i, "%d" % i,
+                wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT)
+            set_text_font(st)
+            number_sizer.Add(st, 0, wxALIGN_RIGHT | wxALIGN_BOTTOM)
+        self.choice_list = wxListBox(self, ID_CHOICES, wxDefaultPosition,
+             wxDefaultSize, self.symbol.alternate_forms, wxLB_SINGLE)
+        set_text_font(self.choice_list)
+        EVT_LISTBOX(self.choice_list, ID_CHOICES, self.on_selected)
+        EVT_LISTBOX_DCLICK(self.choice_list, ID_CHOICES, self.on_double)
+        middle_sizer.AddMany([(intro, 0, wxEXPAND),
+                              (0, 0), #spacer
+                              (self.txt_chosen_form, 0, wxEXPAND | wxALIGN_TOP, 3),
+                              (number_sizer, 0, wxEXPAND | wxALIGN_RIGHT),
+                              (self.choice_list, 0, wxEXPAND)])
+        middle_sizer.AddGrowableRow(2)
+        middle_sizer.AddGrowableCol(1)
+        s.Add(middle_sizer, 1, wxEXPAND | wxALL)
+        button_sizer = wxBoxSizer(wxHORIZONTAL)
+        ok_button = wxButton(self, wxID_OK, "OK", wxDefaultPosition, 
+            wxDefaultSize)
+        cancel_button = wxButton(self, wxID_CANCEL, "Cancel", 
+            wxDefaultPosition, wxDefaultSize)
+        button_sizer.Add(ok_button, 0, wxALL)
+        button_sizer.Add(cancel_button, 0, wxALL)
+        ok_button.SetDefault()
+        s.Add(button_sizer, 0, wxEXPAND | wxALL, 10)
+        
+# AD: Activate those later        
+#        EVT_ACTIVATE(self, self.on_activate)
+#        EVT_CHAR(self.txt_chosen_form, self.on_char_text)
+#        EVT_SET_FOCUS(self.txt_chosen_form, self.on_focus_text)
+#        EVT_KILL_FOCUS(self.txt_chosen_form, self.on_kill_focus_text)
+
+        self.Raise()
+        self.txt_chosen_form.SetFocus()
+        self.SetAutoLayout(true)
+        self.SetSizer(s)
+        self.Layout()
+        s.Fit(self)
+        
+#        EVT_MINE(self, wxEVT_DISMISS_MODAL, self.on_dismiss(self))
+
+
+        
 
     def reset(self, symbol):
        """reinitialise the view layer
@@ -2165,9 +2314,47 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_cap
        SymbolResult symbol -- The symbol to reinitialise with."""
        
        pass        
+
+    def chosen_form(self):
+       """returns the written form of the symbol being displayed by the 
+       view layer"""
+       return self.txt_chosen_form.GetValue()
        
+    def on_selected(self):
+       debug.not_implemented('ReformatFromRecentViewWX.on_selected')
+
+    def on_double(self):
+       debug.not_implemented('ReformatFromRecentViewWX.on_double')
+
+    def on_ok(self):
+       debug.not_implemented('ReformatFromRecentViewWX.on_ok')
+       
+    def on_activate(self, event):
+       debug.not_implemented('ReformatFromRecentViewWX.on_activate')
+
+    def on_char(self):
+       debug.not_implemented('ReformatFromRecentViewWX.on_char')
+
+    def on_choose(self, event):
+       debug.not_implemented('ReformatFromRecentViewWX.on_choose')
+
+    def displayed_list_of_alternate_forms(self):
+       return self.formats_pick_list.GetColumnContents(1)
+       
+    def do_select_nth_form(self, nth):
+       self.formats_pick_list.Select(nth)
+       evt = wxWindowsWithHelpers.MockListSelectionEvent(nth)
+       return self.on_select_alternate_form(evt)
+
+    def on_select_alternate_form(self, evt):
+       self.model().on_select_alternate_form(evt.GetIndex())
+       
+    def set_alternate_form(self, written_form):
+       self.txt_chosen_form.SetValue(written_form)
+              
     def cleanup(self):
        self.Destroy()
+       
  
 # defaults for vim - otherwise ignore
 # vim:sw=4

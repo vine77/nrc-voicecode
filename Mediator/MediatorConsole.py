@@ -61,6 +61,7 @@ class DismissModalEvent(Object.Object):
         *none*
         """
         debug.virtual('DismissModalEvent.dismiss')
+   
 
 class MediatorConsole(Object.OwnerObject):
     """
@@ -416,7 +417,30 @@ class MediatorConsole(Object.OwnerObject):
         """
         debug.virtual('MediatorConsole.show_recent_utterances')
 
-    def show_recent_symbols(self, editor_name, utterances):
+    def reformat_recent(self, editor_name, symbols):
+        """Store the current foreground window,
+        display a reformat recent dialog box  to allow the user to 
+        select a recent symbol to reformat.  Finally, restore
+        the original window to the foreground
+
+
+        **INPUTS**
+
+        *STR editor_name* -- name of the editor instance
+
+        *[SymbolResult] symbols* -- the n most recent dictated symbols
+        sorted most recent last. We assume that all those symbols
+        are in an utterance that can be reinterpreted.
+        
+        **OUTPUTS**
+
+        *none*
+        """
+        editor_window = self.store_foreground_window()
+        self.show_recent_symbols(editor_name, symbols)
+        editor_window.restore_to_foreground()
+
+    def show_recent_symbols(self, editor_name, symbols):
         """display a dialog box with recent symbols to allow the user to 
         select a recent symbol to reformat
 
@@ -424,16 +448,13 @@ class MediatorConsole(Object.OwnerObject):
 
         *STR editor_name* -- name of the editor instance
 
-        *[(SpokenUtterance, BOOL)] utterances* -- the n most recent dictation 
-        utterances (or all available if < n), sorted most recent last, 
-        with corresponding flags indicating if the utterance can be 
-        undone and re-interpreted, or None if no utterances are stored.
+        *[SymbolResult] symbols* -- the n most recent dictated symbols
+        sorted most recent last. We assume that all those symbols
+        are in an utterance that can be reinterpreted.
 
         **OUTPUTS**
 
-        *[INT]* -- the symbol numbers of 
-        those symbols which were corrected by the user, or None if
-        none were corrected
+        *none*
         """
         debug.virtual('MediatorConsole.show_recent_symbols')
 

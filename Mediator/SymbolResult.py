@@ -69,6 +69,13 @@ class SymbolResult(Object):
         
         *UtteranceInterpretation in_utter_interp = None* -- Utterance 
         interpretation in which that symbol was heard.
+        
+        *BOOL was_reformatted=false* -- indicates wheter or not that symbol result
+        was reformatted by the user through a symbol reformatting dialog.
+    
+        *[STR] alternate_forms=[]* -- list of alternate formats for the symbol.
+        These could be homophonic symbols, or different ways of formatting
+        the same symbol.
         """
        
         self.deep_construct(SymbolResult,
@@ -82,7 +89,9 @@ class SymbolResult(Object):
                              'possible': possible_matches,
                              'forbidden': forbidden,
                              'was_new': new_symbol,
-                             'in_utter_interp': in_utter_interp
+                             'in_utter_interp': in_utter_interp,
+                             'was_reformatted': 0,
+                             'alternate_forms': []
                             }, args)
        
                             
