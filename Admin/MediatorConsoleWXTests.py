@@ -283,4 +283,10 @@ class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
         self.dlg.do_ok()
         self.assert_symbol_was_reformatted_to(typed_form)
         self.assert_dialog_was_okayed()
-        
+ 
+    # For now, can't implement this test because no way of 
+    # programmatically sending a character to the wxListCtrl
+    def ___________test_move_around_suggestions_list_with_arrow_keys(self):
+        pass
+        self.dlg.do_move_down_alternate_forms_with_arrow_keys(2)
+        self.assert_assert_displayed_form_is('')

@@ -53,22 +53,11 @@ import WinSystemMSW
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="off", 
+debug.config_traces(status="on", 
                     active_traces={
 #################################  
-                    'ReformatRecentSymbols.reformat_nth': 1,
-#                    'SymDict.correct_symbol': 1,
-#                    'NewMediatorObject.correct_symbol_results': 1,
-#                    'NewMediatorObject.correct_recent_symbols': 1,
-#                    'NewMediatorObject.utter_id_to_rel_utter_index': 1,
-#                    'NewMediatorObject.correct_recent_symbol': 1,
-#                    'ResMgrBasicreformat_recent_synchronous': 1,
-#                    'on_ok': 1,
-#                    'reformat_a_symbol': 1,
-#                    'ReformatFromRecentWX.do_choose_nth_form': 1,
-#                    'ReformatFromRecentWX.on_choose_alternate_form': 1,
-#                    'MediatorConsoleWX.reformat_nth': 1,
-#                    'test_do_ok': 1,
+                    'ReformatRecentSymbolsView.on_choose': 1,
+                    'ReformatRecentSymbolsView.on_recent_char': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                                    allow_trace_id_substrings = 1)
