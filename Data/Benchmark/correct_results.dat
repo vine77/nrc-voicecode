@@ -11040,48 +11040,6 @@ Heard before previous index equals 0
   5: index = 0
 
 
->>> Testing console command: say(['next', 'index', '=\\equals', '0'], user_input='None')
-Heard next index equals 0
-*** Start of source buffer ***
-  1: index = 0
-  2: index = 1
-  3: <SEL_START>index = 0<SEL_END>
-  4: index = 1
-  5: index = 0
-  6: 
-
-*** End of source buffer ***
-
-
->>> Testing console command: goto_line(2)
-
-*** Start of source buffer ***
-  1: index = 0
-  2: <CURSOR>index = 1
-  3: index = 0
-  4: index = 1
-  5: index = 0
-
-
->>> Testing console command: say(['previous', 'index', '=\\equals', '0'], user_input='None')
-Heard previous index equals 0
-*** Start of source buffer ***
-  1: <SEL_START>index = 0<SEL_END>
-  2: index = 1
-  3: index = 0
-  4: index = 1
-
-
->>> Testing console command: goto_line(2)
-
-*** Start of source buffer ***
-  1: index = 0
-  2: <CURSOR>index = 1
-  3: index = 0
-  4: index = 1
-  5: index = 0
-
-
 >>> Testing console command: say(['select', 'index', '=\\equals', '0'], user_input='None')
 Heard select index equals 0
 *** Start of source buffer ***

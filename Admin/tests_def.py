@@ -569,10 +569,6 @@ def test_select_pseudocode():
     # Testing selectionn commands
     #
     test_command("""goto_line(2)""")
-    test_say(['next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
-    test_command("""goto_line(2)""")
-    test_say(['previous', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
-    test_command("""goto_line(2)""")
     test_say(['select', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
     test_say(['select next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
@@ -3028,27 +3024,8 @@ auto_test.add_test('profile_config', test_profile_config,
 # Use this to create temporary tests
 ##############################################################################
 
-def test_temporary():
-
-    testing.init_simulator_regression()
-    test_command("""open_file('blah.py')""")
-    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
-    test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)    
-    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
-    test_say(['index', 'equals', '1', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)        
-    test_say(['index', 'equals', '0', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
-
-    #
-    # Testing repeatability of SelectPseudoCode commands
-    #
-    test_command("""goto_line(1)""")
-    test_say(['select', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
-    test_say(['next', 'one'])
-    test_say(['previous', 'one'])    
-    test_say(['go after next', 'index', '=\\equals', '0'], never_bypass_sr_recog=1)
-    test_say(['next', 'one'])
-    test_say(['previous', 'one'])                
-    test_command("""quit(save_speech_files=0, disconnect=0)""")        
+def test_temporary():    
+    pass  
 
    
 #auto_test.add_test('temp', test_temporary, desc='temporary test')

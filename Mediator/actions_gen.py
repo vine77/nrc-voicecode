@@ -23,7 +23,7 @@
 
 import copy, exceptions, os, re
 import Object, vc_globals
-from debug import trace
+import debug
 
 class Action(Object.Object):
     """Base class for all actions.
@@ -44,6 +44,7 @@ class Action(Object.Object):
                             args_super, \
                             {})
 
+
     def log_execute(self, app, cont):
         """Executes the action and logs it in the application's history.
         
@@ -61,6 +62,8 @@ class Action(Object.Object):
 
         .. [AppState] file:///./AppState.AppState.html
         .. [Context] file:///./Context.Context.html"""
+        
+        debug.trace('Action.log_execute', 'invoked, self=%s, cont=%s' % (self, cont))
 
         #
         # First, make a copies of the action and context before logging them
@@ -79,7 +82,9 @@ class Action(Object.Object):
         #
         action_copy = copy.copy(self)        
         cont_copy = copy.copy(cont)
+        debug.trace('Action.log_execute', 'invoking action log()')        
         action_copy.log(app, cont_copy)
+        debug.trace('Action.log_execute', 'invoking action execute()')                
         action_copy.execute(app, cont)
 
 
@@ -97,7 +102,7 @@ class Action(Object.Object):
         
         *none* -- 
         """
-        trace('Action.log', 'invoked')
+        debug.trace('Action.log', 'invoked')
         app.log_cmd(cont, self)
 
 
@@ -117,7 +122,7 @@ class Action(Object.Object):
 
         .. [AppState] file:///./AppState.AppState.html"""
         
-        debug.virtual('execute')
+        debug.virtual('Action.execute', self)
 
     def doc(self):
         """Returns a documentation string for the action.
@@ -190,7 +195,7 @@ class ActionBidirectionalRepeat(ActionRepeatable, ActionBidirectional):
     """
     
     def __init__(self, direction=1, **args_super):
-        self.deep_construct(Action,
+        self.deep_construct(ActionBidirectionalRepeat,
                             {'direction': direction},
                             args_super,
                             {})
@@ -237,7 +242,7 @@ class ActionRepeatLastCmd(Action):
         See [Action.execute] for description of arguments.
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
-        trace('ActionRepeatLastCmd.log', 'invoked')
+        debug.trace('ActionRepeatLastCmd.log', 'invoked')
         pass
 
     def execute(self, app, cont):
@@ -248,14 +253,16 @@ class ActionRepeatLastCmd(Action):
         .. [Action.execute] file:///./actions_gen.Action.html#execute
         .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
 
-#        print '-- ActionRepeatLastCmd.execute: self=%s,self.__dict__=%s' % (self, self.__dict__)
 
         (last_cont, last_action) = app.get_history(1)
-#        print '-- ActionRepeatLastCmd.execute: last_action=%s, last_action.__dict__=%s' % (last_action, last_action.__dict__)
+        debug.trace('ActionRepeatLastCmd.execute', 
+                    'last_action=%s, last_action.__dict__=%s, self.check_already_repeated=%s' 
+                    % (last_action, last_action.__dict__, self.check_already_repeated))
         if self.check_already_repeated and not last_action.already_repeated:
             self.n_times = self.n_times - 1
             last_action.already_repeated = 1            
 
+        debug.trace('ActionRepeatLastCmd.execute', 'self.n_times=%s' % self.n_times)
         for ii in range(self.n_times):
             last_action.log_execute(app, cont)
 
@@ -292,7 +299,7 @@ class ActionRepeatBidirectCmd(Action):
         See [Action.execute] for description of arguments.
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
-        trace('ActionRepeatBidirectCmd.log', 'invoked')
+        debug.trace('ActionRepeatBidirectCmd.log', 'invoked')
         pass
 
     def execute(self, app, cont):
@@ -304,7 +311,7 @@ class ActionRepeatBidirectCmd(Action):
         .. [Action.execute] file:///./actions_gen.Action.html#execute
         .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
 
-#        print '-- ActionRepeatBidirectCmd.execute: called, self.__dict__=%s' % self.__dict__
+        debug.trace('ActionRepeatBidirectCmd.execute' , 'called, self.__dict__=%s' % self.__dict__)
 
         #
         # Change the direction of the last action.
@@ -355,6 +362,7 @@ class ActionNavigateByPseudoCode(ActionBidirectionalRepeat):
     
     def __init__(self, possible_ranges, select_range_no, mark_selection, cursor_at=1, buff_name=None, 
                        **args_super):
+        debug.trace('ActionNavigateByPseudoCode.__init__', 'invoked')
         self.deep_construct(ActionNavigateByPseudoCode,
                             {'possible_ranges': possible_ranges, 
                              'select_range_no': select_range_no, 
@@ -377,7 +385,9 @@ class ActionNavigateByPseudoCode(ActionBidirectionalRepeat):
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute
         .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
-
+        
+        
+        debug.trace('ActionNavigateByPseudoCode.execute', 'invoked')
         self.select_range_no = self.select_range_no + self.direction
         if self.mark_selection:
             app.set_selection(range=self.possible_ranges[self.select_range_no], 
@@ -417,7 +427,7 @@ class ActionInsert(Action):
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
 
-        trace('ActionInsert.execute' ,'self.code_bef=%s, self.code_after=%s' % (self.code_bef, self.code_after))
+        debug.trace('ActionInsert.execute' ,'self.code_bef=%s, self.code_after=%s' % (self.code_bef, self.code_after))
         app.insert_indent(self.code_bef, self.code_after)
 
 
@@ -617,7 +627,7 @@ class ActionSearch(ActionBidirectional):
 
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
 
-#        print '-- ActionSearch.execute: called'
+        debug.trace('ActionSearch.execute', 'called, app=%s' % app)
         app.search_for(regexp=self.regexp, direction=self.direction,
                        num=self.num, where=self.where)
 
@@ -653,7 +663,7 @@ class ActionSearch(ActionBidirectional):
         return the_doc
 
 
-class ActionSearchRepeat(ActionSearch, ActionRepeatable):
+class ActionSearchBidirectionalRepeat(ActionSearch, ActionBidirectionalRepeat):
     """Moves cursor to occurence of a regular expression.
 
     Contrarily to [ActionSearch], this class of search can be repeated
@@ -671,7 +681,7 @@ class ActionSearchRepeat(ActionSearch, ActionRepeatable):
     ..[ActionSearch] file:///./actions_gen.ActionSearch.html#ActionSearch"""
         
     def __init__(self, **args_super):
-        self.deep_construct(ActionSearchRepeat, 
+        self.deep_construct(ActionSearchBidirectionalRepeat, 
                             {}, 
                             args_super, 
                             {})

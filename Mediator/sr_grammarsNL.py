@@ -165,7 +165,7 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         self.deep_construct(SelectWinGramNL,
             {}, attrs, exclude_bases = {SelectGramBase:1})
         SelectGramBase.__init__(self)
-        self.load(selectWords = self.select_words, throughWord =
+        self.load(selectWords = self.select_phrases, throughWord =
             self.through_word)
 
     def _set_visible(self, visible):
@@ -263,10 +263,14 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
                         #
                         region = resObj.getSelectInfo(self.gramObj, i)
 
-                        
+                        debug.trace('SelectWinGramNL.gotResultsObject', 'adding region=%s' % repr(region))
                         true_region = (region[0] + self.vis_start,
                           region[1] + self.vis_start)
-                        ranges.append(true_region)
+                        #
+                        # For some reason, NatSpeak may return duplicate ranges
+                        #
+                        if not true_region in ranges:
+                           ranges.append(true_region)
 
             except natlink.OutOfRange:
                 pass
@@ -587,8 +591,8 @@ class WinGramFactoryNL(WinGramFactory):
         *SelectWinGram* -- new selection grammar
         """
         return SelectWinGramNL(manager = manager, app = app, 
-            buff_name = buff_name, select_words =
-            self.select_words, through_word = self.through_word, 
+            buff_name = buff_name, select_phrases =
+            self._select_phrases(), through_word = self.through_word, 
             window = window, exclusive = exclusive) 
     
     def make_correction(self, manager, window = None, exclusive = 0):
@@ -667,7 +671,7 @@ class WinGramFactoryNL(WinGramFactory):
             spelling_cbk)
    
     def make_simple_selection(self, get_visible_cbk, get_selection_cbk, 
-        select_cbk, alt_select_words = None):
+        select_cbk, alt_select_phrases = None):
         """create a new SimpleSelection grammar
 
         **INPUTS**
@@ -681,7 +685,7 @@ class WinGramFactoryNL(WinGramFactory):
         range to be selected (relative to the start of the visible range 
         passed to the get_visible_cbk), or None if text wasn't found
 
-        *[STR]* alt_select_words -- words (or phrases) which introduces a
+        *[STR]* alt_select_phrases -- words (or phrases) which introduces a
         selection utterance, or None to use the same value as
         make_selection does.  (Warning: once we add correct xyz, this
         won't be wise any more).
@@ -690,11 +694,11 @@ class WinGramFactoryNL(WinGramFactory):
 
         *SimpleSelection* -- new selection grammar
         """
-        if alt_select_words is None:
-            select_words = self.select_words
+        if alt_select_phrases is None:
+            select_phrases = self.select_phrases
         else:
-            select_words = alt_select_words
-        return SimpleSelectionNL(select_words = select_words,
+            select_phrases = alt_select_phrases
+        return SimpleSelectionNL(select_phrases = select_phrases,
             get_visible_cbk = get_visible_cbk,
             get_selection_cbk = get_selection_cbk, 
             select_cbk = select_cbk)
@@ -1221,7 +1225,7 @@ class SimpleSelectionNL(SimpleSelection, SelectGramBase):
         self.deep_construct(SimpleSelectionNL,
             {}, attrs, exclude_bases = {SelectGramBase:1})
         SelectGramBase.__init__(self)
-        self.load(selectWords = self.select_words, throughWord =
+        self.load(selectWords = self.select_phrases, throughWord =
             self.through_word)
 
     def _set_visible(self, visible):

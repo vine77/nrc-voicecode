@@ -27,9 +27,12 @@ def not_implemented(name):
     """Prints warning message when a stub function is called."""
     print "WARNING: stub function %s is not implemented yet!!!" % name
 
-def virtual(name):
+def virtual(name, instance=None):
     """Prints warning message when a virtual method is called."""
-    print "WARNING: virtual method '%s' called!!!" % name    
+    mess = "WARNING: virtual method '%s'." % name
+    if instance:
+       mess = "%s Invoked on instance %s!!!" % (mess, instance)
+    print mess
 
 def critical_warning(warn):
     """Prints a critical warning message.

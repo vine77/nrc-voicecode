@@ -338,7 +338,6 @@ class PunctuationSet(Object):
 
         *INT spacing* -- the spacing flags (see SpacingState.py)
         """
-#        print spoken_forms, spacing
         aliases.add_lsa(LSAlias(spoken_forms, 
                         {self.language: written}, spacing))
 
@@ -358,37 +357,40 @@ class PunctuationSet(Object):
         context = self.context
         if context is None:
             context = ContAny()
+        debug.trace('PunctuationSet._add_navigation', 'context=%s, expression="%s"' % (context, expression))
         for spoken in spoken_forms:
             command = CSCmd(spoken_forms = \
                ['%s %s' % (self.next_word, spoken),
                 '%s %s' % (self.after_word, spoken),
                 '%s %s %s' % (self.after_word, self.next_word, spoken)],
-               meanings = {context: ActionSearchRepeat(regexp =
+               meanings = {context: ActionSearchBidirectionalRepeat(regexp =
                expression + 
                    r'\s{0,1}')},
                docstring='go after next %s' % spoken)
+            debug.trace('PunctuationSet._add_navigation', 'command.meanings=%s, command.spoken_forms=%s' % (command.meanings, repr(command.spoken_forms)))
             commands.add_csc(command)
             command = CSCmd(spoken_forms = \
                ['%s %s %s' % (self.before_word, self.next_word, spoken), 
                 '%s %s' % (self.before_word, spoken)],
-               meanings = {context: ActionSearchRepeat(regexp = r'\s{0,1}' +
+               meanings = {context: ActionSearchBidirectionalRepeat(regexp = r'\s{0,1}' +
                    expression, where = -1)},
                docstring='go before next %s' % spoken)
             commands.add_csc(command)
             command = CSCmd(spoken_forms = \
                ['%s %s' % (self.prev_word, spoken), 
                 '%s %s %s' % (self.after_word, self.prev_word, spoken)],
-               meanings = {context: ActionSearchRepeat(regexp =
+               meanings = {context: ActionSearchBidirectionalRepeat(regexp =
                expression + 
                    r'\s{0,1}', direction = -1)},
                docstring='go after previous %s' % spoken)
             commands.add_csc(command)
             command = CSCmd(spoken_forms = \
                ['%s %s %s' % (self.before_word, self.prev_word, spoken)],
-               meanings = {context: ActionSearchRepeat(regexp = r'\s{0,1}' +
+               meanings = {context: ActionSearchBidirectionalRepeat(regexp = r'\s{0,1}' +
                    expression, where = -1, direction = -1)},
                docstring='go before previous %s' % spoken)
             commands.add_csc(command)
+        debug.trace('PunctuationSet._add_navigation', 'exited')
 
 
 class SinglePunctuation(PunctuationSet):
@@ -446,6 +448,7 @@ class SinglePunctuation(PunctuationSet):
         *BOOL dictation_only* -- if true, add only LSAs for dictation 
         of punctuation symbols, but not punctuation navigation commands
         """
+        debug.trace('SinglePunctuation.create', 'self.name="%s"' % self.name)
         if not interp:
             return
         aliases = LSAliasSet(self.name, description = 'dictating punctuation')
@@ -495,6 +498,7 @@ class SinglePunctuation(PunctuationSet):
 
         *[STR] spoken_forms* -- the spoken forms
         """
+        debug.trace('SinglePunctuation._add_single_navigation', 'spoken_forms=%s' % repr(spoken_forms))
         escaped = re.escape(self.written_forms[i])
         self._add_navigation(commands, expression = escaped,
             spoken_forms = spoken_forms) 
@@ -678,7 +682,7 @@ class PairedPunctuation(PunctuationSet):
             for spoken in plural:
                 spoken_forms.append("%s %s" % (self.out_of, spoken))
             command = CSCmd(spoken_forms,
-               meanings = {context: ActionSearchRepeat(regexp = close_escaped + 
+               meanings = {context: ActionSearchBidirectionalRepeat(regexp = close_escaped + 
                    r'\s{0,1}')},
                docstring=doc)
             commands.add_csc(command)
@@ -689,7 +693,7 @@ class PairedPunctuation(PunctuationSet):
                 for spoken_form in spoken_forms:
                     back_spoken_forms.append(self.back + " " + spoken_form)
                 command = CSCmd(back_spoken_forms,
-                   meanings = {context: ActionSearchRepeat(regexp = \
+                   meanings = {context: ActionSearchBidirectionalRepeat(regexp = \
                            r'\s{0,1}' + open_escaped, 
                            direction = -1, where = -1)},
                    docstring=doc)
