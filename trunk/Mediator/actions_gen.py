@@ -676,7 +676,7 @@ class ActionBackspace(ActionRepeatable):
 
         .. [Action.doc] file:///./actions_gen.Action.html#doc
         """        
-        return "Backspace %s times." % n_times
+        return "Backspace %s times." % self.n_times
 
     def execute(self, app, cont):
         """See [Action.execute].

@@ -340,7 +340,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1b82e60>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __main__.Canadian at 1a66538>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2989,6 +2989,72 @@ EdSim.__del__
 
 
 *******************************************************************************
+* Name        : insert_delete
+* Description : Testing insertion and deletion commands
+*******************************************************************************
+
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Heard [('this', 'this'), ('is', 'is'), ('a', 'a'), ('very', 'very'), ('long', 'long'), ('variable', 'variable'), ('name', 'name'), ('but', 'but'), ('never', 'never'), ('mind', 'mind')]
+Associate 'this' with symbol (Enter selection):
+
+  '0': no association
+  '1': this (*new*)
+  '2': This (*new*)
+  '3': THIS (*new*)
+
+> Associate 'a very long variable name but never mind' with symbol (Enter selection):
+
+  '0': no association
+  '1': a_very_long_variable_name_but_never_mind (*new*)
+  '2': AVeryLongVariableNameButNeverMind (*new*)
+  '3': aVeryLongVariableNameButNeverMind (*new*)
+  '4': A_VERY_LONG_VARIABLE_NAME_BUT_NEVER_MIND (*new*)
+  '5': averylongvariablenamebutnevermind (*new*)
+  '6': AVERYLONGVARIABLENAMEBUTNEVERMIND (*new*)
+
+> *** Start of source buffer ***
+  1: this is a_very_long_variable_name_but_never_mind<CURSOR>
+
+*** End of source buffer ***
+Heard [('back space', 'back space')]
+*** Start of source buffer ***
+  1: this is a_very_long_variable_name_but_never_min<CURSOR>
+
+*** End of source buffer ***
+Heard [('2 times', '2 times')]
+*** Start of source buffer ***
+  1: this is a_very_long_variable_name_but_never_mi<CURSOR>
+
+*** End of source buffer ***
+Heard [('back space 2', 'back space 2')]
+*** Start of source buffer ***
+  1: this is a_very_long_variable_name_but_never_<CURSOR>
+
+*** End of source buffer ***
+Heard [('back space 3', 'back space 3')]
+*** Start of source buffer ***
+  1: this is a_very_long_variable_name_but_nev<CURSOR>
+
+*** End of source buffer ***
+Heard [('back space 4', 'back space 4')]
+*** Start of source buffer ***
+  1: this is a_very_long_variable_name_but<CURSOR>
+
+*** End of source buffer ***
+Heard [('back space 5', 'back space 5')]
+*** Start of source buffer ***
+  1: this is a_very_long_variable_nam<CURSOR>
+
+*** End of source buffer ***
+
+
+*******************************************************************************
 * Name        : large_messages
 * Description : Send a message that has more than 1024 character (length of a message chunk)
 *******************************************************************************
@@ -3292,7 +3358,7 @@ Heard [('less than', '<'), ('greater than', '>'), ('equal sign', '=')]
 
 >>> Starting mediator with persistence
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
-Error reading <SymDict.SymDict instance at 19c24b0> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
+Error reading <SymDict.SymDict instance at 1a206d8> from file 'C:\Eclipse\workspace\VCode\Data\Tmp\tmp_symdict.pkl'
 [Errno 2] No such file or directory: 'C:\\Eclipse\\workspace\\VCode\\Data\\Tmp\\tmp_symdict.pkl'
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
@@ -6608,7 +6674,7 @@ Heard [('new statement', 'new statement')]
 
 *******************************************************************************
 * Name        : python
-* Description : testing the various Python CSCs and LSAs
+* Description : testing the various CSCs and LSAs for dictating Python from scratch
 *******************************************************************************
 
 >>> Dictating Python when all symbols are known <<<
@@ -8533,6 +8599,13 @@ Associate 'all right' with symbol (Enter selection):
  43:    print 'all_right<CURSOR>'
 
 *** End of source buffer ***
+
+
+*******************************************************************************
+* Name        : python editing
+* Description : testing the various CSCs and LSAs for editing Python
+*******************************************************************************
+
 
 
 *******************************************************************************
@@ -10666,9 +10739,9 @@ Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 
 
 -----------------------------------------------
-Test suite completed in:  748.52700007 secs
+Test suite completed in:  779.350000024 secs
 -----------------------------------------------
 Message loop ended, cleaning up
-cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at b41c60>
+cleanup method is  <method OwnerObject.cleanup of ExtLoopWin32NewMediator instance at bbee28>
 Compiling symbols for file '%VCODE_HOME%\Config\py_std_sym.py'
 ExtLoopWin32.run returning

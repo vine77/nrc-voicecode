@@ -278,17 +278,17 @@ class SourceBuffEdSim(SourceBuffNonCached.SourceBuffNonCached):
         """Replace text in range with 
         with text
 
-	**INPUTS**
+        **INPUTS**
 
-	*STR text* -- new text
+        *STR text* -- new text
 
-	*(INT, INT)* range -- code range to be replaced.  If None,
-	defaults to the current selection.
+        *(INT, INT)* range -- code range to be replaced.  If None,
+        defaults to the current selection.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*none*
-	"""
+        *none*
+        """
 
         if range == None:
             range = self.get_selection()

@@ -138,13 +138,12 @@ def dictate_pseudo_python(commands):
     commands.quit(save_speech_files=0, disconnect=0)
 
 
-def run(testing):
+def test_dictate_from_scratch(testing):
 
     #
     # This file contains the native code that we will dictate
     #
     native_py_file = vc_globals.test_data + os.sep + 'native_python.py'
-#    native_py_file = re.sub('\\\\', '\\\\\\\\', native_py_file)
 
     #
     # Dictate some pseudo python where all symbols are already known
@@ -166,3 +165,21 @@ def run(testing):
     commands = names['commands']
     commands.print_symbols()
     dictate_pseudo_python(commands)    
+
+
+def do_edit_test(testing, edit_file, test_fct):
+   testing.init_simulator_regression()
+   names = testing.namespace()
+   commands = names['commands']
+   commands.open_file(edit_file)
+   test_fct(commands)
+    
+def test_editing(testing):
+   #
+   # This file contains code that will be edited in different ways
+   #
+   edit_file = vc_globals.test_data + os.sep + 'use_this_to_test_edits.py'
+   
+# To create an edit test scenario, just   define a test function and invoke 
+# it through do_edit_test as below.
+#   do_edit_test(testing, edit_file, test_function)    

@@ -1378,10 +1378,14 @@ auto_test.add_test('punctuation', test_punctuation, 'testing the various Python 
 # Testing the various Python CSCs and LSAs
 ##############################################################################
 def pseudo_python_wrapper():
-    test_pseudo_python.run(testing)
+    test_pseudo_python.test_dictate_from_scratch(testing)
 
-auto_test.add_test('python', pseudo_python_wrapper, 'testing the various Python CSCs and LSAs')
+auto_test.add_test('python', pseudo_python_wrapper, 'testing the various CSCs and LSAs for dictating Python from scratch')
 
+def pseudo_python_editing_wrapper():    
+    test_pseudo_python.test_editing(testing)
+    
+auto_test.add_test('python editing', pseudo_python_editing_wrapper, 'testing the various CSCs and LSAs for editing Python')
 
 ##############################################################################
 # Testing repetition of last commands
@@ -2729,7 +2733,7 @@ auto_test.add_test('set_text', test_set_text,
 def test_insert_delete_commands():
    testing.init_simulator_regression()
    commands.open_file('blah.py')
-   commands.say(['this', 'is', 'a', 'very', 'long', 'variable', 'name', 'but', 'never', 'mind'], user_input="0\n")
+   commands.say(['this', 'is', 'a', 'very', 'long', 'variable', 'name', 'but', 'never', 'mind'], user_input="1\n1\n1\n1\n1\n1\n1\n1\n1\n")
    commands.say(['back space'])
    commands.say(['2 times'])
    commands.say(['back space 2'])   
@@ -2737,7 +2741,7 @@ def test_insert_delete_commands():
    commands.say(['back space 4'])
    commands.say(['back space 5'])
 
-#auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands')
+auto_test.add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands')
 
 
 ##############################################################################

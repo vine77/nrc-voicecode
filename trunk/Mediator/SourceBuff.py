@@ -867,9 +867,17 @@ class SourceBuff(OwnerObject):
         
         *none*
         """
+        
+        #
+        # Note: this uses the DEL key which is what Emacs uses for Backspace
+        #       Eventually, we will have to use DEL or BS depending on the 
+        #       Editor. This should be an attribute of SourceBuff
+        #
+        #       -- AlainDesilets
+        #
         bs_string = ""
         for ii in range(n_times):
-           bs_string = "%s%s" % (bs_string, chr(8))
+           bs_string = "%s%s" % (bs_string, chr(127))
         self.insert(bs_string)
         
     def goto(self, pos):

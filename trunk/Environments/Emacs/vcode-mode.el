@@ -30,7 +30,7 @@
 ;; USA
 
 ;;; Change this if you want to see more traces
-(setq message-log-max 10000)
+(setq message-log-max 5000)
 
 
 
@@ -255,14 +255,12 @@ in the 'vr-log-buff-name buffer.")
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
 ;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
-;(cl-puthash "vcode-cmd-get-text" 1 vcode-traces-on)
-;(cl-puthash "vcode-cmd-set-text" 1 vcode-traces-on)
-;(cl-puthash "vcode-execute-command-string" 1 vcode-traces-on)
-
 ;(cl-puthash "vcode-deserialize-message" 1 vcode-traces-on)
 ;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
-;(cl-puthash "vcode-try-parsing-message" 1 vcode-traces-on)
-;(cl-puthash "vr-output-filter" 1 vcode-traces-on)
+
+;(cl-puthash "vr-cmd-alt-frame-activated" 1 vcode-traces-on)
+;(cl-puthash "vcode-cmd-recognition-start" 1 vcode-traces-on)
+;(cl-puthash "vcode-execute-command-string" 1 vcode-traces-on)
 
 
 ; DCF - tracing indentation problems (at Alain's suggestion)
@@ -974,7 +972,6 @@ Changes are put in a changes queue `vr-queued-changes.
   "Execute a string as though it was typed by the user.
 "
   (let ()
-    (vcode-trace "vcode-execute-command-string" "upon entry, (current-buffer)=%S, py-indent-offset=%S, tab-width=%S, command-string=%S, (point)=%S, (mark)=%S, after-change-functions=%S buffer is\n%S" (current-buffer) py-indent-offset tab-width command-string (point) (mark) after-change-functions (buffer-substring (point-min) (point-max)))
     (setq debug-on-error t)
     (setq debug-on-quit t)
 
@@ -995,7 +992,7 @@ Changes are put in a changes queue `vr-queued-changes.
  	     (last-command-event (elt event 0))
  	     (last-command-keys event)
  	     )
-	(vcode-trace "vcode-execute-command-string" "command=%S" command)
+	(vcode-trace "vcode-execute-command-string" "last-command-char=%S, command=%S" last-command-char command)
 	(run-hooks 'pre-command-hook)
 	(command-execute command nil )
 	(run-hooks 'post-command-hook)
@@ -1489,11 +1486,13 @@ which is the list representing the command and its arguments."
   ;;
   (let ()
 
-    (vr-log "--** vr-cmd-alt-frame-activated: init frame: %S\n"
+    (vcode-trace "vr-cmd-alt-frame-activated" "** init frame: %S\n"
         (selected-frame))
-    (vr-log "--** vr-cmd-alt-frame-activated: init frame handle: %S\n"
+    (vcode-trace "vr-cmd-alt-frame-activated" "** init frame handle: %S\n"
         (cdr (assoc 'window-id (frame-parameters (selected-frame)))))
-    (vr-log "--** vr-cmd-alt-frame-activated: init buffer: %S\n"
+    (vcode-trace "vr-cmd-alt-frame-activated" "** init frame handle is of type: %S\n"
+        (type-of (cdr (assoc 'window-id (frame-parameters (selected-frame))))))
+    (vcode-trace "vr-cmd-alt-frame-activated" "** init buffer: %S\n"
         (buffer-name (current-buffer)))
     (global-set-key "\C-\M--" "")
 ; Emacs lisp (Node: Focus Events) claims that a keyboard key or mouse
@@ -2178,6 +2177,7 @@ a buffer"
     ;;; Tell Emacs what the active window was when we heard the utterance
     ;;;
     (setq window-id (cl-gethash 'window_id mess-cont))
+    (vcode-trace "vcode-cmd-recognition-start" "(type-of window-id)=%S, window-id=%S" (type-of window-id) window-id)
     (if (stringp window-id)
         (setq window-id (int-to-string window-id)))
     (vr-log "--** vcode-cmd-recognition-start: window id is %S\n" window-id)
