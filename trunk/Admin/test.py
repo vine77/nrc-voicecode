@@ -1,7 +1,7 @@
 """Regression testing script"""
 
 import os, posixpath
-import auto_test, debug, util
+import auto_test, debug, EdSim, util
 
 def usage():
     print """

@@ -1,4 +1,8 @@
+import re
+
 from Object import Object
+
+file_language = {'c': 'C', 'h': 'C', 'py': 'python'}
 
 class SourceBuff(Object):
     """Class representing a source buffer.
@@ -17,14 +21,25 @@ class SourceBuff(Object):
 
     CLASS ATTRIBUTES**
     
-    *none* -- 
+    *{STR: STR}* file_language -- key is a standard file extension and
+    value is the programming language associated with that extension
     """
     
     def __init__(self, file_name=None, language=None, cur_pos=0, visible_start=None, visible_end=None, content=None, **attrs):
+
+        global file_language        
         Object.__init__(self)
-        self.def_attrs({'file_name': None, 'language': None, 'cur_pos': 0, 'visible_start': None, 'visible_end': None, 'content': None})
+        self.def_attrs({'file_name': file_name, 'language': language, 'cur_pos': cur_pos, 'visible_start': visible_start, 'visible_end': visible_end, 'content': content})
         self.init_attrs(attrs)
 
+        #
+        # Set the language name if it hasn't been set already
+        #
+        if self.language == None and self.file_name != None:
+            a_match = re.match('^.*?\.([^\.]*)$', self.file_name)
+            extension = a_match.group(1)
+            if file_language.has_key(extension):
+                self.language = file_language[extension]
 
 
     def is_language(self, lang):

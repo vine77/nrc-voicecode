@@ -99,7 +99,7 @@ When function ends, the template for the shor/long summary of the method is sele
     ;;;
     ;;; Insert stub
     ;;;
-    (py-insert-code (concat "\n\nDebug.not_implemented('" name "')\n"))
+    (py-insert-code (concat "\n\ndebug.not_implemented('" name "')\n"))
 
     ;;;
     ;;; Move cursor to short description
@@ -261,7 +261,7 @@ Returns a list of pairs with name and value of the argument."
   ;;; Define new attributes
   ;;;
   (py-insert-code "self.def_attrs({")
-  (mapcar #'(lambda (an-attr) (py-insert-code (concat "'" (elt an-attr 0) "'" ": " (elt an-attr 1) ", "))) attr-list)
+  (mapcar #'(lambda (an-attr) (py-insert-code (concat "'" (elt an-attr 0) "'" ": " (elt an-attr 0) ", "))) attr-list)
   (backward-delete-char-untabify 2)
   (py-insert-code "})\n")
 
