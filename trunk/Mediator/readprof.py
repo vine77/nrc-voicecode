@@ -9,7 +9,7 @@ pj = os.path.join
 def read_all(prefix, dir = None):
     if dir is None:
         dir = med
-    l = os.listdir(med)
+    l = os.listdir(dir)
     pfiles = {}
     for file in l:
         s = "%s\.(.*)\.dat" % prefix

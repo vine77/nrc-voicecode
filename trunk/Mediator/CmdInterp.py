@@ -20,9 +20,10 @@
 ##############################################################################
 
 import os, re, string, sys
+import copy
 
 import actions_gen, auto_test, vc_globals
-from debug import trace, config_warning
+from debug import trace, config_warning, trace_is_active
 from actions_C_Cpp import *
 from actions_py import *
 from AppState import AppState
@@ -1078,6 +1079,227 @@ class InterpretedPhrase(Object):
         """
         return self.original_phrase
     
+class SymbolConstruction(Object):
+    """
+    A helper class for CmdInterp which groups together variables
+    related to the state of the current symbol being constructed
+    
+    ** INSTANCE ATTRIBUTES **
+
+    *[STR] untranslated_words* -- the list of untranslated_words
+    accumulated so far in the current symbol being built
+
+    *SymBuilderFactory builder_factory* -- a reference to the factory
+    for creating new SymBuilder objects
+
+    *SymBuilder builder* -- the current SymBuilder object
+
+    *AppState app* -- the current editor application
+
+    *CmdInterp interp* -- the CmdInterp object which created this
+    object
+
+    *[STR] current_preferences* -- the list of current SymBuilder
+    preferences at the time when the current symbol was started
+
+    *[SymbolResult] symbols* -- SymbolResult objects corresponding to
+    the symbols already created during interpretation of this
+    utterance
+
+    *BOOL exact_symbol* -- true with the words which have been added
+    so far form an exact symbol match
+
+    *BOOL allow_inexact* -- if true, allow inexact matches to the
+    current symbol being built, otherwise allow only exact_matches or
+    new symbols
+    """
+    def __init__(self, interp, app, builder_factory, **args):
+        self.deep_construct(SymbolConstruction,
+                            {
+                             'untranslated_words': [],
+                             'interp': interp,
+                             'app': app,
+                             'builder_factory': builder_factory,
+                             'builder': None,
+                             'current_preferences': None,
+                             'symbols': [],
+                             'exact_symbol': 0,
+                             'allow_inexact': 1
+                            }, args)
+
+        # note: despite the circular reference to CmdInterp, we don't
+        # need to make this an OwnerObject, because we don't own
+        # anything with a circular reference to us, and because
+        # CmdInterp's reference to us is temporary and vanishes at
+        # the end of the call to interpret_phrase
+
+    def new_builder(self):
+        """
+        creates a new SymBuilder object
+        """
+        self.builder = self.interp.new_builder(self.app)
+        self.current_preferences = \
+            self.builder_factory.current_preferences(self.app)
+   
+    def add_symbol(self, spoken_form):
+        """
+        Adds the spoken form of an exact symbol match to the current
+        symbol being built
+
+        ** INPUTS **
+
+        *[STR] spoken_form* -- the spoken_form of the exactly matching
+        symbol
+
+        ** OUTPUTS **
+
+        *none*
+        """
+        if not self.untranslated_words:
+            self.exact_symbol = 1
+        self.untranslated_words.extend(spoken_form)
+        if self.builder is None:
+            self.new_builder()
+        for word in spoken_form:
+            word_element = self.interp.make_word_element(word)
+            word_element.add_to(self.builder)
+            
+    def add_word(self, word):
+        """
+        Adds a single untranslated word to the current symbol being
+        built
+
+        ** INPUTS **
+
+        *STR word* -- the spoken form of the new word
+        
+        **OUTPUTS**
+
+        *none*
+        """
+        self.exact_symbol = 0
+        self.untranslated_words.append(word)
+        if self.builder is None:
+            self.new_builder()
+        word_element = self.interp.make_word_element(word)
+        word_element.add_to(self.builder)
+
+    def add_alias(self, alias, spoken_form):
+        """
+        Adds a SymElement corresponding to an AliasMeaning or CapsModifier
+
+        ** INPUTS **
+
+        *AliasMeaning or CapsModifier alias* -- the lsa
+        
+        *STR spoken_form* -- the spoken_form of the alias
+
+        ** OUTPUTS **
+
+        *none*
+        """
+        self.exact_symbol = 0
+        self.allow_inexact = 0
+        if self.builder is None:
+            self.new_builder()
+        written = alias.written()
+        if written:
+            self.untranslated_words.append(written)
+        element = alias.make_element(spoken_form)
+        element.add_to(self.builder)
+
+    def empty(self):
+        """
+        indicates whether or not there is a symbol under construction
+        """
+        if not self.builder or self.builder.empty():
+            return 1
+        return 0
+
+    def reset(self):
+        self.untranslated_words = []
+        self.builder = None
+        self.current_preferences = None
+        self.exact_symbol = 0
+        self.allow_inexact = 1
+
+    def words(self):
+        """
+        returns a copy of the current list of untranslated words
+        """
+        return copy.copy(self.untranslated_words)
+
+    def inserted_symbols(self):
+        """return the accumulated list of SymbolResult objects
+        """
+        return self.symbols
+    def insert_existing(self, symbol, exact_matches = None,
+                        inexact_matches = None):
+        """
+        Insert a known symbol with the given written form, track the
+        associated changes, and create a SymbolResult
+        object
+
+        ** INPUTS **
+
+        *STR symbol* -- the written form of the known symbol
+
+        *[STR] exact_matches* -- a prioritized list of exact matches
+        to known symbols
+      
+        *[STR] inexact_matches* -- written forms of known symbols
+        which are possible (but not exact) matchs to the spoken form
+        of this symbol, or None if none have been generated yet
+
+        ** OUTPUTS **
+
+        *none*
+        """
+        insertion = actions_gen.ActionInsert(code_bef=symbol, code_after='')
+        block, dummy = insertion.log_execute(self.app, None, None)
+        result = SymbolResult(symbol, self.words(),
+                              exact_matches,
+                              block, self.app.curr_buffer_name(),
+                              self.current_preferences,
+                              inexact_matches)
+        self.symbols.append(result)
+        self.reset()
+      
+    def insert_new_symbol(self, exact_matches = None,
+                        inexact_matches = None):
+        """
+        Generate and insert a new symbol, track the
+        associated changes, and create a SymbolResult
+        object
+
+        ** INPUTS **
+
+        *[STR] exact_matches* -- a prioritized list of exact matches
+        to known symbols
+      
+        *[STR] inexact_matches* -- written forms of known symbols
+        which are possible (but not exact) matchs to the spoken form
+        of this symbol, or None if none have been generated yet
+
+        ** OUTPUTS **
+
+        *STR* -- the written form of the new symbol
+        """
+        symbol = self.builder.finish()
+        insertion = actions_gen.ActionInsert(code_bef=symbol, code_after='')
+        block, dummy = insertion.log_execute(self.app, None, None)
+        result = SymbolResult(symbol, self.words(),
+                              exact_matches,
+                              block, self.app.curr_buffer_name(),
+                              self.current_preferences,
+                              inexact_matches, new_symbol = 1)
+        self.symbols.append(result)
+        self.interp.add_symbol(symbol, [self.builder.spoken_form()])
+        self.reset()
+      
+        
+        
+    
 class CmdInterp(OwnerObject):
     """Interprets Context Sensitive Commands spoken into a given application.
     
@@ -1351,21 +1573,10 @@ class CmdInterp(OwnerObject):
         else:
             app.bind_to_buffer(initial_buffer)
 
-        untranslated_words = []
+        symbols = SymbolConstruction(self, app, self.builder_factory)
 
         if clear_state:
             self.styling_state.clear()
-        
-        builder = None
-        current_preferences = None
-
-        inserted_symbols = []
-
-# flag indicating whether untranslated words consists of an exact match
-# of the spoken form to an existing symbol
-        exact_symbol = 0
-
-        new_symbol = 0
         
         #
         # Process the beginning of the command until there is nothing
@@ -1430,54 +1641,28 @@ class CmdInterp(OwnerObject):
             csc_applies = 0
 
             CSC_consumes = self.apply_CSC(app, possible_CSCs,
-                processed_phrase, most_definite,
-                builder, untranslated_words, 
-                exact_symbol, new_symbol,
-                inserted_symbols, current_preferences)
+                processed_phrase, most_definite, symbols)
             if CSC_consumes:
                 phrase = phrase[CSC_consumes:]
                 processed_phrase = processed_phrase[CSC_consumes:]
                 head_was_translated = 1
-                untranslated_words = []
-                builder = None
-                current_preferences = None
-                exact_symbol = 0
-                new_symbol = 0
+                symbols.reset()
 
             if not head_was_translated and LSA_consumes == most_definite:
                 #
                 # LSA consumed the most words from command. Insert it.
                 #
-                trace('CmdInterp.interpret_phrase', 'processing leading LSA=\'%s\'' % chopped_LSA)
-                preceding_symbol = 0
-                if builder and not builder.empty():
-                    preceding_symbol = 1
+                trace('CmdInterp.interpret_phrase',
+                      'processing leading LSA=\'%s\'' % chopped_LSA)
+                
+                preceding_symbol = not symbols.empty()
                 if not chopped_LSA.interp_now(preceding_symbol):
-                    if chopped_LSA.written():
-                        untranslated_words.append(chopped_LSA.written())
-                    else:
-                        new_symbol = 1
                     spoken_form = processed_phrase[:LSA_consumes]
-                    element = \
-                        chopped_LSA.make_element(string.join(spoken_form))
-                    if not builder:
-                        builder = self.new_builder(app)
-                        buff = app.curr_buffer()
-                        current_preferences = \
-                            self.builder_factory.current_preferences(buff)
-                    element.add_to(builder)
+                    symbols.add_alias(chopped_LSA, string.join(spoken_form))
                 else:
 # flush untranslated words before inserting LSA
-                    if builder:
-                        self.match_untranslated_text(builder, 
-                            untranslated_words, app,
-                            inserted_symbols, current_preferences,
-                            exact_symbol, new_symbol)
-                        untranslated_words = []
-                        builder = None
-                        current_preferences = None
-                        exact_symbol = 0
-                        new_symbol = 0
+                    if preceding_symbol:
+                        self.match_untranslated_text(symbols, app)
                     action = actions_gen.ActionInsert(code_bef = \
                         chopped_LSA.written(), code_after = '')
                     action.log_execute(app, None, self.state_interface)
@@ -1498,23 +1683,9 @@ class CmdInterp(OwnerObject):
                 #       class SomeClass you may name the new class
                 #       SomeprefixSomeClass or SomeClassSomepostfix.
                 #
-                trace('CmdInterp.interpret_phrase', 'processing leading symbol=\'%s\'' % chopped_symbol)
-                if untranslated_words:
-                    exact_symbol = 0
-                else:
-                    exact_symbol = 1
-                untranslated_words.append(chopped_symbol)
-                if not builder:
-                    builder = self.new_builder(app)
-                    buff = app.curr_buffer()
-                    current_preferences = \
-                        self.builder_factory.current_preferences(buff)
-                spoken_list = string.split(chopped_symbol)
-                trace('CmdInterp.interpret_phrase', 
-                    'symbol breaks into %s' % repr(spoken_list))
-                for word in spoken_list:
-                    word_element = self.make_word_element(word)
-                    word_element.add_to(builder)
+                trace('CmdInterp.interpret_phrase',
+                      'processing leading symbol=\'%s\'' % chopped_symbol)
+                symbols.add_symbol(chopped_symbol)
 
                 phrase = phrase[symbol_consumes:]
                 processed_phrase = processed_phrase[symbol_consumes:]
@@ -1527,16 +1698,9 @@ class CmdInterp(OwnerObject):
                 # Just chop off the first word and insert it, marking
                 # it as untranslated text.
                 #                 
-                trace('CmdInterp.interpret_phrase', 'processing leading word=\'%s\'' % chopped_word)
-                untranslated_words.append(process_initials(chopped_word))
-                exact_symbol = 0
-                if not builder:
-                    builder = self.new_builder(app)
-                    buff = app.curr_buffer()
-                    current_preferences = \
-                        self.builder_factory.current_preferences(buff)
-                word_element = self.make_word_element(chopped_word)
-                word_element.add_to(builder)
+                trace('CmdInterp.interpret_phrase',
+                      'processing leading word=\'%s\'' % chopped_word)
+                symbols.add_word(chopped_word)
 
                 phrase = phrase[word_consumes:]
                 processed_phrase = processed_phrase[word_consumes:]
@@ -1547,31 +1711,23 @@ class CmdInterp(OwnerObject):
             #
             # Check if it marked the end of some untranslated text
             #
-            if (len(phrase) == 0) and untranslated_words:
+            if (len(phrase) == 0) and not symbols.empty():
                 #
                 # A CSC or LSA was translated, or we reached end of the
                 # command, thus marking the end of a sequence of untranslated
                 # text. Try to match untranslated text to a known (or new)
                 # symbol.
                 #
-                trace('CmdInterp.interpret_phrase', 'found the end of some untranslated text')
-                self.match_untranslated_text(builder, 
-                    untranslated_words, app,
-                    inserted_symbols, current_preferences,
-                    exact_symbol, new_symbol)
-                builder = None
-                current_preferences = None
-                untranslated_words = []
-                exact_symbol = 0
-                new_symbol = 0
+                trace('CmdInterp.interpret_phrase',
+                      'found the end of some untranslated text')
+                self.match_untranslated_text(symbols, app)
 
-            if untranslated_words:
-                untranslated_text = string.join(untranslated_words)
-            else:
-                untranslated_text = None
-            trace('CmdInterp.interpret_phrase', 'End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos()))
+            if trace_is_active('CmdInterp.interpret_phrase'):
+                untranslated_text = string.join(symbols.words())
+                trace('CmdInterp.interpret_phrase',
+                      'End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos()))
 
-        interpreted = InterpretedPhrase(phrase, inserted_symbols)
+        interpreted = InterpretedPhrase(phrase, symbols.inserted_symbols())
         # make sure to unbind the buffer before returning
         app.unbind_from_buffer()
 
@@ -1582,8 +1738,7 @@ class CmdInterp(OwnerObject):
         return interpreted
 
     def apply_CSC(self, app, possible_CSCs, spoken_list,
-        most_definite, builder, untranslated_words, exact_symbol,
-        new_symbol, inserted_symbols, current_preferences):
+        most_definite, symbols):
         """check which CSCs apply and execute the greediest one
 
         **INPUTS**
@@ -1600,38 +1755,19 @@ class CmdInterp(OwnerObject):
         those constructs which definitely apply (i.e. LSAs in the
         current language and known symbols)
 
-        *SymBuilder builder* -- symbol builder for any
-        untranslated words
-
-        *[STR] untranslated_words -- list of untranslated words which
-        would need to be flushed before the CSC
-
-        *BOOL exact_symbol* -- true if the untranslated words are an
-        exact match to a known symbol
-
-        *BOOL new_symbol* -- true if the untranslated words include
-        manual formatting and therefore should not be loosely matched to
-        an existing symbol
-
-        *[SymbolResult] inserted_symbols* -- list of symbols inserted
-         by this utterance so far
-
-        *[STR] current_preferences* -- current preferences for symbol
-         builders    
-
+        *SymbolConstruction symbols* -- object storing information
+        related to any pending untranslated symbols
+        
         **OUTPUTS**
 
         *INT* -- the number of words actually consumed (0 if no CSC
         consuming more than most_definite applies)
         """
-        preceding_symbol = 0
-        if untranslated_words:
-            preceding_symbol = 1
+        preceding_symbol = not symbols.empty()
         for match in possible_CSCs:
             meanings, CSC_consumes = match
             trace('CmdInterp.apply_CSC', 
-                'possible CSC %s, consumes %d' % \
-                (meanings, CSC_consumes))
+                'possible CSC %s, consumes %d' % (meanings, CSC_consumes))
             if CSC_consumes < most_definite:
 # LSA or symbol consumes more than the rest of the CSCs, so defer to
 # them
@@ -1655,15 +1791,8 @@ class CmdInterp(OwnerObject):
                 config_warning(msg)
             csc_applies = 1
 # flush untranslated words before executing action
-            if untranslated_words:
-                self.match_untranslated_text(builder, 
-                    untranslated_words, app,
-                    inserted_symbols, current_preferences,
-                    exact_symbol, new_symbol)
-                
-# Eventually, we may want some of the styling state to persist across
-# some CSCs.  However, it is not clear how to achieve that, so for now, 
-# we just reset the state before executing the action
+            if preceding_symbol:
+                self.match_untranslated_text(symbols, app)
             action.log_execute(app, context, self.state_interface)
             return CSC_consumes
         return 0
@@ -1773,9 +1902,7 @@ class CmdInterp(OwnerObject):
             command_tuples.append((spoken, written))
         return self.massage_command_tuples(command_tuples)
 
-    def match_untranslated_text(self, builder, 
-        untranslated_words, app, inserted_symbols, current_preferences,
-        exact_symbol = 0, new_symbol = 0):
+    def match_untranslated_text(self, symbols, app):
         """Tries to match last sequence of untranslated text to a symbol.
         
         **INPUTS**
@@ -1783,38 +1910,24 @@ class CmdInterp(OwnerObject):
         *[STR]* untranslated_words -- list of untranslated words
 
         *AppState* app -- editor into which the command was spoken
-
-        *SymBuilder builder* -- symbol builder for any
-        untranslated words
-
-        *[STR] untranslated_words -- list of untranslated words which
-        would need to be flushed before the CSC
-
-        *[SymbolResult] inserted_symbols* -- list of symbols inserted
-         by this utterance so far
-         
-        *[STR] current_preferences* -- current preferences for symbol
-         builders    
         
-        *BOOL* exact_symbol -- true if the untranslated text was an
-        exact match for the spoken form of a symbol
-
-        *BOOL new_symbol* -- true if the untranslated words include
-        manual formatting and therefore should not be loosely matched to
-        an existing symbol
+        *SymbolConstruction symbols* -- object storing information
+        related to any pending untranslated symbols
 
         **OUTPUTS**
         
         *none* -- 
         """
-        
-        untranslated_text = string.join(untranslated_words)
-        trace('CmdInterp.match_untranslated_text', 'untranslated_text=\'%s\'' % (untranslated_text))
+        phrase = map(process_initials, symbols.words())
+        untranslated_text = string.join(phrase)
         spoken_form = untranslated_text
-        phrase = string.split(spoken_form)
+        trace('CmdInterp.match_untranslated_text',
+              'untranslated_text="%s"' % untranslated_text)
+        trace('CmdInterp.match_untranslated_text',
+              'phrase = %s' % phrase)
         complete_match = self.known_symbols.complete_match(phrase)        
-        if exact_symbol and not new_symbol \
-                and not self.builder_factory.manually_specified():
+        if symbols.exact_symbol and \
+               not self.builder_factory.manually_specified():
             trace('CmdInterp.match_untranslated_text', 
                 'exact symbol spoken "%s"' % (spoken_form))
             if complete_match:
@@ -1822,14 +1935,7 @@ class CmdInterp(OwnerObject):
                     complete_match)
                 trace('CmdInterp.match_untranslated_text', 
                     'exact symbol written "%s"' % (untranslated_text))
-                insertion = actions_gen.ActionInsert(code_bef=written_symbol,
-                    code_after='')
-                block, dummy = insertion.log_execute(app,
-                    None, self.state_interface)
-                result = SymbolResult(written_symbol, phrase,
-                    complete_match, block, app.curr_buffer_name(),
-                    current_preferences)
-                inserted_symbols.append(result)
+                symbols.insert_existing(written_symbol, complete_match)
                 self.styling_state.clear()
                 return
             else:
@@ -1852,40 +1958,74 @@ class CmdInterp(OwnerObject):
         if num_match:
             untranslated_text = re.sub('\s', '', untranslated_text)        
             actions_gen.ActionInsert(code_bef=untranslated_text,
-            code_after='').log_execute(app, None, self.state_interface)                            
+            code_after='').log_execute(app, None, None)
             self.styling_state.clear()
+            symbols.reset()
             return
 
         symbol_matches = None
-        trace('CmdInterp.match_untranslated_text', 'new_symbol=%s' % new_symbol)
-        if not new_symbol and not self.builder_factory.manually_specified():
-            symbol_matches = self.known_symbols.match_pseudo_symbol(untranslated_text)
-            trace('CmdInterp.match_untranslated_text', 'symbol_matches=%s' % symbol_matches)
+        if symbols.allow_inexact and \
+                not self.builder_factory.manually_specified():
+            symbol_matches = \
+                self.known_symbols.match_pseudo_symbol(untranslated_text)
+            trace('CmdInterp.match_untranslated_text',
+                  'symbol_matches=%s' % symbol_matches)
         if symbol_matches:
             natives = map(lambda match: match.native_symbol, symbol_matches)
-            insertion = actions_gen.ActionInsert(code_bef = natives[0],
-                code_after='')
-            block, dummy = insertion.log_execute(app, None,
-                self.state_interface)
-            result = SymbolResult(natives[0], phrase,
-                complete_match, block, app.curr_buffer_name(),
-                current_preferences, possible_results = natives)
-            inserted_symbols.append(result)
-                       
-#            self.dlg_select_symbol_match(untranslated_text, 
-#                symbol_matches, app)
+            symbols.insert_existing(natives[0],
+                                    exact_matches = complete_match,
+                                    inexact_matches = natives)
         else:
-            symbol = builder.finish()
-            insertion = actions_gen.ActionInsert(code_bef=symbol,
-                code_after='')
-            block, dummy = insertion.log_execute(app, None,
-                self.state_interface)
-            result = SymbolResult(symbol, phrase, complete_match, block,
-                app.curr_buffer_name(), current_preferences)
-            inserted_symbols.append(result)
-            self.known_symbols.add_symbol(symbol, [builder.spoken_form()])
+            symbol = symbols.insert_new_symbol(exact_matches = complete_match)
         
         self.styling_state.clear()
+        return
+        
+    def add_symbol(self, symbol, user_supplied_spoken_forms=None, \
+                   tentative = 1, add_sr_entries=1):
+        """Add a symbol to the dictionary
+
+        **INPUTS**
+        
+        *STR* symbol -- Symbol to add
+
+        *[STR] user_supplied_spoken_forms* -- Spoken forms for the
+         symbol which were supplied explicitly by the user. These
+         forms are added even if they are not generated automaticly by
+         [update_spoken_forms]. This is useful in cases where the user
+         has explicitly supplied spoken forms for a symbol that contains very
+         short abbreviations (i.e. abbreviations that are rejected by
+         [add_abbreviation]). In such cases, the spoken form wouldn't
+         automaticaly be generated by [updated_spoken_forms] and must
+         therefore be added explictely by add_symbol.
+
+        *BOOL* tentative = 1 -- If true, symbol is added tentatively,
+        and can be removed on undo/correction/reformatting
+
+        *BOOL* add_sr_entries = 1 -- If true, adds symbol to the SR vocabulary.
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        self.known_symbols.add_symbol(symbol,
+            user_supplied_spoken_forms, tentative = tentative,
+            add_sr_entries = add_sr_entries)
+
+    def current_preferences(self, app):
+        """returns the current list of preferences for SymBuilder
+        objects
+        
+        **INPUTS**
+
+        *AppState app* -- the AppState interface to the editor
+
+        **OUTPUTS**
+
+        *[STR]* --  the current preferences
+        """
+        buff = app.curr_buffer()
+        return self.builder_factory.current_preferences(buff)
 
     def new_builder(self, app):
         """create a new SymBuilder object to generate new
@@ -2132,13 +2272,15 @@ class CmdInterp(OwnerObject):
 
         Returns a tuple *(chopped_symbol, consumed)* where:
         
-        *STR chopped_symbol* -- spoken form of the known symbol, or None 
+        *[STR] chopped_symbol* -- spoken form of the known symbol, or None 
         if no symbol matches the spoken form. If *None*, it means 
         *command* did not start with a known symbol.
 
         *INT* consumed* -- Number of words consumed by the symbol from
          the command
         """
+        debug.trace('CmdInterp.chop_symbol_phrase', 
+            'phrase = %s' % repr(phrase))
         match = self.known_symbols.match_phrase(phrase)
         debug.trace('CmdInterp.chop_symbol_phrase', 
             'match = %s' % repr(match))
@@ -2148,7 +2290,7 @@ class CmdInterp(OwnerObject):
         symbols, rest_spoken = match
         consumed = len(phrase) - len(rest_spoken)
         consumed_words = phrase[:consumed]
-        return string.join(consumed_words), consumed
+        return consumed_words, consumed
                 
     def whole_words(self, spoken_list, consumed_words):
         """Checks whether a list of words chopped off the spoken
