@@ -211,7 +211,7 @@ def messenger_factory(sock):
     #
     packager = messaging.MessPackager_FixedLenSeq()
     transporter = messaging.MessTransporter_Socket(sock=sock)
-    encoder = messaging.MessEncoder_LenPrefArgs()
+    encoder = messaging.MessEncoderWDDX()
     a_messenger = messaging.Messenger(packager=packager, transporter=transporter, encoder=encoder)        
     return a_messenger
 
