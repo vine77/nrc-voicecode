@@ -27,7 +27,7 @@ Communication protocol
 - Implement an XML based messaging protocol. It will be easier to
   handle at the editor end than Alain's protocol, because there are
   tons of XML libraries in different langauges out there.
-
+ 
 - For better efficiency, SourceBuffCached.get_text(start, end) could
   retrieve only the text between *start* and *end* (*text_region*),
   and cache the 3ple *(start, end, text_region)*. This would allow certain 
