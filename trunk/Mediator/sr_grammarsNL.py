@@ -212,7 +212,6 @@ class DictThroughCmdWinGramNL(DictWinGram, GrammarBase):
             if recogType == 'self':
                 utterance = \
                     sr_interface.SpokenUtteranceNL(results, self.wave_playback)
-                debug.trace('DictThroughCmdWinGramNL.gotResultsObject', '** invoking self.on_results()')
                 self.on_results(utterance)
 #                self.last = SpokenUtteranceNL(results)
 # not sure if yet if this is where we should store the utterance
