@@ -145,6 +145,43 @@ class Action(Object.Object):
         
         return self.docstring
 
+
+class ActionCompound(Action):
+    """manually choose the styling for the following symbol
+
+    **INSTANCE ATTRIBUTES**
+
+    *Action action1* -- Action object for the first action to execute
+    *Action action2* -- Action object for the second action to execute
+    
+    """
+    
+    def __init__(self, action_tuple, **args_super):
+        self.deep_construct(ActionCompound, \
+                            {'action_tuple': action_tuple}, \
+                            args_super, \
+                            {})
+
+    def execute(self, app, cont, state = None):
+        """Performs the two actions in the ActionCompound
+
+        See [Action.execute] for description of arguments.
+        
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+
+        debug.trace('ActionCompound.execute', 
+                    'Trying to execute all actions.')
+
+        for action in self.action_tuple:
+            action.execute(app, cont, state)
+            debug.trace('ActionCompound.execute', 
+                        '  Executed an action.')
+
+        
+        debug.trace('ActionCompound.execute', 
+                    'Tried to execute all actions.')
+
+
 class ActionStyling(Action):
     """manually choose the styling for the following symbol
 
@@ -979,7 +1016,12 @@ class ActionInsertNewClause(Action):
     **INSTANCE ATTRIBUTES**
         
     STR *end_of_clause_regexp=None* -- Use this regexp to find the end
-     of the current clause.
+    of the current clause.
+
+    STR *start_of_next_clause_regexp = None* -- If this regexp occurs
+    closer to the cursor than end_of_clause_regexp, insert relative to
+    this regexp instead of end_of_clause_regexp.  Also reverse sign of
+    *where* in this case.
 
     INT *add_lines* -- Number of lines to insert between end of current clause
     and the new one.
@@ -1006,13 +1048,14 @@ class ActionInsertNewClause(Action):
     *none* -- 
     """
         
-    def __init__(self, end_of_clause_regexp, code_bef='',
+    def __init__(self, end_of_clause_regexp, start_of_next_clause_regexp='', code_bef='',
                  code_after='', add_lines=1, back_indent_by=1, where = -1, direction = 1,
                  include_current_line = 0,
                  **args_super):
         
         self.deep_construct(ActionInsertNewClause, 
                             {'end_of_clause_regexp': end_of_clause_regexp, 
+                             'start_of_next_clause_regexp': start_of_next_clause_regexp, 
                              'where': where,
                              'direction': direction,
                              'add_lines': add_lines, 
@@ -1037,14 +1080,50 @@ class ActionInsertNewClause(Action):
         debug.trace('ActionInsertNewClause.execute',
             'before search, pos = %d' % app.cur_pos())
 
+        orig_pos = app.cur_pos()
+
         app.search_for(regexp=self.end_of_clause_regexp, 
                        where = self.where, direction = self.direction,
                        include_current_line = self.include_current_line,
                        unlogged=1)
         debug.trace('ActionInsertNewClause.execute',
             'after search, pos = %d' % app.cur_pos())
-                       
-        
+        next_clause_pos = app.cur_pos()
+
+        if self.start_of_next_clause_regexp != '':
+            # see if next clause starts before we find the token ending
+            # the current clause (this is required for C/C++, so that
+            # saying 'new statement' between an empty brace pair does not
+            # search beyond the close-brace
+            debug.trace('ActionInsertNewClause.execute',
+                        'where = %d, direction = %d, expression = %s' % \
+                        (-1*self.where, self.direction,
+                         repr(self.start_of_next_clause_regexp)))
+
+            app.goto(orig_pos)
+            app.search_for(regexp=self.start_of_next_clause_regexp, 
+                           where = -1*self.where, direction = self.direction,
+                           include_current_line = self.include_current_line,
+                           unlogged=1)
+            debug.trace('ActionInsertNewClause.execute',
+                'after start-of-next-clause search, orig_pos = %d, next_clause_pos = %d, pos = %d'
+                        % (orig_pos, next_clause_pos, app.cur_pos()))
+
+            if app.cur_pos() == orig_pos or \
+                   (self.where > 0 and app.cur_pos() >= next_clause_pos) or \
+                   (self.where <= 0 and app.cur_pos() <= next_clause_pos):
+                debug.trace('ActionInsertNewClause.execute',
+                            'inserting at end_of_clause_regexp')
+                # go back to position found by end_of_clause_regexp
+                app.goto(next_clause_pos)
+            else:
+                # insert here instead
+                debug.trace('ActionInsertNewClause.execute',
+                            'inserting at start_of_next_clause_regexp')
+            
+        debug.trace('ActionInsertNewClause.execute',
+            'inserting at ' + `app.cur_pos()`)
+
         blank_lines = ""
         for ii in range(self.add_lines):
             blank_lines = "%s%s" % (blank_lines, app.pref_newline_convention())
@@ -1071,7 +1150,6 @@ class ActionInsertNewClause(Action):
             debug.trace('ActionInsertNewClause.execute',
                 'about decrease indent by %d' % self.back_indent_by)
             app.decr_indent_level(levels=self.back_indent_by)
-
             
         debug.trace('ActionInsertNewClause.execute',
             'about to insert %s, %s' % (repr(self.code_bef),
@@ -1079,6 +1157,79 @@ class ActionInsertNewClause(Action):
         app.insert_indent(code_bef=self.code_bef, code_after=self.code_after)
         debug.trace('ActionInsertNewClause.execute',
             'returning')
+
+
+class ActionInsertAround(Action):
+
+    """Inserts text before and after an expression where the cursor lies.  May be used
+    for example to surround an expression with parentheses.  The cursor position is
+    not changed.  No server-side indentation is done (this is intended for surrounding
+    small expressions, not multi-line constructs).
+        
+    **INSTANCE ATTRIBUTES**
+        
+    STR *start_regexp=None* -- Use this regexp to find the expression
+    before which code_bef will be inserted.
+
+    STR *end_regexp=None* -- Use this regexp to find the expression
+    after which code_after will be inserted.
+
+    STR *code_bef=''* -- New text to be inserted before start_regexp.
+
+    STR *code_after=''* -- New text to be inserted after end_regexp.
+    
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+        
+    def __init__(self, start_regexp, end_regexp,
+                 code_bef='',
+                 code_after='', **args_super):
+        
+        self.deep_construct(ActionInsertAround, 
+                            {'start_regexp': start_regexp,
+                             'end_regexp': end_regexp, 
+                             'code_bef': code_bef, 
+                             'code_after': code_after},
+                             args_super, 
+                             {})
+
+    def execute(self, app, cont, state = None):
+        """See [Action.execute] for details.
+        
+        .. [Action.execute] file:///./Action.Action.html#execute"""
+                        
+        debug.trace('ActionInsertAround.execute',
+            'start = %s, end = %s' % \
+            (repr(self.start_regexp), repr(self.end_regexp)))
+        debug.trace('ActionInsertAround.execute',
+            'before search, pos = %d' % app.cur_pos())
+
+        orig_pos = app.cur_pos()
+
+        # search backward to start_regexp and insert code_bef, before cursor
+        app.search_for(regexp=self.start_regexp, 
+                       where = -1, direction = -1,
+                       unlogged = 1)
+        app.insert_indent(self.code_bef,'')
+        
+        # return to orig_pos before searching forward
+        app.goto(orig_pos + len(self.code_bef))
+
+        # search backward to start_regexp and insert code_after, after cursor
+
+        app.search_for(regexp=self.start_regexp, 
+                       where = 1, direction = 1,
+                       unlogged = 1)
+        app.insert_indent('',self.code_after)
+
+        # return to original cursor position - how do we know how much was inserted, including spaces?
+        app.goto(orig_pos + len(self.code_bef))
+
+        debug.trace('ActionInsertAround.execute',
+                    'after insertion, pos = %d' % app.cur_pos())
+
 
 
 class ActionCompileSymbols(Action):
