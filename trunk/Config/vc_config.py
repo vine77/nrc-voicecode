@@ -583,6 +583,9 @@ navigation_within_buffer.add_csc(acmd)
 #
 # repeatable backspace commands (back space / delete backwards "" and 2 to 5
 #
+# Note: Many of those CSCs have same spoken form as some discrete NatSpeak
+#       commands. When that happens, set generate_discrete_cmd=1.
+#
 
 backspacing  = CSCmdSet(name = 'backspace multiple times',
     description = "backspace 1 to n times.")
@@ -596,11 +599,12 @@ insertion_deletions.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms = ['delete that'],
              meanings = {ContTextIsSelected(): ActionDeleteSelectedText()},
-             docstring = "copy selected text")
+             docstring = "copy selected text",
+             generate_discrete_cmd=1)
 insertion_deletions.add_csc(acmd)
 
 
-acmd = CSCmd(spoken_forms = ['copy that',  'emacs copy that'],
+acmd = CSCmd(spoken_forms = ['copy that'],
              meanings = {ContTextIsSelected(): ActionCopySelectedText()},
              docstring = "copy selected text",
              generate_discrete_cmd = 1)
@@ -608,13 +612,15 @@ insertion_deletions.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms = ['paste that'],
              meanings = {ContAny(): ActionPasteClipboard()},
-             docstring = "paste text from the clipboard")
+             docstring = "paste text from the clipboard",
+             generate_discrete_cmd=1)
 insertion_deletions.add_csc(acmd)
 
 
 acmd = CSCmd(spoken_forms = ['cut that'],
              meanings = {ContTextIsSelected(): ActionCutSelectedText()},
-             docstring = "copy selected text")
+             docstring = "copy selected text",
+             generate_discrete_cmd=1)
 insertion_deletions.add_csc(acmd)
 
 

@@ -394,7 +394,6 @@ class SourceBuffEdSim(SourceBuff.BackspaceMixIn,
 
         *none*
         """
-
         if range == None:
             range = self.get_selection()
         range = self.make_valid_range(range)

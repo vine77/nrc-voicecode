@@ -209,8 +209,6 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
 
         *none*
         """
-        
-        trace('SourceBuffMessaging.set_text', '** invoked')
         args = {'text': text, 'start': start, 'end': end,
             'buff_name': self.name()}
         self.app.talk_msgr.send_mess('set_text', args)

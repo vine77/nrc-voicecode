@@ -81,7 +81,7 @@ def print_call_stack(print_to_file=sys.stdout):
 def trace_call_stack(trace_id, location_id=None, print_to_file=sys.stdout):
     if not location_id:
        location_id = trace_id
-    if trace_is_active(trace_id):
+    if tracing(trace_id) and trace_is_active(trace_id):
        print_to_file.write("-- %s: call stack at location '%s' is:\n" % 
        (trace_id, location_id))
        print_call_stack(print_to_file)
@@ -144,13 +144,14 @@ def traces_are_on():
       return None
 
 trace_fct = dont_print_trace
+traces_on = False
 trace_file = sys.stdout
 to_be_traced = {}
 activate_trace_id_substrings = 0
 
 
 def tracing(trace_id):
-    return trace_is_active(trace_id)
+    return trace_is_active(trace_id) and trace_fct != dont_print_trace
 
 def trace_is_active(trace_id):
     global to_be_traced, activate_trace_id_substrings
@@ -196,6 +197,7 @@ def config_traces(print_to=None, status=None, active_traces=None,
     # trace_fct is a function that we set on the fly. It's never defined explicitly
     # through a *def* statement
     #
+    traces_are_on = status
     if status:
         if status == 'on':
             trace_fct = print_trace

@@ -180,6 +180,11 @@ class DictThroughCmdWinGramNL(DictWinGram, GrammarBase):
             GrammarBase.deactivate(self, "vcode_utterance")
             self.active = 0
 
+    def cleanup(self):
+        self.deactivate()
+        GrammarBase.unload(self)
+        
+
     def set_context(self, before = "", after = ""):
         """set the context to improve dictation accuracy
 
@@ -202,11 +207,12 @@ class DictThroughCmdWinGramNL(DictWinGram, GrammarBase):
 
     def gotResultsObject(self, recogType, results):
             debug.trace('DictThroughCmdWinGramNL.gotResultsObject', 
-                'recogType=%s, results=%s, self.exclusive=%s' % \
-                (recogType, repr(results), self.exclusive))
+                'recogType=%s, results=%s, self.exclusive=%s, self.buff_name=%s' % \
+                (recogType, repr(results), self.exclusive, self.buff_name))
             if recogType == 'self':
                 utterance = \
                     sr_interface.SpokenUtteranceNL(results, self.wave_playback)
+                debug.trace('DictThroughCmdWinGramNL.gotResultsObject', '** invoking self.on_results()')
                 self.on_results(utterance)
 #                self.last = SpokenUtteranceNL(results)
 # not sure if yet if this is where we should store the utterance
@@ -335,8 +341,10 @@ class DictWinGramNL(DictWinGram, DictGramBase):
 
     def gotResultsObject(self, recogType, results):
             debug.trace('DictWinGramNL.gotResultsObject', 
-                'recogType=%s, results=%s, self.exclusive=%s' % \
-                (recogType, repr(results), self.exclusive))
+                'recogType=%s, results=%s, self.exclusive=%s, self.buff_name=%s' % \
+                (recogType, repr(results), self.exclusive, self.buff_name))
+                
+            debug.trace('DictWinGramNL.gotResultsObject', '** upon entry, self.app.curr_buffer().buff_name=%s' % self.app.curr_buffer().buff_name)
             if recogType == 'self':
                 utterance = \
                     sr_interface.SpokenUtteranceNL(results, self.wave_playback)
@@ -421,7 +429,7 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
 
         *none*
         """
-        debug.trace('SelectGramBase.activate', 'invoked')
+        debug.trace('SelectGramBase.activate', 'invoked, buff_name=%s' % buff_name)
         self.buff_name = buff_name
         self.find_visible()
 
@@ -445,6 +453,7 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
 
         *none*
         """
+        debug.trace('SelectWinGramNL.deactivate', 'self.buff_name=%s' % self.buff_name)
         if self.is_active():
             SelectGramBase.deactivate(self)
             self.active = 0

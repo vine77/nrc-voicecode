@@ -51,6 +51,7 @@ class ForwardToBuffer:
         self.application = application
         self.method = method
     def __call__(self, *positional, **keys):
+        debug.trace('ForwardToBuffer.__call__', 'positional=%s, keys=%s' % (positional, keys))
         buff_name = None
         if keys.has_key("buff_name"):
             buff_name = keys["buff_name"]
@@ -891,6 +892,7 @@ class AppState(OwnerObject):
 
         *none*
         """
+        debug.trace('AppState.on_change', 'self.change_callback=%s' % self.change_callback)
         if self.change_callback:
             buff = self.find_buff(buff_name)
             if buff:

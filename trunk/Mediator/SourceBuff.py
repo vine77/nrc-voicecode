@@ -136,6 +136,7 @@ class SourceBuff(OwnerObject):
         
         ..[SourceBuff] file:///./SourceBuff.SourceBuff.html"""
 
+        debug.trace('SourceBuff.rename_buffer_cbk', 'new_buff_name=%s' % new_buff_name)
         self.buff_name = new_buff_name
 
     def file_name(self):
@@ -1060,6 +1061,7 @@ class SourceBuff(OwnerObject):
         - When using the EdSim line-based editor, it refreshes the printout
         of the current content after each change."""
 
+        debug.trace('SourceBuff.print_buff_if_necessary', 'self.app.print_buff_when_changed=%s' % self.app.print_buff_when_changed)
         if self.app.print_buff_when_changed:
             self.print_buff()
         

@@ -474,7 +474,7 @@ def test_mediator_console():
     file = small_buff_c
     commands.print_abbreviations()    
     test_command("""compile_symbols([r'""" + file + """'])""")
-    test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'equals', '0', 'loop', 'body'])
+    test_say(['for', 'loop', 'horiz_pos\\horizontal position', 'equals', '0\\zero', 'loop', 'body'])
 
     test_command("say(['select', 'horiz_pos\\horizontal position'," + \
         " '=\equals'],  never_bypass_sr_recog=1)")
@@ -616,9 +616,21 @@ def test_select_pseudocode():
     test_say(['go after next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_say(['next', 'one'])
     test_say(['previous', 'one'])                
-    test_command("""quit(save_speech_files=0, disconnect=0)""")        
-  
+    test_command("""goto_line(1)""")    
+    test_say(['go before', 'index', '=\\equals', '1\\one'], never_bypass_sr_recog=1)        
+    test_say(['next', 'one'])
+    test_say(['previous', 'one'])                
+    test_command("""goto_line(1)""")    
+    test_say(['go after', 'index', '=\\equals', '1\\one'], never_bypass_sr_recog=1)        
+    test_say(['next', 'one'])
+    test_say(['previous', 'one'])                
     
+    # Testing select X through Z
+    # AD: There used to be a bug where Select X through Z failed if
+    #     if cursor was right before an occurence of X through Z.
+    test_command("""goto_line(1)""")
+    test_say(['select', 'index', 'through', '1\\one'])
+    test_say(['select', 'index', 'through', '0\\zero'])
     
     test_command("""quit(save_speech_files=0, disconnect=0)""")        
 
@@ -1376,7 +1388,7 @@ def test_punctuation():
 
     commands.say(['index', '.\\dot', 'function', '()\\without arguments', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['variable', '=\\equals', 'new', 'list', '0\\zero', '...\\ellipsis', '10', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['variable', '=\\equals', 'new', 'list', '0\\zero', '...\\ellipsis', '10\\ten', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     commands.say(['#\\number-sign', '!\\bang', 'python', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['#\\number-sign', '!\\exclamation-mark', 'python', 'new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
@@ -3100,7 +3112,10 @@ def test_basic_correction():
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
-    test_say(['select', 'clown'], never_bypass_sr_recog=1)
+    # AD: With NatSpeak 8, the word Clown must be capitalised in the utterance
+    #     otherwise the selection grammar won't intercept it. Silly recognitionMimic()!
+    #
+    test_say(['select', 'Clown'], never_bypass_sr_recog=1)
     editor = the_mediator.editors.app_instance(instance_name)
     buffer = editor.curr_buffer()
 
@@ -3605,7 +3620,7 @@ def test_basic_correction():
     check_symbol(interpreter, 'osym', expected = 1)    
     check_symbol(interpreter, 'other_symbol', expected = 0)    
     
-    utterances.append(string.split('new statement other symbol equals 0'))
+    utterances.append(string.split('new statement other symbol equals zero'))
     input.append('0\n')
     status.append(1)    
     test_say(utterances[-1], input[-1], never_bypass_sr_recog=1)
@@ -3738,7 +3753,7 @@ def test_insert_delete_commands():
    commands.open_file('blah.py')
    test_say(['this', 'is', 'a', 'very', 'long', 'variable', 'name', 'but', 'never', 'mind'], user_input="1\n1\n1\n1\n1\n1\n1\n1\n1\n")
    test_say(['back space'])
-   test_say(['2 times'])
+   test_say(['two\\two', 'times'])
    test_say(['back space 2'])   
    test_say(['back space 3'])
    test_say(['back space 4'])
@@ -3755,9 +3770,10 @@ def test_insert_delete_commands():
 
    commands.open_file(large_buff_py)
    commands.goto_line(5)
+
    test_say(['delete', 'that', 'line'])
    test_say(['do', 'that', 'again'])
-   test_say(['delete', 'that', 'line', '2', 'times'])
+   test_say(['delete', 'that', 'line', 'two\\two', 'times'])
    
    test_say(['select', 'base', 'class'])
    test_say(['delete', 'that'])
@@ -3770,7 +3786,8 @@ def test_insert_delete_commands():
    test_say(['cut', 'that'])
    test_say(['paste', 'that'])
 
-add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands')
+add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands',
+         foreground = 1)
 
 
 ##############################################################################
@@ -3898,9 +3915,6 @@ def test_Emacs_split_window():
     commands.say(['dictated', 'in', 'buffer', 'two'], user_input="0\n", echo_cmd=1)    
             
     kbd_evt_sim.type_text('{Esc}xdelete-other-window{Enter}')
-
-
-    
 
 
 add_test('emacs_split_window', test_Emacs_split_window, 'Testing dictation into Emacs with two buffers displayed in same window.', foreground = 1)
@@ -4443,11 +4457,11 @@ def test_navigation_within_buffer():
 
     commands.say(['page', 'down'])
     commands.say(['do', 'that', 'again'])   
-    commands.say(['again', 'two', 'times']) 
+    commands.say(['again', 'two\\two', 'times']) 
 
     commands.say(['page', 'up'])
     commands.say(['do', 'that', 'again'])   
-    commands.say(['again', 'two', 'times']) 
+    commands.say(['again', 'two\\two', 'times']) 
     
    
 # This test does not work yet... Fix it later. Don't forget to uncomment

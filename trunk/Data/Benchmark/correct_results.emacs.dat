@@ -53,6 +53,248 @@ Got simulated kbd event: type_text({Esc}xdelete-other-window{Enter},)
 
 
 *******************************************************************************
+* Name        : insert_delete
+* Description : Testing insertion and deletion commands
+*******************************************************************************
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['this', 'is', 'a', 'very', 'long', 'variable', 'name', 'but', 'never', 'mind'], user_input='1
+1
+1
+1
+1
+1
+1
+1
+1
+')
+Heard this is a very long variable name but never mind
+*** Start of source buffer ***
+  1: this_is_a_very_long_variable_name_but_never_mind<CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['back space'], user_input='None')
+Heard back space
+*** Start of source buffer ***
+  1: this_is_a_very_long_variable_name_but_never_min<CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['two\\two', 'times'], user_input='None')
+Heard two times
+*** Start of source buffer ***
+  1: this_is_a_very_long_variable_name_but_never_mi<CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['back space 2'], user_input='None')
+Heard back space 2
+*** Start of source buffer ***
+  1: this_is_a_very_long_variable_name_but_never_<CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['back space 3'], user_input='None')
+Heard back space 3
+*** Start of source buffer ***
+  1: this_is_a_very_long_variable_name_but_nev<CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['back space 4'], user_input='None')
+Heard back space 4
+*** Start of source buffer ***
+  1: this_is_a_very_long_variable_name_but<CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['back space 5'], user_input='None')
+Heard back space 5
+*** Start of source buffer ***
+  1: this_is_a_very_long_variable_nam<CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['select', 'additional'], user_input='None')
+Heard select additional
+*** Start of source buffer ***
+  1: some <SEL_START>additional<SEL_END> text
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['back space'], user_input='None')
+Heard back space
+*** Start of source buffer ***
+  1: some <CURSOR> text
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['select', 'additional'], user_input='None')
+Heard select additional
+*** Start of source buffer ***
+  1: some <SEL_START>additional<SEL_END> text
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['back space 2'], user_input='None')
+Heard back space 2
+*** Start of source buffer ***
+  1: some<CURSOR> text
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: <CURSOR>
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+  5: <CURSOR>
+  6: import auto_test, exceptions, os, posixpath, profile, sys
+  7: 
+  8: class Object:
+
+
+>>> Testing console command: say(['delete', 'that', 'line'], user_input='None')
+Heard delete that line
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+  5: <CURSOR>import auto_test, exceptions, os, posixpath, profile, sys
+  6: 
+  7: class Object:
+  8:     """A base class for all VoiceCode objects
+
+
+>>> Testing console command: say(['do', 'that', 'again'], user_input='None')
+Heard do that again
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+  5: <CURSOR>
+  6: class Object:
+  7:     """A base class for all VoiceCode objects
+  8: 
+
+
+>>> Testing console command: say(['delete', 'that', 'line', 'two\\two', 'times'], user_input='None')
+Heard delete that line two times
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+  5: <CURSOR>    """A base class for all VoiceCode objects
+  6: 
+  7:     This class implements various useful behaviors for generic
+  8:     objects, such as:
+
+
+>>> Testing console command: say(['select', 'base', 'class'], user_input='None')
+Heard select base class
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+  5:     """A <SEL_START>base class<SEL_END> for all VoiceCode objects
+  6: 
+  7:     This class implements various useful behaviors for generic
+  8:     objects, such as:
+
+
+>>> Testing console command: say(['delete', 'that'], user_input='None')
+Heard delete that
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+  5:     """A <CURSOR> for all VoiceCode objects
+  6: 
+  7:     This class implements various useful behaviors for generic
+  8:     objects, such as:
+
+
+>>> Testing console command: say(['select', 'various', 'useful'], user_input='None')
+Heard select various useful
+  4: autoTst = 0
+  5:     """A  for all VoiceCode objects
+  6: 
+  7:     This class implements <SEL_START>various useful<SEL_END> behaviors for generic
+  8:     objects, such as:
+  9: 
+ 10:     - safe attribute setting
+
+
+>>> Testing console command: say(['copy', 'that'], user_input='None')
+Heard copy that
+  4: autoTst = 0
+  5:     """A  for all VoiceCode objects
+  6: 
+  7:     This class implements <SEL_START>various useful<SEL_END> behaviors for generic
+  8:     objects, such as:
+  9: 
+ 10:     - safe attribute setting
+
+
+>>> Testing console command: say(['paste', 'that'], user_input='None')
+Heard paste that
+  4: autoTst = 0
+  5:     """A  for all VoiceCode objects
+  6: 
+  7:     This class implements <SEL_START>various useful<SEL_END>various useful behaviors for generic
+  8:     objects, such as:
+  9: 
+ 10:     - safe attribute setting
+
+
+>>> Testing console command: say(['select', 'safe', 'attribute'], user_input='None')
+Heard select safe attribute
+  7:     This class implements various usefulvarious useful behaviors for generic
+  8:     objects, such as:
+  9: 
+ 10:     - <SEL_START>safe attribute<SEL_END> setting
+ 11:     - deep constructor
+ 12:     - pretty printing???
+ 13:     
+
+
+>>> Testing console command: say(['cut', 'that'], user_input='None')
+Heard cut that
+  7:     This class implements various usefulvarious useful behaviors for generic
+  8:     objects, such as:
+  9: 
+ 10:     - <CURSOR> setting
+ 11:     - deep constructor
+ 12:     - pretty printing???
+ 13:     
+
+
+>>> Testing console command: say(['paste', 'that'], user_input='None')
+Heard paste that
+  7:     This class implements various usefulvarious useful behaviors for generic
+  8:     objects, such as:
+  9: 
+ 10:     - <CURSOR>safe attribute setting
+ 11:     - deep constructor
+ 12:     - pretty printing???
+ 13:     
+
+
+*******************************************************************************
 * Name        : mixed_mode_editing
 * Description : Testing mixed mode (kbd + voice) editing
 *******************************************************************************
@@ -933,7 +1175,7 @@ Heard for loop
  48:   {
  49: 
  50:   }
-Heard integer index equals 0
+Heard integer index equals zero
  44: char *Foo::bar()
  45: {
  46: 
@@ -1053,7 +1295,7 @@ Heard switch initial character go to body
  56: 	}
  57:       }
  58:   }
-Heard case single-quotes a
+Heard case single-quotes alpha
  52: 	enum shapes {square, circle, triangle};
  53: 
  54: 	switch (initial_character) {
@@ -1085,7 +1327,7 @@ Heard after colon new line do something different parens jump out semi new line
  61: 
  62: 
  63: 	}
-Heard break default foo bar equals 4 semi jump out new paragraph
+Heard break default foo bar equals four semi jump out new paragraph
  64: 
  65: 	}
  66: 
@@ -1245,7 +1487,7 @@ Heard new paragraph
  89:   }
  90: }
  91: #endif
-Heard if the value less than 4 then
+Heard if the value less than four then
  87: 
  88:     if (the_value < 4)
  89:       {
@@ -1253,7 +1495,7 @@ Heard if the value less than 4 then
  91:       }
  92:   }
  93: }
-Heard value 1 equals static cast integer add argument some symbol
+Heard value one equals static cast integer add argument some symbol
  87: 
  88:     if (the_value < 4)
  89:       {
@@ -1277,7 +1519,7 @@ Heard semi new statement
  92:       }
  93:   }
  94: }
-Heard value 2 equals reinterpret cast integer add argument some symbol
+Heard value two equals reinterpret cast integer add argument some symbol
  88:     if (the_value < 4)
  89:       {
  90: 	value1 = static_cast<int >(some_symbol); 
@@ -1293,7 +1535,7 @@ Heard new statement
  93:       }
  94:   }
  95: }
-Heard value 3 equals dynamic cast integer add argument some symbol
+Heard value three equals dynamic cast integer add argument some symbol
  89:       {
  90: 	value1 = static_cast<int >(some_symbol); 
  91: 	value2 = reinterpret_cast<int >(some_symbol);
@@ -1309,7 +1551,7 @@ Heard new statement
  94:       }
  95:   }
  96: }
-Heard value 8 equals
+Heard value eight equals
  90: 	value1 = static_cast<int >(some_symbol); 
  91: 	value2 = reinterpret_cast<int >(some_symbol);
  92: 	value3 = dynamic_cast<int >(some_symbol);
@@ -1341,7 +1583,7 @@ Heard new statement above
  94: 	value8 = const_cast<int >(some_symbol);
  95:       }
  96:   }
-Heard value 4 equals some symbol
+Heard value four equals some symbol
  90: 	value1 = static_cast<int >(some_symbol); 
  91: 	value2 = reinterpret_cast<int >(some_symbol);
  92: 	value3 = dynamic_cast<int >(some_symbol);
@@ -1373,7 +1615,7 @@ Heard new statement
  95: 	value8 = const_cast<int >(some_symbol);
  96:       }
  97:   }
-Heard value 5 equals some symbol dynamic cast to void pointer
+Heard value five equals some symbol dynamic cast to void pointer
  91: 	value2 = reinterpret_cast<int >(some_symbol);
  92: 	value3 = dynamic_cast<int >(some_symbol);
  93: 	value4 = const_cast<int >(some_symbol);
@@ -1389,7 +1631,7 @@ Heard new statement
  96: 	value8 = const_cast<int >(some_symbol);
  97:       }
  98:   }
-Heard value 7 equals some symbol reinterpret cast to fake object type
+Heard value seven equals some symbol reinterpret cast to fake object type
  92: 	value3 = dynamic_cast<int >(some_symbol);
  93: 	value4 = const_cast<int >(some_symbol);
  94: 	value5 = dynamic_cast<void * >(some_symbol);
@@ -1405,7 +1647,7 @@ Heard new statement above
  96: 	value7 = reinterpret_cast<fake_object_type>(some_symbol);
  97: 	value8 = const_cast<int >(some_symbol);
  98:       }
-Heard value 6 equals some symbol static cast to void star
+Heard value six equals some symbol static cast to void star
  92: 	value3 = dynamic_cast<int >(some_symbol);
  93: 	value4 = const_cast<int >(some_symbol);
  94: 	value5 = dynamic_cast<void * >(some_symbol);
@@ -1445,7 +1687,7 @@ Heard new statement
  99:       }
 100:   }
 101: }
-Heard yet another value equals value 5 cast to int pointer
+Heard yet another value equals value five cast to int pointer
  95: 	value6 = static_cast<void *>(some_symbol);
  96: 	value7 = reinterpret_cast<fake_object_type>(some_symbol);
  97: 	value8 = const_cast<int >(some_symbol);
@@ -1461,7 +1703,7 @@ Heard new statement
 100:       }
 101:   }
 102: }
-Heard yet another value equals cast int pointer jump out value 8
+Heard yet another value equals cast int pointer jump out value eight
  96: 	value7 = reinterpret_cast<fake_object_type>(some_symbol);
  97: 	value8 = const_cast<int >(some_symbol);
  98: 	yet_another_value = (int * ) value5;
@@ -1485,7 +1727,7 @@ Heard break
 102:       }
 103:   }
 104: }
-Heard else if the value greater than 15 then foo equals new bar semicolon
+Heard else if the value greater than fifteen then foo equals new bar semicolon
 103: 
 104:     else if (the_value > 15)
 105:       {
@@ -1810,7 +2052,7 @@ Heard after semi new paragraph
 *** Compiling symbols from file: %VCODE_HOME%\Data\TestData\used_to_test_C_Cpp_parsing.cpp ***
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_C_Cpp_std_sym.cpp'
-WARNING: source file 'C:\voicetools\VCode\Data\TestData\used_to_test_C_Cpp_parsing.cpp' doesn't exist.
+WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\used_to_test_C_Cpp_parsing.cpp' doesn't exist.
 
 
 Parsed symbols are: 
@@ -1831,7 +2073,7 @@ Unresolved abbreviations are:
 *******************************************************************************
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\edit_this_buff.cpp'
-WARNING: source file 'C:\voicetools\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
+WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 >>> Known symbols are: 
 THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
@@ -1885,7 +2127,7 @@ _cached_symbols_as_one_string[t] is:
 *** Executing edit test: insert an import statement in middle of a file ***
 *********************
 
-WARNING: source file 'C:\voicetools\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
+WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -1909,7 +2151,7 @@ Heard import some module
 *** Executing edit test: create new class ***
 *********************
 
-WARNING: source file 'C:\voicetools\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
+WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -1945,7 +2187,7 @@ Heard define method new method method body pass
 *** Executing edit test: change subclass of existing class ***
 *********************
 
-WARNING: source file 'C:\voicetools\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
+WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -1974,7 +2216,7 @@ Heard new super class
 *** Executing edit test: add_method_to_existing_class_test ***
 *********************
 
-WARNING: source file 'C:\voicetools\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
+WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -1998,7 +2240,7 @@ Heard add method some method method body pass
 *** Executing edit test: add_argument_to_existing_method_test ***
 *********************
 
-WARNING: source file 'C:\voicetools\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
+WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2022,7 +2264,7 @@ Heard add argument extra argument
 *** Executing edit test: change_existing_argument_of_a_method_test ***
 *********************
 
-WARNING: source file 'C:\voicetools\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
+WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2051,7 +2293,7 @@ Heard new argument
 *** Executing edit test: insert_line_of_code_in_method_test ***
 *********************
 
-WARNING: source file 'C:\voicetools\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
+WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2082,7 +2324,7 @@ Heard some array equals none
 *** Executing edit test: change_arguments_in_method_call_test ***
 *********************
 
-WARNING: source file 'C:\voicetools\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
+WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2120,7 +2362,7 @@ Heard after paren none
 *** Executing edit test: nested_if_then_else_test ***
 *********************
 
-WARNING: source file 'C:\voicetools\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
+WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2184,7 +2426,7 @@ Heard else do some stuff without arguments
 *** Executing edit test: add_else_clause_test ***
 *********************
 
-WARNING: source file 'C:\voicetools\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
+WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2211,7 +2453,7 @@ Heard else clause
 *** Executing edit test: add_except_clause_test ***
 *********************
 
-WARNING: source file 'C:\voicetools\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
+WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -3220,10 +3462,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'C:\\voicetools\\VCode\\Data\\TestData'
+'C:\\eclipse\\workspace\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'C:\voicetools\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -5878,7 +6120,7 @@ Heard define method grades method body return B.
 
 
 
->>> Testing console command: say(['select', 'clown'], user_input='None')
+>>> Testing console command: say(['select', 'Clown'], user_input='None')
 Heard select clown
 *** Start of source buffer ***
   1: class <SEL_START>Clown<SEL_END>(student):
@@ -6722,9 +6964,9 @@ symbol osym has spoken forms ['O. symbol', 'osym']
 symbol other_symbol did not exist, as expected
 
 
->>> Testing console command: say(['new', 'statement', 'other', 'symbol', 'equals', '0'], user_input='0
+>>> Testing console command: say(['new', 'statement', 'other', 'symbol', 'equals', 'zero'], user_input='0
 ')
-Heard new statement other symbol equals 0
+Heard new statement other symbol equals zero
  11:     red_bk = 0
  12:     blue_bk = None
  13:     blue_bk = 0
@@ -7058,7 +7300,7 @@ Heard check if was done without arguments new statement
 
 
 
->>> Testing console command: open_file(r'C:\voicetools\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -7344,6 +7586,8 @@ SourceBuff.__del__: fowl.py
 close buffer fowl.py
 DictWinGramDummy for buffer = 'fowl.py', window 5
 del
+DictThroughCmdGramDummy for buffer = 'fowl.py', window 5
+del
 deactivate all for window 5
 SelectWinGramDummy for buffer 'fowl.py', window 5
 deactivating
@@ -7433,8 +7677,6 @@ del
 SelectWinGramDummy for buffer 'fish.C', window 5
 del
 DictThroughCmdGramDummy for buffer = 'fish.C', window 5
-del
-DictThroughCmdGramDummy for buffer = 'fowl.py', window 5
 del
 DictWinGramDummy for buffer = 'fish.C', window 5
 del
@@ -7645,6 +7887,8 @@ SourceBuff.__del__: fowl.py
 close buffer fowl.py
 DictWinGramDummy for buffer = 'fowl.py', global
 del
+DictThroughCmdGramDummy for buffer = 'fowl.py', global
+del
 deactivate all for window 5
 SelectWinGramDummy for buffer 'fowl.py', global
 deactivating
@@ -7751,8 +7995,6 @@ SelectWinGramDummy for buffer 'fish.C', global
 del
 DictThroughCmdGramDummy for buffer = 'fish.C', global
 del
-DictThroughCmdGramDummy for buffer = 'fowl.py', global
-del
 DictWinGramDummy for buffer = 'fish.C', global
 del
 test ending - expect dels of manager, app
@@ -7823,241 +8065,6 @@ Heard indent
   2:     ind<CURSOR>ex = 1
 
 *** End of source buffer ***
-
-
-*******************************************************************************
-* Name        : insert_delete
-* Description : Testing insertion and deletion commands
-*******************************************************************************
-
-WARNING: source file 'blah.py' doesn't exist.
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['this', 'is', 'a', 'very', 'long', 'variable', 'name', 'but', 'never', 'mind'], user_input='1
-1
-1
-1
-1
-1
-1
-1
-1
-')
-Heard this is a very long variable name but never mind
-*** Start of source buffer ***
-  1: this_is_a_very_long_variable_name_but_never_mind<CURSOR>
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['back space'], user_input='None')
-Heard back space
-*** Start of source buffer ***
-  1: this_is_a_very_long_variable_name_but_never_min<CURSOR>
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['2 times'], user_input='None')
-Heard 2 times
-*** Start of source buffer ***
-  1: this_is_a_very_long_variable_name_but_never_mi<CURSOR>
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['back space 2'], user_input='None')
-Heard back space 2
-*** Start of source buffer ***
-  1: this_is_a_very_long_variable_name_but_never_<CURSOR>
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['back space 3'], user_input='None')
-Heard back space 3
-*** Start of source buffer ***
-  1: this_is_a_very_long_variable_name_but_nev<CURSOR>
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['back space 4'], user_input='None')
-Heard back space 4
-*** Start of source buffer ***
-  1: this_is_a_very_long_variable_name_but<CURSOR>
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['back space 5'], user_input='None')
-Heard back space 5
-*** Start of source buffer ***
-  1: this_is_a_very_long_variable_nam<CURSOR>
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['select', 'additional'], user_input='None')
-Heard select additional
-*** Start of source buffer ***
-  1: some <SEL_START>additional<SEL_END> text
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['back space'], user_input='None')
-Heard back space
-*** Start of source buffer ***
-  1: some <CURSOR> text
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['select', 'additional'], user_input='None')
-Heard select additional
-*** Start of source buffer ***
-  1: some <SEL_START>additional<SEL_END> text
-
-*** End of source buffer ***
-
-
->>> Testing console command: say(['back space 2'], user_input='None')
-Heard back space 2
-*** Start of source buffer ***
-  1: some<CURSOR> text
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: <CURSOR>
-  2: # This symbol is here because it is homophonic with auto_test. Just checking
-  3: # to make sure that symbol match works with homophonic symbols.
-  4: autoTst = 0
-  2: # This symbol is here because it is homophonic with auto_test. Just checking
-  3: # to make sure that symbol match works with homophonic symbols.
-  4: autoTst = 0
-  5: <CURSOR>
-  6: import auto_test, exceptions, os, posixpath, profile, sys
-  7: 
-  8: class Object:
-
-
->>> Testing console command: say(['delete', 'that', 'line'], user_input='None')
-Heard delete that line
-  2: # This symbol is here because it is homophonic with auto_test. Just checking
-  3: # to make sure that symbol match works with homophonic symbols.
-  4: autoTst = 0
-  5: <CURSOR>import auto_test, exceptions, os, posixpath, profile, sys
-  6: 
-  7: class Object:
-  8:     """A base class for all VoiceCode objects
-
-
->>> Testing console command: say(['do', 'that', 'again'], user_input='None')
-Heard do that again
-  2: # This symbol is here because it is homophonic with auto_test. Just checking
-  3: # to make sure that symbol match works with homophonic symbols.
-  4: autoTst = 0
-  5: <CURSOR>
-  6: class Object:
-  7:     """A base class for all VoiceCode objects
-  8: 
-
-
->>> Testing console command: say(['delete', 'that', 'line', '2', 'times'], user_input='None')
-Heard delete that line 2 times
-  2: # This symbol is here because it is homophonic with auto_test. Just checking
-  3: # to make sure that symbol match works with homophonic symbols.
-  4: autoTst = 0
-  5: <CURSOR>    """A base class for all VoiceCode objects
-  6: 
-  7:     This class implements various useful behaviors for generic
-  8:     objects, such as:
-
-
->>> Testing console command: say(['select', 'base', 'class'], user_input='None')
-Heard select base class
-  2: # This symbol is here because it is homophonic with auto_test. Just checking
-  3: # to make sure that symbol match works with homophonic symbols.
-  4: autoTst = 0
-  5:     """A <SEL_START>base class<SEL_END> for all VoiceCode objects
-  6: 
-  7:     This class implements various useful behaviors for generic
-  8:     objects, such as:
-
-
->>> Testing console command: say(['delete', 'that'], user_input='None')
-Heard delete that
-  2: # This symbol is here because it is homophonic with auto_test. Just checking
-  3: # to make sure that symbol match works with homophonic symbols.
-  4: autoTst = 0
-  5:     """A <CURSOR> for all VoiceCode objects
-  6: 
-  7:     This class implements various useful behaviors for generic
-  8:     objects, such as:
-
-
->>> Testing console command: say(['select', 'various', 'useful'], user_input='None')
-Heard select various useful
-  4: autoTst = 0
-  5:     """A  for all VoiceCode objects
-  6: 
-  7:     This class implements <SEL_START>various useful<SEL_END> behaviors for generic
-  8:     objects, such as:
-  9: 
- 10:     - safe attribute setting
-
-
->>> Testing console command: say(['copy', 'that'], user_input='None')
-Heard copy that
-
-
->>> Testing console command: say(['paste', 'that'], user_input='None')
-Heard paste that
-  4: autoTst = 0
-  5:     """A  for all VoiceCode objects
-  6: 
-  7:     This class implements <SEL_START>various useful<SEL_END>various useful behaviors for generic
-  8:     objects, such as:
-  9: 
- 10:     - safe attribute setting
-
-
->>> Testing console command: say(['select', 'safe', 'attribute'], user_input='None')
-Heard select safe attribute
-  7:     This class implements various usefulvarious useful behaviors for generic
-  8:     objects, such as:
-  9: 
- 10:     - <SEL_START>safe attribute<SEL_END> setting
- 11:     - deep constructor
- 12:     - pretty printing???
- 13:     
-
-
->>> Testing console command: say(['cut', 'that'], user_input='None')
-Heard cut that
-  7:     This class implements various usefulvarious useful behaviors for generic
-  8:     objects, such as:
-  9: 
- 10:     - <CURSOR> setting
- 11:     - deep constructor
- 12:     - pretty printing???
- 13:     
-
-
->>> Testing console command: say(['paste', 'that'], user_input='None')
-Heard paste that
-  7:     This class implements various usefulvarious useful behaviors for generic
-  8:     objects, such as:
-  9: 
- 10:     - <CURSOR>safe attribute setting
- 11:     - deep constructor
- 12:     - pretty printing???
- 13:     
 
 
 *******************************************************************************
@@ -8691,7 +8698,7 @@ List of unresolved abbreviations
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 
 
->>> Testing console command: compile_symbols([r'C:\voicetools\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -8729,8 +8736,8 @@ _cached_symbols_as_one_string[y] is:
     y 
 
 
->>> Testing console command: say(['for', 'loop', 'horiz_pos\\horizontal position', 'equals', '0', 'loop', 'body'], user_input='None')
-Heard for loop horizontal position equals 0 loop body
+>>> Testing console command: say(['for', 'loop', 'horiz_pos\\horizontal position', 'equals', '0\\zero', 'loop', 'body'], user_input='None')
+Heard for loop horizontal position equals zero loop body
 *** Start of source buffer ***
   1: for (horiz_pos = 0; ; )
   2: {
@@ -9304,7 +9311,7 @@ As best as I can tell from SF Browse CVS, this test was
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'C:\voicetools\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9529,8 +9536,8 @@ Heard index dot function without arguments new statement
   8:         <CURSOR>
 
 *** End of source buffer ***
-Saying: ['variable', '=\\equals', 'new', 'list', '0\\zero', '...\\ellipsis', '10', 'new statement']
-Heard variable equals new list zero ellipsis 10 new statement
+Saying: ['variable', '=\\equals', 'new', 'list', '0\\zero', '...\\ellipsis', '10\\ten', 'new statement']
+Heard variable equals new list zero ellipsis ten new statement
   6:         index = 0; variable = 0;
   7:         index.function()
   8:         variable = [0...10]
@@ -11725,7 +11732,7 @@ F.
 FAIL: test_always_fail (pyUnitExample.SampleTestCase)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\voicetools\VCode\Admin\pyUnitExample.py", line 12, in test_always_fail
+  File "C:\eclipse\workspace\VCode\Admin\pyUnitExample.py", line 12, in test_always_fail
     assert self.var == 2, "This should always fail"
 AssertionError: This should always fail
 
@@ -11753,9 +11760,9 @@ FFFF
 FAIL: test_bad_length_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\voicetools\VCode\Admin\TestCaseWithHelpersTest.py", line 15, in test_bad_length_in_assert_sequences_have_same_content
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 15, in test_bad_length_in_assert_sequences_have_same_content
     self.assert_sequences_have_same_content([], [1, 2], self.nevermind)
-  File "C:\voicetools\VCode\Admin\TestCaseWithHelpers.py", line 33, in assert_sequences_have_same_content
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 33, in assert_sequences_have_same_content
     self.fail(mess + "\nExpeted sequence of length %s, but got sequence of length %s"
   File "C:\Python22\lib\unittest.py", line 254, in fail
     raise self.failureException, msg
@@ -11770,9 +11777,9 @@ Got list:
 FAIL: test_different_first_item_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\voicetools\VCode\Admin\TestCaseWithHelpersTest.py", line 20, in test_different_first_item_in_assert_sequences_have_same_content
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 20, in test_different_first_item_in_assert_sequences_have_same_content
     self.nevermind)
-  File "C:\voicetools\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
     self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
   File "C:\Python22\lib\unittest.py", line 254, in fail
     raise self.failureException, msg
@@ -11783,9 +11790,9 @@ Item at position 1 was wrong. Expected 'world', but got 'universe'
 FAIL: test_different_last_item_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\voicetools\VCode\Admin\TestCaseWithHelpersTest.py", line 25, in test_different_last_item_in_assert_sequences_have_same_content
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 25, in test_different_last_item_in_assert_sequences_have_same_content
     self.nevermind)
-  File "C:\voicetools\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
     self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
   File "C:\Python22\lib\unittest.py", line 254, in fail
     raise self.failureException, msg
@@ -11796,9 +11803,9 @@ Item at position 0 was wrong. Expected 'hello', but got 'hi'
 FAIL: test_different_middle_item_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\voicetools\VCode\Admin\TestCaseWithHelpersTest.py", line 31, in test_different_middle_item_in_assert_sequences_have_same_content
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 31, in test_different_middle_item_in_assert_sequences_have_same_content
     self.nevermind)
-  File "C:\voicetools\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
+  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
     self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
   File "C:\Python22\lib\unittest.py", line 254, in fail
     raise self.failureException, msg
@@ -11856,7 +11863,7 @@ actions_py: ['actions P. Y.', 'actions pie', 'actions py', 'actions python']
 active_language: ['active language']
 active_language_LSAs: ['active language L.s as', 'active language lengths as']
 addWord: ['add word']
-add_voc_entry: ['add V. O. C. entry', 'add voc entry']
+add_voc_entry: ['add voc entry']
 all_language_LSAs: ['all language L.s as', 'all language lengths as']
 and: ['and']
 answer: ['answer']
@@ -12008,7 +12015,7 @@ type: ['type']
 untranslated_text: ['untranslated text']
 upper: ['upper']
 upto: ['upto']
-vc_globals: ['V. C. globals', 'vc globals']
+vc_globals: ['vc globals']
 vocabulary_entry: ['vocabulary entry']
 while: ['while']
 word_consumes: ['word consumes']
@@ -12096,7 +12103,7 @@ actions_py: ['actions P. Y.', 'actions pie', 'actions py', 'actions python']
 active_language: ['active language']
 active_language_LSAs: ['active language L.s as', 'active language lengths as']
 addWord: ['add word']
-add_voc_entry: ['add V. O. C. entry', 'add voc entry']
+add_voc_entry: ['add voc entry']
 all_language_LSAs: ['all language L.s as', 'all language lengths as']
 and: ['and']
 answer: ['answer']
@@ -12248,7 +12255,7 @@ type: ['type']
 untranslated_text: ['untranslated text']
 upper: ['upper']
 upto: ['upto']
-vc_globals: ['V. C. globals', 'vc globals']
+vc_globals: ['vc globals']
 vocabulary_entry: ['vocabulary entry']
 while: ['while']
 word_consumes: ['word consumes']
@@ -12313,7 +12320,7 @@ Heard import modules O. S. comma R. E. comma string comma system new statement
 
 *** End of source buffer ***
 Saying: ['import\\import modules', 'auto\\auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'V.', 'C.', 'globals', 'new', 'statement']
-Heard import modules automatic test comma natural link comma V. C. globals new statement
+Heard import modules auto test comma natural link comma V. C. globals new statement
 *** Start of source buffer ***
   1: import os, re, str, sys
   2: import auto_test, natlink, vc_globals
@@ -12353,7 +12360,7 @@ Heard from module context sensitive command import symbols context sensitive com
   7: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement']
+Saying: ['from', 'module', 'Ed', 'simulator', 'import\\import symbol', 'Ed', 'simulator', 'new', 'statement']
 Heard from module Ed simulator import symbol Ed simulator new statement
   5: from cont_gen import ContC, ContPy
   6: from context_sensitive_command import context_sensitive_command
@@ -12738,10 +12745,10 @@ Heard import modules O. S. comma R. E. comma string comma system new statement
 
 *** End of source buffer ***
 Saying: ['import\\import modules', 'auto\\auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'V.', 'C.', 'globals', 'new', 'statement']
-Heard import modules automatic test comma natural link comma V. C. globals new statement
+Heard import modules auto test comma natural link comma V. C. globals new statement
 *** Start of source buffer ***
   1: import os, re, str, system
-  2: import automatic_test, natural_link, vc_globals
+  2: import auto_test, natural_link, vc_globals
   3: <CURSOR>
 
 *** End of source buffer ***
@@ -12749,14 +12756,14 @@ Saying: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', 'import all', 'new
 Heard from module actions C. C. P. P. import all new statement
 *** Start of source buffer ***
   1: import os, re, str, system
-  2: import automatic_test, natural_link, vc_globals
+  2: import auto_test, natural_link, vc_globals
   3: from actions_ccpp import all
   4: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement']
 Heard from module application state import symbols application state new statement
-  2: import automatic_test, natural_link, vc_globals
+  2: import auto_test, natural_link, vc_globals
   3: from actions_ccpp import all
   4: from application_state import application_state
   5: <CURSOR>
@@ -12778,7 +12785,7 @@ Heard from module context sensitive command import symbols context sensitive com
   7: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement']
+Saying: ['from', 'module', 'Ed', 'simulator', 'import\\import symbol', 'Ed', 'simulator', 'new', 'statement']
 Heard from module Ed simulator import symbol Ed simulator new statement
   5: from context_generic import context_c, context_python
   6: from context_sensitive_command import context_sensitive_command
@@ -13698,7 +13705,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'C:\voicetools\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\eclipse\workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -13850,7 +13857,7 @@ OK
 
 
 
->>> Testing console command: open_file(r'C:\voicetools\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'C:\eclipse\workspace\VCode\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -16151,8 +16158,120 @@ Heard previous one
 *** End of source buffer ***
 
 
->>> Testing console command: quit(save_speech_files=0, disconnect=0)
+>>> Testing console command: goto_line(1)
 
+*** Start of source buffer ***
+  1: <CURSOR>index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: say(['go before', 'index', '=\\equals', '1\\one'], user_input='None')
+Heard go before index equals one
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['next', 'one'], user_input='None')
+Heard next one
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: index = 0
+  4: <CURSOR>index = 1
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['previous', 'one'], user_input='None')
+Heard previous one
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: goto_line(1)
+
+*** Start of source buffer ***
+  1: <CURSOR>index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: say(['go after', 'index', '=\\equals', '1\\one'], user_input='None')
+Heard go after index equals one
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1<CURSOR>
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['next', 'one'], user_input='None')
+Heard next one
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1<CURSOR>
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['previous', 'one'], user_input='None')
+Heard previous one
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1<CURSOR>
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: goto_line(1)
+
+*** Start of source buffer ***
+  1: <CURSOR>index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: say(['select', 'index', 'through', '1\\one'], user_input='None')
+Heard select index through one
+*** Start of source buffer ***
+  1: <SEL_START>index = 0
+  2: index = 1<SEL_END>
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['select', 'index', 'through', '0\\zero'], user_input='None')
+Heard select index through zero
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: <SEL_START>index = 0<SEL_END>
+  4: index = 1
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
 
 
 >>> Testing console command: quit(save_speech_files=0, disconnect=0)

@@ -369,7 +369,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
             tmp = end
             end = start
             start = tmp
-            
+
         return text[start:end]
 
 
@@ -594,6 +594,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
                 'no cache - ignoring callback')
             pass
         else:
+            trace('SourceBuffCached.insert_cbk', 'updating cached value')
             old_text = self.get_text()
             self._put_cache('get_text', old_text[:range[0]] + text + \
                      old_text[range[1]:])

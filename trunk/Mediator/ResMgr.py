@@ -375,7 +375,7 @@ class ResMgrStd(ResMgr):
         *UtteranceInterpretation* -- the object returned by
         CmdInterp.interpret_cmd_tuples
         """
-        debug.trace('ResMgrStd._std_interp', 'standard interpretation')
+        debug.trace('ResMgrStd._std_interp', 'standard interpretation, initial_buffer=%s' % initial_buffer)
         if before:
             debug.trace('ResMgrStd._std_interp', 'about to call before')
             before(app, initial_buffer = initial_buffer)
@@ -413,7 +413,7 @@ class ResMgrStd(ResMgr):
         """
 # we don't store utterances, so we can ignore the utterance_number
         app = self.editor()
-        debug.trace('ResMgrStd.interpret_dictation', 'about to interpret')
+        debug.trace('ResMgrStd.interpret_dictation', 'about to interpret, initial_buffer=%s' % initial_buffer)
         self._std_interp(result, app, initial_buffer = initial_buffer)
 
     def rename_buffer_cbk(self, old_buff_name, new_buff_name):
@@ -2241,7 +2241,7 @@ class ResMgrBasic(ResMgrStd):
 
         *none*
         """
-        debug.trace('ResMgrBasic.interpret_dictation', 'about to interpret')
+        debug.trace('ResMgrBasic.interpret_dictation', 'about to interpret, initial_buffer=%s' % initial_buffer)
         if debug.trace_is_active('ResMgrBasic.interpret_dictation'):
             debug.trace('ResMgrBasic.interpret_dictation',
                  'called from thread %s' %

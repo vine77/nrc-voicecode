@@ -519,6 +519,7 @@ class GramMgrDictContext(GramMgr):
 
         *none*
         """
+        debug.trace('GramMgrDictContext.interpret_dictation', 'initial_buffer=%s' % initial_buffer)
         name = self.name()
 # buffer == 0 is used for special dictation sinks whose results are
 # ignored
@@ -731,6 +732,7 @@ class WinGramMgr(GramMgrDictContext):
 
         *none*
         """
+        debug.trace('WinGramMgr.activate', 'buffer=%s' % buffer)
         if not self.dict_grammars.has_key(window):
             self.new_window(window)
 # this also creates a new dictation grammar and selection grammar
@@ -850,6 +852,7 @@ class WinGramMgr(GramMgrDictContext):
 
         *none*
         """
+        debug.trace('GramMgr._deactivate_all_window', 'invoked')
         if self.dict_grammars.has_key(window):
             self.sel_grammars[window].deactivate()
             if self.correction:
@@ -879,6 +882,7 @@ class WinGramMgr(GramMgrDictContext):
 
         *none*
         """
+        debug.trace('WinGramMgr.deactivate_all', 'window=%s' % window)
         if window == None or self.global_grammars:
             windows = self.dict_grammars.keys()
             windows.sort()
@@ -973,6 +977,7 @@ class WinGramMgr(GramMgrDictContext):
 
         *none*
         """
+        debug.trace('WinGramMgr.new_window', 'window=%s' % window)
         if not self.dict_grammars.has_key(window):
             self.dict_grammars[window] = {}
             self.dict_cmd_grammars[window] = {}            
@@ -1037,6 +1042,7 @@ class WinGramMgr(GramMgrDictContext):
 
         *none*
         """
+        debug.trace('WinGramMgr.delete_window', 'window=%s' % window)
         if self.sel_grammars.has_key(window):
             self._deactivate_all_window(window)
             del self.sel_grammars[window]
@@ -1069,11 +1075,15 @@ class WinGramMgr(GramMgrDictContext):
 
         *none*
         """
+        debug.trace('WinGramMgr.buffer_closed', 'buffer=%s' % buffer)
         for a_window in self.dict_grammars.keys():
             buffers = self.dict_grammars[a_window]
-            if buffers.has_key(buffer):
-                buffers[buffer].cleanup()
-                del buffers[buffer]
+            if self.dict_grammars[a_window].has_key(buffer):
+                self.dict_grammars[a_window][buffer].cleanup()
+                del self.dict_grammars[a_window][buffer]
+                self.dict_cmd_grammars[a_window][buffer].cleanup()
+                del self.dict_cmd_grammars[a_window][buffer]
+
 
     def using_global(self):
         """checks whether GramMgr creates global grammars, rather than 

@@ -1144,7 +1144,7 @@ class RSMInfrastructure(RecogStartMgr):
         *none*
         """
         debug.trace('RSMInfrastructure.interpret_dictation', 
-            'instance = %s, result = %s' % (instance, repr(result.words())))
+            'instance = %s, result = %s, initial_buffer=%s' % (instance, repr(result.words()), initial_buffer))
         if self.known_instance(instance):
             debug.trace('RSMInfrastructure.interpret_dictation', 
                 'known instance')
