@@ -3314,22 +3314,12 @@ add_test('profile_config', test_profile_config,
 ##############################################################################
 
 def test_temporary():  
-   native_py_file = vc_globals.test_data + os.sep + 'native_python.py'
 
-   testing.init_simulator_regression()
-   temp_config = temp_factory.new_config()   
-   commands.open_file('blah.py')
-   
-   commands.say(['new', 'statement'], echo_utterance=1)
-#   commands.say(['back', 'indent', 'five', 'times'], echo_utterance=1)
-   commands.say(['between', 'parens'], echo_utterance=1)
-   commands.say(['before', 'previous', 'paren'], echo_utterance=1)      
-   
-#   commands.say(['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)   
-#   commands.goto(2, echo_cmd=1)
-#   commands.goto_beginning_of_line(echo_cmd=1)
-   
-   
+    temp_config = temp_factory.new_config(skip_config = 1)
+#     a_mediator = MediatorObject.MediatorObject(app = EdSim.EdSim(),
+#         interp=CmdInterp.CmdInterp())
+
+    print commands.app
    
 #add_test('temp', test_temporary, desc='temporary test')
 
