@@ -56,6 +56,8 @@ from actions_C_Cpp import *
 from actions_py import *
 from actions_perl import *
 
+import KnownTargetModule
+
 import sr_interface
 
 #test_mediator = None
@@ -121,6 +123,21 @@ add_abbreviation('attr', ['attribute'])
 #  associate_language('h', 'C')
 #  associate_language('py', 'python')
 
+###############################################################################
+# Known editor modules (ignored by old MediatorObject)
+###############################################################################
+
+mod_Emacs = KnownTargetModule.DedicatedModule(module_name = 'EMACS',
+	editor = 'emacs')
+mod_exceed = \
+    KnownTargetModule.DualModeDisplayByTitle(title_regex = '^Exceed$',
+    module_name = 'EXCEED')
+
+mod_ttssh = KnownTargetModule.RemoteShell(module_name = 'TTSSH')
+  
+add_module(mod_Emacs)
+add_module(mod_exceed)
+add_module(mod_ttssh)
 
 #############################################################################
 # CSCs and LSAs that apply for ALL languages

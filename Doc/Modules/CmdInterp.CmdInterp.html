@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Sun Apr 07 19:55:29 2002)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Jun 25 13:03:57 2002)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -34,6 +34,7 @@
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.chop_construct"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.chop_construct</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>, <SPAN CLASS="Argument">construct_check</SPAN>, <SPAN CLASS="Argument">app</SPAN>)
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.chop_symbol"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.chop_symbol</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>, <SPAN CLASS="Argument">app</SPAN>)<SPAN CLASS="OneLiner"> # Chops off the beginning of a command if it is a known symbol.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.chop_word"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.chop_word</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # Removes a single word from a command.</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.cleanup"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.cleanup</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">clean_sr_voc=0</SPAN>, <SPAN CLASS="Argument">clean_symdict=1</SPAN>, <SPAN CLASS="Argument">resave=1</SPAN>)<SPAN CLASS="OneLiner"> # Cleans up the symbol dictionary.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.dlg_select_symbol_match"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.dlg_select_symbol_match</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">untranslated_text</SPAN>, <SPAN CLASS="Argument">symbol_matches</SPAN>, <SPAN CLASS="Argument">app</SPAN>)<SPAN CLASS="OneLiner"> # Asks the user to select a match for pseudo symbol.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.index_csc"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.index_csc</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">acmd</SPAN>, <SPAN CLASS="Argument">add_voc_entry=1</SPAN>)<SPAN CLASS="OneLiner"> # Add a new csc to the command interpreter's command dictionary</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.interpret_NL_cmd"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.interpret_NL_cmd</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">cmd</SPAN>, <SPAN CLASS="Argument">app</SPAN>, <SPAN CLASS="Argument">initial_buffer=None</SPAN>)
@@ -42,6 +43,8 @@
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.is_spoken_symbol"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.is_spoken_symbol</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>, <SPAN CLASS="Argument">app</SPAN>)<SPAN CLASS="OneLiner"> # Checks if a string is the spoken form of a known symbol.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.massage_command"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.massage_command</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">command</SPAN>)<SPAN CLASS="OneLiner"> # Massages a command to prepare it for interpretation.</SPAN>
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.match_untranslated_text"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.match_untranslated_text</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">untranslated_words</SPAN>, <SPAN CLASS="Argument">app</SPAN>)<SPAN CLASS="OneLiner"> # Tries to match last sequence of untranslated text to a symbol.</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.parse_standard_symbols"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.parse_standard_symbols</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)<SPAN CLASS="OneLiner"> # Parse standard symbols for the various programming languages.</SPAN>
+    <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.parse_symbols_from_files"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.parse_symbols_from_files</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_list</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)<SPAN CLASS="OneLiner"> # Parse symbols from a series of source files</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.print_abbreviations</SPAN>(<SPAN CLASS="Argument">self</SPAN>)
     <A CLASS="DocLink" HREF="#CmdInterp.CmdInterp.spoken_form_regexp"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.spoken_form_regexp</SPAN></A>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">spoken_form</SPAN>)<SPAN CLASS="OneLiner"> # Returns a regexp that matches a spoken form of a command.</SPAN>
     <SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">CmdInterp.CmdInterp.standard_symbols_in</SPAN>(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_list</SPAN>)<SPAN CLASS="OneLiner"> # Compile symbols defined in a series of source files</SPAN>
@@ -367,6 +370,36 @@ Returns a tuple <EM>(chopped_word, consumed, rest)</EM> where:</P>
 <EM>[STR]</EM> rest
 <DD>Rest of the command after the word was chopped
 </DL>
+<H2 ID="CmdInterp.CmdInterp.cleanup" CLASS="Method">CmdInterp.CmdInterp.cleanup(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">clean_sr_voc=0</SPAN>, <SPAN CLASS="Argument">clean_symdict=1</SPAN>, <SPAN CLASS="Argument">resave=1</SPAN>)</H2>
+<P>Cleans up the symbol dictionary.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM> clean_sr_voc=0
+<DD>If true, then remove symbols from SR
+vocabulary
+<DT>
+<EM>BOOL</EM> clean_symdict=1
+<DD>If true, then removes symbols from
+ the symbol dictionary.
+<DT>
+<EM>BOOL resave = 1</EM>
+<DD>If true, symbol dictionary is
+resaved to disk after cleanup.        
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
 <H2 ID="CmdInterp.CmdInterp.dlg_select_symbol_match" CLASS="Method">CmdInterp.CmdInterp.dlg_select_symbol_match(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">untranslated_text</SPAN>, <SPAN CLASS="Argument">symbol_matches</SPAN>, <SPAN CLASS="Argument">app</SPAN>)</H2>
 <P>Asks the user to select a match for pseudo symbol.</P>
 
@@ -533,6 +566,52 @@ multiple, leading or trailing blanks.</P>
 </DL>
 <P>
 <STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="CmdInterp.CmdInterp.parse_standard_symbols" CLASS="Method">CmdInterp.CmdInterp.parse_standard_symbols(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)</H2>
+<P>Parse standard symbols for the various programming languages.</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>BOOL</EM> add_sr_entries = 1
+<DD>If true, then add symbols to the
+ SR vocabulary.
+</DL>
+<P>
+<STRONG>OUTPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+<EM>none</EM>
+<DD>
+</DL>
+<H2 ID="CmdInterp.CmdInterp.parse_symbols_from_files" CLASS="Method">CmdInterp.CmdInterp.parse_symbols_from_files(<SPAN CLASS="Argument">self</SPAN>, <SPAN CLASS="Argument">file_list</SPAN>, <SPAN CLASS="Argument">add_sr_entries=1</SPAN>)</H2>
+<P>Parse symbols from a series of source files</P>
+
+<P>
+<STRONG>INPUTS</STRONG></P>
+
+<DL>
+
+<DT>
+*[STR] file_list
+<DD>List of files to be compiled
+<DT>
+<EM>BOOL</EM> add_sr_entries = 1
+<DD>If true, add symbols to the SR vocabulary
+</DL>
+<P>
+<STRONG>OUTPUT</STRONG></P>
 
 <DL>
 

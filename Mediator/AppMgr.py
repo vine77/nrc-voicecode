@@ -216,6 +216,19 @@ class AppMgr(OwnerObject):
 	"""
 	return self.recog_mgr.known_windows(instance)
 
+    def window_info(self):
+	"""find the window id, title, and module of the current window
+
+	**INPUTS**
+
+	*none*
+
+	**OUTPUTS**
+
+	*(INT, STR, STR)* -- the window id, title, and module name
+	"""
+	return self.recog_mgr.window_info()
+
     def _add_new_instance(self, app_name, title_prefix, app):
 	"""private method called internally to do the work of
 	new_instance, except for notifying the recog_mgr.
