@@ -927,30 +927,25 @@ class StoredInterpState(Object):
                             {'formatting_state': formatting_state}, args) 
         
                  
-class InterpretedPhrase(Object):
+class UtteranceInterpretation(Object):
     """
     Class used to store information about an interpreted phrase and
     the corresponding changes to the buffer, for use by the results
     manager
     """
-    def __init__(self, phrase, symbols, 
-                 utterance, 
-                 **args):
+
+    def __init__(self, utterance, symbols=[], **args):
+
         """
         ** INPUTS **
-
-        *[STR]* phrase -- The list of spoken words in the utterance, without
-        regard to the original boundaries between words as interpreted
-        by the speech engine
-
+        
         *[SymbolResult] symbols* -- symbols matched or created when
         this phrase was interpreted
         
         *SpokenUtterance utterance* -- utterance that generated this phrase.
         """
-        self.deep_construct(InterpretedPhrase,
+        self.deep_construct(UtteranceInterpretation,
                             {
-                             'original_phrase': phrase,
                              'utterance': utterance,
                              'symbol_results': symbols
                             }, args)
@@ -971,8 +966,8 @@ class InterpretedPhrase(Object):
 
     def phrase(self):
         """
-        returns the original phrase which was interpreted by
-        interpret_phrase
+        returns the list of words in the utterance that was
+        interpreted.
 
         **INPUTS**
 
@@ -984,15 +979,14 @@ class InterpretedPhrase(Object):
         regard to the original boundaries between words as interpreted
         by the speech engine
         """
-        return self.original_phrase
+        return self.utterance.words()
         
     def phrase_as_string(self):
-        debug.trace('InterpretedPhrase.phrase_as_string', '** self.phrase()=%s' % self.phrase())
         return string.join(self.phrase())
 
-class MockInterpretedPhrase(InterpretedPhrase):
-    def __init__(self, phrase, symbols, utterance, **args):
-        apply(InterpretedPhrase.__init__, [self, phrase, symbols, utterance], args)
+class MockUtteranceInterpretation(UtteranceInterpretation):
+    def __init__(self, utterance, symbols, **args):
+        apply(UtteranceInterpretation.__init__, [self, utterance, symbols], args)
     
 class SymbolConstruction(Object):
     """
@@ -1215,7 +1209,7 @@ class SymbolConstruction(Object):
 
         ** INPUTS **
         
-        *InterpretedPhrase* interp_phrase -- The phrase from which
+        *UtteranceInterpretation* interp_phrase -- The phrase from which
         the symbol was interpreted.
 
         *[STR] exact_matches* -- a prioritized list of exact matches
@@ -1530,12 +1524,13 @@ class CmdInterp(OwnerObject):
         # need to restore the SymBuilderFactory
         return self.builder_factory.restore_state(formatting)
 
-    def interpret_phrase(self, interp_phrase, app, initial_buffer = None,
+    def interpret_utterance(self, utterance, app, initial_buffer = None,
             clear_state = 0):
+
         """Interprets a natural language command and executes
         corresponding instructions.
 
-        *InterpretedPhrase* interp_phrase-- The utterance.
+        *SpokenUtterance* utterance-- The utterance.
 
         *AppState app* -- the AppState interface to the editor
         
@@ -1547,10 +1542,8 @@ class CmdInterp(OwnerObject):
         *BOOL clear_state* -- if true, clear formatting and spacing
         *states before interpreting the utterance
         """
-        utterance = interp_phrase.utterance
-        phrase_str = utterance.normalized_spoken_phrase()        
-
-#        processed_phrase = utterance.normalized_spoken_phrase()        
+        interp_phrase = UtteranceInterpretation(utterance)
+        phrase_str = utterance.normalized_spoken_phrase()           
 
         if initial_buffer == None:
             app.bind_to_buffer(app.curr_buffer_name())
@@ -1806,38 +1799,8 @@ class CmdInterp(OwnerObject):
         for a_word in cmd:
            written_spoken_words.append((a_word, a_word))
         utterance = SpokenUtterance.MockSpokenUtterance(written_spoken_words)
-        return self.interpret_cmd_from_utterance(utterance, app, initial_buffer = None,
+        return self.interpret_utterance(utterance, app, initial_buffer = None,
             clear_state = 0)
-
-
-    def interpret_cmd_from_utterance(self, utterance, app, initial_buffer = None,
-                                     clear_state = 0):
-        """Interprets a natural language command and executes
-        corresponding instructions.
-
-        **INPUTS**
-
-        *SpokenUtterance utterance* -- The utterance to be interpreted.
-        
-        *AppState app* -- the AppState interface to the editor
-        
-        *[STR] initial_buffer* -- The name of the target buffer at the 
-        start of the utterance.  Some CSCs may change the target buffer of 
-        subsequent parts of the command.  If None, then the current buffer 
-        will be used.
-        
-        *BOOL clear_state* -- if true, clear formatting and spacing
-        *states before interpreting the utterance
-
-        **OUTPUTS**
-
-        *none*
-        """
-        phrase = InterpretedPhrase(utterance.words(), [], utterance)
-        return self.interpret_phrase(phrase, app,
-            initial_buffer = initial_buffer, clear_state = clear_state)
-
-       
 
     def massage_command(self, command):
         """Massages a command to prepare it for interpretation.
@@ -1875,7 +1838,7 @@ class CmdInterp(OwnerObject):
         *SymbolConstruction symbols* -- object storing information
         related to any pending untranslated symbols
         
-        *InterpretedPhrase interp_phrase -- The phrase that the untranslated
+        *UtteranceInterpretation interp_phrase -- The phrase that the untranslated
         text is matched from.
 
         **OUTPUTS**
