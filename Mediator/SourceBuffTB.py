@@ -561,22 +561,24 @@ class SourceBuffTB(SourceBuffNonCached.SourceBuffNonCached):
         return self.state_srv.store_current_state()
 
     def restore_state(self, cookie):
-        """restores the buffer to its state at the time when
-	the cookie was returned by store_current_state.  Both the
-	contents and the selection will be restored.  However, other
-	data, such as the search history, may not.  The restore
-	operation can fail, which will be indicated by a return value of
-	0, so the caller should always check the return value.
+        """
+        restores the buffer to its state at the time when
+        the cookie was returned by store_current_state.  Both the
+        contents and the selection will be restored.  However, other
+        data, such as the search history, may not.  The restore
+        operation can fail, which will be indicated by a return value of
+        0, so the caller should always check the return value.
 	
-	**INPUTS**
+        **INPUTS**
 
-	*SourceBuffState cookie* -- see above.
+        *SourceBuffState cookie* -- see above.
 
-	**OUTPUTS**
+        **OUTPUTS**
 
-	*BOOL* -- true if restore was successful
+        *BOOL* -- true if restore was successful
 
-	"""
+        """
+        debug.trace('SourceBuffTB.restore_state', 'cookie=%s' % cookie)
         return self.state_srv.restore_state(cookie)
 
     def compare_states(self, first_cookie, second_cookie, selection = 0):

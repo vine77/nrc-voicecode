@@ -3,7 +3,7 @@
 ;; more robust than overlays as per Barry Jaspan's vr.el
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; VCode Mode - integration of GNU Emacs and VoiceCode 
+;; Vcode Mode - integration of GNU Emacs and VoiceCode 
 ;;    http://voicecode.iit.nrc.ca/VoiceCode
 ;;
 ;; Based on VR Mode by Barry Jaspan
@@ -238,8 +238,10 @@ in the 'vr-log-buff-name buffer.")
 
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
-(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
-(cl-puthash "vcode-cmd-get-text" 1 vcode-traces-on)
+;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
+;(cl-puthash "vcode-cmd-get-text" 1 vcode-traces-on)
+;(cl-puthash "vcode-cmd-set-text" 1 vcode-traces-on)
+;(cl-puthash "vcode-execute-command-string" 1 vcode-traces-on)
 
 (defvar vr-log-send nil "*If non-nil, VR mode logs all data sent to the VR
 subprocess in the 'vr-log-buff-name buffer.")
@@ -797,7 +799,6 @@ Changes are put in a changes queue `vr-queued-changes.
 (defun vcode-trace (trace-name format-string &rest s)
    (let ((buf) (win))
      (setq buf (get-buffer-create vr-log-buff-name))
-     (message "-- vcode-trace: buf=%S" buf)
      (setq win (get-buffer-window buf 't))
      (if (or (not trace-name) (is-in-hash trace-name vcode-traces-on))
         (progn
@@ -895,7 +896,7 @@ Changes are put in a changes queue `vr-queued-changes.
   "Execute a string as though it was typed by the user.
 "
   (let ()
-    (vr-log "--** vcode-execute-command-string: upon entry, (current-buffer)=%S, py-indent-offset=%S, tab-width=%S, command-string=%S, (point)=%S, (mark)=%S, after-change-functions=%S buffer is\n%S\n" (current-buffer) py-indent-offset tab-width command-string (point) (mark) after-change-functions (buffer-substring (point-min) (point-max)))
+    (vcode-trace "vcode-execute-command-string" "upon entry, (current-buffer)=%S, py-indent-offset=%S, tab-width=%S, command-string=%S, (point)=%S, (mark)=%S, after-change-functions=%S buffer is\n%S" (current-buffer) py-indent-offset tab-width command-string (point) (mark) after-change-functions (buffer-substring (point-min) (point-max)))
     (setq debug-on-error t)
     (setq debug-on-quit t)
 
@@ -916,17 +917,12 @@ Changes are put in a changes queue `vr-queued-changes.
  	     (last-command-event (elt event 0))
  	     (last-command-keys event)
  	     )
-	(vr-log "--** vcode-execute-command-string: command=%S\n" command)
-	(vr-log "--** vcode-execute-command-string: before pre-command-hook, after-change-functions=%S\n" after-change-functions)
+	(vcode-trace "vcode-execute-command-string" "command=%S" command)
 	(run-hooks 'pre-command-hook)
-	(vr-log "--** vcode-execute-command-string: after pre-command-hook, after-change-functions=%S\n" after-change-functions)
 	(command-execute command nil )
-	(vr-log "--** vcode-execute-command-string: before post-command-hook, after-change-functions=%S\n" after-change-functions)
 	(run-hooks 'post-command-hook)
-	(vr-log "--** vcode-execute-command-string: before post-command-hook, after-change-functions=%S\n" after-change-functions)
       )
     )
-    (vr-log "--** vcode-execute-command-string: upon exit, (point)=%S, (mark)=%S, buffer is\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
   )
 )
 
@@ -1763,6 +1759,17 @@ generated while executing VCode request 'vcode-req."
 
 )
 
+(defun vcode-get-buff-name-from-message (message)
+  "Returns name of \"buff_name\" element in 'message. If absent or nil, then
+returns name of current buffer."
+  (let ((buff-name (cl-gethash "buff_name" message nil)))
+    (if (not buff-name)
+	(setq buff-name (buffer-name (current-buffer)))
+    )
+    buff-name
+  )
+)
+
 (defun vcode-cmd-send-app-name (vcode-req)
    "Sends the name of the application ('Emacs) to the VoiceCode server."
 
@@ -2082,7 +2089,7 @@ message.
 	(buffer-name)
 	(response (make-hash-table :test 'string=)))
 
-    (setq buffer-name (cl-gethash "buff_name" mess-cont))
+    (setq buffer-name (vcode-get-buff-name-from-message mess-cont))
     (if (get-buffer buffer-name)
 	(cl-puthash "value" 1 response)
       (cl-puthash "value" 0 response))
@@ -2093,6 +2100,7 @@ message.
   )
 )
 
+
 (defun vcode-cmd-list-open-buffers (vcode-request)
   (let ((mess-cont (elt vcode-request 1)) 
 	(open-buffers (buffer-list))
@@ -2100,7 +2108,9 @@ message.
 	(response (make-hash-table :test 'string=)))
 
     (while open-buffers
-      (setq buffer-names (append buffer-names (list (buffer-name (car open-buffers)))))
+      (if (vr-activate-buffer-p (car open-buffers))
+	  (setq buffer-names (append buffer-names (list (buffer-name (car open-buffers)))))
+      )
       (setq open-buffers (cdr open-buffers))
       )
 
@@ -2116,7 +2126,7 @@ message.
   (let ((mess-cont (elt vcode-request 1)) 
 	(response (make-hash-table :test 'string=))
 	(buff-name) (file-name) (buff-name))
-    (setq buff-name (cl-gethash "buff_name" mess-cont))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
     (setq file-name (buffer-file-name (get-buffer buff-name)))
     (cl-puthash "value" file-name response)
     (vr-send-reply
@@ -2186,7 +2196,7 @@ message.
 
     (cl-puthash "value" 1 response)
 
-    (setq buff-name (cl-gethash "buff_name" mess-cont))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
     (setq buff (get-buffer buff-name))
     (setq save (cl-gethash "save" mess-cont))
 
@@ -2385,22 +2395,28 @@ buffer"
 )
 
 (defun vcode-cmd-cur-pos (vcode-request)
-  (let ((mess-cont (make-hash-table :test 'string=)))
-    (cl-puthash 'value (vcode-convert-pos (point) 'vcode) mess-cont)
+  (let ((mess-cont (make-hash-table :test 'string=)) (buff-name))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
+    (save-excursion
+      (set-buffer buff-name)
+      (cl-puthash 'value (vcode-convert-pos (point) 'vcode) mess-cont)
+    )
     (vr-send-reply 
      (run-hook-with-args 
       'vr-serialize-message-hook (list "cur_pos_resp" mess-cont)))
     )
-  )
+)
 
 (defun vcode-cmd-line-num-of (vcode-request)
   (let ((mess-cont (nth 1 vcode-request))
 	(response (make-hash-table :test 'string=))
-	(line-num) (opoint))
+	(buff-name) (line-num) (opoint))
 
     (setq opoint (cl-gethash "position" mess-cont))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
 
     (save-excursion
+      (set-buffer buff-name)
       (goto-char opoint)
       (beginning-of-line)
       (setq line-num (1+ (count-lines 1 (point))))
@@ -2415,9 +2431,14 @@ buffer"
 
 
 (defun vcode-cmd-get-selection (vcode-request)
-  (let ((response (make-hash-table :test 'string=))
-	(selection))
-    (setq selection (vcode-make-sure-no-nil-in-selection (point) (mark)))
+  (let ((mess-cont (nth 1 vcode-request))
+        (response (make-hash-table :test 'string=))
+	(selection) (buff-name))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
+    (save-excursion
+      (set-buffer buff-name)
+      (setq selection (vcode-make-sure-no-nil-in-selection (point) (mark)))
+    )
     (cl-puthash 'value 
 		(list (vcode-convert-pos (nth 0 selection) 'vcode)
 		      (vcode-convert-pos (nth 1 selection) 'vcode))
@@ -2429,39 +2450,51 @@ buffer"
   )
 
 (defun vcode-cmd-get-text (vcode-request)
-  (let ((mess-cont (make-hash-table :test 'string=)) 
-	(vcode-request-cont (elt vcode-request 1))
-	(start) (end)
+  (let ((resp-cont (make-hash-table :test 'string=)) 
+	(mess-cont (elt vcode-request 1))
+	(buff-name) (start) (end)
 	)
-    (setq start (cl-gethash "start" vcode-request-cont))
-    (setq end (cl-gethash "end" vcode-request-cont))
-    (setq buff-name (cl-gethash "buff_name" vcode-request-cont))
+    (setq start (cl-gethash "start" mess-cont))
+    (setq end (cl-gethash "end" mess-cont))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
     (vcode-trace "vcode-cmd-get-text" "(current-buffer)=%S, buff-name=%S, start=%S, end=%S" 
 		 (current-buffer) buff-name start end)
 
     (save-excursion
       (set-buffer buff-name)
-      (cl-puthash "value" (buffer-substring start end) mess-cont)
+      (cl-puthash "value" (buffer-substring start end) resp-cont)
     )
 
     (vr-send-reply 
      (run-hook-with-args 
-      'vr-serialize-message-hook (list "get_text_resp" mess-cont)))
+      'vr-serialize-message-hook (list "get_text_resp" resp-cont)))
     )
   )
 
 
 (defun vcode-cmd-get-visible (vcode-request)
-  (let ((mess-cont (make-hash-table :test 'string=)))
-    (cl-puthash 'value (vcode-convert-range (window-start) (window-end) 'vcode) mess-cont)
-    (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "get_visible_resp" mess-cont)))
+  (let ((resp-cont (make-hash-table :test 'string=))
+	(mess-cont (nth 1 vcode-request))
+	(buff-name))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
+    (save-excursion
+      (set-buffer buff-name)
+      (cl-puthash 'value (vcode-convert-range (window-start) (window-end) 'vcode) resp-cont)
+    )
+    (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "get_visible_resp" resp-cont)))
     )  
   )
 
 (defun vcode-cmd-len (vcode-request)
-  (let ((mess-cont (make-hash-table :test 'string=)))
-    (cl-puthash 'value (buffer-size) mess-cont)
-    (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "get_visible_resp" mess-cont)))
+  (let ((resp-cont (make-hash-table :test 'string=))
+	(mess-cont (nth 1 vcode-request))
+	(buff-name))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
+    (save-excursion
+      (set-buffer buff-name)
+      (cl-puthash 'value (buffer-size) resp-cont)
+    )
+    (vr-send-reply (run-hook-with-args 'vr-serialize-message-hook (list "get_visible_resp" resp-cont)))
     )  
   )
 
@@ -2503,7 +2536,7 @@ change reports it sends to VCode.
 	(sel-range) (put-cursor-at) (sel-start) (sel-end)
         (buff-name))
 
-    (setq buff-name (cl-gethash "buff_name" mess-cont))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
     (setq sel-range (cl-gethash "range" mess-cont))
     (setq put-cursor-at (cl-gethash "cursor_at" mess-cont))
     (if (= put-cursor-at 1) 
@@ -2541,9 +2574,12 @@ change reports it sends to VCode.
 )
 
 (defun vcode-cmd-move-relative-page (vcode-request)
-  (let ((mess-cont (elt vcode-request 1)) (direction) (num))
+  (let ((mess-cont (elt vcode-request 1)) 
+	(buff-name) (direction) (num))
     (setq direction (cl-gethash "direction" mess-cont))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
     (setq num (cl-gethash "num" mess-cont))
+    (set-buffer buff-name)
     (if (>= direction 0)
 	(scroll-down-nomark num)
       (scroll-up-nomark num))
@@ -2556,14 +2592,14 @@ change reports it sends to VCode.
 	(text) (range) (vr-request) 
 	(delete-start) (delete-end))
 	(setq text (wddx-coerce-string (cl-gethash "text" mess-cont)))
-	(setq buff-name (cl-gethash "buff_name" mess-cont))
+	(setq buff-name (vcode-get-buff-name-from-message mess-cont))
 	(setq range (cl-gethash "range" mess-cont))
 	(setq delete-start (elt range 0))
 	(setq delete-end (elt range 1))
+
 	(set-buffer buff-name)
 	(kill-region delete-start delete-end)
-        (set-mark nil)
-
+	(set-mark nil)
 
         (vcode-execute-command-string text)
 
@@ -2577,23 +2613,23 @@ change reports it sends to VCode.
  	(buff-name) (text) (start) (end))
 
  	(setq text (wddx-coerce-string (cl-gethash "text" mess-cont)))
- 	(setq buff-name (cl-gethash "buff_name" mess-cont))
+ 	(setq buff-name (vcode-get-buff-name-from-message mess-cont))
  	(setq start (cl-gethash "start" mess-cont))
  	(setq end (cl-gethash "end" mess-cont))
-        (vr-log "--** vcode-cmd-set-text: buff-name=%S, text=%S, start=%S, end=%S\n" buff-name text start end)
- 	(set-buffer buff-name)
-        (vr-log "--** vcode-cmd-set-text: before kill-region, in buff-name, (point-min)=%S, (point-max)=%S, after-change-functions=%S\n" (point-min) (point-max) after-change-functions)
- 	(kill-region start end)
-        (vr-log "--** vcode-cmd-set-text: after kill-region\n")
-;        (set-mark nil)
+        (vcode-trace "vcode-cmd-set-text" "buff-name=%S, text=%S, start=%S, end=%S\n" buff-name text start end)
+	(set-buffer buff-name)
+	(vcode-trace "vcode-cmd-set-text" "*** before kill-region, in buff-name, (point-min)=%S, (point-max)=%S, after-change-functions=%S, buffer contains:\n%S" (point-min) (point-max) after-change-functions (buffer-substring (point-min) (point-max)))
+	(kill-region start end)
+	(vcode-trace "vcode-cmd-set-text" "*** after kill-region, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
+	(set-mark nil)
 
 ;;;
 ;;; 'vcode-execute-command-string is still experimental
 ;;;
-; 	(insert text)
-        (vr-log "--** vcode-cmd-set-text: before inserting text\n")
-	(vcode-execute-command-string text)
-        (vr-log "--** vcode-cmd-set-text: after inserting text\n")
+;	  (insert text)
+	  (vcode-execute-command-string text)
+
+	  (vcode-trace "vcode-cmd-set-text" "*** after insert, buffer contains\n%S" (buffer-substring (point-min) (point-max)))
 
  	(vr-send-queued-changes)
     )
@@ -2604,12 +2640,13 @@ change reports it sends to VCode.
 (defun vcode-cmd-indent (vcode-request)
   (let ((mess-name (elt vcode-request 0)) 
 	(mess-cont (elt vcode-request 1))
-	(range) (vr-request) 
+	(range) (vr-request) (buff-name)
 	(indent-start) (indent-end))
 
     (setq range (cl-gethash "range" mess-cont))
     (setq indent-start (elt range 0))
     (setq indent-end (elt range 1))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
 
 
     (set-buffer buff-name)
@@ -2623,18 +2660,23 @@ change reports it sends to VCode.
 (defun vcode-cmd-decr-indent-level (vcode-request)
   (let ((mess-name (elt vcode-request 0))
 	(mess-cont (elt vcode-request 1))
-	(range) (levels) (vr-request)
+	(range) (levels) (vr-request) (buff-name)
 	(indent-start) (indent-end))
     (setq range (cl-gethash "range" mess-cont))
     (setq indent-start (elt range 0))
     (setq indent-end (elt range 1))
     (setq levels (cl-gethash "levels" mess-cont))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
 
     (vr-log "--** vcode-cmd-decr-indent-level: upon entry, (point)=%S, (mark)=%S, range=%S, levels=%S\n" (point) (mark) range levels)
 
-    (set-mark nil)
-    (vcode-unindent-region indent-start indent-end levels) 
-    (vr-log "--** vcode-cmd-decr-indent-level: upon exit, (point)=%S, (mark)=%S, buffer contains\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
+    (set-buffer buff-name)
+    (save-excursion
+      (set-mark nil)
+      (vcode-unindent-region indent-start indent-end levels) 
+      (vr-log "--** vcode-cmd-decr-indent-level: upon exit, (point)=%S, (mark)=%S, buffer contains\n%S\n" (point) (mark) (buffer-substring (point-min) (point-max)))
+    )
+
     (vr-send-queued-changes)
   )
 )
@@ -2772,9 +2814,9 @@ tabs.
   (let ((mess-name (elt vcode-request 0)) 
 	(mess-cont (elt vcode-request 1))
 	(text) (range) (vr-request) 
-	(delete-start) (delete-end))
+	(delete-start) (delete-end) (buff-name))
 
-	(setq buff-name (cl-gethash "buff_name" mess-cont))
+	(setq buff-name (vcode-get-buff-name-from-message mess-cont))
 	(setq range (cl-gethash "range" mess-cont))
 	(setq delete-start (elt range 0))
 	(setq delete-end (elt range 1))
@@ -2792,7 +2834,7 @@ tabs.
   (let ((mess-cont (nth 1 vcode-request))
 	(pos) (buff-name) (final-pos))
     (setq pos (cl-gethash "pos" mess-cont))
-    (setq buff-name (cl-gethash "buff_name" mess-cont))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
     (condition-case err     
 	(progn 
 	  (switch-to-buffer buff-name)
@@ -2827,7 +2869,7 @@ tabs.
 	(line-num) (go-where) (buff-name) (final-pos))
     (setq line-num (cl-gethash "linenum" mess-cont))
     (setq go-where (cl-gethash "where" mess-cont))
-    (setq buff-name (cl-gethash "buff_name" mess-cont))
+    (setq buff-name (vcode-get-buff-name-from-message mess-cont))
     (condition-case err     
 	(progn 
 	  (switch-to-buffer buff-name)

@@ -435,6 +435,7 @@ class ResMgrStd(ResMgr):
         """
 # no information stored, but subclasses will need to
 # define this
+        debug.trace('ResMgrStd.scratch_recent', 'n=%s' % n)
         return 0
 
     def reinterpret_recent(self, changed):
@@ -817,6 +818,7 @@ class BufferStatesBasic(BufferStates):
 # buffers before realizing that others can't be restored,
 # leaving the editor in a mixed up state
 
+        debug.trace('BufferStatesBasic.restore_state', 'app=%s' % app)
         if not self.valid_cookies(app, ignore_deleted = 1):
             return 0
 
@@ -1216,6 +1218,7 @@ class StateStackBasic(StateStack):
 
         *BOOL* -- true if we successfully restored to that state
         """
+        debug.trace('StateStackBasic.undo_manual_changes', 'invoked')
         if self.after_utterance is None:
             return 0
         return self.after_utterance.restore_state(app)
@@ -1263,7 +1266,7 @@ class StateStackBasic(StateStack):
 
         *BOOL* -- true if we sucessfully restored the editor to that state
         """
-        debug.trace('StateStack.pop', 'called with n = %d' % n)
+        debug.trace('StateStackBasic.pop', 'called with n = %d' % n)
         if not self.can_restore(app, n):
             debug.trace('StateStack.pop', 'unable to restore')
             return 0

@@ -127,6 +127,7 @@ class SourceBuffMessaging(SourceBuffCached.SourceBuffCached):
 	*BOOL* -- true if restore was successful
 
 	"""
+        trace('SourceBuffMessaging.restore_state', 'cookie=%s' % cookie)
         return self.state_srv.restore_state(cookie)
 
     def compare_states(self, first_cookie, second_cookie, selection = 0):
