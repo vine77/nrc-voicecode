@@ -18,7 +18,7 @@ class Object:
     - the speed of constructors for Object and non-Object instances are the same
     - the speed of attribute *gets* is the same for Object and non-Object instances
     - when *$PY_DEBUG_OBJECT=0*, the performance of attribute *sets* is the same for Object and non-Object instances
-    - when *$PY_DEBUG_OBJECT=1*, attribute *sets* are about 150% slower for Object instances than for non-Object instances
+    - when *$PY_DEBUG_OBJECT=1*, attribute *sets* are slower by a factor of about 15 for Object instances than for non-Object instances
 
     **TEMPLATE CONSTRUCTOR**
 
