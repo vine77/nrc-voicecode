@@ -1385,7 +1385,7 @@ auto_test.add_test('python', pseudo_python_wrapper, 'testing the various CSCs an
 def pseudo_python_editing_wrapper():    
     test_pseudo_python.test_editing(testing)
     
-auto_test.add_test('python editing', pseudo_python_editing_wrapper, 'testing the various CSCs and LSAs for editing Python')
+auto_test.add_test('python_editing', pseudo_python_editing_wrapper, 'testing the various CSCs and LSAs for editing Python')
 
 ##############################################################################
 # Testing repetition of last commands
@@ -2810,34 +2810,20 @@ auto_test.add_test('large_messages', test_large_messages, desc='Send a message t
 ##############################################################################
 
 def test_temporary():
-    native_py_file = vc_globals.test_data + os.sep + 'native_python.py'
-    testing.init_simulator_regression()
-    names = testing.namespace()
-    commands = names['commands']
-#    commands.compile_symbols([native_py_file])
-
-    #
-    # These words must be in the SR vocab, otherwise some of the say()
-    # statements will faile
-    #
-    sr_interface.addWord(sr_interface.vocabulary_entry('aliases', 'aliases'))
-    sr_interface.addWord(sr_interface.vocabulary_entry('globals', 'globals'))
-
-    commands.open_file('blah.py')
-        
-
-    commands.say(['if', 'statement', 'if', 'body'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
-    
-    commands.say(['variable', 'equals'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
-    
-#    commands.say(['new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)        
-    
-    commands.say(['else', 'clause', 'some', 'variable'], user_input='1\n')
+   edit_file = vc_globals.test_data + os.sep + 'edit_this_buff.py'
+   testing.init_simulator_regression()
+   commands = testing.namespace()['commands']
+   commands.compile_symbols(edit_file)   
+   commands.open_file(edit_file)
+   commands.goto_line(11)
+   commands.say(['new', 'statement', 'if', 'some', 'flag', 'then'], user_input="1\n1\n")
+   commands.say(['do', 'some', 'more', 'stuff', 'with', 'arguments', 'some', 'argument'], user_input="1\n1\n")
+   commands.say(['else', 'do', 'some', 'more', 'stuff', 'with', 'arguments', 'some', 'other', 'argument'], user_input="1\n1\n")
+   commands.say(['next', 'else', 'will', 'not', 'be', 'back', 'indented', 'to', 'the', 'right', 'level', 'by', 'emacs'], user_input="0\n0\n0\n")
+   commands.say(['else', 'do', 'some', 'stuff', 'without', 'arguments'])
+   
 
     
-    
-
-
-auto_test.add_test('temp', test_temporary, desc='temporary test')
+#auto_test.add_test('temp', test_temporary, desc='temporary test')
 
 
