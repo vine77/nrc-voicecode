@@ -37,6 +37,7 @@ debug.config_traces(status="on",
                     active_traces={
 #                      'NewMediatorObject': 1,
 #                      'SymDict': 1,
+#                      'SymDict._add_corresponding_expansion': 1,
 #                      'CmdInterp': 1,
 #                       'StateStackBasic': 1,
 #                       'BufferStateBasic': 1,

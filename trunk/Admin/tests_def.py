@@ -645,9 +645,15 @@ def test_auto_add_abbrevs():
     # Match selection dialog should be invoked, and abbreviation
     # unres->unresolved should be added
     #
+# Actually, the match selection dialog no longer exists, and dictation 
+# doesn't have the effect of confirming a match and resolving
+# abbreviations, so we have to do this manually
     test_say(['this', 'symbol', 'is', 'unresolved', ',\\comma'], user_input='1\\n')
     test_command("""print_abbreviations(1)""")
     test_command("""print_symbols()""")
+    testing.mediator().interpreter().known_symbols.add_extra_expansion('unres',
+        'unresolved')
+
 
     #
     # Match selection dialog should NOT be invoked 
@@ -874,8 +880,8 @@ fake_words = {
               'O': 0,
               'ST': 0,
               'CMP': 0,
-              'multi-\\multi': 1,
-              'co-\\co': 1,
+              ('multi', 'multi-'): 1,
+              ('co', 'co-'): 1,
               'CRC': 0,
               'HSV': 0,
               'IM': 0,
@@ -885,16 +891,16 @@ fake_words = {
               }
 #fake_words = {}
 
-def word_exists(word, flag = None):
+def word_exists(spoken_form, written_form = None):
+    if written_form is None:
+        entry = spoken_form
+    else:
+        entry = (spoken_form, written_form)
     try:
-        exists = fake_words[word]
-        if exists:
-# flag for a normal word
-            return 0
-# return value if word doesn't exist
-        return None
+        return fake_words[entry]
     except KeyError:
-        return sr_interface.getWordInfo(word, flag)
+        entry = sr_interface.vocabulary_entry(spoken_form, written_form)
+        return not (sr_interface.getWordInfo(entry) is None)
 
 def test_SymDict_storage():
     test_data = vc_globals.test_data
