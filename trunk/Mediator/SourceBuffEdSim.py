@@ -3,11 +3,11 @@ import re, string, sys
 
 from Object import Object
 import SourceBuff
+import find_difference
 
 
 #
-# When printing the content of the current buffer, only print this number of
-# lines before and after the current line
+# default value of window_size (unless overridden by the constructor argument)
 #
 print_window_size = 3
 
@@ -19,25 +19,30 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
     **INSTANCE ATTRIBUTES**
     
     *INT pos=0* -- Cursor position (in number of chars) in the buffer
-    *(INT, INT)* visible_range -- the visible portion of the source buffer as
-      character offsets into contents.
     *(INT, INT)* selection_range -- the current selection as
       character offsets into contents.
     *STR content=None* -- Content of the source buffer
+    *INT window_size* -- When printing the content of the current buffer, 
+     only print this number of lines before and after the current line
+    *BOOL global_selection* -- makes the 'visible' region the whole
+    buffer (useful for regression testing)
 
     CLASS ATTRIBUTES**
 
     *none*
     """
     
-    def __init__(self, init_pos=0, init_visible = None, init_selection = None,
-	initial_contents="", **attrs):
+    def __init__(self, init_pos=0, init_selection = None,
+	initial_contents="", window_size = print_window_size,
+	global_selection = 1, **attrs):
 
         self.deep_construct(SourceBuffEdSim,
                             {'pos': init_pos, \
-                             'visible_range': init_visible, \
                              'selection': init_selection, \
-                             'content': initial_contents}, \
+                             'content': initial_contents, \
+			     'window_size': window_size, \
+			     'global_selection': global_selection, \
+			     }, \
                             attrs \
                             )
 
@@ -47,11 +52,6 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
 	s, e = self.get_selection()
 	if (s < e):
 	    self.selection = (self.pos, self.pos)
-	if not self.visible_range:
-	    self.visible_range = (self.pos, self.pos)
-	s, e = self.get_visible()
-	if (s < e):
-	    self.visible_range = (e, s)
 
     def cur_pos(self):
 	return self.pos
@@ -73,7 +73,29 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
 	return self.content[ start: end]
 
     def get_visible(self):
-	return self.visible_range
+	if self.global_selection:
+	    return (0, self.len())
+	top, bottom = self.lines_around_cursor()
+        lines = string.split(self.contents(), '\n')
+	s = 0
+	for line in lines[0: top -1]:
+	    s = s + len(line) + 1
+	e = s
+	for line in lines[top: bottom -1]:
+	    e = e + len(line) + 1
+	e = e + len(lines[bottom])
+	return s, e
+
+    def make_position_visible(self, position = None):
+	target = self.line_num_of(position)
+	top, bottom = self.lines_around_cursor()
+	if target < top:
+	    destination = target +self.window_size
+	elif target > bottom:
+	    destination = target -self.window_size
+	else:
+	    return
+	self.goto_line(destination)
 
     def len(self):
 	return len(self.content)
@@ -84,7 +106,7 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
         **INPUTS**
         
         *INT* from_line = None -- First line to be printed. If *None*, then
-        print *print_window_size* lines around cursor.
+        print *window_size* lines around cursor.
 
         *INT* to_line = None -- Last line to be printed.
 
@@ -146,8 +168,8 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
         """
 
         curr_line = self.line_num_of(self.cur_pos())
-        from_line = curr_line - print_window_size
-        to_line = curr_line + print_window_size
+        from_line = curr_line - self.window_size
+        to_line = curr_line + self.window_size
 	if from_line < 1:
 	    from_line = 1
 	last_line = self.line_num_of(self.len())
@@ -182,12 +204,13 @@ class SourceBuffEdSim(SourceBuff.SourceBuff):
         lines = string.split(self.contents(), '\n')
         line_start_pos = None
         line_end_pos = 0
-        curr_line = 1
+	line_num = 1
+        curr_line = 0
         for a_line in lines:
             curr_line = curr_line + 1
             line_start_pos = line_end_pos
             line_end_pos = line_end_pos + len(a_line) + 1
-            if position >= line_start_pos and position <= line_end_pos:
+            if position >= line_start_pos and position < line_end_pos:
                 line_num = curr_line
                 break
             

@@ -3,7 +3,7 @@
 
 <head>
 
-<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Tue Dec 19 00:20:11 2000)">
+<META NAME="GENERATOR" CONTENT="pythondoc 0.7 (Wed Dec 27 08:37:46 2000)">
 
 <link rel="stylesheet" href="pythondoc.css" type="text/css">
 
@@ -22,6 +22,7 @@
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">goto_line</SPAN>(<SPAN CLASS="Argument">linenum</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Goes to line number <EM>INT linenum</EM> of current source buffer</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">help</SPAN>()</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">listen</SPAN>()</SPAN>
+<SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">make_position_visible</SPAN>(<SPAN CLASS="Argument">pos</SPAN>)</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">move</SPAN>(<SPAN CLASS="Argument">steps</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Moves cursor by <EM>INT steps</EM> (can be negative)</SPAN>
 <SPAN CLASS="FunctionHead"><A CLASS="DocLink" HREF="#open_file"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">open_file</SPAN></A>(<SPAN CLASS="Argument">fname</SPAN>)</SPAN><SPAN CLASS="OneLiner"> # Open a file with name in current buffer.</SPAN>
 <SPAN CLASS="FunctionHead"><SPAN CLASS="PyKeyword">def</SPAN> <SPAN CLASS="FunctionName">print_abbreviations</SPAN>(<SPAN CLASS="Argument">show_unresolved=1</SPAN>)</SPAN>
@@ -133,7 +134,8 @@ goto(INT pos)
    utterance that corresponds to a Context Sensitive Command.</H3>
    Once in <CODE>listen</CODE> mode, you cannot type console commands until you
    have clicked the <CODE>OK</CODE> button on the <CODE>Natlink/ Python Subsystem</CODE>
-   window.print_abbreviations(show_unresolved=1)
+   window.make_position_visible(INT pos)
+   Scroll so that pos is visibleprint_abbreviations(show_unresolved=1)
    Prints out a list of the abbreviations in symbols that were parsed
    so far. If <EM>show_unresolved=1</EM>, also lists unresolved abbreviations
    and the symbols they appear in (an unresolved abbreviation is an
