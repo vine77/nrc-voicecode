@@ -117,15 +117,15 @@ When function ends, the template for the shor/long summary of the class is selec
   (py-class class-name super-classes attrs 1)
 )  
 
-(defun pyc (class-name super-classes attrs)
-  (interactive "sName: \nsSuperclasses: \nsAttributes: ")
+(defun pyc (class-name super-classes attrs exclude-bases)
+  (interactive "sName: \nsSuperclasses: \nsAttributes: \nsExclude base classes: ")
   "Writes template code for a class that is not a subclass of Object (as defined in Object.py)
 
 When function ends, the template for the shor/long summary of the class is selected so that it can easily be deleted with Ctrl-w"
   (py-class class-name super-classes attrs nil)
 )
 
-(defun py-class (class-name super-classes attrs is-object)
+(defun py-class (class-name super-classes attrs exclude-bases is-object)
   (let ((descr-start nil) (descr-end nil) (attr-list nil) (super-list nil))
 
     (beginning-of-line)
@@ -138,6 +138,7 @@ When function ends, the template for the shor/long summary of the class is selec
      ;;;
      (setq attr-list (py-parse-named-args attrs))
      (setq super-list (split-string super-classes "[ ,]+"))
+     (setq exclude-list (split-string exclude-bases "[ ,]+"))
 
      (py-insert-code ":\n")
      (py-insert-doc "\"\"\"")
@@ -158,7 +159,7 @@ When function ends, the template for the shor/long summary of the class is selec
      ;;;
      ;;; Insert constructor for the class
      ;;;
-     (if (not py-no-construct) (py-constructor attr-list super-list is-object))
+     (if (not py-no-construct) (py-constructor class-name attr-list exclude-list is-object))
     
      ;;;
      ;;; Mark description placeholders
@@ -245,30 +246,46 @@ Returns a list of pairs with name and value of the argument."
     )
 )
 
-(defun py-constructor (attr-list super-list is-object)
-  "Insert code for constructor of a class with attributes attr-list (name-value pairs) and superclasses super-list. If is-object is true, build a constructor for a subclass of Object (as defined in Object.py"
+(defun py-constructor  (class-name attr-list exclude-bases is-object)
+  "Insert code for constructor of a class class-name with attributes attr-list (name-value pairs). Do not invoke constructor of classes in exclude-bases. If is-object is true, build a constructor for a subclass of Object (as defined in Object.py"
 
   (py-insert-code "\n\ndef __init__(self")
   (mapcar #'(lambda (name-val) (py-insert-code (concat ", " (elt name-val 0) "=" (elt name-val 1)))) attr-list)
   (py-insert-code ", **attrs):\n")
 
   ;;;
-  ;;; Call constructors for super classes
+  ;;; Call self.deep_construct 
   ;;;
-  (mapcar #'(lambda (a-super) (py-insert-code (concat a-super ".__init__(self)\n"))) super-list)    
+  (py-insert-code (concat "self.deep_construct(" class-name ", \\\n"))
 
   ;;;
-  ;;; Define new attributes
+  ;;; With list of attributes
   ;;;
-  (py-insert-code "self.def_attrs({")
-  (mapcar #'(lambda (an-attr) (py-insert-code (concat "'" (elt an-attr 0) "'" ": " (elt an-attr 0) ", "))) attr-list)
-  (backward-delete-char-untabify 2)
-  (py-insert-code "})\n")
+  (if (> (length attr-list) 0)
+      (progn
+	(py-insert-code "{")
+	(mapcar #'(lambda (an-attr) (py-insert-code (concat "'" (elt an-attr 0) "'" ": " (elt an-attr 0) ", \\\n"))) attr-list)
+                  ;;; Delete last ", "
+	(backward-delete-char-untabify 4)
+	(py-insert-code "}")
+	)
+    (py-insert-code "{}")
+    )
 
-  ;;;
-  ;;; Initialise attributes
-  ;;;
-  (py-insert-code "self.init_attrs(attrs)\n")
+  (py-insert-code ", \\\nattrs, \\\n")
+
+  (if (> (length exclude-list) 0)
+      (progn
+	(py-insert-code "{")
+	(mapcar #'(lambda (a-base) (py-insert-code (concat "'" a-base "': 1, \\\n"))) exclude-bases)
+
+	(backward-delete-char-untabify 4)
+	(py-insert-code "}")
+	)
+    (py-insert-code "{}")
+    )
+
+  (py-insert-code ")\n")
   
 )
 
@@ -279,8 +296,9 @@ Returns a list of pairs with name and value of the argument."
   (switch-to-buffer "*PYTEST*")
   (python-mode)
   (erase-buffer)
-  (py-class "Blah" "S1, S2" "x=0, y, z=3" 1)
+  (py-class "Blah" "S1, S2" "x=0, y=1" "S2" 1)
   (end-of-buffer)
+;  (py-class "Blob" "" "" "" 1)
   (py-method "a_method" "arg1=1, arg2=2, arg3" 1)
   (end-of-buffer)
   (py-method "a_function" "arg1=1, arg2=2, arg3" nil)
