@@ -734,6 +734,96 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
         if recog_type == 'self':
             utterance = sr_interface.SpokenUtteranceNL(results)
             self.results_callback(utterance.words())
+
+class SymbolReformattingWinGramNL(SymbolReformattingWinGram, GrammarBase):
+    """natlink implementation of SymbolReformattingWinGram for window-specific 
+    symbol correction grammars
+
+    **INSTANCE ATTRIBUTES**
+
+    *[STR] rules* -- list of rules for this grammar
+
+    **CLASS ATTRIBUTES**
+
+    *none*
+    """
+    def __init__(self, **attrs):
+        self.deep_construct(SymbolReformattingWinGramNL,
+            {'rules': []}, attrs, exclude_bases = {GrammarBase:1})
+        GrammarBase.__init__(self)
+        self.create_rules()
+        self.load()
+
+    def load(self):
+        if self.rules:
+            GrammarBase.load(self, self.rules)
+
+    def create_rules(self):
+       self.rules.append("<dummy> exported = This is a dummy rule;")
+
+
+    def activate(self):
+        """activates the grammar for recognition
+        tied to the current window.
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('SymbolReformattingWinGramNL.activate', 
+            'received activate')
+        if not self.is_active():
+            debug.trace('SymbolReformattingWinGramNL.activate', 
+                'not already active')
+            window = self.window
+            if window == None:
+                window = 0
+            GrammarBase.activateAll(self, window = window, 
+                exclusive = self.exclusive)
+            self.active = 1
+
+    def deactivate(self):
+        """disable recognition from this grammar
+
+        **INPUTS**
+
+        *none*
+
+        **OUTPUTS**
+
+        *none*
+        """
+        debug.trace('SymbolReformattingWinGramNL.activate', 
+            'received deactivate')
+        if self.is_active():
+            debug.trace('SymbolReformattingWinGramNL.activate', 
+                'was active')
+            GrammarBase.deactivateAll(self)
+            self.active = 0
+
+    def remove_other_references(self):
+        GrammarBase.unload(self)
+        SymbolReformattingWinGram.remove_other_references(self)
+        
+    def _set_exclusive_when_active(self, exclusive):
+        """private method which ensures that even currently active grammars 
+        become exclusive.  This is important because activate may be 
+        ignored if the grammar is already active, so a change to
+        self.exclusive may not take effect even on the next utterance
+
+        **INPUTS**
+
+        *BOOL* exclusive -- true if the grammar should be exclusive
+
+        **OUTPUTS**
+
+        *none*
+        """
+        GrammarBase.setExclusive(self, exclusive)
     
 class WinGramFactoryNL(WinGramFactory):
     """natlink implementation of factory which returns 
@@ -876,7 +966,28 @@ class WinGramFactoryNL(WinGramFactory):
             window = window, exclusive = exclusive, 
             capitalize_rules = self.capitalize) 
 
-#NEW
+    def make_reformatting(self, manager, window = None, exclusive = 0):
+        """create a new symbol reformatting grammar
+
+        **INPUTS**
+
+        *WinGramMgr* manager -- the grammar manager which will own the
+        grammar
+
+        *INT* window -- make grammar specific to a particular window
+
+        *BOOL* exclusive -- is grammar exclusive?  (prevents other
+        non-exclusive grammars from getting results)
+
+        **OUTPUTS**
+
+        *BasicCorrectionWinGram* -- new basic correction grammar
+        """
+        return SymbolReformattingWinGramNL(manager = manager, 
+            window = window, exclusive = exclusive, 
+            capitalize_rules = self.capitalize) 
+
+
     def make_text_mode(self, manager, on_spoken_as, off_spoken_as,
             off_sets_nat_text_to, window = None, exclusive = 0):
         """Create a new grammar for toggling text-mode on and off.
@@ -907,39 +1018,6 @@ class WinGramFactoryNL(WinGramFactory):
         """
         return TextModeTogglingGramNL(on_spoken_as, off_spoken_as,
             off_sets_nat_text_to, manager = manager, window = window, 
-            exclusive=exclusive,
-            capitalize_rules = self.capitalize) 
-            
-#ORIG            
-    def make_text_mode_ORIG(self, manager, window = None, exclusive = 0,
-                ):
-        """Create a new grammar for toggling text-mode on and off.
-        
-        **INPUTS**
-
-        *WinGramMgr* manager -- the grammar manager which will own the
-        grammar
-        
-        *[STR] on_spoken_as* -- list of spoken forms for the command
-        that turns text mode on.
-        
-        *[STR] off_spoken_as* -- list of spoken forms for the command
-        that turns text mode off.
-             
-        *0-1 off_sets_nat_text_to* -- when setting text mode off, put
-        nat text into that state.
-
-        *INT* window -- make grammar specific to a particular window
-
-        *BOOL* exclusive -- is grammar exclusive?  (prevents other
-        non-exclusive grammars from getting results)
-
-        **OUTPUTS**
-
-        *TextModeGram* -- the command grammar for toggling text-mode.
-        
-        """
-        return TextModeTogglingGramNL(manager = manager, window = window, 
             exclusive=exclusive,
             capitalize_rules = self.capitalize) 
             

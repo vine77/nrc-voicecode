@@ -577,6 +577,9 @@ class WinGramMgr(GramMgrDictContext):
 
     *{INT : BasicCorrectWinGram}* correction_grammars -- map from 
     window handles to grammars containing basic correction commands
+
+    *{INT : SymbolReformattingWinGram}* reformatting_grammars -- map from 
+    window handles to grammars containing symbol reformatting commands
     
     *{INT: TextModeTogglingGram}* text_mode_toggling_grammars -- map from
     window handles to command grammars for turning text mode on-off.
@@ -624,6 +627,7 @@ class WinGramMgr(GramMgrDictContext):
                             'dict_cmd_grammars': {},
                             'sel_grammars' : {},
                             'correction_grammars' : {},
+                            'reformatting_grammars' : {},
                             'text_mode_toggling_grammars': {},
                             'correction': correction, 
                             'text_mode_toggling': text_mode_toggling
@@ -634,6 +638,7 @@ class WinGramMgr(GramMgrDictContext):
         self.add_owned('dict_cmd_grammars')        
         self.add_owned('sel_grammars')
         self.add_owned('correction_grammars')
+        self.add_owned('reformatting_grammars')
 
     
     def remove_other_references(self):
@@ -696,6 +701,8 @@ class WinGramMgr(GramMgrDictContext):
             grammar.set_exclusive(exclusive)
         for grammar in self.correction_grammars.values():
             grammar.set_exclusive(exclusive)
+        for grammar in self.reformatting_grammars.values():
+            grammar.set_exclusive(exclusive)
         for grammar in self.text_mode_toggling_grammars.values():
             grammar.set_exclusive(exclusive)
 
@@ -755,6 +762,11 @@ class WinGramMgr(GramMgrDictContext):
                 self.correction_grammars[window].deactivate()
             else:
                 self.correction_grammars[window].activate()
+                
+        if is_in_text_mode:
+            self.reformatting_grammars[window].deactivate()
+        else:
+            self.reformatting_grammars[window].activate()
 
         if self.text_mode_toggling:
             self.text_mode_toggling_grammars[window].activate()            
@@ -766,6 +778,12 @@ class WinGramMgr(GramMgrDictContext):
                 for a_window in self.correction_grammars.keys():
                     if a_window != window:
                         self.correction_grammars[a_window].deactivate()
+
+            for a_window in self.reformatting_grammars.keys():
+                if a_window != window:
+                    self.reformatting_grammars[a_window].deactivate()
+                        
+            
             if self.text_mode_toggling:
                 for a_window in self.text_mode_toggling_grammars.keys():
                     if a_window != window:
@@ -832,6 +850,7 @@ class WinGramMgr(GramMgrDictContext):
             self.sel_grammars[window].deactivate()
             if self.correction:
                 self.correction_grammars[window].deactivate()
+            self.reformatting_grammars[window].deactivate()
             if self.text_mode_toggling:
                 self.text_mode_toggling_grammars[window].deactivate()
             buffers = self.dict_grammars[window].keys()
@@ -970,6 +989,17 @@ class WinGramMgr(GramMgrDictContext):
                 self.factory.make_correction(manager = self, window = a_window, 
                 exclusive = self.exclusive)
 #            print self.correction_grammars[window]
+
+        if not self.reformatting_grammars.has_key(window):
+            a_window = window
+            if self.global_grammars:
+                a_window = None
+            self.reformatting_grammars[window] = \
+                self.factory.make_reformatting(manager = self, window = a_window, 
+                exclusive = self.exclusive)
+#            print self.reformatting_grammars[window]
+
+
         if self.text_mode_toggling and not self.text_mode_toggling_grammars.has_key(window):
             a_window = window
             if self.global_grammars:
@@ -1010,6 +1040,7 @@ class WinGramMgr(GramMgrDictContext):
                 del self.text_mode_toggling_grammars[window]            
             if self.correction:
                 del self.correction_grammars[window]
+            del self.reformatting_grammars[window]
                 
         if self.dict_grammars.has_key(window):
             for a_buffer in self.dict_grammars[window].keys():

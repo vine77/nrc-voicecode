@@ -15,6 +15,9 @@ Last modified: 2003-12-02
 
 - go to the end of large_buff.py and start dictating there
 
+- I find writing a bubble sort method works well cause it's 
+  something everybody understand and I can program it in my sleep.
+
 
 0. Correction
    ----------
@@ -60,6 +63,8 @@ Dictate a simple class with a single method.
 
 - Dictate a new class name within a "define method" utterance, and show that
   the class was automatically formatted using CapitalHungarian formatting
+
+- When we have a symbol correction dialog working, show how that's done.
 
 
 3. Local navigation by punctuation
