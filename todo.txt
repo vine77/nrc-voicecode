@@ -1,7 +1,27 @@
 Todo list for VoiceCode
 =======================
 
+Selec XYZ
+---------
 
+- Suppose you want to select '!='. At the moment, you can't say "Select not equal", because there isn't a word with form '!=\not equal'. We could add such a word, but that might be a problem because 'not equal' may be written differently in different languages.
+
+  We could add a new kind of statement to the config file
+
+  language_specific_word(STR spoken_as, [(STR language, STR written_as)]
+
+  where STR spoken_as is the spoken form of the word and the 2nd argument is 
+  a list showing how the word is written in different languages. 
+
+  the language specific words for a given langauge would only be
+  loaded when we are editing a file of the appropriate language. That
+  is, as soon as we intercept the beginning of an utterance, we first
+  check to see the language of the current buffer. If it's the same as
+  the language for which the language specific words were loaded, we
+  do nothing. Otherwise, we delete all language specific words for the
+  previous language and load those for the current language.
+
+  
 config.py
 ---------
 

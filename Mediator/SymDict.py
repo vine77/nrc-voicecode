@@ -7,6 +7,16 @@ import os, re, string
 
 language_definitions={}
 
+#
+# Set *vocabulary_symbols_written_form* to 1 if you want VoiceCode to create a
+# written form/spoken form entry in the SR vocabulary for every symbol it
+# compiles.
+# If set to 0, SR will create a spoken form entry only and the VoiceCode
+# command interpreter will translate that spoken form to a written form
+#
+vocabulary_symbols_with_written_form = 1
+
+
 def pluralize(word):
     """Finds the plural form of a word
         
@@ -82,12 +92,11 @@ class SymDict(Object):
     *{STR: [STR]}* abbreviations={} -- Dictionary of abbreviations. The
      key is the abbreviation and the value is a list of poosible expansions.
 
-
     *{STR: None}* unresolved_abbreviations={} -- Dictionary of
      unresolved abbreviations. These are abbreviations that have
      appeared in at least one compiled symbol, yet are neither a word
      in the speech vocabulary or a known abbreviation.
-    
+   
     CLASS ATTRIBUTES**
 
     *{STR: * [LangDef] *}* language_definitions={} -- Key is the name
@@ -227,6 +236,9 @@ class SymDict(Object):
         
         *none* -- 
         """
+
+        global vocabulary_symbols_with_written_form
+        
 #        print '-- SymDict.add_symbol: symbol=%s' % symbol
         
         if not self.symbol_info.has_key(symbol):
@@ -267,8 +279,23 @@ class SymDict(Object):
                     #       (because it would correspond to an in-vocabulary
                     #       word)
                     #
+#                    print '-- SymDict.add_symbol: adding symbol spoken=\'%s\', written=\'%s\'' % (a_form, symbol)
                     if len(re.split('\s+', a_form)) > 1:
-                           sr_interface.addWord(a_form)        
+                        if vocabulary_symbols_with_written_form:
+                            #
+                            # Add the vocabulary entry as a written\\spoken
+                            # form
+                            #
+#                            print '-- SymDict.add_symbol: adding it as a written/spoken form'
+                            entry = sr_interface.vocabulary_entry(a_form, symbol)
+                        else:
+                            #
+                            # Add just the spoken form entry
+                            #
+#                            print '-- SymDict.add_symbol: adding it as a written form only'
+                            entry = sr_interface.vocabulary_entry(a_form)
+                            
+                        sr_interface.addWord(entry)        
 
     def get_spoken_forms(self, symbol):
         """Returns a list of possible spoken forms for a symbol.
@@ -483,6 +510,8 @@ class SymDict(Object):
         
         *none* -- 
         """
+
+        global vocabulary_symbols_with_written_form
         
         for (a_form, a_form_info) in self.spoken_form_info.items():
         
@@ -491,7 +520,19 @@ class SymDict(Object):
               # Remove it.
               #
               print '-- SymDict.vocabulary_cleanup: removing word %s' % a_form
-              sr_interface.deleteWord(a_form)
+              if not vocabulary_symbols_with_written_form:
+                  #
+                  # Just remove the spoken form
+                  #
+                  sr_interface.deleteWord(a_form)
+              else:
+                  #
+                  # Remove every spoken\written entry in the vocabulary
+                  #
+                  for a_written_form in self.spoken_form_info[a_form].symbols:
+                      entry = sr_interface.vocabulary_entry(a_form, a_written_form)
+                      sr_interface.deleteWord(entry)
+                  
         self.spoken_form_info = {}
         self.symbol_info = {}
             
