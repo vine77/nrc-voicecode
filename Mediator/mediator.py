@@ -69,7 +69,8 @@ def cleanup(clean_sr_voc=0):
     sim_commands.quit(clean_sr_voc=clean_sr_voc)
 
 def setmic(state):
-    if not os.environ.has_key('VCODE_NOSPEECH'):
+    if sr_interface.speech_able():
+        sr_interface.connect()
         natlink.setMicState(state)
 
 def init_simulator(symdict_pickle_fname=None):
