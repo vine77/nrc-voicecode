@@ -2901,7 +2901,7 @@ def test_symbol_formatting():
     commands.say(['new', 'statement'])
 
     print 'Making sure consecutive letters are treated as part of the same word'
-    test_say(['win', 'X.', 'P.'])
+    test_say(['windows', 'X.', 'P.'])
     commands.say(['new', 'statement'])
 
 
@@ -4273,6 +4273,79 @@ def test_standard_function_call():
 
 add_test('std_func_calls', test_standard_function_call, 'Testing CSCs for calling standard functions.')
 
+##############################################################################
+# Testing special cases for the symbol matching algorithm
+##############################################################################
+
+def test_sym_matching():
+   testing.init_simulator_regression()   
+   testing.mediator().interp.add_symbol('symbolWithUnmatchableExplicitSpokenForm', user_supplied_spoken_forms=['purple bunny'])
+   testing.mediator().interp.add_symbol('filepath')
+   testing.mediator().interp.add_symbol('dpath')
+   testing.mediator().interp.add_symbol('rannum')   
+   testing.mediator().interp.add_symbol('intfmt')
+   testing.mediator().interp.add_symbol('TTCorp')
+   testing.mediator().interp.add_symbol('GrnRab')   
+   testing.mediator().interp.add_symbol('EdSim')   
+   testing.mediator().interp.add_symbol('__rab__')    
+   testing.mediator().interp.add_symbol('datap')    
+            
+   commands.open_file('blah1.py')
+
+   # Should type EdSim
+   commands.say(['editor', 'simulator'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   
+   # Should type symbolWithUnmatchableExplicitSpokenForm   
+   commands.say(['purple', 'bunny'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   
+   # Should NOT type acos (aco is not a prefix of application, and it's too short
+   # to be allowed to be concatenated with another word from the pseudo-symbol)
+   commands.say(['application', 'state'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   
+   # Should type filepath (file and path are prefixes of file and path, so it's OK to concatenate it with
+   # path)
+   commands.say(['file', 'path'] , user_input="1\n1\n1\n", echo_utterance=1)
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   
+   # Should type dpath (d and path are prefixes of directory and path)
+   commands.say(['directory', 'path'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   
+   # Should type TTCorp (T, T and Corp are prefixes of Toronto, Transit and Corporation 
+   # (but doesn't at the moment)
+   commands.say(['Toronto', 'transit', 'corporation'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   
+   # Should type rannum (ran and num are prefixes of random and num, so can concatenate
+   # them)
+   commands.say(['random', 'number'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   
+   # Should type GrnRab (eventhough Grn is not a suffix of green and it's too short
+   # to be allowed to concatenate, there is a change of case, and therefore GnRab
+   # does not count as a concatenation)
+   commands.say(['green', 'rabbit'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   
+   # Should NOT type intfmt (fmt is not a prefix of format and it's too short
+   # to be allowed to concatenate)
+   commands.say(['integer', 'format'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   
+   # Should NOT type __rab__ (cause it's too short if you don't count the _s)
+   commands.say(['rabbit'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   
+   # Should type datap (data and p are prefixes of data and processing, so it's 
+   # ok to concatenate them... this case is to make sure that we process the last
+   # term correctly)
+   commands.say(['data', 'processing'] , user_input="1\n1\n1\n", echo_utterance=1)       
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
+      
+add_test('symbol_matching', test_sym_matching, desc='Test special cases for the symbol matching algorithm.')
 
 ##############################################################################
 # Sending a large message to the client
@@ -4317,37 +4390,52 @@ add_test('profile_config', test_profile_config,
 ##############################################################################
 
 def test_temporary():  
-    testing.init_simulator_regression()
-    
-    native_py_file = vc_globals.test_data + os.sep + 'native_python.py'    
-    commands.compile_symbols([native_py_file])
-        
-    #
-    # These words must be in the SR vocab, otherwise some of the say()
-    # statements will faile
-    #
-    sr_interface.addWord(sr_interface.vocabulary_entry('aliases', 'aliases'))
-    sr_interface.addWord(sr_interface.vocabulary_entry('globals', 'globals'))
+   testing.init_simulator_regression()   
+   testing.mediator().interp.add_symbol('weirdSymbol', user_supplied_spoken_forms=['purple bunny'])
+   testing.mediator().interp.add_symbol('filepath')
+   testing.mediator().interp.add_symbol('dpath')
+   testing.mediator().interp.add_symbol('rannum')   
+   testing.mediator().interp.add_symbol('intfmt')
+   testing.mediator().interp.add_symbol('TTC')
+   testing.mediator().interp.add_symbol('YelRab')   
+   testing.mediator().interp.add_symbol('EdSim')   
+   testing.mediator().interp.add_symbol('__rab__')    
+            
+   commands.open_file('blah1.py')
 
-    commands.open_file('blah.py')
+   # Should type EdSim
+   commands.say(['editor', 'simulator'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
 
-    commands.say(['import\\import modules', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
-        
-#    commands.say(['import\\import modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    commands.say(['import', 'modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
 
-    commands.say(['import', 'modules', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
-        
-    commands.say(['from', 'module', 'Ed', 'simulator', 'import', 'symbol', 'Ed', 'simulator', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
-    commands.say(['import', 'modules', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
-        
-    commands.say(['from', 'module', 'object', 'import', 'symbol', 'object', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+   # Should type weirdSymbol   
+   commands.say(['purple', 'bunny'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   # Should NOT type acos
+   commands.say(['application', 'state'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   # Should type filepath
+   commands.say(['file', 'path'] , user_input="1\n1\n1\n", echo_utterance=1)
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   # Should type dpath (but doesn't at the moment)
+   commands.say(['directory', 'path'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   # Should type TTC (but doesn't at the moment)
+   commands.say(['Toronto', 'transit', 'corporation'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   # Should type rannum (but doesn't at the moment)
+   commands.say(['random', 'number'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   # Should type YelRab (but doesn't at the moment... cause it's considered to
+   # be a run-together words eventhough the two terms are separatable)
+   commands.say(['yellow', 'rabbit'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)         
+   # Should NOT type intfmt
+   commands.say(['integer', 'format'] , user_input="1\n1\n1\n", echo_utterance=1)   
+   commands.say(['new', 'statement'] , user_input="1\n1\n1\n", echo_utterance=1)      
+   # Should NOT type __rab__ (but does at the moment)
+   commands.say(['rabbit'] , user_input="1\n1\n1\n", echo_utterance=1)   
 
-    commands.say(['import', 'modules', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)    
-    
-    commands.say(['import', 'modules', 'Ed', 'simulator', 'comma', 'symbol', 'dictionary', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
-    
     
 #add_test('temp', test_temporary, desc='temporary test')
 

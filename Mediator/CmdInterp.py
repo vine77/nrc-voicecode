@@ -1981,7 +1981,7 @@ class CmdInterp(OwnerObject):
         self.styling_state.clear()
         return
         
-    def add_symbol(self, symbol, user_supplied_spoken_forms=None, \
+    def add_symbol(self, symbol, user_supplied_spoken_forms=[], \
                    tentative = 1, add_sr_entries=1):
         """Add a symbol to the dictionary
 

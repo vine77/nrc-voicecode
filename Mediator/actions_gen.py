@@ -818,7 +818,7 @@ class ActionFuncCallWithParens(Action):
 
      **INSTANCE ATTRIBUTES**
         
-     STR *args_list_type* -- indicates the type of arg list ('emtpy' or 'non-empty').
+     STR *args_list_type* -- indicates the type of arg list ('empty' or 'non-empty').
     
      STR *func_name* -- name of the function or method name.
 
@@ -828,6 +828,7 @@ class ActionFuncCallWithParens(Action):
    
     """
     def __init__(self, func_name, args_list_type, **args_super):
+        debug.trace('ActionFuncCallWithParens.__init__', '** args_list_type=%s' % args_list_type)
         self.deep_construct(ActionFuncCallWithParens, 
                             {'func_name': func_name,
                              'args_list_type': args_list_type}, 
