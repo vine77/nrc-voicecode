@@ -51,12 +51,14 @@ import WinSystemMSW
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="on",
+debug.config_traces(status="off",
                     active_traces={
 #################################
+      'ActionInsert.execute': 1,
+      'actions_c_cpp.main': 1,
 #      'results_callback': 1,
-      'interpret_dictation': 1,
-      'interpret_utterance': 1,
+#      'interpret_dictation': 1,
+#      'interpret_utterance': 1,
 #      'CmdInterp': 1,
 #      'ActionDeleteCurrentLine': 1,
 #      'ResMgr': 1,
@@ -68,10 +70,10 @@ debug.config_traces(status="on",
 #      'change_callback': 1,
 #      'deactivate': 1,
 #      'WinGram.cleanup': 1,
-      'GramMgr': 1,
+#      'GramMgr': 1,
 #      'rename_buffer_cbk': 1,
-      'activate': 1,
-      'gotResult': 1,
+#      'activate': 1,
+#      'gotResult': 1,
 #      'on_results': 1,
 #      'print_buff_if_necessary': 1,
 #      '_std_interp': 1,

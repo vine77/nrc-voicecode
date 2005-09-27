@@ -21,7 +21,8 @@
 
 """Action functions for Python language"""
 
-import re
+import re, sys
+
 import SymDict
 from actions_gen import Action, ActionInsert, ActionSearch, ActionInsertNewClause
 

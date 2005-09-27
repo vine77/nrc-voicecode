@@ -687,7 +687,7 @@ class SymbolReformattingWinGram(WinGram):
         if reformat_words is None:
             reformat_words = ['Reformat']
         if recent_words is None:
-            recent_words = ['Recent']
+            recent_words = ['Recent', 'Symbol', 'Symbols']
         self.reformat_words = map(self.capitalize_rule, reformat_words)
         self.recent_words = map(self.capitalize_rule, recent_words)
             

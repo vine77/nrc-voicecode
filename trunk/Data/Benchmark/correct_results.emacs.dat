@@ -11747,7 +11747,7 @@ F.
 FAIL: test_always_fail (pyUnitExample.SampleTestCase)
 ----------------------------------------------------------------------
 Traceback (most recent call last):
-  File "C:\voicetools\VCode\Admin\pyUnitExample.py", line 12, in test_always_fail
+  File "C:\eclipse\workspace\VCode\Admin\pyUnitExample.py", line 12, in test_always_fail
     assert self.var == 2, "This should always fail"
 AssertionError: This should always fail
 

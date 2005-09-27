@@ -538,7 +538,7 @@ class ActionInsert(Action):
         
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
 
-        debug.trace('ActionInsert.execute' ,'self.code_bef=%s, self.code_after=%s' % (self.code_bef, self.code_after))
+        debug.trace('ActionInsert.execute' ,'self=%s, self.code_bef=%s, self.code_after=%s' % (self, self.code_bef, self.code_after))
 
         inserted = app.insert_indent(self.code_bef, self.code_after)
         if state:

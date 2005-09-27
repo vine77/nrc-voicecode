@@ -26,6 +26,7 @@ from actions_gen import Action, ActionInsert, ActionSearch, ActionInsertNewClaus
 
 import whrandom
 import string
+import debug, sys
 
 class ActionHeaderWrapper(Action):
     """Action that inserts a code template for one time #include
