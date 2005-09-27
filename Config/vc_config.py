@@ -974,14 +974,11 @@ acmd = CSCmd(spoken_forms=['union','define union','declare union'],
              meanings={ContC(): ActionInsert('union ','\r\t{\n\t\n};')},
                        docstring='union definition')
 data_structures.add_csc(acmd)
-acmd = CSCmd(spoken_forms=['class'],
-             meanings={ContBlankLine('python'): py_class_definition},
-             docstring='class definition (python only)')
-data_structures.add_csc(acmd)
-acmd = CSCmd(spoken_forms=['define class', 'declare class',
+
+acmd = CSCmd(spoken_forms=['class', 'define class', 'declare class',
                            'class definition', 'class declaration',
                            'new class'],
-             meanings={ContC(): cpp_class_definition,
+             meanings={ContBlankLine('C'): cpp_class_definition,
                        ContBlankLine('python'): py_class_definition},
              docstring='class definition')
 data_structures.add_csc(acmd)
@@ -1086,6 +1083,8 @@ misc_python.add_lsa(LSAlias(['self dot'], {'python': 'self.'}, spacing =
 misc_python.add_lsa(LSAlias(['self'], {'python': 'self'}))
     
 misc_python.add_lsa(LSAlias(['empty tuple'], {'python': '()'}))
+
+misc_python.add_lsa(LSAlias(['format with'], {'python': ' % '}))
 
 acmd = CSCmd(spoken_forms=['continue statement'],
              meanings={ContPy(): ActionInsert('\\\n', '', 

@@ -317,7 +317,7 @@ class ContBlankLine(Context):
 
         *STR* -- the key
         """
-        return "BlankLine"
+        return "BlankLine(%s)" % self.language
 
 
 class ContTextIsSelected(Context):
