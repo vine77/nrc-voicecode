@@ -1520,10 +1520,6 @@ off -> on, {on,sleeping} -> off."
       (eq (car-safe object) 'lambda)
       (and (symbolp object) (fboundp object))))
 
-(defun vr-deprecated-strip-dash (symbol)
-  (concat (mapcar (lambda (x) (if (eq x ?-) ?\ x)) (symbol-name symbol))))
-
-
 (defun vr-deprecated-startup ()
   "Initialize any per-execution state of the vr-deprecated Mode subprocess."
 
@@ -1694,37 +1690,37 @@ mess-name)
 )
 
 
-(defun vr-deprecated-initialize-server ()
-  "Initialize the vr-deprecated.exe speech server with a series of voice commands and 
-grammars."
-  (let ((l (lambda (x)
-	     (cond ((eq x 'vr-deprecated-default-voice-commands)
-		    (mapcar l vr-deprecated-default-voice-command-list))
-		   ((symbolp x)
-		    (vr-deprecated-send-cmd
-		     (concat "define-command "
-			     (vr-deprecated-strip-dash x) "|" (symbol-name x))))
-		   ((and (listp x) (eq (car x) 'list))
-		    (vr-deprecated-send-cmd
-		     (format "define-list %s|%s" (nth 1 x) (nth 2 x))))
-		   ((and (consp x) (vectorp (cdr x)))
-		    (vr-deprecated-send-cmd
-		     (format "define-command %s|%s" (car x) (cdr x))))
-		   ((and (consp x) (symbolp (cdr x)))
-		    (vr-deprecated-send-cmd
-		     (format "define-command %s|%s" (car x) (cdr x))))
-		   ((and (consp x) (stringp (cdr x)))
-		    (vr-deprecated-send-cmd
-		     (format "define-command %s|%s" (car x) (cdr x))))
-		   (t
-		    (error "Unknown vr-deprecated-voice-command-list element %s"
-			   x))
-		   )
-	     )))
-    (mapcar l (if (eq vr-deprecated-voice-command-list t)
-		  vr-deprecated-default-voice-command-list
-		vr-deprecated-voice-command-list)))
-)
+;; (defun vr-deprecated-initialize-server ()
+;;   "Initialize the vr-deprecated.exe speech server with a series of voice commands and 
+;; grammars."
+;;   (let ((l (lambda (x)
+;; 	     (cond ((eq x 'vr-deprecated-default-voice-commands)
+;; 		    (mapcar l vr-deprecated-default-voice-command-list))
+;; 		   ((symbolp x)
+;; 		    (vr-deprecated-send-cmd
+;; 		     (concat "define-command "
+;; 			     (vr-deprecated-strip-dash x) "|" (symbol-name x))))
+;; 		   ((and (listp x) (eq (car x) 'list))
+;; 		    (vr-deprecated-send-cmd
+;; 		     (format "define-list %s|%s" (nth 1 x) (nth 2 x))))
+;; 		   ((and (consp x) (vectorp (cdr x)))
+;; 		    (vr-deprecated-send-cmd
+;; 		     (format "define-command %s|%s" (car x) (cdr x))))
+;; 		   ((and (consp x) (symbolp (cdr x)))
+;; 		    (vr-deprecated-send-cmd
+;; 		     (format "define-command %s|%s" (car x) (cdr x))))
+;; 		   ((and (consp x) (stringp (cdr x)))
+;; 		    (vr-deprecated-send-cmd
+;; 		     (format "define-command %s|%s" (car x) (cdr x))))
+;; 		   (t
+;; 		    (error "Unknown vr-deprecated-voice-command-list element %s"
+;; 			   x))
+;; 		   )
+;; 	     )))
+;;     (mapcar l (if (eq vr-deprecated-voice-command-list t)
+;; 		  vr-deprecated-default-voice-command-list
+;; 		vr-deprecated-voice-command-list)))
+;; )
 
 (defun vr-deprecated-send-kill-buffer ()
    "Sends a 'kill-buffer message to vr-deprecated.exe"
