@@ -1041,7 +1041,7 @@ class SymDict(OwnerObject):
             if not self._symbols_starting_with.has_key(first_letter):
                 self._symbols_starting_with[first_letter] = {}
             symbol_list = self._symbols_starting_with[first_letter].keys()
-            symbol_list.sort()            
+            symbol_list.sort()    
             symbol_list.append('')
             #
             # Note: symbols must be separated by two spaces because
@@ -1070,6 +1070,7 @@ class SymDict(OwnerObject):
         
         *none* -- 
         """
+        trace("SymDict.print_symbols", "** invoked")
         if symbols:
             the_symbols = symbols
         else:
@@ -1088,8 +1089,15 @@ class SymDict(OwnerObject):
             letters = self._cached_symbols_as_one_string.keys()
             letters.sort()
             for letter in letters:
+                #
+                # Note: For external printing purposes (regression testing), force the 
+                # regeneration of the symbol string, to make sure it's always
+                # sorted in the same way.
+                #
+                del self._cached_symbols_as_one_string[letter]
+                trace("SymDict.print_symbols", "** letter=%s, self.symbols_as_one_string(letter)=%s"  % (letter, self.symbols_as_one_string(letter)))
                 print '_cached_symbols_as_one_string[%s] is:\n   %s' \
-                    % (letter, self._cached_symbols_as_one_string[letter])
+                    % (letter, self.symbols_as_one_string(letter))
 
     def print_abbreviations(self, show_unresolved=0):
         """Prints the known and unresolved abbreviations."""

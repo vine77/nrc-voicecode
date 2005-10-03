@@ -39,7 +39,7 @@ class VCPyUnitTestRunner(TextTestRunner):
         TextTestRunner.__init__(self)
 
     def get_test_class_name(self, test_class):
-        a_match = re.match('\s*<\s*class\s+[\s\S]*?\\.([^\\.]*)\s+at',
+        a_match = re.match('\s*<\s*class\s+[\s\S]*?\\.([^\\.]*)\s*\'*>',
                            repr(test_class))
         return a_match.group(1)
 
