@@ -54,36 +54,11 @@ import WinSystemMSW
 debug.config_traces(status="off",
                     active_traces={
 #################################
-      'ActionInsert.execute': 1,
-      'actions_c_cpp.main': 1,
-#      'results_callback': 1,
-#      'interpret_dictation': 1,
-#      'interpret_utterance': 1,
-#      'CmdInterp': 1,
-#      'ActionDeleteCurrentLine': 1,
-#      'ResMgr': 1,
-#      'restore_state': 1,
-#      'apply_upd_descr': 1,
-#      'insert_cbk': 1,
-#      'delete_cbk': 1,
-#      'on_change': 1,
-#      'change_callback': 1,
-#      'deactivate': 1,
-#      'WinGram.cleanup': 1,
-#      'GramMgr': 1,
-#      'rename_buffer_cbk': 1,
-#      'activate': 1,
-#      'gotResult': 1,
-#      'on_results': 1,
-#      'print_buff_if_necessary': 1,
-#      '_std_interp': 1,
-#      'ForwardToBuffer.__call__': 1,
-#      'set_text': 1,
-#      'tests_def.insert_delete': 1,
-#      'SimCmdsObj.say': 1,
+      'OwnerObject._cleanup_object': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
-                                   allow_trace_id_substrings = 1)
+                    allow_trace_id_substrings = 1,
+                    print_to=sys.stderr)
 
 #debug.config_traces(status="on", active_traces={'CmdInterp':1, 'sr_interface': 1, 'get_mess':1, 'send_mess': 1, 'sim_commands': 1}, allow_trace_id_substrings = 1)
 #debug.config_traces(status="on", active_traces = 'all')
@@ -138,9 +113,10 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
                            )
         self.name_parent('parent')
         wxFrame.__init__(self, None, wxNewId(), self.app_name,
-            wxDefaultPosition, wxSize(400, 100), 
+            wxDefaultPosition, wxSize(5000, 5000), 
 #            wxDEFAULT_FRAME_STYLE | wxSTAY_ON_TOP)
             wxDEFAULT_FRAME_STYLE)
+        self.layout = wxBoxSizer(wxVERTICAL)
         file_menu=wxMenu()
         ID_SAVE_SPEECH_FILES = wxNewId()
         ID_EXIT = wxNewId()
@@ -158,6 +134,32 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
         menuBar.Append(file_menu,"&File");
         self.CreateStatusBar()
         self.SetMenuBar(menuBar)
+
+        #
+        # Text area for displaying a log of user messages and print traces
+        #
+        self.messages_log = \
+               wxTextCtrl(self, wxNewId(), '', wxDefaultPosition,
+                          (700, 400), style = wxTE_MULTILINE)
+        self.messages_log.IsEditable = false
+
+#        self.messages_log.WriteText("Hello world!\nThis is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long line\nAnd this comes after")
+#        self.messages_log.WriteText("This is the second line")
+
+        self.log_message("Hello world!\nThis is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long line\nAnd this comes after")
+        self.log_message("This is the second line")
+                          
+        self.layout.Add(self.messages_log, 0, wxEXPAND | wxALL)
+
+        
+        self.SetAutoLayout(true)
+        self.SetSizer(self.layout)
+        self.Layout()
+        self.layout.Fit(self)
+        
+    def log_message(self, message):
+        self.messages_log.SetInsertionPointEnd()
+        self.messages_log.WriteText(message)
 
     def enable_menus(self, enable = 1):
         """enables or disables all menus

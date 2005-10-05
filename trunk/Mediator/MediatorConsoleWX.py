@@ -189,6 +189,8 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         of displaying user messages 
         """
         self.main_frame.set_status_text(message)
+        
+        self.main_frame.log_message(message + "\n")
         return 1
 
     def message_box(self, message):

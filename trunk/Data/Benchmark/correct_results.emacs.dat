@@ -1,3 +1,17 @@
+
+C:\eclipse\workspace\VCode\Mediator>rem  
+
+C:\eclipse\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
+
+C:\eclipse\workspace\VCode\Mediator>rem
+
+C:\eclipse\workspace\VCode\Mediator>c:
+
+C:\eclipse\workspace\VCode\Mediator>cd C:\eclipse\workspace\VCode\Mediator 
+
+C:\eclipse\workspace\VCode\Mediator>rem python new_server.py --bypass -t all 
+
+C:\eclipse\workspace\VCode\Mediator>python wxMediator.py -t all  
 creating wxMediator
 Loading test definitions...
 Configuring the mediator...
@@ -716,21 +730,21 @@ tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
 type: ['type']
 _cached_symbols_as_one_string[a] is:
-    atan  abspath  acquire  accept  accept2dyear  asin  atanh  __abs__  access  atan2  abs  acos 
+    __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
 _cached_symbols_as_one_string[c] is:
-    cosh  ceil  cos 
+    ceil  cos  cosh  
 _cached_symbols_as_one_string[e] is:
-    exp 
+    exp  
 _cached_symbols_as_one_string[f] is:
-    fabs  floor 
+    fabs  floor  
 _cached_symbols_as_one_string[l] is:
-    len  log  log10 
+    len  log  log10  
 _cached_symbols_as_one_string[r] is:
-    repr 
+    repr  
 _cached_symbols_as_one_string[s] is:
-    str  sinh  sqrt  sin 
+    sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
-    tanh  tan  type  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  type  
 WARNING: source file 'blah.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -2059,7 +2073,7 @@ Parsed symbols are:
 THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 _cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  test_comment  test_procedure  testing_adding_above  testing_declaration  testing_other_pointers  testing_pointers  the_value  this  tiger  triangle  type  
 Unresolved abbreviations are:
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 
@@ -2107,21 +2121,21 @@ tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
 type: ['type']
 _cached_symbols_as_one_string[a] is:
-    atan  abspath  acquire  accept  accept2dyear  asin  atanh  __abs__  access  atan2  abs  acos 
+    __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
 _cached_symbols_as_one_string[c] is:
-    cosh  ceil  cos 
+    ceil  cos  cosh  
 _cached_symbols_as_one_string[e] is:
-    exp 
+    exp  
 _cached_symbols_as_one_string[f] is:
-    fabs  floor 
+    fabs  floor  
 _cached_symbols_as_one_string[l] is:
-    len  log  log10 
+    len  log  log10  
 _cached_symbols_as_one_string[r] is:
-    repr 
+    repr  
 _cached_symbols_as_one_string[s] is:
-    str  sinh  sqrt  sin 
+    sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
-    tanh  tan  type  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  type  
 
 *********************
 *** Executing edit test: insert an import statement in middle of a file ***
@@ -2885,7 +2899,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01A393F8>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01E52780>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2924,21 +2938,21 @@ void: ['void']
 x: ['X.']
 y: ['Y.']
 _cached_symbols_as_one_string[a] is:
-    API_function 
+    API_function  __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
 _cached_symbols_as_one_string[f] is:
-    float  f_name  f_name2 
+    f_name  f_name2  fabs  float  floor  
 _cached_symbols_as_one_string[h] is:
-    horiz_pos 
+    horiz_pos  
 _cached_symbols_as_one_string[m] is:
-    move  move_horiz  move_vert 
+    move  move_horiz  move_vert  
 _cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
 _cached_symbols_as_one_string[v] is:
-    void 
+    void  
 _cached_symbols_as_one_string[x] is:
-    x 
+    x  
 _cached_symbols_as_one_string[y] is:
-    y 
+    y  
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
@@ -3039,39 +3053,39 @@ try_attribute: ['try attribute']
 write: ['write']
 x: ['X.']
 _cached_symbols_as_one_string[a] is:
-    autoTst  auto_test  and  attrs_this_class  attrs_superclasses  a_base  an_attr_def  attrs  an_attr_init  age  AttributeError  add_test 
+    API_function  AttributeError  __abs__  a_base  abs  abspath  accept  accept2dyear  access  acos  acquire  add_test  age  an_attr_def  an_attr_init  and  asin  atan  atan2  atanh  attrs  attrs_superclasses  attrs_this_class  autoTst  auto_test  
 _cached_symbols_as_one_string[b] is:
-    __bases__ 
+    __bases__  
 _cached_symbols_as_one_string[c] is:
-    class  code_file  code 
+    ceil  class  code  code_file  cos  cosh  
 _cached_symbols_as_one_string[d] is:
-    def  deep_construct  __dict__ 
+    __dict__  deep_construct  def  
 _cached_symbols_as_one_string[e] is:
-    exceptions  environ  expandvars  execfile  exclude_bases  else  exec  except  exc 
+    else  environ  exc  except  exceptions  exclude_bases  exec  execfile  exp  expandvars  
 _cached_symbols_as_one_string[f] is:
-    for 
+    f_name  f_name2  fabs  float  floor  for  
 _cached_symbols_as_one_string[h] is:
-    has_key  her_age 
+    has_key  her_age  horiz_pos  
 _cached_symbols_as_one_string[i] is:
-    import  if  __init__  in  items  init_attrs  index 
+    __init__  if  import  in  index  init_attrs  items  
 _cached_symbols_as_one_string[l] is:
-    LargeObject  LargeNonObject 
+    LargeNonObject  LargeObject  len  log  log10  
 _cached_symbols_as_one_string[n] is:
-    not  name  num_times  __name__ 
+    __name__  name  not  num_times  
 _cached_symbols_as_one_string[o] is:
-    os  Object  obj  operation 
+    Object  obj  operation  os  
 _cached_symbols_as_one_string[p] is:
-    posixpath  profile  pass  profConstrSmallObj  profConstrLargeObj  profConstrSmallNonObj  profConstrLargeNonObj  profGetSmallObj  profGetLargeObj  profGetSmallNonObj  profGetLargeNonObj  profSetSmallObj  profSetLargeObj  profSetSmallNonObj  profSetLargeNonObj  profObject  prof_test 
+    pass  posixpath  profConstrLargeNonObj  profConstrLargeObj  profConstrSmallNonObj  profConstrSmallObj  profGetLargeNonObj  profGetLargeObj  profGetSmallNonObj  profGetSmallObj  profObject  profSetLargeNonObj  profSetLargeObj  profSetSmallNonObj  profSetSmallObj  prof_test  profile  
 _cached_symbols_as_one_string[r] is:
-    range  run 
+    range  repr  run  
 _cached_symbols_as_one_string[s] is:
-    sys  sep  self  setattr  SmallObject  SmallNonObject  stdout  str  self_test 
+    SmallNonObject  SmallObject  self  self_test  sep  setattr  sin  sinh  sqrt  stdout  str  sys  
 _cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  this_class  try_attribute  try 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_class  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  try  try_attribute  type  
 _cached_symbols_as_one_string[w] is:
-    write 
+    write  
 _cached_symbols_as_one_string[x] is:
-    x 
+    x  
 Unresolved abbreviations are:
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
@@ -3121,21 +3135,21 @@ void: ['void']
 x: ['X.']
 y: ['Y.']
 _cached_symbols_as_one_string[a] is:
-    API_function 
+    API_function  AttributeError  __abs__  a_base  abs  abspath  accept  accept2dyear  access  acos  acquire  add_test  age  an_attr_def  an_attr_init  and  asin  atan  atan2  atanh  attrs  attrs_superclasses  attrs_this_class  autoTst  auto_test  
 _cached_symbols_as_one_string[f] is:
-    float  f_name  f_name2 
+    f_name  f_name2  fabs  float  floor  for  
 _cached_symbols_as_one_string[h] is:
-    horiz_pos 
+    has_key  her_age  horiz_pos  
 _cached_symbols_as_one_string[m] is:
-    move  move_horiz  move_vert 
+    move  move_horiz  move_vert  
 _cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_class  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  try  try_attribute  type  
 _cached_symbols_as_one_string[v] is:
-    void 
+    void  
 _cached_symbols_as_one_string[x] is:
-    x 
+    x  
 _cached_symbols_as_one_string[y] is:
-    y 
+    y  
 
 
 Unresolved abbreviations are:
@@ -3169,21 +3183,21 @@ void: ['void']
 x: ['X.']
 y: ['Y.']
 _cached_symbols_as_one_string[a] is:
-    API_function 
+    API_function  AttributeError  __abs__  a_base  abs  abspath  accept  accept2dyear  access  acos  acquire  add_test  age  an_attr_def  an_attr_init  and  asin  atan  atan2  atanh  attrs  attrs_superclasses  attrs_this_class  autoTst  auto_test  
 _cached_symbols_as_one_string[f] is:
-    float  f_name  f_name2 
+    f_name  f_name2  fabs  float  floor  for  
 _cached_symbols_as_one_string[h] is:
-    horiz_pos 
+    has_key  her_age  horiz_pos  
 _cached_symbols_as_one_string[m] is:
-    move  move_horiz  move_vert 
+    move  move_horiz  move_vert  
 _cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_class  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  try  try_attribute  type  
 _cached_symbols_as_one_string[v] is:
-    void 
+    void  
 _cached_symbols_as_one_string[x] is:
-    x 
+    x  
 _cached_symbols_as_one_string[y] is:
-    y 
+    y  
 
 
 Unresolved abbreviations are:
@@ -3515,31 +3529,31 @@ void: ['void']
 x: ['X.']
 y: ['Y.']
 _cached_symbols_as_one_string[a] is:
-    atan  abspath  acquire  accept  accept2dyear  asin  atanh  __abs__  access  atan2  abs  acos  API_function 
+    API_function  __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
 _cached_symbols_as_one_string[c] is:
-    cosh  ceil  cos 
+    ceil  cos  cosh  
 _cached_symbols_as_one_string[e] is:
-    exp 
+    exp  
 _cached_symbols_as_one_string[f] is:
-    fabs  floor  float  f_name  f_name2 
+    f_name  f_name2  fabs  float  floor  
 _cached_symbols_as_one_string[h] is:
-    horiz_pos 
+    horiz_pos  
 _cached_symbols_as_one_string[l] is:
-    len  log  log10 
+    len  log  log10  
 _cached_symbols_as_one_string[m] is:
-    move  move_horiz  move_vert 
+    move  move_horiz  move_vert  
 _cached_symbols_as_one_string[r] is:
-    repr 
+    repr  
 _cached_symbols_as_one_string[s] is:
-    str  sinh  sqrt  sin 
+    sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
-    tanh  tan  type  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
 _cached_symbols_as_one_string[v] is:
-    void 
+    void  
 _cached_symbols_as_one_string[x] is:
-    x 
+    x  
 _cached_symbols_as_one_string[y] is:
-    y 
+    y  
 
 
 >>> Testing console command: print_abbreviations(1)
@@ -4470,31 +4484,31 @@ void: ['void']
 x: ['X.']
 y: ['Y.']
 _cached_symbols_as_one_string[a] is:
-    atan  abspath  acquire  accept  accept2dyear  asin  atanh  __abs__  access  atan2  abs  acos  API_function 
+    API_function  __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
 _cached_symbols_as_one_string[c] is:
-    cosh  ceil  cos 
+    ceil  cos  cosh  
 _cached_symbols_as_one_string[e] is:
-    exp 
+    exp  
 _cached_symbols_as_one_string[f] is:
-    fabs  floor  float  f_name  f_name2 
+    f_name  f_name2  fabs  float  floor  
 _cached_symbols_as_one_string[h] is:
-    horiz_pos 
+    horiz_pos  
 _cached_symbols_as_one_string[l] is:
-    len  log  log10 
+    len  log  log10  
 _cached_symbols_as_one_string[m] is:
-    move  move_horiz  move_vert 
+    move  move_horiz  move_vert  
 _cached_symbols_as_one_string[r] is:
-    repr 
+    repr  
 _cached_symbols_as_one_string[s] is:
-    str  sinh  sqrt  sin 
+    sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
-    tanh  tan  type  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
 _cached_symbols_as_one_string[v] is:
-    void 
+    void  
 _cached_symbols_as_one_string[x] is:
-    x 
+    x  
 _cached_symbols_as_one_string[y] is:
-    y 
+    y  
 
 
 >>> Testing console command: say(['this_sym_is_unres_too\\this symbol is unresolved too', ',\\comma'], user_input='None')
@@ -4553,31 +4567,31 @@ void: ['void']
 x: ['X.']
 y: ['Y.']
 _cached_symbols_as_one_string[a] is:
-    atan  abspath  acquire  accept  accept2dyear  asin  atanh  __abs__  access  atan2  abs  acos  API_function 
+    API_function  __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
 _cached_symbols_as_one_string[c] is:
-    cosh  ceil  cos 
+    ceil  cos  cosh  
 _cached_symbols_as_one_string[e] is:
-    exp 
+    exp  
 _cached_symbols_as_one_string[f] is:
-    fabs  floor  float  f_name  f_name2 
+    f_name  f_name2  fabs  float  floor  
 _cached_symbols_as_one_string[h] is:
-    horiz_pos 
+    horiz_pos  
 _cached_symbols_as_one_string[l] is:
-    len  log  log10 
+    len  log  log10  
 _cached_symbols_as_one_string[m] is:
-    move  move_horiz  move_vert 
+    move  move_horiz  move_vert  
 _cached_symbols_as_one_string[r] is:
-    repr 
+    repr  
 _cached_symbols_as_one_string[s] is:
-    str  sinh  sqrt  sin 
+    sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
-    tanh  tan  type  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
 _cached_symbols_as_one_string[v] is:
-    void 
+    void  
 _cached_symbols_as_one_string[x] is:
-    x 
+    x  
 _cached_symbols_as_one_string[y] is:
-    y 
+    y  
 
 
 >>> Testing console command: print_abbreviations(1)
@@ -5073,31 +5087,31 @@ void: ['void']
 x: ['X.']
 y: ['Y.']
 _cached_symbols_as_one_string[a] is:
-    atan  abspath  acquire  accept  accept2dyear  asin  atanh  __abs__  access  atan2  abs  acos  API_function 
+    API_function  __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
 _cached_symbols_as_one_string[c] is:
-    cosh  ceil  cos 
+    ceil  cos  cosh  
 _cached_symbols_as_one_string[e] is:
-    exp 
+    exp  
 _cached_symbols_as_one_string[f] is:
-    fabs  floor  float  f_name  f_name2  file_name 
+    f_name  f_name2  fabs  file_name  float  floor  
 _cached_symbols_as_one_string[h] is:
-    horiz_pos 
+    horiz_pos  
 _cached_symbols_as_one_string[l] is:
-    len  log  log10 
+    len  log  log10  
 _cached_symbols_as_one_string[m] is:
-    move  move_horiz  move_vert 
+    move  move_horiz  move_vert  
 _cached_symbols_as_one_string[r] is:
-    repr 
+    repr  
 _cached_symbols_as_one_string[s] is:
-    str  sinh  sqrt  sin 
+    sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
-    tanh  tan  type  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
 _cached_symbols_as_one_string[v] is:
-    void 
+    void  
 _cached_symbols_as_one_string[x] is:
-    x 
+    x  
 _cached_symbols_as_one_string[y] is:
-    y 
+    y  
 
 
 >>> Testing console command: print_abbreviations(1)
@@ -7398,7 +7412,7 @@ Before compiling symbols, symbols are:
 THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
 _cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  type  
 Heard compile symbols
 Compiling symbols for None
 Done compiling symbols
@@ -7420,19 +7434,19 @@ print: ['print']
 self: ['self']
 x: ['X.']
 _cached_symbols_as_one_string[a] is:
-    AClass  ASuper  a_method 
+    AClass  ASuper  __abs__  a_method  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
 _cached_symbols_as_one_string[c] is:
-    class 
+    ceil  class  cos  cosh  
 _cached_symbols_as_one_string[d] is:
-    def 
+    def  
 _cached_symbols_as_one_string[p] is:
-    print 
+    print  
 _cached_symbols_as_one_string[s] is:
-    self 
+    self  sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  type  
 _cached_symbols_as_one_string[x] is:
-    x 
+    x  
 
 
 *******************************************************************************
@@ -8719,21 +8733,21 @@ void: ['void']
 x: ['X.']
 y: ['Y.']
 _cached_symbols_as_one_string[a] is:
-    API_function 
+    API_function  __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
 _cached_symbols_as_one_string[f] is:
-    float  f_name  f_name2 
+    f_name  f_name2  fabs  float  floor  
 _cached_symbols_as_one_string[h] is:
-    horiz_pos 
+    horiz_pos  
 _cached_symbols_as_one_string[m] is:
-    move  move_horiz  move_vert 
+    move  move_horiz  move_vert  
 _cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
 _cached_symbols_as_one_string[v] is:
-    void 
+    void  
 _cached_symbols_as_one_string[x] is:
-    x 
+    x  
 _cached_symbols_as_one_string[y] is:
-    y 
+    y  
 
 
 >>> Testing console command: say(['for', 'loop', 'horiz_pos\\horizontal position', 'equals', '0\\zero', 'loop', 'body'], user_input='None')
@@ -9361,31 +9375,31 @@ void: ['void']
 x: ['X.']
 y: ['Y.']
 _cached_symbols_as_one_string[a] is:
-    atan  abspath  acquire  accept  accept2dyear  asin  atanh  __abs__  access  atan2  abs  acos  API_function 
+    API_function  __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
 _cached_symbols_as_one_string[c] is:
-    cosh  ceil  cos 
+    ceil  cos  cosh  
 _cached_symbols_as_one_string[e] is:
-    exp 
+    exp  
 _cached_symbols_as_one_string[f] is:
-    fabs  floor  float  f_name  f_name2 
+    f_name  f_name2  fabs  float  floor  
 _cached_symbols_as_one_string[h] is:
-    horiz_pos 
+    horiz_pos  
 _cached_symbols_as_one_string[l] is:
-    len  log  log10 
+    len  log  log10  
 _cached_symbols_as_one_string[m] is:
-    move  move_horiz  move_vert 
+    move  move_horiz  move_vert  
 _cached_symbols_as_one_string[r] is:
-    repr 
+    repr  
 _cached_symbols_as_one_string[s] is:
-    str  sinh  sqrt  sin 
+    sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
-    tanh  tan  type  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
 _cached_symbols_as_one_string[v] is:
-    void 
+    void  
 _cached_symbols_as_one_string[x] is:
-    x 
+    x  
 _cached_symbols_as_one_string[y] is:
-    y 
+    y  
 
 
 >>> Restarting mediator with persistence. Compiled symbols should still be in the dictionary.
@@ -11764,7 +11778,7 @@ Traceback (most recent call last):
     self.assert_sequences_have_same_content([], [1, 2], self.nevermind)
   File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 33, in assert_sequences_have_same_content
     self.fail(mess + "\nExpeted sequence of length %s, but got sequence of length %s"
-  File "C:\Python22\lib\unittest.py", line 254, in fail
+  File "C:\Python23\lib\unittest.py", line 270, in fail
     raise self.failureException, msg
 AssertionError: Nevermind, this test is supposed to fail.
 Expeted sequence of length 0, but got sequence of length 2
@@ -11781,7 +11795,7 @@ Traceback (most recent call last):
     self.nevermind)
   File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
     self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
-  File "C:\Python22\lib\unittest.py", line 254, in fail
+  File "C:\Python23\lib\unittest.py", line 270, in fail
     raise self.failureException, msg
 AssertionError: Nevermind, this test is supposed to fail.
 Item at position 1 was wrong. Expected 'world', but got 'universe'
@@ -11794,7 +11808,7 @@ Traceback (most recent call last):
     self.nevermind)
   File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
     self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
-  File "C:\Python22\lib\unittest.py", line 254, in fail
+  File "C:\Python23\lib\unittest.py", line 270, in fail
     raise self.failureException, msg
 AssertionError: Nevermind, this test is supposed to fail.
 Item at position 0 was wrong. Expected 'hello', but got 'hi'
@@ -11807,7 +11821,7 @@ Traceback (most recent call last):
     self.nevermind)
   File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
     self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
-  File "C:\Python22\lib\unittest.py", line 254, in fail
+  File "C:\Python23\lib\unittest.py", line 270, in fail
     raise self.failureException, msg
 AssertionError: Nevermind, this test is supposed to fail.
 Item at position 1 was wrong. Expected 'beautiful', but got 'wonderful'
@@ -12024,49 +12038,49 @@ write: ['write']
 written: ['written']
 written_as: ['written as']
 _cached_symbols_as_one_string[a] is:
-    atan  abspath  acquire  accept  accept2dyear  asin  atanh  __abs__  access  atan2  abs  acos  auto_test  actions_C_Cpp  actions_py  AppState  attrs  aword  aCSC  and  a_word  a_match  answer  answer_match  accept_symbol_match  a_spoken_form  active_language_LSAs  active_language  all_language_LSAs  acmd  add_voc_entry  addWord 
+    AppState  __abs__  aCSC  a_match  a_spoken_form  a_word  abs  abspath  accept  accept2dyear  accept_symbol_match  access  acmd  acos  acquire  actions_C_Cpp  actions_py  active_language  active_language_LSAs  addWord  add_voc_entry  all_language_LSAs  and  answer  answer_match  asin  atan  atan2  atanh  attrs  auto_test  aword  
 _cached_symbols_as_one_string[b] is:
-    break 
+    break  
 _cached_symbols_as_one_string[c] is:
-    cosh  ceil  cos  cont_gen  ContC  ContPy  CSCmd  class  CmdInterp  cmd  curr_buffer  cur_pos  chopped_CSC  CSC_consumes  cmd_without_CSC  chop_CSC  chopped_LSA  cmd_without_LSA  chop_LSA  chopped_symbol  cmd_without_symbol  chop_symbol  chopped_word  cmd_without_word  chop_word  CSCs  cmd_index  csc_applied  content  command  clean_written_form  clean_for  clean_written  choice_index  chosen_match  consumed  choose_best_symbol  choices  cmds_this_spoken_form 
+    CSC_consumes  CSCmd  CSCs  CmdInterp  ContC  ContPy  ceil  choice_index  choices  choose_best_symbol  chop_CSC  chop_LSA  chop_symbol  chop_word  chopped_CSC  chopped_LSA  chopped_symbol  chopped_word  chosen_match  class  clean_for  clean_written  clean_written_form  cmd  cmd_index  cmd_without_CSC  cmd_without_LSA  cmd_without_symbol  cmd_without_word  cmds_this_spoken_form  command  consumed  cont_gen  content  cos  cosh  csc_applied  cur_pos  curr_buffer  
 _cached_symbols_as_one_string[d] is:
-    def  decl_attrs  deep_construct  dlg_select_symbol_match  dummy  deleteWord 
+    decl_attrs  deep_construct  def  deleteWord  dlg_select_symbol_match  dummy  
 _cached_symbols_as_one_string[e] is:
-    exp  EdSim  else  end  environ 
+    EdSim  else  end  environ  exp  
 _cached_symbols_as_one_string[f] is:
-    fabs  floor  from  for  first 
+    fabs  first  floor  for  from  
 _cached_symbols_as_one_string[g] is:
-    group  good_answer  global 
+    global  good_answer  group  
 _cached_symbols_as_one_string[h] is:
-    head_was_translated  has_key 
+    has_key  head_was_translated  
 _cached_symbols_as_one_string[i] is:
-    import  __init__  in  if  interpret_NL_cmd  interpret  insert_indent  insert_untranslated_text  ii  is_new  int  index_csc 
+    __init__  if  ii  import  in  index_csc  insert_indent  insert_untranslated_text  int  interpret  interpret_NL_cmd  is_new  
 _cached_symbols_as_one_string[j] is:
-    join 
+    join  
 _cached_symbols_as_one_string[k] is:
-    known_symbols 
+    known_symbols  
 _cached_symbols_as_one_string[l] is:
-    len  log  log10  lower  LSA_consumes  leading_spaces  leading_word  language_specific_aliases  load_language_specific_aliases  language  last_language  last_loaded_language 
+    LSA_consumes  language  language_specific_aliases  last_language  last_loaded_language  leading_spaces  leading_word  len  load_language_specific_aliases  log  log10  lower  
 _cached_symbols_as_one_string[m] is:
-    massage_command  most_consumed  max  match_untranslated_text  mod_command  match  match_pseudo_symbol  move_to 
+    massage_command  match  match_pseudo_symbol  match_untranslated_text  max  mod_command  most_consumed  move_to  
 _cached_symbols_as_one_string[n] is:
-    natlink  None  not  num_match  native_symbol  new_pos 
+    None  native_symbol  natlink  new_pos  not  num_match  
 _cached_symbols_as_one_string[o] is:
-    os  Object  on_app  or  old_pos 
+    Object  old_pos  on_app  or  os  
 _cached_symbols_as_one_string[p] is:
-    print  print_buff_content 
+    print  print_buff_content  
 _cached_symbols_as_one_string[r] is:
-    repr  re  regexp  rest  regexp_this_word  return  reg  readline  regexp_is_dirty 
+    re  readline  reg  regexp  regexp_is_dirty  regexp_this_word  repr  rest  return  
 _cached_symbols_as_one_string[s] is:
-    str  sinh  sqrt  sin  string  sys  SymDict  sr_interface  self  symdict_pickle_file  spoken_form_regexp  spoken_form  split  symbol_consumes  s  spoken  spoken_written_form  sub  symbol_info  symbol_matches  stdout  stdin  start  spoken_form_info  symbols  spoken_forms  spoken_as 
+    SymDict  s  self  sin  sinh  split  spoken  spoken_as  spoken_form  spoken_form_info  spoken_form_regexp  spoken_forms  spoken_written_form  sqrt  sr_interface  start  stdin  stdout  str  string  sub  symbol_consumes  symbol_info  symbol_matches  symbols  symdict_pickle_file  sys  
 _cached_symbols_as_one_string[t] is:
-    tanh  tan  type  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  text  text_no_spaces 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  text  text_no_spaces  type  
 _cached_symbols_as_one_string[u] is:
-    upper  _untranslated_text_start  _untranslated_text_end  untranslated_text  upto 
+    _untranslated_text_end  _untranslated_text_start  untranslated_text  upper  upto  
 _cached_symbols_as_one_string[v] is:
-    vc_globals  vocabulary_entry 
+    vc_globals  vocabulary_entry  
 _cached_symbols_as_one_string[w] is:
-    words  while  word_consumes  written  write  written_as 
+    while  word_consumes  words  write  written  written_as  
 AppState: ['app state']
 CSC_consumes: ['C. S. C. consumes', 'CSC consumes']
 CSCmd: ['C. S. cmd', 'C. S. command', 'CS cmd', 'CS command']
@@ -12264,49 +12278,49 @@ write: ['write']
 written: ['written']
 written_as: ['written as']
 _cached_symbols_as_one_string[a] is:
-    atan  abspath  acquire  accept  accept2dyear  asin  atanh  __abs__  access  atan2  abs  acos  auto_test  actions_C_Cpp  actions_py  AppState  attrs  aword  aCSC  and  a_word  a_match  answer  answer_match  accept_symbol_match  a_spoken_form  active_language_LSAs  active_language  all_language_LSAs  acmd  add_voc_entry  addWord 
+    AppState  __abs__  aCSC  a_match  a_spoken_form  a_word  abs  abspath  accept  accept2dyear  accept_symbol_match  access  acmd  acos  acquire  actions_C_Cpp  actions_py  active_language  active_language_LSAs  addWord  add_voc_entry  all_language_LSAs  and  answer  answer_match  asin  atan  atan2  atanh  attrs  auto_test  aword  
 _cached_symbols_as_one_string[b] is:
-    break 
+    break  
 _cached_symbols_as_one_string[c] is:
-    cosh  ceil  cos  cont_gen  ContC  ContPy  CSCmd  class  CmdInterp  cmd  curr_buffer  cur_pos  chopped_CSC  CSC_consumes  cmd_without_CSC  chop_CSC  chopped_LSA  cmd_without_LSA  chop_LSA  chopped_symbol  cmd_without_symbol  chop_symbol  chopped_word  cmd_without_word  chop_word  CSCs  cmd_index  csc_applied  content  command  clean_written_form  clean_for  clean_written  choice_index  chosen_match  consumed  choose_best_symbol  choices  cmds_this_spoken_form 
+    CSC_consumes  CSCmd  CSCs  CmdInterp  ContC  ContPy  ceil  choice_index  choices  choose_best_symbol  chop_CSC  chop_LSA  chop_symbol  chop_word  chopped_CSC  chopped_LSA  chopped_symbol  chopped_word  chosen_match  class  clean_for  clean_written  clean_written_form  cmd  cmd_index  cmd_without_CSC  cmd_without_LSA  cmd_without_symbol  cmd_without_word  cmds_this_spoken_form  command  consumed  cont_gen  content  cos  cosh  csc_applied  cur_pos  curr_buffer  
 _cached_symbols_as_one_string[d] is:
-    def  decl_attrs  deep_construct  dlg_select_symbol_match  dummy  deleteWord 
+    decl_attrs  deep_construct  def  deleteWord  dlg_select_symbol_match  dummy  
 _cached_symbols_as_one_string[e] is:
-    exp  EdSim  else  end  environ 
+    EdSim  else  end  environ  exp  
 _cached_symbols_as_one_string[f] is:
-    fabs  floor  from  for  first 
+    fabs  first  floor  for  from  
 _cached_symbols_as_one_string[g] is:
-    group  good_answer  global 
+    global  good_answer  group  
 _cached_symbols_as_one_string[h] is:
-    head_was_translated  has_key 
+    has_key  head_was_translated  
 _cached_symbols_as_one_string[i] is:
-    import  __init__  in  if  interpret_NL_cmd  interpret  insert_indent  insert_untranslated_text  ii  is_new  int  index_csc 
+    __init__  if  ii  import  in  index_csc  insert_indent  insert_untranslated_text  int  interpret  interpret_NL_cmd  is_new  
 _cached_symbols_as_one_string[j] is:
-    join 
+    join  
 _cached_symbols_as_one_string[k] is:
-    known_symbols 
+    known_symbols  
 _cached_symbols_as_one_string[l] is:
-    len  log  log10  lower  LSA_consumes  leading_spaces  leading_word  language_specific_aliases  load_language_specific_aliases  language  last_language  last_loaded_language 
+    LSA_consumes  language  language_specific_aliases  last_language  last_loaded_language  leading_spaces  leading_word  len  load_language_specific_aliases  log  log10  lower  
 _cached_symbols_as_one_string[m] is:
-    massage_command  most_consumed  max  match_untranslated_text  mod_command  match  match_pseudo_symbol  move_to 
+    massage_command  match  match_pseudo_symbol  match_untranslated_text  max  mod_command  most_consumed  move_to  
 _cached_symbols_as_one_string[n] is:
-    natlink  None  not  num_match  native_symbol  new_pos 
+    None  native_symbol  natlink  new_pos  not  num_match  
 _cached_symbols_as_one_string[o] is:
-    os  Object  on_app  or  old_pos 
+    Object  old_pos  on_app  or  os  
 _cached_symbols_as_one_string[p] is:
-    print  print_buff_content 
+    print  print_buff_content  
 _cached_symbols_as_one_string[r] is:
-    repr  re  regexp  rest  regexp_this_word  return  reg  readline  regexp_is_dirty 
+    re  readline  reg  regexp  regexp_is_dirty  regexp_this_word  repr  rest  return  
 _cached_symbols_as_one_string[s] is:
-    str  sinh  sqrt  sin  string  sys  SymDict  sr_interface  self  symdict_pickle_file  spoken_form_regexp  spoken_form  split  symbol_consumes  s  spoken  spoken_written_form  sub  symbol_info  symbol_matches  stdout  stdin  start  spoken_form_info  symbols  spoken_forms  spoken_as 
+    SymDict  s  self  sin  sinh  split  spoken  spoken_as  spoken_form  spoken_form_info  spoken_form_regexp  spoken_forms  spoken_written_form  sqrt  sr_interface  start  stdin  stdout  str  string  sub  symbol_consumes  symbol_info  symbol_matches  symbols  symdict_pickle_file  sys  
 _cached_symbols_as_one_string[t] is:
-    tanh  tan  type  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  text  text_no_spaces 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  text  text_no_spaces  type  
 _cached_symbols_as_one_string[u] is:
-    upper  _untranslated_text_start  _untranslated_text_end  untranslated_text  upto 
+    _untranslated_text_end  _untranslated_text_start  untranslated_text  upper  upto  
 _cached_symbols_as_one_string[v] is:
-    vc_globals  vocabulary_entry 
+    vc_globals  vocabulary_entry  
 _cached_symbols_as_one_string[w] is:
-    words  while  word_consumes  written  write  written_as 
+    while  word_consumes  words  write  written  written_as  
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -12717,21 +12731,21 @@ tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
 type: ['type']
 _cached_symbols_as_one_string[a] is:
-    atan  abspath  acquire  accept  accept2dyear  asin  atanh  __abs__  access  atan2  abs  acos 
+    __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
 _cached_symbols_as_one_string[c] is:
-    cosh  ceil  cos 
+    ceil  cos  cosh  
 _cached_symbols_as_one_string[e] is:
-    exp 
+    exp  
 _cached_symbols_as_one_string[f] is:
-    fabs  floor 
+    fabs  floor  
 _cached_symbols_as_one_string[l] is:
-    len  log  log10 
+    len  log  log10  
 _cached_symbols_as_one_string[r] is:
-    repr 
+    repr  
 _cached_symbols_as_one_string[s] is:
-    str  sinh  sqrt  sin 
+    sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
-    tanh  tan  type  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  type  
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -13143,11 +13157,11 @@ isasymbol: ['isasymbol']
 isasymbol2: ['isasymbol 2']
 not_a_symbol: ['not A. symbol', 'not a symbol']
 _cached_symbols_as_one_string[i] is:
-    is_a_symbol  is_a_symbol2  _is_a_symbol  _is_a_symbol2  isASymbol  isASymbol2  _isASymbol  _isASymbol2  IsASymbol  IsASymbol2  ISASYMBOL  ISASYMBOL2  isasymbol  isasymbol2  IS_A_SYMBOL  IS_A_SYMBOL2  Is_A_Symbol  isASYMBOL  ISasymbol 
+    ISASYMBOL  ISASYMBOL2  IS_A_SYMBOL  IS_A_SYMBOL2  ISasymbol  IsASymbol  IsASymbol2  Is_A_Symbol  _isASymbol  _isASymbol2  _is_a_symbol  _is_a_symbol2  initialize  isASYMBOL  isASymbol  isASymbol2  is_a_symbol  is_a_symbol2  isasymbol  isasymbol2  
 _cached_symbols_as_one_string[n] is:
-    not_a_symbol 
+    natural_link  not_a_symbol  
 _cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_word  type  
 Unresolved abbreviations are:
 'asymbol': appears in ['isASYMBOL']
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
@@ -13215,29 +13229,29 @@ try: ['try']
 type: ['type']
 yet_another_method: ['yet another method']
 _cached_symbols_as_one_string[a] is:
-    atan  abspath  acquire  accept  accept2dyear  asin  atanh  __abs__  access  atan2  abs  acos  AClass  ASuper  a_method  a_method_with_no_arguments 
+    AClass  ASuper  __abs__  a_method  a_method_with_no_arguments  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
 _cached_symbols_as_one_string[c] is:
-    cosh  ceil  cos  class 
+    ceil  class  cos  cosh  
 _cached_symbols_as_one_string[d] is:
-    def  do_some_stuff  do_some_more 
+    def  do_some_more  do_some_stuff  
 _cached_symbols_as_one_string[e] is:
-    exp 
+    exp  
 _cached_symbols_as_one_string[f] is:
-    fabs  floor 
+    fabs  floor  
 _cached_symbols_as_one_string[i] is:
-    if 
+    if  
 _cached_symbols_as_one_string[l] is:
-    len  log  log10 
+    len  log  log10  
 _cached_symbols_as_one_string[p] is:
-    pass 
+    pass  
 _cached_symbols_as_one_string[r] is:
-    repr 
+    repr  
 _cached_symbols_as_one_string[s] is:
-    str  sinh  sqrt  sin  self  some_argument  some_variable  some_array  SomeOtherClass  some_other_method 
+    SomeOtherClass  self  sin  sinh  some_argument  some_array  some_other_method  some_variable  sqrt  str  
 _cached_symbols_as_one_string[t] is:
-    tanh  tan  type  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  try 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  try  type  
 _cached_symbols_as_one_string[y] is:
-    yet_another_method 
+    yet_another_method  
 
 *********************
 *** Executing edit test: insert an import statement in middle of a file ***
@@ -13755,31 +13769,31 @@ void: ['void']
 x: ['X.']
 y: ['Y.']
 _cached_symbols_as_one_string[a] is:
-    atan  abspath  acquire  accept  accept2dyear  asin  atanh  __abs__  access  atan2  abs  acos  API_function 
+    API_function  __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
 _cached_symbols_as_one_string[c] is:
-    cosh  ceil  cos 
+    ceil  cos  cosh  
 _cached_symbols_as_one_string[e] is:
-    exp 
+    exp  
 _cached_symbols_as_one_string[f] is:
-    fabs  floor  float  f_name  f_name2 
+    f_name  f_name2  fabs  float  floor  
 _cached_symbols_as_one_string[h] is:
-    horiz_pos 
+    horiz_pos  
 _cached_symbols_as_one_string[l] is:
-    len  log  log10 
+    len  log  log10  
 _cached_symbols_as_one_string[m] is:
-    move  move_horiz  move_vert 
+    move  move_horiz  move_vert  
 _cached_symbols_as_one_string[r] is:
-    repr 
+    repr  
 _cached_symbols_as_one_string[s] is:
-    str  sinh  sqrt  sin 
+    sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
-    tanh  tan  type  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  this_sym_is_unres  this_sym_is_unres_too  this_sym_has_an_other_abbrev 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
 _cached_symbols_as_one_string[v] is:
-    void 
+    void  
 _cached_symbols_as_one_string[x] is:
-    x 
+    x  
 _cached_symbols_as_one_string[y] is:
-    y 
+    y  
 
 
 >>> Testing console command: say(['index', '!=\\not equal to', '0\\zero'], user_input='0
@@ -13833,7 +13847,7 @@ Heard move horizontally
 
 .....
 ----------------------------------------------------------------------
-Ran 5 tests in 0.172s
+Ran 5 tests in 0.390s
 
 OK
 
@@ -13845,7 +13859,7 @@ OK
 
 ......
 ----------------------------------------------------------------------
-Ran 6 tests in 0.297s
+Ran 6 tests in 0.671s
 
 OK
 
@@ -16937,11 +16951,11 @@ openlog: ['openlog']
 s: ['S.']
 se: ['S. E.', 'se']
 _cached_symbols_as_one_string[o] is:
-    openlog 
+    openlog  
 _cached_symbols_as_one_string[s] is:
-    s  se 
+    s  se  sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym 
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  type  
 Unresolved abbreviations are:
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'openlog': appears in ['openlog']
@@ -17102,12 +17116,12 @@ Heard select previous index equals zero
 
 ......
 ----------------------------------------------------------------------
-Ran 6 tests in 0.047s
+Ran 6 tests in 0.180s
 
 OK
 
 
 
 -----------------------------------------------
-Test suite completed in:  486.733999968 secs
+Test suite completed in:  817.846000195 secs
 -----------------------------------------------
