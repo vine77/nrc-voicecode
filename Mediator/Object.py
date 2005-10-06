@@ -941,7 +941,8 @@ class OwnerObject(Object):
                     return error_msg
             return None
 
-        if type(object) != types.InstanceType:
+        if (type(object) != types.InstanceType and
+           not debug.isinstance_of_some_class(object)):
             return 'because it is not an object, but has type %s' % (type(object))
         try:
             object.cleanup
@@ -965,7 +966,6 @@ class OwnerObject(Object):
 
         *none*
         """
-#        debug.trace('OwnerObject.cleanup', 'cleanup of %s' % repr(self))
 #        debug.trace_call_stack('OwnerObject.cleanup')
         self.remove_other_references()
         debug.trace('OwnerObject.cleanup', 'after remove_other_references')
@@ -1003,7 +1003,8 @@ class OwnerObject(Object):
                             debug.critical_warning(msg_prefix + error_msg)
                         else:
                             del attribute[key]
-                elif type(attribute) == types.InstanceType:
+                elif (type(attribute) == types.InstanceType or 
+                      debug.isinstance_of_some_class(attribute)):
                     error_msg = self._cleanup_object(attribute)
                     if error_msg != None:
                         error_msg = 'attribute %s\n%s\n' \

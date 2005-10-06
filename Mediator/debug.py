@@ -20,7 +20,7 @@
 ##############################################################################
 
 import util
-import exceptions, string, sys, traceback, types
+import exceptions, re, string, sys, traceback, types
 
 """Functions for debugging purposes."""
 
@@ -48,9 +48,8 @@ def critical_warning(warn):
     if an error is detected by an object destructor or during cleanup, it 
     may be advisable to proceed to free the rest of the resources used
     by the object."""
-#   for now, just write to stderr.  Later, we may want to log this to a
-#   file and/or tell the user to submit a bug report
     sys.stderr.write(warn)
+    notify_trace_listeners(warn)
 
 def config_warning(warn):
     """Prints a warning message about a possible configuration error
@@ -91,7 +90,7 @@ def trace_call_stack(trace_id, location_id=None, print_to_file=sys.stdout):
 ###############################################################################
 
 def what_class(instance):
-    """Returns a string describing the class of an instance.
+    """Returns the class of an instance.
 
     It works with any Python class or Python standard data types (int, float,
     string, etc.), but not with extension classes."""
@@ -108,6 +107,16 @@ def what_class(instance):
         is_class = type(instance)
 
     return is_class
+    
+def isinstance_of_some_class(instance):
+    trace('debug.isinstance_of_some_class', 'instance=%s, repr(what_class(instance))=%s' % (instance, repr(what_class(instance))))
+    class_name = repr(what_class(instance))
+    is_an_instance = 0
+    if re.match('^\s*<\s*class\s+', class_name):
+       is_an_instance = 1
+    trace('debug.isinstance_of_some_class', 'returning is_an_instance=%s' % is_an_instance)
+    return is_an_instance
+        
 
 def methods(instance):
     methods = {}
@@ -128,26 +137,52 @@ def dont_print_trace(trace_id, message, insert_nl=1):
     pass
 
 def print_trace(trace_id, message, insert_nl=1):
-    global to_be_traced, trace_file
+    global to_be_traced, trace_listeners
 
-#    print '-- debug.print_trace: trace_id=%s, trace_is_active(trace_id)=%s' % (trace_id, trace_is_active(trace_id))
     if trace_is_active(trace_id):
-        trace_file.write('-- %s: %s' % (trace_id, message))
+        trace = '-- %s: %s' % (trace_id, message)
         if insert_nl:
-            trace_file.write('\n')
-        trace_file.flush()
+           trace = "%s\n" % trace
+        notify_trace_listeners(trace)
+
+def notify_trace_listeners(message, trace_id=None):
+    global trace_listeners
+    for a_trace_listener in trace_listeners: 
+        try:
+            a_trace_listener.on_trace(message)
+        except exceptions.Exception, err:        
+            # 
+            # When debugging, sometimes 
+            # 
+            sys.stderr.write("Could not print trace unto the following trace listener: %s\ntrace id was: %s\ntrace message was: %s.\nReason for failure was: %s" % 
+                             (a_trace_listener, trace_id, message, err))
+
+
+def add_trace_listener(listener):
+    global trace_listeners
+    trace_listeners.append(listener)
+
+class TraceListener:
+    def __init__(self):
+       pass
+       
+    def on_trace(self, message):
+       virtual('TraceListener.on_trace')
+       
+class STDERR_TraceListener(TraceListener):
+    def __init__(self):
+         TraceListener.__init__(self)
+         
+    def on_trace(self, message):
+         sys.stderr.write(message)
+
+
 
 def traces_are_on():
    if trace_fct is print_trace:
       return 1
    else:
       return None
-
-trace_fct = dont_print_trace
-traces_on = False
-trace_file = sys.stdout
-to_be_traced = {}
-activate_trace_id_substrings = 0
 
 
 def tracing(trace_id):
@@ -187,11 +222,11 @@ def trace(trace_id, message):
        mess_string = message
     trace_fct(trace_id, mess_string)
 
-def config_traces(print_to=None, status=None, active_traces=None,
+def config_traces(status=None, active_traces=None,
                   allow_trace_id_substrings=None):
     """Configures what traces are printed, and where"""
 
-    global trace_fct, trace_file, to_be_traced, activate_trace_id_substrings
+    global trace_fct, to_be_traced, activate_trace_id_substrings
 
     #
     # trace_fct is a function that we set on the fly. It's never defined explicitly
@@ -204,8 +239,6 @@ def config_traces(print_to=None, status=None, active_traces=None,
         else:
             trace_fct = dont_print_trace
 
-    if print_to:
-        trace_file = print_to
 
     if active_traces:
         to_be_traced = active_traces
@@ -213,7 +246,11 @@ def config_traces(print_to=None, status=None, active_traces=None,
     if allow_trace_id_substrings != None:
         activate_trace_id_substrings = allow_trace_id_substrings
         
-#    print '-- debug.config_traces: upon exit, trace_fct=%s, trace_file=%s, to_be_traced=%s, activate_trace_id_substrings=%s' % (trace_fct, trace_file, to_be_traced, activate_trace_id_substrings)
 
+trace_fct = dont_print_trace
+traces_on = False
+trace_listeners = [STDERR_TraceListener()]
+to_be_traced = {}
+activate_trace_id_substrings = 0
 
     

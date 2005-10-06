@@ -1,6 +1,6 @@
 from vc_globals import unit_tests_dir, benchmark_dir
 import exceptions, glob, os, re, string, sys
-from debug import trace, config_traces, trace_file, trace_fct, to_be_traced, \
+from debug import trace, config_traces, trace_fct, to_be_traced, \
                   activate_trace_id_substrings
 from unittest import makeSuite, TestCase, TestSuite, TextTestRunner
 import debug
@@ -164,13 +164,11 @@ def define_all_test_suites():
 class TraceTest(TestCase):
     def setUp(self):
         self.old_trace_fct = trace_fct
-        self.old_trace_file = trace_file
         self.old_to_be_traced = to_be_traced
         self.old_activate_trace_id_substrings = activate_trace_id_substrings
 
     def reset_traces_config(self):
         trace_fct = self.old_trace_fct
-        trace_file = self.old_trace_file
         to_be_traced = self.old_to_be_traced        
     
     def do_some_traces(self, status, activate_all=0, allow_trace_id_substring=None):
@@ -181,7 +179,7 @@ class TraceTest(TestCase):
         else:
             active_traces = {'always_in_active_list': 1}
             
-        config_traces(print_to=mock_stdout, status=status,
+        config_traces(status=status,
                       active_traces=active_traces,
                       allow_trace_id_substrings=allow_trace_id_substring)
         trace('always_in_active_list', '')

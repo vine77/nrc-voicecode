@@ -54,16 +54,12 @@ import WinSystemMSW
 debug.config_traces(status="off",
                     active_traces={
 #################################
-      'OwnerObject._cleanup_object': 1,
+#      'OwnerObject._cleanup_object': 1,
+      'OwnerObject.cleanup': 1,
+      'debug.isinstance_of_some_class': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
-                    allow_trace_id_substrings = 1,
-                    print_to=sys.stderr)
-
-#debug.config_traces(status="on", active_traces={'CmdInterp':1, 'sr_interface': 1, 'get_mess':1, 'send_mess': 1, 'sim_commands': 1}, allow_trace_id_substrings = 1)
-#debug.config_traces(status="on", active_traces = 'all')
-#debug.config_traces(status="on", active_traces = {'sr_interface':1},
-#allow_trace_id_substrings = 1)
+                    allow_trace_id_substrings = 1)
 
 #
 # Port numbers for the communication link
@@ -77,6 +73,22 @@ def EVT_MINE(evt_handler, evt_type, func):
 # create unique event types
 wxEVT_NEW_LISTEN_CONN = wxNewEventType()
 wxEVT_NEW_TALK_CONN = wxNewEventType()
+
+class wxTextControlTraceListener(debug.TraceListener):
+    """Listens for traces and prints them onto a wxTextControl
+
+    **INSTANCE ATTRIBUTES**
+
+    *wxTextControl traces_log_text_control* -- The text control that traces will be logged onto."""
+
+    def __init__(self, tracesTextControl):
+        debug.TraceListener.__init__(self)
+        self.traces_log_text_control = tracesTextControl
+        
+    def on_trace(self, message):
+        self.traces_log_text_control.SetInsertionPointEnd()
+        self.traces_log_text_control.WriteText(message)
+    
 
 class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
     """main frame for the GUI mediator
@@ -142,20 +154,15 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
                wxTextCtrl(self, wxNewId(), '', wxDefaultPosition,
                           (700, 400), style = wxTE_MULTILINE)
         self.messages_log.IsEditable = false
+        debug.add_trace_listener(wxTextControlTraceListener(self.messages_log))
 
-#        self.messages_log.WriteText("Hello world!\nThis is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long line\nAnd this comes after")
-#        self.messages_log.WriteText("This is the second line")
-
-        self.log_message("Hello world!\nThis is a very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very long line\nAnd this comes after")
-        self.log_message("This is the second line")
-                          
         self.layout.Add(self.messages_log, 0, wxEXPAND | wxALL)
-
         
         self.SetAutoLayout(true)
         self.SetSizer(self.layout)
         self.Layout()
         self.layout.Fit(self)
+        
         
     def log_message(self, message):
         self.messages_log.SetInsertionPointEnd()
