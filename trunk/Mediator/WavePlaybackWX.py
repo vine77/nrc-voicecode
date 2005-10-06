@@ -32,10 +32,10 @@ class WavePlaybackWX(WavePlayback):
         self.deep_construct(WavePlaybackWX,
             {'wave': None}, attrs)
         if self.data:
-# AD: Uncomment two lines below once we upgrade to wxPython 2.5
-#            wave = wxSound()
-#            wave.CreateFromData(self.data)
-            wave = wxWaveData(self.data)
+# AD: Use one or the other depending on version of wxPython 2.5 used
+            wave = wxSound()
+            wave.CreateFromData(self.data)
+#            wave = wxWaveData(self.data)
             if wave.IsOk():
                 self.wave = wave
 
