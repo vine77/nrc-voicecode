@@ -581,10 +581,19 @@ navigation_within_buffer.add_csc(acmd)
 #############################################################################
 
 #
-# repeatable backspace commands (back space / delete backwards "" and 2 to 5
+# NOTE: Many of the commands in this section have same spoken form as some discrete 
+#       NatSpeak commands. When that happens, set generate_discrete_cmd=1, otherwise
+#       the NatSpeak command will take precedence over the VoiceCode command.
+#       
+#       But even that does not seem to work with all versions of Natspeak. So additionaly
+#       create a variant whose spoken form starts with prefix "yo", so that users can
+#       explicitly disambiguate between the NatSpeak and the VoiceCode command.
+#       -- AD (2005-10-26)
 #
-# Note: Many of those CSCs have same spoken form as some discrete NatSpeak
-#       commands. When that happens, set generate_discrete_cmd=1.
+
+
+#
+# repeatable backspace commands (back space / delete backwards "" and 2 to 5
 #
 
 backspacing  = CSCmdSet(name = 'backspace multiple times',
@@ -603,27 +612,36 @@ acmd = CSCmd(spoken_forms = ['delete that'],
              generate_discrete_cmd=1)
 insertion_deletions.add_csc(acmd)
 
-
-acmd = CSCmd(spoken_forms = ['copy that'],
+acmd = CSCmd(spoken_forms = ['yo copy that', 'copy that'],
              meanings = {ContTextIsSelected(): ActionCopySelectedText()},
              docstring = "copy selected text",
              generate_discrete_cmd = 1)
 insertion_deletions.add_csc(acmd)
 
-acmd = CSCmd(spoken_forms = ['paste that'],
+acmd = CSCmd(spoken_forms = ['yo paste that', 'paste that'],
              meanings = {ContAny(): ActionPasteClipboard()},
              docstring = "paste text from the clipboard",
              generate_discrete_cmd=1)
 insertion_deletions.add_csc(acmd)
 
 
-acmd = CSCmd(spoken_forms = ['cut that'],
+acmd = CSCmd(spoken_forms = ['yo cut that', 'cut that'],
              meanings = {ContTextIsSelected(): ActionCutSelectedText()},
              docstring = "copy selected text",
              generate_discrete_cmd=1)
 insertion_deletions.add_csc(acmd)
 
+acmd = CSCmd(spoken_forms = ['yo copy line', 'copy line'],
+             meanings = {ContAny(): ActionCopyLine()},
+             docstring = "copy current line",
+             generate_discrete_cmd=1)
+insertion_deletions.add_csc(acmd)
 
+acmd = CSCmd(spoken_forms = ['yo cut line', 'cut line'],
+             meanings = {ContAny(): ActionCutLine()},
+             docstring = "cut current line",
+             generate_discrete_cmd=1)
+insertion_deletions.add_csc(acmd)
 
 ##############################################################################
 # CSCs and LSAs that apply for more than one language (but not necessarily
@@ -1663,8 +1681,9 @@ c_reserved_words.add_lsa(LSAlias(['wchar_t','wide char type'],
 
 emacs_ctrl = CSCmdSet(name = 'emacs control',
     description = 'commands to control Emacs')
-acmd = CSCmd(spoken_forms=['emacs list buffers', 'emacs switch to buffer', 
-                           'emacs switch buffer'], 
+acmd = CSCmd(spoken_forms=['yo list buffers', 'yo switch to buffer', 
+                           'yo switch buffer', 'yo list files', 'yo switch to file', 
+                           'yo switch file'], 
              meanings={ContEmacs(): ActionEmacsListBuffers()}, 
              docstring='open the Emacs buffer list.')
 emacs_ctrl.add_csc(acmd)
@@ -1672,11 +1691,11 @@ acmd = CSCmd(spoken_forms=['new line', 'enter', 'choose that'],
              meanings={cont_emacs_in_selection_buff: ActionTypeText("{Enter}")}, 
              docstring='types "enter" in an Emacs selection buffer (e.g. *Buffer List*).')
 emacs_ctrl.add_csc(acmd)             
-acmd = CSCmd(spoken_forms=['emacs save file', 'emacs save buffer'], 
+acmd = CSCmd(spoken_forms=['yo save file', 'yo save buffer'], 
              meanings={ContEmacs(): ActionTypeText("{Esc}xsave-buffer{Enter}")}, 
              docstring='Save the current Emacs buffer.')
 emacs_ctrl.add_csc(acmd)             
-acmd = CSCmd(spoken_forms=['emacs find file', 'emacs open file'], 
+acmd = CSCmd(spoken_forms=['yo find file', 'yo open file'], 
              meanings={ContEmacs(): ActionTypeText("{Esc}xdired{Enter}")}, 
              docstring='opens an Emacs dired buffer.')
 emacs_ctrl.add_csc(acmd)             

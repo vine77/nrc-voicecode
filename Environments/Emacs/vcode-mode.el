@@ -267,7 +267,14 @@ in the 'vr-deprecated-log-buff-name buffer.")
 "Set entries in this hashtable, to activate traces with that name.")
 
 
-(cl-puthash  "vcode-cmd-copy-selection" 1 vcode-traces-on)
+;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
+;(cl-puthash "vcode-deserialize-message" 1 vcode-traces-on)
+;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
+
+;(cl-puthash  "vcode-cmd-copy-selection" 1 vcode-traces-on)
+;(cl-puthash  "vcode-cmd-paste" 1 vcode-traces-on)
+;(cl-puthash  "vr-deprecated-output-filter" 1 vcode-traces-on)
+
 
 (defvar vr-deprecated-log-send nil "*If non-nil, vr-deprecated mode logs all data sent to the vr-deprecated
 subprocess in the 'vr-deprecated-log-buff-name buffer.")

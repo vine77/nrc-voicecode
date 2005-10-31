@@ -3779,12 +3779,21 @@ def test_insert_delete_commands():
    test_say(['delete', 'that'])
 
    test_say(['select', 'various', 'useful'])
-   test_say(['copy', 'that'])
-   test_say(['paste', 'that'])
+   test_say(['yo', 'copy', 'that'])
+   test_say(['yo', 'paste', 'that'])
    
    test_say(['select', 'safe', 'attribute'])
-   test_say(['cut', 'that'])
-   test_say(['paste', 'that'])
+   test_say(['yo', 'cut', 'that'])
+   test_say(['yo', 'paste', 'that'])
+   
+   commands.goto_line(5)
+   test_say(['yo', 'cut', 'line'])
+   test_say(['yo', 'paste', 'that'])
+
+   commands.goto_line(4)
+   test_say(['yo', 'copy', 'line'])
+   test_say(['yo', 'paste', 'that'])
+
 
 add_test('insert_delete', test_insert_delete_commands, 'Testing insertion and deletion commands',
          foreground = 1)
@@ -4555,7 +4564,7 @@ def test_emacs_do_switch_buffer():
     commands.open_file('dummy.py')
     commands.say(['class', 'dummy'], echo_cmd=1)
     commands.open_file('test.py')
-    commands.say(['emacs', 'switch', 'to', 'buffer'], echo_cmd=1)
+    commands.say(['yo', 'switch', 'to', 'buffer'], echo_cmd=1)
     commands.say(['select', 'dummy', ], echo_cmd=1, never_bypass_sr_recog = 1)
     commands.say(['new', 'line'], echo_cmd=1)    
     time.sleep(3)
@@ -4563,7 +4572,7 @@ def test_emacs_do_switch_buffer():
     
 def test_emacs_do_invalid_dictation_in_buffer_list():  
     commands.open_file('dummy.py')
-    commands.say(['emacs', 'switch', 'to', 'buffer'], echo_cmd=1)
+    commands.say(['yo', 'switch', 'to', 'buffer'], echo_cmd=1)
     commands.say(['select', 'dummy', ], echo_cmd=1, never_bypass_sr_recog = 1)
     commands.say(['hello'], echo_cmd=1, never_bypass_sr_recog = 1)     
     time.sleep(3)
@@ -4596,7 +4605,7 @@ def test_emacs_save_buffer():
        pass
     commands.open_file(file_name)
     commands.say(['class', 'dummy'], echo_cmd=1)
-    commands.say(['emacs', 'save', 'buffer'], echo_cmd=1)
+    commands.say(['yo', 'save', 'buffer'], echo_cmd=1)
     commands.open_file(file_name)
     
 #add_test('save_buffer', test_emacs_save_buffer,
