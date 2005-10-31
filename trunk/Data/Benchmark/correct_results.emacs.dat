@@ -253,8 +253,8 @@ Heard select various useful
  10:     - safe attribute setting
 
 
->>> Testing console command: say(['copy', 'that'], user_input='None')
-Heard copy that
+>>> Testing console command: say(['yo', 'copy', 'that'], user_input='None')
+Heard yo copy that
   4: autoTst = 0
   5:     """A  for all VoiceCode objects
   6: 
@@ -264,8 +264,8 @@ Heard copy that
  10:     - safe attribute setting
 
 
->>> Testing console command: say(['paste', 'that'], user_input='None')
-Heard paste that
+>>> Testing console command: say(['yo', 'paste', 'that'], user_input='None')
+Heard yo paste that
   4: autoTst = 0
   5:     """A  for all VoiceCode objects
   6: 
@@ -286,8 +286,8 @@ Heard select safe attribute
  13:     
 
 
->>> Testing console command: say(['cut', 'that'], user_input='None')
-Heard cut that
+>>> Testing console command: say(['yo', 'cut', 'that'], user_input='None')
+Heard yo cut that
   7:     This class implements various usefulvarious useful behaviors for generic
   8:     objects, such as:
   9: 
@@ -297,8 +297,8 @@ Heard cut that
  13:     
 
 
->>> Testing console command: say(['paste', 'that'], user_input='None')
-Heard paste that
+>>> Testing console command: say(['yo', 'paste', 'that'], user_input='None')
+Heard yo paste that
   7:     This class implements various usefulvarious useful behaviors for generic
   8:     objects, such as:
   9: 
@@ -306,6 +306,67 @@ Heard paste that
  11:     - deep constructor
  12:     - pretty printing???
  13:     
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+  5: <CURSOR>    """A  for all VoiceCode objects
+  6: 
+  7:     This class implements various usefulvarious useful behaviors for generic
+  8:     objects, such as:
+
+
+>>> Testing console command: say(['yo', 'cut', 'line'], user_input='None')
+Heard yo cut line
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+  5: <CURSOR>
+  6:     This class implements various usefulvarious useful behaviors for generic
+  7:     objects, such as:
+  8: 
+
+
+>>> Testing console command: say(['yo', 'paste', 'that'], user_input='None')
+Heard yo paste that
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+  5: <CURSOR>    """A  for all VoiceCode objects
+  6: 
+  7:     This class implements various usefulvarious useful behaviors for generic
+  8:     objects, such as:
+*** Start of source buffer ***
+  1: 
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: <CURSOR>autoTst = 0
+  5:     """A  for all VoiceCode objects
+  6: 
+  7:     This class implements various usefulvarious useful behaviors for generic
+
+
+>>> Testing console command: say(['yo', 'copy', 'line'], user_input='None')
+Heard yo copy line
+*** Start of source buffer ***
+  1: 
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: <SEL_START>autoTst = 0
+  5: <SEL_END>    """A  for all VoiceCode objects
+  6: 
+  7:     This class implements various usefulvarious useful behaviors for generic
+
+
+>>> Testing console command: say(['yo', 'paste', 'that'], user_input='None')
+Heard yo paste that
+*** Start of source buffer ***
+  1: 
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: <SEL_START>autoTst = 0
+  5: <SEL_END>autoTst = 0
+  6:     """A  for all VoiceCode objects
+  7: 
 
 
 *******************************************************************************
@@ -433,8 +494,8 @@ WARNING: source file 'test.py' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-Got command: say(['emacs', 'switch', 'to', 'buffer'],None,0,0,)
-Heard emacs switch to buffer
+Got command: say(['yo', 'switch', 'to', 'buffer'],None,0,0,)
+Heard yo switch to buffer
 Compiling symbols for *Completions*
 Done compiling symbols
 *** Start of source buffer ***
@@ -468,8 +529,8 @@ WARNING: source file 'dummy.py' doesn't exist.
   2:     
 
 *** End of source buffer ***
-Got command: say(['emacs', 'switch', 'to', 'buffer'],None,0,0,)
-Heard emacs switch to buffer
+Got command: say(['yo', 'switch', 'to', 'buffer'],None,0,0,)
+Heard yo switch to buffer
 Compiling symbols for *Completions*
 Done compiling symbols
 *** Start of source buffer ***
@@ -2899,7 +2960,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01E52780>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01E53D50>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*

@@ -622,7 +622,7 @@ class WinGramMgr(GramMgrDictContext):
         
         *BOOL text_mode_toggling* -- true IIF toggling of text mode is supported.                    
         """
-        debug.trace("GramMgr.WinGramMgr", "**there are %s unconsumed arguments, and they are: args=%s" % (len(args.keys()), args))
+        debug.trace("GramMgr.WinGramMgr", "exlusive=%s" % exclusive)
         self.deep_construct(WinGramMgr,
                             {
                             'factory': factory, 
@@ -741,12 +741,14 @@ class WinGramMgr(GramMgrDictContext):
             
         for buff_name in self.dict_grammars[window].keys():
             if buff_name != buffer:
+                debug.trace('WinGramMgr.activate', 'deactivating dictation and dict_cmd grammars for buff_name=%s' % buff_name)
                 self.dict_grammars[window][buff_name].deactivate()
                 self.dict_cmd_grammars[window][buff_name].deactivate()
 
 # if the dictation grammars are actually global, we need to deactivate 
 # all the rest, even if they are stored under other windows in dict_grammars
         if self.global_grammars:
+            debug.trace('WinGramMgr.activate', 'Grammars are global. Disabling window-specific dictation grammars.')
             for a_window in self.dict_grammars.keys():
                 if a_window != window:
                     for buff_name in self.dict_grammars[a_window].keys():
@@ -759,12 +761,14 @@ class WinGramMgr(GramMgrDictContext):
 # if the selection grammars are actually global, we need to deactivate 
 # all the rest, even if they are stored under other windows in sel_grammars
         if self.global_grammars:
+            debug.trace('WinGramMgr.activate', 'Grammars are global. Disabling window specific selection grammars..')
             for a_window in self.sel_grammars.keys():
                 if a_window != window:
                     self.sel_grammars[a_window].deactivate()
 
         if self.correction:
             if is_in_text_mode:
+                debug.trace('WinGramMgr.activate', 'Grammars are global. Disabling window specific selection grammars..')
                 self.correction_grammars[window].deactivate()
             else:
                 self.correction_grammars[window].activate()
@@ -804,6 +808,8 @@ class WinGramMgr(GramMgrDictContext):
             before, after = self.find_context(buffer)
             self.dict_grammars[window][buffer].set_context(before, after)
             self.dict_grammars[window][buffer].activate()
+            
+            debug.trace('WinGramMgr.activate', 'activating self.dict_cmd_grammars[window][buffer]=%s:' % self.dict_cmd_grammars[window][buffer])
             self.dict_cmd_grammars[window][buffer].activate()            
     
     def activate_sink(self, window):

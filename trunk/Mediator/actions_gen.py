@@ -1536,6 +1536,59 @@ class ActionCutSelectedText(Action):
         app.cut_selection()
 
 
+class ActionCopyLine(Action):
+    """Copies line at cursor.
+        
+    **INSTANCE ATTRIBUTES**
+                
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+
+    def __init__(self, **args_super):
+        self.deep_construct(ActionCopyLine, \
+                            {}, \
+                                args_super, \
+                            {})
+                            
+    def doc(self):
+        return 'Copy line that the cursor is currently on.';
+                               
+    def execute(self, app, cont, state = None):
+        """See [Action.execute] for details.
+        
+        .. [Action.execute] file:///./Action.Action.html#execute"""
+        app.select_line()
+        app.copy_selection()
+
+class ActionCutLine(Action):
+    """Cuts current line.
+        
+    **INSTANCE ATTRIBUTES**
+                
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+
+    def __init__(self, **args_super):
+        self.deep_construct(ActionCutLine, \
+                            {}, \
+                                args_super, \
+                            {})
+                            
+    def doc(self):
+        return 'Cuts current line.';
+                               
+    def execute(self, app, cont, state = None):
+        """See [Action.execute] for details.
+        
+        .. [Action.execute] file:///./Action.Action.html#execute"""
+        app.select_line()
+        app.cut_selection()
+
+
 class ActionPasteClipboard(Action):
     """Paste content of clipboard into current buffer.
         

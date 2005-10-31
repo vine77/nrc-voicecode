@@ -949,6 +949,9 @@ class SourceBuff(OwnerObject):
                     (self.beginning_of_line(), self.end_of_line()))
         self.delete((self.beginning_of_line(), self.end_of_line()+1))
         
+    def select_line(self):
+        self.set_selection((self.beginning_of_line(), self.end_of_line()+1))
+        
     def backspace(self, n_times):
         """Delete a number of spaces before the cursor.
 

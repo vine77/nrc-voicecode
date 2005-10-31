@@ -61,10 +61,13 @@ class DictThroughCmdWinGramNL(DictWinGram, GrammarBase):
         *CLASS* wave_playback -- class constructor for a concrete
         subclass of WavePlayback, or None if no playback is available
         """
+
+
         self.deep_construct(DictThroughCmdWinGramNL,
             {'wave_playback': wave_playback}, attrs, 
             exclude_bases = {GrammarBase:1})
         GrammarBase.__init__(self)
+        
         
         
         # AD: When these are set to 1, we generate grammars for dictating
@@ -108,7 +111,7 @@ class DictThroughCmdWinGramNL(DictWinGram, GrammarBase):
                        self.interpreter().gram_spec_spoken_symbol("known_spoken_symbol", not self.generate_sym_gram)   
         
         if debug.tracing('DictThroughCmdWinGramNL._gram_spec'):
-            debug.trace('DictThroughCmdWinGramNL._gram_spec', 'returning "%s"' % gram_spec)
+            debug.trace('DictThroughCmdWinGramNL._gram_spec', 'self=%s, returning "%s"' % (self, gram_spec))
                        
         return gram_spec        
                 
@@ -204,6 +207,18 @@ class DictThroughCmdWinGramNL(DictWinGram, GrammarBase):
         # AD: Note this method doesn't make sense for this class. 
         #     Remove it later.
         pass
+
+    def gotResults_vcode_utterance(self, words, fullResults):
+       print '-- DictThroughCmdWinGramNL.gotResults_vcode_utterance: words=%s' % repr(words)
+       
+    def gotResults_known_spoken_form(self, words, fullResults):
+       print '-- DictThroughCmdWinGramNL.gotResults_known_spoken_form: words=%s' % repr(words)
+    
+    def gotResults_known_spoken_form(self, words, fullResults):
+       print '-- DictThroughCmdWinGramNL.gotResults_known_spoken_form: words=%s' % repr(words)
+    
+    def gotResults_known_spoken_symbol(self, words, fullResults):        
+       print '-- DictThroughCmdWinGramNL.gotResults_known_spoken_symbol: words=%s' % repr(words)
 
     def gotResultsObject(self, recogType, results):
             debug.trace('DictThroughCmdWinGramNL.gotResultsObject', 
@@ -752,6 +767,7 @@ class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
         self.on_correct_recent()
 
     def gotResultsObject(self, recog_type, results):
+        debug.trace('BasicCorrectionWinGramNL.gotResultsObject', 'invoked')
         if recog_type == 'self':
             utterance = sr_interface.SpokenUtteranceNL(results)
             self.results_callback(utterance)
@@ -1115,6 +1131,7 @@ class WinGramFactoryNL(WinGramFactory):
         *DictationGramSetNL* -- new pair of grammars (dictation plus command)
         for supporting VoiceCode dictation.
         """
+        debug.trace('WinGramFactoryNL.make_dictation_through_cmd', 'exclusive=%s' % exclusive)
         return DictThroughCmdWinGramNL(manager = manager, app = app, 
             buff_name = buff_name, window = window, exclusive = exclusive,
             wave_playback = self.wave_playback)    
@@ -1924,6 +1941,7 @@ class SimpleSelectionNL(SimpleSelection, SelectGramBase):
             self.recognition_starting()
 
     def gotResultsObject(self,recogType,resObj):
+        debug.trace('SimpleSelectionNL.gotResultsObject', 'invoked')
         if recogType == 'self':
             # If there are multiple matches in the text we need to scan through
             # the list of choices to find every entry which has the highest.

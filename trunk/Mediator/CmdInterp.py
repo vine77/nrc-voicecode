@@ -1452,7 +1452,7 @@ class CmdInterp(OwnerObject):
            self._spoken_commands_gram_rule = "<%s> = dummyghjetqwer" % rule_name
            for a_known_spoken_form in known_spoken_forms.keys():
               self._spoken_commands_gram_rule = self._spoken_commands_gram_rule + "|%s" % a_known_spoken_form
-           self._spoken_commands_gram_rule = self._spoken_commands_gram_rule + ";\n"
+           self._spoken_commands_gram_rule = self._spoken_commands_gram_rule + ";\n"           
         return self._spoken_commands_gram_rule
 
     def gram_spec_spoken_symbol(self, rule_name, empty=0): 
