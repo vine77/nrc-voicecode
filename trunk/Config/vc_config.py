@@ -588,6 +588,7 @@ acmd = CSCmd(spoken_forms=['yo end of line', 'go to end of line'],
                            docstring='Move cursor to end of line.')
 navigation_within_buffer.add_csc(acmd)
 
+
 #############################################################################
 # Insertions and deletions
 #############################################################################
