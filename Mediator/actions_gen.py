@@ -762,6 +762,8 @@ class ActionPaging(ActionBidirectionalRepeat):
                             {"direction": direction, "n_times": n_times}, 
                             args_super, 
                             {})
+        self.direction = direction
+        debug.trace('ActionPaging.__init__', 'direction=%s, self.direction=%s' % (direction, self.direction))
 
     def doc(self):
         """See [Action.doc].
@@ -777,6 +779,72 @@ class ActionPaging(ActionBidirectionalRepeat):
         debug.trace('ActionPaging.execute', "** paging in direction %s, %s times" % (self.direction, self.n_times))
         return app.move_relative_page(self.direction, self.n_times)
 
+
+class ActionGotoBeginningOfLine(Action):
+    """Moves cursor to beginning of current line.
+        
+    **INSTANCE ATTRIBUTES**
+
+    *none* -- 
+
+    **CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+    def __init__(self, **args_super):
+        self.deep_construct(ActionGotoBeginningOfLine, 
+                            {}, 
+                            args_super, 
+                            {})
+
+
+    def execute(self, app, cont, state = None):
+        """See [Action.execute].
+
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+
+        return app.goto(app.beginning_of_line())
+
+    def doc(self):
+        """See [Action.doc].
+
+        .. [Action.doc] file:///./actions_gen.Action.html#doc
+        """
+        return "Move cursor to beginning of current line."
+
+
+class ActionGotoEndOfLine(Action):
+    """Moves cursor to end of current line.
+        
+    **INSTANCE ATTRIBUTES**
+
+    *none* -- 
+
+    **CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+    def __init__(self, **args_super):
+        self.deep_construct(ActionGotoEndOfLine, 
+                            {}, 
+                            args_super, 
+                            {})
+
+
+    def execute(self, app, cont, state = None):
+        """See [Action.execute].
+
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+
+        return app.goto(app.end_of_line())
+
+    def doc(self):
+        """See [Action.doc].
+
+        .. [Action.doc] file:///./actions_gen.Action.html#doc
+        """
+        return "Move cursor to end of current line."
+    
 
 class ActionSearch(ActionBidirectional):
     """Moves cursor to occurence of a regular expression.

@@ -390,6 +390,7 @@ class SourceBuffMessaging(SourceBuffWithDiffs.SourceBuffWithDiffs):
         
         *none* -- 
         """
+        trace('SourceBuffMessaging.move_relative_page', 'direction=%s, num=%s' % (direction, num))
         args = {'direction': direction, 'num': num,
             'buff_name': self.name()}
         self.app.talk_msgr.send_mess('move_relative_page', args)

@@ -15,7 +15,8 @@
 ;; the Free Software Foundation; either version 2 of the License, or (at
 ;; your option) any later version.
 ;;
-;; Emacs vr-deprecated Mode is distributed in the hope that it will be useful, butdeemo
+;; Emacs vr-deprecated Mode is distributed in the hope that it will be useful, butdeemof
+
 ;; WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ;; General Public License for more details.
@@ -267,6 +268,7 @@ in the 'vr-deprecated-log-buff-name buffer.")
 "Set entries in this hashtable, to activate traces with that name.")
 
 
+;(cl-puthash "vcode-cmd-move-relative-page" 1 vcode-traces-on)
 ;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
 ;(cl-puthash "vcode-deserialize-message" 1 vcode-traces-on)
 ;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
@@ -3602,14 +3604,19 @@ change reports it sends to VCode.
 
 (defun vcode-cmd-move-relative-page (vcode-request)
   (let ((mess-cont (elt vcode-request 1)) 
-	(buff-name) (direction) (num))
+	(buff-name) (direction) (num) (times-so-far 0))
     (setq direction (cl-gethash "direction" mess-cont))
     (setq buff-name (vcode-get-buff-name-from-message mess-cont))
     (setq num (cl-gethash "num" mess-cont))
+    (vcode-trace "vcode-cmd-move-relative-page" "direction=%S, buff-name=%S, num=%S" direction buff-name num)
     (set-buffer buff-name)
-    (if (>= direction 0)
-	(scroll-up-nomark num)
-      (scroll-down-nomark num))
+    (while (< times-so-far num)
+      (vcode-trace "vcode-cmd-move-relative-page" "times-so-far=%S, num=%S" times-so-far num)
+      (if (>= direction 0)
+	  (scroll-up-nomark nil)
+	(scroll-down-nomark nil))
+      (setq times-so-far (+ 1 times-so-far))
+    )
   )
 
   (vcode-send-queued-changes)
