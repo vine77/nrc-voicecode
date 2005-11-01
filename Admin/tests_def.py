@@ -4471,17 +4471,12 @@ def test_navigation_within_buffer():
     commands.say(['do', 'that', 'again'])   
     commands.say(['again', 'two\\two', 'times']) 
     
+    commands.goto_line(11)
     commands.say(['go', 'to', 'end', 'of', 'line'])
     commands.say(['go', 'to', 'beginning', 'of', 'line'])
     
-   
-# This test does not work yet... Fix it later. Don't forget to uncomment
-# the statements that say:
-#    add_csc_set(navigation_within_buffer)
-# in user_config.py, vc_config.py and sample_config.py
-#
-#add_test('navigation_within_buffer', test_navigation_within_buffer, 
-#    desc='testing navigation commands like page up/down etc.')    
+add_test('navigation_within_buffer', test_navigation_within_buffer, 
+         desc='testing navigation commands like page up/down etc.')    
 
 ##############################################################################
 # Testing special cases for the symbol matching algorithm
