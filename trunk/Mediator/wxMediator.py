@@ -54,23 +54,11 @@ import WinSystemMSW
 debug.config_traces(status="off",
                     active_traces={
 #################################
-      'ActionCopySelectedText.execute': 1,
-#      'CmdInterp.interpret_utterance': 1,
+      'ActionPaging.execute': 1,
+      'SourceBuffMessaging.move_relative_page': 1,
+      'ActionPaging.__init__': 1,
       'SourceBuffMessaging.copy_selection': 1,
 #      'CmdInterp.apply_CSC': 1,
-      "CmdInterp.gram_spec_spoken_cmd": 1,
-      'DictThroughCmdWinGramNL._gram_spec': 1,
-      'DictThroughCmdWinGramNL.activate': 1,
-      'WinGramFactoryNL.make_dictation_through_cmd': 1,
-      "GramMgr.WinGramMgr": 1,
-      'DictThroughCmdWinGramNL.gotResultsObject': 1,
-      'DictThroughCmdWinGramNL.gotResults_vcode_utterance': 1,
-      'DictWinGramNL.gotResultsObject': 1,
-      'SelectWinGramNL.gotResultsObject': 1,
-      'BasicCorrectionWinGramNL.gotResultsObject': 1,
-      'SimpleSelectionNL.gotResultsObject': 1,
-#      'DictThroughCmdWinGramNL.gotResultsObject': 1,
-
 ### Zillion versions of grammar manager
       'WinGramMgr.activate': 1,
       

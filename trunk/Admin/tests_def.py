@@ -4460,17 +4460,19 @@ add_test('syntax_navigation', test_syntax_navigation,
 ##############################################################################
 
 def test_navigation_within_buffer():
-    testing.init_simulator_regression()    
+    testing.init_simulator_regression() 
     commands.open_file(large_buff_py)
-    print "saying page down"
 
-    commands.say(['page', 'down'])
+    commands.say(['yo', 'page', 'down'])
     commands.say(['do', 'that', 'again'])   
     commands.say(['again', 'two\\two', 'times']) 
 
-    commands.say(['page', 'up'])
+    commands.say(['yo', 'page', 'up'])
     commands.say(['do', 'that', 'again'])   
     commands.say(['again', 'two\\two', 'times']) 
+    
+    commands.say(['go', 'to', 'end', 'of', 'line'])
+    commands.say(['go', 'to', 'beginning', 'of', 'line'])
     
    
 # This test does not work yet... Fix it later. Don't forget to uncomment
@@ -4478,7 +4480,7 @@ def test_navigation_within_buffer():
 #    add_csc_set(navigation_within_buffer)
 # in user_config.py, vc_config.py and sample_config.py
 #
-# add_test('navigation_within_buffer', test_navigation_within_buffer, 
+#add_test('navigation_within_buffer', test_navigation_within_buffer, 
 #    desc='testing navigation commands like page up/down etc.')    
 
 ##############################################################################

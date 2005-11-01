@@ -566,14 +566,26 @@ change_direction.add_csc(acmd)
 navigation_within_buffer = CSCmdSet(name = 'move up or down the page', 
                              description = "move up or down the page")
 
-acmd = CSCmd(spoken_forms=['page down'],
+acmd = CSCmd(spoken_forms=['yo page down', 'page down'],
              meanings={ContAny(): ActionPaging(n_times=1, direction=1)},
+             generate_discrete_cmd = 1,
              docstring='Move down a page')
 navigation_within_buffer.add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['page up'],
+acmd = CSCmd(spoken_forms=['yo page up', 'page up'],
              meanings={ContAny(): ActionPaging(n_times=1, direction=-1)},
+             generate_discrete_cmd = 1,
              docstring='Move up a page')
+navigation_within_buffer.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['yo beginning of line', 'go to beginning of line'],
+                           meanings={ContAny(): ActionGotoBeginningOfLine()},
+                           docstring='Move cursor to beginning of line.')
+navigation_within_buffer.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['yo end of line', 'go to end of line'],
+                           meanings={ContAny(): ActionGotoEndOfLine()},
+                           docstring='Move cursor to end of line.')
 navigation_within_buffer.add_csc(acmd)
 
 #############################################################################

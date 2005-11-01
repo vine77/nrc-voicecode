@@ -147,8 +147,7 @@ add_csc_set(compound_statements)
 add_csc_set(ctrl_structures)
 add_csc_set(data_structures)
 add_csc_set(function_definitions)
-# AD: Does not work for now. Reactivate when it is debugged.
-#add_csc_set(navigation_within_buffer)
+add_csc_set(navigation_within_buffer)
 add_csc_set(insertion_deletions)
 
 # Python-specific
