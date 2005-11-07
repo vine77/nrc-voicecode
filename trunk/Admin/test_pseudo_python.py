@@ -46,7 +46,7 @@ def dictate_pseudo_python(commands):
 # spaces from the written forms entered as vocabular words.  try this instead
     commands.say(['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', 'import all', 'new', 'statement'] , user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
-    commands.say(['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
+    commands.say(['from', 'module', 'application', 'state', 'import', 'application', 'state', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     
     commands.say(['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement'], user_input='1\n1\n1\n1\n1\n1\n1\n', echo_utterance=1)
     

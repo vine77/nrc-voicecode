@@ -593,7 +593,7 @@ class BasicCorrectionWinGram(WinGram):
              'recent_words': None
             }, attrs)
         if scratch_words is None:
-            scratch_words = ['Scratch']
+            scratch_words = ['Scratch', 'Undo']
         if correct_words is None:
             correct_words = ['Correct']
         if recent_words is None:

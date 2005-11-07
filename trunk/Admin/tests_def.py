@@ -4475,6 +4475,9 @@ def test_navigation_within_buffer():
     commands.say(['go', 'to', 'end', 'of', 'line'])
     commands.say(['go', 'to', 'beginning', 'of', 'line'])
     
+    commands.say(['yo', 'top', 'of', 'file'])
+    commands.say(['yo', 'bottom', 'of', 'file'])
+    
 add_test('navigation_within_buffer', test_navigation_within_buffer, 
          desc='testing navigation commands like page up/down etc.')    
 

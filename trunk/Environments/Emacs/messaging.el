@@ -133,7 +133,6 @@
 (defun vcode-decode-mess (mess)
     "Parses a WDDX \"document\" and converts it to a LISP data structure"
 
-;    (vr-log (format "-- vcode-decode-mess: mess=%S\n" mess))
     (let ((mess-cont) (mess-name))
        ;;;
        ;;; Parse the message in a temporary buffer
@@ -168,12 +167,19 @@
 (defun vcode-encode-mess (mess-name mess-content)
    "Translates a LISP data structure into a WDDX \"document\"."
  
-;   (vr-log "-- vcode-encode-mess: started, mess-name=%S, mess-content=%S\n" mess-name mess-content)
-;   (vr-log (format "-- vcode-encode-mess: (hash-items mess-content)=%S\n" (hash-items mess-content)))
+;   (vcode-trace "vcode-encode-mess" "started, mess-name=%S, mess-content=%S\n" mess-name mess-content)
+;   (vcode-trace "vcode-encode-mess" "(hash-items mess-content)=%S\n" (hash-items mess-content))
+
+   ; Debuggin problem with reporting changes involving unicode characters
+   ; AD 2005-11-03
+   (if (string= "mess-name" "updates")
+      (vcode-trace "vcode-encode-mess" "Message is of type updates. (cl-gethash \"value\" mess-content)=%S" (cl-gethash "value" mess-content))
+   )
+
    (let ((wddx-mess))
 
      ;;; Generate header
-     (setq wddx-mess "<?xml version=\"1.0\"?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data>")
+     (setq wddx-mess "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><!DOCTYPE wddxPacket SYSTEM \"wddx_0090.dtd\"><wddxPacket version=\"0.9\"><header/><data>")
 
 
      ;;; Generate data part
@@ -182,7 +188,7 @@
 
      ;;; Generate closing of header
      (setq wddx-mess (concat wddx-mess "</data></wddxPacket>"))
-;     (vr-log "-- vcode-encode-mess: exited\n")
+     (vcode-trace "vcode-encode-mess" "returning message:\n%S\n" wddx-mess)
      wddx-mess
    )
 )

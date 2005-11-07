@@ -54,15 +54,9 @@ import WinSystemMSW
 debug.config_traces(status="off",
                     active_traces={
 #################################
-      'ActionPaging.execute': 1,
-      'SourceBuffMessaging.move_relative_page': 1,
-      'ActionPaging.__init__': 1,
-      'SourceBuffMessaging.copy_selection': 1,
-#      'CmdInterp.apply_CSC': 1,
-### Zillion versions of grammar manager
-      'WinGramMgr.activate': 1,
-      
-      
+#      'CmdInterp.interpret_utterance': 1,
+      'get_mess': 1,
+      'messaging.MessEncoderWDDX.decode': 1,
       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                                    },
                     allow_trace_id_substrings = 1)

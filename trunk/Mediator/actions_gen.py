@@ -844,6 +844,71 @@ class ActionGotoEndOfLine(Action):
         .. [Action.doc] file:///./actions_gen.Action.html#doc
         """
         return "Move cursor to end of current line."
+
+class ActionGotoTopOfBuffer(Action):
+    """Moves cursor to beginning of current file.
+        
+    **INSTANCE ATTRIBUTES**
+
+    *none* -- 
+
+    **CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+    def __init__(self, **args_super):
+        self.deep_construct(ActionGotoTopOfBuffer, 
+                            {}, 
+                            args_super, 
+                            {})
+
+
+    def execute(self, app, cont, state = None):
+        """See [Action.execute].
+
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+
+        return app.goto(0)
+
+    def doc(self):
+        """See [Action.doc].
+
+        .. [Action.doc] file:///./actions_gen.Action.html#doc
+        """
+        return "Move cursor to beginning of current file."
+
+
+class ActionGotoBottomOfBuffer(Action):
+    """Moves cursor to end of current buffer.
+        
+    **INSTANCE ATTRIBUTES**
+
+    *none* -- 
+
+    **CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+    def __init__(self, **args_super):
+        self.deep_construct(ActionGotoBottomOfBuffer, 
+                            {}, 
+                            args_super, 
+                            {})
+
+
+    def execute(self, app, cont, state = None):
+        """See [Action.execute].
+
+        .. [Action.execute] file:///./actions_gen.Action.html#execute"""
+
+        return app.goto(app.len() - 1)
+
+    def doc(self):
+        """See [Action.doc].
+
+        .. [Action.doc] file:///./actions_gen.Action.html#doc
+        """
+        return "Move cursor to end of current file."
     
 
 class ActionSearch(ActionBidirectional):
