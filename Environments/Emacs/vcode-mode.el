@@ -268,6 +268,15 @@ in the 'vr-deprecated-log-buff-name buffer.")
 "Set entries in this hashtable, to activate traces with that name.")
 
 
+; Debuggin problem with reporting changes involving unicode characters
+; AD 2005-11-03
+;(cl-puthash "vcode-generate-raw-change-description" 1 vcode-traces-on)
+;(cl-puthash "vcode-serialize-changes" 1 vcode-traces-on)
+;(cl-puthash "vcode-generate-change-hash" 1 vcode-traces-on)
+;(cl-puthash "vcode-generate-contents-change-hash" 1 vcode-traces-on)
+;(cl-puthash "vcode-encode-mess" 1 vcode-traces-on)
+;(cl-puthash "wddx-serialize-string" 1 vcode-traces-on)
+
 ;(cl-puthash "vcode-cmd-move-relative-page" 1 vcode-traces-on)
 ;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
 ;(cl-puthash "vcode-deserialize-message" 1 vcode-traces-on)
@@ -1430,6 +1439,10 @@ whole content of the buffer."
       (progn
 	(if (integerp msg)
 	    (setq msg (int-to-string msg)))
+
+	;;; Make sure the message is encoded in UTF-8
+	(setq msg (encode-coding-string msg 'utf-8))
+
         (vcode-trace "vr-deprecated-send-reply" "sending reply %S..."
 (substring msg 0 20))
 	(if vr-deprecated-log-send
@@ -1444,6 +1457,11 @@ whole content of the buffer."
 (defun vr-deprecated-send-cmd (msg)
   (if (and vr-deprecated-emacs-cmds (eq (process-status vr-deprecated-emacs-cmds) 'open))
       (progn
+
+        ;;; Make sure the message is encoded in UTF-8
+        (setq msg (encode-coding-string msg 'utf-8))
+
+
 	(if vr-deprecated-log-send
 	    (vr-deprecated-log "<- c %s\n" msg))
 ;;; Should this be part of vr-deprecated-serialize-message???

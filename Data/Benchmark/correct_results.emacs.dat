@@ -8941,6 +8941,20 @@ Heard go to beginning of line
  12:     objects, such as:
  13: 
  14:     - safe attribute setting
+Heard yo top of file
+*** Start of source buffer ***
+  1: <CURSOR>
+  2: # This symbol is here because it is homophonic with auto_test. Just checking
+  3: # to make sure that symbol match works with homophonic symbols.
+  4: autoTst = 0
+Heard yo bottom of file
+673:     self_test()
+674:     prof_test()
+675: 			
+676: <CURSOR>
+677: 
+
+*** End of source buffer ***
 
 
 *******************************************************************************
@@ -12488,21 +12502,21 @@ Heard from module actions C. C. P. P. import all new statement
 *** Start of source buffer ***
   1: import os, re, str, sys
   2: import auto_test, natlink, vc_globals
-  3: from actions_C_Cpp import all
+  3: from actions_C_Cpp import *
   4: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement']
-Heard from module application state import symbols application state new statement
+Saying: ['from', 'module', 'application', 'state', 'import', 'application', 'state', 'new', 'statement']
+Heard from module application state import application state new statement
   2: import auto_test, natlink, vc_globals
-  3: from actions_C_Cpp import all
+  3: from actions_C_Cpp import *
   4: from AppState import AppState
   5: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement']
 Heard from module context generic import symbols context C. comma context python new statement
-  3: from actions_C_Cpp import all
+  3: from actions_C_Cpp import *
   4: from AppState import AppState
   5: from cont_gen import ContC, ContPy
   6: <CURSOR>
@@ -12913,21 +12927,21 @@ Heard from module actions C. C. P. P. import all new statement
 *** Start of source buffer ***
   1: import os, re, str, system
   2: import auto_test, natural_link, vc_globals
-  3: from actions_ccpp import all
+  3: from actions_ccpp import *
   4: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['from', 'module', 'application', 'state', 'import', 'symbols', 'application', 'state', 'new', 'statement']
-Heard from module application state import symbols application state new statement
+Saying: ['from', 'module', 'application', 'state', 'import', 'application', 'state', 'new', 'statement']
+Heard from module application state import application state new statement
   2: import auto_test, natural_link, vc_globals
-  3: from actions_ccpp import all
+  3: from actions_ccpp import *
   4: from application_state import application_state
   5: <CURSOR>
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement']
 Heard from module context generic import symbols context C. comma context python new statement
-  3: from actions_ccpp import all
+  3: from actions_ccpp import *
   4: from application_state import application_state
   5: from context_generic import context_c, context_python
   6: <CURSOR>

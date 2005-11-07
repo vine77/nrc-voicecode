@@ -588,6 +588,18 @@ acmd = CSCmd(spoken_forms=['yo end of line', 'go to end of line'],
                            docstring='Move cursor to end of line.')
 navigation_within_buffer.add_csc(acmd)
 
+acmd = CSCmd(spoken_forms=['yo top of file', 'yo top of buffer', 
+                           'yo beginning of file', 'yo beginning of buffer'],
+                           meanings={ContAny(): ActionGotoTopOfBuffer()},
+                           docstring='Move cursor to top of current file.')
+navigation_within_buffer.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['yo bottom of file', 'yo bottom of buffer', 
+                           'yo end of file', 'yo end of buffer'],
+                           meanings={ContAny(): ActionGotoBottomOfBuffer()},
+                           docstring='Move cursor to bottom of current file.')
+navigation_within_buffer.add_csc(acmd)
+
 
 #############################################################################
 # Insertions and deletions
@@ -1183,13 +1195,21 @@ python_imports_cscs = CSCmdSet('Python import statements',
 
 python_imports_cscs.add_csc(CSCmd(spoken_forms=['from', 'from module'], 
                             meanings={ContBlankLine('python'): ActionInsert('from ')}))
+#
+# Support two uses of the word import:
+#    import module_name
+#    from module_name import symbol_name
+#
+python_imports_cscs.add_csc(CSCmd(spoken_forms=['import'], 
+                            meanings={ContBlankLine('python'): ActionInsert('import '), ContPy(): ActionInsert(' import ')}))                            
+                            
 
 # this form used for statements : import module1, module2, etc...
-python_imports.add_lsa(LSAlias(['import', 'import module', 'import modules'], {'python': 'import '}))
+python_imports.add_lsa(LSAlias(['import module', 'import modules'], {'python': 'import '}))
 # this form used for statements like: from module symbol1, symbol2, etc...
 python_imports.add_lsa(LSAlias(['import symbols', 'import symbol'], {'python': ' import '}))
 # this form used for statements like: from module import all
-python_imports.add_lsa(LSAlias(['import all'], {'python': ' import all'}))
+python_imports.add_lsa(LSAlias(['import all'], {'python': ' import *'}))
 
 # Python-specific comparison operators
 
