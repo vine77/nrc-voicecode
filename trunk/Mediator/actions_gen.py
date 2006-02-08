@@ -777,7 +777,8 @@ class ActionPaging(ActionBidirectionalRepeat):
 
         .. [Action.execute] file:///./actions_gen.Action.html#execute"""
         debug.trace('ActionPaging.execute', "** paging in direction %s, %s times" % (self.direction, self.n_times))
-        return app.move_relative_page(self.direction, self.n_times)
+        success = app.move_relative_page(self.direction, self.n_times)
+        return success
 
 
 class ActionGotoBeginningOfLine(Action):

@@ -37,6 +37,8 @@ import AppStateEmacs
 NewMediatorObject for the next new regression test
 """
 
+mediator_used_for_testing = None
+
 class PersistentConfig(Object.Object):
     """abstract base class which hides the details of MediatorObject 
     and command initialization for regression tests which use a
@@ -290,7 +292,7 @@ class PersistentConfigNewMediator(Object.Object):
         return self.names
 
     def init_simulator_regression(self, alt_sym_file = None,
-        exclusive = 1):
+        exclusive = 1, print_buffer_content_after_commands=1):
         """re-initialize the mediator, using the same editor application
 
         **NOTE:**  This method must also ensure that the namespace in

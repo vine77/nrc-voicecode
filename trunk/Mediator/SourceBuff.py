@@ -1941,7 +1941,7 @@ class SourceBuff(OwnerObject):
         trace('SourceBuff.insert_cbk', 'range=%s, text=\'%s\'' % (range, text))
         self.on_change(None, None, text, 0)
 
-    def pos_selection_cbk(self, pos, selection):
+    def pos_selection_cbk(self, pos, selection, visible_range=None):
         """External editor invokes that callback to notify VoiceCode
         of a change in the current position or selection
 
@@ -1950,6 +1950,9 @@ class SourceBuff(OwnerObject):
         INT *pos* -- Position the cursor was moved to.
 
         (INT, INT) *selection* -- Start and end position of selected text
+        
+        (INT, INT) *visible_range* -- Start and end position of the text 
+        that is currently visible on the screen.
         
         **OUTPUTS**
         
@@ -1989,11 +1992,6 @@ class SourceBuff(OwnerObject):
         #
         # Figure out the first and last line to be printed
         #
-#        from_line, to_line = self.lines_around_cursor()
-#        trace('SourceBuff.print_buff', 
-#            '** now, from_line=%s, to_line=%s' % (from_line, to_line))           
-        
-
         at_start = 0
         at_end = 0
         start = self.beginning_of_line(selection_start)

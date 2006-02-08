@@ -26,6 +26,7 @@ messaging protocol to communicate with external editors.
 import vc_globals
 
 import NewMediatorObject
+import VoiceCodeRootTest
 from MediatorConsoleWX import MediatorConsoleWX
 import tcp_server
 
@@ -54,11 +55,18 @@ import WinSystemMSW
 debug.config_traces(status="off",
                     active_traces={
 #################################
-#      'CmdInterp.interpret_utterance': 1,
-      'get_mess': 1,
-      'messaging.MessEncoderWDDX.decode': 1,
-      'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
-                                   },
+#                       'SimCmdsObj.say': 1,
+#                       'WinGram.results_callback': 1,
+#                       'gotResultsObject': 1,
+#                       'interpret': 1,
+                       'ActionPaging': 1,
+                       'move_relative_page': 1,
+                       'get_visible': 1,
+                       '_get_cache_element_multiple': 1,
+                       'move_relative_line': 1,
+#                       'print_buff': 1,
+                       'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
+                    },
                     allow_trace_id_substrings = 1)
 
 
@@ -353,7 +361,6 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
         *BOOL bypass_sr_recog* -- when testing, bypass natlink for 
         dictation utterances (ignored if test_suite is None) 
         """
-
         self.deep_construct(wxMediator, 
                             {
                              'the_server': None,
@@ -413,6 +420,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
             self.quitting = 1
             raise
 
+        VoiceCodeRootTest.mediator_used_for_testing = self.the_mediator
         sys.stderr.write('Configuring the mediator...\n')
         sys.stderr.flush()
         try:
@@ -883,16 +891,9 @@ if __name__ == '__main__':
     opts, args = util.gopt(['h', None, 't=', None, 'bypass', 0,
         'p=', None, 'train=', 0])
     
-#    sr_interface.connect()
-
-    #
-    # Create a global grammar manager
-    #
-#    the_recog_start_mgr = RecogStartMgr.RecogStartMgr()
-
-
     if opts['t']:
        sys.stderr = sys.stdout
+
     #
     # Start servers on the VC_LISTEN and VC_TALK ports
     #

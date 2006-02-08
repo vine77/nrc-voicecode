@@ -69,7 +69,7 @@ class BuffTracker(Object):
         return self.buff_name
     def rename_buffer_cbk(self, new_buff_name):
         self.buff_name = new_buff_name
-    def pos_selection_cbk(self, pos, selection):
+    def pos_selection_cbk(self, pos, selection, visible_range=None):
         pass
 
 class ClosedBuffer(BuffTracker):

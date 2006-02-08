@@ -346,6 +346,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         Examples: say('x not equal to') -> 'x != '
                   say(['x', ' != \\not equal to'] -> 'x != '
         """
+
         
         global sleep_before_recognitionMimic
         
@@ -355,7 +356,6 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
 
         if echo_cmd: self.echo_command('say', utterance, user_input, never_bypass_sr_recog, echo_utterance)
 
-        trace('SimCmdsObj.say', 'utterance=%s' % utterance)
 
 #    print 'Saying: %s' % utterance
         sys.stdout.flush()

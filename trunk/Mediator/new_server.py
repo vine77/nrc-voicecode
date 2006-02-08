@@ -37,7 +37,7 @@ import messaging, Object
 import AppMgr, RecogStartMgr, SourceBuffMessaging, sb_services
 import sr_interface, util
 
-
+import regression
 
 
 # Uncomment this and add some entries to active_traces if you want to 
@@ -186,6 +186,10 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
                 profile_prefix = profile_prefix, 
                 bypass_sr_recog = bypass_sr_recog,
                 num_words_training = num_words_training)
+                
+        if test_server:
+           regression.mediator_used_for_testing =  self.the_mediator       
+                
 #        print self.the_mediator.server
         sys.stderr.write('Configuring the mediator...\n')
         sys.stderr.flush()
