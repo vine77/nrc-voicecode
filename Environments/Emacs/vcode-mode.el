@@ -26,6 +26,7 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ;; USA
 
+
 (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"
 "\*Completions\*"))
 
@@ -267,24 +268,7 @@ in the 'vr-deprecated-log-buff-name buffer.")
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
 
-
-; Debuggin problem with reporting changes involving unicode characters
-; AD 2005-11-03
-;(cl-puthash "vcode-generate-raw-change-description" 1 vcode-traces-on)
-;(cl-puthash "vcode-serialize-changes" 1 vcode-traces-on)
-;(cl-puthash "vcode-generate-change-hash" 1 vcode-traces-on)
-;(cl-puthash "vcode-generate-contents-change-hash" 1 vcode-traces-on)
-;(cl-puthash "vcode-encode-mess" 1 vcode-traces-on)
-;(cl-puthash "wddx-serialize-string" 1 vcode-traces-on)
-
-;(cl-puthash "vcode-cmd-move-relative-page" 1 vcode-traces-on)
-;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
-;(cl-puthash "vcode-deserialize-message" 1 vcode-traces-on)
-;(cl-puthash "vr-execute-event-handler" 1 vcode-traces-on)
-
-;(cl-puthash  "vcode-cmd-copy-selection" 1 vcode-traces-on)
-;(cl-puthash  "vcode-cmd-paste" 1 vcode-traces-on)
-;(cl-puthash  "vr-deprecated-output-filter" 1 vcode-traces-on)
+(cl-puthash "vcode-cmd-move-relative-page" 1 vcode-traces-on)
 
 
 (defvar vr-deprecated-log-send nil "*If non-nil, vr-deprecated mode logs all data sent to the vr-deprecated
@@ -338,6 +322,16 @@ sent."
   (interactive)
   (setq debug-on-error t)
   (setq debug-on-quit t)
+
+  ;;;
+  ;;; Set number of lines and columns to standard value, otherwise
+  ;;; tests involving pageUp and pageDown will have different results
+  ;;; depending on the initial size of the frame.
+  ;;;
+  (setq default-frame-alist
+      '((width . 80) (height . 40)))
+  (set-frame-width (selected-frame) 80)
+  (set-frame-height (selected-frame) 40)
  
   (vcode-close-all-buffers)
   (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$" "*Completions*"))
@@ -958,7 +952,8 @@ Changes are put in a changes queue `vcode-queued-changes.
 (defun vcode-generate-raw-change-description (change-type change-data)
 
   (let ((change-desc) (buff-name) (inserted-start) (inserted-end) 
-	(deleted-length) (deleted-start) (deleted-end) (inserted-text))
+	(deleted-length) (deleted-start) (deleted-end) (inserted-text)
+        (visible-range))
     (vcode-trace "vcode-generate-raw-change-description" "change-type=%S, change-data=%S" change-type change-data)
     (if (eq 'change-is-select change-type)
 	  (setq change-desc (list change-type change-data))
@@ -991,7 +986,6 @@ Changes are put in a changes queue `vcode-queued-changes.
 ;;;
                 (setq inserted-text (buffer-substring-no-properties 
 			     inserted-start inserted-end))
-
               )
 
               (vcode-trace "vcode-generate-raw-change-description" "** inserted-text=%S" inserted-text)
@@ -3374,7 +3368,7 @@ buffer"
     (save-excursion
       (set-buffer buff-name)
       (goto-char opoint)
-      (setq line-num (what-line (point)))
+      (setq line-num (line-at-pos (point)))
       )
 
     (cl-puthash "value" line-num response)
@@ -3635,7 +3629,18 @@ change reports it sends to VCode.
 	(scroll-down-nomark nil))
       (setq times-so-far (+ 1 times-so-far))
     )
+
+    ;;;
+    ;;; Cursor changes do not automatically get queued to the change queue.
+    ;;; Need to do so explicitely
+    ;;;
+    (vcode-report-goto-select-change buff-name 
+      (if mark-active (mark) (point))
+      (point)
+    )
   )
+
+
 
   (vcode-send-queued-changes)
 )
@@ -3954,7 +3959,7 @@ change reports it sends to VCode.
    )
 )
 
-(defun what-line (pos)
+(defun line-at-pos (pos)
    (let ((line-num))
      (setq line-num (count-lines (point-min) pos))
      (save-excursion
@@ -3981,12 +3986,12 @@ change reports it sends to VCode.
      ;;; by some characters.
      ;;;
 ;    (save-excursion
-       (setq end-line (what-line end))
+       (setq end-line (line-at-pos end))
        (goto-char start)
        (setq keep-going t)
        (while keep-going
          (apply do-this args)
-	 (setq current-line (what-line (point)))
+	 (setq current-line (line-at-pos (point)))
          (if (<  current-line end-line)
 	     (next-line 1)
 	   (setq keep-going nil)
@@ -4233,6 +4238,7 @@ change reports it sends to VCode.
         (return-pos) (pos (point)) (reply-name) (buff-name)
 	(response (make-hash-table :test 'string=)))
     (setq buff-name (vcode-get-buff-name-from-message mess-cont))
+    (vcode-trace "vcode-cmd-beginning-of-statement" "** buff-name=%S" buff-name)
     (save-excursion
       (condition-case err     
         (progn 

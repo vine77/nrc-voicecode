@@ -25,6 +25,12 @@
 from wxPython.wx import *
 from WavePlayback import WavePlayback
 
+try:
+    wxSound
+except NameError:
+    wxSound = None
+    
+
 class WavePlaybackWX(WavePlayback):
     """implementation of WavePlayback using the wxWave class of wxPython
     """
@@ -33,9 +39,12 @@ class WavePlaybackWX(WavePlayback):
             {'wave': None}, attrs)
         if self.data:
 # AD: Use one or the other depending on version of wxPython 2.5 used
-            wave = wxSound()
-            wave.CreateFromData(self.data)
-#            wave = wxWaveData(self.data)
+# trying this for different versions, QH:
+            if not wxSound is None:
+                wave = wxSound()
+                wave.CreateFromData(self.data)
+            else:
+                wave = wxWaveData(self.data)
             if wave.IsOk():
                 self.wave = wave
 

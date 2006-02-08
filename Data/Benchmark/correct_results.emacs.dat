@@ -3315,11 +3315,6 @@ Fresh abbreviation file matches current one, as expected
 * Description : Testing SymbolResult.
 *******************************************************************************
 
-..
-----------------------------------------------------------------------
-Ran 2 tests in 0.000s
-
-OK
 
 
 *******************************************************************************
@@ -8873,12 +8868,6 @@ Heard less-than greater-than equal-sign
   3: # to make sure that symbol match works with homophonic symbols.
   4: autoTst = 0
 Heard yo page down
-*** Start of source buffer ***
-  1: <CURSOR>
-  2: # This symbol is here because it is homophonic with auto_test. Just checking
-  3: # to make sure that symbol match works with homophonic symbols.
-  4: autoTst = 0
-Heard do that again
  33:     method because Python already raises an exception when trying to
  34:     get the value of an inexistant attribute.
  35: 
@@ -8886,7 +8875,7 @@ Heard do that again
  37: 
  38:     - the speed of constructors for Object and non-Object instances are the same
  39:     - the speed of attribute *gets* is the same for Object and non-Object instances
-Heard again two times
+Heard do that again
  60:     - you can call it without arguments to obtain a consistent default instance
  61:     - you can override the default value of any attribute (including ones defined by ancestor classe) simply by passing a named argument to the constructor
  62:     - you can leave the value of any attribute (including ones defined by ancestor classe) at its default value, simply by not passing a named argument for that attribute
@@ -8894,6 +8883,14 @@ Heard again two times
  64:     Below is a template for such a standard constructor.
  65: 
  66:     Example:
+Heard again two times
+124:         pass
+125: 
+126:     def deep_construct(self, this_class , attrs_this_class, attrs_superclasses, exclude_bases={}):
+127: <CURSOR>        """Build an instance of a class.
+128: 
+129:         Make *[Object] self* into an instance of class *CLASS this_class*.
+130: 
 Heard yo page up
 124:         pass
 125: 
@@ -8903,14 +8900,6 @@ Heard yo page up
 129:         Make *[Object] self* into an instance of class *CLASS this_class*.
 130: 
 Heard do that again
-124:         pass
-125: 
-126:     def deep_construct(self, this_class , attrs_this_class, attrs_superclasses, exclude_bases={}):
-127: <CURSOR>        """Build an instance of a class.
-128: 
-129:         Make *[Object] self* into an instance of class *CLASS this_class*.
-130: 
-Heard again two times
  91:     *AClass*, and *val1, ..., valN* are their default values.
  92: 
  93:     The argument *{STR: ANY} **attrs* collects any named arguments fed
@@ -8918,6 +8907,14 @@ Heard again two times
  95:     by this class. These will be used to set the values of attributes
  96:     defined in ancestor classes.
  97:                        
+Heard again two times
+ 34:     get the value of an inexistant attribute.
+ 35: 
+ 36:     Profile tests on NT indicate that:
+ 37: <CURSOR>
+ 38:     - the speed of constructors for Object and non-Object instances are the same
+ 39:     - the speed of attribute *gets* is the same for Object and non-Object instances
+ 40:     - when *$PY_DEBUG_OBJECT=0*, the performance of attribute *sets* is the same for Object and non-Object instances
   8: class Object:
   9:     """A base class for all VoiceCode objects
  10: 
@@ -11893,102 +11890,6 @@ Heard this is a commented out
 
 
 *******************************************************************************
-* Name        : py_unit
-* Description : Testing that pyUnit works ok.
-*******************************************************************************
-
-F.
-======================================================================
-FAIL: test_always_fail (pyUnitExample.SampleTestCase)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "C:\eclipse\workspace\VCode\Admin\pyUnitExample.py", line 12, in test_always_fail
-    assert self.var == 2, "This should always fail"
-AssertionError: This should always fail
-
-----------------------------------------------------------------------
-Ran 2 tests in 0.000s
-
-FAILED (failures=1)
-
-*** Making sure that failing tests won't halt the whole test process.
-F.
-======================================================================
-FAIL: test_always_fail (pyUnitExample.SampleTestCase)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "C:\eclipse\workspace\VCode\Admin\pyUnitExample.py", line 12, in test_always_fail
-    assert self.var == 2, "This should always fail"
-AssertionError: This should always fail
-
-----------------------------------------------------------------------
-Ran 2 tests in 0.000s
-
-FAILED (failures=1)
-FFFF
-======================================================================
-FAIL: test_bad_length_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 15, in test_bad_length_in_assert_sequences_have_same_content
-    self.assert_sequences_have_same_content([], [1, 2], self.nevermind)
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 33, in assert_sequences_have_same_content
-    self.fail(mess + "\nExpeted sequence of length %s, but got sequence of length %s"
-  File "C:\Python23\lib\unittest.py", line 270, in fail
-    raise self.failureException, msg
-AssertionError: Nevermind, this test is supposed to fail.
-Expeted sequence of length 0, but got sequence of length 2
-Expected list:
-   []
-Got list:
-   [1, 2]
-
-======================================================================
-FAIL: test_different_first_item_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 20, in test_different_first_item_in_assert_sequences_have_same_content
-    self.nevermind)
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
-    self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
-  File "C:\Python23\lib\unittest.py", line 270, in fail
-    raise self.failureException, msg
-AssertionError: Nevermind, this test is supposed to fail.
-Item at position 1 was wrong. Expected 'world', but got 'universe'
-
-======================================================================
-FAIL: test_different_last_item_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 25, in test_different_last_item_in_assert_sequences_have_same_content
-    self.nevermind)
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
-    self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
-  File "C:\Python23\lib\unittest.py", line 270, in fail
-    raise self.failureException, msg
-AssertionError: Nevermind, this test is supposed to fail.
-Item at position 0 was wrong. Expected 'hello', but got 'hi'
-
-======================================================================
-FAIL: test_different_middle_item_in_assert_sequences_have_same_content (TestCaseWithHelpersTest.TestCaseWithHelpersTest)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpersTest.py", line 31, in test_different_middle_item_in_assert_sequences_have_same_content
-    self.nevermind)
-  File "C:\eclipse\workspace\VCode\Admin\TestCaseWithHelpers.py", line 39, in assert_sequences_have_same_content
-    self.fail(mess + "\nItem at position %s was wrong. Expected '%s', but got '%s'" \
-  File "C:\Python23\lib\unittest.py", line 270, in fail
-    raise self.failureException, msg
-AssertionError: Nevermind, this test is supposed to fail.
-Item at position 1 was wrong. Expected 'beautiful', but got 'wonderful'
-
-----------------------------------------------------------------------
-Ran 4 tests in 0.000s
-
-FAILED (failures=4)
-
-
-*******************************************************************************
 * Name        : python
 * Description : testing the various CSCs and LSAs for dictating Python from scratch
 *******************************************************************************
@@ -14001,11 +13902,6 @@ Heard move horizontally
 * Description : Testing dialog for reformatting a selected symbol.
 *******************************************************************************
 
-.....
-----------------------------------------------------------------------
-Ran 5 tests in 0.390s
-
-OK
 
 
 *******************************************************************************
@@ -14013,11 +13909,6 @@ OK
 * Description : Testing dialog for selecting a symbol to reformat.
 *******************************************************************************
 
-......
-----------------------------------------------------------------------
-Ran 6 tests in 0.671s
-
-OK
 
 
 *******************************************************************************
@@ -16988,109 +16879,6 @@ Heard new statement
 
 
 *******************************************************************************
-* Name        : syntax_navigation
-* Description : testing navigation by syntax in C
-*******************************************************************************
-
-*** Start of source buffer ***
-  1: <CURSOR>/* test buffer for C statements */
-  2: 
-  3: 
-  4: float extreme(float *values, int n, bool biggest, bool absolute) 
-  4: float extreme(float *values, int n, bool biggest, bool absolute) 
-  5: {
-  6:     float *trans(float);
-  7: <CURSOR>    
-  8:     if (absolute)
-  9:         trans = &fabs;
- 10:     else
-
-
->>> Testing console command: say(['after', 'next', ')\\close-paren'], user_input='None')
-Heard after next close-paren
-  5: {
-  6:     float *trans(float);
-  7:     
-  8:     if (absolute)<CURSOR>
-  9:         trans = &fabs;
- 10:     else
- 11:         trans = &identity;
-
-found matching open paren
-
-  5: {
-  6:     float *trans(float);
-  7:     
-  8:     if <CURSOR>(absolute)
-  9:         trans = &fabs;
- 10:     else
- 11:         trans = &identity;
-
-found matching close paren
-
-  5: {
-  6:     float *trans(float);
-  7:     
-  8:     if (absolute)<CURSOR>
-  9:         trans = &fabs;
- 10:     else
- 11:         trans = &identity;
-
-
->>> Testing console command: say(['after', 'next', '}\\close-brace'], user_input='None')
-Heard after next close-brace
- 15:         if (biggest) {
- 16:             if ((*trans)(values[i]) > (*trans)(x)) 
- 17:                 x = values[i];
- 18:         } <CURSOR>else {
- 19:             if ((*trans)(values[i]) < (*trans)(x)) 
- 20:                 x = values[i];
- 21:         }
-
-found matching open brace
-
- 12: 
- 13:     float x = values[0];
- 14:     for (i = 1; i < n; i++) {
- 15:         if (biggest) <CURSOR>{
- 16:             if ((*trans)(values[i]) > (*trans)(x)) 
- 17:                 x = values[i];
- 18:         } else {
-
-found matching close brace
-
- 15:         if (biggest) {
- 16:             if ((*trans)(values[i]) > (*trans)(x)) 
- 17:                 x = values[i];
- 18:         }<CURSOR> else {
- 19:             if ((*trans)(values[i]) < (*trans)(x)) 
- 20:                 x = values[i];
- 21:         }
-WARNING: didn't return to original position
-
-
->>> Testing console command: say(['before', 'previous', ';\\semicolon'], user_input='None')
-Heard before previous semicolon
- 14:     for (i = 1; i < n; i++) {
- 15:         if (biggest) {
- 16:             if ((*trans)(values[i]) > (*trans)(x)) 
- 17:                 x = values[i]<CURSOR>;
- 18:         } else {
- 19:             if ((*trans)(values[i]) < (*trans)(x)) 
- 20:                 x = values[i];
-
-found beginning of statement
-
- 13:     float x = values[0];
- 14:     for (i = 1; i < n; i++) {
- 15:         if (biggest) {
- 16:             <CURSOR>if ((*trans)(values[i]) > (*trans)(x)) 
- 17:                 x = values[i];
- 18:         } else {
- 19:             if ((*trans)(values[i]) < (*trans)(x)) 
-
-
-*******************************************************************************
 * Name        : unusual_symbols
 * Description : compilation and dictation of unusual symbols
 *******************************************************************************
@@ -17270,11 +17058,6 @@ Heard select previous index equals zero
 * Description : Testing subclasses of wxWindows widgets.
 *******************************************************************************
 
-......
-----------------------------------------------------------------------
-Ran 6 tests in 0.180s
-
-OK
 
 
 

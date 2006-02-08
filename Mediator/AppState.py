@@ -490,12 +490,15 @@ class SB_UpdPosSelection(SB_Update):
         
         *none* -- 
         """
-# By using a single update for both position and range, we avoid
-# the situation where one update is received by itself and
+# By using a single update for position, selected range, and visible 
+# range, we avoid the situation where one update is received by itself and
 # we don't know whether the other property has also changed
         pos = messaging.messarg2int(self.descr['pos'])
         selection = messaging.messarg2inttuple(self.descr['selection'])
-        on_buff.pos_selection_cbk(pos = pos, selection = selection)
+        visible_range = None
+        if self.descr.has_key('visible_range'):
+           visible_range = messaging.messarg2inttuple(self.descr['visible_range'])
+        on_buff.pos_selection_cbk(pos = pos, selection = selection, visible_range=visible_range)
 # here, we don't necessarily guarantee that pos coincides with one end
 # of the range, at least not for now - DCF.
 # However, set_selection and goto do.

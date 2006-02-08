@@ -155,7 +155,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
            return None
            
     def _get_cache_multiple(self, names):
-        debug.trace('SourceBuffCached._get_cache_multiple', 'names=%s' % repr(names))
+        trace('SourceBuffCached._get_cache_multiple', 'names=%s' % repr(names))
         values = []
         for a_name in names:
             values.append(self._get_cache(a_name))
@@ -206,6 +206,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
                # element
                values = [values]           
         else:  
+           debug.trace('SourceBuffCached._get_cache_element_multiple', 'looking up in cache')                   
            if self._not_cached_multiple(elt_names):
               debug.trace('SourceBuffCached._get_cache_element_multiple', 'cache is dirty... retrieving from app')                   
               values_from_app = apply(get_from_app_method)
@@ -215,6 +216,8 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
                  # element
                  values_from_app = [values_from_app]
               self._put_cache_multiple(elt_names, values_from_app)
+           else:
+              debug.trace('SourceBuffCached._get_cache_element_multiple', 'cache element was up to date')
            values = self._get_cache_multiple(elt_names)
            
         if tracing('SourceBuffCached._get_cache_element_multiple'):
@@ -404,6 +407,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
 
         *INT* (start, end)
         """
+        debug.trace('SourceBuffCached.get_visible', '** invoked')
         return self._get_cache_element('get_visible', self._get_visible_from_app)
 
     def _get_visible_from_app(self):
@@ -640,7 +644,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
             self.insert_cbk(range = (start, end), text = change)
         
 
-    def pos_selection_cbk(self, pos, selection):
+    def pos_selection_cbk(self, pos, selection, visible_range=None):
         """External editor invokes that callback to notify VoiceCode
         of a change in the current position or selection
 
@@ -649,6 +653,10 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
         INT *pos* -- Position the cursor was moved to.
 
         (INT, INT) *selection* -- Start and end position of selected text
+        
+        (INT, INT) *visible_range* -- Start and end position of the text 
+        that is currently visible on the screen.
+
         
         **OUTPUTS**
         
@@ -659,6 +667,23 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
             selection[1]))
         self._put_cache('get_selection', selection)
         self._put_cache('cur_pos', pos)
+        self._put_cache('get_visible', visible_range) 
+
+    def visible_range_cbk(self, visible_range):
+        """External editor invokes that callback to notify VoiceCode
+        of a change in the range visible in current buffer
+
+        **INPUTS**
+        
+        (INT, INT) *visible_range* -- New range of visible text in the buffer.
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        pass
+
+
             
 # DCF: this should only be called after changes to the buffer *contents*
 #        self.uncache_data_after_buffer_change('get_selection')            

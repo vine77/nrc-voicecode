@@ -35,6 +35,7 @@ import posixpath
 import unittest
 from pyUnitExample import SampleTestCase
 import TestCaseWithHelpersTest
+import NavigationWithinBufferTest
 import MediatorConsoleWXTests
 
 import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
@@ -64,18 +65,6 @@ unusual_symbols_py = vc_globals.test_data + os.sep + 'unusual_symbols.py'
 
 # use this only for foreground tests:
 foreground_py = vc_globals.test_data + os.sep + 'foreground.py'
-
-#####################################################################################
-# Some helper functions for testing
-#####################################################################################
-
-def test_py_unit():
-   unittest.TextTestRunner().run(unittest.makeSuite(SampleTestCase, 'test')) 
-   print "\n*** Making sure that failing tests won't halt the whole test process."   
-   unittest.TextTestRunner().run(unittest.makeSuite(SampleTestCase, 'test'))    
-   unittest.TextTestRunner().run(unittest.makeSuite(TestCaseWithHelpersTest.TestCaseWithHelpersTest, 'test'))    
-   
-add_test('py_unit', test_py_unit, 'Testing that pyUnit works ok.')
 
 ##############################################################################
 # Testing SymDict
@@ -4386,78 +4375,20 @@ add_test('std_func_calls', test_standard_function_call, 'Testing CSCs for callin
 
 
 
-##############################################################################
-# Testing navigation by syntax
-##############################################################################
-
-class SyntaxNavError(RuntimeError):
-    pass
-
-def test_syntax_navigation():
-    
-    testing.init_simulator_regression()    
-    commands.open_file(if_else_c)
-    app = testing.editor()
-    if not app.syntax_nav_supported():
-        print 'Editor does not support syntax navigation'
-        return
-
-    commands.goto_line(7)
-    test_say(['after', 'next', ')\\close-paren'])
-    orig = app.cur_pos()
-    pos = app.find_matching(direction = -1)
-    try:
-        if pos is None:
-            raise SyntaxNavError('ERROR: failed to find matching open paren')
-        print '\nfound matching open paren\n'
-        commands.goto(pos)
-        pos = app.find_matching()
-        if pos is None:
-            raise SyntaxNavError('ERROR: failed to find matching close paren')
-        print '\nfound matching close paren\n'
-        commands.goto(pos)
-        if pos != orig:
-            print "WARNING: didn't return to original position"
-    except SyntaxNavError, e:
-        print e
-
-    test_say(['after', 'next', '}\\close-brace'])
-    orig = app.cur_pos()
-    pos = app.find_matching(direction = -1)
-    try:
-        if pos is None:
-            raise SyntaxNavError('ERROR: failed to find matching open brace')
-        print '\nfound matching open brace\n'
-        commands.goto(pos)
-        pos = app.find_matching()
-        if pos is None:
-            raise SyntaxNavError('ERROR: failed to find matching close brace')
-        print '\nfound matching close brace\n'
-        commands.goto(pos)
-        if pos != orig:
-            print "WARNING: didn't return to original position"
-    except SyntaxNavError, e:
-        print e
-
-    test_say(['before', 'previous', ';\\semicolon'])
-    orig = app.cur_pos()
-    pos = app.beginning_of_statement()
-    try:
-        if pos is None:
-            msg = 'ERROR: failed to find beginning of statement'
-            raise SyntaxNavError(msg)
-        print '\nfound beginning of statement\n'
-        commands.goto(pos)
-    except SyntaxNavError, e:
-        print e
-
-add_test('syntax_navigation', test_syntax_navigation, 
-    desc='testing navigation by syntax in C')    
-
 
 ##############################################################################
 # Testing navigation within buffer with page up/down etc.
 ##############################################################################
+
+def test_navigation_within_buffer2():
+   testing.init_simulator_regression()
+   unittest.TextTestRunner(). \
+       run(unittest.makeSuite(NavigationWithinBufferTest.NavigationWithinBufferTest, 'test')) 
+      
+add_test('navigation_within_buffer2', test_navigation_within_buffer2, 
+         desc='unit testing navigation commands like page up/down etc.')
+
+
 
 def test_navigation_within_buffer():
     testing.init_simulator_regression() 
