@@ -58,3 +58,34 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       global mediator_used_for_testing
       return mediator_used_for_testing
       
+   def _goto(self, pos):
+      return self._app().goto(pos)   
+
+   def _goto_line(self, line_num, where=-1):
+      return self._app().goto_line(line_num, where)   
+      
+   def _cur_pos(self):
+      return self._app().cur_pos()
+      
+   def _get_text(self, start_pos, end_pos):
+      return self._app().get_text(start_pos, end_pos)
+      
+   def _len(self):
+      return self._app().len()      
+      
+   def _assert_cursor_looking_at(self, exp_looking_at, direction=1, 
+                                 message=""):
+      start_pos = self._cur_pos()
+      end_pos = start_pos + len(exp_looking_at)*direction
+      debug.trace('VoiceCodeRootTest._assert_cursor_looking_at', 
+                  '** exp_looking_at=%s, start_pos=%s, end_pos=%s' % 
+                  (exp_looking_at, start_pos, end_pos))
+      actually_looking_at = self._get_text(start_pos, end_pos)
+      self.assert_equals(exp_looking_at, actually_looking_at,
+             message +"At postion %s, expected to be looking at string '%s' in direction %s, but was actually looking at '%s'" %
+             (start_pos, exp_looking_at, direction, actually_looking_at))
+             
+   def _assert_cur_pos_is(self, exp_pos, mess=""):
+      got_pos = self._cur_pos()
+      self.assert_equals(exp_pos, got_pos,  
+                   mess + "Cursor was at the wrong place")

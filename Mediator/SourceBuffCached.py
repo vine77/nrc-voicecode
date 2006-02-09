@@ -373,6 +373,7 @@ class SourceBuffCached(SourceBuff.SourceBuffWithServices):
             end = start
             start = tmp
 
+
         return text[start:end]
 
 

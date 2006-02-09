@@ -187,8 +187,6 @@ class ExtLoopWin32NewMediator(tcp_server.ExtLoopWin32):
                 bypass_sr_recog = bypass_sr_recog,
                 num_words_training = num_words_training)
                 
-        if test_server:
-           regression.mediator_used_for_testing =  self.the_mediator       
                 
 #        print self.the_mediator.server
         sys.stderr.write('Configuring the mediator...\n')

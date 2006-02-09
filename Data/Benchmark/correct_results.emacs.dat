@@ -8955,6 +8955,23 @@ Heard yo bottom of file
 
 
 *******************************************************************************
+* Name        : navigation_within_buffer
+* Description : unit testing navigation commands like page up/down etc.
+*******************************************************************************
+
+Heard yo page down
+Heard do that again
+Heard again two times
+Heard yo page up
+Heard do that again
+Heard again two times
+Heard go to end of line
+Heard go to beginning of line
+Heard yo top of file
+Heard yo bottom of file
+
+
+*******************************************************************************
 * Name        : new_statement
 * Description : Test creation of new statements above/below current line
 *******************************************************************************

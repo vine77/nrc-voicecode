@@ -495,6 +495,15 @@ class SB_UpdPosSelection(SB_Update):
 # we don't know whether the other property has also changed
         pos = messaging.messarg2int(self.descr['pos'])
         selection = messaging.messarg2inttuple(self.descr['selection'])
+        
+        #
+        # AD 2006-02-09: At the moment, the VoiceCode Emacs client does not
+        # report the new visible range upon cursor movement, but it might
+        # in the future. For now, if the visible rance was not reported, set
+        # to None, which will result in SourceBuffCached tagging the cached
+        # element 'get_visible' as stale (in other words, it will be retrieved
+        # from Emacs next time it is needed).
+        #
         visible_range = None
         if self.descr.has_key('visible_range'):
            visible_range = messaging.messarg2inttuple(self.descr['visible_range'])
