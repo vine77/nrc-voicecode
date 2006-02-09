@@ -4380,12 +4380,12 @@ add_test('std_func_calls', test_standard_function_call, 'Testing CSCs for callin
 # Testing navigation within buffer with page up/down etc.
 ##############################################################################
 
-def test_navigation_within_buffer2():
+def test_navigation_within_buffer():
    testing.init_simulator_regression()
    unittest.TextTestRunner(). \
        run(unittest.makeSuite(NavigationWithinBufferTest.NavigationWithinBufferTest, 'test')) 
       
-add_test('navigation_within_buffer2', test_navigation_within_buffer2, 
+add_test('navigation_within_buffer', test_navigation_within_buffer, 
          desc='unit testing navigation commands like page up/down etc.')
 
 

@@ -35,27 +35,38 @@ class NavigationWithinBufferTest(VoiceCodeRootTest.VoiceCodeRootTest):
       self._assert_moved_by_n_pages(orig_linenum, new_linenum, 2, 
               "Failed to repeat previous page down command twice", )
 
-      ### BEG
-      print "ABOUT TO SAY PAGE UP!!!!"
-      import time
-      time.sleep(5)
-      ### END
-
       orig_linenum = new_linenum      
       self._say(['yo', 'page', 'up'])
       new_linenum = self._get_top_visible_line_num()
-      self._assert_moved_by_n_pages(orig_linenum, new_linenum, 1, 
+      self._assert_moved_by_n_pages(orig_linenum, new_linenum, -1, 
               "Page up command failed.", )
 
-#      self._say(['do', 'that', 'again'])   
-#      self._say(['again', 'two\\two', 'times']) 
-#    
-#      self._goto_line(11)
-#      self._say(['go', 'to', 'end', 'of', 'line'])
-#      self._say(['go', 'to', 'beginning', 'of', 'line'])
-#    
-#      self._say(['yo', 'top', 'of', 'file'])
-#      self._say(['yo', 'bottom', 'of', 'file'])
+      orig_linenum = new_linenum      
+      self._say(['do', 'that', 'again'])   
+      new_linenum = self._get_top_visible_line_num()
+      self._assert_moved_by_n_pages(orig_linenum, new_linenum, -1, 
+              "Repeating page up command failed.", )
+
+      orig_linenum = new_linenum      
+      self._say(['again', 'two\\two', 'times']) 
+      new_linenum = self._get_top_visible_line_num()
+      self._assert_moved_by_n_pages(orig_linenum, new_linenum, -2, 
+              "Repeating page up command twice failed.", )
+    
+      self._goto_line(11)
+      self._say(['go', 'to', 'end', 'of', 'line'])
+      self._assert_cursor_looking_at("\n", 1, 
+             "Cursor should have moved to end of line.")
+      
+      self._say(['go', 'to', 'beginning', 'of', 'line'])
+      self._assert_cursor_looking_at("\n", -1, 
+             "Cursor should have moved to end of line.")
+
+      self._say(['yo', 'top', 'of', 'file'])
+      self._assert_cur_pos_is(0, "Should have moved to top of file.")
+      
+      self._say(['yo', 'bottom', 'of', 'file'])
+      self._assert_cur_pos_is(self._len()-1, "Should have moved to bottom of file.")
       
    def _sign(self, number):
       if number == 0:
@@ -66,7 +77,6 @@ class NavigationWithinBufferTest(VoiceCodeRootTest.VoiceCodeRootTest):
    def _get_top_visible_line_num(self):
       (visible_start_pos, visible_end_pos) = self._app().get_visible()
       top_line = self._app().line_num_of(visible_start_pos)
-      print "--** _get_top_visible_line_num: visible_start_pos=%s, top_line=%s" % (visible_start_pos, top_line)
       return top_line
       
    def _assert_moved_by_n_pages(self, orig_line, new_line, n, message, ):

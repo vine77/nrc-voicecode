@@ -37,8 +37,6 @@ import AppStateEmacs
 NewMediatorObject for the next new regression test
 """
 
-mediator_used_for_testing = None
-
 class PersistentConfig(Object.Object):
     """abstract base class which hides the details of MediatorObject 
     and command initialization for regression tests which use a
