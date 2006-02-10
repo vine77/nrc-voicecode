@@ -4390,27 +4390,6 @@ add_test('navigation_within_buffer', test_navigation_within_buffer,
 
 
 
-def test_navigation_within_buffer():
-    testing.init_simulator_regression() 
-    commands.open_file(large_buff_py)
-
-    commands.say(['yo', 'page', 'down'])
-    commands.say(['do', 'that', 'again'])   
-    commands.say(['again', 'two\\two', 'times']) 
-
-    commands.say(['yo', 'page', 'up'])
-    commands.say(['do', 'that', 'again'])   
-    commands.say(['again', 'two\\two', 'times']) 
-    
-    commands.goto_line(11)
-    commands.say(['go', 'to', 'end', 'of', 'line'])
-    commands.say(['go', 'to', 'beginning', 'of', 'line'])
-    
-    commands.say(['yo', 'top', 'of', 'file'])
-    commands.say(['yo', 'bottom', 'of', 'file'])
-    
-add_test('navigation_within_buffer', test_navigation_within_buffer, 
-         desc='testing navigation commands like page up/down etc.')    
 
 ##############################################################################
 # Testing special cases for the symbol matching algorithm

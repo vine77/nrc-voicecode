@@ -26,6 +26,12 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ;; USA
 
+;;;
+;;; VCode assumes the following.
+;;;
+(require 'cl)
+(pc-selection-mode)
+
 
 (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"
 "\*Completions\*"))
