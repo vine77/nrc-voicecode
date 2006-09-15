@@ -1758,7 +1758,7 @@ class CmdInterp(OwnerObject):
                 continue
             context, action = applicable[0]
             trace('CmdInterp.apply_CSC', 
-                'len(applicable) = %d' % len(applicable))
+                'applicable = %s' % repr(applicable))
             if len(applicable) > 1:
                 msg = 'Configuration Warning: phrase %s\n' \
                     % spoken_list[:CSC_consumes]

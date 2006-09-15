@@ -523,6 +523,21 @@ class SelectWinGram(WinGram):
             return
 
         #
+        # Need to figure out in which direction we are moving in initially
+        #           
+        selected_range = ranges[closest_range_index]
+        if where > 0:
+           move_curs_to_pos = selected_range[1]
+        else:
+           move_curs_to_pos = selected_range[0]
+        if self.app.cur_pos() > move_curs_to_pos:
+           direction = -1
+        else:
+           direction = 1
+        debug.trace('SelectWinGram.find_closest', '** move_curs_to_pos=%s, self.app.cur_pos()=%s' % 
+                    (move_curs_to_pos, self.app.cur_pos()))
+
+        #
         # Mark selection and/or move cursor  to the appropriate end of
         # the selection.
         #
@@ -531,7 +546,7 @@ class SelectWinGram(WinGram):
         a = actions_gen.ActionNavigateByPseudoCode(possible_ranges = ranges, 
             select_range_no = closest_range_index,
             buff_name = self.buff_name, cursor_at=where, 
-            mark_selection=mark_selection)
+            mark_selection=mark_selection, direction=direction)
         a.log_execute(self.app, None)
 
 # this is needed for the EdSim mediator simulator.  We want EdSim to

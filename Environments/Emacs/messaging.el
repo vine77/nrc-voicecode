@@ -1,4 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; VoiceCode, a programming-by-voice environment.
 ;;;
 ;;; This program is free software; you can redistribute it and/or
@@ -64,7 +64,7 @@
 (defun vcode-unpack-mess (mess)
    "Unpacks a message received as a series of chunks"
    
-;   (vr-log (format "-- vcode-unpack-mess: mess=%S\n" mess))
+
 
    (let ((bytes-read 0) (unpacked-mess "") (a-chunk) (chop-len) (chunk-prefix))
 
@@ -74,7 +74,6 @@
        ;;;
        (setq a-chunk (substring mess 0 chunk-len))
        (setq mess (substring mess chunk-len))
-
        ;;;
        ;;; Ignore single character prefix (the one indicating if this is 
        ;;; the last chunk in the message)
@@ -82,14 +81,14 @@
        (setq unpacked-mess (concat unpacked-mess (substring a-chunk 1)))
        (setq bytes-read (+ bytes-read chunk-len))
      )
-     (list unpacked-mess bytes-read)
+     (setq result (list unpacked-mess bytes-read))
+     result
    )
 )
 
 (defun vcode-pack-mess (mess)
    "Packs a message into a series of fixed length chunks."
 
-;   (vr-log "-- vcode-pack-mess: mess=%S\n" mess)
    (let ((packed-mess "") (len-this-chunk (1- chunk-len))
 	 (prefix "0") (padding nil))
 
@@ -115,7 +114,6 @@
 	(if (= 0 (length mess)) (setq prefix "1"))
 	(setq packed-mess (concat packed-mess prefix this-chunk))
      )
-;     (vr-log "-- vcode-pack-mess: exited\n")
      packed-mess
    )
 )
@@ -160,15 +158,14 @@
        (setq mess-cont (wddx-deserialize dom))
        (setq mess-name (cl-gethash "message_name" mess-cont))
        (cl-remhash "message_name" mess-cont)
-       (list mess-name mess-cont)
+       (setq result (list mess-name mess-cont))
+       result
     )
 )
 
 (defun vcode-encode-mess (mess-name mess-content)
    "Translates a LISP data structure into a WDDX \"document\"."
  
-;   (vcode-trace "vcode-encode-mess" "started, mess-name=%S, mess-content=%S\n" mess-name mess-content)
-;   (vcode-trace "vcode-encode-mess" "(hash-items mess-content)=%S\n" (hash-items mess-content))
 
    ; Debuggin problem with reporting changes involving unicode characters
    ; AD 2005-11-03

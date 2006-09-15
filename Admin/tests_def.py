@@ -494,6 +494,8 @@ def test_select_pseudocode():
     #
     # Testing go commands
     #
+    print "\nTesting 'go' commands...\n"
+    
 #    test_command("""goto_line(2)""")
 #    test_say(['go', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
@@ -524,30 +526,11 @@ def test_select_pseudocode():
     test_command("""goto_line(2)""")
     
     #
-    # Testing correct commands
+    # Testing selection commands
     #
-# DCF: this is silly.  Until we implement correct xyz, these are
-# equivalent to the corresponding select xyz commands, so there is no
-# point in testing them.  Once we implement correct xyz,
-# test_say(['correct',...]) will bring up the correction test, so the
-# old "correct" results for this test won't be right anyway
-#
-# AD: It's not really silly. It was meant to test that "correct XYZ" is a valid
-#     part of the SelectPseudoCode grammar. But never mind.
-# DCF:  Yes, it is.  Having correct XYZ without an actual implementation would
-# only confuse users - when they say correct XYZ, it would be recognized 
-# and the text would be selected, but no correction box 
-# would appear - and they would assume this is a bug.  
-#
-#    test_say(['correct', 'index', '=\\equals', '0\\zero'])
-#    test_command("""goto_line(2)""")
-#    test_say(['correct next', 'index', '=\\equals', '0\\zero'])
-#    test_command("""goto_line(2)""")
-#    test_say(['correct previous', 'index', '=\\equals', '0\\zero'])
 
-    #
-    # Testing selectionn commands
-    #
+    print "\nTesting selection commands...\n"    
+    
     test_command("""goto_line(2)""")
     test_say(['select', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_command("""goto_line(2)""")
@@ -555,39 +538,13 @@ def test_select_pseudocode():
     test_command("""goto_line(2)""")
     test_say(['select previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
 
-    #
-    # Testing repeated go commands in both directions
-    #
-#    test_command("""goto_line(1)""")
-#    test_say(['go next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
-#    test_say(['go next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
-#    test_command("""goto_line(6)""")
-#    test_say(['go previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
-#    test_say(['go previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     
 
-    #
-    # Testing repeated correction in both directions
-    #
-# DCF: this is silly.  Until we implement correct xyz, these are
-# equivalent to the corresponding select xyz commands, so there is no
-# point in testing them.  Once we implement correct xyz,
-# test_say(['correct',...]) will bring up the correction test, so the
-# old "correct" results for this test won't be right anyway
-#
-# AD: It's not really silly. It was meant to test that "correct XYZ" is a valid
-#     part of the SelectPseudoCode grammar. But nevermind
-
-#    test_command("""goto_line(1)""")
-#    test_say(['correct next', 'index', '=\\equals', '0\\zero'])
-#    test_say(['correct next', 'index', '=\\equals', '0\\zero'])
-#    test_command("""goto_line(6)""")
-#    test_say(['correct previous', 'index', '=\\equals', '0\\zero'])
-#    test_say(['correct previous', 'index', '=\\equals', '0\\zero'])
-    
     #
     # Testing repeated selection in both directions
     #
+    print "\nTesting repeated selection commands in both directions...\n"       
+
     test_command("""goto_line(1)""")
     test_say(['select next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_say(['select next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
@@ -595,9 +552,12 @@ def test_select_pseudocode():
     test_say(['select previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_say(['select previous', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
 
+
     #
     # Testing repeatability of SelectPseudoCode commands
     #
+    
+    print "\nTesting repeatability of SelectPseudoCode commands...\n"       
     test_command("""goto_line(1)""")
     test_say(['select', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_say(['next', 'one'])
@@ -605,18 +565,30 @@ def test_select_pseudocode():
     test_say(['go after next', 'index', '=\\equals', '0\\zero'], never_bypass_sr_recog=1)
     test_say(['next', 'one'])
     test_say(['previous', 'one'])                
+    
     test_command("""goto_line(1)""")    
     test_say(['go before', 'index', '=\\equals', '1\\one'], never_bypass_sr_recog=1)        
     test_say(['next', 'one'])
     test_say(['previous', 'one'])                
+    
     test_command("""goto_line(1)""")    
     test_say(['go after', 'index', '=\\equals', '1\\one'], never_bypass_sr_recog=1)        
     test_say(['next', 'one'])
     test_say(['previous', 'one'])                
     
+    print "\n   Testing reapeating without specifying direction...\n"
+    test_command("""goto_line(1)""")    
+    test_say(['go after', 'index', '=\\equals', '1\\one'], never_bypass_sr_recog=1)        
+    test_say(['again'])
+    test_command("""goto_line(5)""")    
+    test_say(['go after', 'index', '=\\equals', '1\\one'], never_bypass_sr_recog=1)        
+    test_say(['again'])
+
+    
     # Testing select X through Z
     # AD: There used to be a bug where Select X through Z failed if
     #     if cursor was right before an occurence of X through Z.
+    print "\nTesting select X through Z...\n"       
     test_command("""goto_line(1)""")
     test_say(['select', 'index', 'through', '1\\one'])
     test_say(['select', 'index', 'through', '0\\zero'])
@@ -2758,6 +2730,29 @@ def test_symbol_formatting():
 add_test('symbol_formatting', test_symbol_formatting, 
     'Testing styling and manual formatting of new symbols.')
     
+##############################################################################
+# Testing commands that specify formatting of subsequent symbols
+##############################################################################
+
+def test_commands_that_set_format_of_subsequent_symbols():  
+    testing.init_simulator_regression()
+    
+    print 'Testing Python commands.'
+    
+    commands.open_file('blah.py')
+    test_say(['class', 'some', 'python', 'class', 'inherits', 'from', 'some', 'python', 'super', 'class'])
+
+    print 'Testing C++ commands.'
+
+    commands.open_file('blah.cpp')
+    test_say(['class', 'some', 'C' 'class', 'inherits', 'from', 'some', 'C', 'super', 'class'])
+
+
+
+add_test('commands_that_set_format_of_subsequent_symbols', test_commands_that_set_format_of_subsequent_symbols, 
+    'Testing commands that specify formatting of subsequent symbols.')
+
+    
     
 ##############################################################################
 # Testing basic correction features of ResMgr
@@ -4230,7 +4225,7 @@ add_test('compile_symbols', test_compile_symbols, 'Testing voice command for com
 
 
 ##############################################################################
-# Testing commands that have a special meaning only a a blank line
+# Testing commands that have a special meaning only on a blank line
 ##############################################################################    
 
 
@@ -4537,9 +4532,12 @@ def test_language_name():
     test_language_name_for_file("dummy.c")
     test_language_name_for_file("dummy.h")
     test_language_name_for_file("dummy.cpp")
+    test_language_name_for_file("fileWithMultipleDots.InItsName.py")
+    
     
 add_test('language_name', test_language_name,
          desc='Testing language name of a buffer.')
+
 
 
 ##############################################################################

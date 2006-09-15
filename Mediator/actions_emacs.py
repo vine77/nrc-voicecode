@@ -102,5 +102,3 @@ class ActionEmacsListBuffers(Action):
         *none* -- 
         """
         return "Opens the Emacs buffer list."
-
-        

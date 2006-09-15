@@ -163,7 +163,7 @@ cpp_template_definition = \
 
 cpp_subclass = \
     ActionInsert(code_bef=': ', code_after='',
-                 docstring = """Inserts ': ' for subclass definition""")
+                 docstring = """Inserts ': ' for subclass definition""", expect='class')
 
 cpp_class_body = \
     ActionSearch(regexp=r'\{\s*',

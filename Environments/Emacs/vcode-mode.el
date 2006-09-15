@@ -31,6 +31,9 @@
 ;;;
 (require 'cl)
 (pc-selection-mode)
+(load-file (substitute-in-file-name "$VCODE_HOME/Environments/Emacs/python-mode.el"))
+(custom-set-variables
+ '(py-indent-offset 3))
 
 
 (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"
@@ -276,7 +279,6 @@ in the 'vr-deprecated-log-buff-name buffer.")
 
 (cl-puthash "vcode-cmd-move-relative-page" 1 vcode-traces-on)
 
-
 (defvar vr-deprecated-log-send nil "*If non-nil, vr-deprecated mode logs all data sent to the vr-deprecated
 subprocess in the 'vr-deprecated-log-buff-name buffer.")
 
@@ -286,7 +288,7 @@ from the vr-deprecated subprocess in the 'vr-deprecated-log-buff-name buffer.")
 (defvar vr-deprecated-log-buff-name "*Messages*" "Name of the buffer where vr-deprecated log messages are 
 sent."
 )
-(setq message-log-max 100000)
+(setq message-log-max 1000000)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Code for running in testing mode
@@ -1051,7 +1053,39 @@ Changes are put in a changes queue `vcode-queued-changes.
 ;; Subprocess communication.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+
 (defun vcode-trace (trace-name format-string &rest s)
+   (let ()
+     (if (or (not trace-name) (is-in-hash trace-name vcode-traces-on))
+        (progn
+
+          ;;;
+          ;;; Make sure message log buffer is large enoug (in case someone else
+          ;;; changed its size on us
+          ;;;
+          (setq message-log-max 1000000)
+
+          (setq format-string (concat "-- " trace-name ": " format-string "\n"))
+;;          (message "-- vcode-trace: format-string=%S" format-string)
+          (if s
+              (progn
+;;		 (message "-- vcode-trace: format-string=%S" format-string)
+;;                 (message "-- vcode-trace: s=%S" s)
+                 (setq args (append (list format-string) s))
+;;                 (message "-- vcode-trace: args=%S" args)
+                 (apply 'message args)
+              )
+            (message format-string)
+           )
+	 )
+      )
+   )
+)
+
+
+
+(defun vcode-trace-OLD (trace-name format-string &rest s)
    (let ((buf) (win))
      (setq buf (get-buffer-create vr-deprecated-log-buff-name))
      (setq win (get-buffer-window buf 't))
@@ -3543,7 +3577,7 @@ buffer"
     (if file-name 
 	(progn 
 	  (save-match-data
-	    (string-match "\\.\\(.*\\)$" file-name)
+	    (string-match "\\.\\([^\\.]*\\)$" file-name)
             (if (match-beginning 1)
 		(setq extension (substring file-name 
 					   (match-beginning 1) (match-end 1)))

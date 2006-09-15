@@ -936,6 +936,8 @@ class MessTransporter_Socket(MessTransporter):
 #                raise SocketError, "socket connection broken"
             a_string = a_string + chunk
 
+#        if tracing('receive_string'):
+#            trace('receive_string', "received string '%s'" % a_chunk)
         return a_string         
 
     def data_available(self):

@@ -58,6 +58,11 @@ py_class_definition = \
                  docstring="""Inserts template code for a Python class""",
                  expect = "class")
 
+py_subclass = \
+    ActionInsert(code_bef='(', code_after=')',
+                 docstring="""Inserts empty parens where to type name of superclass.""",
+                 expect = "class")
+
 class ActionPyInsertInBody(Action):
     """Inserts a new line at the start of the block of the previous or 
     following compound statement"""
