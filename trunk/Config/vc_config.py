@@ -19,7 +19,6 @@
 #
 ##############################################################################
 
-# Just testing CVS on SourceForge.
 
 ##############################################################################
 # 
@@ -195,7 +194,13 @@ mediator_ctrl.add_csc(acmd)
 
 std_US_punc = \
     SinglePunctuation(name = 'standard punctuation (US English)')
+    
+# AD (206-04-22): For some reason I don't understand "{Backslash}\backslash"
+# does not work but "{Backslash}\back slash" does. 
+# 'backslash' as two words 'back slash'.
+# std_US_punc.add('\\', ['backslash'], like_backslash)
 std_US_punc.add('\\', ['backslash'], like_backslash)
+
 std_US_punc.add('', ['New-Line', 'Next-Line'], hard_new_line)
 std_US_punc.add('', ['New-Paragraph', 'Next-Paragraph'], 
     hard_paragraph)
@@ -590,7 +595,9 @@ acmd = CSCmd(spoken_forms=['yo end of line', 'go to end of line'],
 navigation_within_buffer.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['yo top of file', 'yo top of buffer', 
-                           'yo beginning of file', 'yo beginning of buffer'],
+                           'yo beginning of file', 'yo beginning of buffer',
+                           'go to top of file', 'got to top of buffer', 
+                           'go to beginning of file', 'got to beginning of buffer'],
                            meanings={ContAny(): ActionGotoTopOfBuffer()},
                            docstring='Move cursor to top of current file.')
 navigation_within_buffer.add_csc(acmd)
@@ -1029,7 +1036,7 @@ data_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['sub class of', 'inherits from', 'is subclass',
                            'is subclass of', 'with superclass',
                            'with superclasses'],
-             meanings={ContC(): cpp_subclass, ContPy(): gen_parens_pair},
+             meanings={ContC(): cpp_subclass, ContPy(): py_subclass},
              docstring='superclasses of a class')
 data_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['class body'],
@@ -1608,7 +1615,7 @@ description = """Special navigational commands for C/C++""")
 # it would be nicer if this could look backwards...
 
 acmd = CSCmd(spoken_forms=['public member','new public member', 'public members'],
-             meanings={ContC(): ActionSearch(regexp='public:',
+             meanings={ContC(): ActionSearch(regexp='public:\s*?($|\n)( \t)*',
                                              direction=1, where=1)},
              docstring='move to public members')
 c_navigation.add_csc(acmd)

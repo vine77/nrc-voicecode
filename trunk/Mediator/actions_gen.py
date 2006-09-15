@@ -490,7 +490,6 @@ class ActionNavigateByPseudoCode(ActionBidirectionalRepeat):
         .. [self.n_times] file:///./actions_gen.ActionRepeatLastCmd.html"""
         
         
-        debug.trace('ActionNavigateByPseudoCode.execute', 'invoked')
         new_index = self.select_range_no + self.direction
         if new_index >= 0 and new_index < len(self.possible_ranges):
             self.select_range_no  = new_index

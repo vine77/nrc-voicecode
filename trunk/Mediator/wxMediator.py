@@ -54,19 +54,13 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="off",
                     active_traces={
-#################################
-#                       'SimCmdsObj.say': 1,
-#                       'WinGram.results_callback': 1,
-#                       'gotResultsObject': 1,
-#                       'interpret': 1,
-                       'SourceBuffCached.get_text': 1,
-                       'VoiceCodeRootTest._assert_cursor_looking_at': 1,
-                       'ActionPaging': 1,
-                       'move_relative_page': 1,
-                       'get_visible': 1,
-#                       '_get_cache_element_multiple': 1,
-#                       'move_relative_line': 1,
-#                       'print_buff': 1,
+                       'get_mess': 1,
+                       'send_mess': 1,
+                       'receive_string': 1,
+                       'encode': 1,
+                       'decode': 1,
+                       'pack_mess': 1,
+                       'unpack_mess': 1,
                        'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                     },
                     allow_trace_id_substrings = 1)
