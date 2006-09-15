@@ -1,0 +1,11 @@
+ignorethisfile.tmp
+*~
+*#
+abbrevs.py
+abbrevs.test_editing.aftertest
+abbrevs.test_editing.init
+abbrevs.test_editing.postcompile
+bad.dict
+bad.dict.failed
+modified_symdict.dict
+symdict.dict
