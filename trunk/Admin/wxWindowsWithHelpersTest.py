@@ -95,11 +95,11 @@ class wxListCtrlWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
        self.dlg.Destroy()
 
     def test_NumberOfColumns(self):
-       self.assert_equals(3, self.dlg.list.NumberOfColumns(),
+       self.assert_equal(3, self.dlg.list.NumberOfColumns(),
                           "Number of columns was wrong.", )
 
     def test_NumberOfRows(self):
-       self.assert_equals(self.dlg.list.NumberOfRows(), 2,
+       self.assert_equal(self.dlg.list.NumberOfRows(), 2,
                           "Number of rows was wrong.")
        
     def test_AllCellsContentsString(self):
@@ -115,11 +115,11 @@ class wxListCtrlWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
     # AD: Reactivate this test when we upgrade to wxPython 2.5 (ActivateNth does
     #     not work with wxPython < 2.5)         
     def ___test_ActivateNth(self):
-       self.assert_equals(None,
+       self.assert_equal(None,
                           self.dlg.last_list_item_activated,
                           "List started out with an activated item")                          
        self.dlg.list.ActivateNth(1)
-       self.assert_equals(1,
+       self.assert_equal(1,
                           self.dlg.last_list_item_activated,
                           "Activating an element of the list did not invoke proper event handler")                          
                     
@@ -129,7 +129,7 @@ class wxListCtrlWithHelpersTest(TestCaseWithHelpers.TestCaseWithHelpers):
        self.dlg.list.SendKey(WXK_DOWN)
        self.assert_(self.dlg.last_key_pressed_for_widget(self.dlg.list) != None, 
                    "Pressing a key on list item did not invoke appropriate event handler.")
-       self.assert_equals(WXK_DOWN, self.dlg.last_key_pressed_for_widget(self.dlg.list), 
+       self.assert_equal(WXK_DOWN, self.dlg.last_key_pressed_for_widget(self.dlg.list), 
                     "Wrong key received by event handler.")
     
        
