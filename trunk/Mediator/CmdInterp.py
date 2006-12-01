@@ -1364,7 +1364,6 @@ class CmdInterp(OwnerObject):
         print 'caught what can I say'
         try:
             index = self.index_cmds_by_topic()
-            debug.trace('CmdInterp.what_can_I_say', '** index=%s' % index)
             self.html_cmd_outline(index)
             self.html_cmds_by_topic(index)
             self.html_cmds_alphabetically(index)
@@ -1395,7 +1394,9 @@ class CmdInterp(OwnerObject):
         #
         # First, index the LSAs
         #
-        for a_language in self.supported_languages():
+        all_languages = self.supported_languages()
+        all_languages.sort()
+        for a_language in all_languages:
             index[a_language] = []
             wTrie = self.language_specific_aliases[a_language]
             for an_LSA in wTrie.items():
@@ -1455,8 +1456,7 @@ class CmdInterp(OwnerObject):
 
         .. [html_index_cmds_by_topic] file:///./CmdInterp.CmdInterp.html#html_index_cmds_by_topic"""
         
-
-        print """
+        outline = """
 <HTML>
 <HEADER>
 <TITLE>VoiceCode: What can I say?</TITLE>
@@ -1469,23 +1469,32 @@ class CmdInterp(OwnerObject):
 
 <UL>"""
 
-        languages = index.keys().sort()
+        languages = self.supported_languages()
+        languages.sort()
         debug.trace('CmdInterp.html_cmd_outline', '** index=%s, languages=%s' % (index, languages))
         for a_language in languages:
             
-            if a_language == '':
+            if not a_language:
                 a_lang_name = 'Global'
             else:
                 a_lang_name = a_language
 
-            print '<LI><A HREF="#%s">%s</A>\n   <UL>\n' % (a_lang_name, a_lang_name)
+            outline = outline +  "\n" + \
+                      '<LI><A HREF="#%s">%s</A>\n' % (a_lang_name, a_lang_name)
+   
+# AD: Not sure what you mean by a topic, so I'm commenting this out for now.
+#
+#            topics = index[a_language].keys().sort()
+#            for a_topic in topics:
+#                url = a_lang_name + '-' + a_topic
+#                outline = outline + "\n" + \
+#                          '      <LI><A HREF="#%s">%s</A>' % (url, a_topic)
+#            outline = outline + "\n" + \
+#                      '   </UL>'
+
+        outline = outline + "\n" + '</UL>\n<HR>'
         
-            topics = index[a_languages].keys().sort()
-            for a_topic in topics:
-                url = a_lang_name + '-' + a_topic
-                print '      <LI><A HREF="#%s">%s</A>' % (url, a_topic)
-            print '   </UL>'
-        print '</UL>\n<HR>'
+        return outline
 
 
 
@@ -1505,25 +1514,35 @@ class CmdInterp(OwnerObject):
 
         .. [html_index_cmds_by_topic] file:///./CmdInterp.CmdInterp.html#html_index_cmds_by_topic"""
         
-        languages = index.keys().sort()
-        for a_language in languages:            
-            if a_language == '':
+        html = ""    
+        all_languages = self.supported_languages()
+        all_languages.sort()
+        for a_language in all_languages:        
+            if not a_language:
                 a_lang_name = 'Global'
             else:
                 a_lang_name = a_language
 
-            print '<H2><A NAME="%s">%s commands</A></H2>\n\n' % (a_lang_name, a_lang_name)
-        
-            topics = index[a_language].keys().sort()
-            for a_topic in topics:
-                url = a_lang_name + '-' + a_topic
-                print '<H3><A NAME="%s">%s</A></H3>\n\n' % (url, a_topic)
-                for spoken, descr in index[a_language][a_topic]:
-                    print '<STRONG>"%s"</STRONG><BR><DD>%s' % (spoken, descr)
-        
+            html = html + "\n" + \
+                   '<H2><A NAME="%s">%s commands</A></H2>\n\n' % (a_lang_name, a_lang_name)
 
-        print '</BODY>\n</HTML>'
-        # until here from what_can_i_say        
+# AD: Not sure what you mean by a topic, so I'm commenting this out for now.        
+#            topics = index[a_language].keys().sort()
+#            for a_topic in topics:
+#                url = a_lang_name + '-' + a_topic
+#                print '<H3><A NAME="%s">%s</A></H3>\n\n' % (url, a_topic)
+#                for spoken, descr in index[a_language][a_topic]:
+#                    print '<STRONG>"%s"</STRONG><BR><DD>%s' % (spoken, descr)
+#        
+
+        html = html + "\n" + '</BODY>\n</HTML>'
+        
+        return html
+
+         
+    def html_cmds_alphabetically(self, index):
+        """Does nothing for now"""
+        return ""
                 
     def set_mediator(self, mediator):
         """sets the parent mediator which owns this CmdInterp instance

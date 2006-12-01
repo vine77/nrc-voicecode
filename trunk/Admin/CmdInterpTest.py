@@ -1,6 +1,7 @@
 import debug
 from CmdInterp import CmdInterp
 from CmdInterp import LSAlias
+from CmdInterp import AliasMeaning
 import VoiceCodeRootTest
 import vc_globals
 import os
@@ -27,25 +28,88 @@ class CmdInterpTest(VoiceCodeRootTest.VoiceCodeRootTest):
           languages, 
           "List of supported languages was wrong")
        
-   def ___test_index_cmds_by_topic(self):
+   def test_index_cmds_by_topic(self):
        index = self.interp.index_cmds_by_topic()
-       self.assert_cmd_index_is({'C':     
-                                    [(['multiply', 'by'], None, None),
-                                     (['multiplied', 'by'], None, None),
-                                     (['times'], None, None)],
-                                 'python': 
-                                    [(['multiply', 'by'], None, None),
-                                     (['multiplied', 'by'], None, None),
-                                     (['times'], None, None)],
-                                 'perl': 
-                                    [(['multiply', 'by'], None, None),
-                                     (['multiplied', 'by'], None, None),
-                                     (['times'], None, None)],
-                                 None: []
-                                 }, 
-                                index, 
-                                "Command indexes were not the same")
-       self.fail('test not finalized yet')
+       self.assert_equal({'C':     
+                               [(['multiply', 'by'], AliasMeaning(" * ")),
+                                (['multiplied', 'by'], AliasMeaning(" * ")),
+                                (['times'], AliasMeaning(" * "))
+                                ],
+                          'python': 
+                                [(['multiply', 'by'], AliasMeaning(" * ")),
+                                 (['multiplied', 'by'], AliasMeaning(" * ")),
+                                 (['times'], AliasMeaning(" * "))
+                                 ],
+                          'perl': 
+                                 [(['multiply', 'by'], AliasMeaning(" * ")),
+                                  (['multiplied', 'by'], AliasMeaning(" * ")),
+                                  (['times'], AliasMeaning(" * "))
+                                  ],
+                          None: []
+                         }, 
+                         index, 
+                         "Command indexes was not as expected.")
+
+   def test_html_cmd_outline(self):
+       index = self.interp.index_cmds_by_topic()
+       outline = self.interp.html_cmd_outline(index)
+       self.assert_equal("""
+<HTML>
+<HEADER>
+<TITLE>VoiceCode: What can I say?</TITLE>
+</HEADER>
+<BODY>
+
+<H1>VoiceCode: What can I say?</H1>
+
+<H2>Index</H2>
+
+<UL>
+<LI><A HREF="#Global">Global</A>
+
+<LI><A HREF="#C">C</A>
+
+<LI><A HREF="#perl">perl</A>
+
+<LI><A HREF="#python">python</A>
+
+</UL>
+<HR>""", 
+                         outline,
+                         "HTML for command outline was wrong.")
+ 
+   def test_html_cmds_by_topic(self):
+       index = self.interp.index_cmds_by_topic()
+       by_topics = self.interp.html_cmds_by_topic(index)
+       self.assert_equal("""
+<H2><A NAME="Global">Global commands</A></H2>
+
+
+<H2><A NAME="C">C commands</A></H2>
+
+
+<H2><A NAME="perl">perl commands</A></H2>
+
+
+<H2><A NAME="python">python commands</A></H2>
+
+
+</BODY>
+</HTML>""", 
+                         by_topics,
+                         "HTML for Index of commands by topic was wrong.")
+ 
+   def test_html_cmds_alphabetically(self):
+       index = self.interp.index_cmds_by_topic()
+       html = self.interp.html_cmds_alphabetically(index)
+       self.assert_equal("", 
+                         html,
+                         "HTML for alphabetical index of commands was wrong.")
+ 
+ 
+ ###############################################################
+ # Assertions.
+ ###############################################################
  
    def assert_cmd_index_is(self, expected, got, mess):
        self.assert_dicts_have_same_keys(expected, got, 
