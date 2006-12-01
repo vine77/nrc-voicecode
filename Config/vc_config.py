@@ -157,6 +157,11 @@ acmd = CSCmd(spoken_forms=['show symbols', 'print symbols'],
              docstring='Print the list of all known symbols.')
 mediator_ctrl.add_csc(acmd)
 
+acmd = CSCmd(spoken_forms=['voice coder what can I say', 'What can I say'], 
+             meanings={ContLanguage(None): ActionWhatCanISay()}, 
+             docstring='Give active commands')
+mediator_ctrl.add_csc(acmd)
+
 acmd = CSCmd(spoken_forms=['show abbreviations', 'print abbreviations'], 
              meanings={ContLanguage(None): ActionPrintAbbrevs()}, 
              docstring='Print the list of all known symbols.')

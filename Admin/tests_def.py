@@ -38,7 +38,7 @@ import TestCaseWithHelpersTest
 import NavigationWithinBufferTest
 import MediatorConsoleWXTests
 
-import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
+import actions_C_Cpp, actions_py, CmdInterp, CmdInterpTest, CSCmd, cont_gen, EdSim
 import Object, SymDict, test_pseudo_python, test_pseudo_C_Cpp
 import util, unit_testing, vc_globals, wxWindowsWithHelpersTest
 import AppMgr, RecogStartMgr, GramMgr, sr_grammars
@@ -257,6 +257,11 @@ def test_CmdInterp():
 #     a_mediator = MediatorObject.MediatorObject(app = EdSim.EdSim(),
 #         interp=CmdInterp.CmdInterp())
     test_CmdInterp_mediator(temp_config)
+    
+    print "\n\n-- Running PyUnit tests\n"
+    unittest.TextTestRunner(). \
+       run(unittest.makeSuite(CmdInterpTest.CmdInterpTest, 'test')) 
+
     
 
 add_test('CmdInterp', test_CmdInterp, desc='self-test for CmdInterp.py')
@@ -4582,11 +4587,19 @@ add_test('profile_config', test_profile_config,
 # Use this to create temporary tests
 ##############################################################################
 
+def test_whatcanisay():  
+    testing.init_simulator_regression()      
+    commands.open_file('blah1.py')
+
+    commands.say(['voice coder', 'what', 'can', 'I', 'say'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+add_test('whatcanisay', test_whatcanisay, desc='what can I say test')
+
+
 def test_temporary():  
     testing.init_simulator_regression()      
     commands.open_file('blah1.py')
 
-    commands.say(['index', 'semi', 'variable', 'semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
   
     commands.say(['previous semi', 'previous semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
@@ -4598,7 +4611,7 @@ def test_temporary():
 
     commands.say(['before semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-#add_test('temp', test_temporary, desc='temporary test')
+add_test('temp', test_temporary, desc='temporary test')
 
 
 

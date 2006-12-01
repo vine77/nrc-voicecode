@@ -52,15 +52,11 @@ import WinSystemMSW
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="off",
+debug.config_traces(status="on",
                     active_traces={
-                       'get_mess': 1,
-                       'send_mess': 1,
-                       'receive_string': 1,
-                       'encode': 1,
-                       'decode': 1,
-                       'pack_mess': 1,
-                       'unpack_mess': 1,
+                       'CmdInterp.html_cmd_outline': 1,
+                       'CmdInterp.what_can_I_say': 1,
+                       'CmdInterp.index_cmds_by_topic': 1,
                        'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                     },
                     allow_trace_id_substrings = 1)

@@ -1526,6 +1526,41 @@ class ActionPrintSymbols(Action):
            except AttributeError:
              print 'print symbols command not supported with old Mediator'
 
+class ActionWhatCanISay(Action):
+    """give what can I say info...
+    
+    **INSTANCE ATTRIBUTES**
+        
+    *none*
+        
+    CLASS ATTRIBUTES**
+        
+    *none* -- 
+    """
+
+    def __init__(self, buff_name=None, **args_super):
+        self.deep_construct(ActionWhatCanISay, \
+                            {}, \
+                                args_super, \
+                            {})
+                            
+    def doc(self):
+        return 'Give actual command info.';
+    
+                            
+
+    def execute(self, app, cont, state = None):
+        """See [Action.execute] for details.
+        
+        .. [Action.execute] file:///./Action.Action.html#execute"""
+        
+        manager = app.current_manager()
+        if manager:
+           try:
+             manager.interpreter().what_can_I_say()
+           except AttributeError:
+             print 'What can I say command not supported with QH Mediator'
+
 
 class ActionPrintAbbrevs(Action):
     """Print the list of all abbreviations (resolved and unresolved).
