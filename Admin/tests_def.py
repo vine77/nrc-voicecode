@@ -258,7 +258,6 @@ def test_CmdInterp():
 #         interp=CmdInterp.CmdInterp())
     test_CmdInterp_mediator(temp_config)
     
-    print "\n\n-- Running PyUnit tests\n"
     unittest.TextTestRunner(). \
        run(unittest.makeSuite(CmdInterpTest.CmdInterpTest, 'test')) 
 
