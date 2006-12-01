@@ -26,6 +26,7 @@ import Object, vc_globals
 import debug
 import sr_interface
 import symbol_formatting
+from WhatCanISay import WhatCanISay
 
 class Action(Object.Object):
     """Base class for all actions.
@@ -1546,8 +1547,6 @@ class ActionWhatCanISay(Action):
                             
     def doc(self):
         return 'Give actual command info.';
-    
-                            
 
     def execute(self, app, cont, state = None):
         """See [Action.execute] for details.
@@ -1557,7 +1556,8 @@ class ActionWhatCanISay(Action):
         manager = app.current_manager()
         if manager:
            try:
-             manager.interpreter().what_can_I_say()
+             wciSay = WhatCanISay()
+             wciSay.show_cmds(manager.interpreter())
            except AttributeError:
              print 'What can I say command not supported with QH Mediator'
 
