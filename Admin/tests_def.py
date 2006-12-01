@@ -40,7 +40,7 @@ import MediatorConsoleWXTests
 
 import actions_C_Cpp, actions_py, CmdInterp, CmdInterpTest, CSCmd, cont_gen, EdSim
 import Object, SymDict, test_pseudo_python, test_pseudo_C_Cpp
-import util, unit_testing, vc_globals, wxWindowsWithHelpersTest
+import util, unit_testing, vc_globals, WhatCanISayTest, wxWindowsWithHelpersTest
 import AppMgr, RecogStartMgr, GramMgr, sr_grammars
 import KnownTargetModule, NewMediatorObject, TargetWindow, WinIDClient
 import test_helpers
@@ -261,9 +261,21 @@ def test_CmdInterp():
     unittest.TextTestRunner(). \
        run(unittest.makeSuite(CmdInterpTest.CmdInterpTest, 'test')) 
 
-    
 
 add_test('CmdInterp', test_CmdInterp, desc='self-test for CmdInterp.py')
+
+##############################################################################
+# Testing WhatCanISay dialogs
+##############################################################################
+
+def test_WhatCanISay():
+    
+    unittest.TextTestRunner(). \
+       run(unittest.makeSuite(WhatCanISayTest.WhatCanISayTest, 'test')) 
+
+
+add_test('WhatCanISay', test_WhatCanISay, desc='self-test for WhatCanISay.py')
+
 
 
 ##############################################################################
@@ -4592,7 +4604,7 @@ def test_whatcanisay():
 
     commands.say(['voice coder', 'what', 'can', 'I', 'say'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-#add_test('whatcanisay', test_whatcanisay, desc='what can I say test')
+add_test('whatcanisay', test_whatcanisay, desc='what can I say test')
 
 
 def test_temporary():  
