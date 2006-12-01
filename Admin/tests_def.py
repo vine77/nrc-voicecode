@@ -4593,7 +4593,7 @@ def test_whatcanisay():
 
     commands.say(['voice coder', 'what', 'can', 'I', 'say'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-add_test('whatcanisay', test_whatcanisay, desc='what can I say test')
+#add_test('whatcanisay', test_whatcanisay, desc='what can I say test')
 
 
 def test_temporary():  
@@ -4611,7 +4611,7 @@ def test_temporary():
 
     commands.say(['before semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-add_test('temp', test_temporary, desc='temporary test')
+#add_test('temp', test_temporary, desc='temporary test')
 
 
 

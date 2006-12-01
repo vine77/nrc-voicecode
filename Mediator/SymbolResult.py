@@ -89,8 +89,6 @@ class SymbolResult(Object):
                              'in_utter_interp': in_utter_interp,
                              'reformatted_to': None,
                             }, args)
-        
-       
                             
     def native_symbol(self):
         return self.symbol
@@ -210,7 +208,7 @@ class SymbolResult(Object):
         
         return list
         
- 
+        
     def reformat_to(self, alt_form):
        """Changes the written form of the symbol to an alternate form.
        

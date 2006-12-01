@@ -30,7 +30,7 @@ class SymbolResultTest(TestCaseWithHelpers.TestCaseWithHelpers):
         pass
         
     def test_suggestions_list(self):
-        self.assert_sequences_have_same_content(
+        self.assert_equal(
                      ['some_symb', 'SomeSymb', 'so_sbl', 's_sym', 'sSmb',
                      'some_symbol', 'SomeSymbol', 'SOME_SYMBOL'], 
                      self.sym_res1.suggestions_list(), 

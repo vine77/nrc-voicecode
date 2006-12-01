@@ -81,11 +81,11 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
                   '** exp_looking_at=%s, start_pos=%s, end_pos=%s' % 
                   (exp_looking_at, start_pos, end_pos))
       actually_looking_at = self._get_text(start_pos, end_pos)
-      self.assert_equals(exp_looking_at, actually_looking_at,
+      self.assert_equal(exp_looking_at, actually_looking_at,
              message +"At postion %s, expected to be looking at string '%s' in direction %s, but was actually looking at '%s'" %
              (start_pos, exp_looking_at, direction, actually_looking_at))
              
    def _assert_cur_pos_is(self, exp_pos, mess=""):
       got_pos = self._cur_pos()
-      self.assert_equals(exp_pos, got_pos,  
+      self.assert_equal(exp_pos, got_pos,  
                    mess + "Cursor was at the wrong place")

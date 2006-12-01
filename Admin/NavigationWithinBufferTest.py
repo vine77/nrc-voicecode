@@ -100,7 +100,7 @@ class NavigationWithinBufferTest(VoiceCodeRootTest.VoiceCodeRootTest):
       self.assert_(abs(diff) > min_lines_displacement, 
                    message + 
                    "\nExpected to have moved by at least %s lines, but moved by %d" % (min_lines_displacement, abs(diff)))
-      self.assert_equals(
+      self.assert_equal(
               expected_direction, got_direction, 
               message + 
               "\nExpected to move in direction %s, but moved in direction %s" % (expected_direction, got_direction)

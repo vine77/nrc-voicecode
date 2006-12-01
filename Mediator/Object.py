@@ -1034,8 +1034,7 @@ class OwnerObject(Object):
                 and self.__dict__.has_key(self.parent_name):
             del self.__dict__[self.parent_name]
         debug.trace('OwnerObject.cleanup', 'cleanup of %s finished' % repr(self))
-
-
+          
 
 ##############################################################################
 # The remaining code is just for profile testing purposes
