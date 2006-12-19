@@ -1306,8 +1306,8 @@ class CmdInterp(OwnerObject):
     .. [SymDict] file:///./SymDict.SymDict.html"""
     
     def __init__(self, sym_file = None,
-                 disable_dlg_select_symbol_matches = None, mediator =
-                 None, **attrs):
+                 disable_dlg_select_symbol_matches = None, 
+                 mediator = None, **attrs):
         
         """
         **INPUTS**

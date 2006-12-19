@@ -48,6 +48,11 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
    def _say(self, utterance):
       self._commands().say(utterance)
       
+   def _open_empty_test_file(self, file_name):
+       fpath = os.path.join(vc_globals.tmp, file_name)
+       self._open_file(fpath)  
+       self._app().delete_all()
+      
    def _open_file(self, fpath):
       self._commands().open_file(fpath)    
   
@@ -57,6 +62,9 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
    def _mediator(self):
       global mediator_used_for_testing
       return mediator_used_for_testing
+  
+   def _command_interpreter(self):
+      return self._mediator().interp
       
    def _goto(self, pos):
       return self._app().goto(pos)   
@@ -72,7 +80,7 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       
    def _len(self):
       return self._app().len()      
-      
+            
    def _assert_cursor_looking_at(self, exp_looking_at, direction=1, 
                                  message=""):
       start_pos = self._cur_pos()
@@ -89,3 +97,8 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       got_pos = self._cur_pos()
       self.assert_equal(exp_pos, got_pos,  
                    mess + "Cursor was at the wrong place")
+      
+   def _assert_active_buffer_content_is(self, exp_content, mess=""):
+      got_content = self._app().get_text()
+      self.assert_equal(exp_content, got_content, 
+                        mess + "\nContent of the active buffer was not as expected.")

@@ -52,10 +52,9 @@ import WinSystemMSW
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="off",
+debug.config_traces(status="on",
                     active_traces={
-                       'assert_equal': 1,
-                       'assert_reformat_from_recent_invoked_with_symbol': 1,
+                       'SourceBuff.delete_all': 1,
                        'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
                     },
                     allow_trace_id_substrings = 1)
