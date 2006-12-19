@@ -744,7 +744,7 @@ class AppState(OwnerObject):
     'move_relative', 'insert', 'indent', 'insert_indent', 
     'syntax_nav_supported',
     'find_matching', 'beginning_of_statement',
-    'delete', 'delete_line', 'copy_selection', 'cut_selection', 'paste',
+    'delete', 'delete_line', 'delete_all', 'copy_selection', 'cut_selection', 'paste',
     'select_line','goto', 'goto_line', 'goto_end_of_line', 'goto_beginning_of_line',
     'goto_range', 'move_relative_line',
     'move_relative_page', 'search_for', 'log_search', 'looking_at', 
