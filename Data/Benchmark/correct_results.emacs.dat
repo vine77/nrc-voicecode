@@ -3313,6 +3313,13 @@ Fresh abbreviation file matches current one, as expected
 
 
 *******************************************************************************
+* Name        : WhatCanISay
+* Description : self-test for WhatCanISay.py
+*******************************************************************************
+
+
+
+*******************************************************************************
 * Name        : am_dictionaries
 * Description : Testing AppMgr dictionary management.
 *******************************************************************************
@@ -17087,6 +17094,60 @@ Heard select previous index equals zero
   2: index = 1
   3: index = 0
   4: index = 1
+
+
+*******************************************************************************
+* Name        : whatcanisay
+* Description : what can I say test
+*******************************************************************************
+
+WARNING: source file 'blah1.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['voice coder', 'what', 'can', 'I', 'say']
+Heard voice coder what can I say
+
+<HTML>
+<HEADER>
+<TITLE>VoiceCode: What can I say?</TITLE>
+</HEADER>
+<BODY>
+
+<H1>VoiceCode: What can I say?</H1>
+
+<H2>Index</H2>
+
+<UL>
+<LI><A HREF="#Global">Global</A>
+
+<LI><A HREF="#C">C</A>
+
+<LI><A HREF="#perl">perl</A>
+
+<LI><A HREF="#python">python</A>
+
+</UL>
+<HR>
+<H2><A NAME="Global">Global commands</A></H2>
+
+
+<H2><A NAME="C">C commands</A></H2>
+
+
+<H2><A NAME="perl">perl commands</A></H2>
+
+
+<H2><A NAME="python">python commands</A></H2>
+
+
+</BODY>
+</HTML>
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
 
 
 *******************************************************************************

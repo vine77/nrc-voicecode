@@ -277,7 +277,7 @@ in the 'vr-deprecated-log-buff-name buffer.")
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
 
-(cl-puthash "vcode-cmd-move-relative-page" 1 vcode-traces-on)
+(cl-puthash "vcode-cmd-delete" 1 vcode-traces-on)
 
 (defvar vr-deprecated-log-send nil "*If non-nil, vr-deprecated mode logs all data sent to the vr-deprecated
 subprocess in the 'vr-deprecated-log-buff-name buffer.")
@@ -3158,6 +3158,27 @@ Also converts from VCode's 0-based positions to Emacs 1-based positions."
   pos
 )
 
+(defun vcode-make-sure-range-is-valid-for-buffer (range buff-name)
+   "Make sure range is a valid range for buffer named buff-name. 
+
+    If start of range is less than (min-point), set it to (min-point).
+
+    If start of range is greater than (max-point), set it to (max-point).
+
+    We assume that start of range is less or equal to end of range.
+   "
+   (let ((range-start (elt range 0)) (range-end (elt range 1)))
+      
+      (save-excursion
+	 (switch-to-buffer buff-name)
+         (if (< range-start (point-min)) (setq range-start (point-min)))
+         (if (> range-end (point-max)) (setq range-end (point-max)))
+      )
+      (list range-start range-end)
+    )
+  
+)
+
 (defun vcode-fix-range-for-emacs (range default)
   "Fixes a position range received from VCode server. This range
 may be nil or contain string values, and the 1st element may be
@@ -4051,6 +4072,11 @@ change reports it sends to VCode.
 
 	(setq buff-name (vcode-get-buff-name-from-message mess-cont))
 	(setq range (cl-gethash "range" mess-cont))
+        (setq range 
+              (vcode-fix-range-for-emacs range (list 0 0)))
+        (setq range
+              (vcode-make-sure-range-is-valid-for-buffer range buff-name))
+
 	(setq delete-start (elt range 0))
 	(setq delete-end (elt range 1))
 	(set-buffer buff-name)
