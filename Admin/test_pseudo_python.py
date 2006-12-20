@@ -162,7 +162,6 @@ def test_dictate_from_scratch(testing):
     names = testing.namespace()
     commands = names['commands']
     commands.compile_symbols([native_py_file])
-    commands.print_symbols()
     dictate_pseudo_python(commands)
 
     #
@@ -172,7 +171,6 @@ def test_dictate_from_scratch(testing):
     testing.init_simulator_regression()
     names = testing.namespace()
     commands = names['commands']
-    commands.print_symbols()
     dictate_pseudo_python(commands)    
 
 

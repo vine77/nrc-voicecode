@@ -38,7 +38,7 @@ class CmdInterpTest(VoiceCodeRootTest.VoiceCodeRootTest):
 
 
        
-   def test_symbol_containing_an_LSA(self):
+   def __test_symbol_containing_an_LSA(self):
        self._open_empty_test_file('test.c')
        self.interp.add_symbol('MyVec_INT')
        utterance = MockSpokenUtterance(['my', 'vector', 'int'])
