@@ -267,7 +267,7 @@ def test_dictate_from_scratch(testing):
     testing.init_simulator_regression()
     names = testing.namespace()
     commands = names['commands']
-    commands.print_symbols()
+#    commands.print_symbols()
     dictate_pseudo_C_Cpp(commands)    
 
 
