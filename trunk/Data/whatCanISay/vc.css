@@ -1,0 +1,40 @@
+BODY {background-color: #dddddd; color: black;font-family: Verdana, Helvetica, sans-serif}
+
+TD.topoff {background-color: #669999; padding: 3px;font-weight:bold}
+#TD.topoff a:link {background-color: #ccddee; padding: 3px}
+#TD.topoff a:visited {background-color: #ffcc33; padding: 3px}
+p.lefton { padding:1 2 1 7; 
+           color:#F8BF24;font-weight:bold}
+p.lefton a:active {color:#F8BF24 ;font-weight:bold}
+p.lefton a:visited{color:#F8BF24 ;font-weight:bold}
+p.lefton a:link {color:#F8BF24;font-weight:bold}
+p.leftoff {padding:1 2 1 7;color:#F8BF24 }
+p.leftoff a:visited {color:#F8BF24}
+p.leftoff a:link {color:#F8BF24}
+TD.back {background-color: #aaaaaa}
+TD.navline {background-color: #669999;padding:10 0 5 0}
+TD.copyright {background-color: #669999;
+   font-size: xx-small; text-align: right; padding: 5px}
+
+TD.body {padding: 20px; border-right:5px solid #669999;border-bottom:5px solid #669999}
+TD.body a:link {color: black} 
+TD.body a:visited {color: black} 
+TD.body a:active {color: black} 
+TD.body0 {vertical-align: top}
+TD.bannertext {width:100%; padding: 0 0 0 30}
+TD.bannerim {padding: 5}
+
+P.pre {margin: 20 50 1 1; border: thin solid #999999; padding: 5;
+        font-family: Lucida sans typewriter, fixed, courier}
+td.spoken0{padding:0 0 0 20}
+td.written0{padding:0 0 0 20}
+td.written1{background-color:#eeeeee;padding:0 0 0 20}
+td.spoken1{background-color:#eeeeee;padding:0 0 0 20}
+
+TD.leftmenu {padding: 5 0 5 5 ; background-color: #225566; vertical-align:top}
+TD.banner {background-color:#669999; text-align:left; color:black; font-weight: bold; font-size:xx-large} 
+DIV.header {background-color: #669999}
+DIV.footer {background-color: #eeeeee}
+DIV.body {background-color: #cc9933}
+
+
