@@ -54,7 +54,10 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
        self._app().delete_all()
       
    def _open_file(self, fpath):
-      self._commands().open_file(fpath)    
+      self._app().open_file(fpath)    
+      
+   def _insert_in_active_buffer(self, text):
+       self._app().insert(text)
   
    def _init_simulator_regression(self):
       return self._mediator_testing_namespace().init_simulator_regression()
@@ -65,6 +68,9 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
   
    def _command_interpreter(self):
       return self._mediator().interp
+  
+   def _symbol_dictionary(self):
+      return self._command_interpreter().known_symbols
       
    def _goto(self, pos):
       return self._app().goto(pos)   

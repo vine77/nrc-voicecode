@@ -38,12 +38,13 @@ import TestCaseWithHelpersTest
 import NavigationWithinBufferTest
 import MediatorConsoleWXTests
 
-import actions_C_Cpp, actions_py, CmdInterp, CmdInterpTest, CSCmd, cont_gen, EdSim
+import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
 import Object, SymDict, test_pseudo_python, test_pseudo_C_Cpp
 import util, unit_testing, vc_globals, WhatCanISayTest, wxWindowsWithHelpersTest
 import AppMgr, RecogStartMgr, GramMgr, sr_grammars
 import KnownTargetModule, NewMediatorObject, TargetWindow, WinIDClient
 import test_helpers
+import CmdInterpTest, ContBlankLineTest, SymDictTest
 import debug
 import DiffCrawler
 import difflib
@@ -177,6 +178,9 @@ def test_SymDict():
     accept_symbol_match_test(interp, small_buff_c, [a_match])
 
     temp_config.quit()
+    
+#    unittest.TextTestRunner(). \
+#       run(unittest.makeSuite(SymDictTest.SymDictTest, 'test')) 
 
 add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
 
@@ -265,11 +269,23 @@ def test_CmdInterp():
 add_test('CmdInterp', test_CmdInterp, desc='self-test for CmdInterp.py')
 
 ##############################################################################
+# Testing context objects
+##############################################################################
+
+
+def test_ContBlankLine():
+    unittest.TextTestRunner(). \
+       run(unittest.makeSuite(ContBlankLineTest.ContBlankLineTest, 'test')) 
+
+add_test('ContBlankLine', test_ContBlankLine, 
+         desc='Tests for the blank line context class.')
+
+    
+##############################################################################
 # Testing WhatCanISay dialogs
 ##############################################################################
 
 def test_WhatCanISay():
-    
     unittest.TextTestRunner(). \
        run(unittest.makeSuite(WhatCanISayTest.WhatCanISayTest, 'test')) 
 
@@ -4614,6 +4630,26 @@ def test_temporary():
     commands.say(['before semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
 #add_test('temp', test_temporary, desc='temporary test')
+
+##############################################################################
+# Alain Desilets uses this test suite to write reminder to himself.
+##############################################################################
+
+class AlainReminderTest(unittest.TestCase):
+    def __init__(self, name):
+        unittest.TestCase.__init__(self, name)
+
+    def test_check_reminders(self):
+        self.fail("Remember to reactivate the SymDict and CmdInterp tests in tests_def")
+        self.fail("remember to reactivate all other tests in SymDictTest")
+        self.fail_("Remember to change name of SourceBuff.delete_all() to SourceBuff.delete_buff_content(). The later is better name for AppState delegate.")
+        self.fail_("Make sure fuzzy_match_phrase() is done only if fuzzy matches are allowed, etc... See the test done in CmdInterp.interpret() before invoking match_pseudo_symbol.")
+
+        
+def test_alain_reminder():
+    unittest.TextTestRunner(). \
+    run(unittest.makeSuite(AlainRemindersTest, 'test')) 
+
 
 
 
