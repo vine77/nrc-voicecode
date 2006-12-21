@@ -4598,15 +4598,6 @@ add_test('profile_config', test_profile_config,
 # Use this to create temporary tests
 ##############################################################################
 
-def test_whatcanisay():  
-    testing.init_simulator_regression()      
-    commands.open_file('blah1.py')
-
-    commands.say(['voice coder', 'what', 'can', 'I', 'say'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
-add_test('whatcanisay', test_whatcanisay, desc='what can I say test')
-
-
 def test_temporary():  
     testing.init_simulator_regression()      
     commands.open_file('blah1.py')
