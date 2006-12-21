@@ -4072,8 +4072,6 @@ change reports it sends to VCode.
 
 	(setq buff-name (vcode-get-buff-name-from-message mess-cont))
 	(setq range (cl-gethash "range" mess-cont))
-        (setq range 
-              (vcode-fix-range-for-emacs range (list 0 0)))
         (setq range
               (vcode-make-sure-range-is-valid-for-buffer range buff-name))
 
