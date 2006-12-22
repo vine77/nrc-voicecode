@@ -1788,7 +1788,7 @@ class CmdInterp(OwnerObject):
                 chopped_LSA = chopped_generic_LSA
                 LSA_consumes = generic_LSA_consumes
 
-            chopped_symbol, symbol_consumes = \
+            chopped_symbol, symbol_consumes, chopped_symbol_is_exact_match = \
                 self.chop_symbol_phrase(phrase_str)
 
             chopped_word = phrase_str[0]
@@ -1865,7 +1865,9 @@ class CmdInterp(OwnerObject):
                 trace('CmdInterp.interpret_utterance', 
                       'processing leading symbol=\'%s\'' % chopped_symbol)
                 symbols.add_symbol(chopped_symbol)
-
+                if not chopped_symbol_is_exact_match:
+                    symbols.exact_symbol = False
+                    
                 phrase_str = phrase_str[symbol_consumes:]
                 head_was_translated = 1
                                          
@@ -2474,6 +2476,9 @@ class CmdInterp(OwnerObject):
 
         *INT* consumed* -- Number of words consumed by the symbol from
          the command
+         
+         *BOOL* was_exact -- True IIF the consumed words matched the existing symbol
+         exactly (i.e. no abbreviations)
         """
         debug.trace('CmdInterp.chop_symbol_phrase', 
             'phrase = %s' % repr(phrase))
@@ -2491,15 +2496,16 @@ class CmdInterp(OwnerObject):
         #       for symbol "function".
         #
         match = \
-         self.known_symbols.match_phrase(phrase, use_match_threshold=1.0)
+         self.known_symbols.match_phrase(phrase, use_match_threshold=0.6)
         debug.trace('CmdInterp.chop_symbol_phrase', 
             'match = %s' % repr(match))
         if match[0] is None:
-            return None, 0
+            return None, 0, False
         symbols, rest_spoken, exact = match
         consumed = len(phrase) - len(rest_spoken)
         consumed_words = phrase[:consumed]
-        return consumed_words, consumed
+        was_exact = match[2]
+        return consumed_words, consumed, was_exact
                 
     def whole_words(self, spoken_list, consumed_words):
         """Checks whether a list of words chopped off the spoken
