@@ -157,7 +157,7 @@ acmd = CSCmd(spoken_forms=['show symbols', 'print symbols'],
              docstring='Print the list of all known symbols.')
 mediator_ctrl.add_csc(acmd)
 
-acmd = CSCmd(spoken_forms=['voice coder what can I say', 'yo what can I say'], 
+acmd = CSCmd(spoken_forms=['voice coder what can I say', 'What can I say'], 
              meanings={ContLanguage(None): ActionWhatCanISay()}, 
              docstring='Give active commands')
 mediator_ctrl.add_csc(acmd)
@@ -237,7 +237,6 @@ std_US_punc.add(":", ['colon'], no_space_before)
 std_US_punc.add(":", ['numeric-colon'], no_spaces)
 std_US_punc.add(";", ['semicolon'], no_space_before)
 std_US_punc.add("<", ['less-than'])
-std_US_punc.add("<", ['less than'])
 std_US_punc.add(">", ['greater-than'])
 std_US_punc.add("=", ['equal-sign'])
 std_US_punc.add('?', ['question-mark'], no_spaces)

@@ -1537,11 +1537,6 @@ class ActionWhatCanISay(Action):
     CLASS ATTRIBUTES**
         
     *none* -- 
-    
-    Moves to instance of class WhatCanISay, written mainly by Quintijn Hoogenbooms
-    This instance makes a current language aware overview of LSAs (and later) CSCs.
-    The info is presented in HTML format and opened with webbrowser in the default browser.
-    
     """
 
     def __init__(self, buff_name=None, **args_super):
@@ -1560,8 +1555,11 @@ class ActionWhatCanISay(Action):
         
         manager = app.current_manager()
         if manager:
-            wciSay = WhatCanISay()
-            wciSay.show_cmds(manager.interpreter(), app.language_name())
+           try:
+             wciSay = WhatCanISay()
+             wciSay.show_cmds(manager.interpreter())
+           except AttributeError:
+             print 'What can I say command not supported with QH Mediator'
 
 
 class ActionPrintAbbrevs(Action):
