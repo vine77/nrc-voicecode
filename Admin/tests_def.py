@@ -179,8 +179,8 @@ def test_SymDict():
 
     temp_config.quit()
     
-#    unittest.TextTestRunner(). \
-#       run(unittest.makeSuite(SymDictTest.SymDictTest, 'test')) 
+    unittest.TextTestRunner(). \
+       run(unittest.makeSuite(SymDictTest.SymDictTest, 'test')) 
 
 add_test('SymDict', test_SymDict, desc='self-test for SymDict.py')
 
@@ -4644,6 +4644,7 @@ class AlainReminderTest(unittest.TestCase):
         self.fail("remember to reactivate all other tests in SymDictTest")
         self.fail_("Remember to change name of SourceBuff.delete_all() to SourceBuff.delete_buff_content(). The later is better name for AppState delegate.")
         self.fail_("Make sure fuzzy_match_phrase() is done only if fuzzy matches are allowed, etc... See the test done in CmdInterp.interpret() before invoking match_pseudo_symbol.")
+        self.fail("Now, chop_symbol() checks for fuzzy symbol matches. But if a fuzzy match is found, interpret_utterance()just inserts the corresponding text. In fact, it should create a SymbolResult, etc... as is done when translating untranslated text further down in interpret_utterance()" )
 
         
 def test_alain_reminder():

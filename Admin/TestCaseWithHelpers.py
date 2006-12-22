@@ -51,6 +51,9 @@ class TestCaseWithHelpers(unittest.TestCase):
     def __init__(self, name):
         unittest.TestCase.__init__(self, name)
         
+    def remind_me_to_implement_this_test(self):
+        self.fail("DON'T FORGET TO IMPLEMENT THIS TEST!!!")
+        
     def assert_equal(self, expected, got, mess="", epsilon=0):
         debug.trace('assert_equal', 'expected=%s, got=%s' % (expected, got))
         try:
@@ -60,6 +63,7 @@ class TestCaseWithHelpers(unittest.TestCase):
             raise err
         
     def assert_equal_dispatch_according_to_type(self, expected, got, mess, epsilon):
+        self.assert_(self.isnumber(epsilon), "assert_equal called with a value of epsilon that was not a number. Type of epsilon was: %s, value was %s" % (self.what_class(epsilon), epsilon))
         if (self.what_class(expected) != self.what_class(got) 
             # Note: Floats can be considered same type as ints
             and not (self.isnumber(expected) and self.isnumber(got))):
@@ -77,10 +81,9 @@ class TestCaseWithHelpers(unittest.TestCase):
             mess = mess + "\n----\nThe two numbers differed significantly."
             mess = mess + "\nExpected:\n   %s\nGot:\n   %s" % (expected, got)
             if epsilon == 0:
-                
                self.assert_(expected == got, mess)
             else:
-               self.assert_(got <= expected + epsilon and got >= expected - epsilon, 
+               self.assert_((got <= expected + epsilon) and (got >= expected - epsilon), 
                         mess + "\nValue was not within epsilon=%s range of expected value." % epsilon)
         elif (self.isstring(expected)):
             debug.trace('TestCaseWithHelpers.assert_equal_dispatch_according_to_type', "** comparing string types")
@@ -91,6 +94,7 @@ class TestCaseWithHelpers(unittest.TestCase):
         else:
             debug.trace('TestCaseWithHelpers.assert_equal_dispatch_according_to_type', "** comparing objects")
             self.assert_equal_objects(expected, got, mess, epsilon)
+        
 
     def assert_equal_string(self, exp_string, got_string, message=''):
        first_diff = self.find_first_diff_char(got_string, exp_string)

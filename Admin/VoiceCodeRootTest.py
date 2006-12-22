@@ -106,5 +106,14 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       
    def _assert_active_buffer_content_is(self, exp_content, mess=""):
       got_content = self._app().get_text()
+      got_cur_pos = self._app().cur_pos()
+      got_content = got_content[:got_cur_pos] + "<CURSOR>" + got_content[got_cur_pos:]
       self.assert_equal(exp_content, got_content, 
                         mess + "\nContent of the active buffer was not as expected.")
+         
+      
+   def _find_cur_pos_in_expected_translation(self, expected_translation):
+       match = re.search("\\^", expected_translation)
+       pos = match.start()
+       expected_translation = re.sub("\\^", "", expected_translation)
+       return pos

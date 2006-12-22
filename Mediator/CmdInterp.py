@@ -50,7 +50,7 @@ class DeferInterp(Object):
     def __init__(self, **args):
         self.deep_construct(DeferInterp, {}, args)
 
-    def interp_now(self,  preceding_symbol = 0):
+    def interp_now(self, preceding_symbol = 0):
         """tells the interpreter main loop whether to interpret this 
         object now or whether to append it to the untranslated list
         which will build up the components of a new symbol
@@ -122,12 +122,12 @@ class LSAlias(Object):
         underscore, letter-alpha), or 'within' if it can appear within a
         symbol but cannot start one (e.g. digits)
         """
-        self.deep_construct(LSAlias,
-                            {'spoken_forms': spoken_forms,
-                             'meanings': {},
-                             'spacing': spacing,
+        self.deep_construct(LSAlias, 
+                            {'spoken_forms': spoken_forms, 
+                             'meanings': {}, 
+                             'spacing': spacing, 
                              'new_symbol': new_symbol
-                            },
+                            }, 
                             args)
 
         for language, written_as in meanings.items():
@@ -152,14 +152,14 @@ class AliasMeaning(DeferInterp, symbol_formatting.SymElement):
     underscore, letter-alpha), or 'within' if it can appear within a
     symbol but cannot start one (e.g. digits)
     """
-    def __init__(self, written_form, spacing = 0, new_symbol = None,
+    def __init__(self, written_form, spacing = 0, new_symbol = None, 
         **args):
-        self.deep_construct(AliasMeaning,
+        self.deep_construct(AliasMeaning, 
                             {
-                             'written_form': written_form,
-                             'spacing_flag': spacing,
+                             'written_form': written_form, 
+                             'spacing_flag': spacing, 
                              'new_symbol': new_symbol
-                            },
+                            }, 
                             args)
     def written(self):
         """returns the written form of the alias
@@ -187,7 +187,7 @@ class AliasMeaning(DeferInterp, symbol_formatting.SymElement):
         """
         return self.spacing_flag
 
-    def interp_now(self,  preceding_symbol = 0):
+    def interp_now(self, preceding_symbol = 0):
         """tells the interpreter main loop whether to interpret this 
         object now or whether to append it to the untranslated list
         which will build up the components of a new symbol
@@ -227,11 +227,11 @@ class AliasElement(symbol_formatting.SymElement):
     """
 
     def __init__(self, written, spoken, **args):
-        self.deep_construct(AliasElement,
+        self.deep_construct(AliasElement, 
                             {
-                             'written': written,
+                             'written': written, 
                              'spoken': spoken
-                            },
+                            }, 
                             args)
 
     def add_to(self, builder):
@@ -276,11 +276,11 @@ class CapitalizationWord(Object):
         subsequent CapitalizationWord with one_word = 0.  (A subsequent
         CapitalizationWord one_word = 1 will take precedence temporarily)
         """
-        self.deep_construct(CapitalizationWord,
+        self.deep_construct(CapitalizationWord, 
                             {
-                             'spoken_forms': spoken_forms,
-                             'modifier': CapsModifier(caps, one_word),
-                            },
+                             'spoken_forms': spoken_forms, 
+                             'modifier': CapsModifier(caps, one_word), 
+                            }, 
                             args)
 
 class CapsModifier(DeferInterp):
@@ -294,7 +294,7 @@ class CapsModifier(DeferInterp):
                              'one_word': one_word
                             }, args)
 
-    def interp_now(self,  preceding_symbol = 0):
+    def interp_now(self, preceding_symbol = 0):
         """tells the interpreter main loop whether to interpret this 
         object now or whether to append it to the untranslated list
         which will build up the components of a new symbol
@@ -383,8 +383,8 @@ class CSCmdSet(Object):
         *STR* description -- description of the command set (to be used 
         for automatic generation of documentation)
         """
-        self.deep_construct(CSCmdSet,
-                            {'name': name, 'description': description,
+        self.deep_construct(CSCmdSet, 
+                            {'name': name, 'description': description, 
                              'commands': {}}, args)
     def add_csc(self, command, name = None):
         """add a context-sensitive command to the set
@@ -509,8 +509,8 @@ class LSAliasSet(Object):
         *STR* description -- description of the alias set (to be used 
         for automatic generation of documentation)
         """
-        self.deep_construct(LSAliasSet,
-                            {'name': name, 'description': description,
+        self.deep_construct(LSAliasSet, 
+                            {'name': name, 'description': description, 
                              'aliases': {}}, args)
 
     def add_lsa(self, alias, name = None):
@@ -639,8 +639,8 @@ class CapitalizationWordSet(Object):
         *STR* description -- description of the set (to be used 
         for automatic generation of documentation)
         """
-        self.deep_construct(CapitalizationWordSet,
-                            {'name': name, 'description': description,
+        self.deep_construct(CapitalizationWordSet, 
+                            {'name': name, 'description': description, 
                              'words': {}}, args)
 
     def add_capitalization_word(self, word, name = None):
@@ -753,11 +753,11 @@ class SymWord(symbol_formatting.SymElement):
     abbreviation/substitution) or None if word is not abbreviated
     """
     def __init__(self, word, original = None, **args):
-        self.deep_construct(SymWord,
+        self.deep_construct(SymWord, 
                             {
-                             'word': word,
+                             'word': word, 
                              'original': original
-                            },
+                            }, 
                             args)
 
     def add_to(self, builder):
@@ -848,7 +848,7 @@ class InterpState(OwnerObject):
         self.deep_construct(InterpState, 
                             {
                              'sym_style': sym_style
-                            },
+                            }, 
                             args)
         self.add_owned('sym_style')
 
@@ -924,7 +924,7 @@ class StoredInterpState(Object):
     back to the interpret_ methods.
     """
     def __init__(self, formatting_state, **args):
-        self.deep_construct(StoredInterpState,
+        self.deep_construct(StoredInterpState, 
                             {'formatting_state': formatting_state}, args) 
         
                  
@@ -945,9 +945,9 @@ class UtteranceInterpretation(Object):
         
         *SpokenUtterance utterance* -- utterance that generated this phrase.
         """
-        self.deep_construct(UtteranceInterpretation,
+        self.deep_construct(UtteranceInterpretation, 
                             {
-                             'utterance': utterance,
+                             'utterance': utterance, 
                              'symbol_results': symbols
                             }, args)
     def symbols(self):
@@ -1026,16 +1026,16 @@ class SymbolConstruction(Object):
     new symbols
     """
     def __init__(self, interp, app, builder_factory, **args):
-        self.deep_construct(SymbolConstruction,
+        self.deep_construct(SymbolConstruction, 
                             {
-                             'untranslated_words': [],
-                             'interp': interp,
-                             'app': app,
-                             'builder_factory': builder_factory,
-                             'builder': None,
-                             'current_preferences': None,
-                             'symbols': [],
-                             'exact_symbol': 0,
+                             'untranslated_words': [], 
+                             'interp': interp, 
+                             'app': app, 
+                             'builder_factory': builder_factory, 
+                             'builder': None, 
+                             'current_preferences': None, 
+                             'symbols': [], 
+                             'exact_symbol': 0, 
                              'allow_inexact': 1
                             }, args)
 
@@ -1079,7 +1079,7 @@ class SymbolConstruction(Object):
         for word in spoken_form:
             word_element = self.interp.make_word_element(word)
             word_element.add_to(self.builder)
-        debug.trace('SymbolConstruction.add_symbol',
+        debug.trace('SymbolConstruction.add_symbol', 
               'allow_inexact = %d' % self.allow_inexact)
             
     def add_word(self, word):
@@ -1101,7 +1101,7 @@ class SymbolConstruction(Object):
             self.new_builder()
         word_element = self.interp.make_word_element(word)
         word_element.add_to(self.builder)
-        trace('SymbolConstruction.add_word',
+        trace('SymbolConstruction.add_word', 
               'allow_inexact = %d' % self.allow_inexact)
 
     def add_alias(self, alias, spoken_form):
@@ -1119,7 +1119,7 @@ class SymbolConstruction(Object):
         *none*
         """
         self.exact_symbol = 0
-        trace('SymbolConstruction.add_alias',
+        trace('SymbolConstruction.add_alias', 
               'allow_inexact = %d' % self.allow_inexact)
         if self.builder is None:
             self.new_builder()
@@ -1128,7 +1128,7 @@ class SymbolConstruction(Object):
             self.untranslated_words.append(written)
             if not written.isalnum():
                 self.allow_inexact = 0
-        trace('SymbolConstruction.add_alias',
+        trace('SymbolConstruction.add_alias', 
               'written = %s, now allow_inexact = %d' % \
               (written, self.allow_inexact))
         element = alias.make_element(spoken_form)
@@ -1148,7 +1148,7 @@ class SymbolConstruction(Object):
         self.current_preferences = None
         self.exact_symbol = 0
         self.allow_inexact = 1
-        trace('SymbolConstruction.reset',
+        trace('SymbolConstruction.reset', 
               'allow_inexact = %d' % self.allow_inexact)
 
     def words(self):
@@ -1162,7 +1162,7 @@ class SymbolConstruction(Object):
         """
         return self.symbols
 
-    def insert_existing_symbol(self, symbol, found_in_utter, exact_matches = [],
+    def insert_existing_symbol(self, symbol, found_in_utter, exact_matches = [], 
                         inexact_matches = [], forbidden = []):
         """
         Insert a known symbol with the given written form, track the
@@ -1193,21 +1193,21 @@ class SymbolConstruction(Object):
 
         *none*
         """
-        debug.trace('SymbolConstruction.insert_existing_symbol',
+        debug.trace('SymbolConstruction.insert_existing_symbol', 
             'exact_matches=%s, symbol = %s, found_in_utter=%s' % (exact_matches, symbol, found_in_utter))
             
         insertion = actions_gen.ActionInsert(code_bef=symbol, code_after='')
         block, dummy = insertion.log_execute(self.app, None, None)
-        result = SymbolResult(symbol, self.words(),
-                              exact_matches,
-                              block, self.app.curr_buffer_name(),
-                              self.current_preferences,
-                              inexact_matches, forbidden,
+        result = SymbolResult(symbol, self.words(), 
+                              exact_matches, 
+                              block, self.app.curr_buffer_name(), 
+                              self.current_preferences, 
+                              inexact_matches, forbidden, 
                               in_utter_interp = found_in_utter)
         self.symbols.append(result)
         self.reset()
       
-    def insert_new_symbol(self, interp_phrase, exact_matches = [],
+    def insert_new_symbol(self, interp_phrase, exact_matches = [], 
                         inexact_matches = [], forbidden = []):
         """
         Generate and insert a new symbol, track the
@@ -1236,16 +1236,16 @@ class SymbolConstruction(Object):
 
         *STR* -- the written form of the new symbol
         """
-        debug.trace('SymbolConstruction.insert_new_symbol',
+        debug.trace('SymbolConstruction.insert_new_symbol', 
             'exact_matches=%s, interp_phrase = %s' % (exact_matches, interp_phrase))
         symbol = self.builder.finish()
         insertion = actions_gen.ActionInsert(code_bef=symbol, code_after='')
         block, dummy = insertion.log_execute(self.app, None, None)
-        result = SymbolResult(symbol, self.words(),
-                              exact_matches,
-                              block, self.app.curr_buffer_name(),
-                              self.current_preferences,
-                              inexact_matches, forbidden, new_symbol = 1,
+        result = SymbolResult(symbol, self.words(), 
+                              exact_matches, 
+                              block, self.app.curr_buffer_name(), 
+                              self.current_preferences, 
+                              inexact_matches, forbidden, new_symbol = 1, 
                               in_utter_interp=interp_phrase)
         self.symbols.append(result)
         self.interp.add_symbol(symbol, [self.builder.spoken_form()])
@@ -1305,7 +1305,7 @@ class CmdInterp(OwnerObject):
     .. [Context] file:///./Context.Context.html
     .. [SymDict] file:///./SymDict.SymDict.html"""
     
-    def __init__(self, sym_file = None,
+    def __init__(self, sym_file = None, 
                  disable_dlg_select_symbol_matches = None, 
                  mediator = None, **attrs):
         
@@ -1323,19 +1323,19 @@ class CmdInterp(OwnerObject):
         which owns this CmdInterp instance
         """
 
-        self.deep_construct(CmdInterp,
-                            {'mediator': mediator,
+        self.deep_construct(CmdInterp, 
+                            {'mediator': mediator, 
                              'commands': WordTrie.WordTrie(), 
-                             'known_symbols': None,
+                             'known_symbols': None, 
                              'language_specific_aliases': \
-                                 {None: WordTrie.WordTrie()},
+                                 {None: WordTrie.WordTrie()}, 
                              'builder_factory':
-                                 symbol_formatting.SymBuilderFactory(),
-                             'state_interface': None,
-                             'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches,
-                             'add_sr_entries_for_LSAs_and_CSCs': 1,
-                             '_spoken_commands_gram_rule': None,
-                             '_spoken_symbols_gram_rule': None},
+                                 symbol_formatting.SymBuilderFactory(), 
+                             'state_interface': None, 
+                             'disable_dlg_select_symbol_matches': disable_dlg_select_symbol_matches, 
+                             'add_sr_entries_for_LSAs_and_CSCs': 1, 
+                             '_spoken_commands_gram_rule': None, 
+                             '_spoken_symbols_gram_rule': None}, 
                             attrs)
         self.name_parent('mediator')
         self.add_owned('known_symbols')
@@ -1729,7 +1729,7 @@ class CmdInterp(OwnerObject):
         # need to restore the SymBuilderFactory
         return self.builder_factory.restore_state(formatting)
 
-    def interpret_utterance(self, utterance, app, initial_buffer = None,
+    def interpret_utterance(self, utterance, app, initial_buffer = None, 
             clear_state = 0):
 
         """Interprets a natural language command and executes
@@ -1820,7 +1820,7 @@ class CmdInterp(OwnerObject):
             #
             csc_applies = 0
 
-            CSC_consumes = self.apply_CSC(app, possible_CSCs,
+            CSC_consumes = self.apply_CSC(app, possible_CSCs, 
                 phrase_str, most_definite, symbols, interp_phrase)
 
             if CSC_consumes:
@@ -1832,7 +1832,7 @@ class CmdInterp(OwnerObject):
                 #
                 # LSA consumed the most words from command. Insert it.
                 #
-                trace('CmdInterp.interpret_utterance',
+                trace('CmdInterp.interpret_utterance', 
                       'processing leading LSA=\'%s\'' % chopped_LSA)
                 
                 preceding_symbol = not symbols.empty()
@@ -1862,7 +1862,7 @@ class CmdInterp(OwnerObject):
                 #       class SomeClass you may name the new class
                 #       SomeprefixSomeClass or SomeClassSomepostfix.
                 #
-                trace('CmdInterp.interpret_utterance',
+                trace('CmdInterp.interpret_utterance', 
                       'processing leading symbol=\'%s\'' % chopped_symbol)
                 symbols.add_symbol(chopped_symbol)
 
@@ -1876,7 +1876,7 @@ class CmdInterp(OwnerObject):
                 # Just chop off the first word and insert it, marking
                 # it as untranslated text.
                 #                 
-                trace('CmdInterp.interpret_utterance',
+                trace('CmdInterp.interpret_utterance', 
                       'processing leading word=\'%s\'' % chopped_word)
                 symbols.add_word(chopped_word)
 
@@ -1895,13 +1895,13 @@ class CmdInterp(OwnerObject):
                 # text. Try to match untranslated text to a known (or new)
                 # symbol.
                 #
-                trace('CmdInterp.interpret_utterance',
+                trace('CmdInterp.interpret_utterance', 
                       'found the end of some untranslated text')
                 self.match_untranslated_text(symbols, app, interp_phrase)
 
             if trace_is_active('CmdInterp.interpret_utterance'):
                 untranslated_text = string.join(symbols.words())
-                trace('CmdInterp.interpret_utterance',
+                trace('CmdInterp.interpret_utterance', 
                       'End of *while* iteration. untranslated_text=\'%s\', app.curr_buffer().cur_pos=%s' % (untranslated_text, app.curr_buffer().cur_pos()))
 
         interp_phrase.symbol_results = symbols.inserted_symbols()
@@ -1914,7 +1914,7 @@ class CmdInterp(OwnerObject):
         app.recog_end()
         return interp_phrase
 
-    def apply_CSC(self, app, possible_CSCs, spoken_list,
+    def apply_CSC(self, app, possible_CSCs, spoken_list, 
         most_definite, symbols, interp_phrase):
         """check which CSCs apply and execute the greediest one
 
@@ -1978,7 +1978,7 @@ class CmdInterp(OwnerObject):
             return CSC_consumes
         return 0
 
-    def interpret_NL_cmd(self, cmd, app, initial_buffer = None,
+    def interpret_NL_cmd(self, cmd, app, initial_buffer = None, 
             clear_state = 0):
         
         """Interprets a natural language command and executes
@@ -2001,7 +2001,7 @@ class CmdInterp(OwnerObject):
         *states before interpreting the utterance
         """
         utterance = SpokenUtterance.MockSpokenUtterance(cmd)
-        return self.interpret_utterance(utterance, app, initial_buffer = None,
+        return self.interpret_utterance(utterance, app, initial_buffer = None, 
             clear_state = 0)
 
     def massage_command(self, command):
@@ -2023,7 +2023,7 @@ class CmdInterp(OwnerObject):
         """
         command_tuples = []
         for a_word in command:
-            spoken, written = sr_interface.spoken_written_form(a_word,
+            spoken, written = sr_interface.spoken_written_form(a_word, 
                 clean_spoken = 0)
             command_tuples.append((spoken, written))
         return self.massage_command_tuples(command_tuples)
@@ -2051,9 +2051,9 @@ class CmdInterp(OwnerObject):
         phrase = map(SpokenUtterance.remove_periods_from_initials, symbols.words())
         untranslated_text = string.join(phrase)
         spoken_form = untranslated_text
-        trace('CmdInterp.match_untranslated_text',
+        trace('CmdInterp.match_untranslated_text', 
               'untranslated_text="%s"' % untranslated_text)
-        trace('CmdInterp.match_untranslated_text',
+        trace('CmdInterp.match_untranslated_text', 
               'phrase = %s' % phrase)
         complete_match = self.known_symbols.complete_match(phrase)        
         trace('CmdInterp.match_untranslated_text', 'complete_match=%s' % complete_match)
@@ -2087,7 +2087,7 @@ class CmdInterp(OwnerObject):
         num_match = re.match(reg, untranslated_text)
         if num_match:
             untranslated_text = re.sub('\s', '', untranslated_text)        
-            actions_gen.ActionInsert(code_bef=untranslated_text,
+            actions_gen.ActionInsert(code_bef=untranslated_text, 
             code_after='').log_execute(app, None, None)
             self.styling_state.clear()
             symbols.reset()
@@ -2096,31 +2096,31 @@ class CmdInterp(OwnerObject):
         symbol_matches = None
         inexact_matches = None
         forbidden = None
-        trace('CmdInterp.match_untranslated_text',
-              'allow_inexact, manual = %d, %d' % (symbols.allow_inexact,
+        trace('CmdInterp.match_untranslated_text', 
+              'allow_inexact, manual = %d, %d' % (symbols.allow_inexact, 
               self.builder_factory.manually_specified()))
         if symbols.allow_inexact and \
                 not self.builder_factory.manually_specified():
             symbol_matches, weak_matches, forbidden = \
                 self.match_pseudo_symbol(untranslated_text)
-            trace('CmdInterp.match_untranslated_text',
+            trace('CmdInterp.match_untranslated_text', 
                   'symbol_matches=%s' % symbol_matches)
             symbol_matches = self.adjust_match_scores(symbol_matches)
             weak_matches = self.adjust_match_scores(weak_matches)
             forbidden = self.adjust_match_scores(forbidden)
             inexact_matches = symbol_matches[:] + weak_matches
 
-        trace('CmdInterp.match_untranslated_text',
+        trace('CmdInterp.match_untranslated_text', 
               'symbol_matches=%s, inexact_matches=%s, forbidden=%s' % (symbol_matches, inexact_matches, forbidden))
         if symbol_matches:
-            symbols.insert_existing_symbol(symbol_matches[0][1], interp_phrase,
-                                    exact_matches = complete_match,
-                                    inexact_matches = inexact_matches,
+            symbols.insert_existing_symbol(symbol_matches[0][1], interp_phrase, 
+                                    exact_matches = complete_match, 
+                                    inexact_matches = inexact_matches, 
                                     forbidden = forbidden)
         else:
             symbol = \
-                symbols.insert_new_symbol(interp_phrase, exact_matches = complete_match,
-                                          inexact_matches = inexact_matches,
+                symbols.insert_new_symbol(interp_phrase, exact_matches = complete_match, 
+                                          inexact_matches = inexact_matches, 
                                           forbidden = forbidden)
         
         self.styling_state.clear()
@@ -2176,8 +2176,8 @@ class CmdInterp(OwnerObject):
         
         *none* -- 
         """
-        self.known_symbols.add_symbol(symbol,
-            user_supplied_spoken_forms, tentative = tentative,
+        self.known_symbols.add_symbol(symbol, 
+            user_supplied_spoken_forms, tentative = tentative, 
             add_sr_entries = add_sr_entries)
 
     def correct_symbol(self, spoken_form, bad_written_form, correct_written_form):
@@ -2372,14 +2372,14 @@ class CmdInterp(OwnerObject):
             #
             # Insert matched symbol
             #
-            actions_gen.ActionInsert(code_bef=chosen_match.native_symbol,
+            actions_gen.ActionInsert(code_bef=chosen_match.native_symbol, 
             code_after='').log_execute(app, None, self.state_interface)            
             if choice_index != 0:
                 trace('CmdInterp.dlg_select_symbol_match.mismatch', 
                 'selected alternative match %d: %s' % \
                 (choice_index, chosen_match.native_symbol))
         else:
-            actions_gen.ActionInsert(code_bef=untranslated_text,
+            actions_gen.ActionInsert(code_bef=untranslated_text, 
             code_after='').log_execute(app, None, self.state_interface)                        
             if untranslated_text != symbol_matches[0].native_symbol:
                 trace('CmdInterp.dlg_select_symbol_match.mismatch', 
@@ -2410,14 +2410,14 @@ class CmdInterp(OwnerObject):
         consumed
         """
         matches = self.commands.all_matches(phrase)
-        trace('CmdInterp.chop_CSC_phrase',
+        trace('CmdInterp.chop_CSC_phrase', 
             '%d matches' % len(matches))
         match_consumed = []
         for match in matches:
             cmd_dict, rest_spoken = match
             consumed = len(phrase) - len(rest_spoken)
-            trace('CmdInterp.chop_CSC_phrase',
-                'words = %d, phrase = %s' % (consumed,
+            trace('CmdInterp.chop_CSC_phrase', 
+                'words = %d, phrase = %s' % (consumed, 
                 phrase[:consumed]))
             match_consumed.append((cmd_dict, consumed))
 
@@ -2477,12 +2477,26 @@ class CmdInterp(OwnerObject):
         """
         debug.trace('CmdInterp.chop_symbol_phrase', 
             'phrase = %s' % repr(phrase))
-        match = self.known_symbols.match_phrase(phrase)
+        
+        
+        #
+        # Note: We use a higher match_threshold here, to prevent
+        #       a known symbol from consuming a trailing LSA or CSC
+        #       unless it has good reasons to do so.
+        #       For example, if user says "function open paren", 
+        #       and there is a known symbol "function", then "function open"
+        #       could be a valid match for symbol "function". But 
+        #       we want to prevent that. We prevent that by requiring 
+        #       strong matches, and "function open" is not a strong match
+        #       for symbol "function".
+        #
+        match = \
+         self.known_symbols.match_phrase(phrase, use_match_threshold=1.0)
         debug.trace('CmdInterp.chop_symbol_phrase', 
             'match = %s' % repr(match))
         if match[0] is None:
             return None, 0
-        symbols, rest_spoken = match
+        symbols, rest_spoken, exact = match
         consumed = len(phrase) - len(rest_spoken)
         consumed_words = phrase[:consumed]
         return consumed_words, consumed
@@ -2682,7 +2696,7 @@ class CmdInterp(OwnerObject):
                     meaning)
                 trace('CmdInterp.add_lsa', 'language = %s' % language)
                 trace('CmdInterp.add_lsa', 
-                    'spoken, written = "%s", "%s"' % (clean_spoken,
+                    'spoken, written = "%s", "%s"' % (clean_spoken, 
                     written_as))
 
 
@@ -2809,7 +2823,7 @@ class CmdInterp(OwnerObject):
 
         *none* -- 
         """
-        self.known_symbols.add_abbreviation(abbreviation, expansions,
+        self.known_symbols.add_abbreviation(abbreviation, expansions, 
             user_added = user_added)
 
     def clear_standard_symbols_file_list(self):
@@ -2818,6 +2832,7 @@ class CmdInterp(OwnerObject):
 
     def standard_symbols_in(self, file_list):
         """Specify source files defining standard symbols"""
+        debug.trace('CmdInter.standard_symbols_in', "file_list=%s" % file_list)
         self.known_symbols.standard_symbols_in(file_list)
 
     def abbreviations_in(self, file_list):
@@ -2869,7 +2884,7 @@ class CmdInterp(OwnerObject):
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
         return self.known_symbols.accept_symbol_match(the_match)
 
-    def match_pseudo_symbol(self, pseudo_symbol):        
+    def match_pseudo_symbol(self, pseudo_symbol, use_match_threshold=None):        
         """Returns a prioritized list of all known native symbols that
         match a given pseudo symbol.
         
@@ -2877,6 +2892,10 @@ class CmdInterp(OwnerObject):
         
         *STR* pseudo_symbol -- The pseudo symbol to be matched. 
         
+        *FLOAT use_match_threshold* -- minimum confidence level required of an
+         approximate symbol match. If None, use the default setting of the
+         SymDict.
+
 
         **OUTPUTS**
         
@@ -3028,7 +3047,7 @@ class CmdInterp(OwnerObject):
 
         *BOOL* add_sr_entries = 1 -- If true, add symbols to the SR vocabulary
         """
-        self.known_symbols.parse_symbols(contents, language_name,
+        self.known_symbols.parse_symbols(contents, language_name, 
             add_sr_entries = add_sr_entries)
 
     def print_symbols(self, symbols = None):
@@ -3049,7 +3068,7 @@ class CmdInterp(OwnerObject):
         """Prints the known and unresolved abbreviations."""
         self.known_symbols.print_abbreviations(show_unresolved)
         
-    def generate_training_material(self, num_words=1000000,
+    def generate_training_material(self, num_words=1000000, 
                                    words_per_file=10000, file_names="training"):
         """generate files that can be used to tune NatSpeak's
         language model to "VoiceCodese".

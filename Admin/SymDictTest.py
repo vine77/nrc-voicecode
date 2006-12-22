@@ -16,20 +16,82 @@ class SymDictTest(VoiceCodeRootTest.VoiceCodeRootTest):
 # These tests illustrate how to use the class.
 ##########################################################
 
-   def test_reminder(self):
+   def ___test_reminder(self):
+       pass
        self.fail("remember to reactivate all other tests in SymDictTest")
       
-   def ___test_this_is_how_you_create_a_SymDict(self):
+   def test_This_is_how_you_create_a_SymDict(self):
        interp = SymDict.SymDict()
        
-   def ___test_this_is_how_you_add_a_symbol_to_the_SymDict(self):
+   def test_This_is_how_you_add_a_symbol_to_the_SymDict(self):
        self.sym_dict.add_symbol('ThisIsASymbol')
        
-   def ___test_this_is_how_you_match_a_naturally_spoken_phrase_to_symbols_in_a_SymDict(self):
+   def test_This_is_how_you_match_the_HEAD_of_a_naturally_spoken_phrase_to_symbols_in_a_SymDict(self):
        sample_spoken_phrase = ['this', 'is', 'a', 'spoken', 'phrase']
        matches = self.sym_dict.match_phrase(sample_spoken_phrase)
        list_of_matching_symbols = matches[0]
        list_of_remaining_unmatched_words_in_spoken_phrase = matches[1]
+       are_these_exact_matches = matches[2]
+       
+   def test_This_is_how_you_match_a_WHOLE_naturally_spoken_phrase_to_symbols_in_a_SymDict(self):
+       self.sym_dict.add_symbol('KnownSymb')
+       self.sym_dict.add_symbol('kwn_sm')
+       self.sym_dict.add_symbol('ks')
+    
+       matches = self.sym_dict.match_pseudo_symbol('known symbol')
+       good_matches = matches[0]
+       weak_matches = matches[1]
+       forbidden_matches = matches[2]
+       self.assert_equal([(0.51734539969834092, 'KnownSymb')], 
+                         good_matches, epsilon=0.01,
+                         mess="Good matches were wrong for pseudo-symbol")
+       self.assert_equal([(0.36538461538461553, 'kwn_sm'), (0.048185603807257449, 'ks')], weak_matches, 
+                         mess="Weak matches were wrong for pseudo-symbol")
+       self.assert_equal([], forbidden_matches, 
+                         mess="Forbidden matches were wrong for pseudo-symbol")
+
+   def test_When_matching_HEAD_of_a_spoken_phrase_to_a_symbol_you_can_be_more_or_less_demanding_for_fuzzy_matches(self):
+       self.sym_dict.add_symbol('KnownSymb')
+       self.sym_dict.add_symbol('kwn_sm')
+       self.sym_dict.add_symbol('ks')
+
+       matches = self.sym_dict.match_phrase(
+                                ['known', 'symbol'], 
+                                use_match_threshold=0.4)
+       list_of_matching_symbols = matches[0]
+    
+       self.assert_equal(['KnownSymb'], 
+                         list_of_matching_symbols, 
+                         mess="Matching symbols for head of phrase were wrong in case with high match threshold")
+
+       matches = self.sym_dict.match_phrase(
+                               ['known', 'symbol'], 
+                               use_match_threshold=0.2)
+       good_matches = matches[0]
+       self.assert_equal(['KnownSymb','kwn_sm'], 
+                         good_matches,
+                         mess="Matching symbols for head of phrase were wrong in case with low match threshold")
+
+       
+   def test_When_matching_a_WHOLE_spoken_phrase_to_a_symbol_you_can_be_more_or_less_demanding_for_fuzzy_matches(self):
+       self.sym_dict.add_symbol('KnownSymb')
+       self.sym_dict.add_symbol('kwn_sm')
+       self.sym_dict.add_symbol('ks')
+    
+       matches = self.sym_dict.match_pseudo_symbol('known symbol', use_match_threshold=0.4)
+       good_matches = matches[0]
+       self.assert_equal([(0.51734539969834092, 'KnownSymb')], 
+                         good_matches, epsilon=0.01,
+                         mess="Good matches were wrong for high match threshold")
+
+       matches = self.sym_dict.match_pseudo_symbol('known symbol', use_match_threshold=0.2)
+       good_matches = matches[0]
+       self.assert_equal([(0.51734539969834092, 'KnownSymb'), 
+                          (0.36538461538461553, 'kwn_sm')], 
+                         good_matches, epsilon=0.01,
+                         mess="Good matches were wrong for low match threshold")
+       
+
               
 
 ##########################################################
@@ -38,42 +100,32 @@ class SymDictTest(VoiceCodeRootTest.VoiceCodeRootTest):
 # These tests check the internal workings of the class.
 ##########################################################
 
-   def ___test_match_pseudo_symbol(self):
-       self.sym_dict.add_symbol('ThisIsASmb')
-       
-       # Example of use
-       matches = self.sym_dict.match_pseudo_symbol('this is a symbol')
-       good_matches = matches[0]
-       weak_matches = matches[1]
-       forbidden_matches = matches[2]
-       self.assert_equal([(0.76719576719576721, 'ThisIsASmb')], 
-                         good_matches, epsilon=0.01,
-                         mess="Good matches were wrong for pseudo-symbol")
-       self.assert_equal([], weak_matches, 
-                         mess="Weak matches were wrong for pseudo-symbol")
-       self.assert_equal([], forbidden_matches, 
-                         mess="Forbidden matches were wrong for pseudo-symbol")
-       
+   def test_match_pseudo_symbol(self):
        # Testing match_pseudo_symbol() under varied conditions
        self.assert__match_pseudo_symbol__returns('', ([], [], []),
                 "Matching pseudo-symbol failed for empty pseudo-symbol.")
+       self.assert__match_pseudo_symbol__returns(
+                'known symbol', 
+                ([], [], []),
+                "Matching pseudo-symbol failed for empty pseudo-symbol.")
 
-   def test_delete_me_later(self):
-       self.sym_dict.add_symbol('ThisIsASymbol')
 
-       self.assert_phrase_matches(phrase=['this', 'is', 'a', 'symbol', 'but', 'not', 'this'],
-                                  expected_matches=(['ThisIsASmb'], []),
-                                  mess="Nevermind... I'm just trying to see how WordTrie.match_phrase works")
-       
+      
 
    def test_match_phrase(self):
        self.sym_dict.add_symbol('ThisIsASmb')
-
-       self.assert_phrase_matches(phrase=['this', 'is', 'a', 'symbol'],
-                                  expected_matches=(['ThisIsASmb'], []))
+       self.sym_dict.add_symbol('ThisSymbolDoesNotContainAbbreviations')
        
-       self.assert_phrase_matches(phrase=['this', 'is', 'a', 'symbol', 'but', 'not', 'this'],
-                                  expected_matches=(['ThisIsASmb'], ['but', 'not', 'this']))
+       self.assert_phrase_matches(phrase=['this', 'is', 'a', 'symbol'],
+                                  expected_matches=(['ThisIsASmb'], [], False))
+       
+       self.assert_phrase_matches(phrase=['this', 'is', 'a', 'symbol', 'however', 'this', 'is', 'not'],
+                                  expected_matches=(['ThisIsASmb'], ['however', 'this', 'is', 'not'], False))
+
+       self.assert_phrase_matches(phrase=['this', 'symbol', 'does', 'not', 'contain', 'abbreviations'],
+                                  expected_matches=(['ThisSymbolDoesNotContainAbbreviations'], [], True),
+                                  mess="Failed trying to match a symbol exactly.")
+
        
    def test_fuzzy_match_phrase(self):
        self.sym_dict.add_symbol('a_known_smb')
@@ -100,8 +152,9 @@ class SymDictTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self.assert_equal(expected_matches, got_matches, mess)
        
    def assert__match_pseudo_symbol__returns(self, pseudo_symbol,
-          expected_matches, mess=""):
-       matches = self.sym_dict.match_pseudo_symbol(pseudo_symbol)
+          expected_matches, use_match_threshold=None, mess=""):
+       matches = self.sym_dict.match_pseudo_symbol(pseudo_symbol, 
+                                                   use_match_threshold=use_match_threshold)
        good_matches = matches[0]
        weak_matches = matches[1]
        forbidden_matches = matches[2]

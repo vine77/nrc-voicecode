@@ -28,12 +28,14 @@ import sb_services, SourceBuff
 from LangDef import LangDef
 import auto_test, PickledObject, sr_interface, vc_globals
 import WordTrie
+from SymbolResult import SymbolResult
 import DictConverter
 import util
 from debug import trace, tracing
 import debug
 import StringIO
 import math
+import copy
 
 import copy, cPickle, exceptions, os, re, string, sys
 import shutil
@@ -149,7 +151,7 @@ class SymbolMatch(Object):
     *STR native_symbol=None* -- The matched native symbol (e.g. aNewSym)
 
     *STR words=None* --  The words in *pseudo_symbol*
-
+    
     *BOOL is_new=0* -- If true, then the symbol is a new one
 
     *NUM fmt_rank=10* -- For new symbol, this gives the match's rank in
@@ -170,7 +172,7 @@ class SymbolMatch(Object):
                             {'pseudo_symbol': pseudo_symbol, \
                              'native_symbol': native_symbol, \
                              'words': words, \
-                            'word_matches': word_matches, \
+                             'word_matches': word_matches, \
                              'is_new': is_new, \
                              'fmt_rank': fmt_rank}, \
                             args_super, \
@@ -382,7 +384,7 @@ class SymDict(OwnerObject):
      consonants, and the value is the list of strong consonants
      associated with each weak consonant.
 
-    *FLOAT match_threshold* -- minimum confidence level required of an
+    *FLOAT match_threshold* -- Default minimum confidence level required of an
     approximate symbol match
 
     *FCT BOOL(STR, STR) word_exists* -- alternative function to use to
@@ -404,41 +406,41 @@ class SymDict(OwnerObject):
         export_file = None, match_threshold = 0.4, **attrs):
 
         # These attributes can't be set with constructor arguments
-        self.decl_attrs({'_cached_symbols_as_one_string': {},
-                         '_symbols_starting_with': {},
-                         'spoken_form_info': WordTrie.WordTrie(),
-                         'symbol_info': {},
-                         'tentative_symbols': {},
-                         'abbreviations': {},
-                         'alt_abbreviations': {},
-                         'expansions': {},
-                         'pronunciations': {},
-                         'acronyms': {},
-                         'extra_expansions': {},
-                         'standard_symbol_sources': [],
-                         'symbol_sources_read': [],
-                         'abbrev_sources': [],
-                         'unresolved_abbreviations': {},
+        self.decl_attrs({'_cached_symbols_as_one_string': {}, 
+                         '_symbols_starting_with': {}, 
+                         'spoken_form_info': WordTrie.WordTrie(), 
+                         'symbol_info': {}, 
+                         'tentative_symbols': {}, 
+                         'abbreviations': {}, 
+                         'alt_abbreviations': {}, 
+                         'expansions': {}, 
+                         'pronunciations': {}, 
+                         'acronyms': {}, 
+                         'extra_expansions': {}, 
+                         'standard_symbol_sources': [], 
+                         'symbol_sources_read': [], 
+                         'abbrev_sources': [], 
+                         'unresolved_abbreviations': {}, 
                          # AD: This is ugly... should use the AppState's SB_SereviceLang
                          #     instance instead.
-                         'lang_name_srv': sb_services.SB_ServiceLangServerSide(buff=None),
-                         'min_chars_for_approx_match': 4,
-                         'min_chars_run_together': 4,
-                         'min_non_consec_chars_for_approx_match': 3,
-                         'max_auto_acronym': 3,
-                         'word_exists': None,
+                         'lang_name_srv': sb_services.SB_ServiceLangServerSide(buff=None), 
+                         'min_chars_for_approx_match': 4, 
+                         'min_chars_run_together': 4, 
+                         'min_non_consec_chars_for_approx_match': 3, 
+                         'max_auto_acronym': 3, 
+                         'word_exists': None, 
                          'common_hyphenated': {'un': 0 , 'co': 0, 'non': 0, 
-                             're': 0},
+                             're': 0}, 
                          'weak_pairs': {'n': ['t']}
                         })
         
-        self.deep_construct(SymDict,
-                            {'sym_file': sym_file,
-                             'export_file': export_file,
-                             'interp': interp,
-                             'from_file': 0,
-                             'file_time': None,
-                             'match_threshold': match_threshold},
+        self.deep_construct(SymDict, 
+                            {'sym_file': sym_file, 
+                             'export_file': export_file, 
+                             'interp': interp, 
+                             'from_file': 0, 
+                             'file_time': None, 
+                             'match_threshold': match_threshold}, 
                             attrs)
         self.name_parent('interp')
         if not export_file:
@@ -669,8 +671,8 @@ class SymDict(OwnerObject):
             return copy.copy(self.symbol_info[symbol].spoken_forms)
         return None
 
-    def match_phrase(self, phrase):
-        """looks for a complete or partial (prefix) match of the
+    def match_phrase(self, phrase, use_match_threshold=None):
+        """looks for a complete or partial (prefix) EXACT match of the
         phrase to the spoken forms of known symbols.
         returns the value corresponding to the longest prefix of the
         given phrase which appears in the WordTrie
@@ -678,14 +680,92 @@ class SymDict(OwnerObject):
         **INPUTS**
 
         *[STR] phrase* -- list of words to match
+        
+         *FLOAT use_match_threshold* -- minimum confidence level required of an
+         approximate symbol match. If None, use the default setting of the
+         SymDict.
+
+
+        **OUTPUTS**
+
+        *([STR], [STR], BOOL)* -- First element is the list of written 
+        forms of known symbols corresponding to the partial phrase. Second
+        element is the list of remaining unmatched words from the phrase.
+        Third element specifies whether the match was exact. 
+        """
+        exact_matches = self.spoken_form_info.match_phrase(phrase)
+        fuzzy_matches = self.fuzzy_match_phrase(phrase, use_match_threshold)
+        debug.trace('SymDict.match_phrase', 
+                    "** phrase=%s, exact_matches=%s, fuzzy_matches=%s" % 
+                    (phrase, exact_matches, fuzzy_matches))
+        
+        exact_matches_unmatched_words = exact_matches[1]
+        fuzzy_matches_unmatched_words = fuzzy_matches[1]
+        # Take match which consumes the most words from the phrase
+        # In case of tie, exact matches take precedence.
+        if (len(exact_matches_unmatched_words) <= len(fuzzy_matches_unmatched_words)):
+           match = (exact_matches[0], exact_matches[1], True)
+        else:
+           match = ([], fuzzy_matches_unmatched_words, False)
+           for a_match in fuzzy_matches[0]:
+              match[0].append(a_match[1])
+
+        debug.trace('SymDict.match_phrase', 
+                    "** returning match=%s" % repr(match))
+            
+        return match
+    
+    def fuzzy_match_phrase(self, phrase, use_match_threshold=None):
+        """Looks for a complete or partial (prefix) FUZZY match of 
+        phrase to the spoken forms of known symbols.
+        returns the value corresponding to the longest prefix of the
+        given phrase which appears in the WordTrie
+
+        **INPUTS**
+
+        *[STR] phrase* -- list of words to match
+        
+         *FLOAT use_match_threshold* -- minimum confidence level required of an
+         approximate symbol match. If None, use the default setting of the
+         SymDict.
 
         **OUTPUTS**
 
         *([STR], [STR])* -- the list of written forms of known symbols
         corresponding to the partial phrase, together with any 
         remaining unmatched words from the phrase
-        """
-        return self.spoken_form_info.match_phrase(phrase)
+        
+        See SymDictTest unit test for examples of how to use"""
+        
+        trace('SymDict.fuzzy_match_phrase', "** phrase=%s, use_match_threshold=%s" % (phrase, use_match_threshold))
+        
+        longest_matchings_found = (None, copy.copy(phrase))
+        if phrase:
+           rest_words = copy.copy(phrase)
+           match_text = ''
+           while len(rest_words) > 0: 
+               word = rest_words.pop(0)
+               if match_text != '':
+                   match_text = match_text + " "
+               match_text = match_text + word
+               trace('SymDict.fuzzy_match_phrase', 
+                     "** match_text='%s', rest_words=%s" %
+                     (match_text, rest_words))
+            
+               symbol_matches, weak_matches, forbidden = \
+                   self.match_pseudo_symbol(match_text, use_match_threshold)
+            
+               trace('SymDict.fuzzy_match_phrase', 
+                     "** matches for '%s' are (%s, %s, %s)" %
+                     (match_text, symbol_matches, weak_matches, forbidden))
+            
+               if symbol_matches:
+                   longest_matchings_found = \
+                      (symbol_matches, copy.copy(rest_words))
+                   trace('SymDict.fuzzy_match_phrase', 
+                         "** this matches, so now longest_matchings_found =%s" % repr(longest_matchings_found))
+            
+        return longest_matchings_found
 
     def complete_match(self, phrase):
         """returns the list of symbols with spoken forms exactly
@@ -1028,10 +1108,9 @@ class SymDict(OwnerObject):
 
         .. [self._cached_symbols_as_one_string] file:///./SymDict.SymDict.html
         """
-        
         first_letter = first_letter[0].lower()
         if not first_letter.isalpha():
-            return None
+            return ""
 
         if not self._cached_symbols_as_one_string.has_key(first_letter):
             #
@@ -1158,9 +1237,9 @@ class SymDict(OwnerObject):
         persistent symbol dictionary file, or if this SymDict instance
         was not initialized from a persisten symbol dictionary
         """
-        trace('SymDict.changed_since_sym_file',
+        trace('SymDict.changed_since_sym_file', 
            'symdict file modified %s' % self.file_time)
-        trace('SymDict.changed_since_sym_file',
+        trace('SymDict.changed_since_sym_file', 
            'file %s modified %s' % (path, util.last_mod(path)))
         if self.from_file and util.last_mod(path) <= self.file_time:
             return 0
@@ -1355,16 +1434,16 @@ class SymDict(OwnerObject):
 #        print 'existing files:', existing
 #        print 'from_file = ', self.from_file
 #        print 'marked = ', sr_interface.is_user_marked()
-        debug.trace('SymDict.maybe_parse_standard_symbols',
+        debug.trace('SymDict.maybe_parse_standard_symbols', 
             'from_file = %d' % self.from_file)
-        debug.trace('SymDict.maybe_parse_standard_symbols',
+        debug.trace('SymDict.maybe_parse_standard_symbols', 
             'standard symbol sources: %s' % self.standard_symbol_sources)
-        debug.trace('SymDict.maybe_parse_standard_symbols',
+        debug.trace('SymDict.maybe_parse_standard_symbols', 
             'symbol sources already read: %s' % self.symbol_sources_read)
         if self.from_file and sr_interface.is_user_marked():
             files = []
             for file in existing:
-                debug.trace('SymDict.maybe_parse_standard_symbols',
+                debug.trace('SymDict.maybe_parse_standard_symbols', 
                     'checking file %s' % file)
 # need to scan files which have just been added to the standard symbols
 # sources list, and re-scan files changed since the persistent SymDict file 
@@ -1542,6 +1621,7 @@ class SymDict(OwnerObject):
 
     def standard_symbols_in(self, file_list):
         """Specify source files defining standard symbols"""
+        debug.trace('SymDict.standard_symbols_in', "file_list=%s" % file_list)
         for a_file in file_list:
             if not a_file in self.standard_symbol_sources:
                 self.standard_symbol_sources.append(a_file)
@@ -1583,14 +1663,14 @@ class SymDict(OwnerObject):
         *BOOL* -- true if the symbol was only tentative, and 
         was successfully removed
         """
-        debug.trace('SymDict.remove_symbol_if_tentative',
+        debug.trace('SymDict.remove_symbol_if_tentative', 
             'symbol = %s' % symbol)
         success = 0
         if self.symbol_is_tentative(symbol):
-            debug.trace('SymDict.remove_symbol_if_tentative',
+            debug.trace('SymDict.remove_symbol_if_tentative', 
                 'is tentative')
             success = self.remove_symbol(symbol)
-        debug.trace('SymDict.remove_symbol_if_tentative',
+        debug.trace('SymDict.remove_symbol_if_tentative', 
             'success = %d' % success)
         return success
 
@@ -1609,38 +1689,38 @@ class SymDict(OwnerObject):
         *BOOL* -- true if the symbol was known and was successfully
         removed
         """
-        debug.trace('SymDict.remove_symbol',
+        debug.trace('SymDict.remove_symbol', 
             'symbol = %s' % symbol)
         try:
             symbol_info = self.symbol_info[symbol]
         except KeyError:
-            debug.trace('SymDict.remove_symbol',
+            debug.trace('SymDict.remove_symbol', 
                 'unknown symbol')
             return 0
 
         spoken_forms = symbol_info.spoken_forms
         for spoken_form in spoken_forms:
             phrase = self.spoken_to_phrase(spoken_form)
-            debug.trace('SymDict.remove_symbol',
+            debug.trace('SymDict.remove_symbol', 
                 'removing spoken forms: phrase = \n%s' % phrase)
             symbol_list = self.spoken_form_info.complete_match(phrase)
-            debug.trace('SymDict.remove_symbol',
+            debug.trace('SymDict.remove_symbol', 
                 'complete match returned %s' % symbol_list)
             if remove_sr_entries:
                 self.remove_vocabulary_entry(symbol, spoken_form)
             if not (symbol_list is None):
                 try:
                     symbol_list.remove(symbol)
-                    debug.trace('SymDict.remove_symbol',
+                    debug.trace('SymDict.remove_symbol', 
                         'symbol_list now %s' % repr(symbol_list))
                     if not symbol_list:
                         remove_branch = \
                             self.spoken_form_info.remove_phrase(phrase)
                         if remove_branch is None:
-                            debug.trace('SymDict.remove_symbol',
+                            debug.trace('SymDict.remove_symbol', 
                                 'failed to remove empty branch')
                 except ValueError:
-                    debug.trace('SymDict.remove_symbol',
+                    debug.trace('SymDict.remove_symbol', 
                         'symbol not found in symbol_list')
                     pass
 
@@ -1888,7 +1968,7 @@ class SymDict(OwnerObject):
         debug.trace('SymDict.correct_symbol', 
                     'spoken_form_used=%s, bad_written_form=%s, correct_written_form=%s' % 
                     (spoken_form_used, bad_written_form, correct_written_form))
-        self.move_written_form_to_top_of_priority_list(spoken_form_used,
+        self.move_written_form_to_top_of_priority_list(spoken_form_used, 
                                                        correct_written_form)
         self.add_symbol(correct_written_form, [spoken_form_used], tentative=0)
         self.save()
@@ -1911,7 +1991,7 @@ class SymDict(OwnerObject):
         debug.trace('SymDict.move_written_form_to_top_of_priority_list', 
                     'spoken_form=%s, written_form=%s, string.split(spoken_form)=%s' % (spoken_form, written_form, repr(string.split(spoken_form))))
         written_forms_priority_list = self.match_phrase(string.split(spoken_form))[0]
-        debug.trace('SymDict.move_written_form_to_top_of_priority_list',
+        debug.trace('SymDict.move_written_form_to_top_of_priority_list', 
                     "written_forms_priority_list=%s" % repr(written_forms_priority_list))
         if (written_forms_priority_list == None):
            written_forms_priority_list = []
@@ -1919,10 +1999,6 @@ class SymDict(OwnerObject):
            util.remove_occurences_from_list(written_form, written_forms_priority_list)
         written_forms_priority_list = [written_form] + written_forms_priority_list
         self.spoken_form_info.add_phrase(string.split(spoken_form), written_forms_priority_list)
-        debug.trace('SymDict.move_written_form_to_top_of_priority_list',
-                    "** after bumping, written_forms_priority_list=%s" % repr(self.match_phrase(spoken_form)[0]))        
-        debug.trace('SymDict.move_written_form_to_top_of_priority_list',
-                    "after bumping, priority list =%s" % repr(self.match_phrase(spoken_form)[0]))        
 
 
     def remove_vocabulary_entry(self, symbol, spoken_form):
@@ -2023,7 +2099,7 @@ class SymDict(OwnerObject):
 # add_vocabulary_entry now filters for this
 
 #        the_spoken_forms = filter(lambda form: form != symbol,
-#                                  the_spoken_forms )
+#                                  the_spoken_forms)
             
 #        print '-- SymDict.get_spoken_forms: the_spoken_forms=%s' % the_spoken_forms        
         return the_spoken_forms
@@ -2305,7 +2381,8 @@ class SymDict(OwnerObject):
             debug.trace('SymDict.get_language_definition', 'returning definition=%s' % definition)            
         return definition
     
-    def _score_symbol_matches(self, pseudo_symbol, words, native_matches):
+    def _score_symbol_matches(self, pseudo_symbol, words, 
+                               native_matches):
        """Assign confidence scores to each approximate match to the
        given pseudo_symbol
        
@@ -2314,6 +2391,7 @@ class SymDict(OwnerObject):
        *STR pseudo_symbol* -- The pseudo symbol that was matched.
 
        *[STR] words* -- words in the pseudo symbol
+       
 
        *Iterator over Match objects native_matches* -- iterator of
        re.MatchObjects corresponding to native symbol matches for 
@@ -2321,7 +2399,7 @@ class SymDict(OwnerObject):
        
        **OUTPUTS**
        
-       *( allowed, forbidden )* where
+       *(allowed, forbidden)* where
 
        allowed and forbidden are lists of tuples (score, re.MatchObject)
        each sorted by descending score.  The confidence score is a
@@ -2366,7 +2444,7 @@ class SymDict(OwnerObject):
        
        **OUTPUTS**
 
-       *( forbidden, confidence_score )* -- where the confidence score
+       *(forbidden, confidence_score)* -- where the confidence score
         is a floating point value between 0 and 1 (inclusive), and
         forbidden is a BOOL indicating whether some rule forbade using
         the match as the first choice (e.g. because a final "s" was
@@ -2396,32 +2474,32 @@ class SymDict(OwnerObject):
        word_groups = native_match.groups('')[1:]
        for word, matched_text in zip(words, word_groups):
            if tracing('SymDict._score_symbol_match'):
-               trace('SymDict._score_symbol_match',
+               trace('SymDict._score_symbol_match', 
                    'word = %s, matched text = %s' % (word, repr(matched_text)))
            s = self.reg_word_to_native(word, map_letter = lambda x:"(%s)" % x)
            word_match = re.match(s, matched_text, re.IGNORECASE)
            if tracing('SymDict._score_symbol_match'):
-               trace('SymDict._score_symbol_match',
+               trace('SymDict._score_symbol_match', 
                    'word_match = %s' % word_match)
            factor = self._score_word_match(word, word_match)
            if tracing('SymDict._score_symbol_match'):
-               trace('SymDict._score_symbol_match',
+               trace('SymDict._score_symbol_match', 
                    'word factor = %f' % factor)
            if factor < 0:
                forbidden = 1
                raw_confidence = raw_confidence * (1. + factor)
                if tracing('SymDict._score_symbol_match'):
-                   trace('SymDict._score_symbol_match',
+                   trace('SymDict._score_symbol_match', 
                        'raw_confidence now = %f' % raw_confidence)
            else:
                doubt = doubt / (1. + factor/word_factor)
                if tracing('SymDict._score_symbol_match'):
-                   trace('SymDict._score_symbol_match',
+                   trace('SymDict._score_symbol_match', 
                        'doubt now = %f' % doubt)
 
        confidence = raw_confidence * (1. - doubt)
        if tracing('SymDict._score_symbol_match'):
-           trace('SymDict._score_symbol_match',
+           trace('SymDict._score_symbol_match', 
                'forbidden, confidence = %d, %f' % (forbidden, confidence))
        
        # add code here to modify confidence based on multi-word
@@ -2457,7 +2535,7 @@ class SymDict(OwnerObject):
        if abbrev_score:
            return abbrev_score
        
-       expansion_score = self._score_expansion(word,
+       expansion_score = self._score_expansion(word, 
            whole_match)
        if expansion_score:
            return expansion_score
@@ -2490,7 +2568,7 @@ class SymDict(OwnerObject):
 #       factor = 1 - k_prefix/math.pow(len(whole_match), p_prefix)
 #           factor = float(len(whole_match))/len(word)
        if tracing('SymDict._score_word_match'):
-           trace('SymDict._score_word_match',
+           trace('SymDict._score_word_match', 
                'prefix factor = %f' % factor)
        if word[-1] == 's' and whole_match[-1] != 's':
            factor = factor - 1.
@@ -2520,7 +2598,7 @@ class SymDict(OwnerObject):
        penalty = 0.
        norm = 0.
        if tracing('SymDict._score_word_missing_letters'):
-           trace('SymDict._score_word_missing_letters',
+           trace('SymDict._score_word_missing_letters', 
                'letter matches = %s' % letter_matches)
        last_letter = ""
        for letter, letter_match in letter_matches:
@@ -2553,7 +2631,7 @@ class SymDict(OwnerObject):
                    penalty = penalty + 0.5
            last_letter = letter
        if tracing('SymDict._score_word_missing_letters'):
-           trace('SymDict._score_word_missing_letters',
+           trace('SymDict._score_word_missing_letters', 
                'penalty, norm = %f, %f' % (penalty, norm))
        penalty = penalty/norm
        # extra penalty for singular abbreviations of plural words
@@ -2561,7 +2639,7 @@ class SymDict(OwnerObject):
            penalty = penalty + 1.0
        factor = 1. - penalty
        if tracing('SymDict._score_word_missing_letters'):
-           trace('SymDict._score_word_missing_letters',
+           trace('SymDict._score_word_missing_letters', 
                'factor = 1 - penalty/norm = %f' % factor)
        return factor
        
@@ -2590,7 +2668,7 @@ class SymDict(OwnerObject):
        try:
            i = abbreviations.index(whole_match)
            factor = 1. - 0.5 * float(i)/len(abbreviations)
-           trace('SymDict._score_abbrev',
+           trace('SymDict._score_abbrev', 
                'factor = %f' % factor)
            return factor
        except ValueError:
@@ -2619,7 +2697,7 @@ class SymDict(OwnerObject):
        if self.expansions.has_key(whole_match):
            if word in self.expansions[whole_match]:
                factor = f/(len(self.expansions[whole_match])  + 1.)
-               trace('SymDict._score_expansion',
+               trace('SymDict._score_expansion', 
                    'factor = %f' % factor)
                return factor
        return None
@@ -2650,7 +2728,7 @@ class SymDict(OwnerObject):
        #
        pseudo_symbol = string.lower(pseudo_symbol)
        pseudo_symbol = re.sub('[^a-z0-9]', '', pseudo_symbol)
-       trace('SymDict._remove_bad_symbol_matches',
+       trace('SymDict._remove_bad_symbol_matches', 
              'pseudo_symbol after is: "%s"' % pseudo_symbol)       
        
        good_matches = []
@@ -2809,7 +2887,7 @@ class SymDict(OwnerObject):
        return 1
 
        
-    def match_pseudo_symbol(self, pseudo_symbol):        
+    def match_pseudo_symbol(self, pseudo_symbol, use_match_threshold=None):        
         """Returns a prioritized list of all known native symbols that
         match a given pseudo symbol.
         
@@ -2817,6 +2895,10 @@ class SymDict(OwnerObject):
         
         *STR* pseudo_symbol -- The pseudo symbol to be matched. 
         
+         *FLOAT use_match_threshold* -- minimum confidence level required of an
+         approximate symbol match. If None, use the default setting of the
+         SymDict.
+
 
         **OUTPUTS**
         
@@ -2830,8 +2912,18 @@ class SymDict(OwnerObject):
         .. [SymbolMatch] file:///./SymDict.SymbolMatch.html"""
 
         trace('SymDict.match_pseudo_symbol', 'pseudo_symbol=\'%s\'' % pseudo_symbol)
+                
+        if use_match_threshold == None:
+           use_match_threshold = self.match_threshold                
+
+        trace('SymDict.match_pseudo_symbol', '** Got use_match_threshold=%s' % use_match_threshold)
+
+                
+        if not pseudo_symbol:
+            return ([], [], [])
         mess_symbols = lambda : "Symbols are: %s" % repr(self.symbol_info)
-#        trace('SymDict.match_pseudo_symbol', mess_symbols)
+        if tracing('SymDict.match_pseudo_symbol'):
+            trace('SymDict.match_pseudo_symbol', mess_symbols)
 
 
         #
@@ -2852,27 +2944,28 @@ class SymDict(OwnerObject):
         #
         # Find all known native symbols that match *pseudo_symbol*
         #
+        
         all_symbols = self.symbols_as_one_string(words[0][0])
 
             
 #        print '-- SymDict.match_pseudo_symbols: words=%s' % words        
         regexp = self.reg_pseudo_to_native_symbol(words)
 
-#        print '-- SymDict.match_pseudo_symbol: regexp=%s, all_symbols=\'%s\'' % (regexp.__dict__, all_symbols)
+#        print '-- SymDict.match_pseudo_symbol: all_symbols=\'%s\'' % all_symbols
         
         raw_matches = regexp.finditer(all_symbols)
 
 #        print '-- SymDict.match_pseudo_symbol: raw_matches = %s' % raw_matches
 
         allowed, forbidden = \
-                      self._score_symbol_matches(pseudo_symbol, words,
+                      self._score_symbol_matches(pseudo_symbol, words, 
                                                  raw_matches)
         good_matches = []
         weak_matches = []
         if allowed:
             i_good = 0
             for score, match in allowed:
-                if score >= self.match_threshold:
+                if score >= use_match_threshold:
                     i_good = i_good + 1
                 else:
                     break
@@ -2953,7 +3046,7 @@ class SymDict(OwnerObject):
         regexp_string = ' (' + reg_non_alphanums
         for a_word in words:
             if tracing('SymDict.reg_pseudo_to_native_symbol'): 
-                trace('SymDict.reg_pseudo_to_native_symbol',
+                trace('SymDict.reg_pseudo_to_native_symbol', 
                     'a_word=%s' % a_word)
             if len(a_word) > 0:
                 regexp_string = regexp_string + '(' + \
@@ -3037,7 +3130,7 @@ class SymDict(OwnerObject):
         # forms if it is already there
         #
         
-        self.add_symbol(the_match.native_symbol,
+        self.add_symbol(the_match.native_symbol, 
         user_supplied_spoken_forms=[the_match.pseudo_symbol])
 
 
@@ -3272,14 +3365,14 @@ class SymDict(OwnerObject):
             version = values['version']
         except KeyError:
             version = 1
-        debug.trace('SymDict.init_from_file',
+        debug.trace('SymDict.init_from_file', 
             'state file version %s (current is %s)' \
             % (version, current_version))
         try:
             if version != current_version:
                 if not symdict_cvtr.known_version(version):
-                    debug.trace('SymDict.init_from_file',
-                        'version %d, known versions: %s' % (version,
+                    debug.trace('SymDict.init_from_file', 
+                        'version %d, known versions: %s' % (version, 
                         symdict_cvtr.known_versions()))
                     msg = 'unknown version %d' % version \
                         + ' of the symbol dictionary file\n%s\n' % self.sym_file
@@ -3351,8 +3444,8 @@ class SymDict(OwnerObject):
                     (version, self.sym_file)
                 raise ErrorReadingPersistDict(msg)
 ##} wrong version
-            fields = ['symbol_info', 'spoken_form_info', 'abbreviations',
-                'alt_abbreviations', 'unresolved_abbreviations',
+            fields = ['symbol_info', 'spoken_form_info', 'abbreviations', 
+                'alt_abbreviations', 'unresolved_abbreviations', 
                 'symbol_sources_read']
             current_field = None
             for field in fields:
@@ -3506,9 +3599,9 @@ class SymDict(OwnerObject):
 class SymDictSingleConverter(DictConverter.SingleVersionDictConverter):
     def __init__(self, initial_version, final_version, **args):
         self.deep_construct(SymDictSingleConverter, 
-            {'initial': initial_version,
+            {'initial': initial_version, 
              'target': final_version
-            },
+            }, 
             args)
 
     def initial_version(self):
@@ -3556,8 +3649,8 @@ class SymDictSingleConverter(DictConverter.SingleVersionDictConverter):
 class AddSymbolSourcesRead(SymDictSingleConverter):
 
     def __init__(self, **args):
-        self.deep_construct(AddSymbolSourcesRead, {}, args,
-           enforce_value = {'initial_version': 1,
+        self.deep_construct(AddSymbolSourcesRead, {}, args, 
+           enforce_value = {'initial_version': 1, 
                             'final_version': 2})
 
     def convert(self, original, initial_version):
@@ -3594,7 +3687,7 @@ class AddSymbolSourcesRead(SymDictSingleConverter):
             msg = msg + '\converting dictionary data\n'
             msg = msg + ' read from symbol dictionary file\n%s\n' \
                   % self.sym_file
-            msg = msg + 'from version %s to %s' % (initial_version,
+            msg = msg + 'from version %s to %s' % (initial_version, 
                 self.final_version())
             raise DictConverter.ConversionFailure(msg)
         return d
@@ -3602,8 +3695,8 @@ class AddSymbolSourcesRead(SymDictSingleConverter):
 class SpokenFormsAsWordTrie(SymDictSingleConverter):
 
     def __init__(self, **args):
-        self.deep_construct(AddSymbolSourcesRead, {}, args,
-           enforce_value = {'initial_version': 3,
+        self.deep_construct(AddSymbolSourcesRead, {}, args, 
+           enforce_value = {'initial_version': 3, 
                             'final_version': 4})
 
     def convert(self, original, initial_version):
@@ -3644,7 +3737,7 @@ class SpokenFormsAsWordTrie(SymDictSingleConverter):
             msg = msg + '\converting dictionary data\n'
             msg = msg + ' read from symbol dictionary file\n%s\n' \
                   % self.sym_file
-            msg = msg + 'from version %s to %s' % (initial_version,
+            msg = msg + 'from version %s to %s' % (initial_version, 
                 self.final_version())
             raise DictConverter.ConversionFailure(msg)
         return d
@@ -3652,8 +3745,8 @@ class SpokenFormsAsWordTrie(SymDictSingleConverter):
 class MoreExpansionCategories(SymDictSingleConverter):
 
     def __init__(self, **args):
-        self.deep_construct(MoreExpansionCategories, {}, args,
-           enforce_value = {'initial_version': 4,
+        self.deep_construct(MoreExpansionCategories, {}, args, 
+           enforce_value = {'initial_version': 4, 
                             'final_version': 5})
 
     def convert(self, original, initial_version):
@@ -3692,7 +3785,7 @@ class MoreExpansionCategories(SymDictSingleConverter):
             msg = msg + '\converting dictionary data\n'
             msg = msg + ' read from symbol dictionary file\n%s\n' \
                   % self.sym_file
-            msg = msg + 'from version %s to %s' % (initial_version,
+            msg = msg + 'from version %s to %s' % (initial_version, 
                 self.final_version())
             raise DictConverter.ConversionFailure(msg)
         return d
