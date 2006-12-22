@@ -2077,7 +2077,7 @@ class CmdInterp(OwnerObject):
                 msg = msg + "complete_match is %s\n" % complete_match
                 msg = msg + "phrase is %s\n" % phrase
                 msg = msg + "match_phrase gives %s\n" \
-                    % repr(self.known_symbols.match_phrase(phrase))
+                    % repr(self.known_symbols.match_head(phrase))
                 sys.stderr.write(msg)
         # Match untranslated text to new known symbol or a known symbol with
         # unresolved spoken forms.
@@ -2450,7 +2450,7 @@ class CmdInterp(OwnerObject):
         # See if spoken_form is in the list of active LSAs
         #
 
-        match = aliases.match_phrase(phrase)
+        match = aliases.match_head(phrase)
         if match[0] is None:
             return None, 0
         meaning, rest_spoken = match
@@ -2496,7 +2496,7 @@ class CmdInterp(OwnerObject):
         #       for symbol "function".
         #
         match = \
-         self.known_symbols.match_phrase(phrase, use_match_threshold=0.6)
+         self.known_symbols.match_head(phrase, use_match_threshold=0.6)
         debug.trace('CmdInterp.chop_symbol_phrase', 
             'match = %s' % repr(match))
         if match[0] is None:

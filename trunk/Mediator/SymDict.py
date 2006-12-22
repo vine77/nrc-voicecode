@@ -671,7 +671,7 @@ class SymDict(OwnerObject):
             return copy.copy(self.symbol_info[symbol].spoken_forms)
         return None
 
-    def match_phrase(self, phrase, use_match_threshold=None):
+    def match_head(self, phrase, use_match_threshold=None):
         """looks for a complete or partial (prefix) EXACT match of the
         phrase to the spoken forms of known symbols.
         returns the value corresponding to the longest prefix of the
@@ -693,9 +693,9 @@ class SymDict(OwnerObject):
         element is the list of remaining unmatched words from the phrase.
         Third element specifies whether the match was exact. 
         """
-        exact_matches = self.spoken_form_info.match_phrase(phrase)
-        fuzzy_matches = self.fuzzy_match_phrase(phrase, use_match_threshold)
-        debug.trace('SymDict.match_phrase', 
+        exact_matches = self.spoken_form_info.match_head(phrase)
+        fuzzy_matches = self.fuzzy_match_head(phrase, use_match_threshold)
+        debug.trace('SymDict.match_head(', 
                     "** phrase=%s, exact_matches=%s, fuzzy_matches=%s" % 
                     (phrase, exact_matches, fuzzy_matches))
         
@@ -710,12 +710,12 @@ class SymDict(OwnerObject):
            for a_match in fuzzy_matches[0]:
               match[0].append(a_match[1])
 
-        debug.trace('SymDict.match_phrase', 
+        debug.trace('SymDict.match_head(', 
                     "** returning match=%s" % repr(match))
             
         return match
     
-    def fuzzy_match_phrase(self, phrase, use_match_threshold=None):
+    def fuzzy_match_head(self, phrase, use_match_threshold=None):
         """Looks for a complete or partial (prefix) FUZZY match of 
         phrase to the spoken forms of known symbols.
         returns the value corresponding to the longest prefix of the
@@ -1990,7 +1990,7 @@ class SymDict(OwnerObject):
         """
         debug.trace('SymDict.move_written_form_to_top_of_priority_list', 
                     'spoken_form=%s, written_form=%s, string.split(spoken_form)=%s' % (spoken_form, written_form, repr(string.split(spoken_form))))
-        written_forms_priority_list = self.match_phrase(string.split(spoken_form))[0]
+        written_forms_priority_list = self.match_head(string.split(spoken_form))[0]
         debug.trace('SymDict.move_written_form_to_top_of_priority_list', 
                     "written_forms_priority_list=%s" % repr(written_forms_priority_list))
         if (written_forms_priority_list == None):

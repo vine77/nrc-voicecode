@@ -28,7 +28,7 @@ class SymDictTest(VoiceCodeRootTest.VoiceCodeRootTest):
        
    def test_This_is_how_you_match_the_HEAD_of_a_naturally_spoken_phrase_to_symbols_in_a_SymDict(self):
        sample_spoken_phrase = ['this', 'is', 'a', 'spoken', 'phrase']
-       matches = self.sym_dict.match_phrase(sample_spoken_phrase)
+       matches = self.sym_dict.match_head(sample_spoken_phrase)
        list_of_matching_symbols = matches[0]
        list_of_remaining_unmatched_words_in_spoken_phrase = matches[1]
        are_these_exact_matches = matches[2]
@@ -55,7 +55,7 @@ class SymDictTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self.sym_dict.add_symbol('kwn_sm')
        self.sym_dict.add_symbol('ks')
 
-       matches = self.sym_dict.match_phrase(
+       matches = self.sym_dict.match_head(
                                 ['known', 'symbol'], 
                                 use_match_threshold=0.4)
        list_of_matching_symbols = matches[0]
@@ -64,7 +64,7 @@ class SymDictTest(VoiceCodeRootTest.VoiceCodeRootTest):
                          list_of_matching_symbols, 
                          mess="Matching symbols for head of phrase were wrong in case with high match threshold")
 
-       matches = self.sym_dict.match_phrase(
+       matches = self.sym_dict.match_head(
                                ['known', 'symbol'], 
                                use_match_threshold=0.2)
        good_matches = matches[0]
@@ -112,27 +112,27 @@ class SymDictTest(VoiceCodeRootTest.VoiceCodeRootTest):
 
       
 
-   def test_match_phrase(self):
+   def test_match_head(self):
        self.sym_dict.add_symbol('ThisIsASmb')
        self.sym_dict.add_symbol('ThisSymbolDoesNotContainAbbreviations')
        
-       self.assert_phrase_matches(phrase=['this', 'is', 'a', 'symbol'],
+       self.assert_head_matches_symbol(phrase=['this', 'is', 'a', 'symbol'],
                                   expected_matches=(['ThisIsASmb'], [], False))
        
-       self.assert_phrase_matches(phrase=['this', 'is', 'a', 'symbol', 'however', 'this', 'is', 'not'],
+       self.assert_head_matches_symbol(phrase=['this', 'is', 'a', 'symbol', 'however', 'this', 'is', 'not'],
                                   expected_matches=(['ThisIsASmb'], ['however', 'this', 'is', 'not'], False))
 
-       self.assert_phrase_matches(phrase=['this', 'symbol', 'does', 'not', 'contain', 'abbreviations'],
+       self.assert_head_matches_symbol(phrase=['this', 'symbol', 'does', 'not', 'contain', 'abbreviations'],
                                   expected_matches=(['ThisSymbolDoesNotContainAbbreviations'], [], True),
                                   mess="Failed trying to match a symbol exactly.")
 
        
-   def test_fuzzy_match_phrase(self):
+   def test_fuzzy_match_head(self):
        self.sym_dict.add_symbol('a_known_smb')
 
        # Example of use
        phrase = ['a', 'known', 'symbol', 'equal', 'to', 'another', 'one']
-       fuzzy_matches = self.sym_dict.fuzzy_match_phrase(phrase)
+       fuzzy_matches = self.sym_dict.fuzzy_match_head(phrase)
        self.assert_equal(([(0.65079365079365081, 'a_known_smb')], ['equal', 'to', 'another', 'one']),
                          fuzzy_matches,
                          epsilon=0.005,
@@ -146,8 +146,8 @@ class SymDictTest(VoiceCodeRootTest.VoiceCodeRootTest):
 # Use these methods to check the state of the class.
 ###############################################################
 
-   def assert_phrase_matches(self, phrase, expected_matches, mess=""):
-       got_matches = self.sym_dict.match_phrase(phrase)
+   def assert_head_matches_symbol(self, phrase, expected_matches, mess=""):
+       got_matches = self.sym_dict.match_head(phrase)
        mess = mess + "\nSymbol matches for phrase %s were wrong" % repr(phrase)
        self.assert_equal(expected_matches, got_matches, mess)
        

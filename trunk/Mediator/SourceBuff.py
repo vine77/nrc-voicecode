@@ -934,7 +934,7 @@ class SourceBuff(OwnerObject):
         """
         debug.virtual('SourceBuff.delete')
         
-    def delete_all(self):
+    def delete_buffer_content(self):
         self.delete((0, self.len()))
 
     def delete_line(self):
