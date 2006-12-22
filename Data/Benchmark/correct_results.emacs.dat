@@ -4509,8 +4509,6 @@ _cached_symbols_as_one_string[f] is:
     f_name  f_name2  fabs  float  floor  
 _cached_symbols_as_one_string[h] is:
     horiz_pos  
-_cached_symbols_as_one_string[i] is:
-    
 _cached_symbols_as_one_string[l] is:
     len  log  log10  
 _cached_symbols_as_one_string[m] is:
@@ -4521,8 +4519,6 @@ _cached_symbols_as_one_string[s] is:
     sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
-_cached_symbols_as_one_string[u] is:
-    
 _cached_symbols_as_one_string[v] is:
     void  
 _cached_symbols_as_one_string[x] is:
@@ -4596,8 +4592,6 @@ _cached_symbols_as_one_string[f] is:
     f_name  f_name2  fabs  float  floor  
 _cached_symbols_as_one_string[h] is:
     horiz_pos  
-_cached_symbols_as_one_string[i] is:
-    
 _cached_symbols_as_one_string[l] is:
     len  log  log10  
 _cached_symbols_as_one_string[m] is:
@@ -4608,8 +4602,6 @@ _cached_symbols_as_one_string[s] is:
     sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
-_cached_symbols_as_one_string[u] is:
-    
 _cached_symbols_as_one_string[v] is:
     void  
 _cached_symbols_as_one_string[x] is:
@@ -5119,8 +5111,6 @@ _cached_symbols_as_one_string[f] is:
     f_name  f_name2  fabs  file_name  float  floor  
 _cached_symbols_as_one_string[h] is:
     horiz_pos  
-_cached_symbols_as_one_string[i] is:
-    
 _cached_symbols_as_one_string[l] is:
     len  log  log10  
 _cached_symbols_as_one_string[m] is:
@@ -5133,8 +5123,6 @@ _cached_symbols_as_one_string[s] is:
     sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
-_cached_symbols_as_one_string[u] is:
-    
 _cached_symbols_as_one_string[v] is:
     void  
 _cached_symbols_as_one_string[x] is:

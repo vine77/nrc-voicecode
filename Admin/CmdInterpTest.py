@@ -51,7 +51,7 @@ class CmdInterpTest(VoiceCodeRootTest.VoiceCodeRootTest):
                'function(<CURSOR>',
                mess="Failed translation. Might it be that a fuzzy symbol match consumed part of a LSA.")
                       
-   def ___test_symbol_containing_an_LSA(self):
+   def test_symbol_containing_an_LSA(self):
        self.interp.add_symbol('MyVec_INT')
        
        self.assert_utterance_translates_to(['my', 'vec', 'int'],
