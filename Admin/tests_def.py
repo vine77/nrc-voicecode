@@ -4640,11 +4640,8 @@ class AlainReminderTest(unittest.TestCase):
         unittest.TestCase.__init__(self, name)
 
     def test_check_reminders(self):
-        self.fail("Remember to reactivate the SymDict and CmdInterp tests in tests_def")
-        self.fail("remember to reactivate all other tests in SymDictTest")
-        self.fail_("Remember to change name of SourceBuff.delete_all() to SourceBuff.delete_buff_content(). The later is better name for AppState delegate.")
-        self.fail_("Make sure fuzzy_match_phrase() is done only if fuzzy matches are allowed, etc... See the test done in CmdInterp.interpret() before invoking match_pseudo_symbol.")
-        self.fail("Now, chop_symbol() checks for fuzzy symbol matches. But if a fuzzy match is found, interpret_utterance()just inserts the corresponding text. In fact, it should create a SymbolResult, etc... as is done when translating untranslated text further down in interpret_utterance()" )
+        pass
+#        self.fail_("reminder here.")
 
         
 def test_alain_reminder():

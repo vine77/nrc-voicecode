@@ -70,7 +70,7 @@ class WordTrie(Object):
             self.branches[word] = WordTrie() # create a new branch
         self.branches[word].add_phrase(rest, value)
 
-    def match_phrase(self, phrase):
+    def match_head(self, phrase):
         """looks for complete or partial matches to the phrase, and
         returns the value corresponding to the longest prefix of the
         given phrase which appears in the WordTrie
@@ -90,7 +90,7 @@ class WordTrie(Object):
         rest = phrase[1:]
         if not self.branches.has_key(word):
             return self.value, phrase
-        value, rest = self.branches[word].match_phrase(rest)
+        value, rest = self.branches[word].match_head(rest)
         if value is None:
             return None, phrase
         return value, rest
@@ -230,7 +230,7 @@ def test_translator(w, sentence):
     indentation = 0
     start_of_line = 1
     while phrase:
-        translation, rest = w.match_phrase(phrase)
+        translation, rest = w.match_head(phrase)
         space = ''
         if translation is None:
             translation = phrase[0]

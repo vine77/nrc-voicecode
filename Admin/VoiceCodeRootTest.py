@@ -51,7 +51,7 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
    def _open_empty_test_file(self, file_name):
        fpath = os.path.join(vc_globals.tmp, file_name)
        self._open_file(fpath)  
-       self._app().delete_all()
+       self._app().delete_buffer_content()
       
    def _open_file(self, fpath):
       self._app().open_file(fpath)    
