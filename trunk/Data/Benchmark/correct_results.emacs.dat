@@ -759,53 +759,6 @@ Starting background tests...
 
 >>> Dictating C/C++ when only standard symbols are known <<<
 
-THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
-THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-__abs__: ['abs', 'underscore abs', 'underscore absolute', 'underscore absolute value']
-abs: ['abs', 'absolute', 'absolute value']
-abspath: ['abs path', 'absolute path', 'abspath']
-accept: ['accept']
-accept2dyear: ['accept 2 dyear', 'accept two D. year']
-access: ['access']
-acos: ['A. cos', 'acos', 'arc cos', 'arc cosine']
-acquire: ['acquire']
-asin: ['A. sine', 'arc sine', 'asin']
-atan: ['A. tan', 'arc tan', 'arc tangent', 'atan']
-atan2: ['A. tan 2', 'arc tan 2', 'arc tangent 2', 'atan 2']
-atanh: ['A. tan H.', 'arc tan H.', 'arc tangent H.', 'atanh', 'hyperbolic arc tangent']
-ceil: ['ceil', 'ceiling']
-cos: ['cos', 'cosine']
-cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
-exp: ['exp', 'exponential']
-fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
-floor: ['floor']
-len: ['len', 'length']
-log: ['log', 'logarithm']
-log10: ['log 10', 'log base 10', 'logarithm base 10']
-repr: ['rep', 'repr', 'represent', 'representation']
-sin: ['sin', 'sine']
-sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['sqirt', 'sqrt', 'square root']
-str: ['S. T. R.', 'str', 'string']
-tan: ['tan', 'tangent']
-tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
-type: ['type']
-_cached_symbols_as_one_string[a] is:
-    __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
-_cached_symbols_as_one_string[c] is:
-    ceil  cos  cosh  
-_cached_symbols_as_one_string[e] is:
-    exp  
-_cached_symbols_as_one_string[f] is:
-    fabs  floor  
-_cached_symbols_as_one_string[l] is:
-    len  log  log10  
-_cached_symbols_as_one_string[r] is:
-    repr  
-_cached_symbols_as_one_string[s] is:
-    sin  sinh  sqrt  str  
-_cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  type  
 WARNING: source file 'blah.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -2698,6 +2651,13 @@ EdSim instance EdSim(0) connected
 
 
 *******************************************************************************
+* Name        : ContBlankLine
+* Description : Tests for the blank line context class.
+*******************************************************************************
+
+
+
+*******************************************************************************
 * Name        : EdSim
 * Description : self-test for EdSim.py
 *******************************************************************************
@@ -4549,6 +4509,8 @@ _cached_symbols_as_one_string[f] is:
     f_name  f_name2  fabs  float  floor  
 _cached_symbols_as_one_string[h] is:
     horiz_pos  
+_cached_symbols_as_one_string[i] is:
+    
 _cached_symbols_as_one_string[l] is:
     len  log  log10  
 _cached_symbols_as_one_string[m] is:
@@ -4559,6 +4521,8 @@ _cached_symbols_as_one_string[s] is:
     sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
+_cached_symbols_as_one_string[u] is:
+    
 _cached_symbols_as_one_string[v] is:
     void  
 _cached_symbols_as_one_string[x] is:
@@ -4632,6 +4596,8 @@ _cached_symbols_as_one_string[f] is:
     f_name  f_name2  fabs  float  floor  
 _cached_symbols_as_one_string[h] is:
     horiz_pos  
+_cached_symbols_as_one_string[i] is:
+    
 _cached_symbols_as_one_string[l] is:
     len  log  log10  
 _cached_symbols_as_one_string[m] is:
@@ -4642,6 +4608,8 @@ _cached_symbols_as_one_string[s] is:
     sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
+_cached_symbols_as_one_string[u] is:
+    
 _cached_symbols_as_one_string[v] is:
     void  
 _cached_symbols_as_one_string[x] is:
@@ -5151,16 +5119,22 @@ _cached_symbols_as_one_string[f] is:
     f_name  f_name2  fabs  file_name  float  floor  
 _cached_symbols_as_one_string[h] is:
     horiz_pos  
+_cached_symbols_as_one_string[i] is:
+    
 _cached_symbols_as_one_string[l] is:
     len  log  log10  
 _cached_symbols_as_one_string[m] is:
     move  move_horiz  move_vert  
+_cached_symbols_as_one_string[n] is:
+    
 _cached_symbols_as_one_string[r] is:
     repr  
 _cached_symbols_as_one_string[s] is:
     sin  sinh  sqrt  str  
 _cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_sym_has_an_other_abbrev  this_sym_is_unres  this_sym_is_unres_too  type  
+_cached_symbols_as_one_string[u] is:
+    
 _cached_symbols_as_one_string[v] is:
     void  
 _cached_symbols_as_one_string[x] is:
@@ -12099,246 +12073,6 @@ _cached_symbols_as_one_string[v] is:
     vc_globals  vocabulary_entry  
 _cached_symbols_as_one_string[w] is:
     while  word_consumes  words  write  written  written_as  
-AppState: ['app state']
-CSC_consumes: ['C. S. C. consumes', 'CSC consumes']
-CSCmd: ['C. S. cmd', 'C. S. command', 'CS cmd', 'CS command']
-CSCs: ['C. S. C. S.', 'C. S. CS', 'CS C. S.', 'CS CS']
-CmdInterp: ['cmd interp', 'cmd interpreter', 'command interp', 'command interpreter']
-ContC: ['cont C.', 'content C.', 'context C.']
-ContPy: ['cont P. Y.', 'cont pie', 'cont py', 'cont python', 'content P. Y.', 'content pie', 'content py', 'content python', 'context P. Y.', 'context pie', 'context py', 'context python']
-EdSim: ['ed sim']
-LSA_consumes: ['L. S. A. consumes', 'LSA consumes']
-None: ['none']
-Object: ['object']
-SymDict: ['sym dict', 'sym dictionary', 'symbol dict', 'symbol dictionary']
-THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
-THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-__abs__: ['abs', 'underscore abs', 'underscore absolute', 'underscore absolute value']
-__init__: ['init', 'initial', 'initialize']
-_untranslated_text_end: ['untranslated text end']
-_untranslated_text_start: ['untranslated text start']
-aCSC: ['A. C. S. C.', 'A. CSC', 'a C. S. C.', 'a CSC']
-a_match: ['A. match', 'a match']
-a_spoken_form: ['A. spoken form', 'a spoken form']
-a_word: ['A. word', 'a word']
-abs: ['abs', 'absolute', 'absolute value']
-abspath: ['abs path', 'absolute path', 'abspath']
-accept: ['accept']
-accept2dyear: ['accept 2 dyear', 'accept two D. year']
-accept_symbol_match: ['accept symbol match']
-access: ['access']
-acmd: ['acmd']
-acos: ['A. cos', 'acos', 'arc cos', 'arc cosine']
-acquire: ['acquire']
-actions_C_Cpp: ['actions C. C. plus plus', 'actions C. cpp']
-actions_py: ['actions P. Y.', 'actions pie', 'actions py', 'actions python']
-active_language: ['active language']
-active_language_LSAs: ['active language L.s as', 'active language lengths as']
-addWord: ['add word']
-add_voc_entry: ['add voc entry']
-all_language_LSAs: ['all language L.s as', 'all language lengths as']
-and: ['and']
-answer: ['answer']
-answer_match: ['answer match']
-asin: ['A. sine', 'arc sine', 'asin']
-atan: ['A. tan', 'arc tan', 'arc tangent', 'atan']
-atan2: ['A. tan 2', 'arc tan 2', 'arc tangent 2', 'atan 2']
-atanh: ['A. tan H.', 'arc tan H.', 'arc tangent H.', 'atanh', 'hyperbolic arc tangent']
-attrs: ['attributes']
-auto_test: ['auto test']
-aword: ['aword']
-break: ['break']
-ceil: ['ceil', 'ceiling']
-choice_index: ['choice index']
-choices: ['choices']
-choose_best_symbol: ['choose best symbol']
-chop_CSC: ['chop C. S. C.', 'chop CSC']
-chop_LSA: ['chop L. S. A.', 'chop LSA']
-chop_symbol: ['chop symbol']
-chop_word: ['chop word']
-chopped_CSC: ['chopped C. S. C.', 'chopped CSC']
-chopped_LSA: ['chopped L. S. A.', 'chopped LSA']
-chopped_symbol: ['chopped symbol']
-chopped_word: ['chopped word']
-chosen_match: ['chosen match']
-class: ['class']
-clean_for: ['clean for']
-clean_written: ['clean written']
-clean_written_form: ['clean written form']
-cmd: ['cmd', 'command']
-cmd_index: ['cmd index', 'command index']
-cmd_without_CSC: ['cmd without C. S. C.', 'cmd without CSC', 'command without C. S. C.', 'command without CSC']
-cmd_without_LSA: ['cmd without L. S. A.', 'cmd without LSA', 'command without L. S. A.', 'command without LSA']
-cmd_without_symbol: ['cmd without symbol', 'command without symbol']
-cmd_without_word: ['cmd without word', 'command without word']
-cmds_this_spoken_form: ['commands this spoken form']
-command: ['command']
-consumed: ['consumed']
-cont_gen: ['cont gen', 'cont general', 'cont generic', 'content gen', 'content general', 'content generic', 'context gen', 'context general', 'context generic']
-content: ['content']
-cos: ['cos', 'cosine']
-cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
-csc_applied: ['C. S. C. applied', 'CSC applied']
-cur_pos: ['cur pos', 'cur position', 'cur positioning', 'current pos', 'current position', 'current positioning', 'cursor pos', 'cursor position', 'cursor positioning']
-curr_buffer: ['curr buffer', 'current buffer']
-decl_attrs: ['decl attributes', 'declaration attributes', 'declare attributes']
-deep_construct: ['deep construct']
-def: ['deaf', 'def', 'default', 'define', 'defined', 'definition']
-deleteWord: ['delete word']
-dlg_select_symbol_match: ['dialog select symbol match', 'dlg select symbol match']
-dummy: ['dummy']
-else: ['else']
-end: ['end']
-environ: ['environ', 'environment']
-exp: ['exp', 'exponential']
-fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
-first: ['first']
-floor: ['floor']
-for: ['for']
-from: ['from']
-global: ['global']
-good_answer: ['good answer']
-group: ['group']
-has_key: ['has key']
-head_was_translated: ['head was translated']
-if: ['if']
-ii: ['I. I.', 'ii']
-import: ['import']
-in: ['in']
-index_csc: ['index C. S. C.', 'index CSC']
-insert_indent: ['insert indent']
-insert_untranslated_text: ['insert untranslated text']
-int: ['int', 'integer']
-interpret: ['interpret']
-interpret_NL_cmd: ['interpret N. L. cmd', 'interpret N. L. command', 'interpret NL cmd', 'interpret NL command']
-is_new: ['is new']
-join: ['join']
-known_symbols: ['known symbols']
-language: ['language']
-language_specific_aliases: ['language specific aliases']
-last_language: ['last language']
-last_loaded_language: ['last loaded language']
-leading_spaces: ['leading spaces']
-leading_word: ['leading word']
-len: ['len', 'length']
-load_language_specific_aliases: ['load language specific aliases']
-log: ['log', 'logarithm']
-log10: ['log 10', 'log base 10', 'logarithm base 10']
-lower: ['lower']
-massage_command: ['massage command']
-match: ['match']
-match_pseudo_symbol: ['match pseudo symbol']
-match_untranslated_text: ['match untranslated text']
-max: ['max', 'maximum']
-mod_command: ['mod command', 'mode command', 'modified command', 'modify command']
-most_consumed: ['most consumed']
-move_to: ['move to']
-native_symbol: ['native symbol']
-natlink: ['natlink']
-new_pos: ['new pos', 'new position', 'new positioning']
-not: ['not']
-num_match: ['num match', 'number match']
-old_pos: ['old pos', 'old position', 'old positioning']
-on_app: ['on app']
-or: ['or']
-os: ['O. S.', 'operating system', 'os']
-print: ['print']
-print_buff_content: ['print buff content', 'print buffer content']
-re: ['re-']
-readline: ['readline']
-reg: ['reg', 'regular', 'regular expression']
-regexp: ['regexp', 'regular expression']
-regexp_is_dirty: ['regexp is dirty', 'regular expression is dirty']
-regexp_this_word: ['regexp this word', 'regular expression this word']
-repr: ['rep', 'repr', 'represent', 'representation']
-rest: ['rest']
-return: ['return']
-s: ['S.']
-self: ['self']
-sin: ['sin', 'sine']
-sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-split: ['split']
-spoken: ['spoken']
-spoken_as: ['spoken as']
-spoken_form: ['spoken form']
-spoken_form_info: ['spoken form info', 'spoken form information']
-spoken_form_regexp: ['spoken form regexp', 'spoken form regular expression']
-spoken_forms: ['spoken forms']
-spoken_written_form: ['spoken written form']
-sqrt: ['sqirt', 'sqrt', 'square root']
-sr_interface: ['S. R. interface', 'SR interface']
-start: ['start']
-stdin: ['S. T. D. in', 'standard in', 'standard input', 'stdin']
-stdout: ['S. T. D. out', 'standard out', 'stdout']
-str: ['S. T. R.', 'str', 'string']
-string: ['string']
-sub: ['sub', 'sub routine']
-symbol_consumes: ['symbol consumes']
-symbol_info: ['symbol info', 'symbol information']
-symbol_matches: ['symbol matches']
-symbols: ['symbols']
-symdict_pickle_file: ['symdict pickle file']
-sys: ['sys', 'system']
-tan: ['tan', 'tangent']
-tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
-text: ['text']
-text_no_spaces: ['text no spaces', 'text number spaces']
-type: ['type']
-untranslated_text: ['untranslated text']
-upper: ['upper']
-upto: ['upto']
-vc_globals: ['vc globals']
-vocabulary_entry: ['vocabulary entry']
-while: ['while']
-word_consumes: ['word consumes']
-words: ['words']
-write: ['write']
-written: ['written']
-written_as: ['written as']
-_cached_symbols_as_one_string[a] is:
-    AppState  __abs__  aCSC  a_match  a_spoken_form  a_word  abs  abspath  accept  accept2dyear  accept_symbol_match  access  acmd  acos  acquire  actions_C_Cpp  actions_py  active_language  active_language_LSAs  addWord  add_voc_entry  all_language_LSAs  and  answer  answer_match  asin  atan  atan2  atanh  attrs  auto_test  aword  
-_cached_symbols_as_one_string[b] is:
-    break  
-_cached_symbols_as_one_string[c] is:
-    CSC_consumes  CSCmd  CSCs  CmdInterp  ContC  ContPy  ceil  choice_index  choices  choose_best_symbol  chop_CSC  chop_LSA  chop_symbol  chop_word  chopped_CSC  chopped_LSA  chopped_symbol  chopped_word  chosen_match  class  clean_for  clean_written  clean_written_form  cmd  cmd_index  cmd_without_CSC  cmd_without_LSA  cmd_without_symbol  cmd_without_word  cmds_this_spoken_form  command  consumed  cont_gen  content  cos  cosh  csc_applied  cur_pos  curr_buffer  
-_cached_symbols_as_one_string[d] is:
-    decl_attrs  deep_construct  def  deleteWord  dlg_select_symbol_match  dummy  
-_cached_symbols_as_one_string[e] is:
-    EdSim  else  end  environ  exp  
-_cached_symbols_as_one_string[f] is:
-    fabs  first  floor  for  from  
-_cached_symbols_as_one_string[g] is:
-    global  good_answer  group  
-_cached_symbols_as_one_string[h] is:
-    has_key  head_was_translated  
-_cached_symbols_as_one_string[i] is:
-    __init__  if  ii  import  in  index_csc  insert_indent  insert_untranslated_text  int  interpret  interpret_NL_cmd  is_new  
-_cached_symbols_as_one_string[j] is:
-    join  
-_cached_symbols_as_one_string[k] is:
-    known_symbols  
-_cached_symbols_as_one_string[l] is:
-    LSA_consumes  language  language_specific_aliases  last_language  last_loaded_language  leading_spaces  leading_word  len  load_language_specific_aliases  log  log10  lower  
-_cached_symbols_as_one_string[m] is:
-    massage_command  match  match_pseudo_symbol  match_untranslated_text  max  mod_command  most_consumed  move_to  
-_cached_symbols_as_one_string[n] is:
-    None  native_symbol  natlink  new_pos  not  num_match  
-_cached_symbols_as_one_string[o] is:
-    Object  old_pos  on_app  or  os  
-_cached_symbols_as_one_string[p] is:
-    print  print_buff_content  
-_cached_symbols_as_one_string[r] is:
-    re  readline  reg  regexp  regexp_is_dirty  regexp_this_word  repr  rest  return  
-_cached_symbols_as_one_string[s] is:
-    SymDict  s  self  sin  sinh  split  spoken  spoken_as  spoken_form  spoken_form_info  spoken_form_regexp  spoken_forms  spoken_written_form  sqrt  sr_interface  start  stdin  stdout  str  string  sub  symbol_consumes  symbol_info  symbol_matches  symbols  symdict_pickle_file  sys  
-_cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  text  text_no_spaces  type  
-_cached_symbols_as_one_string[u] is:
-    _untranslated_text_end  _untranslated_text_start  untranslated_text  upper  upto  
-_cached_symbols_as_one_string[v] is:
-    vc_globals  vocabulary_entry  
-_cached_symbols_as_one_string[w] is:
-    while  word_consumes  words  write  written  written_as  
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -12717,53 +12451,6 @@ Heard finally do print single quotes all right
 
 >>> Dictating Python when only standard symbols are known <<<
 
-THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
-THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-__abs__: ['abs', 'underscore abs', 'underscore absolute', 'underscore absolute value']
-abs: ['abs', 'absolute', 'absolute value']
-abspath: ['abs path', 'absolute path', 'abspath']
-accept: ['accept']
-accept2dyear: ['accept 2 dyear', 'accept two D. year']
-access: ['access']
-acos: ['A. cos', 'acos', 'arc cos', 'arc cosine']
-acquire: ['acquire']
-asin: ['A. sine', 'arc sine', 'asin']
-atan: ['A. tan', 'arc tan', 'arc tangent', 'atan']
-atan2: ['A. tan 2', 'arc tan 2', 'arc tangent 2', 'atan 2']
-atanh: ['A. tan H.', 'arc tan H.', 'arc tangent H.', 'atanh', 'hyperbolic arc tangent']
-ceil: ['ceil', 'ceiling']
-cos: ['cos', 'cosine']
-cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
-exp: ['exp', 'exponential']
-fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
-floor: ['floor']
-len: ['len', 'length']
-log: ['log', 'logarithm']
-log10: ['log 10', 'log base 10', 'logarithm base 10']
-repr: ['rep', 'repr', 'represent', 'representation']
-sin: ['sin', 'sine']
-sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['sqirt', 'sqrt', 'square root']
-str: ['S. T. R.', 'str', 'string']
-tan: ['tan', 'tangent']
-tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
-type: ['type']
-_cached_symbols_as_one_string[a] is:
-    __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
-_cached_symbols_as_one_string[c] is:
-    ceil  cos  cosh  
-_cached_symbols_as_one_string[e] is:
-    exp  
-_cached_symbols_as_one_string[f] is:
-    fabs  floor  
-_cached_symbols_as_one_string[l] is:
-    len  log  log10  
-_cached_symbols_as_one_string[r] is:
-    repr  
-_cached_symbols_as_one_string[s] is:
-    sin  sinh  sqrt  str  
-_cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  type  
 WARNING: source file 'blah.py' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -17094,60 +16781,6 @@ Heard select previous index equals zero
   2: index = 1
   3: index = 0
   4: index = 1
-
-
-*******************************************************************************
-* Name        : whatcanisay
-* Description : what can I say test
-*******************************************************************************
-
-WARNING: source file 'blah1.py' doesn't exist.
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
-Saying: ['voice coder', 'what', 'can', 'I', 'say']
-Heard voice coder what can I say
-
-<HTML>
-<HEADER>
-<TITLE>VoiceCode: What can I say?</TITLE>
-</HEADER>
-<BODY>
-
-<H1>VoiceCode: What can I say?</H1>
-
-<H2>Index</H2>
-
-<UL>
-<LI><A HREF="#Global">Global</A>
-
-<LI><A HREF="#C">C</A>
-
-<LI><A HREF="#perl">perl</A>
-
-<LI><A HREF="#python">python</A>
-
-</UL>
-<HR>
-<H2><A NAME="Global">Global commands</A></H2>
-
-
-<H2><A NAME="C">C commands</A></H2>
-
-
-<H2><A NAME="perl">perl commands</A></H2>
-
-
-<H2><A NAME="python">python commands</A></H2>
-
-
-</BODY>
-</HTML>
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
 
 
 *******************************************************************************

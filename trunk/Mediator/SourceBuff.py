@@ -935,7 +935,7 @@ class SourceBuff(OwnerObject):
         debug.virtual('SourceBuff.delete')
         
     def delete_all(self):
-        self.delete((0, self.len()-1))
+        self.delete((0, self.len()))
 
     def delete_line(self):
         """Delete line at cursor.
