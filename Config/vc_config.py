@@ -62,6 +62,11 @@ import KnownTargetModule
 
 import sr_interface
 
+#config choices:
+equal_sign_csc = 1    # QH choice, normally false
+
+
+
 
 ###############################################################################
 # Configure the grammar for toggling text mode on/off
@@ -237,8 +242,12 @@ std_US_punc.add(":", ['colon'], no_space_before)
 std_US_punc.add(":", ['numeric-colon'], no_spaces)
 std_US_punc.add(";", ['semicolon'], no_space_before)
 std_US_punc.add("<", ['less-than'])
-std_US_punc.add("<", ['less than'])
 std_US_punc.add(">", ['greater-than'])
+
+# QH: for version 9 apparently needed:
+std_US_punc.add("<", ['less than'])
+std_US_punc.add(">", ['greater than'])
+
 std_US_punc.add("=", ['equal-sign'])
 std_US_punc.add('?', ['question-mark'], no_spaces)
 std_US_punc.add('@', ['at-sign'], like_hyphen)
@@ -788,8 +797,8 @@ logic_ops.add_lsa(LSAlias(['and'],
 # comparison operators
 comparisons = LSAliasSet('comparison operators', 
     description = "comparison operators")
-
-comparisons.add_lsa(LSAlias(['equals', 'equal', 'is assigned', 'assign value'],
+if not equal_sign_csc:
+    comparisons.add_lsa(LSAlias(['equals', 'equal', 'is assigned', 'assign value'],
         {'C': ' = ', 'python': ' = '}, comparison_operator))
 comparisons.add_lsa(LSAlias(['less than', 'is less than'],
         {'C': ' < ', 'python': ' < ', 'perl': ' < '},
@@ -1017,6 +1026,16 @@ acmd = CSCmd(spoken_forms=['then', 'then do', 'then do the following',
                        ContPerl(): c_goto_body},
              docstring='move to body of a conditional')
 ctrl_structures.add_csc(acmd)
+
+##experiment succeeded a little bit QH:
+operator_cmds = CSCmdSet('operator commands',
+                            description = "operator commands like equal sign")
+if equal_sign_csc:
+    acmd = CSCmd(spoken_forms=['equals', 'equal', 'is assigned', 'assign value'],
+             meanings={ContPyInsideArguments(): ActionInsert("="),
+                       ContAny(): ActionInsert(' = ')},
+             docstring='equal sign inside or outside arguments with or without spacing')
+    operator_cmds.add_csc(acmd)
 
 # data structures (C struct, C++ and Python classes, etc.)
 

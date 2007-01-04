@@ -150,6 +150,10 @@ add_csc_set(function_definitions)
 add_csc_set(navigation_within_buffer)
 add_csc_set(insertion_deletions)
 
+# new, QH:
+add_csc_set(operator_cmds)
+
+
 # Python-specific
 
 add_lsa_set(misc_python)
