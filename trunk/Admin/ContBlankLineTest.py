@@ -16,6 +16,7 @@ class ContBlankLineTest(VoiceCodeRootTest.VoiceCodeRootTest):
 #
 # These tests illustrate how to use the class.
 ##########################################################
+
       
    def test_This_is_how_you_create_a_ContBlankLine(self):
        context = cont_gen.ContBlankLine()
@@ -38,6 +39,7 @@ class ContBlankLineTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self._open_empty_test_file('temp.py')
        self.assert_(self.context.applies(self._app()), 
                     "Context should have applied because cursor was on a blank line of the correct language.")
+       
        self._open_empty_test_file('temp.c')
        self.failIf(self.context.applies(self._app()), 
                     "Context should NOT have applied because eventhough it was on a blank line, the file was in the wrong language.")
@@ -50,6 +52,8 @@ class ContBlankLineTest(VoiceCodeRootTest.VoiceCodeRootTest):
 ##########################################################
 
 
+       
+ 
 ###############################################################
 # Assertions.
 # 

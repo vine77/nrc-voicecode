@@ -752,6 +752,13 @@ Starting background tests...
 
 
 *******************************************************************************
+* Name        : BasicBuffer
+* Description : showing and testing basic buffer functions (from VoiceCodeRootTest)
+*******************************************************************************
+
+
+
+*******************************************************************************
 * Name        : C_Cpp
 * Description : testing the various CSCs and LSAs for dictating C/C++ from scratch
 *******************************************************************************
@@ -2080,7 +2087,7 @@ Heard after semi new paragraph
 *** Compiling symbols from file: %VCODE_HOME%\Data\TestData\used_to_test_C_Cpp_parsing.cpp ***
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_C_Cpp_std_sym.cpp'
-WARNING: source file 'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\used_to_test_C_Cpp_parsing.cpp' doesn't exist.
+WARNING: source file 'C:\Documents and Settings\Desiletsa\My Documents\eclipse_workspace\VCode\Data\TestData\used_to_test_C_Cpp_parsing.cpp' doesn't exist.
 
 
 Parsed symbols are: 
@@ -2089,6 +2096,7 @@ THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test 
 _cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  test_comment  test_procedure  testing_adding_above  testing_declaration  testing_other_pointers  testing_pointers  the_value  this  tiger  triangle  type  
 Unresolved abbreviations are:
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 
 *** End of compilation test ***
 
@@ -2100,7 +2108,6 @@ Unresolved abbreviations are:
 *******************************************************************************
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\edit_this_buff.cpp'
-WARNING: source file 'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 >>> Known symbols are: 
 THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
@@ -2154,7 +2161,6 @@ _cached_symbols_as_one_string[t] is:
 *** Executing edit test: insert an import statement in middle of a file ***
 *********************
 
-WARNING: source file 'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2178,7 +2184,6 @@ Heard import some module
 *** Executing edit test: create new class ***
 *********************
 
-WARNING: source file 'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2214,7 +2219,6 @@ Heard define method new method method body pass
 *** Executing edit test: change subclass of existing class ***
 *********************
 
-WARNING: source file 'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2243,7 +2247,6 @@ Heard new super class
 *** Executing edit test: add_method_to_existing_class_test ***
 *********************
 
-WARNING: source file 'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2267,7 +2270,6 @@ Heard add method some method method body pass
 *** Executing edit test: add_argument_to_existing_method_test ***
 *********************
 
-WARNING: source file 'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2291,7 +2293,6 @@ Heard add argument extra argument
 *** Executing edit test: change_existing_argument_of_a_method_test ***
 *********************
 
-WARNING: source file 'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2320,7 +2321,6 @@ Heard new argument
 *** Executing edit test: insert_line_of_code_in_method_test ***
 *********************
 
-WARNING: source file 'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2351,7 +2351,6 @@ Heard some array equals none
 *** Executing edit test: change_arguments_in_method_call_test ***
 *********************
 
-WARNING: source file 'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2389,7 +2388,6 @@ Heard after paren none
 *** Executing edit test: nested_if_then_else_test ***
 *********************
 
-WARNING: source file 'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2453,7 +2451,6 @@ Heard else do some stuff without arguments
 *** Executing edit test: add_else_clause_test ***
 *********************
 
-WARNING: source file 'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2480,7 +2477,6 @@ Heard else clause
 *** Executing edit test: add_except_clause_test ***
 *********************
 
-WARNING: source file 'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2975,6 +2971,7 @@ _cached_symbols_as_one_string[y] is:
     y  
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
@@ -3106,6 +3103,7 @@ _cached_symbols_as_one_string[w] is:
 _cached_symbols_as_one_string[x] is:
     x  
 Unresolved abbreviations are:
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
 'execfile': appears in ['execfile']
 'expandvars': appears in ['expandvars']
@@ -3172,6 +3170,7 @@ _cached_symbols_as_one_string[y] is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'f': appears in ['f_name2', 'f_name']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
@@ -3219,6 +3218,7 @@ _cached_symbols_as_one_string[y] is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'f': appears in ['f_name2', 'f_name']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -3494,10 +3494,10 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'C:\\Documents and Settings\\desileta\\My Documents\\workspace\\VCode\\Data\\TestData'
+'C:\\Documents and Settings\\Desiletsa\\My Documents\\eclipse_workspace\\VCode\\Data\\TestData'
 
 
->>> Testing console command: compile_symbols([r'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'%VCODE_HOME%\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -3999,9 +3999,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'10': appears in ['log10']
+'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
@@ -4442,9 +4445,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'10': appears in ['log10']
+'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
@@ -5036,9 +5042,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'10': appears in ['log10']
+'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
@@ -5557,9 +5566,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'10': appears in ['log10']
+'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
@@ -6000,9 +6012,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'10': appears in ['log10']
+'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
@@ -7329,7 +7344,7 @@ Heard check if was done without arguments new statement
 
 
 
->>> Testing console command: open_file(r'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'%VCODE_HOME%\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>
@@ -8771,7 +8786,7 @@ List of unresolved abbreviations
 
 
 
->>> Testing console command: compile_symbols([r'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'%VCODE_HOME%\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9401,7 +9416,7 @@ As best as I can tell from SF Browse CVS, this test was
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Documents and Settings\Desiletsa\My Documents\eclipse_workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -13411,7 +13426,7 @@ WARNING: source file 'blah.c' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: compile_symbols([r'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'%VCODE_HOME%\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -13553,7 +13568,7 @@ Heard move horizontally
 
 
 
->>> Testing console command: open_file(r'C:\Documents and Settings\desileta\My Documents\workspace\VCode\Data\TestData\large_buff.py')
+>>> Testing console command: open_file(r'%VCODE_HOME%\Data\TestData\large_buff.py')
 
 *** Start of source buffer ***
   1: <CURSOR>

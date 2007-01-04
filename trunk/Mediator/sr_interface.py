@@ -280,10 +280,10 @@ def getWordInfo(word, flag = None):
            answer = natlink.getWordInfo(word, flag)
     except:
        # In case the word's spelling is not allowed by
-       print 'word: %s'% `word`
-       print """WARNING: error trying to get info from this vocabulary word
-             Maybe you forgot to start Dragon NaturallySpeaking before starting VoiceCode?"""
-       debug.print_call_stack()
+       # NatSpeak
+       print "WARNING: error trying to get info from vocabulary word '%s'\n" + \
+             "Maybe you forgot to start Dragon NaturallySpeaking before starting VoiceCode?" % repr(word)
+#       debug.print_call_stack()
        answer = None       
 
     return answer

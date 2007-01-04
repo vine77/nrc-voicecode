@@ -65,9 +65,6 @@ import sr_interface
 #config choices:
 equal_sign_csc = 1    # QH choice, normally false
 
-
-
-
 ###############################################################################
 # Configure the grammar for toggling text mode on/off
 ###############################################################################
@@ -798,7 +795,7 @@ logic_ops.add_lsa(LSAlias(['and'],
 comparisons = LSAliasSet('comparison operators', 
     description = "comparison operators")
 if not equal_sign_csc:
-    comparisons.add_lsa(LSAlias(['equals', 'equal', 'is assigned', 'assign value'],
+   comparisons.add_lsa(LSAlias(['equals', 'equal', 'is assigned', 'assign value'],
         {'C': ' = ', 'python': ' = '}, comparison_operator))
 comparisons.add_lsa(LSAlias(['less than', 'is less than'],
         {'C': ' < ', 'python': ' < ', 'perl': ' < '},

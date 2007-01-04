@@ -18,7 +18,6 @@
 # (C) 2000, National Research Council of Canada
 #
 ##############################################################################
-
 from HTMLgen import *
 from debug import trace
 from Object import Object
@@ -28,6 +27,7 @@ import re, os
 reIsInt = re.compile(r'^\d+$')
 reIsLetter = re.compile(r'^[a-zA-Z]$')
 from copy import copy
+
 
 
 class WhatCanISay(Object):
@@ -124,7 +124,7 @@ class WhatCanISay(Object):
                     all_commands.setdefault('letters', []).append((words, written))
                 else:
                     all_commands[lang].append((words, written))
-                    
+
         # manipulating all_commands (in place):
 ##        print '1: %s'% all_commands.keys()
         self.extract_common_commands(all_commands)
@@ -132,7 +132,7 @@ class WhatCanISay(Object):
         self.elaborate_commands(all_commands)
 ##        print '3: %s'% all_commands.keys()
         self.lsa_commands = all_commands
-        
+
 
     def extract_common_commands(self, all_commands):
         """change (inplace) the Commands dict
@@ -195,10 +195,10 @@ class WhatCanISay(Object):
                 group = group + '_sb__w'
             all_commands[group] = cmds[:]
             
-
+        
     def create_html_pages(self):
         """Created the actual pages, using HTMLgen
-
+        
         the input is from the self.lsa_commands dict for the lsa menu
         and from csc_commands (future) for the csc menu
         
@@ -251,6 +251,7 @@ class WhatCanISay(Object):
         if not os.path.isdir(self.html_folder):
             raise Exception('not a valid directory for What Can I Say website: %s'% self.html_folder)
         return self.html_folder
+        
     
     
     def html_command_index(self):
@@ -359,7 +360,7 @@ class WhatCanISay(Object):
         outfile = os.path.join(self.html_folder, page_html)
         trace('WhatCanISay.files', 'making page: %s'% outfile)
         doc.write(outfile)
-
+                  
     def html_csc_page(self, page):
         """generate one csc page, with a menu to the other pages"""
         doc = SimpleDocument()
