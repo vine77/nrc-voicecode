@@ -41,12 +41,13 @@ import MediatorConsoleWXTests
 import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
 import Object, SymDict, test_pseudo_python, test_pseudo_C_Cpp
 import util, unit_testing, vc_globals, WhatCanISayTest, wxWindowsWithHelpersTest
-
 import AppMgr, RecogStartMgr, GramMgr, sr_grammars
 import KnownTargetModule, NewMediatorObject, TargetWindow, WinIDClient
 import test_helpers
 import CmdInterpTest, ContBlankLineTest, SymDictTest
-import BasicBufferTest, ContPyInsideArgumentsTest
+import BasicBufferTest
+# AD: Disable until QH commits it to CVS.
+# import ContPyInsideArgumentsTest
 import debug
 import DiffCrawler
 import difflib
@@ -282,14 +283,15 @@ def test_ContBlankLine():
 add_test('ContBlankLine', test_ContBlankLine, 
          desc='Tests for the blank line context class.')
 
-
+    
 def test_ContPyInsideArguments():
     unittest.TextTestRunner(). \
        run(unittest.makeSuite(ContPyInsideArgumentsTest.ContPyInsideArgumentsTest,
                               'test'))
 
-add_test('ContPyInsideArguments', test_ContPyInsideArguments, 
-         desc='Tests for being inside the argument list of a function.')
+# AD: Disactivate for now until QH commits ContPyInsideArgumentsTest to CVS.
+# add_test('ContPyInsideArguments', test_ContPyInsideArguments, 
+#         desc='Tests for being inside the argument list of a function.')
 
 ##############################################################################
 # Testing WhatCanISay dialogs
@@ -493,9 +495,22 @@ add_test('Object', test_Object, desc='self-test for Object.py')
 # Testing mediator.py console
 ###############################################################################
 
+def substitute_VCODE_HOME_in_command(command):
+    vcode_home_regex = re.sub('[\\\\/]+', '[\\\\\\/]', vc_globals.home)
+    command_with_VCODE_HOME_substitution = re.sub(vcode_home_regex, '%VCODE_HOME%',                                                   command, re.IGNORECASE)
+    return command_with_VCODE_HOME_substitution
+
+
 def test_command(command):
     
-    print '\n\n>>> Testing console command: %s\n' % command
+    #
+    # Substitute %VCODE_HOME% directory in arguments to the command, so that they
+    # don't appear in the test output. Otherwise, the test output will differ
+    # depending on where the user installed VoiceCode
+    #
+    command_with_VCODE_HOME_substituted = substitute_VCODE_HOME_in_command(command)
+    
+    print '\n\n>>> Testing console command: %s\n' % command_with_VCODE_HOME_substituted
     sys.stdout.flush()
     testing.execute_command(command)
     sys.stdout.flush()
@@ -508,7 +523,6 @@ def test_say(utterance, user_input=None, never_bypass_sr_recog=0):
     
 
 def test_mediator_console():
-
     global small_buff_c, small_buff_py, large_buff_py
     
     testing.init_simulator_regression()
@@ -534,7 +548,6 @@ add_test('mediator_console', test_mediator_console, desc='testing mediator conso
 
 def test_select_pseudocode():
 
-    
     testing.init_simulator_regression()
     test_command("""open_file('blah.py')""")
     test_say(['index', 'equals', '0\\zero', 'new statement'], user_input='1\\n', never_bypass_sr_recog=1)
@@ -4640,18 +4653,34 @@ def test_temporary():
     testing.init_simulator_regression()      
     commands.open_file('blah1.py')
 
-  
-    commands.say(['previous semi', 'previous semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-
-    commands.say(['after semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['before previous semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
-    commands.say(['after semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
-    commands.say(['before semi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['0\\zero', '<\\less-than', '1\\one', '<\\less-than', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-#add_test('temp', test_temporary, desc='temporary test')
+    commands.say(['previous less-than', 'previous less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    
+    commands.say(['after less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    
+    commands.say(['before previous less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    
+    commands.say(['before next less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
+    
+    commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+
+
+    commands.say(['0\\zero', '>\\greater-than', '1\\one', '>\\greater-than', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    
+    commands.say(['previous greater-than', 'previous greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    
+    commands.say(['after greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    
+    commands.say(['before previous greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    
+    commands.say(['before next greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
+    
+    commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    
+# add_test('temp', test_temporary, desc='temporary test')
 
 ##############################################################################
 # Alain Desilets uses this test suite to write reminder to himself.

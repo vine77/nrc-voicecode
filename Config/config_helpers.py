@@ -405,7 +405,7 @@ class PunctuationSet(Object):
         context = self.context
         if context is None:
             context = ContAny()
-        debug.trace('PunctuationSet._add_navigation', 'context=%s, expression="%s"' % (context, expression))
+        debug.trace('PunctuationSet._add_navigation', 'self.name=%s, context=%s, expression="%s", spoken_forms=%s' % (self.name, context, expression, spoken_forms))
         for spoken in spoken_forms:
             command = CSCmd(spoken_forms = \
                ['%s %s' % (self.next_word, spoken),
