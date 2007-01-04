@@ -102,7 +102,8 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
    def _assert_cur_pos_is(self, exp_pos, mess=""):
       got_pos = self._cur_pos()
       self.assert_equal(exp_pos, got_pos,  
-                   mess + "Cursor was at the wrong place")
+          mess + "\nCursor was at the wrong place\nexp: %s\ngot: %s"% \
+                        (exp_pos, got_pos))
       
    def _assert_active_buffer_content_is(self, exp_content, mess=""):
       got_content = self._app().get_text()
