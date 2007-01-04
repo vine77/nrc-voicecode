@@ -190,17 +190,18 @@ class SymbolResult(Object):
                util.remove_occurences_from_list(self.native_symbol(), self.exact_matches())
        
         sorted_possible = self.possible_matches()
-        
         def cmp(a, b):
            if a[0] > b[0]: return 1
            if a[0] < b[0]: return -1
            return 0
-           
-        sorted_possible.sort(cmp)        
-        sorted_possible.reverse()
-        for a_possible in sorted_possible:
-           if not a_possible[1] in list:
-              list.append(a_possible[1])
+
+        # the case sorted_possible is None (QH):
+        if sorted_possible != None:
+            sorted_possible.sort(cmp)        
+            sorted_possible.reverse()
+            for a_possible in sorted_possible:
+                if not a_possible[1] in list:
+                    list.append(a_possible[1])
    
         for a_new_format in self.possible_new_symbol_formats():
            if not a_new_format in list:

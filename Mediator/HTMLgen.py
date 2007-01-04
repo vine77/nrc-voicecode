@@ -109,7 +109,7 @@ CONTYPE = 'Content-Type: text/html '
 DOCTYPE = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>"""
 # 0 = minimal, 1 = normal, 2 = more
-PRINTECHO = 2
+PRINTECHO = 0
 #QH20102002 insert newline before each tag and before each end tag
 # advise: ENDNL = ''
 STARTNL = '\n'

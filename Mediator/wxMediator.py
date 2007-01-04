@@ -54,10 +54,14 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="off",
                     active_traces={
-                       'CmdInterp.match_untranslated_text': 1,
-                       'CmdInterp.interpret_utterance2': 1,
-                       'CmdInterp.restore_state': 1,
-                       'CmdInterp.apply_CSC': 1,
+                    'sr_interface.getWordInfo': 1,
+                    'WhatCanISay.files': 1,
+#                      'SinglePunctuation': 1,
+#                      'PunctuationSet': 1,
+#                       'CmdInterp.match_untranslated_text': 1,
+#                       'CmdInterp.interpret_utterance2': 1,
+#                       'CmdInterp.restore_state': 1,
+#                       'CmdInterp.apply_CSC': 1,
 #                       'SymDict.add_symbol': 1,
 #                       'standard_symbols_in': 1,
 #                       'CmdInterp.interpret_utterance': 1,
@@ -161,7 +165,12 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
         #
         self.messages_log = \
                wxTextCtrl(self, wxNewId(), '', wxDefaultPosition,
-                          (700, 400), style = wxTE_MULTILINE)
+                          (700, 400),
+##                          style = wxTE_MULTILINE)
+## style wxTE_RICH give a python error during the complete regression testing
+## these styles ensure very long text will remain displayed, without there is a limit
+## to the TextCtrl and the regression test stops displaying at some point.
+                          style = wxTE_MULTILINE | wxTE_RICH2 | wxTE_NOHIDESEL )
         self.messages_log.IsEditable = false
         debug.add_trace_listener(wxTextControlTraceListener(self.messages_log))
 
