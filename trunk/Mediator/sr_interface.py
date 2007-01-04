@@ -18,7 +18,6 @@
 # (C)2000, National Research Council of Canada
 #
 ##############################################################################
-
 """Interface to the Speech Recognition engine.
 """
 
@@ -54,6 +53,8 @@ sr_mic_change_callback = None
 #
 sr_user_needs_saving = 0
 
+# maximum word length for getWordInfo:
+sr_max_word_length = 200
 #
 # Name, base model and base topic to use for VoiceCode
 #
@@ -256,9 +257,22 @@ def addedByVC(flag):
     return indicator
 
 def getWordInfo(word, flag = None):
+    """get word info, if word OK
     
-#    trace('sr_interface.getWordInfo', 'word=%s, rest=%s' % (word, rest))
+    skip if there is no spoken form, or the length > sr_max_word_length
+    """
+##    trace('sr_interface.getWordInfo', 'word=%s, rest=%s' % (word, rest))
     
+    if not word:
+        trace('sr_interface.getWordInfo', 'getWordInfo, empty word: %s'% word)
+        return
+    if word.endswith('\\'):
+        trace('sr_interface.getWordInfo', 'getWordInfo, empty spoken form: %s'% word)
+        return
+    if len(word) > sr_max_word_length:
+        trace('sr_interface.getWordInfo', 'getWordInfo, (too?) long word (%s):\n%s'% (len(word), word))
+        return
+        
     try:
        if flag is None:
            answer = natlink.getWordInfo(word)
@@ -266,10 +280,10 @@ def getWordInfo(word, flag = None):
            answer = natlink.getWordInfo(word, flag)
     except:
        # In case the word's spelling is not allowed by
-       # NatSpeak
-       print "WARNING: error trying to get info from vocabulary word '%s'\n" + \
-             "Maybe you forgot to start Dragon NaturallySpeaking before starting VoiceCode?" % word
-#       debug.print_call_stack()
+       print 'word: %s'% `word`
+       print """WARNING: error trying to get info from this vocabulary word
+             Maybe you forgot to start Dragon NaturallySpeaking before starting VoiceCode?"""
+       debug.print_call_stack()
        answer = None       
 
     return answer

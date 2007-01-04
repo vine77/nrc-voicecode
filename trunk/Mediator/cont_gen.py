@@ -320,6 +320,61 @@ class ContBlankLine(Context):
         return "BlankLine(%s)" % self.language
 
 
+class ContPyInsideArguments(ContPy):
+    """This context should apply if the cursor is inside the arguments section
+
+
+    For python, inside a function definition or a function call.  So between the parens.
+
+    def f(here):
+        pass
+
+    or 
+
+    x = f(here)
+
+    This context can be used for formatting the "=" without spacing when inside. 
+    (QH, dec 2006)
+
+    """   
+
+    def __init__(self, language=None, **attrs):        
+        self.deep_construct(ContPyInsideArguments, {'language': language},
+                            attrs)
+       
+    def _applies(self, app, preceding_symbol = 0):
+        """return 1 if context applies"""
+        answer = 0
+        if not ContPy._applies(self, app, preceding_symbol):
+            return answer
+
+        buff = app.curr_buffer()
+        cur_pos = buff.cur_pos()       
+        start = buff.beginning_of_line()
+        end = buff.end_of_line()
+        lineleft = buff.get_text(start, cur_pos)
+        lineright = buff.get_text(cur_pos, end)
+##        print 'lineleft: %s'% lineleft
+##        print 'lineright: %s'% lineright
+        if lineleft.find("(") >= 0 and lineright.find(")") >= 0:
+            answer = 1
+        return answer
+
+    def scope(self):
+        """skope of ContPyInsideArguments is immediate
+
+        *STR* -- the string identifying the scope
+        """
+        return "immediate"
+
+    def equivalence_key(self):
+        """returns the equivalence_key of ContPyInsideArguments
+
+        *STR* -- the key
+        """
+        return "ContPyInsideArguments"
+
+
 class ContTextIsSelected(Context):
     """This context applies if there is some text selected."""
 

@@ -18,15 +18,16 @@
 # (C) 2000, National Research Council of Canada
 #
 ##############################################################################
+
 from HTMLgen import *
-import debug
+from debug import trace
 from Object import Object
 import pprint
 import webbrowser
 import re, os
 reIsInt = re.compile(r'^\d+$')
 reIsLetter = re.compile(r'^[a-zA-Z]$')
-
+from copy import copy
 
 
 class WhatCanISay(Object):
@@ -49,6 +50,14 @@ class WhatCanISay(Object):
                             args)
 
     def load_commands_from_interpreter(self, cmd_interp):
+        """Get a dictionary of all commands from the interpreter
+
+        The LSA commands a return in self.index, a dict
+        that has keys None and all the possible languages.
+
+        The values are a list of tuples (wordList, LSAentry)
+
+        """
         self.index = {}
 
         #
@@ -58,12 +67,7 @@ class WhatCanISay(Object):
         self.languages = cmd_interp.supported_languages()
         Commands = cmd_interp.commands
         Symbols = cmd_interp.known_symbols.abbreviations
-        for k,v in Symbols.items():
-            print k, Symbols[k]
             
-        Dir = dir(Commands)
-       # for i in Dir:
-       #     print 'commands %s: %s'% (i, type(getattr(Commands, i)))
         self.languages.sort()
         for a_language in self.languages:
             self.index[a_language] = []
@@ -88,155 +92,262 @@ class WhatCanISay(Object):
 ##                        if a_language:
 ##                            self.html_create_index_entry(a_language, a_topic, spoken, descr)
 
-    def show_cmds(self, cmd_interp, currLang):
-        print 'currLang: %s'% currLang
-        self.language = currLang
+    def create_cmds(self, cmd_interp, curr_lang):
+        """Create all commands, separated by language
+
+        First all LSA commands are extracted from self.index.
+
+        Commands that are in None, or appear to be equal in all languages come in language 'global'.
+
+        The wordList is joined into a string,
+        The written_form is extracted from the LSA entry.
+
+        the result is in self.all_commands
+
+        """
+        self.language = curr_lang
         self.load_commands_from_interpreter(cmd_interp)
-        allCommands = {}
+        all_commands = {}
         for lang in self.index:
             part = self.index[lang]
             if lang == None:
-                lang = 'global'
+                lang = 'common'
+            all_commands[lang] = []
             for tup in part:
                 words = ' '.join(tup[0])  # ['is', 'equal', 'to'] -->> 'is equal to')
                 written = getattr(tup[1], 'written_form', '')
-##                print 'words: %s, written: %s'% (words, written)
                 if not written:
-##                    print 'empty, lang: %s'% lang
-                    allCommands.setdefault(lang, []).append((words, written))
+                    all_commands[lang].append((words, written))
                 elif reIsInt.match(written):
-##                    print 'number'
-                    allCommands.setdefault('numbers', []).append((words, written))
+                    all_commands.setdefault('numbers', []).append((words, written))
                 elif reIsLetter.match(written):
-##                    print 'letter'
-                    allCommands.setdefault('letters', []).append((words, written))
+                    all_commands.setdefault('letters', []).append((words, written))
                 else:
-##                    print 'else'
-                    allCommands.setdefault(lang, []).append((words, written))
+                    all_commands[lang].append((words, written))
+                    
+        # manipulating all_commands (in place):
+##        print '1: %s'% all_commands.keys()
+        self.extract_common_commands(all_commands)
+##        print '2: %s'% all_commands.keys()
+        self.elaborate_commands(all_commands)
+##        print '3: %s'% all_commands.keys()
+        self.lsa_commands = all_commands
+        
 
-        allCommands['Actual'] = allCommands['global'][:]
+    def extract_common_commands(self, all_commands):
+        """change (inplace) the Commands dict
 
+        input:  all_commands: a dict like {'common': [(...), (...)], 'C': [(...), ...],
+                                     'python': [(...), (...)], ...}
+                              a dict like {'C': [(...), ...],
+                                     'python': [(...), (...)], ...} ('common' created in this function)
+        output: tuples that are common to all specific languages are put in 'common' and
+        deleted from specific.
+
+        'letters' and 'numbers' are kept separate and ignored in this function
+
+        """
+        specific_languages = [k for k in all_commands if k not in ('common', 'letters', 'numbers')]
+        common = all_commands.setdefault('common', [])
+        if len(specific_languages) <= 1:
+            return
+        first, rest = all_commands[specific_languages[0]], [all_commands[k] for k in specific_languages[1:]]
+        # first changes, so copy the list:
+        for item in copy(first):
+            for c in rest:
+                if item not in c: break
+            else:
+                # command is global, add and delete:
+                if item not in common:
+                    common.append(item)
+                for c in rest:
+                    c.remove(item)
+                first.remove(item)
+    
+    def elaborate_commands(self, all_commands):
+        """Extend the commands dictionary
+
+        1. with actual commands
+        2. make two versions sbs (sorted by spoken), sbw (sorted by written)
+        """
         # here I make an entry for actual commands (LSA), being global + language specific:
-        for c in allCommands[self.language]:
-            if c not in allCommands['Actual']:
-                allCommands['Actual'].append(c)
+        all_commands.setdefault('actual', copy(all_commands['common']))
+        # we have at least actual and common commands, possibly empty.
+        if self.language in all_commands:
+            for c in all_commands[self.language]:
+                if c not in all_commands['actual']:
+                    all_commands['actual'].append(c)
                 
         # here I make two groups of each, sorted by written and sorted by spoken form:
-        for group, cmds in allCommands.items():
+        for group, cmds in copy(all_commands.items()):
+            if cmds == []:
+                # remove empty groups, except for "actual"
+                if group != 'actual':
+                    del all_commands[group]
+                    continue
+                
             if group not in ('numbers','letters'):
-                cmds = self.sortBySpoken(cmds)
-                allCommands[group + 'sbs'] = cmds[:]
-            cmds = self.sortByWritten(cmds)
+                cmds = self.sort_by_spoken(cmds)
+                all_commands[group + '_sb_s'] = cmds[:]
+            cmds = self.sort_by_written(cmds)
             if group not in ('numbers','letters'):
-                del allCommands[group]
-                group = group + 'sbw'
-            allCommands[group] = cmds[:]
+                del all_commands[group]
+                group = group + '_sb__w'
+            all_commands[group] = cmds[:]
             
-        self.allCommands = allCommands
+
+    def create_html_pages(self):
+        """Created the actual pages, using HTMLgen
+
+        the input is from the self.lsa_commands dict for the lsa menu
+        and from csc_commands (future) for the csc menu
         
-        self.pages = self.allCommands.keys()
-        self.pages.sort()
-        
+        returns the entry pages for the webbrowser
+        """
+        self.top_menu = ['lsa', 'csc'] 
+        self.lsa_pages = self.lsa_commands.keys()
+        self.lsa_pages.sort()
+        want_in_top = ['actual_sb__w', 'actual_sb_s', 'common_sb__w', 'common_sb_s',
+                       self.language + '_sb__w', self.language + '_sb_s', 'letters', 'numbers']
+        want_in_top.reverse()
+        for w in want_in_top:
+            self.bring_to_top(self.lsa_pages, w)
+        self.csc_pages = 'dummy'
         self.html_command_index()
-        self.html_command_pages()
-        indexPage = os.path.join(self.htmlFolder, 'index.html')
-        webbrowser.open_new(indexPage)
+        for top in self.top_menu:
+            self.html_command_pages(top)
+        index_page = os.path.join(self.html_folder, 'index.html')
+        return index_page
+
+    def bring_to_top(self, List, item):
+        """Change inplace the list"""
+        if item in List:
+            List.remove(item)
+            List.insert(0, item)
+
+    def show_cmds(self, cmd_interp, curr_lang):
+        """Do all the steps to make and show  the WhatCanISay website
+
+        collect the commands
+        create the html files,
+        then show with webbrowser
+        """
+        self.create_cmds(cmd_interp,curr_lang)
+        index_page = self.create_html_pages()
+        webbrowser.open_new(index_page)
 
     def create_html_folder(self):
-        """create a folder for the simple website"""
-        self.htmlFolder = r'C:\vcodeWhat'
+        """create a folder for the WhatCanISay website
+
+        this foldername is also returned
+        """
         home = os.environ['VCODE_HOME']
-        print 'home: %s'% home
-        self.htmlFolder = os.path.join(home, 'Data', 'whatCanISay')
+        self.html_folder = os.path.join(home, 'Data', 'whatCanISay')
         try:
-            os.makedirs(self.htmlFolder)
-            print 'warning: whatCanISay folder did not exist, stylesheet will not be available'
+            os.makedirs(self.html_folder)
+            print 'WARNING: whatCanISay folder did not exist, stylesheet will not be available'
         except:
             pass
-        if not os.path.isdir(self.htmlFolder):
-            raise Exception('not a valid directory for What Can I Say website: %s'% self.htmlFolder)
-        
+        if not os.path.isdir(self.html_folder):
+            raise Exception('not a valid directory for What Can I Say website: %s'% self.html_folder)
+        return self.html_folder
     
     
     def html_command_index(self):
         """make the index page of the website"""
         doc = SimpleDocument()
         doc.stylesheet = "vc.css"
-
-        doc.append(self.html_header('index'))
+        page = 'index.html'
+        page_type = 'index'
+        page_html = 'index.html'
+        doc.append(self.html_header(page, page_type=page_type, page_html=page_html))
         tlpage = FullTable(Class="page")
         trpage = TR()
+        tdpage = TD(Class="body")
         # produce the menu (left):
-        leftMenu = self.getMenu('index')
-        trpage.append(leftMenu)
         # produce the body:
-        text =[ 'this is the index page, more info will follow',
-                'sbs: sorted by spoken form',
-                'sbw: sorted by written form']
-        trpage.append(TD(map(Paragraph, text), Class="body"))
-        tlpage.append(trpage)
-        doc.append(tlpage)
-        outfile = os.path.join(self.htmlFolder, 'index.html')
+        VcodeWebsite = Href("http://voicecode.iit.nrc.ca/VoiceCode/public/ywiki.cgi", "Voice Code website", target="_blank")
+        text =[ 'This is the What Can I Say (actual) information of your VoiceCode instance.', '',
+               'The lsa section gives the Language Sensitive Aliases, in different categories.',
+                'The "numbers" and the "letters" are taken apart for better readability of the other commands.',
+                'The different sections are sorted by written form (sb written) and  by spoken form (sb spoken)',
+                '', '',
+                'The csc part is not ready yet. It is going to contain the Context Sensitive Aliases',
+                '', '',
+                'For the general information please consult the '+VcodeWebsite+'.',
+                '',
+                '']
+        for t in text:
+            if t:
+                tdpage.append(Paragraph(t))
+            else:
+                tdpage.append(Paragraph("&nbsp;", Class="blank"))
+        doc.append(tlpage(trpage(tdpage)))
+        doc.append(self.html_footer(page, page_type=page_type, page_html=page_html))
+        outfile = os.path.join(self.html_folder, 'index.html')
    
-        print 'making page: %s'% outfile
+        trace('WhatCanISay.files', 'making page: %s'% outfile)
         doc.write(outfile)
 
-    def getMenu(self, me):
+    def get_left_menu(self, me, page_type, pages):
         """produce a menu with me without link
 
-        me = name of calling page
+        me = name of calling page, page_type is to be included before the link name
 
         """
         td = TD(Class="leftmenu")
-        for p in self.pages:
+        for p in pages:
             niceP = p
-#            if niceP.startswith('only'):
-#                niceP = 'only ' + niceP[4:]
-#            if niceP.endswith('sbs'):
-#                niceP = niceP[:-3] + '(sorted by spoken)'
-#            if niceP.endswith('sbw'):
-#                niceP = niceP[:-3] + '(sorted by written)'
+            if niceP.endswith('_sb_s'):
+                niceP = p.replace('_sb_s', ' (sb spoken)')
+            if niceP.endswith('_sb__w'):
+                niceP = p.replace('_sb__w', ' (sb written)')
                 
             if p == me:
                 td.append(Paragraph(niceP, Class="lefton"))
             else:                
-                td.append(Paragraph(Href('%s.html'% p, niceP), Class="leftoff"))
+                td.append(Paragraph(Href('%s_%s.html'% (page_type, p), niceP), Class="leftoff"))
         return td
 
-    def html_command_pages(self):
+    def html_command_pages(self, page_type):
         """generate the pages"""
 
-        for p in self.pages:
-            self.html_command_page(p)
+        if page_type == 'lsa':
+            for p in self.lsa_pages:
+                self.html_lsa_page(p)
+        else:
+            self.html_csc_page('index')
 
-    def html_command_page(self, page):
-        """generate one page, with a menu to the other pages"""
+    def html_lsa_page(self, page):
+        """generate one lsa page, with a menu to the other pages"""
         doc = SimpleDocument()
         doc.stylesheet = "vc.css"
-        content = self.allCommands[page]
+        page_type = 'lsa'
         
-        doc.append(self.html_header(page))
+        content = self.lsa_commands[page]
+        page_html = 'lsa_%s.html'% page
+        doc.append(self.html_header(page, page_type=page_type, page_html=page_html))
         tlpage = FullTable(Class="page")
         trpage = TR()
         # produce the menu (left):
-        leftMenu = self.getMenu(page)
+        leftMenu = self.get_left_menu(page, page_type=page_type, pages=self.lsa_pages)
         trpage.append(leftMenu)
 
         # now the contents:        
         tl = FullTable(Class="body")
         tr = TR()
-        perCol = 3
+        per_col = 3
         tdspacer = TD("&nbsp;", Class="spacer")
-        rows = len(content)/perCol
-        if len(content)%perCol:
+        rows = len(content)/per_col
+        if len(content)%per_col:
             rows += 1
-        cellNum = 0
+        cell_num = 0
         for start in range(rows):
             for col in range(start, len(content), rows):
-                cellNum += 1
+                cell_num += 1
                 k, v = content[col]
-                tr.append(TD(v, Class="spoken%s"% (cellNum%2,)))
-                tr.append(TD(k, Class="written%s"% (cellNum%2,)))
+                tr.append(TD(v, Class="spoken%s"% (cell_num%2,)))
+                tr.append(TD(k, Class="written%s"% (cell_num%2,)))
                 tr.append(tdspacer())
             tl.append(tr)
             tr.empty()
@@ -244,22 +355,138 @@ class WhatCanISay(Object):
         trpage.append(TD(tl, Class="body"))
         tlpage.append(trpage)
         doc.append(tlpage)
-        outfile = os.path.join(self.htmlFolder, '%s.html'% page)
-        print 'making page: %s'% outfile
+        doc.append(self.html_footer(page, page_type=page_type, page_html=page_html))
+        outfile = os.path.join(self.html_folder, page_html)
+        trace('WhatCanISay.files', 'making page: %s'% outfile)
+        doc.write(outfile)
+
+    def html_csc_page(self, page):
+        """generate one csc page, with a menu to the other pages"""
+        doc = SimpleDocument()
+        doc.stylesheet = "vc.css"
+        page_type = 'csc'
+        page_html = 'csc_%s.html'% page
+##        content = self.csc_commands[page]
+        doc.append(self.html_header(page, page_type=page_type, page_html=page_html))
+
+        if 0:
+            tlpage = FullTable(Class="page")
+            trpage = TR()
+
+            # produce the menu (left):
+            leftMenu = self.get_left_menu(page, page_type=page_type, pages=self.lsa_pages)
+            trpage.append(leftMenu)
+            
+            # now the contents:        
+            tl = FullTable(Class="body")
+            tr = TR()
+            per_col = 3
+            tdspacer = TD("&nbsp;", Class="spacer")
+            rows = len(content)/per_col
+            if len(content)%per_col:
+                rows += 1
+                cell_num = 0
+                for start in range(rows):
+                    for col in range(start, len(content), rows):
+                        cell_num += 1
+                        k, v = content[col]
+                        tr.append(TD(v, Class="spoken%s"% (cell_num%2,)))
+                tr.append(TD(k, Class="written%s"% (cell_num%2,)))
+                tr.append(tdspacer())
+            tl.append(tr)
+            tr.empty()
+        
+            trpage.append(TD(tl, Class="body"))
+            tlpage.append(trpage)
+            doc.append(tlpage)
+            doc.append(self.html_footer(page, page_type=page_type, page_html=page_html))
+        doc.append(Paragraph("coming later"))
+        outfile = os.path.join(self.html_folder, page_html)
+        trace('WhatCanISay.files', 'making page: %s'% outfile)
         doc.write(outfile)
                   
-    def html_header(self, page):
-        """produce the header at the top of the html page, with the name mentioned"""
+    def html_header(self, page, page_type, page_html):
+        """produce the header at the top of the html page, with the name mentioned
+
+        Include the top menu, lsa, csc...
+
+        page_type can be 'index', 'lsa', 'csc'
+
+
+        """
+        # assume height of picture = 90, h2 is height of top_menu
+        h_pic = 90
+        h2 = 28
+        h1 = h_pic - h2 + 20 # allow 20 for MLB number space in firefox
+        # assume w of picture = 134
+        w = 134
         im = Img('vcodeuser.jpg', alt='what can i say website for voicecoder')
-        if page == 'index':
+        L = []
+##        print 'header of page: %s, page_type: %s'% (page, page_type)
+        if page_type == 'index' and page == 'index.html':
             pass
         else:
             im = Href('index.html', im)
-        text = "VoiceCoder What Can I Say (%s): %s"% (self.language, page)
-        tl = FullTable(Class="header")
-        return Div(tl(TR(TD(text, Class="bannertext"), TD(im, Class="bannerim"))), Class="header")
 
-    def sortBySpoken(self, cmds):
+        if page_type != 'index':
+            niceP = '%s commands, %s'% (page_type, page)
+            niceP = niceP.replace('_sb_s', ' (sorted by spoken forms)')
+            niceP = niceP.replace('_sb__w', ' (sorted by written forms)')
+        else:
+            niceP = 'home'
+            
+        text = "VoiceCoder What Can I Say (%s): %s"% (self.language, niceP)
+        tl = FullTable(Class="header")
+        tl_menu = FullTable(Class="header", height=h2)
+        tl.append(TR(TD(im, Class="bannerim", rowspan=2, width=w, height=h_pic),
+                     TD(text, Class="bannertext", height=h1)))
+        # make the top menu:
+        tr = TR()
+        for menu in self.top_menu:
+            start_page = self.get_first_page(menu)
+#            print 'menu: %s, start_page: %s, page: %s, page_html: %s'% \
+#                  (menu, start_page, page, page_html)
+            if page_html.startswith(menu):
+                if page_html == start_page:
+                    tr.append(TD(menu, Class="topon"))
+                else:
+                    tr.append(TD(Href(start_page, menu), onclick="location='%s';"%start_page, Class="topon", height=h2))
+            else:
+                tr.append(TD(Href(start_page, menu), onclick="location='%s';"%start_page, Class="topoff", height=h2))
+            tr.append(TD('&nbsp;', Class="blank"))
+        tl_menu.append(tr)
+        tl.append(TR(TD(tl_menu, Class="topmenu")))
+        return tl
+
+    def html_footer(self, page, page_type, page_html):
+        """construct a footer for the webpage"""
+        
+        tl = FullTable(Class="footer")
+        if page_type == 'index' and page == 'index.html':
+            scramble = 'home'
+        else:
+            niceP = page
+            niceP = niceP.replace('_sb_s', ' (sorted by spoken forms)')
+            niceP = niceP.replace('_sb__w', ' (sorted by written forms)')
+            scramble = join(Href('index.html', 'home'), ' &gt; ', niceP)
+        scramble += " &gt; " + str(Href("javascript:scrollTo(0,0);", " top"))
+        tim = time.localtime(time.time())
+        copyright = time.strftime("%a, %d %b %Y", tim)
+        tl.append(TR(TD(scramble, Class="scramble"),
+                     TD(copyright, Class="copyright")))
+        return join(tl)
+
+    def get_first_page(self, menu):
+        """Extract from the list of pages the first page to display"""
+        if menu == 'lsa':
+            return 'lsa_%s.html'% self.lsa_pages[0]
+        elif menu == 'csc':
+            return 'csc_%s.html'% 'index'
+        else:
+            return 'index.html'
+        
+
+    def sort_by_spoken(self, cmds):
         """sort list of tuples by the first key
 
         note the presentation is the other way
@@ -270,7 +497,7 @@ class WhatCanISay(Object):
         cmds.sort()
         return cmds
 
-    def sortByWritten(self, cmds):
+    def sort_by_written(self, cmds):
         """sort list of tuples by the second key
         
         note the presentation is the other way
