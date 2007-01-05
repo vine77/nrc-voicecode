@@ -50,15 +50,12 @@ dummy.py			   test.py"""
       
       self._assert_active_buffer_is_called('dummy.py', 
                "Emacs didn't switch to dummy buffer after it was selected in the Completions buffer.")
-   
-
-   def ___test_emacs_do_invalid_dictation_in_buffer_list(self):  
-      self._open_file('dummy.py')
+               
       self._say(['yo', 'switch', 'to', 'buffer'])
       self.sleep_for_a_while()
             
       self._assert_active_buffer_is_called('*Completions*', 
-               "Emacs didn't switch to the Completion buffer after switch buffer command was uttered")
+               "Emacs didn't switch back to the Completion buffer after switch buffer command was uttered")
 
       self._say(['select', 'dummy', ], never_bypass_sr_recog = 1)      
       content_before_invalid_dictation = self._get_buffer_content_with_cursor_position()
@@ -71,4 +68,13 @@ dummy.py			   test.py"""
               self._get_buffer_content_with_cursor_position(),
               "Content of *Completions* buffer should not have changed when user tried to dictate into it.")
 
+      # 
+      # We do a correct switch buffer to avoid leaving Emacs split in two windows,
+      # which could change the result of some future tests (move relative page
+      # in particular, which depend on the number of lines displayed in
+      # the current Emacs window).
+      #   
+      self._say(['select', 'dummy', ], never_bypass_sr_recog = 1)
+      self._say(['new', 'line'])    
+      self.sleep_for_a_while()
 
