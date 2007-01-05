@@ -593,169 +593,11 @@ Heard new line
 * Description : Test dictation of normal text.
 *******************************************************************************
 
-*** Start of source buffer ***
-  1: <CURSOR>#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-  2: # WARNING: the mediator is now running foreground tests, which may
-  3: # change the contents of the foreground window.  Unless you want your
-  4: # own files corrupted, this editor window MUST remain in the foreground 
-  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-  8: 
-  9: # This is a small buffer for testing editing of Python code
- 10: <CURSOR>
- 11: class AClass(ASuper):
- 12:     """This is a dummy class"""
- 13:     
-Heard print quotes
-  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-  8: 
-  9: # This is a small buffer for testing editing of Python code
- 10: print "<CURSOR>"
- 11: class AClass(ASuper):
- 12:     """This is a dummy class"""
- 13:     
-  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-  8: 
-  9: # This is a small buffer for testing editing of Python code
- 10: print "<CURSOR>"
- 11: class AClass(ASuper):
- 12:     """This is a dummy class"""
- 13:     
-Setting VCode in text mode.
-Got command: say(['text', 'mode', 'on'],1
-1
-1
-,1,0,)
-Got command: say(['this', 'should', 'be', 'typed', 'as', 'normal', 'text'],1
-1
-,1,0,)
-  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-  8: 
-  9: # This is a small buffer for testing editing of Python code
- 10: print "this should be typed as normal text<CURSOR>"
- 11: class AClass(ASuper):
- 12:     """This is a dummy class"""
- 13:     
-Setting VCode in code dictation mode.
-Got command: say(['text', 'mode', 'off'],1
-1
-1
-,1,0,)
-Heard jump out
-  7: #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-  8: 
-  9: # This is a small buffer for testing editing of Python code
- 10: print "this should be typed as normal text"<CURSOR>
- 11: class AClass(ASuper):
- 12:     """This is a dummy class"""
- 13:     
-Got command: say(['new', 'statement', 'print'],None,0,0,)
-Heard new statement print
-  8: 
-  9: # This is a small buffer for testing editing of Python code
- 10: print "this should be typed as normal text"
- 11: print <CURSOR>
- 12: class AClass(ASuper):
- 13:     """This is a dummy class"""
- 14:     
-Got command: say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'],1
-1
-1
-,1,0,)
-Heard this should be typed as a variable name
-  8: 
-  9: # This is a small buffer for testing editing of Python code
- 10: print "this should be typed as normal text"
- 11: print this_should_be_typed_as_a_variable_name<CURSOR>
- 12: class AClass(ASuper):
- 13:     """This is a dummy class"""
- 14:     
-  8: 
-  9: # This is a small buffer for testing editing of Python code
- 10: print "this should be typed as normal text"
- 11: print this_should_be_typed_as_a_variable_name<CURSOR>
- 12: class AClass(ASuper):
- 13:     """This is a dummy class"""
- 14:     
-Heard new statement print quotes
-  9: # This is a small buffer for testing editing of Python code
- 10: print "this should be typed as normal text"
- 11: print this_should_be_typed_as_a_variable_name
- 12: print "<CURSOR>"
- 13: class AClass(ASuper):
- 14:     """This is a dummy class"""
- 15:     
-  9: # This is a small buffer for testing editing of Python code
- 10: print "this should be typed as normal text"
- 11: print this_should_be_typed_as_a_variable_name
- 12: print "<CURSOR>"
- 13: class AClass(ASuper):
- 14:     """This is a dummy class"""
- 15:     
-Setting VCode in text mode using alternative spoken form.
-Got command: say(['text', 'mode', 'on'],1
-1
-1
-,1,0,)
-Got command: say(['this', 'should', 'be', 'typed', 'as', 'normal', 'text'],1
-1
-,1,0,)
-  9: # This is a small buffer for testing editing of Python code
- 10: print "this should be typed as normal text"
- 11: print this_should_be_typed_as_a_variable_name
- 12: print "this should be typed as normal text<CURSOR>"
- 13: class AClass(ASuper):
- 14:     """This is a dummy class"""
- 15:     
-Setting VCode in code dictation mode using alternative spoken form.
-Got command: say(['alternative', 'test', 'text', 'mode', 'off'],1
-1
-1
-,1,0,)
-Heard jump out
-  9: # This is a small buffer for testing editing of Python code
- 10: print "this should be typed as normal text"
- 11: print this_should_be_typed_as_a_variable_name
- 12: print "this should be typed as normal text"<CURSOR>
- 13: class AClass(ASuper):
- 14:     """This is a dummy class"""
- 15:     
-Got command: say(['new', 'statement', 'print'],None,0,0,)
-Heard new statement print
- 10: print "this should be typed as normal text"
- 11: print this_should_be_typed_as_a_variable_name
- 12: print "this should be typed as normal text"
- 13: print <CURSOR>
- 14: class AClass(ASuper):
- 15:     """This is a dummy class"""
- 16:     
-Got command: say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'],1
-1
-1
-,1,0,)
-Heard this should be typed as a variable name
- 10: print "this should be typed as normal text"
- 11: print this_should_be_typed_as_a_variable_name
- 12: print "this should be typed as normal text"
- 13: print this_should_be_typed_as_a_variable_name<CURSOR>
- 14: class AClass(ASuper):
- 15:     """This is a dummy class"""
- 16:     
- 10: print "this should be typed as normal text"
- 11: print this_should_be_typed_as_a_variable_name
- 12: print "this should be typed as normal text"
- 13: print this_should_be_typed_as_a_variable_name<CURSOR>
- 14: class AClass(ASuper):
- 15:     """This is a dummy class"""
- 16:     
+Heard new statement above
+Heard new statement this should be typed as a variable name
+Heard with arguments
 Finished foreground tests...
 Starting background tests...
-
-
-*******************************************************************************
-* Name        : BasicBuffer
-* Description : showing and testing basic buffer functions (from VoiceCodeRootTest)
-*******************************************************************************
-
 
 
 *******************************************************************************
@@ -2654,6 +2496,17 @@ EdSim instance EdSim(0) connected
 
 
 *******************************************************************************
+* Name        : ContPyInsideArguments
+* Description : Tests for being inside the argument list of a function.
+*******************************************************************************
+
+Heard select inside
+Heard select inside
+Heard select inside
+Heard select outside
+
+
+*******************************************************************************
 * Name        : EdSim
 * Description : self-test for EdSim.py
 *******************************************************************************
@@ -3275,6 +3128,13 @@ Fresh abbreviation file matches current one, as expected
 *******************************************************************************
 * Name        : SymbolResult
 * Description : Testing SymbolResult.
+*******************************************************************************
+
+
+
+*******************************************************************************
+* Name        : TestCaseWithHelpers
+* Description : Test the unit testing framework.
 *******************************************************************************
 
 

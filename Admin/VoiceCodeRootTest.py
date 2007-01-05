@@ -52,6 +52,9 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
        fpath = os.path.join(vc_globals.tmp, file_name)
        self._open_file(fpath)  
        self._app().delete_buffer_content()
+       
+   def _clear_active_buffer(self):
+       self._app().delete_buffer_content()
       
    def _open_file(self, fpath):
       self._app().open_file(fpath)    
@@ -115,7 +118,13 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
                         mess + "\nContent of the active buffer was not as expected.")
          
    def _assert_current_line_content_is(self, expected_text, mess=""):
-      got_text = self._app().get_content_of_line() 
+      current_line_text = self._app().get_text_of_line() 
+      cur_pos = self._app().cur_pos()
+      start_of_line_pos = self._app().beginning_of_line()
+      end_of_line_pos = self._app().beginning_of_line()
+      before_cursor = current_line_text[:cur_pos - start_of_line_pos]
+      after_cursor = current_line_text[cur_pos - start_of_line_pos:]
+      got_text = before_cursor + '^^^' + after_cursor
       mess = mess + "\nContent of current line in the active buffer was wrong."
       self.assert_equal(expected_text, got_text, mess)    
       

@@ -33,14 +33,14 @@ class AssertStringEqualsFailed(AssertionError):
                     "   Got: \n%s\n"
            message = format % (self.orig_message, self.exp_string, self.got_string)
        else:
-           exp_with_caret = self.exp_string[:self.first_diff] + '^^^' + self.exp_string[self.first_diff:]
-           got_with_caret = self.got_string[:self.first_diff] + '^^^' + self.got_string[self.first_diff:]         
-           format = "%s\n----\nStrings differed. See triple caret (^^^) position below.\n" + \
+           exp_with_tilde = self.exp_string[:self.first_diff] + '~~~' + self.exp_string[self.first_diff:]
+           got_with_tilde = self.got_string[:self.first_diff] + '~~~' + self.got_string[self.first_diff:]         
+           format = "%s\n----\nStrings differed. See triple tilde (~~~) position below.\n" + \
                      "Expected:\n" + \
                      "   '%s'\n" + \
                      "Got:\n" + \
                      "   '%s'\n"
-           message = format % (self.orig_message, exp_with_caret, got_with_caret)
+           message = format % (self.orig_message, exp_with_tilde, got_with_tilde)
        return message
 
 class TestCaseWithHelpers(unittest.TestCase):
