@@ -6,19 +6,26 @@ import regression
 import itertools
 
 from CmdInterp import AliasMeaning, CmdInterp, LSAlias
+from CSCmd import CSCmd
+from cont_gen import *
 from WhatCanISay import WhatCanISay
-
+from actions_gen import gen_parens_pair
 # test data:
 expected_languages = ['C', 'perl', 'python']
 expected_all_commands_keys = ['actual_sb_s', 'actual_sb__w', 'C_sb_s', 'C_sb__w',
                               'common_sb_s', 'common_sb__w',
                               'perl_sb_s', 'perl_sb__w', 'python_sb_s', 'python_sb_w']
 expected_languages.sort()
-lsa_multiply_list = ['multiply by', 'multiplied by', 'times']
-lsa_multiply_dict  = dict.fromkeys(expected_languages, ' * ')
-lsa_not_list = ['not']
-lsa_not_dict  = dict(python='not', C="!", perl="!")
 
+
+lsa_multiply_spoken_forms = ['multiply by', 'multiplied by', 'times']
+lsa_multiply_meanings  = dict.fromkeys(expected_languages, ' * ')
+lsa_not_spoken_forms = ['not']
+lsa_not_meanings  = dict(python='not', C="!", perl="!")
+
+csc_with_arguments_spoken_forms = ['with arguments', 'with argument', 'call with',
+                                   'called with', 'function of']
+csc_with_arguments_meanings = dict.fromkeys(expected_languages, gen_parens_pair)
 
 # expected index contents of the 3 languages: values of self.index (raw LSA commands)
 # first one is equal over the 2 languages
@@ -26,13 +33,13 @@ lsa_not_dict  = dict(python='not', C="!", perl="!")
 index_contents =  [(['multiply', 'by'], AliasMeaning(" * ")),
                    (['multiplied', 'by'], AliasMeaning(" * "))]
                   
-expected_index = {}
-expected_index[None] = []
-expected_index['C'] = index_contents + [(['not'], AliasMeaning('!')),
+expected_lsa_index = {}
+expected_lsa_index[None] = []
+expected_lsa_index['C'] = index_contents + [(['not'], AliasMeaning('!')),
                                         (['times'], AliasMeaning(" * "))]
-expected_index['perl'] = index_contents + [(['not'], AliasMeaning('!')),
+expected_lsa_index['perl'] = index_contents + [(['not'], AliasMeaning('!')),
                                            (['times'], AliasMeaning(" * "))]
-expected_index['python'] = index_contents + [(['not'], AliasMeaning('not')),
+expected_lsa_index['python'] = index_contents + [(['not'], AliasMeaning('not')),
                                              (['times'], AliasMeaning(" * "))]
                             
 
@@ -56,6 +63,8 @@ expected_lsa_commands = dict(C_sb__w=[('not', '!')],
                              common_sb__w=[('multiplied by', ' * '),
                                          ('multiply by', ' * '),
                                          ('times', ' * ')])
+                                         
+expected_csc_commands = dict()                                         
 
 
 
@@ -86,8 +95,13 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
    def setUp(self):
        self.wciSay = WhatCanISay()
        self.interp = CmdInterp()
-       self.interp.add_lsa(LSAlias(lsa_multiply_list, lsa_multiply_dict))
-       self.interp.add_lsa(LSAlias(lsa_not_list, lsa_not_dict))
+       self.interp.add_lsa(LSAlias(lsa_multiply_spoken_forms, lsa_multiply_meanings))
+       self.interp.add_lsa(LSAlias(lsa_not_spoken_forms, lsa_not_meanings))
+       self.interp.add_csc(CSCmd(spoken_forms=csc_with_arguments_spoken_forms,
+                           meanings={ContC(): gen_parens_pair, ContPy(): gen_parens_pair,
+                                     ContPerl(): gen_parens_pair},
+             docstring='argument list for function'))
+
        self.wciSay.load_commands_from_interpreter(self.interp)
 
       
@@ -104,7 +118,7 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        interp = CmdInterp()
        wciSay.load_commands_from_interpreter(interp)
        Expected = {None: []}
-       self.assert_equal(Expected, wciSay.index, 'lsa commands index should be equal (and nearly empty, no commands loaded)')
+       self.assert_equal(Expected, wciSay.lsa_index, 'lsa commands index should be equal (and nearly empty, no commands loaded)')
 
    def test_This_is_how_you_create_the_lsa_commands_for_showing(self):
        """lsa commands elaborated from self.index, should be empty now"""
@@ -181,8 +195,8 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self.assert_equal(expected_languages, actual_languages,
                          "List of supported languages was wrong.")  
        
-       self.assert_equal(expected_index,
-                         self.wciSay.index, 
+       self.assert_equal(expected_lsa_index,
+                         self.wciSay.lsa_index, 
                          "Command index (lsa) with multiply and not are NOT as expected.")
  
    def test_lsa_commands(self):
@@ -244,6 +258,23 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        
            self.assert_equal_html_files(test_folder, tmp_folder,
                                         'WhatCanISay website of language %s'% lang)
+
+   def test_context_applies_for_lang(self):
+        self.assert_(self.wciSay.context_applies_for_lang('python', ContPy()), 
+                     "ContPy should applie for langage python")
+        self.failIf(self.wciSay.context_applies_for_lang('C', ContPy()), 
+                     "ContPy should not apply for langage C")
+
+        self.assert_(self.wciSay.context_applies_for_lang('C', ContC()), 
+                     "ContC should apply for langage C")                     
+        self.failIf(self.wciSay.context_applies_for_lang('python', ContC()), 
+                     "ContC should not apply for langage python")
+                     
+        self.assert_(self.wciSay.context_applies_for_lang('python', ContAny()), 
+                     "ContAny should apply for langage python")
+        self.assert_(self.wciSay.context_applies_for_lang('C', ContAny()), 
+                     "ContAny should apply for langage C")         
+        
 
 ###############################################################
 # Assertions.

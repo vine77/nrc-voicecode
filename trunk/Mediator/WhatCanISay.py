@@ -23,10 +23,12 @@ from debug import trace
 from Object import Object
 import pprint
 import webbrowser
+import debug
 import re, os
 reIsInt = re.compile(r'^\d+$')
 reIsLetter = re.compile(r'^[a-zA-Z]$')
 from copy import copy
+from cont_gen import *
 
 
 
@@ -46,56 +48,69 @@ class WhatCanISay(Object):
     """
     def __init__(self, **args):
         self.deep_construct(WhatCanISay, 
-                            {'index': {}, 'languages': [],}, 
+                            {'lsa_index': {}, 'csc_index': {}, 'languages': [],}, 
                             args)
 
     def load_commands_from_interpreter(self, cmd_interp):
         """Get a dictionary of all commands from the interpreter
 
-        The LSA commands a return in self.index, a dict
+        The LSA commands a return in self.lsa_index, a dict
         that has keys None and all the possible languages.
 
         The values are a list of tuples (wordList, LSAentry)
 
         """
-        self.index = {}
-
-        #
-        # First, index the LSAs
-        #
         self.create_html_folder()            
         self.languages = cmd_interp.supported_languages()
-        Commands = cmd_interp.commands
-        Symbols = cmd_interp.known_symbols.abbreviations
-            
         self.languages.sort()
+        
+        self.index_lsas(cmd_interp)
+        self.index_cscs(cmd_interp)        
+
+
+    def index_lsas(self, cmd_interp):
+        self.lsa_index = {}
         for a_language in self.languages:
-            self.index[a_language] = []
+            self.lsa_index[a_language] = []
             wTrie = cmd_interp.language_specific_aliases[a_language]
             for an_LSA in wTrie.items():
                 wordList, entry = an_LSA
-                self.index[a_language].append((wordList, entry))
+                self.lsa_index[a_language].append((wordList, entry))
 
-        #
-        # Then the CSCs
-        #
-##        for a_CSC in self.cmd_index:
-##            for spoken in a_CSC.spoken_forms:
-##                for a_topic in a_CSC.topics:
-##                    for a_context, an_action in a_CSC.meanings:
-##                        descr = an_action.doc()
-##                        try:
-##                            a_language = a_context.language
-##                        except:
-##                            # context is not a language context
-##                            a_language = None
-##                        if a_language:
-##                            self.html_create_index_entry(a_language, a_topic, spoken, descr)
+    def index_cscs(self, cmd_interp):
+        self.csc_index = {}
+        for a_language in self.languages:
+           self.csc_index[a_language] = []
+        wTrie = cmd_interp.commands
+        for a_csc_entry in wTrie.items():
+           debug.trace('WhatCanISay.index_cscs', "** Processing a_csc_entry=%s" % repr(a_csc_entry))
+           the_spoken_form = a_csc_entry[0]
+           the_meanings = a_csc_entry[1]
+           self.index_contextual_meanings(the_spoken_form, the_meanings)
+           
+    def index_contextual_meanings(self, spoken_form, meanings_dict):
+        contexts = meanings_dict.contexts.values()
+        for a_context in contexts:
+           debug.trace('WhatCanISay.index_contextual_meanings', "** Processing a_context=%s" % repr(a_context))           
+           for a_language in self.languages:
+              if self.context_applies_for_lang(a_language, a_context):
+                 debug.trace('WhatCanISay.index_contextual_meanings', 
+                             "** a_context=%s applies for a_language=%s" % (a_context, a_language)                         )
+           
+    def context_applies_for_lang(self, language, context):
+        debug.trace('WhatCanISay.context_applies_for_lang', "** language=%s, context=%s" %(language, context))
+        answer = False        
+        if (isinstance(context, ContLanguage) and 
+            (context.language == language or context.language == None)):
+           answer = True
+        if (isinstance(context, ContAny)):
+           answer = True
+        return answer
 
     def create_cmds(self, cmd_interp, curr_lang):
         """Create all commands, separated by language
 
-        First all LSA commands are extracted from self.index.
+        First all LSA commands are extracted from self.lsa_index.
 
         Commands that are in None, or appear to be equal in all languages come in language 'global'.
 
@@ -108,8 +123,8 @@ class WhatCanISay(Object):
         self.language = curr_lang
         self.load_commands_from_interpreter(cmd_interp)
         all_commands = {}
-        for lang in self.index:
-            part = self.index[lang]
+        for lang in self.lsa_index:
+            part = self.lsa_index[lang]
             if lang == None:
                 lang = 'common'
             all_commands[lang] = []
