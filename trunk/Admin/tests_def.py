@@ -73,6 +73,19 @@ foreground_py = vc_globals.test_data + os.sep + 'foreground.py'
 VoiceCodeRootTest.foreground_py = foreground_py
 
 ##############################################################################
+# Testing the test harness
+##############################################################################
+
+
+def test_TestCaseWithHelpers():
+    unittest.TextTestRunner(). \
+       run(unittest.makeSuite(TestCaseWithHelpersTest.TestCaseWithHelpersTest, 'test')) 
+
+add_test('TestCaseWithHelpers', test_TestCaseWithHelpers, 
+         desc='Test the unit testing framework.')
+
+
+##############################################################################
 # Testing SymDict
 ##############################################################################
 
@@ -282,15 +295,9 @@ def test_SourceBuff():
     unittest.TextTestRunner(). \
        run(unittest.makeSuite(SourceBuffTest.SourceBuffTest, 'test')) 
 
-def test_ContPyInsideArguments():
-    unittest.TextTestRunner(). \
-       run(unittest.makeSuite(ContPyInsideArgumentsTest.ContPyInsideArgumentsTest,
-                              'test'))
-
 add_test('SourceBuff', test_SourceBuff, 
          desc='Unit tests for the SourceBuff class and subclasses.')
 
-##############################################################################
 
 
 ##############################################################################
@@ -3993,64 +4000,9 @@ add_test('emacs_split_window', test_Emacs_split_window, 'Testing dictation into 
 
 def test_normal_text_dictation():
 
-#   testing.init_simulator_regression()
-#   unittest.TextTestRunner(). \
-#       run(unittest.makeSuite(TextModeTest.TextModeTest, 'test')) 
-#
-#   return
-
-   testing.init_simulator_regression(exclusive = 0)
- 
-   mediator = testing.mediator()
-   app = testing.editor()
-   init_line = 10
-   
-   commands.open_file(foreground_py)   
-   commands.goto_line(init_line)
-
-   commands.say(['print', 'quotes'])
-   app.print_buff()
-
-   print 'Setting VCode in text mode.'
-   commands.say(['text', 'mode', 'on'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
-   commands.say(['this', 'should', 'be', 'typed', 'as', 'normal', 'text'], 
-       never_bypass_sr_recog=1, user_input="1\n1\n", echo_cmd=1)
-   time.sleep(3)
-# see if adding this makes any difference
-   app.process_pending_updates()
-   time.sleep(3)
-   app.process_pending_updates()
-   app.print_buff()
-
-
-   print 'Setting VCode in code dictation mode.'   
-   commands.say(['text', 'mode', 'off'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)   
-   commands.say(['jump', 'out'])
-   commands.say(['new', 'statement', 'print'], echo_cmd = 1)
-   commands.say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
-   app.print_buff()
-   
-   commands.say(['new', 'statement', 'print', 'quotes'])
-   app.print_buff()
-
-   print 'Setting VCode in text mode using alternative spoken form.' 
-#   commands.say(['alternative', 'test', 'text', 'mode', 'on'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
-   commands.say(['text', 'mode', 'on'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
-   commands.say(['this', 'should', 'be', 'typed', 'as', 'normal', 'text'], 
-       never_bypass_sr_recog=1, user_input="1\n1\n", echo_cmd=1)
-   time.sleep(3)
-# see if adding this makes any difference
-   app.process_pending_updates()
-   time.sleep(3)
-   app.process_pending_updates()
-   app.print_buff()
-   
-   print 'Setting VCode in code dictation mode using alternative spoken form.'   
-   commands.say(['alternative', 'test', 'text', 'mode', 'off'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)   
-   commands.say(['jump', 'out'])
-   commands.say(['new', 'statement', 'print'], echo_cmd = 1)
-   commands.say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
-   app.print_buff()
+   testing.init_simulator_regression()
+   unittest.TextTestRunner(). \
+       run(unittest.makeSuite(TextModeTest.TextModeTest, 'test')) 
    
   
 add_test('text_mode', test_normal_text_dictation, 'Test dictation of normal text.', foreground = 1)   
