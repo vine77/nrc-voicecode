@@ -45,9 +45,7 @@ import AppMgr, RecogStartMgr, GramMgr, sr_grammars
 import KnownTargetModule, NewMediatorObject, TargetWindow, WinIDClient
 import test_helpers
 import CmdInterpTest, ContBlankLineTest, SymDictTest
-import BasicBufferTest
-# AD: Disable until QH commits it to CVS.
-# import ContPyInsideArgumentsTest
+import ContPyInsideArgumentsTest
 import debug
 import DiffCrawler
 import difflib
@@ -313,9 +311,8 @@ def test_ContPyInsideArguments():
        run(unittest.makeSuite(ContPyInsideArgumentsTest.ContPyInsideArgumentsTest,
                               'test'))
 
-# AD: Disactivate for now until QH commits ContPyInsideArgumentsTest to CVS.
-# add_test('ContPyInsideArguments', test_ContPyInsideArguments, 
-#         desc='Tests for being inside the argument list of a function.')
+add_test('ContPyInsideArguments', test_ContPyInsideArguments, 
+         desc='Tests for being inside the argument list of a function.')
 
 ##############################################################################
 # Testing WhatCanISay dialogs
@@ -327,19 +324,6 @@ def test_WhatCanISay():
 
 
 add_test('WhatCanISay', test_WhatCanISay, desc='self-test for WhatCanISay.py')
-
-
-##############################################################################
-# Testing BasicBufferTest stuff (VoiceCodeRootTest functions)
-##############################################################################
-
-def test_BasicBuffer():
-    unittest.TextTestRunner(). \
-       run(unittest.makeSuite(BasicBufferTest.BasicBufferTest, 'test')) 
-
-add_test('BasicBuffer', test_BasicBuffer, desc='showing and testing basic buffer functions (from VoiceCodeRootTest)')
-
-
 
 
 ##############################################################################
