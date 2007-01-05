@@ -2926,6 +2926,13 @@ Subclassing from non-standard class AnimatedCharacter.*
 
 
 *******************************************************************************
+* Name        : SourceBuff
+* Description : Unit tests for the SourceBuff class and subclasses.
+*******************************************************************************
+
+
+
+*******************************************************************************
 * Name        : SymDict
 * Description : self-test for SymDict.py
 *******************************************************************************
@@ -3277,6 +3284,9 @@ Fresh abbreviation file matches current one, as expected
 * Description : self-test for WhatCanISay.py
 *******************************************************************************
 
+using test folder: C:\Documents and Settings\Desiletsa\My Documents\eclipse_workspace\VCode\Data\Benchmark\WhatCanISayTestResults\C
+using test folder: C:\Documents and Settings\Desiletsa\My Documents\eclipse_workspace\VCode\Data\Benchmark\WhatCanISayTestResults\perl
+using test folder: C:\Documents and Settings\Desiletsa\My Documents\eclipse_workspace\VCode\Data\Benchmark\WhatCanISayTestResults\python
 
 
 *******************************************************************************
