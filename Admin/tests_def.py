@@ -52,6 +52,9 @@ import debug
 import DiffCrawler
 import difflib
 from config_helpers import alpha_bravo
+import TextModeTest
+import VoiceCodeRootTest
+import SourceBuffTest
 
 from actions_gen import *
 from actions_C_Cpp import *
@@ -69,6 +72,7 @@ unusual_symbols_py = vc_globals.test_data + os.sep + 'unusual_symbols.py'
 
 # use this only for foreground tests:
 foreground_py = vc_globals.test_data + os.sep + 'foreground.py'
+VoiceCodeRootTest.foreground_py = foreground_py
 
 ##############################################################################
 # Testing SymDict
@@ -270,6 +274,26 @@ def test_CmdInterp():
 
 
 add_test('CmdInterp', test_CmdInterp, desc='self-test for CmdInterp.py')
+
+##############################################################################
+# Testing SourceBuff
+##############################################################################
+
+
+def test_SourceBuff():
+    unittest.TextTestRunner(). \
+       run(unittest.makeSuite(SourceBuffTest.SourceBuffTest, 'test')) 
+
+def test_ContPyInsideArguments():
+    unittest.TextTestRunner(). \
+       run(unittest.makeSuite(ContPyInsideArgumentsTest.ContPyInsideArgumentsTest,
+                              'test'))
+
+add_test('SourceBuff', test_SourceBuff, 
+         desc='Unit tests for the SourceBuff class and subclasses.')
+
+##############################################################################
+
 
 ##############################################################################
 # Testing context objects
@@ -3984,6 +4008,13 @@ add_test('emacs_split_window', test_Emacs_split_window, 'Testing dictation into 
 ##############################################################################
 
 def test_normal_text_dictation():
+
+#   testing.init_simulator_regression()
+#   unittest.TextTestRunner(). \
+#       run(unittest.makeSuite(TextModeTest.TextModeTest, 'test')) 
+#
+#   return
+
    testing.init_simulator_regression(exclusive = 0)
  
    mediator = testing.mediator()
@@ -4037,7 +4068,6 @@ def test_normal_text_dictation():
    commands.say(['this', 'should', 'be', 'typed', 'as', 'a', 'variable', 'name'], never_bypass_sr_recog=1, user_input="1\n1\n1\n", echo_cmd=1)
    app.print_buff()
    
-
   
 add_test('text_mode', test_normal_text_dictation, 'Test dictation of normal text.', foreground = 1)   
 

@@ -397,6 +397,15 @@ class SourceBuff(OwnerObject):
         *STR* -- contents of specified range of the buffer
         """
         debug.virtual('SourceBuff.get_text')
+        
+    def get_text_of_line(self, line_num=None):
+        old_pos = self.cur_pos()
+        if line_num != None:
+           self.goto_line(line_num)
+        start = self.beginning_of_line()
+        end = self.end_of_line()
+        self.goto(old_pos)
+        return self.get_text(start, end)
 
     def set_text(self, text, start = None, end = None):
         """changes a portion of the buffer

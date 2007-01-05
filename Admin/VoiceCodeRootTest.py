@@ -45,8 +45,8 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       debug.trace('VoiceCodeRootTest._commands', 'self._mediator_testing_namespace=%s' % self._mediator_testing_namespace())
       return  self._mediator_testing_namespace().namespace()['commands'] 
       
-   def _say(self, utterance):
-      self._commands().say(utterance)
+   def _say(self, utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0, echo_cmd=0):
+      self._commands().say(utterance, user_input, never_bypass_sr_recog, echo_utterance, echo_cmd)
       
    def _open_empty_test_file(self, file_name):
        fpath = os.path.join(vc_globals.tmp, file_name)
@@ -59,8 +59,11 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
    def _insert_in_active_buffer(self, text):
        self._app().insert(text)
   
-   def _init_simulator_regression(self):
-      return self._mediator_testing_namespace().init_simulator_regression()
+   def _init_simulator_regression(self, alt_sym_file = None, exclusive = 1, 
+                                  print_buffer_content_after_commands=1):
+      return self._mediator_testing_namespace(). \
+                  init_simulator_regression(alt_sym_file, exclusive, 
+                                  print_buffer_content_after_commands)
       
    def _mediator(self):
       global mediator_used_for_testing
@@ -111,6 +114,10 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       self.assert_equal(exp_content, got_content, 
                         mess + "\nContent of the active buffer was not as expected.")
          
+   def _assert_current_line_content_is(self, expected_text, mess=""):
+      got_text = self._app().get_content_of_line() 
+      mess = mess + "\nContent of current line in the active buffer was wrong."
+      self.assert_equal(expected_text, got_text, mess)    
       
    def _find_cur_pos_in_expected_translation(self, expected_translation):
        match = re.search("\\^", expected_translation)
