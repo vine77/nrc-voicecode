@@ -86,9 +86,20 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       
    def _cur_pos(self):
       return self._app().cur_pos()
+
+   def _active_buffer_name(self):
+      return self._app().curr_buffer().name()
+
       
    def _get_text(self, start_pos, end_pos):
       return self._app().get_text(start_pos, end_pos)
+
+   def _get_buffer_content_with_cursor_position(self, buff_name=None):
+      got_content = self._app().find_buff(buff_name).contents()
+      got_cur_pos = self._app().find_buff(buff_name).cur_pos()
+      got_content = got_content[:got_cur_pos] + "<CURSOR>" + got_content[got_cur_pos:]      
+      return got_content      
+      
       
    def _len(self):
       return self._app().len()      
@@ -110,10 +121,14 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       self.assert_equal(exp_pos, got_pos,  
                    mess + "Cursor was at the wrong place")
       
+   def _assert_active_buffer_is_called(self, exp_name, mess=""):
+      got_name = self._app().curr_buffer().name()
+      mess = mess + "\nName of active buffer was wrong."
+      self.assert_equal(exp_name, got_name, mess)
+   
+      
    def _assert_active_buffer_content_is(self, exp_content, mess=""):
-      got_content = self._app().get_text()
-      got_cur_pos = self._app().cur_pos()
-      got_content = got_content[:got_cur_pos] + "<CURSOR>" + got_content[got_cur_pos:]
+      got_content = self._get_buffer_content_with_cursor_position()
       self.assert_equal(exp_content, got_content, 
                         mess + "\nContent of the active buffer was not as expected.")
          
@@ -124,7 +139,7 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       end_of_line_pos = self._app().beginning_of_line()
       before_cursor = current_line_text[:cur_pos - start_of_line_pos]
       after_cursor = current_line_text[cur_pos - start_of_line_pos:]
-      got_text = before_cursor + '^^^' + after_cursor
+      got_text = before_cursor + '<CURSOR>' + after_cursor
       mess = mess + "\nContent of current line in the active buffer was wrong."
       self.assert_equal(expected_text, got_text, mess)    
       

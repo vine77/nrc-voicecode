@@ -1,17 +1,4 @@
 
-C:\Documents and Settings\desileta\My Documents\workspace\VCode\Mediator>rem  
-
-C:\Documents and Settings\desileta\My Documents\workspace\VCode\Mediator>rem Shortcut for invoking VoiceCode server 
-
-C:\Documents and Settings\desileta\My Documents\workspace\VCode\Mediator>rem
-
-C:\Documents and Settings\desileta\My Documents\workspace\VCode\Mediator>c:
-
-C:\Documents and Settings\desileta\My Documents\workspace\VCode\Mediator>cd C:\Documents and Settings\desileta\My Documents\workspace\VCode\Mediator 
-
-C:\Documents and Settings\desileta\My Documents\workspace\VCode\Mediator>rem python new_server.py --bypass -t all 
-
-C:\Documents and Settings\desileta\My Documents\workspace\VCode\Mediator>python wxMediator.py -t all  
 creating wxMediator
 Loading test definitions...
 Configuring the mediator...
@@ -477,115 +464,12 @@ Heard select hello
 * Description : Switching to an other buffer in Emacs.
 *******************************************************************************
 
-WARNING: source file 'dummy.py' doesn't exist.
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
-Got command: say(['class', 'dummy'],None,0,0,)
 Heard class dummy
-*** Start of source buffer ***
-  1: class Dummy<CURSOR>:
-  2:     
-
-*** End of source buffer ***
-WARNING: source file 'test.py' doesn't exist.
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
-Got command: say(['yo', 'switch', 'to', 'buffer'],None,0,0,)
 Heard yo switch to buffer
 Compiling symbols for *Completions*
 Done compiling symbols
-*** Start of source buffer ***
-  1: <CURSOR>
-
-*** End of source buffer ***
-Got command: say(['select', 'dummy'],None,1,0,)
 Heard select dummy
-  3: 
-  4: Possible completions are:
-  5: *Messages*			   *scratch*
-  6: <SEL_START>dummy<SEL_END>.py			   test.py
-
-*** End of source buffer ***
-Got command: say(['new', 'line'],None,0,0,)
 Heard new line
-  3: 
-  4: Possible completions are:
-  5: *Messages*			   *scratch*
-  6: <SEL_START>dummy<SEL_END>.py			   test.py
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: class Dummy<CURSOR>:
-  2:     
-
-*** End of source buffer ***
-WARNING: source file 'dummy.py' doesn't exist.
-*** Start of source buffer ***
-  1: class Dummy<CURSOR>:
-  2:     
-
-*** End of source buffer ***
-Got command: say(['yo', 'switch', 'to', 'buffer'],None,0,0,)
-Heard yo switch to buffer
-Compiling symbols for *Completions*
-Done compiling symbols
-*** Start of source buffer ***
-  1: class Dummy<CURSOR>:
-  2:     
-
-*** End of source buffer ***
-Got command: say(['select', 'dummy'],None,1,0,)
-Heard select dummy
-  3: 
-  4: Possible completions are:
-  5: *Completions*			   *Messages*
-  6: *scratch*			   <SEL_START>dummy<SEL_END>.py
-  7: test.py
-
-*** End of source buffer ***
-Got command: say(['hello'],None,1,0,)
-Heard hello
-  3: 
-  4: Possible completions are:
-  5: *Completions*			   *Messages*
-  6: *scratch*			   <SEL_START>dummy<SEL_END>.py
-  7: test.py
-
-*** End of source buffer ***
-  3: 
-  4: Possible completions are:
-  5: *Completions*			   *Messages*
-  6: *scratch*			   <SEL_START>dummy<SEL_END>.py
-  7: test.py
-
-*** End of source buffer ***
-Got command: say(['select', 'dummy'],None,1,0,)
-Heard select dummy
-  3: 
-  4: Possible completions are:
-  5: *Completions*			   *Messages*
-  6: *scratch*			   <SEL_START>dummy<SEL_END>.py
-  7: test.py
-
-*** End of source buffer ***
-Got command: say(['new', 'line'],None,0,0,)
-Heard new line
-  3: 
-  4: Possible completions are:
-  5: *Completions*			   *Messages*
-  6: *scratch*			   <SEL_START>dummy<SEL_END>.py
-  7: test.py
-
-*** End of source buffer ***
-*** Start of source buffer ***
-  1: <SEL_START>class Dummy<SEL_END>:
-  2:     
-
-*** End of source buffer ***
 
 
 *******************************************************************************

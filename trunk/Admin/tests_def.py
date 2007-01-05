@@ -44,7 +44,7 @@ import util, unit_testing, vc_globals, WhatCanISayTest, wxWindowsWithHelpersTest
 import AppMgr, RecogStartMgr, GramMgr, sr_grammars
 import KnownTargetModule, NewMediatorObject, TargetWindow, WinIDClient
 import test_helpers
-import CmdInterpTest, ContBlankLineTest, SymDictTest
+import CmdInterpTest, ContBlankLineTest, SwitchBufferTest, SymDictTest
 import ContPyInsideArgumentsTest
 import debug
 import DiffCrawler
@@ -4496,35 +4496,12 @@ add_test('symbol_matching', test_sym_matching, desc='Test special cases for the 
 ##############################################################################
 # Switching to another buffer by voice
 ##############################################################################    
-
-def test_emacs_do_switch_buffer():
-    testing.init_simulator_regression()
-    commands.open_file('dummy.py')
-    commands.say(['class', 'dummy'], echo_cmd=1)
-    commands.open_file('test.py')
-    commands.say(['yo', 'switch', 'to', 'buffer'], echo_cmd=1)
-    commands.say(['select', 'dummy', ], echo_cmd=1, never_bypass_sr_recog = 1)
-    commands.say(['new', 'line'], echo_cmd=1)    
-    time.sleep(3)
-    commands.app.print_buff()
-    
-def test_emacs_do_invalid_dictation_in_buffer_list():  
-    commands.open_file('dummy.py')
-    commands.say(['yo', 'switch', 'to', 'buffer'], echo_cmd=1)
-    commands.say(['select', 'dummy', ], echo_cmd=1, never_bypass_sr_recog = 1)
-    commands.say(['hello'], echo_cmd=1, never_bypass_sr_recog = 1)     
-    time.sleep(3)
-    commands.app.print_buff()  
-    commands.say(['select', 'dummy', ], echo_cmd=1, never_bypass_sr_recog = 1)
-    commands.app.print_buff()  
-    commands.say(['new', 'line'], echo_cmd=1)    
-    time.sleep(5)
-    commands.app.print_buff()  
-    
+   
 def test_emacs_switch_buffer():
-    test_emacs_do_switch_buffer()
-    test_emacs_do_invalid_dictation_in_buffer_list()
-    
+
+    unittest.TextTestRunner(). \
+       run(unittest.makeSuite(SwitchBufferTest.SwitchBufferTest, 'test')) 
+    return
     
     
 add_test('switch_buffer', test_emacs_switch_buffer,

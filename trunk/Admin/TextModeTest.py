@@ -30,7 +30,7 @@ class TextModeTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self._app().process_pending_updates()
        time.sleep(1)
        self._app().process_pending_updates()
-       self._assert_current_line_content_is("this should be typed as normal text^^^",
+       self._assert_current_line_content_is("this should be typed as normal text<CURSOR>",
                                             "Text dictated with text mode on was wrong.")
                                             
                
@@ -40,7 +40,7 @@ class TextModeTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self._app().process_pending_updates()
        time.sleep(1)
        self._app().process_pending_updates()
-       self._assert_current_line_content_is("with arguments^^^",
+       self._assert_current_line_content_is("with arguments<CURSOR>",
                                             "CSC dictated while text mode on, should have been printed as normal text.")
        
        self._say(['text', 'mode', 'off'], never_bypass_sr_recog=1)
@@ -51,7 +51,7 @@ class TextModeTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self._app().process_pending_updates()
        time.sleep(1)
        self._app().process_pending_updates()
-       self._assert_current_line_content_is("this_should_be_typed_as_a_variable_name^^^",
+       self._assert_current_line_content_is("this_should_be_typed_as_a_variable_name<CURSOR>",
                                             "New variable name was not inserted properly after switching text mode off.")
        
        self._app().insert("\n")                                                                 
@@ -60,6 +60,6 @@ class TextModeTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self._app().process_pending_updates()
        time.sleep(1)
        self._app().process_pending_updates()
-       self._assert_current_line_content_is("(^^^)",
+       self._assert_current_line_content_is("(<CURSOR>)",
                                             "CSC dictated while text mode on, not interpreted correctly after switching text mode off.")
        
