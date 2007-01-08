@@ -21,9 +21,9 @@
 from HTMLgen import *
 from debug import trace
 from Object import Object
+import vc_globals
 import pprint
 import webbrowser
-import debug
 import re, os
 reIsInt = re.compile(r'^\d+$')
 reIsLetter = re.compile(r'^[a-zA-Z]$')
@@ -54,10 +54,16 @@ class WhatCanISay(Object):
     def load_commands_from_interpreter(self, cmd_interp):
         """Get a dictionary of all commands from the interpreter
 
-        The LSA commands a return in self.lsa_index, a dict
-        that has keys None and all the possible languages.
+        The list of languages goes in self.languages
 
-        The values are a list of tuples (wordList, LSAentry)
+        The LSA commands are put in self.lsa_index, a dict
+         with keys None and all the possible languages.
+         and values:  a list of tuples (wordList, LSAentry)
+
+        The CSC commands are put in self.csc_index.
+         with keys: the languages
+         with values: a dict with keys 'spoken form'
+                             and values: [(context key, action),...]
 
         """
         self.create_html_folder()            
@@ -75,40 +81,61 @@ class WhatCanISay(Object):
             wTrie = cmd_interp.language_specific_aliases[a_language]
             for an_LSA in wTrie.items():
                 wordList, entry = an_LSA
-                self.lsa_index[a_language].append((wordList, entry))
+                spoken_form_text = ' '.join(wordList)
+                self.lsa_index[a_language].append((spoken_form_text, entry))
 
     def index_cscs(self, cmd_interp):
         self.csc_index = {}
         for a_language in self.languages:
-           self.csc_index[a_language] = []
+            if a_language == None:
+                continue
+            self.csc_index[a_language] = {}
+        
         wTrie = cmd_interp.commands
         for a_csc_entry in wTrie.items():
-           debug.trace('WhatCanISay.index_cscs', "** Processing a_csc_entry=%s" % repr(a_csc_entry))
-           the_spoken_form = a_csc_entry[0]
-           the_meanings = a_csc_entry[1]
-           self.index_contextual_meanings(the_spoken_form, the_meanings)
+            the_spoken_form = ' '.join(a_csc_entry[0])
+            the_meanings = a_csc_entry[1]
+            trace('WhatCanISay.index_cscs', "** Processing a_csc_entry: the_spoken_form: %s, the_meanings: %s" % \
+                  (the_spoken_form, the_meanings))
+            self.index_contextual_meanings(the_spoken_form, the_meanings)
            
     def index_contextual_meanings(self, spoken_form, meanings_dict):
         contexts = meanings_dict.contexts.values()
         for a_context in contexts:
-           debug.trace('WhatCanISay.index_contextual_meanings', "** Processing a_context=%s" % repr(a_context))           
+           trace('WhatCanISay.index_contextual_meanings', "** Processing a_context=%s" % repr(a_context))           
            for a_language in self.languages:
-              if self.context_applies_for_lang(a_language, a_context):
-                 debug.trace('WhatCanISay.index_contextual_meanings', 
-                             "** a_context=%s applies for a_language=%s" % (a_context, a_language)                         )
+               if a_language == None:
+                   continue
+               if self.context_applies_for_lang(a_language, a_context):
+                   a_context_key = a_context.equivalence_key()
+                   trace('WhatCanISay.index_contextual_meanings', 
+                         "** a_context=%s applies for a_language=%s" % \
+                            (a_context_key, a_language))
+                   action_for_this_context = meanings_dict.actions[a_context_key]
+                   self.csc_index[a_language].setdefault(spoken_form, []).append((a_context_key,
+                                                                                  action_for_this_context))
+
+                 
            
     def context_applies_for_lang(self, language, context):
-        debug.trace('WhatCanISay.context_applies_for_lang', "** language=%s, context=%s" %(language, context))
+        trace
+        ('WhatCanISay.context_applies_for_lang', "** language=%s, context=%s" %(language, context))
         answer = False        
         if (isinstance(context, ContLanguage) and 
             (context.language == language or context.language == None)):
-           answer = True
+            answer = True
         if (isinstance(context, ContAny)):
-           answer = True
+            answer = True
         return answer
 
     def create_cmds(self, cmd_interp, curr_lang):
-        """Create all commands, separated by language
+        self.language = curr_lang
+        self.load_commands_from_interpreter(cmd_interp)
+        self.create_lsa_cmds(cmd_interp, self.language)
+        self.create_csc_cmds(cmd_interp, self.language)
+        
+    def create_lsa_cmds(self, cmd_interp, curr_lang):
+        """Create all lsa commands, separated by language
 
         First all LSA commands are extracted from self.lsa_index.
 
@@ -120,8 +147,6 @@ class WhatCanISay(Object):
         the result is in self.all_commands
 
         """
-        self.language = curr_lang
-        self.load_commands_from_interpreter(cmd_interp)
         all_commands = {}
         for lang in self.lsa_index:
             part = self.lsa_index[lang]
@@ -129,7 +154,7 @@ class WhatCanISay(Object):
                 lang = 'common'
             all_commands[lang] = []
             for tup in part:
-                words = ' '.join(tup[0])  # ['is', 'equal', 'to'] -->> 'is equal to')
+                words = tup[0]
                 written = getattr(tup[1], 'written_form', '')
                 if not written:
                     all_commands[lang].append((words, written))
@@ -148,6 +173,27 @@ class WhatCanISay(Object):
 ##        print '3: %s'% all_commands.keys()
         self.lsa_commands = all_commands
 
+        
+    def create_csc_cmds(self, cmd_interp, curr_lang):
+        """Create all csc commands, separated by language
+
+        """
+        all_commands = {}
+        for lang, part in self.csc_index.items():
+            if lang == None:
+                raise ValueError("value of self.csc_index[None] should not exist")
+            all_commands[lang] = []
+            for words, action in part.items():
+                written = self.get_written_form_from_action(action[0][1])
+                all_commands[lang].append((words, written))
+        self.csc_commands = all_commands
+
+    def get_written_form_from_action(self, action):
+        try:
+            doc = action.doc()
+        except AttributeError:
+            doc = repr(action).split(" at ")[0] + ">"
+        return doc
 
     def extract_common_commands(self, all_commands):
         """change (inplace) the Commands dict
@@ -256,8 +302,8 @@ class WhatCanISay(Object):
 
         this foldername is also returned
         """
-        home = os.environ['VCODE_HOME']
-        self.html_folder = os.path.join(home, 'Data', 'whatCanISay')
+        self.html_folder = vc_globals.wcisay_html_folder
+
         try:
             os.makedirs(self.html_folder)
             print 'WARNING: whatCanISay folder did not exist, stylesheet will not be available'
@@ -359,6 +405,7 @@ class WhatCanISay(Object):
             rows += 1
         cell_num = 0
         for start in range(rows):
+            cell_num = start % 2
             for col in range(start, len(content), rows):
                 cell_num += 1
                 k, v = content[col]
@@ -375,48 +422,50 @@ class WhatCanISay(Object):
         outfile = os.path.join(self.html_folder, page_html)
         trace('WhatCanISay.files', 'making page: %s'% outfile)
         doc.write(outfile)
+
                   
     def html_csc_page(self, page):
-        """generate one csc page, with a menu to the other pages"""
+        """generate one csc page"""
         doc = SimpleDocument()
         doc.stylesheet = "vc.css"
         page_type = 'csc'
         page_html = 'csc_%s.html'% page
+        content = self.csc_commands['python']
 ##        content = self.csc_commands[page]
         doc.append(self.html_header(page, page_type=page_type, page_html=page_html))
+        doc.append(Header(1, 'rudimentary csc commands, python'))
 
-        if 0:
+        if 1:
             tlpage = FullTable(Class="page")
             trpage = TR()
 
             # produce the menu (left):
-            leftMenu = self.get_left_menu(page, page_type=page_type, pages=self.lsa_pages)
-            trpage.append(leftMenu)
+#            leftMenu = self.get_left_menu(page, page_type=page_type, pages=self.lsa_pages)
+#            trpage.append(leftMenu)
             
             # now the contents:        
             tl = FullTable(Class="body")
             tr = TR()
-            per_col = 3
+            per_col = 2
             tdspacer = TD("&nbsp;", Class="spacer")
             rows = len(content)/per_col
             if len(content)%per_col:
                 rows += 1
-                cell_num = 0
-                for start in range(rows):
-                    for col in range(start, len(content), rows):
-                        cell_num += 1
-                        k, v = content[col]
-                        tr.append(TD(v, Class="spoken%s"% (cell_num%2,)))
-                tr.append(TD(k, Class="written%s"% (cell_num%2,)))
-                tr.append(tdspacer())
-            tl.append(tr)
-            tr.empty()
+            for start in range(rows):
+                cell_num = start%2
+                for col in range(start, len(content), rows):
+                    cell_num += 1
+                    k, v = content[col]
+                    tr.append(TD(escape(v), Class="spoken%s"% (cell_num%2,)))
+                    tr.append(TD(k, Class="written%s"% (cell_num%2,)))
+                    tr.append(tdspacer())
+                tl.append(tr)
+                tr.empty()
         
             trpage.append(TD(tl, Class="body"))
             tlpage.append(trpage)
             doc.append(tlpage)
             doc.append(self.html_footer(page, page_type=page_type, page_html=page_html))
-        doc.append(Paragraph("coming later"))
         outfile = os.path.join(self.html_folder, page_html)
         trace('WhatCanISay.files', 'making page: %s'% outfile)
         doc.write(outfile)
