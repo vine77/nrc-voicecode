@@ -4594,36 +4594,19 @@ add_test('profile_config', test_profile_config,
 
 def test_temporary():  
     testing.init_simulator_regression()      
+
     commands.open_file('blah1.py')
+    
+    commands.say(['define', 'method', 'blah', 'add', 'arguments', 'hello', 'comma', 'hi', 'equals', 'zero'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['do', 'the', 'following'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['self', 'dot', 'hello', 'less', 'than', 'some', 'function', 'with', 'arguments', 'hi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['select', '<\\less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['equals'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['yo', 'what', 'can', 'I', 'say'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    
 
-
-    commands.say(['0\\zero', '<\\less-than', '1\\one', '<\\less-than', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
     
-    commands.say(['previous less-than', 'previous less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    
-    commands.say(['after less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    
-    commands.say(['before previous less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    
-    commands.say(['before next less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
-    
-    commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-
-
-
-    commands.say(['0\\zero', '>\\greater-than', '1\\one', '>\\greater-than', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    
-    commands.say(['previous greater-than', 'previous greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    
-    commands.say(['after greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    
-    commands.say(['before previous greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    
-    commands.say(['before next greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)        
-    
-    commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    
-# add_test('temp', test_temporary, desc='temporary test')
+#add_test('temp', test_temporary, desc='temporary test')
 
 ##############################################################################
 # Alain Desilets uses this test suite to write reminder to himself.

@@ -475,6 +475,8 @@ Compiling symbols for *Completions*
 Done compiling symbols
 Heard select dummy
 Heard hello
+Heard select dummy
+Heard new line
 
 
 *******************************************************************************
@@ -3034,8 +3036,6 @@ Fresh abbreviation file matches current one, as expected
 *******************************************************************************
 
 using test folder: C:\Documents and Settings\Desiletsa\My Documents\eclipse_workspace\VCode\Data\Benchmark\WhatCanISayTestResults\C
-using test folder: C:\Documents and Settings\Desiletsa\My Documents\eclipse_workspace\VCode\Data\Benchmark\WhatCanISayTestResults\perl
-using test folder: C:\Documents and Settings\Desiletsa\My Documents\eclipse_workspace\VCode\Data\Benchmark\WhatCanISayTestResults\python
 
 
 *******************************************************************************

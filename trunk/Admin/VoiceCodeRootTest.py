@@ -2,6 +2,7 @@ import debug
 import TestCaseWithHelpers
 import vc_globals
 import os
+import re
 
 mediator_used_for_testing = None
 
@@ -132,7 +133,8 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       self.assert_equal(exp_content, got_content, 
                         mess + "\nContent of the active buffer was not as expected.")
          
-   def _assert_current_line_content_is(self, expected_text, mess=""):
+   def _assert_current_line_content_is(self, expected_text, mess="",
+                                       compare_as_regexp=False, regexp_flags=''):
       current_line_text = self._app().get_text_of_line() 
       cur_pos = self._app().cur_pos()
       start_of_line_pos = self._app().beginning_of_line()
@@ -141,7 +143,11 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       after_cursor = current_line_text[cur_pos - start_of_line_pos:]
       got_text = before_cursor + '<CURSOR>' + after_cursor
       mess = mess + "\nContent of current line in the active buffer was wrong."
-      self.assert_equal(expected_text, got_text, mess)    
+      if not compare_as_regexp:
+         self.assert_equal(expected_text, got_text, mess)    
+      else:
+         mess = mess + "\nExpected to match regexp:\n'%s'\nGot:\n'%s'" % (expected_text, got_text)
+         self.assert_(re.match(expected_text, got_text, regexp_flags), mess)
       
    def _find_cur_pos_in_expected_translation(self, expected_translation):
        match = re.search("\\^", expected_translation)
