@@ -9,7 +9,8 @@ from CmdInterp import AliasMeaning, CmdInterp, LSAlias
 from CSCmd import CSCmd
 from cont_gen import *
 from WhatCanISay import WhatCanISay
-from actions_gen import gen_parens_pair
+from actions_gen import gen_parens_pair, ActionInsertNewClause, ActionInsert
+from actions_C_Cpp import c_else
 # test data:
 expected_languages = ['C', 'perl', 'python']
 expected_all_commands_keys = ['actual_sb_s', 'actual_sb__w', 'C_sb_s', 'C_sb__w',
@@ -23,24 +24,38 @@ lsa_multiply_meanings  = dict.fromkeys(expected_languages, ' * ')
 lsa_not_spoken_forms = ['not']
 lsa_not_meanings  = dict(python='not', C="!", perl="!")
 
-csc_with_arguments_spoken_forms = ['with arguments', 'with argument', 'call with',
-                                   'called with', 'function of']
-csc_with_arguments_meanings = dict.fromkeys(expected_languages, gen_parens_pair)
+csc_with_arguments_spoken_forms = ['with arguments', 'function of']
+csc_with_arguments_meanings = {ContC(): gen_parens_pair,
+                               ContPy(): gen_parens_pair,
+                               ContPerl(): gen_parens_pair}
+csc_with_arguments_docstring = 'giving the parens after a function call, position inside'
+csc_else_spoken_forms = ['else']
+csc_else_meanings ={ContPy(): ActionInsertNewClause('($|\n)',
+                                                    code_bef = 'else:\n\t',
+                                                    code_after = '',
+                                                    where = -1),
+                    ContC(): c_else,
+                    ContPerl(): c_else}
+csc_else_docstring = 'else clause'
+csc_equals_spoken_forms = ['equals', 'assign value']
+csc_equals_meanings ={ContPyInsideArguments(): ActionInsert("="),
+                      ContAny(): ActionInsert(' = ')}
+csc_equals_docstring = 'equal sign'
 
 # expected index contents of the 3 languages: values of self.index (raw LSA commands)
 # first one is equal over the 2 languages
 # second one differs with python:
-index_contents =  [(['multiply', 'by'], AliasMeaning(" * ")),
-                   (['multiplied', 'by'], AliasMeaning(" * "))]
+index_contents =  [('multiply by', AliasMeaning(" * ")),
+                   ('multiplied by', AliasMeaning(" * "))]
                   
 expected_lsa_index = {}
 expected_lsa_index[None] = []
-expected_lsa_index['C'] = index_contents + [(['not'], AliasMeaning('!')),
-                                        (['times'], AliasMeaning(" * "))]
-expected_lsa_index['perl'] = index_contents + [(['not'], AliasMeaning('!')),
-                                           (['times'], AliasMeaning(" * "))]
-expected_lsa_index['python'] = index_contents + [(['not'], AliasMeaning('not')),
-                                             (['times'], AliasMeaning(" * "))]
+expected_lsa_index['C'] = index_contents + [('not', AliasMeaning('!')),
+                                        ('times', AliasMeaning(" * "))]
+expected_lsa_index['perl'] = index_contents + [('not', AliasMeaning('!')),
+                                           ('times', AliasMeaning(" * "))]
+expected_lsa_index['python'] = index_contents + [('not', AliasMeaning('not')),
+                                             ('times', AliasMeaning(" * "))]
                             
 
 expected_lsa_commands = dict(C_sb__w=[('not', '!')],
@@ -61,11 +76,58 @@ expected_lsa_commands = dict(C_sb__w=[('not', '!')],
                                          ('times', ' * ')],
                              python_sb__w=[('not', 'not')],
                              common_sb__w=[('multiplied by', ' * '),
-                                         ('multiply by', ' * '),
-                                         ('times', ' * ')])
-                                         
-expected_csc_commands = dict()                                         
+                                           ('multiply by', ' * '),
+                                           ('times', ' * ')])
+#QH not working (excluded from test):
+expected_csc_commands = {'python':\
+     [('function of', '<actions_gen.ActionInsert instance>'),
+      ('with arguments', '<actions_gen.ActionInsert instance>'),
+      ('assign value', '<actions_gen.ActionInsert instance>'),
+      ('equals', '<actions_gen.ActionInsert instance>'),
+      ('else', '<actions_gen.ActionInsertNewClause instance>')],
+                         'C':\
+     [('function of', '<actions_gen.ActionInsert instance>'),
+      ('with arguments', '<actions_gen.ActionInsert instance>'),
+      ('assign value', '<actions_gen.ActionInsert instance>'),
+      ('equals', '<actions_gen.ActionInsert instance>'),
+      ('else', '<actions_gen.ActionInsertNewClause instance>')],
+                         'perl':\
+     [('function of', '<actions_gen.ActionInsert instance>'),
+      ('with arguments', '<actions_gen.ActionInsert instance>'),
+      ('assign value', '<actions_gen.ActionInsert instance>'),
+      ('equals', '<actions_gen.ActionInsert instance>'),
+      ('else', '<actions_gen.ActionInsertNewClause instance>')]}
 
+
+expected_csc_index =  {'python':\
+       {'function of': [('Language: python', gen_parens_pair)],
+        'with arguments': [('Language: python', gen_parens_pair)],
+        'assign value': [('Any', ActionInsert(" = ")),
+                         ('ContPyInsideArguments', ActionInsert("="))],
+        'equals': [('Any', ActionInsert(" = ")),
+                         ('ContPyInsideArguments', ActionInsert("="))],
+        'else': [('Language: python', ActionInsertNewClause('($|\n)',
+                                                    code_bef = 'else:\n\t',
+                                                    code_after = '',
+                                                    where = -1))]},
+                       'C':\
+       {'function of': [('Language: C', gen_parens_pair)],
+        'with arguments':[('Language: C', gen_parens_pair)],
+        'assign value': [('Any', ActionInsert(" = "))],
+        'equals': [('Any', ActionInsert(" = "))],
+        'else': [('Language: C', ActionInsertNewClause('($|\n)',
+                                                    code_bef = 'else:\n\t',
+                                                    code_after = '',
+                                                    where = -1))]},\
+                       'perl':\
+       {'function of': [('Language: perl', gen_parens_pair)],
+        'with arguments': [('Language: perl', gen_parens_pair)],
+        'assign value': [('Any', ActionInsert(" = "))],
+        'equals': [('Any', ActionInsert(" = "))],
+        'else': [('Language: perl',ActionInsertNewClause('($|\n)',
+                                                    code_bef = 'else:\n\t',
+                                                    code_after = '',
+                                                    where = -1))]}}
 
 
 
@@ -98,9 +160,14 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self.interp.add_lsa(LSAlias(lsa_multiply_spoken_forms, lsa_multiply_meanings))
        self.interp.add_lsa(LSAlias(lsa_not_spoken_forms, lsa_not_meanings))
        self.interp.add_csc(CSCmd(spoken_forms=csc_with_arguments_spoken_forms,
-                           meanings={ContC(): gen_parens_pair, ContPy(): gen_parens_pair,
-                                     ContPerl(): gen_parens_pair},
-             docstring='argument list for function'))
+                           meanings=csc_with_arguments_meanings,
+                           docstring=csc_with_arguments_docstring))
+       self.interp.add_csc(CSCmd(spoken_forms=csc_else_spoken_forms,
+                           meanings=csc_else_meanings,
+                           docstring=csc_else_docstring))
+       self.interp.add_csc(CSCmd(spoken_forms=csc_equals_spoken_forms,
+                           meanings=csc_equals_meanings,
+                           docstring=csc_equals_docstring))
 
        self.wciSay.load_commands_from_interpreter(self.interp)
 
@@ -113,72 +180,70 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
       
 
    def test_This_is_how_you_create_a_WhatCanISay_instance(self):
-       """after this call the lsa list should be created (self.index)"""
+       """after this call the lsa_index and csc_index should be created"""
        wciSay = WhatCanISay()
        interp = CmdInterp()
        wciSay.load_commands_from_interpreter(interp)
-       Expected = {None: []}
-       self.assert_equal(Expected, wciSay.lsa_index, 'lsa commands index should be equal (and nearly empty, no commands loaded)')
+       expected_lsa = {None: []}
+       self.assert_equal(expected_lsa, wciSay.lsa_index, 'lsa commands index should be equal (and nearly empty, no commands loaded)')
+       expected_csc = {}
+       self.assert_equal(expected_csc, wciSay.csc_index, 'csc commands index should be equal (and nearly empty, no commands loaded)')
 
-   def test_This_is_how_you_create_the_lsa_commands_for_showing(self):
-       """lsa commands elaborated from self.index, should be empty now"""
+   def test_This_is_how_you_create_the_commands_for_showing(self):
+       """after this call the lsa_commands and csc_commands should be created"""
        wciSay = WhatCanISay()
        interp = CmdInterp()
        wciSay.create_cmds(interp, 'C')
-       Expected =  {'actual_sb__w': [], 'actual_sb_s': []}
-       self.assert_equal(Expected, wciSay.lsa_commands, "lsa_commands should be empty lists, nothing loaded yet")
+       expected_lsa =  {'actual_sb__w': [], 'actual_sb_s': []}
+       self.assert_equal(expected_lsa, wciSay.lsa_commands, "lsa_commands should be empty lists, nothing loaded yet")
+
+       expected_csc =  {}
+       self.assert_equal(expected_csc, wciSay.csc_commands, "csc_commands should be empty lists, nothing loaded yet")
+
+
 
    def test_This_is_how_to_create_the_pages(self):
        """in order to automatically show the pages
  
        hard to test, except by eye...
-       note: disable when doing all tests automatically
+       note: possibly disable when doing all tests automatically
        """
        self.wciSay.show_cmds(self.interp, 'python')
        
 ##########################################################
-# Unit tests
+# Unit tests lsa and general commands
 #
 # These tests check the internal workings of the class.
 ##########################################################
 
-   def test_bring_to_top(self):
-       """Testing the simple function bring_to_top
-
-       Bringing a list item to the top (position zero)"""
-       List = [1, 2, 3, 4]
-       self.wciSay.bring_to_top(List, 2)
-       Expected = [2, 1, 3, 4]
-       self.assert_equal(Expected, List, "Bring_to_top function does not change correctly in place")
-       self.wciSay.bring_to_top(List, 5)
-       self.assert_equal(Expected, List, "Bring_to_top function should not change when called with non existing item")
-
    def test_extract_common_commands(self):
        """extract items that are common within the programming languages
+
+       tested on numbers here, in practice the items are tuples or instances...
 
        """
        # no common at start:
        D = dict(python=[1,3,4], C=[1,3,5], letters=['a'], numbers=[1,3,4,5])
-       Expected = dict(common=[1, 3], python=[4], C=[5], letters=['a'], numbers=[1, 3, 4, 5])   
+       expected = dict(common=[1, 3], python=[4], C=[5], letters=['a'], numbers=[1, 3, 4, 5])   
        self.wciSay.extract_common_commands(D)
-       self.assert_equal(Expected, D,
+       self.assert_equal(expected, D,
                          "extract_common_commands result unexpected (no common at start.")  
 
        # common at start too:
        D = dict(common=[1,6,7], python=[1,3,4], C=[1,3,5], numbers=[1,3,4,5])
        # note no sorting of keys here, can have strange test result:
-       Expected = dict(common=[1, 6, 7, 3], python=[4], C=[5], numbers=[1, 3, 4, 5])
+       expected = dict(common=[1, 6, 7, 3], python=[4], C=[5], numbers=[1, 3, 4, 5])
        self.wciSay.extract_common_commands(D)
-       self.assert_equal(Expected, D,
+       self.assert_equal(expected, D,
                          "extract_common_commands result unexpected, common at start.")  
 
 
        # nothing common:
        D = dict(python=[1,4], C=[5], numbers=[1,3,4,5])
        # note no sorting of keys here, can have strange test result:
-       Expected = dict(common=[], python=[1,4], C=[5], numbers=[1, 3, 4, 5])
+       expected = dict(common=[], python=[1,4], C=[5], numbers=[1, 3, 4, 5])
        self.wciSay.extract_common_commands(D)
-       self.assert_equal(Expected, D,
+       self.assert_equal(expected, D,
                          "extract_common_commands result unexpected, no common commands")  
 
 
@@ -186,7 +251,7 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
 
    
    def test_index_dict(self):
-       """testing self.index (lsa commands) with test data multiply and not"""
+       """testing self.lsa_index (lsa commands) and self.csc_index with test data"""
        self.wciSay.create_cmds(self.interp, 'python')  
        actual_languages = self.wciSay.languages
        self.assert_(None in actual_languages, "None is not in supported languages")
@@ -197,7 +262,12 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        
        self.assert_equal(expected_lsa_index,
                          self.wciSay.lsa_index, 
-                         "Command index (lsa) with multiply and not are NOT as expected.")
+                         'Command index (lsa) with "multiply" and "not" is  NOT as expected.')
+
+## QH do not know how to test this one:
+       self.assert_equal(expected_csc_index,
+                         self.wciSay.csc_index, 
+                         'Command index (csc) with "with arguments" and "equalse" and "else" is NOT as expected.')
  
    def test_lsa_commands(self):
        """testing elaborated lsa commands with test data multiply and not"""
@@ -212,6 +282,19 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self.assert_equal(expected_lsa_commands,
                          self.wciSay.lsa_commands, 
                          "lsa_commands with multiply and not are NOT as expected.")
+
+   def test_csc_commands(self):
+       self.wciSay.create_cmds(self.interp, 'python')  
+       actual_languages = self.wciSay.languages
+       self.assert_(None in actual_languages, "None is not in supported languages")
+       actual_languages.remove(None)
+       actual_languages.sort()
+       self.assert_equal(expected_languages, actual_languages,
+                         "List of supported languages was wrong.")  
+       
+       self.assert_equal(expected_csc_commands,
+                         self.wciSay.csc_commands, 
+                         'csc_commands with with "with arguments" and "equals" and "else" is NOT as expected')
  
    def test_control_standard_files(self):
        """Controls the existence of some standard files"""
@@ -237,9 +320,9 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
            self.wciSay.create_cmds(self.interp, lang)
            index_page = self.wciSay.create_html_pages()
 
-           home = os.environ['VCODE_HOME']
-           test_folder = os.path.join(home, 'Data','Benchmark',
-                                      'WhatCanISayTestResults', lang)
+           test_home = vc_globals.wcisay_test_folder
+           self.assert_(os.path.isdir(test_home), "No valid folder for testing the resulting websites")
+           test_folder = os.path.join(test_home, lang)
            if os.path.isdir(test_folder):
                print 'using test folder: %s'% test_folder
            else:
@@ -248,10 +331,10 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
                self.copy_html_files(html_folder, test_folder)
                continue
            
-           Tmp_folder = os.path.join(home,'Data', 'Tmp')
-           if not os.path.isdir(Tmp_folder):
-               os.path.makedirs(Tmp_folder)
-           tmp_folder = os.path.join(Tmp_folder, lang)
+           Tmp = vc_globals.tmp
+           if not os.path.isdir(Tmp):
+               os.path.makedirs(Tmp)
+           tmp_folder = os.path.join(Tmp, lang)
            if os.path.isdir(tmp_folder):
                shutil.rmtree(tmp_folder)
            self.copy_html_files(html_folder, tmp_folder)
@@ -277,8 +360,20 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
         
 
 ###############################################################
-# Assertions.
+# Assertions and utility function testing:
+#
 ###############################################################
+   def test_bring_to_top(self):
+       """Testing the simple function bring_to_top
+
+       Bringing a list item to the top (position zero)"""
+       List = [1, 2, 3, 4]
+       self.wciSay.bring_to_top(List, 2)
+       expected_lsa = [2, 1, 3, 4]
+       self.assert_equal(expected_lsa, List, "Bring_to_top function does not change correctly in place")
+       self.wciSay.bring_to_top(List, 5)
+       self.assert_equal(expected_lsa, List, "Bring_to_top function should not change when called with non existing item")
+
    def assert_equal_html_files(self, expected_folder, actual_folder, mess):
        """test the equality of the html files"""
        expected_list = glob.glob(os.path.join(expected_folder, '*.html'))
