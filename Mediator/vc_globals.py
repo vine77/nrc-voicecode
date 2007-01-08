@@ -52,6 +52,10 @@ test_data = os.path.join(data, 'TestData')
 benchmark_dir = os.path.join(data, 'Benchmark')
 sample_config = os.path.join(config, 'Samples')
 
+#What Can I Say:
+wcisay_html_folder = os.path.join(data, 'whatCanISay')
+wcisay_test_folder = os.path.join(benchmark_dir, "WhatCanISayTestResults")
+
 doc = os.path.join(home, 'Doc')
 doc_modules = os.path.join(doc, 'Modules')
 
