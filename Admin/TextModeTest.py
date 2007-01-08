@@ -1,6 +1,7 @@
 import debug
 import VoiceCodeRootTest
 import time
+import re
 
 class TextModeTest(VoiceCodeRootTest.VoiceCodeRootTest):
    """Test dictation of normal text.
@@ -30,8 +31,10 @@ class TextModeTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self._app().process_pending_updates()
        time.sleep(1)
        self._app().process_pending_updates()
-       self._assert_current_line_content_is("this should be typed as normal text<CURSOR>",
-                                            "Text dictated with text mode on was wrong.")
+       self._assert_current_line_content_is("This should be typed as normal text<CURSOR>",
+                                            "Text dictated with text mode on was wrong.",
+                                            compare_as_regexp=True, regexp_flags=re.IGNORECASE
+                                            )
                                             
                
        self._app().insert("\n")                                                                 

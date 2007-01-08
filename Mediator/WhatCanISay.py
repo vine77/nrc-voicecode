@@ -114,7 +114,6 @@ class WhatCanISay(Object):
                    action_for_this_context = meanings_dict.actions[a_context_key]
                    self.csc_index[a_language].setdefault(spoken_form, []).append((a_context_key,
                                                                                   action_for_this_context))
-
                  
            
     def context_applies_for_lang(self, language, context):
@@ -123,9 +122,9 @@ class WhatCanISay(Object):
         answer = False        
         if (isinstance(context, ContLanguage) and 
             (context.language == language or context.language == None)):
-            answer = True
+           answer = True
         if (isinstance(context, ContAny)):
-            answer = True
+           answer = True
         return answer
 
     def create_cmds(self, cmd_interp, curr_lang):
@@ -133,7 +132,7 @@ class WhatCanISay(Object):
         self.load_commands_from_interpreter(cmd_interp)
         self.create_lsa_cmds(cmd_interp, self.language)
         self.create_csc_cmds(cmd_interp, self.language)
-        
+
     def create_lsa_cmds(self, cmd_interp, curr_lang):
         """Create all lsa commands, separated by language
 
@@ -173,7 +172,7 @@ class WhatCanISay(Object):
 ##        print '3: %s'% all_commands.keys()
         self.lsa_commands = all_commands
 
-        
+
     def create_csc_cmds(self, cmd_interp, curr_lang):
         """Create all csc commands, separated by language
 
@@ -422,7 +421,6 @@ class WhatCanISay(Object):
         outfile = os.path.join(self.html_folder, page_html)
         trace('WhatCanISay.files', 'making page: %s'% outfile)
         doc.write(outfile)
-
                   
     def html_csc_page(self, page):
         """generate one csc page"""
@@ -451,16 +449,16 @@ class WhatCanISay(Object):
             rows = len(content)/per_col
             if len(content)%per_col:
                 rows += 1
-            for start in range(rows):
-                cell_num = start%2
-                for col in range(start, len(content), rows):
-                    cell_num += 1
-                    k, v = content[col]
+                for start in range(rows):
+                    cell_num = start%2
+                    for col in range(start, len(content), rows):
+                        cell_num += 1
+                        k, v = content[col]
                     tr.append(TD(escape(v), Class="spoken%s"% (cell_num%2,)))
-                    tr.append(TD(k, Class="written%s"% (cell_num%2,)))
-                    tr.append(tdspacer())
-                tl.append(tr)
-                tr.empty()
+                tr.append(TD(k, Class="written%s"% (cell_num%2,)))
+                tr.append(tdspacer())
+            tl.append(tr)
+            tr.empty()
         
             trpage.append(TD(tl, Class="body"))
             tlpage.append(trpage)
