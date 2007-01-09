@@ -56,8 +56,6 @@ class TestCaseWithHelpers(unittest.TestCase):
         
     def assert_equal(self, expected, got, mess="", epsilon=0):
 
-#        # for instance address comparisons:
-#QH        self.instance_dict = {}
         debug.trace('assert_equal', 'expected=%s, got=%s' % (expected, got))
         try:
            self.assert_equal_dispatch_according_to_type(expected, got, mess, epsilon)
@@ -137,26 +135,6 @@ class TestCaseWithHelpers(unittest.TestCase):
     def assert_equal_objects(self, expected, got, mess, epsilon=0):
         self.assert_equal(self.what_class(expected), self.what_class(got),
                            mess + "\n----\nThe two objects were not of the same class or type.")
-        if 0:
-            expected_repr = repr(expected)
-            got_repr = repr(got)
-            expected_key = expected_repr.split()[0][1:]
-            exec("expected_address = %s"% expected_repr.split()[-1][:-1])
-            got_key = got_repr.split()[0][1:]
-            exec("got_address = %s"% got_repr.split()[-1][:-1])
-            
-            self.assert_equal(expected_key, got_key, 
-                           mess + "\n----\nInstance name of the two objects differed." 
-                                "\nExpected:\n   %s\nGot:\n   %s" % (expected.__dict__, got.__dict__),
-                              epsilon)
-
-            got_before_instance = self.instance_dict.setdefault('expected_key', {})
-            got_before_address = got_before_instance.setdefault('expected_address', got_address)
-        
-            self.assert_equal(got_before_address, got_address, 
-                           mess + "\n----\nRepeated instance of the two objects differs from expected." 
-                                + "\nExpected:\n   %s\nGot:\n   %s" % (expected.__dict__, got.__dict__),
-                              epsilon) 
 
         self.assert_equal(expected.__dict__, got.__dict__, 
                            mess + "\n----\nAttributes of the two objects differed." 
