@@ -29,8 +29,7 @@ reIsInt = re.compile(r'^\d+$')
 reIsLetter = re.compile(r'^[a-zA-Z]$')
 from copy import copy
 from cont_gen import *
-
-
+from Context import scope_order, valid_scope
 
 class WhatCanISay(Object):
     """
@@ -463,10 +462,14 @@ class WhatCanISay(Object):
                     k, v = content[col]
                     rows_inside = len(v)
                     tr.append(TD(k, Class=class_name, rowspan=rows_inside))
+                    if rows_inside > 1:
+                        v = self.sort_csc_values_by_scope(v)
+                        v.reverse()
                     for row_inside in v:
                         cont, scope, value = row_inside
                         tr.append(TD(value, Class=class_name))
-                        tr.append(TD(cont + " " + scope, Class=class_name))
+                        tr.append(TD(scope, Class=class_name))
+                        tr.append(TD(cont, Class=class_name))
                         tr.append(tdspacer())
                         tl.append(tr)
                         tr.empty()
@@ -584,6 +587,25 @@ class WhatCanISay(Object):
         decorated.sort()
         undecorated = [(s,w) for (w,s) in decorated]
         return undecorated
+
+    def sort_csc_values_by_scope(self, csc_values):
+        """sort list of tuples by skope
+
+        [(str context_equivalence, str skop, str docs), ...]
+        """
+        for  csc_value in  csc_values:
+            a, skope, c = csc_value
+            if not valid_scope(skope):
+                trace("WhatCanISay.sort_csc_value_by_scope",
+                      "WARNING: invalid skope in csc entry WhatCanISay: %s"% \
+                      repr(csc_value))
+                return csc_values
+        scope_order_list = scope_order()
+        dec = [(scope_order_list.index(skope), (a, skope, c)) for (a, skope, c) in csc_values]
+        dec.sort()
+        return [b for (a,b) in dec]
+        
+                
 
 # defaults for vim - otherwise ignore
 # vim:sw=4
