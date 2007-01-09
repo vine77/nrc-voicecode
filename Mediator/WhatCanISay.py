@@ -191,7 +191,7 @@ class WhatCanISay(Object):
         try:
             doc = action.doc()
         except AttributeError:
-            doc = repr(action).split(" at ")[0] + ">"
+            doc = 'no doc for %s'% repr(action).split()[0][1:]
         return doc
 
     def extract_common_commands(self, all_commands):
@@ -431,10 +431,10 @@ class WhatCanISay(Object):
         content = self.csc_commands['python']
 ##        content = self.csc_commands[page]
         doc.append(self.html_header(page, page_type=page_type, page_html=page_html))
-        doc.append(Header(1, 'rudimentary csc commands, python'))
 
         if 1:
             tlpage = FullTable(Class="page")
+            doc.append(Header(1, 'begin of csc commands, python'))
             trpage = TR()
 
             # produce the menu (left):
@@ -449,16 +449,16 @@ class WhatCanISay(Object):
             rows = len(content)/per_col
             if len(content)%per_col:
                 rows += 1
-                for start in range(rows):
-                    cell_num = start%2
-                    for col in range(start, len(content), rows):
-                        cell_num += 1
-                        k, v = content[col]
+            for start in range(rows):
+                cell_num = start%2
+                for col in range(start, len(content), rows):
+                    cell_num += 1
+                    k, v = content[col]
                     tr.append(TD(escape(v), Class="spoken%s"% (cell_num%2,)))
-                tr.append(TD(k, Class="written%s"% (cell_num%2,)))
-                tr.append(tdspacer())
-            tl.append(tr)
-            tr.empty()
+                    tr.append(TD(k, Class="written%s"% (cell_num%2,)))
+                    tr.append(tdspacer())
+                tl.append(tr)
+                tr.empty()
         
             trpage.append(TD(tl, Class="body"))
             tlpage.append(trpage)

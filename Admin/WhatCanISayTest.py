@@ -42,6 +42,10 @@ csc_equals_meanings ={ContPyInsideArguments(): ActionInsert("="),
                       ContAny(): ActionInsert(' = ')}
 csc_equals_docstring = 'equal sign'
 
+
+
+
+
 # expected index contents of the 3 languages: values of self.index (raw LSA commands)
 # first one is equal over the 2 languages
 # second one differs with python:
@@ -78,28 +82,30 @@ expected_lsa_commands = dict(C_sb__w=[('not', '!')],
                              common_sb__w=[('multiplied by', ' * '),
                                            ('multiply by', ' * '),
                                            ('times', ' * ')])
-#QH not working (excluded from test):
-expected_csc_commands = {'python':\
-     [('function of', '<actions_gen.ActionInsert instance>'),
-      ('with arguments', '<actions_gen.ActionInsert instance>'),
-      ('assign value', '<actions_gen.ActionInsert instance>'),
-      ('equals', '<actions_gen.ActionInsert instance>'),
-      ('else', '<actions_gen.ActionInsertNewClause instance>')],
-                         'C':\
-     [('function of', '<actions_gen.ActionInsert instance>'),
-      ('with arguments', '<actions_gen.ActionInsert instance>'),
-      ('assign value', '<actions_gen.ActionInsert instance>'),
-      ('equals', '<actions_gen.ActionInsert instance>'),
-      ('else', '<actions_gen.ActionInsertNewClause instance>')],
-                         'perl':\
-     [('function of', '<actions_gen.ActionInsert instance>'),
-      ('with arguments', '<actions_gen.ActionInsert instance>'),
-      ('assign value', '<actions_gen.ActionInsert instance>'),
-      ('equals', '<actions_gen.ActionInsert instance>'),
-      ('else', '<actions_gen.ActionInsertNewClause instance>')]}
+#
+expected_csc_commands = {\
+   'python':\
+       [('function of', 'Insert parens and puts cursor in between'),
+        ('with arguments', 'Insert parens and puts cursor in between'),
+      ('assign value', "Inserts ' = ^' in current buffer"),
+      ('equals', "Inserts ' = ^' in current buffer"),
+      ('else', None)],
+   'C':\
+     [('function of', 'Insert parens and puts cursor in between'),
+      ('with arguments', 'Insert parens and puts cursor in between'),
+      ('assign value', "Inserts ' = ^' in current buffer"),
+      ('equals', "Inserts ' = ^' in current buffer"),
+      ('else', 'else clause of a C conditional')],
+   'perl':\
+     [('function of', 'Insert parens and puts cursor in between'),
+      ('with arguments','Insert parens and puts cursor in between'),
+      ('assign value', "Inserts ' = ^' in current buffer"),
+      ('equals', "Inserts ' = ^' in current buffer"),
+      ('else', 'else clause of a C conditional')]}
 
 
-expected_csc_index =  {'python':\
+expected_csc_index =  {\
+    'python':\
        {'function of': [('Language: python', gen_parens_pair)],
         'with arguments': [('Language: python', gen_parens_pair)],
         'assign value': [('Any', ActionInsert(" = ")),
@@ -108,26 +114,19 @@ expected_csc_index =  {'python':\
                          ('ContPyInsideArguments', ActionInsert("="))],
         'else': [('Language: python', ActionInsertNewClause('($|\n)',
                                                     code_bef = 'else:\n\t',
-                                                    code_after = '',
-                                                    where = -1))]},
-                       'C':\
+                                                    code_after = ''))]},
+    'C':\
        {'function of': [('Language: C', gen_parens_pair)],
         'with arguments':[('Language: C', gen_parens_pair)],
         'assign value': [('Any', ActionInsert(" = "))],
         'equals': [('Any', ActionInsert(" = "))],
-        'else': [('Language: C', ActionInsertNewClause('($|\n)',
-                                                    code_bef = 'else:\n\t',
-                                                    code_after = '',
-                                                    where = -1))]},\
-                       'perl':\
-       {'function of': [('Language: perl', gen_parens_pair)],
+        'else': [('Language: C', c_else)]},
+   'perl':\
+       {'function of': [('Language: perl', gen_parens_pair)],      
         'with arguments': [('Language: perl', gen_parens_pair)],
         'assign value': [('Any', ActionInsert(" = "))],
         'equals': [('Any', ActionInsert(" = "))],
-        'else': [('Language: perl',ActionInsertNewClause('($|\n)',
-                                                    code_bef = 'else:\n\t',
-                                                    code_after = '',
-                                                    where = -1))]}}
+        'else': [('Language: perl',c_else)]}}
 
 
 
@@ -147,7 +146,7 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
    If you are working on WhatCanISay, it is pretty safe to remove above folders as long as you
    test the results in your webbrowser afterwards.
 
-   The test websites are created in  VCODE_HOME\Data\Tmp\language folders.
+   The test websites are created in  VCODE_HOME\Data\Tmp\language folders(see vc_config)
 
    """
    
