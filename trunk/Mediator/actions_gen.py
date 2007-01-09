@@ -43,7 +43,7 @@ class Action(Object.Object):
     
     def __init__(self, docstring=None, **args_super):
         self.deep_construct(Action, \
-                            {}, \
+                            {'docstring': docstring}, \
                             args_super, \
                             {})
 

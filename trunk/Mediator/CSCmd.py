@@ -81,7 +81,8 @@ class CSCmd(Object):
         self.deep_construct(CSCmd,
                             {'spoken_forms': spoken_forms,
                              'meanings': CSCmdDict(meanings, generate_discrete_cmd),
-                             'generate_discrete_cmd': generate_discrete_cmd
+                             'generate_discrete_cmd': generate_discrete_cmd,
+                             'docstring': docstring
                             },
                             attrs)
 

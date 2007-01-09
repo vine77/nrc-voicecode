@@ -14,7 +14,7 @@ class SwitchBufferTest(VoiceCodeRootTest.VoiceCodeRootTest):
       self.sleep_for_a_while()
       
    def sleep_for_a_while(self):
-      time.sleep(5)
+       time.sleep(1)
       
 ##########################################################
 # Documentation tests
@@ -30,7 +30,7 @@ class SwitchBufferTest(VoiceCodeRootTest.VoiceCodeRootTest):
             
       self._assert_active_buffer_is_called('test.py', "Emacs didn't start out in the right buffer")
       self._say(['yo', 'switch', 'to', 'buffer'])
-      self.sleep_for_a_while()
+#      self.sleep_for_a_while()
       
       self._assert_active_buffer_is_called('*Completions*', 
                "Emacs didn't switch to the *Completion* buffer after switch buffer command was uttered")
@@ -46,13 +46,13 @@ dummy.py			   test.py"""
       
       self._say(['select', 'dummy', ], never_bypass_sr_recog = 1)
       self._say(['new', 'line'])    
-      self.sleep_for_a_while()
+#      self.sleep_for_a_while()
       
       self._assert_active_buffer_is_called('dummy.py', 
                "Emacs didn't switch to dummy buffer after it was selected in the Completions buffer.")
                
       self._say(['yo', 'switch', 'to', 'buffer'])
-      self.sleep_for_a_while()
+#      self.sleep_for_a_while()
             
       self._assert_active_buffer_is_called('*Completions*', 
                "Emacs didn't switch back to the Completion buffer after switch buffer command was uttered")
@@ -60,7 +60,7 @@ dummy.py			   test.py"""
       self._say(['select', 'dummy', ], never_bypass_sr_recog = 1)      
       content_before_invalid_dictation = self._get_buffer_content_with_cursor_position()
       self._say(['hello'], never_bypass_sr_recog = 1)     
-      self.sleep_for_a_while()
+#      self.sleep_for_a_while()
       
       self._assert_active_buffer_is_called('*Completions*', 
                "Emacs should not have switched from the *Completion* buffer when user tried to dictate into it.")
@@ -76,5 +76,5 @@ dummy.py			   test.py"""
       #   
       self._say(['select', 'dummy', ], never_bypass_sr_recog = 1)
       self._say(['new', 'line'])    
-      self.sleep_for_a_while()
+#      self.sleep_for_a_while()
 
