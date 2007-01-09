@@ -5,6 +5,7 @@ import os, glob, shutil
 import regression
 import itertools
 
+from copy import copy
 from CmdInterp import AliasMeaning, CmdInterp, LSAlias
 from CSCmd import CSCmd
 from cont_gen import *
@@ -133,6 +134,7 @@ expected_csc_index =  {\
         'assign value': [(ContAny(), ActionInsert(" = "))],
         'equals': [(ContAny(), ActionInsert(" = "))],
         'else': [(ContPerl(), c_else)]}}
+
 
 # files testing (required apart from generated html files:
 required_non_html_files = ['vc.css', 'vcodeuser.jpg', 'waveform.gif']
@@ -376,6 +378,30 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self.assert_equal(expected_lsa, List, "Bring_to_top function does not change correctly in place")
        self.wciSay.bring_to_top(List, 5)
        self.assert_equal(expected_lsa, List, "Bring_to_top function should not change when called with non existing item")
+
+   def test_sort_csc_values_by_scope(self):
+       """Testing the function that sorts csc entries by scope
+
+       """
+       list_to_sort_by_scope = [('Any', 'global', "... in current buffer"),
+                    ('ContPyInsideArguments', 'immediate', "Inserts ")]
+       wrong_list_to_sort_by_scope = [('Any', 'globaly', "wrong word in scope..."),
+                    ('ContPyInsideArguments', 'immediate', "Inserts ")]
+       
+       
+       sorted = self.wciSay.sort_csc_values_by_scope(list_to_sort_by_scope)
+       expected = copy(list_to_sort_by_scope)
+       expected.reverse()
+       
+       self.assert_equal(expected, sorted, "csc_sorted list by scope not as expected")
+
+       sorted = self.wciSay.sort_csc_values_by_scope(wrong_list_to_sort_by_scope)
+       expected = wrong_list_to_sort_by_scope
+       
+       self.assert_equal(expected, sorted, "csc_sorted list, when error should return the original list")
+
+
+
 
    def assert_equal_html_files(self, expected_folder, actual_folder, mess):
        """test the equality of the html files"""
