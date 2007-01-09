@@ -108,11 +108,12 @@ class WhatCanISay(Object):
                    continue
                if self.context_applies_for_lang(a_language, a_context):
                    a_context_key = a_context.equivalence_key()
+         #          a_context_scope = a_context.scope()
                    trace('WhatCanISay.index_contextual_meanings', 
-                         "** a_context=%s applies for a_language=%s" % \
-                            (a_context_key, a_language))
+                         "** a_context=%s, applies for a_language=%s" % \
+                            (a_context, a_language))
                    action_for_this_context = meanings_dict.actions[a_context_key]
-                   self.csc_index[a_language].setdefault(spoken_form, []).append((a_context_key,
+                   self.csc_index[a_language].setdefault(spoken_form, []).append((a_context,
                                                                                   action_for_this_context))
                  
            
@@ -182,9 +183,14 @@ class WhatCanISay(Object):
             if lang == None:
                 raise ValueError("value of self.csc_index[None] should not exist")
             all_commands[lang] = []
-            for words, action in part.items():
-                written = self.get_written_form_from_action(action[0][1])
-                all_commands[lang].append((words, written))
+            for words, action_tuple in part.items():
+                action_list = []
+                for a_context, act in action_tuple:
+                    written = self.get_written_form_from_action(act)
+                    a_context_equivalence = a_context.equivalence_key()
+                    a_context_scope = a_context.scope()
+                    action_list.append((a_context_equivalence, a_context_scope, written))
+                    all_commands[lang].append((words, action_list))
         self.csc_commands = all_commands
 
     def get_written_form_from_action(self, action):
@@ -429,7 +435,7 @@ class WhatCanISay(Object):
         page_type = 'csc'
         page_html = 'csc_%s.html'% page
         content = self.csc_commands['python']
-##        content = self.csc_commands[page]
+        trace('WhatCanISay.html_csc_page', 'csc_commands: %s'% content)
         doc.append(self.html_header(page, page_type=page_type, page_html=page_html))
 
         if 1:
@@ -444,7 +450,7 @@ class WhatCanISay(Object):
             # now the contents:        
             tl = FullTable(Class="body")
             tr = TR()
-            per_col = 2
+            per_col = 1
             tdspacer = TD("&nbsp;", Class="spacer")
             rows = len(content)/per_col
             if len(content)%per_col:
@@ -453,11 +459,17 @@ class WhatCanISay(Object):
                 cell_num = start%2
                 for col in range(start, len(content), rows):
                     cell_num += 1
+                    class_name = "written%s"% (cell_num%2,)
                     k, v = content[col]
-                    tr.append(TD(escape(v), Class="spoken%s"% (cell_num%2,)))
-                    tr.append(TD(k, Class="written%s"% (cell_num%2,)))
-                    tr.append(tdspacer())
-                tl.append(tr)
+                    rows_inside = len(v)
+                    tr.append(TD(k, Class=class_name, rowspan=rows_inside))
+                    for row_inside in v:
+                        cont, scope, value = row_inside
+                        tr.append(TD(value, Class=class_name))
+                        tr.append(TD(cont + " " + scope, Class=class_name))
+                        tr.append(tdspacer())
+                        tl.append(tr)
+                        tr.empty()
                 tr.empty()
         
             trpage.append(TD(tl, Class="body"))

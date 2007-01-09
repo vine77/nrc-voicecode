@@ -85,50 +85,54 @@ expected_lsa_commands = dict(C_sb__w=[('not', '!')],
 #
 expected_csc_commands = {\
    'python':\
-       [('function of', 'Insert parens and puts cursor in between'),
-        ('with arguments', 'Insert parens and puts cursor in between'),
-      ('assign value', "Inserts ' = ^' in current buffer"),
-      ('equals', "Inserts ' = ^' in current buffer"),
-      ('else', None)],
+       [('function of', [('Language: python', 'buffer', 'Insert parens and puts cursor in between')]),
+        ('with arguments', [('Language: python', 'buffer', 'Insert parens and puts cursor in between')]),
+        ('assign value', [('Any', 'global', "Inserts ' = ^' in current buffer"),
+                          ('ContPyInsideArguments', 'immediate',"Inserts '=^' in current buffer")]),
+        ('assign value', [('Any', 'global', "Inserts ' = ^' in current buffer"),
+                          ('ContPyInsideArguments', 'immediate', "Inserts '=^' in current buffer")]),
+        ('equals', [('Any', 'global', "Inserts ' = ^' in current buffer"),
+                    ('ContPyInsideArguments', 'immediate', "Inserts '=^' in current buffer")]),
+        ('equals', [('Any', 'global', "Inserts ' = ^' in current buffer"),
+                    ('ContPyInsideArguments', 'immediate', "Inserts '=^' in current buffer")]),
+        ('else', [('Language: python', 'buffer', None)])],
    'C':\
-     [('function of', 'Insert parens and puts cursor in between'),
-      ('with arguments', 'Insert parens and puts cursor in between'),
-      ('assign value', "Inserts ' = ^' in current buffer"),
-      ('equals', "Inserts ' = ^' in current buffer"),
-      ('else', 'else clause of a C conditional')],
+      [('function of', [('Language: C', 'buffer', 'Insert parens and puts cursor in between')]),
+       ('with arguments', [('Language: C', 'buffer', 'Insert parens and puts cursor in between')]),
+       ('assign value', [('Any', 'global', "Inserts ' = ^' in current buffer")]),
+       ('equals', [('Any', 'global', "Inserts ' = ^' in current buffer")]),
+       ('else', [('Language: C', 'buffer', 'else clause of a C conditional')])],
    'perl':\
-     [('function of', 'Insert parens and puts cursor in between'),
-      ('with arguments','Insert parens and puts cursor in between'),
-      ('assign value', "Inserts ' = ^' in current buffer"),
-      ('equals', "Inserts ' = ^' in current buffer"),
-      ('else', 'else clause of a C conditional')]}
+      [('function of', [('Language: perl', 'buffer', 'Insert parens and puts cursor in between')]),
+       ('with arguments', [('Language: perl', 'buffer', 'Insert parens and puts cursor in between')]),
+       ('assign value', [('Any', 'global', "Inserts ' = ^' in current buffer")]),
+       ('equals', [('Any', 'global', "Inserts ' = ^' in current buffer")]),
+       ('else', [('Language: perl', 'buffer', 'else clause of a C conditional')])]}
 
 
 expected_csc_index =  {\
     'python':\
-       {'function of': [('Language: python', gen_parens_pair)],
-        'with arguments': [('Language: python', gen_parens_pair)],
-        'assign value': [('Any', ActionInsert(" = ")),
-                         ('ContPyInsideArguments', ActionInsert("="))],
-        'equals': [('Any', ActionInsert(" = ")),
-                         ('ContPyInsideArguments', ActionInsert("="))],
-        'else': [('Language: python', ActionInsertNewClause('($|\n)',
+       {'function of': [(ContPy(), gen_parens_pair)],
+        'with arguments': [(ContPy(), gen_parens_pair)],
+        'assign value': [(ContAny(), ActionInsert(" = ")),
+                         (ContPyInsideArguments(), ActionInsert("="))],
+        'equals': [(ContAny(), ActionInsert(" = ")),
+                   (ContPyInsideArguments(), ActionInsert("="))],
+        'else': [(ContPy(), ActionInsertNewClause('($|\n)',
                                                     code_bef = 'else:\n\t',
                                                     code_after = ''))]},
     'C':\
-       {'function of': [('Language: C', gen_parens_pair)],
-        'with arguments':[('Language: C', gen_parens_pair)],
-        'assign value': [('Any', ActionInsert(" = "))],
-        'equals': [('Any', ActionInsert(" = "))],
-        'else': [('Language: C', c_else)]},
+       {'function of': [(ContC(), gen_parens_pair)],
+        'with arguments':[(ContC(), gen_parens_pair)],
+        'assign value': [(ContAny(),  ActionInsert(" = "))],
+        'equals': [(ContAny(), ActionInsert(" = "))],
+        'else': [(ContC(), c_else)]},
    'perl':\
-       {'function of': [('Language: perl', gen_parens_pair)],      
-        'with arguments': [('Language: perl', gen_parens_pair)],
-        'assign value': [('Any', ActionInsert(" = "))],
-        'equals': [('Any', ActionInsert(" = "))],
-        'else': [('Language: perl',c_else)]}}
-
-
+       {'function of': [(ContPerl(), gen_parens_pair)],      
+        'with arguments': [(ContPerl(), gen_parens_pair)],
+        'assign value': [(ContAny(), ActionInsert(" = "))],
+        'equals': [(ContAny(), ActionInsert(" = "))],
+        'else': [(ContPerl(), c_else)]}}
 
 # files testing (required apart from generated html files:
 required_non_html_files = ['vc.css', 'vcodeuser.jpg', 'waveform.gif']
