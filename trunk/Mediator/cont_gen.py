@@ -26,6 +26,8 @@ import actions_gen
 import debug
 import AppStateEmacs
 import re
+from vc_globals import *
+##from utilsqh import curry
 
 class ContLanguage(Context):
     """Context that applies only if a particular programming language is the
@@ -41,6 +43,18 @@ class ContLanguage(Context):
     """
     
     def __init__(self, language=None, **args_super):
+        if language == None:
+            language = all_languages
+        elif isinstance(language, basestring):
+            language = (language,)
+        elif isinstance(language, tuple):
+            pass
+        else:
+            raise TypeError("Language of ContLanguage instance must be None, string or tuple, not: %s"% \
+                            language)
+        for l in language:
+            if l not in all_languages:
+                raise(ValueError, 'ContLanguage called with invalid language: "%s"'% l)
         self.deep_construct(ContLanguage, \
                             {'language': language}, \
                             args_super, \
@@ -51,6 +65,7 @@ class ContLanguage(Context):
         Commands with more specific scopes are checked first.
 
         See Context for details of the recognized scopes
+
 
         **INPUTS**
 
@@ -82,11 +97,16 @@ class ContLanguage(Context):
 
         *STR* -- the key
         """
-        return "Language: %s" % self.language
+        return "Language: %s" % "|".join(self.language)
 
     def _applies(self, app, preceding_symbol = 0):
         buff = app.curr_buffer()
-        return (self.language == None or (buff != None and  buff.language_name() == self.language))
+        if buff == None:
+            trace("ContLanguage.applies", "buff == None")
+            return False
+        
+        return buff.language_name() in self.language
+
         
 
 class ContC(ContLanguage):
@@ -96,7 +116,7 @@ class ContC(ContLanguage):
     """
     
     def __init__(self, **args_super):
-        self.deep_construct(ContC, {}, args_super, enforce_value={'language': 'C'})
+        ContLanguage.__init__(self, language='C')
 
 
 class ContPerl(ContLanguage):
@@ -106,17 +126,33 @@ class ContPerl(ContLanguage):
     """
     
     def __init__(self, **args_super):
-        self.deep_construct(ContPerl, {}, args_super, enforce_value={'language': 'perl'})
+        ContLanguage.__init__(self, language='perl')
 
 class ContPy(ContLanguage):
     """This context applies if current source buffer is in Python.
 
     It is essentially a shortcut for ContLanguage(language='python')
     """
+    def __init__(self, **args_super):
+        ContLanguage.__init__(self, language='python')
+    
+class ContAnyLanguage(ContLanguage):
+    """This context applies if current source buffer is in some programming language.
+
+    It is essentially a shortcut for ContLanguage(language=all_languages)
+    """
     
     def __init__(self, **args_super):
-        self.deep_construct(ContPy, {}, args_super, enforce_value={'language': 'python'})
+        ContLanguage.__init__(self, language=all_languages)
 
+class ContCStyleLanguage(ContLanguage):
+    """This context applies if current source buffer is one of the C Style languages (C, perl...)
+
+    It is essentially a shortcut for ContLanguage(all_languages)
+    """
+    
+    def __init__(self, **args_super):
+        ContLanguage.__init__(self, c_style_languages)
 
 class ContAny(Context):
     """This context always applies, UNLESS translation is off."""
@@ -338,9 +374,8 @@ class ContPyInsideArguments(ContPy):
 
     """   
 
-    def __init__(self, language=None, **attrs):        
-        self.deep_construct(ContPyInsideArguments, {'language': language},
-                            attrs)
+    def __init__(self, **attrs):
+        ContPy.__init__(self, **attrs)
        
     def _applies(self, app, preceding_symbol = 0):
         """return 1 if context applies"""

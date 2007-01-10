@@ -120,10 +120,10 @@ class WhatCanISay(Object):
         trace
         ('WhatCanISay.context_applies_for_lang', "** language=%s, context=%s" %(language, context))
         answer = False        
-        if (isinstance(context, ContLanguage) and 
-            (context.language == language or context.language == None)):
+        if isinstance(context, ContLanguage) and \
+            language in context.language:
            answer = True
-        if (isinstance(context, ContAny)):
+        elif isinstance(context, ContAny):
            answer = True
         return answer
 

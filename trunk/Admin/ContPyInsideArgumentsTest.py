@@ -23,7 +23,7 @@ class ContPyInsideArgumentsTest(VoiceCodeRootTest.VoiceCodeRootTest):
       
     def setUp(self):
         self._init_simulator_regression()
-        self.context = cont_gen.ContPyInsideArguments(language="python")
+        self.context = cont_gen.ContPyInsideArguments()
 
 ##########################################################
 # Documentation tests
