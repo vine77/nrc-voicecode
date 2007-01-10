@@ -55,7 +55,37 @@ class ContLanguageTest(VoiceCodeRootTest.VoiceCodeRootTest):
         self.failIf(context_py.applies(self._app()), 
                      "Context should NOT have applied because the file was in the wrong language.")
 
+    def test_ContLanguage_equivalence_keys(self):
+        for lang in all_languages:
+            context = ContLanguage(lang)
+            expected = "Language: %s"% lang 
+            self.assert_equal(expected, context.equivalence_key(),
+                              "single language ContLanguage context does not produce expected equivalence key")
 
+        context = ContCStyleLanguage()
+        expected = "Language: %s"% '|'.join(c_style_languages)
+        self.assert_equal(expected, context.equivalence_key(),
+                              "ContCStyleLanguage context does not produce expected equivalence key")
+
+        context = ContAnyLanguage()
+        expected = "Language: any"
+        self.assert_equal(expected, context.equivalence_key(),
+                              "ContAnyLanguage context does not produce expected equivalence key")
+
+        context = ContPy()
+        expected = "Language: %s"% 'python'
+        self.assert_equal(expected, context.equivalence_key(),
+                              "ContPy context does not produce expected equivalence key")
+
+        context = ContC()
+        expected = "Language: %s"% 'C'
+        self.assert_equal(expected, context.equivalence_key(),
+                              "ContC context does not produce expected equivalence key")
+
+        context = ContPerl()
+        expected = "Language: %s"% 'perl'
+        self.assert_equal(expected, context.equivalence_key(),
+                              "ContPerl context does not produce expected equivalence key")
 
 ##########################################################
 # Unit tests

@@ -97,6 +97,8 @@ class ContLanguage(Context):
 
         *STR* -- the key
         """
+        if self.language == all_languages:
+            return "Language: %s" % "any"
         return "Language: %s" % "|".join(self.language)
 
     def _applies(self, app, preceding_symbol = 0):
