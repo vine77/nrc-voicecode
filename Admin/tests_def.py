@@ -46,6 +46,7 @@ import KnownTargetModule, NewMediatorObject, TargetWindow, WinIDClient
 import test_helpers
 import CmdInterpTest, ContBlankLineTest, SwitchBufferTest, SymDictTest
 import ContPyInsideArgumentsTest
+import ContLanguageTest
 import debug
 import DiffCrawler
 import difflib
@@ -313,6 +314,7 @@ add_test('ContBlankLine', test_ContBlankLine,
          desc='Tests for the blank line context class.')
 
     
+
 def test_ContPyInsideArguments():
     unittest.TextTestRunner(). \
        run(unittest.makeSuite(ContPyInsideArgumentsTest.ContPyInsideArgumentsTest,
@@ -320,6 +322,15 @@ def test_ContPyInsideArguments():
 
 add_test('ContPyInsideArguments', test_ContPyInsideArguments, 
          desc='Tests for being inside the argument list of a function.')
+
+def test_ContLanguage():
+    unittest.TextTestRunner(). \
+       run(unittest.makeSuite(ContLanguageTest.ContLanguageTest,
+                              'test'))
+
+add_test('ContLanguage', test_ContLanguage, 
+         desc='Tests for different language contexts.')
+
 
 ##############################################################################
 # Testing WhatCanISay dialogs

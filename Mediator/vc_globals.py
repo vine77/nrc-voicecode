@@ -69,3 +69,5 @@ sym_state_file = os.path.join(state, 'symdict.dict')
 sys.path = [admin] + sys.path
 sys.path = [mediator_dir] + sys.path
 
+all_languages = ('C', 'python', 'perl')
+c_style_languages = ('C', 'perl')

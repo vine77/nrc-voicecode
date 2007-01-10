@@ -52,9 +52,9 @@ import WinSystemMSW
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="off",
-                    active_traces={
-                       'WhatCanISay.index_cscs': 1,
+debug.config_traces(status="on",
+                    active_traces={'WhatCanISay.html_csc_page': 1,
+                                   'WhatCanISay.index_cscs': 1,
 ##                       'WhatCanISay.index_contextual_meanings': 1,
 ##                       'WhatCanISay.context_applies_for_lang': 1,
                        'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0
