@@ -26,17 +26,15 @@ lsa_not_spoken_forms = ['not']
 lsa_not_meanings  = dict(python='not', C="!", perl="!")
 
 csc_with_arguments_spoken_forms = ['with arguments', 'function of']
-csc_with_arguments_meanings = {ContC(): gen_parens_pair,
-                               ContPy(): gen_parens_pair,
-                               ContPerl(): gen_parens_pair}
+csc_with_arguments_meanings = {ContAnyLanguage(): gen_parens_pair}
+
 csc_with_arguments_docstring = 'giving the parens after a function call, position inside'
 csc_else_spoken_forms = ['else']
 csc_else_meanings ={ContPy(): ActionInsertNewClause('($|\n)',
                                                     code_bef = 'else:\n\t',
                                                     code_after = '',
                                                     where = -1),
-                    ContC(): c_else,
-                    ContPerl(): c_else}
+                    ContCStyleLanguage(): c_else}
 csc_else_docstring = 'else clause'
 csc_equals_spoken_forms = ['equals', 'assign value']
 csc_equals_meanings ={ContPyInsideArguments(): ActionInsert("="),
@@ -85,36 +83,31 @@ expected_lsa_commands = dict(C_sb__w=[('not', '!')],
                                            ('times', ' * ')])
 #
 expected_csc_commands = {\
-   'python':\
-       [('function of', [('Language: python', 'buffer', 'Insert parens and puts cursor in between')]),
-        ('with arguments', [('Language: python', 'buffer', 'Insert parens and puts cursor in between')]),
-        ('assign value', [('Any', 'global', "Inserts ' = ^' in current buffer"),
-                          ('ContPyInsideArguments', 'immediate',"Inserts '=^' in current buffer")]),
-        ('assign value', [('Any', 'global', "Inserts ' = ^' in current buffer"),
-                          ('ContPyInsideArguments', 'immediate', "Inserts '=^' in current buffer")]),
-        ('equals', [('Any', 'global', "Inserts ' = ^' in current buffer"),
-                    ('ContPyInsideArguments', 'immediate', "Inserts '=^' in current buffer")]),
-        ('equals', [('Any', 'global', "Inserts ' = ^' in current buffer"),
-                    ('ContPyInsideArguments', 'immediate', "Inserts '=^' in current buffer")]),
-        ('else', [('Language: python', 'buffer', None)])],
-   'C':\
-      [('function of', [('Language: C', 'buffer', 'Insert parens and puts cursor in between')]),
-       ('with arguments', [('Language: C', 'buffer', 'Insert parens and puts cursor in between')]),
-       ('assign value', [('Any', 'global', "Inserts ' = ^' in current buffer")]),
-       ('equals', [('Any', 'global', "Inserts ' = ^' in current buffer")]),
-       ('else', [('Language: C', 'buffer', 'else clause of a C conditional')])],
-   'perl':\
-      [('function of', [('Language: perl', 'buffer', 'Insert parens and puts cursor in between')]),
-       ('with arguments', [('Language: perl', 'buffer', 'Insert parens and puts cursor in between')]),
-       ('assign value', [('Any', 'global', "Inserts ' = ^' in current buffer")]),
-       ('equals', [('Any', 'global', "Inserts ' = ^' in current buffer")]),
-       ('else', [('Language: perl', 'buffer', 'else clause of a C conditional')])]}
-
-
+   'python': [\
+    ('function of', [('Language: any', 'buffer', 'Insert parens and puts cursor in between')]),
+    ('with arguments', [('Language: any', 'buffer', 'Insert parens and puts cursor in between')]),
+    ('assign value', [('Any', 'global', "Inserts ' = ^' in current buffer"),
+                      ('ContPyInsideArguments', 'immediate', "Inserts '=^' in current buffer")]),
+    ('equals', [('Any', 'global', "Inserts ' = ^' in currentbuffer"),
+                ('ContPyInsideArguments', 'immediate', "Inserts '=^' in current buffer")]),
+    ('else', [('Language: python', 'buffer', None)])],
+   'C': [\
+      ('function of', [('Language: any', 'buffer', 'Insert parens and puts cursor in between')]),
+      ('with arguments', [('Language: any', 'buffer', 'Insert parens and puts cursor in between')]),
+      ('assign value', [('Any', 'global', "Inserts ' = ^' in current buffer")]),
+      ('equals', [('Any', 'global', "Inserts ' = ^' in current buffer")]),
+      ('else', [('Language: C|perl', 'buffer', 'else clause of a C conditional')])],
+   'perl': [\
+      ('function of', [('Language: any', 'buffer', 'Insert parens and puts cursor in between')]),
+      ('with arguments', [('Language: any', 'buffer', 'Insert parens and puts cursor in between')]),
+      ('assign value', [('Any', 'global', "Inserts ' = ^' in current buffer")]),
+      ('equals', [('Any', 'global', "Inserts ' = ^' in current buffer")]),
+      ('else', [('Language: C|perl', 'buffer', 'else clause of a C conditional')])]}
+   
 expected_csc_index =  {\
     'python':\
-       {'function of': [(ContPy(), gen_parens_pair)],
-        'with arguments': [(ContPy(), gen_parens_pair)],
+       {'function of': [(ContAnyLanguage(), gen_parens_pair)],
+        'with arguments': [(ContAnyLanguage(), gen_parens_pair)],
         'assign value': [(ContAny(), ActionInsert(" = ")),
                          (ContPyInsideArguments(), ActionInsert("="))],
         'equals': [(ContAny(), ActionInsert(" = ")),
@@ -123,17 +116,17 @@ expected_csc_index =  {\
                                                     code_bef = 'else:\n\t',
                                                     code_after = ''))]},
     'C':\
-       {'function of': [(ContC(), gen_parens_pair)],
-        'with arguments':[(ContC(), gen_parens_pair)],
+       {'function of': [(ContAnyLanguage(), gen_parens_pair)],
+        'with arguments':[(ContAnyLanguage(), gen_parens_pair)],
         'assign value': [(ContAny(),  ActionInsert(" = "))],
         'equals': [(ContAny(), ActionInsert(" = "))],
-        'else': [(ContC(), c_else)]},
+        'else': [(ContCStyleLanguage(), c_else)]},
    'perl':\
-       {'function of': [(ContPerl(), gen_parens_pair)],      
-        'with arguments': [(ContPerl(), gen_parens_pair)],
+       {'function of': [(ContAnyLanguage(), gen_parens_pair)],      
+        'with arguments': [(ContAnyLanguage(), gen_parens_pair)],
         'assign value': [(ContAny(), ActionInsert(" = "))],
         'equals': [(ContAny(), ActionInsert(" = "))],
-        'else': [(ContPerl(), c_else)]}}
+        'else': [(ContCStyleLanguage(), c_else)]}}
 
 
 # files testing (required apart from generated html files:
