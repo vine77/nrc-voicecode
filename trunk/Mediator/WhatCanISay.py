@@ -189,7 +189,7 @@ class WhatCanISay(Object):
                     a_context_equivalence = a_context.equivalence_key()
                     a_context_scope = a_context.scope()
                     action_list.append((a_context_equivalence, a_context_scope, written))
-                    all_commands[lang].append((words, action_list))
+                all_commands[lang].append((words, action_list))
         self.csc_commands = all_commands
 
     def get_written_form_from_action(self, action):

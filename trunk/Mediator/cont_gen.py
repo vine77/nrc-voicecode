@@ -20,10 +20,14 @@
 ##############################################################################
 
 """Context objects which are not tied to a specific language"""
+try:
+    set
+except NameError:
+    from sets import Set as set
 
 from Context import Context
 import actions_gen 
-import debug
+from debug import trace
 import AppStateEmacs
 import re
 from vc_globals import *
@@ -42,23 +46,24 @@ class ContLanguage(Context):
     *none* -- 
     """
     
-    def __init__(self, language=None, **args_super):
+    def __init__(self, language, **args_super):
+
+        # Ensure language is always a tuple of one or more valid languages
         if language == None:
             language = all_languages
         elif isinstance(language, basestring):
-            language = (language,)
+            language = (language, ) 
         elif isinstance(language, tuple):
             pass
         else:
-            raise TypeError("Language of ContLanguage instance must be None, string or tuple, not: %s"% \
-                            language)
-        for l in language:
-            if l not in all_languages:
-                raise(ValueError, 'ContLanguage called with invalid language: "%s"'% l)
-        self.deep_construct(ContLanguage, \
-                            {'language': language}, \
-                            args_super, \
-                            {})
+            raise TypeError("Language of ContLanguage instance must be a string or tuple, not: %s"% \
+                            repr(language))
+        for lang in language:
+            if lang not in all_languages:
+                raise(ValueError, 'ContLanguage is called with invalid language: "%s"\n'
+                                  'valid languages are: %s'% (lang, repr(all_languages)))
+        self.language = language
+        super(ContLanguage, self).__init__(**args_super)
 
     def scope(self):
         """returns a string indicating the scope of this context.
@@ -77,7 +82,7 @@ class ContLanguage(Context):
         """
         return "buffer"
 
-    def equivalence_key(self):
+    def equivalence_key(self, prefix="Language"):
         """returns a key used to separate Context instances into
         equivalence classes.  Two contexts which are equivalent (i.e.
         share the same set of circumstances under which they apply)
@@ -98,8 +103,10 @@ class ContLanguage(Context):
         *STR* -- the key
         """
         if self.language == all_languages:
-            return "Language: %s" % "any"
-        return "Language: %s" % "|".join(self.language)
+            lang = "any"
+        else:
+            lang = "|".join(self.language)
+        return "%s: %s" % (prefix, lang)
 
     def _applies(self, app, preceding_symbol = 0):
         buff = app.curr_buffer()
@@ -109,58 +116,44 @@ class ContLanguage(Context):
         
         return buff.language_name() in self.language
 
-        
+    def overlaps_with(self, other_context):
+        """Check if this context overlaps with another
+         
+        for language instances and its children, check for overlapping languages
+          in QH words: other_context is same class as self, or a subclass of self
 
+        """
+        language1 = set(self.language)
+        language2 = set(other_context.language)
+        # see if intersection of 2 sets is not empty:
+
+        if language1 & language2:
+            trace('ContLanguage.overlaps_with', 'overlapping, language1: %s, language2: %s' % \
+                    (language1, language2))
+            return True
+        else:
+            trace('ContLanguage.overlaps_with', 'NOT overlapping, language1: %s, language2: %s' % \
+                    (language1, language2))
+
+       
+# do NOT do this any more, use instances directly:
 class ContC(ContLanguage):
-    """This context applies if current source buffer is in C.
-
-    It is essentially a shortcut for ContLanguage(language='C')
-    """
-    
-    def __init__(self, **args_super):
-        ContLanguage.__init__(self, language='C')
-
+    def __init__(self, **attr):
+        raise DeprecationError('deprecated class "ContC", use instance "contC" or "ContLanguage(\'C\')" instead')
 
 class ContPerl(ContLanguage):
-    """This context applies if current source buffer is in Perl.
-
-    It is essentially a shortcut for ContLanguage(language='perl')
-    """
-    
-    def __init__(self, **args_super):
-        ContLanguage.__init__(self, language='perl')
+    def __init__(self, **attr):
+        raise DeprecationError('deprecated class "ContPerl", use instance "contPerl" or "ContLanguage(\'perl\')" instead')
 
 class ContPy(ContLanguage):
-    """This context applies if current source buffer is in Python.
-
-    It is essentially a shortcut for ContLanguage(language='python')
-    """
-    def __init__(self, **args_super):
-        ContLanguage.__init__(self, language='python')
+    def __init__(self, **attr):
+        raise DeprecationError('deprecated class "ContPy", use instance "contPy" or "ContLanguage(\'python\')" instead')
     
-class ContAnyLanguage(ContLanguage):
-    """This context applies if current source buffer is in some programming language.
-
-    It is essentially a shortcut for ContLanguage(language=all_languages)
-    """
-    
-    def __init__(self, **args_super):
-        ContLanguage.__init__(self, language=all_languages)
-
-class ContCStyleLanguage(ContLanguage):
-    """This context applies if current source buffer is one of the C Style languages (C, perl...)
-
-    It is essentially a shortcut for ContLanguage(all_languages)
-    """
-    
-    def __init__(self, **args_super):
-        ContLanguage.__init__(self, c_style_languages)
-
 class ContAny(Context):
     """This context always applies, UNLESS translation is off."""
 
     def __init__(self, **attrs):
-        self.deep_construct(ContAny, {}, attrs)
+        super(ContAny, self).__init__(attrs)
         
     def _applies(self, app, preceding_symbol = 0):
         return not app.translation_is_off
@@ -220,11 +213,12 @@ class ContLastActionWas(Context):
          *'or'*, then context applies if last action is an instance of
          any of the classes in *types*.
         """
-        
-        self.deep_construct(ContLastActionWas, {'types': types, 'connector': connector},
-                            attrs)
-        if self.connector != 'and':
+        self.types = types
+        if connector == 'and':
+            self.connector = connector
+        else:
             self.connector = 'or'
+        super(ContLastActionWas, self).__init__(attrs)
         
     def _applies(self, app, preceding_symbol = 0):
         if preceding_symbol:
@@ -232,7 +226,7 @@ class ContLastActionWas(Context):
             last_action = actions_gen.ActionInsert('%dummy%')
         else:
             entry = app.get_history(1)
-            debug.trace('ContLastActionWas.applies', 'entry=%s' % repr(entry))
+            trace('ContLastActionWas.applies', 'entry=%s' % repr(entry))
             if entry:
                 (last_cont, last_action) = entry
             else:
@@ -249,7 +243,7 @@ class ContLastActionWas(Context):
                 if isinstance(last_action, a_class):
                     answer = 1
                     break
-        debug.trace('ContLastActionWas.applies', 'last_cont=%s, last_action=%s, self.types=%s, answer=%s' % (last_cont, last_action, self.types, answer))
+        trace('ContLastActionWas.applies', 'last_cont=%s, last_action=%s, self.types=%s, answer=%s' % (last_cont, last_action, self.types, answer))
         return answer
 
     def scope(self):
@@ -296,26 +290,26 @@ class ContLastActionWas(Context):
         return s
 
 
-class ContBlankLine(Context):
+class ContBlankLine(ContLanguage):
     """This context applies if the cursor is on a blank line."""
+    reBlank = re.compile(r'\s*$')
 
-    def __init__(self, language=None, **attrs):        
-        self.deep_construct(ContBlankLine, {'language': language},
-                            attrs)
+    def __init__(self, language=None, **attrs):
+        super(ContBlankLine, self).__init__(language, **attrs)
        
     def _applies(self, app, preceding_symbol = 0):
        if preceding_symbol:
            return 0
        answer = 0
-       lang_cont = ContLanguage(language=self.language)
-       
-       if lang_cont.applies(app):
-          buff = app.curr_buffer()
-          start = buff.beginning_of_line()
-          end = buff.end_of_line()
-          line = buff.get_text(start, end)
-          if re.match('\s*$', line):
-             answer = 1
+       if not super(ContBlankLine, self)._applies(app, preceding_symbol):
+           return answer
+
+       buff = app.curr_buffer()
+       start = buff.beginning_of_line()
+       end = buff.end_of_line()
+       line = buff.get_text(start, end)
+       if self.reBlank.match(line):
+          answer = 1
  
        return answer        
 
@@ -355,10 +349,10 @@ class ContBlankLine(Context):
 
         *STR* -- the key
         """
-        return "BlankLine(%s)" % self.language
+        return ContLanguage.equivalence_key(self, prefix="BlankLine")
 
 
-class ContPyInsideArguments(ContPy):
+class ContPyInsideArguments(ContLanguage):
     """This context should apply if the cursor is inside the arguments section
 
 
@@ -375,26 +369,48 @@ class ContPyInsideArguments(ContPy):
     (QH, dec 2006)
 
     """   
+    re_function_call = re.compile(r'\w\s*[(]')
 
     def __init__(self, **attrs):
-        ContPy.__init__(self, **attrs)
+        super(ContPyInsideArguments, self).__init__(language='python', **attrs)
+
        
     def _applies(self, app, preceding_symbol = 0):
         """return 1 if context applies"""
         answer = 0
-        if not ContPy._applies(self, app, preceding_symbol):
+        if not super(ContPyInsideArguments, self)._applies(app, preceding_symbol):
             return answer
 
         buff = app.curr_buffer()
-        cur_pos = buff.cur_pos()       
+        current_pos = buff.cur_pos()
+        num = buff.line_num_of(current_pos)
         start = buff.beginning_of_line()
-        end = buff.end_of_line()
-        lineleft = buff.get_text(start, cur_pos)
-        lineright = buff.get_text(cur_pos, end)
-##        print 'lineleft: %s'% lineleft
-##        print 'lineright: %s'% lineright
-        if lineleft.find("(") >= 0 and lineright.find(")") >= 0:
-            answer = 1
+        lineleft = buff.get_text(start, current_pos)
+        buff.goto(current_pos)
+        trace('ContPyInsideArguments._applies', 'lineleft: %s'% lineleft)
+        has_function_call = self.re_function_call.search(lineleft)
+        if has_function_call:
+            trace('ContPyInsideArguments._applies', 're_function_call.search OK: %s'% has_function_call)
+            return 1
+        while num > 0:
+            num -= 1
+            line = buff.get_text_of_line(num)
+            trace('ContPyInsideArguments._applies', 'testing line num %s: "%s"'% \
+                  (num, line))
+            line = line.strip()
+            for ending in ('\\', '"', "'", ','):
+                if line.endswith(ending):
+                    break
+            else:
+                # no continuation line, not found:
+                return answer
+            has_function_call = self.re_function_call.search(line)
+            if has_function_call:
+                trace('ContPyInsideArguments._applies', 're_function_call.search OK: %s'% has_function_call)
+                return 1
+
+        
+        trace('ContPyInsideArguments._applies', 'fall through, not apply')
         return answer
 
     def scope(self):
@@ -409,15 +425,14 @@ class ContPyInsideArguments(ContPy):
 
         *STR* -- the key
         """
-        return "ContPyInsideArguments"
+        return "ContPyInsideArguments: python"
 
 
 class ContTextIsSelected(Context):
     """This context applies if there is some text selected."""
 
-    def __init__(self, **attrs):        
-        self.deep_construct(ContTextIsSelected, {},
-                            attrs)
+    def __init__(self, **attrs):
+        super(ContTextIsSelected, self).__init__(**attrs)
        
     def _applies(self, app, preceding_symbol = 0):
         (start, end) = app.get_selection()
@@ -470,7 +485,8 @@ class ContAnyEvenOff(Context):
     """This context always applies, EVEN IF translation is off."""
 
     def __init__(self, **attrs):
-        self.deep_construct(ContAnyEvenOff, {}, attrs)
+        super(ContAnyEvenOff, self).__init__(**attrs)
+        
         
     def _applies(self, app, preceding_symbol = 0):
         return 1
@@ -528,10 +544,8 @@ class ContTranslationOff(Context):
     """
     
     def __init__(self, **args_super):
-        self.deep_construct(ContTranslationOff, \
-                            {}, \
-                            args_super, \
-                            {})
+        super(ContTranslationOff, self).__init__(**attrs)
+
     def _applies(self, app, preceding_symbol = 0):
         return app.translation_is_off
 
@@ -574,23 +588,21 @@ class ContTranslationOff(Context):
         return "TranslationOff"
 
 
-class ContNotAfterNewSymb(Context):
+class ContNotAfterNewSymb(ContLanguage):
     """This context applies if the current buffer is in a particular language
     AND the words being interpreted weren't preceded by words which were
     interpreted as being part of a new symbol."""
 
-    def __init__(self, language, **args_super):
-        self.deep_construct(ContNotAfterNewSymb, \
-                            {'language': language}, \
-                            args_super, \
-                            {})
+    def __init__(self, language, **attrs):
+        super(ContNotAfterNewSymb, self).__init__(language, **attrs)
+        
     
     def _applies(self, app, preceding_symbol = 0):
-        tmp_cont_lang = ContLanguage(self.language)
-        return not preceding_symbol and tmp_cont_lang._applies(app, preceding_symbol)
+        if super(ContNotAfterNewSymb, self)._applies(app):
+            return not preceding_symbol
     
     def scope(self):
         return "last command"
         
     def equivalence_key(self):
-        return "NotAfterSymb_in_%s" % self.language
+        return super(ContNotAfterNewSymb, self).equivalence_key(prefix="NotAfterSymb")

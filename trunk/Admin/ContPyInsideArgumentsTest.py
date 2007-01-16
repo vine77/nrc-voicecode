@@ -72,38 +72,41 @@ class ContPyInsideArgumentsTest(VoiceCodeRootTest.VoiceCodeRootTest):
 ##########################################################
     def test_Results_of_equalsign(self):
         """testing the results in a python buffer"""
-        self.fail("this works not in regression mode, equalsign QH testing")
 
         # nevermind:        
         self._open_empty_test_file('temp.py')
-        self._say("golf assign value none")
-        self._assert_active_buffer_content_is('g = None<CURSOR>')
-
-        self._say("new statement")
-        self._say("hotel equals")
-        self._say("function with arguments")
-        self._say("three comma four")
-        self._assert_active_buffer_content_is("""g = None
-h = func(3, 4)<CURSOR>""")
-
-        
-        self._say("new statement")
-        self._say("define function test")
-        self._say("after paren")
-        self._say("India equals one")
-        self._say("do the following")
-        self._say("juliett equals india plus one")
-        self._say("New-Line")
-        self._say("kilo equals")
-        self._say("test with arguments")
-        self._say("India equal three")
-        self._say("jump out")
+        self._insert_in_active_buffer("""g = None
+h = func(3, 4)
+i = None'
+def test(i=5):
+j = i + 6
+k = test(i=7)""")
         self._assert_active_buffer_content_is("""g = None
 h = func(3, 4)
 i = None'
-def test(i=1):
-    j = i + 1
-    k = test(i=3)<CURSOR>""")
+def test(i=5):
+    j = i + 6
+    k = test(i=7)<CURSOR>""")
+        self._say("select three")
+        self._assert_active_buffer_content_is("""g = None
+h = func(3<CURSOR>, 4)
+i = None'
+def test(i=5):
+    j = i + 6
+    k = test(i=7)""")
+        self._say("select four")
+        self.assert_(self.context.applies(self._app()), '4 should apply, because inside a function call')
+        self._say("select five")
+        self.assert_(self.context.applies(self._app()), '5 should apply, because inside a function call')
+        self._say("select six")
+        self.failIf(self.context.applies(self._app()), '6 should NOT apply, because inside a function call')
+        self._say("select seven")
+        self.assert_(self.context.applies(self._app()), '7 should apply, because inside a function call')
+        self._say("select test")
+        self.failIf(self.context.applies(self._app()), 'at test should NOT apply, because inside a function call')
+        self._say("select none")
+        self.failIf(self.context.applies(self._app()), 'at None should NOT apply, because inside a function call')
+        
         
     
 ###############################################################

@@ -26,6 +26,12 @@ class SwitchBufferTest(VoiceCodeRootTest.VoiceCodeRootTest):
       self._open_file('dummy.py')
       self._say(['class', 'dummy'])
       self._open_file('test.py')
+      # here are the differences QH
+      # sleeping 5 times
+      self.sleep_for_a_while()
+      self.sleep_for_a_while()
+      self.sleep_for_a_while()
+      self.sleep_for_a_while()
       self.sleep_for_a_while()
             
       self._assert_active_buffer_is_called('test.py', "Emacs didn't start out in the right buffer")

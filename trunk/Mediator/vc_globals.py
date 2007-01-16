@@ -34,7 +34,11 @@ The following variables are defined in this module
 """
 
 import os, sys
-
+#
+# special error for deprecated things
+#
+class DeprecationError(Exception):
+    pass
 #
 # Various directories
 #

@@ -1,6 +1,6 @@
-
 creating wxMediator
 Loading test definitions...
+****cannot import test module, skipping test: nonexistingTest
 Configuring the mediator...
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_C_Cpp_std_sym.cpp'
@@ -489,6 +489,13 @@ Heard new statement this should be typed as a variable name
 Heard with arguments
 Finished foreground tests...
 Starting background tests...
+
+
+*******************************************************************************
+* Name        : CSCmd
+* Description : Test the CSCcmd internals
+*******************************************************************************
+
 
 
 *******************************************************************************
@@ -1820,7 +1827,7 @@ Heard after semi new paragraph
 *** Compiling symbols from file: %VCODE_HOME%\Data\TestData\used_to_test_C_Cpp_parsing.cpp ***
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_C_Cpp_std_sym.cpp'
-WARNING: source file 'C:\Documents and Settings\Desiletsa\My Documents\eclipse_workspace\VCode\Data\TestData\used_to_test_C_Cpp_parsing.cpp' doesn't exist.
+WARNING: source file 'd:\natlink\VCode\Data\TestData\used_to_test_C_Cpp_parsing.cpp' doesn't exist.
 
 
 Parsed symbols are: 
@@ -1868,7 +1875,7 @@ log10: ['log 10', 'log base 10', 'logarithm base 10']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['sqirt', 'sqrt', 'square root']
+sqrt: ['SQRT', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -2387,14 +2394,71 @@ EdSim instance EdSim(0) connected
 
 
 *******************************************************************************
+* Name        : ContLanguage
+* Description : Tests for different language contexts.
+*******************************************************************************
+
+
+
+*******************************************************************************
 * Name        : ContPyInsideArguments
-* Description : Tests for being inside the argument list of a function.
+* Description : Test Py context inside or outside arguments
 *******************************************************************************
 
 Heard select inside
+Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32210>
+didn't restore the selection
+old position, selection were 18, (12, 18)
+new position, selection were 18, (18, 18)
 Heard select inside
+Warning: context <cont_gen.ContPyInsideArguments object at 0x01E54C70>
+didn't restore the selection
+old position, selection were 18, (12, 18)
+new position, selection were 18, (18, 18)
 Heard select inside
 Heard select outside
+Warning: context <cont_gen.ContPyInsideArguments object at 0x01E26B70>
+didn't restore the selection
+old position, selection were 7, (0, 7)
+new position, selection were 7, (7, 7)
+Heard select three
+Heard select four
+Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32650>
+didn't restore the selection
+old position, selection were 22, (21, 22)
+new position, selection were 22, (22, 22)
+Heard select five
+Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32650>
+didn't restore the selection
+old position, selection were 46, (45, 46)
+new position, selection were 46, (46, 46)
+Heard select six
+Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32650>
+didn't restore the selection
+old position, selection were 62, (61, 62)
+new position, selection were 62, (62, 62)
+Heard select seven
+Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32650>
+didn't restore the selection
+old position, selection were 79, (78, 79)
+new position, selection were 79, (79, 79)
+Heard select test
+Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32650>
+didn't restore the selection
+old position, selection were 75, (71, 75)
+new position, selection were 75, (75, 75)
+Heard select none
+Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32650>
+didn't restore the selection
+old position, selection were 32, (28, 32)
+new position, selection were 32, (32, 32)
+
+
+*******************************************************************************
+* Name        : Context
+* Description : Test contexts and their possible conflicts
+*******************************************************************************
+
 
 
 *******************************************************************************
@@ -2659,7 +2723,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01E53D50>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01D0C270>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -3025,7 +3089,7 @@ Fresh abbreviation file matches current one, as expected
 
 *******************************************************************************
 * Name        : TestCaseWithHelpers
-* Description : Test the unit testing framework.
+* Description : Test the unit testing framework
 *******************************************************************************
 
 
@@ -3035,7 +3099,9 @@ Fresh abbreviation file matches current one, as expected
 * Description : self-test for WhatCanISay.py
 *******************************************************************************
 
-using test folder: C:\Documents and Settings\Desiletsa\My Documents\eclipse_workspace\VCode\Data\Benchmark\WhatCanISayTestResults\C
+using test folder: d:\natlink\VCode\Data\Benchmark\WhatCanISayTestResults\C
+using test folder: d:\natlink\VCode\Data\Benchmark\WhatCanISayTestResults\perl
+using test folder: d:\natlink\VCode\Data\Benchmark\WhatCanISayTestResults\python
 
 
 *******************************************************************************
@@ -3253,7 +3319,7 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'C:\\Documents and Settings\\Desiletsa\\My Documents\\eclipse_workspace\\VCode\\Data\\TestData'
+'d:\\natlink\\VCode\\Data\\TestData'
 
 
 >>> Testing console command: compile_symbols([r'%VCODE_HOME%\Data\TestData\small_buff.c'])
@@ -3294,7 +3360,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['sqirt', 'sqrt', 'square root']
+sqrt: ['SQRT', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -3758,8 +3824,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'10': appears in ['log10']
-'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
@@ -4204,8 +4268,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'10': appears in ['log10']
-'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
@@ -4253,7 +4315,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['sqirt', 'sqrt', 'square root']
+sqrt: ['SQRT', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -4336,7 +4398,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['sqirt', 'sqrt', 'square root']
+sqrt: ['SQRT', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -4801,8 +4863,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'10': appears in ['log10']
-'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
@@ -4858,7 +4918,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['sqirt', 'sqrt', 'square root']
+sqrt: ['SQRT', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -5325,8 +5385,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'10': appears in ['log10']
-'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
@@ -5771,8 +5829,6 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'10': appears in ['log10']
-'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
@@ -9175,7 +9231,7 @@ As best as I can tell from SF Browse CVS, this test was
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'C:\Documents and Settings\Desiletsa\My Documents\eclipse_workspace\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'd:\natlink\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9213,7 +9269,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['sqirt', 'sqrt', 'square root']
+sqrt: ['SQRT', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -9297,7 +9353,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['sqirt', 'sqrt', 'square root']
+sqrt: ['SQRT', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -11761,7 +11817,7 @@ spoken_form_info: ['spoken form info', 'spoken form information']
 spoken_form_regexp: ['spoken form regexp', 'spoken form regular expression']
 spoken_forms: ['spoken forms']
 spoken_written_form: ['spoken written form']
-sqrt: ['sqirt', 'sqrt', 'square root']
+sqrt: ['SQRT', 'square root']
 sr_interface: ['S. R. interface', 'SR interface']
 start: ['start']
 stdin: ['S. T. D. in', 'standard in', 'standard input', 'stdin']
@@ -11933,7 +11989,7 @@ Heard define method initialize add argument on application equals none comma
   9: import EdSim, SymDict
  10: import sr_interface
  11: class CmdInterp(Object):
- 12:     def __init__(self, on_app = None, <CURSOR>):
+ 12:     def __init__(self, on_app=None, <CURSOR>):
  13:         
 
 *** End of source buffer ***
@@ -11941,7 +11997,7 @@ Saying: ['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'd
 Heard symbol dictionary pickle file equals none comma double asterisk attributes method body
  10: import sr_interface
  11: class CmdInterp(Object):
- 12:     def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
+ 12:     def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
  13:         <CURSOR>
 
 *** End of source buffer ***
@@ -11949,7 +12005,7 @@ Saying: ['self', 'dot', 'declare', 'attributes', 'with', 'arguments', 'brace', '
 Heard self dot declare attributes with arguments brace pair
  10: import sr_interface
  11: class CmdInterp(Object):
- 12:     def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
+ 12:     def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
  13:         self.decl_attrs({<CURSOR>})
 
 *** End of source buffer ***
@@ -11957,21 +12013,21 @@ Saying: ['single', 'quotes', 'un', 'translated', 'text', 'start', 'jump', 'out',
 Heard single quotes un translated text start jump out colon none comma
  10: import sr_interface
  11: class CmdInterp(Object):
- 12:     def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
+ 12:     def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
  13:         self.decl_attrs({'_untranslated_text_start': None, <CURSOR>})
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement']
 Heard single quotes un translated text end jump out colon none new statement
  11: class CmdInterp(Object):
- 12:     def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
+ 12:     def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
  13:         self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:         <CURSOR>
 
 *** End of source buffer ***
 Saying: ['self', 'dot', 'deep', 'construct', 'with', 'arguments', 'command', 'interpreter', 'comma', 'continue', 'statement']
 Heard self dot deep construct with arguments command interpreter comma continue statement
- 12:     def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
+ 12:     def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
  13:         self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:         self.deep_construct(CmdInterp, \
  15:                             <CURSOR>)
@@ -11979,7 +12035,7 @@ Heard self dot deep construct with arguments command interpreter comma continue 
 *** End of source buffer ***
 Saying: ['brace', 'pair', 'single', 'quotes', 'on', 'application', 'jump', 'out', ':\\colon', 'on', 'application', 'comma']
 Heard brace pair single quotes on application jump out colon on application comma
- 12:     def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
+ 12:     def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
  13:         self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:         self.deep_construct(CmdInterp, \
  15:                             {'on_app': on_app, <CURSOR>})
@@ -12311,7 +12367,7 @@ Heard define method initialize add argument on application equals none comma
   9: import ed_simulator, symbol_dictionary
  10: import sr_interface
  11: class CommandInterpreter(object):
- 12:     def initialize(self, on_application = None, <CURSOR>):
+ 12:     def initialize(self, on_application=None, <CURSOR>):
  13:         
 
 *** End of source buffer ***
@@ -12319,7 +12375,7 @@ Saying: ['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'd
 Heard symbol dictionary pickle file equals none comma double asterisk attributes method body
  10: import sr_interface
  11: class CommandInterpreter(object):
- 12:     def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
+ 12:     def initialize(self, on_application=None, symbol_dictionary_pickle_file=None, **attributes):
  13:         <CURSOR>
 
 *** End of source buffer ***
@@ -12327,7 +12383,7 @@ Saying: ['self', 'dot', 'declare', 'attributes', 'with', 'arguments', 'brace', '
 Heard self dot declare attributes with arguments brace pair
  10: import sr_interface
  11: class CommandInterpreter(object):
- 12:     def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
+ 12:     def initialize(self, on_application=None, symbol_dictionary_pickle_file=None, **attributes):
  13:         self.declare_attributes({<CURSOR>})
 
 *** End of source buffer ***
@@ -12335,21 +12391,21 @@ Saying: ['single', 'quotes', 'un', 'translated', 'text', 'start', 'jump', 'out',
 Heard single quotes un translated text start jump out colon none comma
  10: import sr_interface
  11: class CommandInterpreter(object):
- 12:     def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
+ 12:     def initialize(self, on_application=None, symbol_dictionary_pickle_file=None, **attributes):
  13:         self.declare_attributes({'un_translated_text_start': None, <CURSOR>})
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement']
 Heard single quotes un translated text end jump out colon none new statement
  11: class CommandInterpreter(object):
- 12:     def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
+ 12:     def initialize(self, on_application=None, symbol_dictionary_pickle_file=None, **attributes):
  13:         self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:         <CURSOR>
 
 *** End of source buffer ***
 Saying: ['self', 'dot', 'deep', 'construct', 'with', 'arguments', 'command', 'interpreter', 'comma', 'continue', 'statement']
 Heard self dot deep construct with arguments command interpreter comma continue statement
- 12:     def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
+ 12:     def initialize(self, on_application=None, symbol_dictionary_pickle_file=None, **attributes):
  13:         self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:         self.deep_construct(CommandInterpreter, \
  15:                             <CURSOR>)
@@ -12357,7 +12413,7 @@ Heard self dot deep construct with arguments command interpreter comma continue 
 *** End of source buffer ***
 Saying: ['brace', 'pair', 'single', 'quotes', 'on', 'application', 'jump', 'out', ':\\colon', 'on', 'application', 'comma']
 Heard brace pair single quotes on application jump out colon on application comma
- 12:     def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
+ 12:     def initialize(self, on_application=None, symbol_dictionary_pickle_file=None, **attributes):
  13:         self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:         self.deep_construct(CommandInterpreter, \
  15:                             {'on_application': on_application, <CURSOR>})
@@ -12687,7 +12743,7 @@ some_argument: ['some argument']
 some_array: ['some array']
 some_other_method: ['some other method']
 some_variable: ['some variable']
-sqrt: ['sqirt', 'sqrt', 'square root']
+sqrt: ['SQRT', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -13223,7 +13279,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['sqirt', 'sqrt', 'square root']
+sqrt: ['SQRT', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -16557,5 +16613,5 @@ WARNING: Call to deprecated method TestCaseWithHelpers.assert_sequences_have_sam
 
 
 -----------------------------------------------
-Test suite completed in:  817.846000195 secs
+Test suite completed in:  601.04700017 secs
 -----------------------------------------------

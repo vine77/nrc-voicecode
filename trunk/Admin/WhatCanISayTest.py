@@ -1,6 +1,8 @@
 import debug
 import VoiceCodeRootTest
+from vc_globals import *
 import vc_globals
+
 import os, glob, shutil
 import regression
 import itertools
@@ -12,6 +14,15 @@ from cont_gen import *
 from WhatCanISay import WhatCanISay
 from actions_gen import gen_parens_pair, ActionInsertNewClause, ActionInsert
 from actions_C_Cpp import c_else
+#
+# language context instances:
+for lang in all_languages:
+   exec('cont%s = ContLanguage("%s")'% (lang.capitalize(), lang))
+contAnyLanguage = ContLanguage(all_languages)
+contCStyleLanguage = ContLanguage(c_style_languages)
+
+
+
 # test data:
 expected_languages = ['C', 'perl', 'python']
 expected_all_commands_keys = ['actual_sb_s', 'actual_sb__w', 'C_sb_s', 'C_sb__w',
@@ -26,15 +37,16 @@ lsa_not_spoken_forms = ['not']
 lsa_not_meanings  = dict(python='not', C="!", perl="!")
 
 csc_with_arguments_spoken_forms = ['with arguments', 'function of']
-csc_with_arguments_meanings = {ContAnyLanguage(): gen_parens_pair}
+csc_with_arguments_meanings = {all_languages: gen_parens_pair}
 
 csc_with_arguments_docstring = 'giving the parens after a function call, position inside'
 csc_else_spoken_forms = ['else']
-csc_else_meanings ={ContPy(): ActionInsertNewClause('($|\n)',
+csc_else_meanings ={contPython: ActionInsertNewClause('($|\n)',
                                                     code_bef = 'else:\n\t',
                                                     code_after = '',
                                                     where = -1),
-                    ContCStyleLanguage(): c_else}
+                    c_style_languages: c_else}
+
 csc_else_docstring = 'else clause'
 csc_equals_spoken_forms = ['equals', 'assign value']
 csc_equals_meanings ={ContPyInsideArguments(): ActionInsert("="),
@@ -60,7 +72,7 @@ expected_lsa_index['perl'] = index_contents + [('not', AliasMeaning('!')),
 expected_lsa_index['python'] = index_contents + [('not', AliasMeaning('not')),
                                              ('times', AliasMeaning(" * "))]
                             
-
+#
 expected_lsa_commands = dict(C_sb__w=[('not', '!')],
                              actual_sb__w= [('multiplied by', ' * '),
                                           ('multiply by', ' * '),
@@ -82,14 +94,40 @@ expected_lsa_commands = dict(C_sb__w=[('not', '!')],
                                            ('multiply by', ' * '),
                                            ('times', ' * ')])
 #
+expected_csc_index =  {\
+    'python':\
+       {'function of': [(ContLanguage(all_languages), gen_parens_pair)],
+        'with arguments': [(ContLanguage(all_languages), gen_parens_pair)],
+        'assign value': [(ContPyInsideArguments(), ActionInsert("=")),
+                         (ContAny(), ActionInsert(" = "))],
+        'equals': [(ContPyInsideArguments(), ActionInsert("=")),
+                         (ContAny(), ActionInsert(" = "))],
+        'else': [(contPython, ActionInsertNewClause('($|\n)',
+                                                    code_bef = 'else:\n\t',
+                                                    code_after = ''))]},
+    'C':\
+    {'function of': [(ContLanguage(all_languages), gen_parens_pair)],
+        'with arguments':[(ContLanguage(all_languages), gen_parens_pair)],
+        'assign value': [(ContAny(),  ActionInsert(" = "))],
+        'equals': [(ContAny(), ActionInsert(" = "))],
+        'else': [(ContLanguage(c_style_languages), c_else)]},
+   'perl':\
+       {'function of': [(ContLanguage(all_languages), gen_parens_pair)],      
+        'with arguments': [(ContLanguage(all_languages), gen_parens_pair)],
+        'assign value': [(ContAny(), ActionInsert(" = "))],
+        'equals': [(ContAny(), ActionInsert(" = "))],
+        'else': [(ContLanguage(c_style_languages), c_else)]}}
+
+
+#
 expected_csc_commands = {\
    'python': [\
     ('function of', [('Language: any', 'buffer', 'Insert parens and puts cursor in between')]),
     ('with arguments', [('Language: any', 'buffer', 'Insert parens and puts cursor in between')]),
-    ('assign value', [('Any', 'global', "Inserts ' = ^' in current buffer"),
-                      ('ContPyInsideArguments', 'immediate', "Inserts '=^' in current buffer")]),
-    ('equals', [('Any', 'global', "Inserts ' = ^' in currentbuffer"),
-                ('ContPyInsideArguments', 'immediate', "Inserts '=^' in current buffer")]),
+    ('assign value', [('ContPyInsideArguments: python', 'immediate', "Inserts '=^' in current buffer"),
+                      ('Any', 'global', "Inserts ' = ^' in current buffer")]),
+    ('equals', [('ContPyInsideArguments: python', 'immediate', "Inserts '=^' in current buffer"),
+                      ('Any', 'global', "Inserts ' = ^' in current buffer")]),
     ('else', [('Language: python', 'buffer', None)])],
    'C': [\
       ('function of', [('Language: any', 'buffer', 'Insert parens and puts cursor in between')]),
@@ -104,30 +142,6 @@ expected_csc_commands = {\
       ('equals', [('Any', 'global', "Inserts ' = ^' in current buffer")]),
       ('else', [('Language: C|perl', 'buffer', 'else clause of a C conditional')])]}
    
-expected_csc_index =  {\
-    'python':\
-       {'function of': [(ContAnyLanguage(), gen_parens_pair)],
-        'with arguments': [(ContAnyLanguage(), gen_parens_pair)],
-        'assign value': [(ContAny(), ActionInsert(" = ")),
-                         (ContPyInsideArguments(), ActionInsert("="))],
-        'equals': [(ContAny(), ActionInsert(" = ")),
-                   (ContPyInsideArguments(), ActionInsert("="))],
-        'else': [(ContPy(), ActionInsertNewClause('($|\n)',
-                                                    code_bef = 'else:\n\t',
-                                                    code_after = ''))]},
-    'C':\
-       {'function of': [(ContAnyLanguage(), gen_parens_pair)],
-        'with arguments':[(ContAnyLanguage(), gen_parens_pair)],
-        'assign value': [(ContAny(),  ActionInsert(" = "))],
-        'equals': [(ContAny(), ActionInsert(" = "))],
-        'else': [(ContCStyleLanguage(), c_else)]},
-   'perl':\
-       {'function of': [(ContAnyLanguage(), gen_parens_pair)],      
-        'with arguments': [(ContAnyLanguage(), gen_parens_pair)],
-        'assign value': [(ContAny(), ActionInsert(" = "))],
-        'equals': [(ContAny(), ActionInsert(" = "))],
-        'else': [(ContCStyleLanguage(), c_else)]}}
-
 
 # files testing (required apart from generated html files:
 required_non_html_files = ['vc.css', 'vcodeuser.jpg', 'waveform.gif']
@@ -341,14 +355,14 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
                                         'WhatCanISay website of language %s'% lang)
 
    def test_context_applies_for_lang(self):
-        self.assert_(self.wciSay.context_applies_for_lang('python', ContPy()), 
+        self.assert_(self.wciSay.context_applies_for_lang('python', contPython), 
                      "ContPy should applie for langage python")
-        self.failIf(self.wciSay.context_applies_for_lang('C', ContPy()), 
+        self.failIf(self.wciSay.context_applies_for_lang('C', contPython), 
                      "ContPy should not apply for langage C")
 
-        self.assert_(self.wciSay.context_applies_for_lang('C', ContC()), 
+        self.assert_(self.wciSay.context_applies_for_lang('C', contC), 
                      "ContC should apply for langage C")                     
-        self.failIf(self.wciSay.context_applies_for_lang('python', ContC()), 
+        self.failIf(self.wciSay.context_applies_for_lang('python', contC), 
                      "ContC should not apply for langage python")
                      
         self.assert_(self.wciSay.context_applies_for_lang('python', ContAny()), 

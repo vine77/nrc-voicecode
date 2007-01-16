@@ -56,14 +56,21 @@ from actions_emacs import *
 from actions_C_Cpp import *
 from actions_py import *
 from actions_perl import *
-import vc_globals
+from vc_globals import *
 
 import KnownTargetModule
 
 import sr_interface
 
-#config choices:
-equal_sign_csc = 1    # QH choice, normally false
+# language context instances:
+# so use contPython, contC etc or contAnyLanguage in definitions of csc commands
+# can also use 'python' or all_languages or ('C', 'perl') in definitions
+for lang in all_languages:
+   exec('cont%s = ContLanguage("%s")'% (lang.capitalize(), lang))
+contAnyLanguage = ContLanguage(all_languages)
+contCStyleLanguage = ContLanguage(c_style_languages)
+
+
 
 ###############################################################################
 # Configure the grammar for toggling text mode on/off
@@ -150,22 +157,22 @@ add_prefix('dumbEdSim', 'Dumbo')
 mediator_ctrl = CSCmdSet(name = 'mediator control',
     description = 'commands to control the mediator')
 acmd = CSCmd(spoken_forms=['compile symbols'], 
-             meanings={ContLanguage(None): ActionCompileSymbols()}, 
+             meanings={all_languages: ActionCompileSymbols()}, 
              docstring='compile symbols from active buffer.')
 mediator_ctrl.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['show symbols', 'print symbols'], 
-             meanings={ContLanguage(None): ActionPrintSymbols()}, 
+             meanings={all_languages: ActionPrintSymbols()}, 
              docstring='Print the list of all known symbols.')
 mediator_ctrl.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['voice coder what can I say', 'yo what can I say'], 
-             meanings={ContLanguage(None): ActionWhatCanISay()}, 
+             meanings={all_languages: ActionWhatCanISay()}, 
              docstring='Give active commands')
 mediator_ctrl.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['show abbreviations', 'print abbreviations'], 
-             meanings={ContLanguage(None): ActionPrintAbbrevs()}, 
+             meanings={all_languages: ActionPrintAbbrevs()}, 
              docstring='Print the list of all known symbols.')
 mediator_ctrl.add_csc(acmd)
 
@@ -794,9 +801,9 @@ logic_ops.add_lsa(LSAlias(['and'],
 # comparison operators
 comparisons = LSAliasSet('comparison operators', 
     description = "comparison operators")
-if not equal_sign_csc:
-   comparisons.add_lsa(LSAlias(['equals', 'equal', 'is assigned', 'assign value'],
-        {'C': ' = ', 'python': ' = '}, comparison_operator))
+
+##changed to csc (QH)    comparisons.add_lsa(LSAlias(['equals', 'equal', 'is assigned', 'assign value'],
+##        {'C': ' = ', 'python': ' = '}, comparison_operator))
 comparisons.add_lsa(LSAlias(['less than', 'is less than'],
         {'C': ' < ', 'python': ' < ', 'perl': ' < '},
         comparison_operator))
@@ -844,48 +851,45 @@ functional_pairs = CSCmdSet('functional pairs',
 
 acmd = CSCmd(spoken_forms=['with arguments', 'with argument', 'call with',
                            'called with', 'function of'],
-             meanings={ContC(): gen_parens_pair, ContPy(): gen_parens_pair,
-                       ContPerl(): gen_parens_pair},
+             meanings={all_languages: gen_parens_pair},
              docstring='argument list for function')
 functional_pairs.add_csc(acmd)        
 
 acmd = CSCmd(spoken_forms=['dictionary with elements', 'hash with elements', 
                            'new dictionary', 'new hash',
                            'dictionary with items', 'hash with items'],
-             meanings={ContPy(): ActionInsert('{', '}', 
+             meanings={contPython: ActionInsert('{', '}', 
                                      spacing = like_open_paren),
-                       ContPerl(): ActionInsert('(', ')', 
+                       contPerl: ActionInsert('(', ')', 
                                      spacing = like_open_paren)},
              docstring='dictionary with enumerated elements')
 functional_pairs.add_csc(acmd)             
 
 acmd = CSCmd(spoken_forms=['list with elements', 'new list',
                            'list with items'],
-             meanings={ContPy(): ActionInsert('[', ']',
+             meanings={contPython: ActionInsert('[', ']',
                                      spacing = like_open_paren),
-                       ContPerl(): ActionInsert('(', ')',
+                       contPerl: ActionInsert('(', ')',
                                      spacing = like_open_paren)},
              docstring='list with enumerated elements')
 functional_pairs.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['at index', 'indexed by'],
-             meanings={ContPy(): ActionInsert('[', ']',
+             meanings={contPython: ActionInsert('[', ']',
                                      spacing = like_open_paren),
-                       ContC(): ActionInsert('[', ']',
-                                     spacing = like_open_paren),
-                       ContPerl(): ActionInsert('[', ']',
+                       c_style_languages: ActionInsert('[', ']',
                                      spacing = like_open_paren)},
              docstring='array element access')
 functional_pairs.add_csc(acmd)                          
 acmd = CSCmd(spoken_forms=['sliced at'],
-             meanings={ContPy(): ActionInsert('[', ']',
+             meanings={contPython: ActionInsert('[', ']',
                                      spacing = like_open_paren)},
              docstring='array slicing')             
 functional_pairs.add_csc(acmd)             
 # Note: 'at key' is often misrecognised
 acmd = CSCmd(spoken_forms=['with key', 'item with key', 'at key'],
-             meanings={ContPy(): ActionInsert('[', ']',
+             meanings={contPython: ActionInsert('[', ']',
                                      spacing = like_open_paren),
-                       ContPerl(): ActionInsert('{', '}',
+                       contPerl: ActionInsert('{', '}',
                                      spacing = like_open_paren)},
              docstring='dictionary/hash element access')
 functional_pairs.add_csc(acmd)
@@ -932,13 +936,13 @@ new_statement = CSCmdSet('new statement',
 description = 'new statement commands') 
 
 acmd = CSCmd(spoken_forms=['new statement', 'new statement below'],
-             meanings={ContPy(): py_new_statement, ContC(): c_new_statement},
+             meanings={contPython: py_new_statement, contC: c_new_statement},
              docstring='start new statement on next line')
 new_statement.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['new statement above'],
-             meanings={ContPy(): py_new_statement_above,
-                       ContC(): c_new_statement_above},
+             meanings={contPython: py_new_statement_above,
+                       c_style_languages: c_new_statement_above},
              docstring='start new statement on previous line')
 new_statement.add_csc(acmd)
 
@@ -949,8 +953,7 @@ compound_statements = CSCmdSet('compound statements',
     description = 'commands for dictation and navigating compound statements') 
 
 acmd = CSCmd(spoken_forms=['body', 'go to body'],
-             meanings={ContC(): c_goto_body, ContPy(): py_goto_body,
-                       ContPerl(): c_goto_body},
+             meanings={c_style_languages: c_goto_body, contPython: py_goto_body},
              docstring = 'move to body of a compound statement')
 compound_statements.add_csc(acmd)
 
@@ -961,39 +964,36 @@ ctrl_structures = CSCmdSet('control structures',
     description = 'commands for dictation and navigation of control structures')
 
 acmd = CSCmd(spoken_forms=['for', 'for loop', 'for each'],
-             meanings={ContC(): c_simple_for, 
-                       ContBlankLine('python'): py_simple_for,
-                       ContPerl(): c_simple_for},
+             meanings={c_style_languages: c_simple_for, 
+                       ContBlankLine('python'): py_simple_for},
              docstring='for loop')
 ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['while', 'while loop'],
-             meanings={ContC(): c_simple_while,
-#                       ContPy(): ActionInsert('while ', ':\n\t'),             
-                       ContBlankLine('python'): ActionInsert('while ', ':\n\t'),
-                       ContPerl(): c_simple_while},
+             meanings={c_style_languages: c_simple_while,
+#                       contPython: ActionInsert('while ', ':\n\t'),             
+                       ContBlankLine('python'): ActionInsert('while ', ':\n\t')},
              docstring='while loop')
 ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['do', 'do the following', 'loop body', 'for body',
                            'while body'],
-             meanings={ContC(): c_goto_body, ContPy(): py_goto_body,
-                       ContPerl(): c_goto_body},
+             meanings={c_style_languages: c_goto_body, contPython: py_goto_body},
              docstring = 'move to body of loop')
 ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['do while'],
-             meanings={ContC(): c_do_while},
+             meanings={c_style_languages: c_do_while},
              docstring='do...while loop')
 ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['if', 'if statement'],
              meanings={ContBlankLine('python'): ActionInsert('if ', ':\n\t'),
-                       ContC(): ActionInsert('if (', ')\n\t{\n\t\n}',
+                       contC: ActionInsert('if (', ')\n\t{\n\t\n}',
                            spacing = no_space_after),
-                       ContPerl(): ActionInsert('if (', ') {\n\t}',
+                       contPerl: ActionInsert('if (', ') {\n\t}',
                            spacing = no_space_after)},
              docstring = 'if statement')
 ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['else if', 'else if clause', 
                            'elif', 'elif clause'],
-             meanings={ContPy(): ActionInsertNewClause('($|\n)', 
+             meanings={contPython: ActionInsertNewClause('($|\n)', 
                            code_bef = 'elif ', code_after = ': \n\t', 
 #                           back_indent_by=0,
 # I suspect the default value of back_indent_by = 1 won't hurt in the
@@ -1005,34 +1005,31 @@ acmd = CSCmd(spoken_forms=['else if', 'else if clause',
 # Using where = -1 should solve the problem of the extra \n
 # -- DCF
 #                           code_bef = 'elif ', code_after = ': \n\t', where = -1),
-                       ContC(): c_else_if,
-                       ContPerl(): perl_else_if},
+                       contC: c_else_if,
+                       contPerl: perl_else_if},
              docstring = 'else if clause of conditional statement')
 ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['else clause', 'else'],
-             meanings={ContPy(): ActionInsertNewClause('($|\n)', 
+             meanings={contPython: ActionInsertNewClause('($|\n)', 
                           code_bef = 'else:\n\t', code_after = '', where = -1),
 # try where = -1 here as well 
-                       ContC(): c_else,
-                       ContPerl(): c_else},
+                       c_style_languages: c_else},
              docstring = 'else clause of conditional statement')
 ctrl_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['then', 'then do', 'then do the following',
                            'if body'],
-             meanings={ContPy(): py_goto_body, ContC(): c_goto_body,
-                       ContPerl(): c_goto_body},
+             meanings={contPython: py_goto_body, c_style_languages: c_goto_body},
              docstring='move to body of a conditional')
 ctrl_structures.add_csc(acmd)
 
 ##experiment succeeded a little bit QH:
 operator_cmds = CSCmdSet('operator commands',
                             description = "operator commands like equal sign")
-if equal_sign_csc:
-    acmd = CSCmd(spoken_forms=['equals', 'equal', 'is assigned', 'assign value'],
+acmd = CSCmd(spoken_forms=['equals', 'equal', 'is assigned', 'assign value'],
              meanings={ContPyInsideArguments(): ActionInsert("="),
-                       ContAny(): ActionInsert(' = ')},
-             docstring='equal sign inside or outside arguments with or without spacing')
-    operator_cmds.add_csc(acmd)
+                       contAnyLanguage: ActionInsert(' = ')},
+             docstring='equal sign inside or outside arguments with or without spacing (python)')
+operator_cmds.add_csc(acmd)
 
 # data structures (C struct, C++ and Python classes, etc.)
 
@@ -1040,11 +1037,11 @@ data_structures = CSCmdSet('data structures',
     description = 'commands for dictation of commands to define new data types')
 
 acmd = CSCmd(spoken_forms=['struct','structure','define structure','declare structure'],
-             meanings={ContC(): ActionInsert('struct ','\r\t{\n\t\n};')},
+             meanings={contC: ActionInsert('struct ','\r\t{\n\t\n};')},
                        docstring='structure definition')
 data_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['union','define union','declare union'],
-             meanings={ContC(): ActionInsert('union ','\r\t{\n\t\n};')},
+             meanings={contC: ActionInsert('union ','\r\t{\n\t\n};')},
                        docstring='union definition')
 data_structures.add_csc(acmd)
 
@@ -1058,11 +1055,11 @@ data_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['sub class of', 'inherits from', 'is subclass',
                            'is subclass of', 'with superclass',
                            'with superclasses'],
-             meanings={ContC(): cpp_subclass, ContPy(): py_subclass},
+             meanings={contC: cpp_subclass, contPython: py_subclass},
              docstring='superclasses of a class')
 data_structures.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['class body'],
-             meanings={ContC(): cpp_class_body, ContPy(): py_class_body},
+             meanings={contC: cpp_class_body, contPython: py_class_body},
              docstring='move to body of class definition')
 data_structures.add_csc(acmd)
 
@@ -1072,39 +1069,39 @@ function_definitions = CSCmdSet('function definitions',
     description = 'commands for defining new functions')
 
 acmd = CSCmd(spoken_forms=['declare method', 'add method'],
-             meanings={ContC(): c_function_declaration,
-                       ContPy(): py_method_declaration},
+             meanings={c_style_languages: c_function_declaration,
+                       contPython: py_method_declaration},
              docstring='method definition')
 function_definitions.add_csc(acmd)
 
 # SN: separated 'definition' and 'declaration' commands to support C/C++
 
 acmd = CSCmd(spoken_forms=['define function'],
-             meanings={ContC(): c_function_definition,
-                       ContPy(): py_function_declaration},
+             meanings={c_style_languages: c_function_definition,
+                       contPython: py_function_declaration},
              docstring='function definition')
 function_definitions.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['define method'],
-             meanings={ContC(): c_function_definition,
-                       ContPy(): py_method_declaration},
+             meanings={c_style_languages: c_function_definition,
+                       contPython: py_method_declaration},
              docstring='function definition')
 function_definitions.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['declare function'],
-             meanings={ContC(): c_function_declaration,
-                       ContPy(): py_function_declaration},
+             meanings={c_style_languages: c_function_declaration,
+                       contPython: py_function_declaration},
              docstring='function definition')
 function_definitions.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['add argument', 'add arguments'],
-             meanings={ContC(): c_function_add_argument,
-                       ContPy(): py_function_add_argument},
+             meanings={c_style_languages: c_function_add_argument,
+                       contPython: py_function_add_argument},
              docstring='move to end of argument list of a function call or declaration')
 
 function_definitions.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['function body', 'method body'],
-             meanings={ContC(): c_function_body, ContPy(): py_function_body},
+             meanings={c_style_languages: c_function_body, contPython: py_function_body},
              docstring='move to body of a function definition')
 function_definitions.add_csc(acmd)
 
@@ -1160,14 +1157,14 @@ misc_python.add_lsa(LSAlias(['empty tuple'], {'python': '()'}))
 misc_python.add_lsa(LSAlias(['format with'], {'python': ' % '}))
 
 acmd = CSCmd(spoken_forms=['continue statement'],
-             meanings={ContPy(): ActionInsert('\\\n', '', 
+             meanings={contPython: ActionInsert('\\\n', '', 
                                      spacing = no_space_after)},
              docstring='python continue statement on next line')
 
 misc_python_cmds.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['define in it', 'define init', 'define constructor'],
-             meanings={ContPy(): py_constructor_definition},
+             meanings={contPython: py_constructor_definition},
              docstring='constructor definition')
 
 misc_python_cmds.add_csc(acmd)
@@ -1198,7 +1195,7 @@ python_compound = CSCmdSet('Python compound statements',
     description = "commands for dictating Python-specific compound statements")
 
 acmd = CSCmd(spoken_forms=['lambda'],
-             meanings={ContPy(): ActionInsert('lambda ', ': ')},
+             meanings={contPython: ActionInsert('lambda ', ': ')},
              docstring='python lamdba function')
 python_compound.add_csc(acmd)
 
@@ -1208,11 +1205,11 @@ acmd = CSCmd(spoken_forms=['try'],
              docstring='python try statement')
 python_compound.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['except', 'except for', 'catch exceptions', 'except when', 'except clause'],
-             meanings={ContPy(): ActionInsertNewClause('($|\n)', code_bef='except ', code_after=': \n\t')},
+             meanings={contPython: ActionInsertNewClause('($|\n)', code_bef='except ', code_after=': \n\t')},
              docstring='python except statement')
 python_compound.add_csc(acmd)
 acmd = CSCmd(spoken_forms=['finally', 'finally do'],
-             meanings={ContPy(): ActionInsertNewClause('($|\n)', code_bef='finally:\n\t')},
+             meanings={contPython: ActionInsertNewClause('($|\n)', code_bef='finally:\n\t')},
              docstring='finally clause of python try statement')
 python_compound.add_csc(acmd)
 
@@ -1231,7 +1228,7 @@ python_imports_cscs.add_csc(CSCmd(spoken_forms=['from', 'from module'],
 #    from module_name import symbol_name
 #
 python_imports_cscs.add_csc(CSCmd(spoken_forms=['import'], 
-                            meanings={ContBlankLine('python'): ActionInsert('import '), ContPy(): ActionInsert(' import ')}))                            
+                            meanings={ContBlankLine('python'): ActionInsert('import '), contPython: ActionInsert(' import ')}))                            
                             
 
 # this form used for statements : import module1, module2, etc...
@@ -1262,7 +1259,7 @@ python_comparisons.add_lsa(LSAlias(['is same', 'same as', 'is same as'], {'pytho
 # Python-specific quotes
 
 python_quotes = PairedQuotes(name = 'Python-specific quotes',
-        plural_pair = ['between %s', '%s'], context = ContPy())
+        plural_pair = ['between %s', '%s'], context = contPython)
 python_quotes.add('"""', ['triple-quote', 'triple-quotes'], ['triple-quotes'], 
     no_empty = 1)
 python_quotes.add("'''", ['triple-single-quote', 'three-single-quote', 'three-single'], ['triple-single-quotes', 'three-single-quotes', 'three-singles'], 
@@ -1300,17 +1297,17 @@ python_functional = CSCmdSet('Python paired punctuation',
 
 acmd = CSCmd(spoken_forms=['tuple with elements', 'new tuple',
                            'tuple with items'],
-             meanings={ContPy(): ActionInsert('(', ')', 
+             meanings={contPython: ActionInsert('(', ')', 
                                      spacing = like_open_paren)},
              docstring='python tuple with enumerated elements')
 python_functional.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['range of'],
-             meanings={ContPy(): ActionInsert('range(', ')', 
+             meanings={contPython: ActionInsert('range(', ')', 
                                      spacing = no_space_after)},
              docstring='types range(^)')	
 acmd = CSCmd(spoken_forms=['in range of'],
-             meanings={ContPy(): ActionInsert(' in range(', ')', 
+             meanings={contPython: ActionInsert(' in range(', ')', 
                                      spacing = no_space_after)},
              docstring='types range(^)')             
 python_functional.add_csc(acmd)
@@ -1409,22 +1406,22 @@ c_preprocessor_cmds = CSCmdSet('C pre-processor',
 description = """dictating C pre-processor commands""")
 
 acmd = CSCmd(spoken_forms=['header wrapper', 'wrap header'],
-             meanings={ContC(): ActionHeaderWrapper()},
+             meanings={contC: ActionHeaderWrapper()},
              docstring='insert code template for unique #include')
 c_preprocessor_cmds.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['macro if def', 'if def', 'pound if def'],
-             meanings={ContC(): ActionInsert('#ifdef ', '\n#endif\n')},
+             meanings={contC: ActionInsert('#ifdef ', '\n#endif\n')},
              docstring='insert code template for #ifdef')
 c_preprocessor_cmds.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['macro if', 'pound if'],
-             meanings={ContC(): ActionInsert('#if ', '\n#endif\n')},
+             meanings={contC: ActionInsert('#if ', '\n#endif\n')},
              docstring='insert code template for #if')
 c_preprocessor_cmds.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['macro if N. def', 'pound if N. def', 'macro if not defined', 'pound if not defined'],
-             meanings={ContC(): ActionInsert('#ifndef ', '\n#endif\n')},
+             meanings={contC: ActionInsert('#ifndef ', '\n#endif\n')},
              docstring='insert code template for #ifndef')
 c_preprocessor_cmds.add_csc(acmd)
 
@@ -1444,25 +1441,25 @@ c_statements = CSCmdSet('C/C++ statements',
                         description = """dictating miscellaneous C/C++ statements""")
 
 acmd = CSCmd(spoken_forms=['try'],
-             meanings={ContC(): ActionInsert('try {\n\t', '\n}', 
+             meanings={contC: ActionInsert('try {\n\t', '\n}', 
                                              spacing = no_space_after)},
              docstring='insert code template for C++ try block')
 c_statements.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['catch'],
-             meanings={ContC(): ActionInsert('catch (', ') {\n\t\n}', 
+             meanings={contC: ActionInsert('catch (', ') {\n\t\n}', 
                                              spacing = no_space_after)},
              docstring='insert code template for C++ catch block')
 c_statements.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['switch'],
-             meanings={ContC(): ActionInsert('switch (', ') {\n\t\n}', 
+             meanings={contC: ActionInsert('switch (', ') {\n\t\n}', 
                                              spacing = no_space_after)},
              docstring='insert code template for C++ catch block')
 c_statements.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['case'],
-             meanings={ContC(): ActionCompound((ActionInsert('case ARG', ':\r', 
+             meanings={contC: ActionCompound((ActionInsert('case ARG', ':\r', 
                                                             spacing = no_space_after),
                                                ActionSearch(regexp='ARG', direction=-1, where=1),
                                                ActionBackspace(n_times=3)))},
@@ -1470,19 +1467,19 @@ acmd = CSCmd(spoken_forms=['case'],
 c_statements.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['default'],
-             meanings={ContC(): ActionInsert('default:\r','')}, 
+             meanings={contC: ActionInsert('default:\r','')}, 
              docstring='insert C/C++ default label (for within a switch block)')
 c_statements.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['type I. D.','type I. D. of'],
-             meanings={ContC(): ActionInsert('typeid(',')')},
+             meanings={contC: ActionInsert('typeid(',')')},
              docstring='insert typeid() operator')
 c_statements.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['template', 'define template', 'declare template',
                            'template definition', 'template declaration',
                            'new template'],
-             meanings={ContC(): cpp_template_definition},
+             meanings={contC: cpp_template_definition},
              docstring='template definition')
 data_structures.add_csc(acmd)
 
@@ -1528,24 +1525,24 @@ c_type_declarations = CSCmdSet('C/C++ type declarations',
     description = "commands for dictating types and their declarations in C and C++")
 
 acmd = CSCmd(spoken_forms=['pointer to'],
-             meanings={ContC(): ActionInsert('', '*')},
+             meanings={contC: ActionInsert('', '*')},
              docstring='insert * after cursor ("pointer to int" gives "int*"')
 c_type_declarations.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['of type'],
-             meanings={ContC(): ActionInsertNewClause(r'\w+(\s*::\s*\w*)?',
+             meanings={contC: ActionInsertNewClause(r'\w+(\s*::\s*\w*)?',
              '', '', direction= -1, where = -1, add_lines = 0)},
              docstring='position cursor before previous identifier, ready to dictate type')
 c_type_declarations.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['returning'],
-             meanings={ContC(): ActionInsertNewClause(r'\w+(\s*::\s*\w*)?(\([^\;\{\}\)]*)?',
+             meanings={contC: ActionInsertNewClause(r'\w+(\s*::\s*\w*)?(\([^\;\{\}\)]*)?',
              '', '', direction= -1, where = -1, add_lines = 0)},
              docstring='position cursor before previous function identifier (previous identifier, before any parameter list)')
 c_type_declarations.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['declare enumerator','define enumerator','enumerator','enum'],
-             meanings={ContC(): ActionCompound(
+             meanings={contC: ActionCompound(
     (ActionInsert('enum ARG',' {};'),
      ActionSearch(regexp='ARG', direction=-1, where=1),
      ActionBackspace(n_times=3)))},
@@ -1557,24 +1554,24 @@ c_type_casts = CSCmdSet('C/C++ type casts',
 
 # just use "parens" for this, don't need a separate command?
 acmd = CSCmd(spoken_forms=['cast'],
-             meanings={ContC(): ActionInsert('(', ')')},
+             meanings={contC: ActionInsert('(', ')')},
              docstring='insert parens for a C-style cast')
 c_type_casts.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['cast to'],
-             meanings={ContC(): ActionInsertNewClause(r'\w+(\s*::\s*\w*)?',
+             meanings={contC: ActionInsertNewClause(r'\w+(\s*::\s*\w*)?',
              code_bef='(', code_after=') ', direction= -1, where = -1, add_lines = 0)},
              docstring='position cursor before previous identifier, ready to dictate type to cast to')
 c_type_casts.add_csc(acmd)
 
 
 acmd = CSCmd(spoken_forms=['constant cast'],
-             meanings={ContC(): ActionInsert('const_cast<', '>()')},
+             meanings={contC: ActionInsert('const_cast<', '>()')},
              docstring='insert template text for a C++ const cast')
 c_type_casts.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['constant cast to'],
-             meanings={ContC(): ActionCompound(
+             meanings={contC: ActionCompound(
                                 (ActionInsertAround('[A-Za-z0-9_]*',
                                                     '[A-Za-z0-9_]*',
                                                     code_bef='const_cast<>(',
@@ -1584,12 +1581,12 @@ acmd = CSCmd(spoken_forms=['constant cast to'],
 c_type_casts.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['dynamic cast'],
-             meanings={ContC(): ActionInsert('dynamic_cast<', '>()')},
+             meanings={contC: ActionInsert('dynamic_cast<', '>()')},
              docstring='insert template text for a C++ dynamic cast')
 c_type_casts.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['dynamic cast to'],
-             meanings={ContC(): ActionCompound(
+             meanings={contC: ActionCompound(
                                 (ActionInsertAround('[A-Za-z0-9_]*',
                                                     '[A-Za-z0-9_]*',
                                                     code_bef='dynamic_cast<>(',
@@ -1599,12 +1596,12 @@ acmd = CSCmd(spoken_forms=['dynamic cast to'],
 c_type_casts.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['reinterpret cast'],
-             meanings={ContC(): ActionInsert('reinterpret_cast<', '>()')},
+             meanings={contC: ActionInsert('reinterpret_cast<', '>()')},
              docstring='insert template text for a C++ reinterpret cast')
 c_type_casts.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['reinterpret cast to'],
-             meanings={ContC(): ActionCompound(
+             meanings={contC: ActionCompound(
                                 (ActionInsertAround('[A-Za-z0-9_]*',
                                                     '[A-Za-z0-9_]*',
                                                     code_bef='reinterpret_cast<>(',
@@ -1614,12 +1611,12 @@ acmd = CSCmd(spoken_forms=['reinterpret cast to'],
 c_type_casts.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['static cast'],
-             meanings={ContC(): ActionInsert('static_cast<', '>()')},
+             meanings={contC: ActionInsert('static_cast<', '>()')},
              docstring='insert template text for a C++ static cast')
 c_type_casts.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['static cast to'],
-             meanings={ContC(): ActionCompound(
+             meanings={contC: ActionCompound(
                                 (ActionInsertAround('[A-Za-z0-9_]*',
                                                     '[A-Za-z0-9_]*',
                                                     code_bef='static_cast<>(',
@@ -1637,19 +1634,19 @@ description = """Special navigational commands for C/C++""")
 # it would be nicer if this could look backwards...
 
 acmd = CSCmd(spoken_forms=['public member','new public member', 'public members'],
-             meanings={ContC(): ActionSearch(regexp='public:\s*?($|\n)( \t)*',
+             meanings={contC: ActionSearch(regexp='public:\s*?($|\n)( \t)*',
                                              direction=1, where=1)},
              docstring='move to public members')
 c_navigation.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['private member','new private member', 'private members'],
-             meanings={ContC(): ActionSearch(regexp='private:',
+             meanings={contC: ActionSearch(regexp='private:',
                                              direction=1, where=1)},
              docstring='move to private members')
 c_navigation.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['protected member','new protected member', 'protected members'],
-             meanings={ContC(): ActionSearch(regexp='protected:',
+             meanings={contC: ActionSearch(regexp='protected:',
                                              direction=1, where=1)},
              docstring='move to protected members')
 c_navigation.add_csc(acmd)

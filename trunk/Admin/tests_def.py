@@ -34,18 +34,18 @@ import time
 import posixpath
 import unittest
 from pyUnitExample import SampleTestCase
-import TestCaseWithHelpersTest
+##import TestCaseWithHelpersTest
 import NavigationWithinBufferTest
 import MediatorConsoleWXTests
+import CSCmd
 
-import actions_C_Cpp, actions_py, CmdInterp, CSCmd, cont_gen, EdSim
+import actions_C_Cpp, actions_py, CmdInterp, cont_gen, EdSim
 import Object, SymDict, test_pseudo_python, test_pseudo_C_Cpp
 import util, unit_testing, vc_globals, WhatCanISayTest, wxWindowsWithHelpersTest
 import AppMgr, RecogStartMgr, GramMgr, sr_grammars
 import KnownTargetModule, NewMediatorObject, TargetWindow, WinIDClient
 import test_helpers
-import CmdInterpTest, ContBlankLineTest, SwitchBufferTest, SymDictTest
-import ContPyInsideArgumentsTest
+import CmdInterpTest, ContBlankLineTest, SymDictTest, SwitchBufferTest
 import ContLanguageTest
 import debug
 import DiffCrawler
@@ -62,6 +62,12 @@ from cont_gen import *
 from exceptions import Exception
 import SymbolResultTest
 
+# language context instances:
+for lang in all_languages:
+   exec('cont%s = ContLanguage("%s")'% (lang.capitalize(), lang))
+contAnyLanguage = ContLanguage(all_languages)
+contCStyleLanguage = ContLanguage(c_style_languages)
+
 
 if_else_c = vc_globals.test_data + os.sep + 'ifelse.c'
 small_buff_c = vc_globals.test_data + os.sep + 'small_buff.c'
@@ -77,13 +83,46 @@ VoiceCodeRootTest.foreground_py = foreground_py
 # Testing the test harness
 ##############################################################################
 
+def Add_test(name, desc):
+    """one way call to the add_test function
 
-def test_TestCaseWithHelpers():
-    unittest.TextTestRunner(). \
-       run(unittest.makeSuite(TestCaseWithHelpersTest.TestCaseWithHelpersTest, 'test')) 
+    assume name + Test == test case module and class
+    """
+    test_name = name
+    mod_name =  name + "Test"
+    try:
+        module = __import__(name+"Test")
+    except ImportError:
+        print '****cannot import test module, skipping test: %s'% mod_name
+        return
+   
+    test_class_name = mod_name
+    try:
+        test_class = getattr(module, test_class_name)
+    except AttributeError:
+        print '****cannot find test class in test module, skipping test: %s'% test_class_name
+        return
 
-add_test('TestCaseWithHelpers', test_TestCaseWithHelpers, 
-         desc='Test the unit testing framework.')
+   
+    def test_function():
+        unittest.TextTestRunner(). \
+             run(unittest.makeSuite(test_class, 'test')) 
+
+    add_test(test_name, test_function, desc=desc)
+   
+   
+Add_test('TestCaseWithHelpers', 'Test the unit testing framework')
+Add_test('CSCmd', 'Test the CSCcmd internals')
+Add_test('nonexisting', 'dummy')
+Add_test('Context', 'Test contexts and their possible conflicts')
+Add_test('ContPyInsideArguments', 'Test Py context inside or outside arguments')
+
+## def test_TestCaseWithHelpers():
+##     unittest.TextTestRunner(). \
+##        run(unittest.makeSuite(TestCaseWithHelpersTest.TestCaseWithHelpersTest, 'test')) 
+
+## add_test('TestCaseWithHelpers', test_TestCaseWithHelpers, 
+##          desc='Test the unit testing framework.')
 
 
 ##############################################################################
@@ -225,9 +264,10 @@ def test_CmdInterp_mediator(temp_config):
     a_mediator = temp_config.mediator()
     app = temp_config.editor()
     interp = temp_config.interpreter()
-    acmd = CSCmd.CSCmd(spoken_forms=['for', 'for loop'], meanings={ContC(): c_simple_for, ContPy(): py_simple_for})
+    acmd = CSCmd.CSCmd(spoken_forms=['for', 'for loop'], meanings={contC: c_simple_for, 
+                                                                   contPython: py_simple_for})
     a_mediator.add_csc(acmd)
-    acmd = CSCmd.CSCmd(spoken_forms=['loop body', 'goto body'], meanings={ContC(): c_goto_body, ContPy(): py_goto_body})
+    acmd = CSCmd.CSCmd(spoken_forms=['loop body', 'goto body'], meanings={contC: c_goto_body, contPython: py_goto_body})
     a_mediator.add_csc(acmd)    
     app.open_file(small_buff_c)
     app.goto(41)
@@ -300,6 +340,21 @@ add_test('SourceBuff', test_SourceBuff,
          desc='Unit tests for the SourceBuff class and subclasses.')
 
 
+##############################################################################
+# Testing CSCmd 
+##############################################################################
+
+
+
+## def test_CSCmd():
+##     unittest.TextTestRunner(). \
+##        run(unittest.makeSuite(CSCmdTest.CSCmdTest,
+##                               'test'))
+
+## add_test('CSCmd', test_CSCmd, 
+##          desc='Tests for CSCmds.')
+
+
 
 ##############################################################################
 # Testing context objects
@@ -314,14 +369,6 @@ add_test('ContBlankLine', test_ContBlankLine,
          desc='Tests for the blank line context class.')
 
     
-
-def test_ContPyInsideArguments():
-    unittest.TextTestRunner(). \
-       run(unittest.makeSuite(ContPyInsideArgumentsTest.ContPyInsideArgumentsTest,
-                              'test'))
-
-add_test('ContPyInsideArguments', test_ContPyInsideArguments, 
-         desc='Tests for being inside the argument list of a function.')
 
 def test_ContLanguage():
     unittest.TextTestRunner(). \
