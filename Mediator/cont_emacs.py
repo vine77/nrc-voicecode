@@ -29,9 +29,9 @@ import re
 class ContEmacs(Context):
     """This context applies iif we are connected to Emacs."""
 
-    def __init__(self, **attrs):        
-        self.deep_construct(ContEmacs, {},
-                            attrs)
+    def __init__(self, **attrs):
+        super(ContEmacs, self).__init__(attrs)
+
        
     def _applies(self, app, preceding_symbol = 0):
 
@@ -80,9 +80,9 @@ class ContEmacsInBuffNamed(Context):
     """This context applies iif the cursor is in an Emacs buffer whose
     name matches *self.name*"""
 
-    def __init__(self, name, **attrs):        
-        self.deep_construct(ContEmacsInBuffNamed, {'name': name},
-                            attrs)
+    def __init__(self, name, **attrs):
+        self.name = name
+        super(ContEmacsInBuffNamed, self).__init__(attrs)
        
     def _applies(self, app, preceding_symbol = 0):
        answer = 0

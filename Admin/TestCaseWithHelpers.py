@@ -14,7 +14,7 @@ import re
 import string
 import types
 import unittest
-
+from pprint import pformat
 
 import debug
 
@@ -106,7 +106,8 @@ class TestCaseWithHelpers(unittest.TestCase):
     def assert_equal_sequence(self, expected, got, mess="", epsilon=0):
         debug.trace('TestCaseWithHelpers.assert_equal_sequence', 
                     "** expected=%s, got=%s" % (expected, got))
-        mess = mess + "\n----\nThe two sequences differred\nExpected sequence:\n   %s\nGot sequence:\n   %s" % (repr(expected), repr(got))
+        mess = mess + "\n----\nThe two sequences differred\nExpected sequence:\n   %s\nGot sequence:\n   %s" % \
+               (pformat(expected), pformat(got))
         
         self.assert_equal(len(expected), len(got), mess + "\nThe two sequences did not have the same length.")
         
@@ -121,7 +122,7 @@ class TestCaseWithHelpers(unittest.TestCase):
         got_keys.sort()
         
         mess = mess + "\n----\nThe two dictionaries differed"
-        mess = mess + "\nExpected:\n   %s\nGot:\n   %s" % (expected, got)
+        mess = mess + "\nExpected:\n   %s\nGot:\n   %s" % (pformat(expected), pformat(got))
         
         # NOTE: Keys must be exactly equal, even if epsilon is greater than 0.
         self.assert_equal(expected_keys, got_keys, 
@@ -162,7 +163,7 @@ class TestCaseWithHelpers(unittest.TestCase):
 
     def assert_sequences_have_same_length(self, expected, got, mess):
         display_both_lists_mess = \
-           "\nExpected list:\n   %s\nGot list:\n   %s" % (repr(expected), repr(got))
+           "\nExpected list:\n   %s\nGot list:\n   %s" % (pformat(expected), pformat(got))
         
         if len(expected) != len(got):  
            self.fail(mess + "\nExpeted sequence of length %s, but got sequence of length %s" 

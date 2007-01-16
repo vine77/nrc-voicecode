@@ -25,6 +25,7 @@ import copy
 from Object import Object
 from debug import trace, config_warning
 import Context
+from cont_gen import ContLanguage
 
 class DuplicateContextKeys(RuntimeError):
     def __init__(self, msg):
@@ -266,9 +267,26 @@ class CSCmdDict(Object):
 
         *none*
         """
-        duplicates = []
+        self.duplicates = []
         for context, action in meanings.items():
+            if isinstance(context, (tuple, basestring)):
+                # a tuple or string means do a language context on the languages in the tuple:
+                context = ContLanguage(context)
+                
+            self._add_a_meaning(context, action)    
+        if self.duplicates:
+            msg = "Duplicate contexts\n"
+            for original, duplicate in duplicates:
+                msg = msg + "Contexts %s and %s" % (self.contexts[key], context)
+                msg = msg + \
+                    "\nhave the same key %s\n" % context.equivalence_key()
+            raise DuplicateContextKeys(msg)
+        del self.duplicates 
+
+    def _add_a_meaning(self, context, action):
+            """add one meaning to the """
             key = context.equivalence_key()
+
             if not key in self.contexts.keys():
                 scope = context.scope()
                 if not Context.valid_scope(scope):
@@ -282,14 +300,9 @@ class CSCmdDict(Object):
                 self.contexts[key] = context
                 self.actions[key] = action
             else:
-                duplicates.append((self.contexts[key], context))
-        if duplicates:
-            msg = "Duplicate contexts\n"
-            for original, duplicate in duplicates:
-                msg = msg + "Contexts %s and %s" % (self.contexts[key], context)
-                msg = msg + \
-                    "\nhave the same key %s\n" % context.equivalence_key()
-            raise DuplicateContextKeys(msg)
+                self.duplicates.append((self.contexts[key], context))
+
+
 
     def merge(self, cmd_dict):
         """merges another CSCmdDict into this one

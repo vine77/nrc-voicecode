@@ -28,7 +28,6 @@ from debug import trace, config_warning, trace_is_active
 from actions_C_Cpp import *
 from actions_py import *
 from AppState import AppState
-from cont_gen import ContC, ContPy
 from CSCmd import CSCmd, DuplicateContextKeys
 from Object import Object, OwnerObject
 import SymDict

@@ -19,10 +19,10 @@
 #
 ##############################################################################
 
-from Object import Object
 import sys
+from debug import virtual, trace
 
-class Context(Object):
+class Context(object):
     """Base class for all application contexts.
 
     This virtual class is the base class for all context objects.
@@ -40,12 +40,64 @@ class Context(Object):
     *none* -- 
     """
     
-    def __init__(self, doc_string=None, doc_topics=[], **attrs):
-        self.deep_construct(Context,
-                            {'doc_string': doc_string,\
-                             'doc_topics': doc_topics},
-                            attrs)
+    def __init__(self, doc_string=None, doc_topics=None, **attrs):
+        self.doc_string = doc_string
+        if doc_topics == None:
+            self.doc_topics = []
+        else:
+            self.doc_topics = doc_topics
+        for key, val in attrs.items():
+            setattr(self, key, val)
+            
 
+    def conflicts_with(self, other_context):
+        """Checks if contexts conflict.
+
+        1. If the class is equal, check for overlaps_with, which defaults to True.
+        See ContLanguage
+
+        2. if scopes differ they do not overlap
+
+        3. If the classes are in equal branches (ie one is subclass of the other) call
+        overlaps_with, from the instance that is highest on the tree (QH most super)
+
+        """
+        # equal classes always have same scope so test other_context directly:
+        trace('Context.conflicts_with', 'self is: %s'% repr(self))
+        trace('Context.conflicts_with', 'other_context is: %s'% repr(self))
+        if self.__class__ == other_context.__class__:
+            return self.overlaps_with(other_context)
+        scope1 = self.scope()
+        scope2 = other_context.scope()
+        trace('Context.conflicts_with', 'scope of self: "%s", scope of other: "%s"'% \
+              (scope1,scope2))
+        
+        if self.scope() != other_context.scope():
+            return
+
+        if isinstance(other_context, self.__class__):
+            # other_context is either same class or subclass of self
+            # So we can ask self if it overlaps with other_context
+            trace('Context.conflicts_with', 'calling overlaps_with with other_context')
+            return self.overlaps_with(other_context)       
+        elif isinstance(self, other_context.__class__):
+            # self is subclass of other_context. So ask other_context
+            # if it overlaps with self
+            trace('Context.conflicts_with', 'calling overlaps_with with self')
+            return other_context.overlaps_with(self)
+
+    def overlaps_with(self, other_context):
+        """Check if this context overlaps with another
+         
+          Note: We assume that other_context is on the same branch
+          of the inheritance hierarchy as self, i.e. it is either
+          same class, or a descendant of self.
+
+          in QH words: other_context is same class as self, or a subclass of self
+
+        """
+        return True
+      
 
     def scope(self):
         """returns a string indicating the scope of this context.
@@ -74,7 +126,7 @@ class Context(Object):
 
         *STR* -- the string identifying the scope
         """
-        debug.virtual('Context.scope')
+        return virtual('Context.scope')
 
     def equivalence_key(self):
         """returns a key used to separate Context instances into
@@ -107,7 +159,8 @@ class Context(Object):
 
         *STR* -- the key
         """
-        debug.virtual('Context.equivalence_key')
+        # should never instantiate Context itself, and always overload this method
+        virtual('Context.equivalence_key')
 
     def applies(self, app, preceding_symbol = 0):        
         """Returns *true* iif the context applies given current state
@@ -159,9 +212,10 @@ class Context(Object):
         at the current cursor position before the action corresponding
         to this context was executed.  
         
-        .. [AppState] file:///./AppState.AppState.html"""
-        
-        debug.virtual('Context._applies')
+        .. [AppState] file:///./AppState.AppState.html
+        """
+        # should never instantiate Context directly, always overload this method        
+        virtual('Context._applies')
 
 #    Currently, the recognized return values for scope, in order of
 #    decreasing specificity, are: 
