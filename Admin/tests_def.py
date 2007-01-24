@@ -1424,6 +1424,8 @@ add_test('SymDict_storage', test_SymDict_storage,
 # Testing redundant translation of LSAs and symbols
 ##############################################################################
 
+add_unittest('LessThanGreaterThan', 'testing variants of less than and greater than')
+
 def test_redundant_translation():
     global small_buff_c
 
@@ -4624,7 +4626,7 @@ add_test('profile_config', test_profile_config,
 # Use this to create temporary tests
 ##############################################################################
 
-add_unittest('Temp', desc='Temp test less than greater than less-than greater-than')
+##add_unittest('Temp', desc='Temp test less than greater than less-than greater-than')
 
 def test_temporary():
     testing.init_simulator_regression()
