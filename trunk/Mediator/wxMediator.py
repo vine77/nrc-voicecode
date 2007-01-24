@@ -54,6 +54,8 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="off",
                     active_traces={\
+                                    'gotResults': 1,
+                                    'CmdInterp.interp': 1,
 ##                                   'WhatCanISay.index_cscs': 1,
 ##                                   'Context.conflicts_with': 1,
 ##                                   'ContLanguage.overlaps_with': 1,
