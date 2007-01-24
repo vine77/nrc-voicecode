@@ -4624,7 +4624,7 @@ add_test('profile_config', test_profile_config,
 # Use this to create temporary tests
 ##############################################################################
 
-add_unittest('Temporary', desc='Temp rest less than sign')
+add_unittest('Temp', desc='Temp test less than greater than less-than greater-than')
 
 def test_temporary():
     testing.init_simulator_regression()
