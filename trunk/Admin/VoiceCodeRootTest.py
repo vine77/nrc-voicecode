@@ -47,6 +47,7 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       return  self._mediator_testing_namespace().namespace()['commands'] 
       
    def _say(self, utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0, echo_cmd=0):
+      self.assert_(isinstance(utterance, list), "_say: utterance should be a list, not: %s" % repr(utterance))
       self._commands().say(utterance, user_input, never_bypass_sr_recog, echo_utterance, echo_cmd)
       
    def _open_empty_test_file(self, file_name):

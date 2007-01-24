@@ -1,8 +1,13 @@
 import debug
 import VoiceCodeRootTest
 
-class TempTest(VoiceCodeRootTest.VoiceCodeRootTest):
-     
+class LessThanGreaterThanTest(VoiceCodeRootTest.VoiceCodeRootTest):
+    """Tests the various possibilities of less than and greater than
+
+    In different versions of NatSpeak or with different vocabularies
+    difference results seem to happen
+    """
+    
     def __init__(self, name):
         VoiceCodeRootTest.VoiceCodeRootTest.__init__(self, name)
     
@@ -24,7 +29,8 @@ class TempTest(VoiceCodeRootTest.VoiceCodeRootTest):
         self._open_empty_test_file('blah.py')
         self._insert_in_active_buffer("hello\n")
         self._assert_active_buffer_content_is('hello\n<CURSOR>')
-        self._say(["variable", "equals", "three"])
-        self._assert_active_buffer_content_is('hello\nvariable = 3<CURSOR>')
+        self._say(["variable", "less", "than", "three"])
+        self._assert_active_buffer_content_is('hello\nvariable = 4<CURSOR>')
+
 
 
