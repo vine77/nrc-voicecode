@@ -276,8 +276,8 @@ class CSCmdDict(Object):
             self._add_a_meaning(context, action)    
         if self.duplicates:
             msg = "Duplicate contexts\n"
-            for original, duplicate in duplicates:
-                msg = msg + "Contexts %s and %s" % (self.contexts[key], context)
+            for original, duplicate in self.duplicates:
+                msg = msg + "Contexts %s and %s" % (original, duplicate)
                 msg = msg + \
                     "\nhave the same key %s\n" % context.equivalence_key()
             raise DuplicateContextKeys(msg)

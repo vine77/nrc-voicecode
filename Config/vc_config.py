@@ -249,8 +249,8 @@ std_US_punc.add("<", ['less-than'])
 std_US_punc.add(">", ['greater-than'])
 
 # QH: for version 9 apparently needed:
-std_US_punc.add("<", ['less than'])
-std_US_punc.add(">", ['greater than'])
+## std_US_punc.add("<", ['less than'])
+## std_US_punc.add(">", ['greater than'])
 
 std_US_punc.add("=", ['equal-sign'])
 std_US_punc.add('?', ['question-mark'], no_spaces)
