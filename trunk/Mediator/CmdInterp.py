@@ -84,9 +84,7 @@ class LSAlias(Object):
 
     *{STR: STR}* meanings -- Dictionary of language specific
      meanings. Key is the language name and value is the written form
-     of the LSA for that langugage. If language name is *None*, then
-     it means that this LSA applies for all languages (I know, it
-     doesn't make much sense syntactically).
+     of the LSA for that langugage. The key None is not permitted any more...
 
     *INT* spacing -- spacing flags, from SpacingState (Note: only a
     handful of these spacing flags are currently used)
@@ -107,10 +105,8 @@ class LSAlias(Object):
 
         *{STR: STR}* meanings -- Dictionary of language specific
          meanings. Key is the language name and value is the written form
-         of the LSA for that langugage. If language name is *None*, then
-         it means that this LSA applies for all languages (I know, it
-         doesn't make much sense syntactically).
-
+         of the LSA for that langugage. The key None is not permitted any more.
+         
         *INT* spacing -- spacing flags, from SpacingState (CURRENTLY
         IGNORED BUT MUST BE SPECIFIED PROPERLY TO INSURE FUTURE
         COMPATABILITY)
@@ -132,7 +128,7 @@ class LSAlias(Object):
 
         for language, written_as in meanings.items():
             if language == None:
-                raise DeprecationError('LSAlias with language "None" isdeprecated,\n'
+                raise DeprecationError('LSAlias with language "None" is deprecated,\n'
                                        'use the vc_globals variable  "all_languages" instead')
             if isinstance(language, tuple):
                 for lang in language:
@@ -1825,7 +1821,7 @@ class CmdInterp(OwnerObject):
             # specific, i.e.
             #
             # - CSCs usually apply in very restricted contexts only
-            # - LSAs usually apply for a specific language only
+            # - LSAs  apply for a specific language only
             # - Symbols are restricted to sequences of words that are the
             #   spoken form of a known symbol
             # - ordinary words can be anything

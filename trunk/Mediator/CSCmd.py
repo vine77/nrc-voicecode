@@ -32,7 +32,7 @@ class DuplicateContextKeys(RuntimeError):
         RuntimeError.__init__(self, msg)
         self.msg = msg
 
-class CSCmd(Object):
+class CSCmd(object):
     """Class for Context Sensitive Commands (CSCs).
 
     A CSC is a phrase which, when uttered into an application, may
@@ -61,7 +61,7 @@ class CSCmd(Object):
     .. [Context] file:///./Context.Context.html
     .. [Action] file:///./Action.Action.html"""
         
-    def __init__(self, spoken_forms=[], meanings={}, docstring=None, 
+    def __init__(self, spoken_forms=None, meanings=None, docstring=None, 
                  generate_discrete_cmd = 0, **attrs):
         """
         **INPUTS**
@@ -79,18 +79,18 @@ class CSCmd(Object):
 
         *STR docstring* -- string documentating the command
         """
-        self.deep_construct(CSCmd,
-                            {'spoken_forms': spoken_forms,
-                             'meanings': CSCmdDict(meanings, generate_discrete_cmd),
-                             'generate_discrete_cmd': generate_discrete_cmd,
-                             'docstring': docstring
-                            },
-                            attrs)
+        self.spoken_forms = spoken_forms or []
+        meanings = meanings or {}
+        self.meanings = CSCmdList(meanings, generate_discrete_cmd)
+        self.docstring = docstring
+        self.description = ""   # should come from CSCmdSet...
+        for key, val in attrs.items():
+            setattr(self, key, val)
 
     def get_meanings(self):
-        """returns a copy of the internal CSCmdDict object.
+        """returns the reference of the meanings list...
         """
-        return self.meanings.clone()
+        return self.meanings
 
     def applies(self, app, preceding_symbol = 0):
         """test whether any of its contexts applies, and returns
@@ -169,23 +169,15 @@ class CSCmd(Object):
                 new_spoken.append(spoken)
         self.spoken_forms = new_spoken
 
-class CSCmdDict(Object):
+class CSCmdList(list):
     """underlying class used to store CSCmd context and action data 
     internally for CSCmd and also once the commands have been indexed 
     within CmdInterp.
     
     **INSTANCE ATTRIBUTES**
 
-    *{STR: [STR]} by_scope* -- map from scope names to keys of 
-    (context, action) pairs with that scope.
-        
-    *contexts=*{* STR: Context *}* -- Dictionary of contexts in which
-    this command applies.  The key is a string returned by
-    Context.equivalence_key (see Context for details).
-
-    *actions=*{* STR: Action *}* -- Dictionary of actions to take in
-    the corresponding context.  The key is a string returned by
-    Context.equivalence_key (see Context for details).
+    self (the list) will be populated by (context, action) tuples, which are sorted
+    at define time by scope, classname and equivalence key
     
     *BOOL generate_discrete_cmd=0* -- If true, then a command should be 
     added to the discrete commands grammar for CSCs.
@@ -199,45 +191,32 @@ class CSCmdDict(Object):
         
     def __init__(self, meanings={}, generate_discrete_cmd=0, **attrs):
         """
-        **INPUTS**
 
-        *BOOL generate_discrete_cmd* -- If true, then a command should be 
-    added to the discrete commands grammar for CSCs.
-
-        *meanings=*{* [Context] *: * [Action] *}* -- Dictionary of
-        possible contextual meanings for this command. Key is a context
-        and value is an action object to be fired if that context applies.
         """           
-        self.deep_construct(CSCmdDict,
-                            {'generate_discrete_cmd': generate_discrete_cmd,
-                             'by_scope': {},
-                             'contexts': {}, 
-                             'actions': {}
-                            },
-                            attrs)
+        self.generate_discrete_cmd = generate_discrete_cmd
         self._add_meanings(meanings)        
 
     def clone(self):
-        """returns a mixed deep-shallow copy of the object.  The
-        object's dictionaries are not shared, but the Context and Action
-        objects in those dictionaries are.
-
-        **INPUTS**
-
-        *none*
-
+        """returns a mixed deep-shallow copy of the object.  
         **OUTPUTS**
 
-        *CSCmdDict* -- the copy
+        *CSCmdList* -- the copy
         """
-        meanings = self._extract_meanings()
-        generate_discrete_cmd = self.generate_discrete_cmd
-        return CSCmdDict(meanings, generate_discrete_cmd)
+        return copy.copy(self)
+
+    def get_visible_list(self):
+        """return a list with the visible items: scope|equivalencekey|actiondoc"""
+        visible = []
+        for context, action in self:
+            vis = '%s||%s||%s'% (context.scope(), context.equivalence_key(), action.doc())
+            visible.append(vis)
+        return visible
+    
 
     def _extract_meanings(self):
         """private method which converts the actions and contexts from a
-        CSCmdDict back into the meanings argument expected by the
-        constructor and by _add_meanings
+        CSCmdDict back into the meanings (Dict) argument expected by the
+        constructor and by _add_meanings, trivial now list is used
 
         **INPUTS**
 
@@ -250,9 +229,11 @@ class CSCmdDict(Object):
         and value is an action object to be fired if that context applies.
         """
         meanings = {}
-        for key, context in self.contexts.items():
-            meanings[context] = self.actions[key]
+        for context, action in self:
+            
+            meanings[context] = action
         return meanings
+    
         
     def _add_meanings(self, meanings):
         """private method which adds new meanings to the dictionary
@@ -272,51 +253,39 @@ class CSCmdDict(Object):
             if isinstance(context, (tuple, basestring)):
                 # a tuple or string means do a language context on the languages in the tuple:
                 context = ContLanguage(context)
-                
-            self._add_a_meaning(context, action)    
-        if self.duplicates:
-            msg = "Duplicate contexts\n"
-            for original, duplicate in self.duplicates:
-                msg = msg + "Contexts %s and %s" % (original, duplicate)
-                msg = msg + \
-                    "\nhave the same key %s\n" % context.equivalence_key()
-            raise DuplicateContextKeys(msg)
-        del self.duplicates 
+            self._add_a_meaning(context, action)
+
+        self._sort_meanings()
+            
 
     def _add_a_meaning(self, context, action):
             """add one meaning to the """
-            key = context.equivalence_key()
-
-            if not key in self.contexts.keys():
-                scope = context.scope()
-                if not Context.valid_scope(scope):
-                    msg = "Scope %s of context %s\n" % (scope, context)
-                    msg = msg + "\nis unknown\n"
-                    raise RuntimeError(msg)
-                try:
-                    self.by_scope[scope].append(key)
-                except KeyError:
-                    self.by_scope[scope] = [key]
-                self.contexts[key] = context
-                self.actions[key] = action
-            else:
-                self.duplicates.append((self.contexts[key], context))
+            for prev_context, prev_action in self:
+                if prev_context.conflicts_with(context):
+                    msg = "Trying to define conflicting contexts\n" \
+                          "first:  %s (scope: %s, equivalence_key: %s)\n" \
+                          "second: %s (scope: %s, equivalence_key: %s)"% \
+                          (prev_context.__class__, prev_context.scope(), prev_context.equivalence_key(),
+                           context.__class__, context.scope(), context.equivalence_key())
+                    raise DuplicateContextKeys(msg)
+            # no conflicts, just add to the list:
+            self.append((context, action))
 
 
 
-    def merge(self, cmd_dict):
-        """merges another CSCmdDict into this one
-
-        **INPUTS**
-
-        *CSCmdDict cmd_dict* -- the other command dictionary
-
-        **OUTPUTS**
-
-        *none*
+    def merge(self, cscmd_list):
+        """merges another CSCmdList into this one
         """
+        for context, action in cscmd_list:
+            self._add_a_meaning(context, action)
 
-        self._add_meanings(cmd_dict._extract_meanings())
+    def _sort_meanings(self):
+        """sort by scope and classname and equivalence key"""
+        decorated = [(context.scope_number(), context.__class__, context.equivalence_key(), context, action) for
+                     context, action in self]
+        decorated.sort()
+        self = [(context, action) for (a,b,c, context, action) in decorated]
+        
 
     def applies(self, app, preceding_symbol = 0):
         """test whether any of its contexts applies, and returns
@@ -344,19 +313,14 @@ class CSCmdDict(Object):
         # applies
         #
 #        print '-- CSCmd.interpret: self.meanings=%s' % self.meanings
-        scopes = Context.scope_order()
-        for scope in scopes:
-            try:
-                keys = self.by_scope[scope]
-                applicable_keys = []
-                meanings = []
-                for key in keys:
-                    if self.contexts[key].applies(app, preceding_symbol):
-                        applicable_keys.append(key)
-                if applicable_keys:
-                    return map(lambda k: \
-                                  (self.contexts[k], self.actions[k]),
-                               applicable_keys)
-            except KeyError:
-                pass
-        return None
+        last_scope = -1
+        result = []
+        for context, action in self:
+            if result and context.scope_number() > last_scope:
+                return result
+            last_scope = context.scope_number()
+            if context.applies(app, preceding_symbol):
+                result.append((context, action))
+                
+        return result or None
+    

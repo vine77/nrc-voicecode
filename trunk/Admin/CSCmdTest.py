@@ -107,40 +107,32 @@ class CSCmdTest(VoiceCodeRootTest.VoiceCodeRootTest):
 
     def test_This_is_how_you_collect_all_the_CSC_commands(self):
          interp = CmdInterp()
-
+         contAny = ContAny()
+         actionHello = ActionInsert("hello")
+         contBlankLine = ContBlankLine()
+         actionThere = ActionInsert("there")
+         actionOtherwise = ActionInsert("there otherwise")
          interp.add_csc(CSCmd(spoken_forms=['hello'],
-                                     meanings={ContAny(): ActionInsert("hello")},
+                                     meanings={contAny: actionHello},
                                      docstring="hello"))
          
          interp.add_csc(CSCmd(spoken_forms=['there'],
-                                     meanings={ContBlankLine(): ActionInsert("there"),
-                                                  ContAny(): ActionInsert("there otherwise")},
+                                     meanings={contBlankLine: actionThere,
+                                               contAny: actionOtherwise},
                                      docstring="there on blankline or otherwise"))
          
          wTrie = interp.commands
-         expected = [(['hello'], ActionInsert("hello")),
-                            (['there'], ActionInsert("there"))]
-         for spoken, cscmddict in wTrie.items():
-             contexts_dict = cscmddict.contexts
-             by_scope_dict = cscmddict.by_scope
-             actions_dict = cscmddict.actions
+         for spoken, cscmd_list in wTrie.items():
+             
              if spoken == ['hello']:
-                 contexts_expected = {"Any": ContAny()}
-                 by_scope_expected = {'global': ['Any']}
-                 actions_expected = {"Any": ActionInsert("hello")}
+                 cscmd_list_expected = ["global||Any||Inserts 'hello^' in current buffer"]
              elif spoken == ['there']:
-                 contexts_expected = {"BlankLine: any": ContBlankLine(),
-                                             "Any": ContAny()}
-                 by_scope_expected = {'global': ['Any'], 'immediate': ['BlankLine: any']}
-                 actions_expected = {"Any": ActionInsert("there otherwise"),
-                                          "BlankLine: any": ActionInsert("there")}
-
-             self.assert_equal(contexts_expected, contexts_dict,
-                                 'wTrie CSCmdDict meanings **contexts dict** with spoken form "%s" is not as expected'% repr(spoken))
-             self.assert_equal(by_scope_expected, by_scope_dict,
-                                 'wTrie CSCmdDict meanings **by_scope dict** with spoken form "%s" is not as expected'% repr(spoken))
-             self.assert_equal(actions_expected, actions_dict,
-                                 'wTrie CSCmdDict meanings **action dict** with spoken form "%s" is not as expected'% repr(spoken))
+                 cscmd_list_expected = ["immediate||BlankLine: any||Inserts 'there^' in current buffer",
+                                        "global||Any||Inserts 'there otherwise^' in current buffer"]
+             
+             visible_list = cscmd_list.get_visible_list()
+             self.assert_equal(cscmd_list_expected, visible_list,
+                               'wTrie CSCmdList of meanings with spoken form "%s" is not as expected'% repr(spoken))
              
 
 ##########################################################
