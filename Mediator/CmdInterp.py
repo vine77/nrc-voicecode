@@ -24,6 +24,7 @@ import copy, traceback
 import debug
 
 import actions_gen, auto_test, vc_globals
+from vc_globals import *
 from debug import trace, config_warning, trace_is_active
 from actions_C_Cpp import *
 from actions_py import *
@@ -130,7 +131,23 @@ class LSAlias(Object):
                             args)
 
         for language, written_as in meanings.items():
-            self.meanings[language] = written_as
+            if language == None:
+                raise DeprecationError('LSAlias with language "None" isdeprecated,\n'
+                                       'use the vc_globals variable  "all_languages" instead')
+            if isinstance(language, tuple):
+                for lang in language:
+                    if lang in all_languages:
+                        self.meanings[language] = written_as
+                    else:
+                        raise ValueError('invalid language "%s" in LSA definition (with: "%s"), spoken_forms: %s'%
+                                         (lang, repr(language), spoken_forms))
+            else:
+                if language in all_languages:
+                    self.meanings[language] = written_as
+                else:
+                    raise ValueError('invalid language "%s" in LSA definition with spoken_forms: %s'%
+                                     (language, spoken_forms))
+                
 
 class AliasMeaning(DeferInterp, symbol_formatting.SymElement):
     """underlying object used by CmdInterp to store the data associated 
@@ -301,6 +318,7 @@ class CapsModifier(DeferInterp):
         **INPUTS**
 
         BOOL *preceding_symbol* indicates if there is already
+
         untranslated text (LSAs generating digits should be interpreted
         immediately if there is no pending text, because digits cannot
         start a symbol name)
@@ -1327,7 +1345,7 @@ class CmdInterp(OwnerObject):
                              'commands': WordTrie.WordTrie(), 
                              'known_symbols': None, 
                              'language_specific_aliases': \
-                                 {None: WordTrie.WordTrie()}, 
+                                 {}, 
                              'builder_factory':
                                  symbol_formatting.SymBuilderFactory(), 
                              'state_interface': None, 
@@ -1345,6 +1363,7 @@ class CmdInterp(OwnerObject):
                 
     def supported_languages(self):
         languages = self.language_specific_aliases.keys()
+        languages.sort()
         return languages
                 
     #inserted from what_can_i_say:
@@ -1780,12 +1799,6 @@ class CmdInterp(OwnerObject):
             if aliases.has_key(language):
                 chopped_LSA, LSA_consumes = \
                     self.chop_LSA_phrase(phrase_str, aliases[language])
-            chopped_generic_LSA, generic_LSA_consumes = \
-                self.chop_LSA_phrase(phrase_str, aliases[None])
-
-            if LSA_consumes < generic_LSA_consumes:
-                chopped_LSA = chopped_generic_LSA
-                LSA_consumes = generic_LSA_consumes
 
             chopped_symbol, symbol_consumes, chopped_symbol_is_exact_match = \
                 self.chop_symbol_phrase(phrase_str)
@@ -2663,6 +2676,7 @@ class CmdInterp(OwnerObject):
         """
 
         for language, written_as in an_LSA.meanings.items():
+
 # DCF temporary spacing hack until we put in the real system
             hacked_written_as = written_as
             if an_LSA.spacing & hard_space:
@@ -2681,54 +2695,76 @@ class CmdInterp(OwnerObject):
 # no point in keeping leading and trailing spaces in the written form
 # (and besides, they're going to go away as soon as the real spacing
 # system is set up)
-            for spoken_as in an_LSA.spoken_forms:
-                clean_spoken = sr_interface.clean_spoken_form(spoken_as)
-                entry = sr_interface.vocabulary_entry(spoken_as, written_as)
-                vc_entry = sr_interface.vocabulary_entry(spoken_as, written_as, clean_written=0)
-#                if clean_spoken == 'ellipsis':
-#                    print "ellipsis spacing %d, written-as '%s'" \
-#                        % (an_LSA.spacing, written_as)
-                
-                if not self.language_specific_aliases.has_key(language):
-                    self.language_specific_aliases[language] = \
-                        WordTrie.WordTrie()
+            if isinstance(language, basestring):
+                languages = (language,)
+            elif isinstance(language, tuple):
+                languages = language
+            else:
+                raise ValueError('add_lsa, invalid language: "%s" (written form: %s)'% \
+                                 (repr(language), written_as))
+            for language in languages:
+                for spoken_as in an_LSA.spoken_forms:
+                    clean_spoken = sr_interface.clean_spoken_form(spoken_as)
+                    trace('CmdInterp.add_lsa', 'spoken as: %s, clean_spoken: %s'% (spoken_as, clean_spoken))
+                    entry = sr_interface.vocabulary_entry(spoken_as, written_as)
+                    vc_entry = sr_interface.vocabulary_entry(spoken_as, written_as, clean_written=0)
+    #                if clean_spoken == 'ellipsis':
+    #                    print "ellipsis spacing %d, written-as '%s'" \
+    #                        % (an_LSA.spacing, written_as)
+                    if not self.language_specific_aliases.has_key(language):
+                        self.language_specific_aliases[language] = \
+                            WordTrie.WordTrie()
 
-                meaning = AliasMeaning(hacked_written_as, 
-                    spacing = an_LSA.spacing, 
-                    new_symbol = an_LSA.new_symbol)
-                phrase = string.split(clean_spoken)
-                self.language_specific_aliases[language].add_phrase(phrase, 
-                    meaning)
-                trace('CmdInterp.add_lsa', 'language = %s' % language)
-                trace('CmdInterp.add_lsa', 
-                    'spoken, written = "%s", "%s"' % (clean_spoken, 
-                    written_as))
-
-
-                #
-                # Add LSA to the SR vocabulary
-                #
-                if self.add_sr_entries_for_LSAs_and_CSCs:
+                    meaning = AliasMeaning(hacked_written_as, 
+                        spacing = an_LSA.spacing, 
+                        new_symbol = an_LSA.new_symbol)
+                    phrase = string.split(clean_spoken)
+                    self.language_specific_aliases[language].add_phrase(phrase, 
+                        meaning)
+                    trace('CmdInterp.add_lsa', 'language = %s' % repr(language))
                     trace('CmdInterp.add_lsa', 
-                        'adding entry "%s"' % entry)
-#                    print 'clean_spoken, written, entry: "%s", "%s", "%s"' \
-#                        % (clean_spoken, hacked_written_as, entry)
-                    sr_interface.addWord(entry)
-# we had some problems in regression testing because the individual
-# words in a spoken form were unknown, so now we add the individual
-# words in a multiple-word spoken form
+                        'spoken, written = "%s", "%s"' % (clean_spoken, 
+                        written_as))
+                    if None in self.language_specific_aliases:
+                        self.print_language_specific_aliases()
+                        raise ValueError("None should not be a key of an LSAlias %s"% \
+                                         self.language_specific_aliases)
+                    else:
+                        trace('CmdInterp.add_lsa', 'self.language_specific_aliases.keys: %s'%
+                              self.language_specific_aliases.keys())
+                    #
+                    # Add LSA to the SR vocabulary
+                    #
+                    if self.add_sr_entries_for_LSAs_and_CSCs:
+                        trace('CmdInterp.add_lsa', 
+                            'adding entry "%s"' % entry)
+    #                    print 'clean_spoken, written, entry: "%s", "%s", "%s"' \
+    #                        % (clean_spoken, hacked_written_as, entry)
+                        sr_interface.addWord(entry)
+    # we had some problems in regression testing because the individual
+    # words in a spoken form were unknown, so now we add the individual
+    # words in a multiple-word spoken form
 
-# This allows for redundant translation, avoiding
-# the problems in regression testing.  However,
-# this presumably makes Natspeak recognition of the CSC/LSA worse, 
-# so we may want to come up with an alternate solution in the future
+    # This allows for redundant translation, avoiding
+    # the problems in regression testing.  However,
+    # this presumably makes Natspeak recognition of the CSC/LSA worse, 
+    # so we may want to come up with an alternate solution in the future
 
-                all_words = string.split(spoken_as)
-                if (len(all_words) > 1 and
-                    self.add_sr_entries_for_LSAs_and_CSCs):
-                    for word in all_words:
-                        word = sr_interface.clean_spoken_form(word)
-                        sr_interface.addWord(word)
+                    all_words = string.split(spoken_as)
+                    if (len(all_words) > 1 and
+                        self.add_sr_entries_for_LSAs_and_CSCs):
+                        for word in all_words:
+                            word = sr_interface.clean_spoken_form(word)
+                            sr_interface.addWord(word)
+
+    def print_language_specific_aliases(self):
+        """helper qh"""
+        lsa = self.language_specific_aliases
+        for lang in lsa:
+            wTrie = lsa[lang]
+            print 'language: %s'% repr(lang)
+            for w,s in wTrie.items():
+                print '%s: %s'% (w, s)
 
     def add_capitalization_word(self, word):
         """Add a language specific word.
@@ -2741,15 +2777,12 @@ class CmdInterp(OwnerObject):
         
         *none* -- 
         """
-        if not self.language_specific_aliases.has_key(None):
-            self.language_specific_aliases[None] = \
-                WordTrie.WordTrie()
-
         for spoken_as in word.spoken_forms:
             clean_spoken = sr_interface.clean_spoken_form(spoken_as)
             vc_entry = sr_interface.vocabulary_entry(spoken_as, "", clean_written=0)
             phrase = string.split(clean_spoken)
-            self.language_specific_aliases[None].add_phrase(phrase, 
+            for lang in all_languages:
+                self.language_specific_aliases[lang].add_phrase(phrase, 
                 word.modifier)
 
             #

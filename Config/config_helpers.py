@@ -32,6 +32,7 @@ from Object import Object
 import sr_interface
 import debug
 from SpacingState import *
+from vc_globals import *
 
 # US English military spelling
 
@@ -82,6 +83,8 @@ def add_letters(aliases, prefix, alphabet = 'abcdefghijklmnopqrstuvwxyz',
     *STR language* -- language of the aliases, or None to use in all
     languages (almost certainly the desired behavior)
     """
+    if language == None:
+        language = all_languages
     for letter in alphabet:
         try:
             name = "%s" % name_map[letter]
@@ -276,6 +279,8 @@ class PunctuationSet(Object):
         *Context context* -- context for punctuation navigation
         commands, or None for ContAny.
         """
+        if language == None:
+            language = all_languages
         self.deep_construct(PunctuationSet,
                             {'name': name,
                              'language': language,
@@ -1280,16 +1285,16 @@ class EnglishSmallNumbersSet(Object):
                                     
                                                    
         aliases.add_lsa(LSAlias([spoken], 
-                        {None: written}, letters_and_digits, 
+                        {all_languages: written}, letters_and_digits, 
                         new_symbol = 'within'))
 
     def _add_zero_prefixed_numbers(self, aliases):
        aliases.add_lsa(LSAlias(['oh X.'], 
-                       {None: '0x'}, letters_and_digits))
+                       {all_languages: '0x'}, letters_and_digits))
     
-       aliases.add_lsa(LSAlias(['thousand'], {None: '000'},
+       aliases.add_lsa(LSAlias(['thousand'], {all_languages: '000'},
            letters_and_digits, new_symbol = 'within'))
-       aliases.add_lsa(LSAlias(['hundred'], {None: '00'},
+       aliases.add_lsa(LSAlias(['hundred'], {all_languages: '00'},
            letters_and_digits, new_symbol = 'within'))
        for digit in range(10):
           if digit == 0:
@@ -1299,7 +1304,7 @@ class EnglishSmallNumbersSet(Object):
              spoken = 'oh %s' % self.words_0_19[digit]
              written = '0%s' % digit
           aliases.add_lsa(LSAlias([spoken], 
-                          {None: written}, letters_and_digits,
+                          {all_languages: written}, letters_and_digits,
                           new_symbol = 'within'))
                
     def create(self, interp, numeral_prefix = None):
@@ -1330,7 +1335,7 @@ class EnglishSmallNumbersSet(Object):
                 spoken = "%s%s" % (numeral_prefix, self.digits[number])
                 written = "%d" % number
                 aliases.add_lsa(LSAlias([spoken], 
-                                {None: written}, letters_and_digits, 
+                                {all_languages: written}, letters_and_digits, 
                                 new_symbol = 'within'))
 
         self._add_zero_prefixed_numbers(aliases)

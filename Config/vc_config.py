@@ -1657,8 +1657,9 @@ c_navigation.add_csc(acmd)
 c_reserved_words = LSAliasSet('C/C++ keywords', 
     description = 'aliases for reserved words in C/C++')
 
+# this is compiler-dependent... :-(
 c_reserved_words.add_lsa(LSAlias(['asm', 'assembly', 'A. S. M.'],
-        {'C': 'asm '})) # this is compiler-dependent... :-(
+        {'C': 'asm '})) 
 c_reserved_words.add_lsa(LSAlias(['auto', 'automatic'],
         {'C': 'auto '}))
 c_reserved_words.add_lsa(LSAlias(['char'],
@@ -1674,8 +1675,10 @@ c_reserved_words.add_lsa(LSAlias(['double'],
         {'C': 'double '}))
 c_reserved_words.add_lsa(LSAlias(['explicit'],
         {'C': 'explicit '}))
+
+# rare!
 c_reserved_words.add_lsa(LSAlias(['export'],
-        {'C': 'export '})) # rare!
+        {'C': 'export '}))
 c_reserved_words.add_lsa(LSAlias(['extern', 'external'],
         {'C': 'extern '}))
 c_reserved_words.add_lsa(LSAlias(['float'],
