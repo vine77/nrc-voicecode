@@ -363,6 +363,12 @@ add_unittest('ContLanguage', desc='Tests for different language contexts.')
 
 add_unittest('CSCmd', desc='Testing CSCmd')
 
+##############################################################################
+# Testing LSAlias definitions
+##############################################################################
+
+add_unittest('LSAlias', desc='Testing LSA definitions')
+
 
 ##############################################################################
 # Testing WhatCanISay dialogs

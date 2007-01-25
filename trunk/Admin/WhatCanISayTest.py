@@ -64,7 +64,6 @@ index_contents =  [('multiply by', AliasMeaning(" * ")),
                    ('multiplied by', AliasMeaning(" * "))]
                   
 expected_lsa_index = {}
-expected_lsa_index[None] = []
 expected_lsa_index['C'] = index_contents + [('not', AliasMeaning('!')),
                                         ('times', AliasMeaning(" * "))]
 expected_lsa_index['perl'] = index_contents + [('not', AliasMeaning('!')),
@@ -196,7 +195,7 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        wciSay = WhatCanISay()
        interp = CmdInterp()
        wciSay.load_commands_from_interpreter(interp)
-       expected_lsa = {None: []}
+       expected_lsa = {}
        self.assert_equal(expected_lsa, wciSay.lsa_index, 'lsa commands index should be equal (and nearly empty, no commands loaded)')
        expected_csc = {}
        self.assert_equal(expected_csc, wciSay.csc_index, 'csc commands index should be equal (and nearly empty, no commands loaded)')
@@ -266,8 +265,7 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        """testing self.lsa_index (lsa commands) and self.csc_index with test data"""
        self.wciSay.create_cmds(self.interp, 'python')  
        actual_languages = self.wciSay.languages
-       self.assert_(None in actual_languages, "None is not in supported languages")
-       actual_languages.remove(None)
+       self.failIf(None in actual_languages, "None should not be in supported languages")
        actual_languages.sort()
        self.assert_equal(expected_languages, actual_languages,
                          "List of supported languages was wrong.")  
@@ -285,8 +283,7 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        """testing elaborated lsa commands with test data multiply and not"""
        self.wciSay.create_cmds(self.interp, 'python')  
        actual_languages = self.wciSay.languages
-       self.assert_(None in actual_languages, "None is not in supported languages")
-       actual_languages.remove(None)
+       self.failIf(None in actual_languages, "None should not be in supported languages")
        actual_languages.sort()
        self.assert_equal(expected_languages, actual_languages,
                          "List of supported languages was wrong.")  
@@ -298,8 +295,7 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
    def test_csc_commands(self):
        self.wciSay.create_cmds(self.interp, 'python')  
        actual_languages = self.wciSay.languages
-       self.assert_(None in actual_languages, "None is not in supported languages")
-       actual_languages.remove(None)
+       self.failIf(None in actual_languages, "None should not be in supported languages")
        actual_languages.sort()
        self.assert_equal(expected_languages, actual_languages,
                          "List of supported languages was wrong.")  

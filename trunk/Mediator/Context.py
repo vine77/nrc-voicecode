@@ -63,14 +63,20 @@ class Context(object):
 
         """
         # equal classes always have same scope so test other_context directly:
-        trace('Context.conflicts_with', 'self is: %s'% repr(self))
-        trace('Context.conflicts_with', 'other_context is: %s'% repr(self))
+##         trace('Context.conflicts_with', 'self is: %s'% repr(self))
+##         trace('Context.conflicts_with', 'other_context is: %s'% repr(self))
         if self.__class__ == other_context.__class__:
             return self.overlaps_with(other_context)
+
+        if self.equivalence_key() == other_context.equivalence_key():
+            raise ValueError(\
+                  'Different context instances have identical equivalence keys("%s")\n'
+                  'They should be different. Classes: %s and %s'% \
+                  (self.equivalence_key(), self.__class__, other_context.__class__))
         scope1 = self.scope()
         scope2 = other_context.scope()
-        trace('Context.conflicts_with', 'scope of self: "%s", scope of other: "%s"'% \
-              (scope1,scope2))
+##         trace('Context.conflicts_with', 'scope of self: "%s", scope of other: "%s"'% \
+##               (scope1,scope2))
         
         if self.scope() != other_context.scope():
             return
@@ -78,12 +84,12 @@ class Context(object):
         if isinstance(other_context, self.__class__):
             # other_context is either same class or subclass of self
             # So we can ask self if it overlaps with other_context
-            trace('Context.conflicts_with', 'calling overlaps_with with other_context')
+##            trace('Context.conflicts_with', 'calling overlaps_with with other_context')
             return self.overlaps_with(other_context)       
         elif isinstance(self, other_context.__class__):
             # self is subclass of other_context. So ask other_context
             # if it overlaps with self
-            trace('Context.conflicts_with', 'calling overlaps_with with self')
+##            trace('Context.conflicts_with', 'calling overlaps_with with self')
             return other_context.overlaps_with(self)
 
     def overlaps_with(self, other_context):
@@ -94,6 +100,8 @@ class Context(object):
           same class, or a descendant of self.
 
           in QH words: other_context is same class as self, or a subclass of self
+
+          in the default case (no overloading) overlaps_with returns True, so always overlap
 
         """
         return True
@@ -183,23 +191,12 @@ class Context(object):
         if buffer != app.curr_buffer_name():
             raise RuntimeError("context %s switched buffers" % self)
         newpos, newsel = app.get_pos_selection()
-        if position != newpos:
-            msg = "Warning: context %s" % self + \
-                  "\ndidn't restore the cursor position\n"
-            msg = msg + 'old position, selection were %d, (%d, %d)\n' \
-                % ((position,) + selection)
-            msg = msg + 'new position, selection were %d, (%d, %d)\n' \
-                % ((newpos,) + newsel)
-            sys.stderr.write(msg)
-        if selection != newsel:
-            msg = "Warning: context %s" % self + \
-                  "\ndidn't restore the selection\n"
-            msg = msg + 'old position, selection were %d, (%d, %d)\n' \
-                % ((position,) + selection)
-            msg = msg + 'new position, selection were %d, (%d, %d)\n' \
-                % ((newpos,) + newsel)
-            sys.stderr.write(msg)
-        app.set_selection(selection, cursor_at)
+        if not (position == newpos and selection == newsel):
+            # used to give a warning here.
+            # now simply reset the selection to where it started,
+            # so the _applies function (of a specific context class)
+            # does not have to return at the starting position 
+            app.set_selection(selection, cursor_at)
         return answer
         
     def _applies(self, app, preceding_symbol = 0):        

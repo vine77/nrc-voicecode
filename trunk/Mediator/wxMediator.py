@@ -56,6 +56,7 @@ debug.config_traces(status="off",
                     active_traces={\
                                     'gotResults': 1,
                                     'CmdInterp.interp': 1,
+##                                    'CmdInterp.add_lsa': 1,
 ##                                   'WhatCanISay.index_cscs': 1,
 ##                                   'Context.conflicts_with': 1,
 ##                                   'ContLanguage.overlaps_with': 1,
@@ -158,7 +159,11 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
         #
         self.messages_log = \
                wxTextCtrl(self, wxNewId(), '', wxDefaultPosition,
-                          (700, 400), style = wxTE_MULTILINE)
+                          (700, 400),
+                          style=wxTE_MULTILINE)
+
+##QHpresents python errors, should provide more output in mediator window:
+##        style=wxTE_MULTILINE | wxTE_RICH2 | wxTE_NOHIDESEL)
         self.messages_log.IsEditable = false
         debug.add_trace_listener(wxTextControlTraceListener(self.messages_log))
 
