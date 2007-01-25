@@ -245,8 +245,12 @@ std_US_punc.add("/", ['slash', 'forward-slash'],
 std_US_punc.add(":", ['colon'], no_space_before)
 std_US_punc.add(":", ['numeric-colon'], no_spaces)
 std_US_punc.add(";", ['semicolon'], no_space_before)
-std_US_punc.add("<", ['less-than'])
-std_US_punc.add(">", ['greater-than'])
+
+# seems to be duplicate with LSA definition below, try to change QH
+##std_US_punc.add("<", ['less-than'])
+##std_US_punc.add(">", ['greater-than'])
+std_US_punc.add("<", ['less-than-sign'])
+std_US_punc.add(">", ['greater-than-sign'])
 
 # QH: for version 9 apparently needed:
 ## std_US_punc.add("<", ['less than'])
