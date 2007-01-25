@@ -42,10 +42,7 @@ class Context(object):
     
     def __init__(self, doc_string=None, doc_topics=None, **attrs):
         self.doc_string = doc_string
-        if doc_topics == None:
-            self.doc_topics = []
-        else:
-            self.doc_topics = doc_topics
+        self.doc_topics = doc_topics or []
         for key, val in attrs.items():
             setattr(self, key, val)
             
@@ -106,6 +103,14 @@ class Context(object):
         """
         return True
       
+
+    def scope_number(self):
+        """return the number of the scope, raise error if invalid scope"""
+        try:
+            return scope_map[self.scope()]
+        except KeyError:
+            raise ValueError("Invalid scope for context: %s (scope: %s, equivalence_key: %s"% \
+                             (self.__class__, self.scope(), self.equivalence_key()))
 
     def scope(self):
         """returns a string indicating the scope of this context.

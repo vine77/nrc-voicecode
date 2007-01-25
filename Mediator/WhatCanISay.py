@@ -30,6 +30,7 @@ reIsLetter = re.compile(r'^[a-zA-Z]$')
 from copy import copy
 from cont_gen import *
 from Context import scope_order, valid_scope
+from CSCmd import CSCmdList
 
 class WhatCanISay(Object):
     """
@@ -98,27 +99,21 @@ class WhatCanISay(Object):
                   (the_spoken_form, the_meanings))
             self.index_contextual_meanings(the_spoken_form, the_meanings)
            
-    def index_contextual_meanings(self, spoken_form, meanings_dict):
-        contexts = meanings_dict.contexts.values()
-        for a_context in contexts:
-           trace('WhatCanISay.index_contextual_meanings', "** Processing a_context=%s" % repr(a_context))           
+    def index_contextual_meanings(self, spoken_form, meanings_list):
+        for a_context, an_action in meanings_list:
+           trace('WhatCanISay.index_contextual_meanings', "** Processing a_context=%s, an_action: %s" % \
+                 (repr(a_context), repr(an_action)))
+
            for a_language in self.languages:
-               if a_language == None:
-                   continue
-               if self.context_applies_for_lang(a_language, a_context):
-                   a_context_key = a_context.equivalence_key()
-         #          a_context_scope = a_context.scope()
-                   trace('WhatCanISay.index_contextual_meanings', 
-                         "** a_context=%s, applies for a_language=%s" % \
-                            (a_context, a_language))
-                   action_for_this_context = meanings_dict.actions[a_context_key]
-                   self.csc_index[a_language].setdefault(spoken_form, []).append((a_context,
-                                                                                  action_for_this_context))
+               for_this_language = meanings_list.clone()
+               if not self.context_applies_for_lang(a_language, a_context):
+                   for_this_language.remove((a_context, an_action))
+                   visible = for_this_language.get_visible_list()
+                   self.csc_index[a_language].setdefault(spoken_form, []).append("||||".join(visible))
                  
            
     def context_applies_for_lang(self, language, context):
-        trace
-        ('WhatCanISay.context_applies_for_lang', "** language=%s, context=%s" %(language, context))
+        trace('WhatCanISay.context_applies_for_lang', "** language=%s, context=%s" %(language, context))
         answer = False        
         if isinstance(context, ContLanguage) and \
             language in context.language:
@@ -182,14 +177,11 @@ class WhatCanISay(Object):
             if lang == None:
                 raise ValueError("value of self.csc_index[None] should not exist")
             all_commands[lang] = []
-            for words, action_tuple in part.items():
-                action_list = []
-                for a_context, act in action_tuple:
-                    written = self.get_written_form_from_action(act)
-                    a_context_equivalence = a_context.equivalence_key()
-                    a_context_scope = a_context.scope()
-                    action_list.append((a_context_equivalence, a_context_scope, written))
-                all_commands[lang].append((words, action_list))
+            for words, visible in part.items():
+                vis = repr(visible)
+                print 'words: %s, vis: %s'% (words, vis)
+            
+                all_commands[lang].append((words, vis))
         self.csc_commands = all_commands
 
     def get_written_form_from_action(self, action):
