@@ -513,8 +513,12 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
                         # This region has the same score as the first ones. Add it
                         # to the candidate selection ranges.
                         #
-                        region = resObj.getSelectInfo(self.gramObj, i)
-
+                        #QH: if a results object is not of this Select Grammar
+                        #also break
+                        try:
+                            region = resObj.getSelectInfo(self.gramObj, i)
+                        except natlink.WrongType:
+                            continue
                         if debug.tracing('SelectWinGramNL.gotResultsObject'):
                             debug.trace('SelectWinGramNL.gotResultsObject', 'adding region=%s' % repr(region))
                         true_region = (region[0] + self.vis_start,
