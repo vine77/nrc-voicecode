@@ -1762,29 +1762,60 @@ def test_punctuation():
 
     commands.say(['0\\zero', '<\\less-than', '1\\one', '<\\less-than', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['previous less-than', 'previous less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['after less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    #QH, changed less-than to less-than-sign, greater-than to greater-than-sign
+    commands.say(['previous less-than-sign', 'previous less-than-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['before previous less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['after less-than-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['before next less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['before previous less-than-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['before next less-than-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['0\\zero', '>\\greater-than', '1\\one', '>\\greater-than', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['previous greater-than', 'previous greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['after greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['previous greater-than-sign', 'previous greater-than-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['before previous greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['after greater-than-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
-    commands.say(['before next greater-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['before previous greater-than-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['before next greater-than-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['0\\zero', '>\\greater-than-sign', '1\\one', '>\\greater-than-sign', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    # changed greater-than to greater-than-sign:
+    commands.say(['previous greater-than-sign', 'previous greater-than-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['after greater-than-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['before previous greater-than-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['before next greater-than-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['0\\zero', '=\\equal-sign', '1\\one', '=\\equal-sign', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['previous equal-sign', 'previous equal-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['after equal-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['before previous equal-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['before next equal-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    commands.say(['new statement'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+
+    # added QH:
+    commands.say(['0\\zero', 'equal', '1\\one', 'equal', '2\\two'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
     commands.say(['previous equal-sign', 'previous equal-sign'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
