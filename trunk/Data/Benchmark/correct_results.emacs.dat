@@ -1,6 +1,5 @@
 creating wxMediator
 Loading test definitions...
-****cannot import test module, skipping test: nonexistingTest
 Configuring the mediator...
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_C_Cpp_std_sym.cpp'
@@ -493,7 +492,7 @@ Starting background tests...
 
 *******************************************************************************
 * Name        : CSCmd
-* Description : Test the CSCcmd internals
+* Description : Testing CSCmd
 *******************************************************************************
 
 
@@ -1836,7 +1835,6 @@ THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test 
 _cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  test_comment  test_procedure  testing_adding_above  testing_declaration  testing_other_pointers  testing_pointers  the_value  this  tiger  triangle  type  
 Unresolved abbreviations are:
-'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 
 *** End of compilation test ***
 
@@ -2402,61 +2400,25 @@ EdSim instance EdSim(0) connected
 
 *******************************************************************************
 * Name        : ContPyInsideArguments
-* Description : Test Py context inside or outside arguments
+* Description : Tests for being inside the argument list of a function.
 *******************************************************************************
 
 Heard select inside
-Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32210>
-didn't restore the selection
-old position, selection were 18, (12, 18)
-new position, selection were 18, (18, 18)
 Heard select inside
-Warning: context <cont_gen.ContPyInsideArguments object at 0x01E54C70>
-didn't restore the selection
-old position, selection were 18, (12, 18)
-new position, selection were 18, (18, 18)
 Heard select inside
 Heard select outside
-Warning: context <cont_gen.ContPyInsideArguments object at 0x01E26B70>
-didn't restore the selection
-old position, selection were 7, (0, 7)
-new position, selection were 7, (7, 7)
 Heard select three
 Heard select four
-Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32650>
-didn't restore the selection
-old position, selection were 22, (21, 22)
-new position, selection were 22, (22, 22)
 Heard select five
-Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32650>
-didn't restore the selection
-old position, selection were 46, (45, 46)
-new position, selection were 46, (46, 46)
 Heard select six
-Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32650>
-didn't restore the selection
-old position, selection were 62, (61, 62)
-new position, selection were 62, (62, 62)
 Heard select seven
-Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32650>
-didn't restore the selection
-old position, selection were 79, (78, 79)
-new position, selection were 79, (79, 79)
 Heard select test
-Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32650>
-didn't restore the selection
-old position, selection were 75, (71, 75)
-new position, selection were 75, (75, 75)
 Heard select none
-Warning: context <cont_gen.ContPyInsideArguments object at 0x01D32650>
-didn't restore the selection
-old position, selection were 32, (28, 32)
-new position, selection were 32, (32, 32)
 
 
 *******************************************************************************
 * Name        : Context
-* Description : Test contexts and their possible conflicts
+* Description : Tests for conflicting contexts.
 *******************************************************************************
 
 
@@ -2687,6 +2649,20 @@ EdSim.__del__
 
 
 *******************************************************************************
+* Name        : LSAlias
+* Description : Testing LSA definitions
+*******************************************************************************
+
+
+
+*******************************************************************************
+* Name        : LessThanGreaterThan
+* Description : testing variants of less than and greater than
+*******************************************************************************
+
+
+
+*******************************************************************************
 * Name        : Object
 * Description : self-test for Object.py
 *******************************************************************************
@@ -2723,7 +2699,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01D0C270>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CDF9F0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2786,7 +2762,6 @@ _cached_symbols_as_one_string[y] is:
     y  
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
@@ -2918,7 +2893,6 @@ _cached_symbols_as_one_string[w] is:
 _cached_symbols_as_one_string[x] is:
     x  
 Unresolved abbreviations are:
-'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
 'execfile': appears in ['execfile']
 'expandvars': appears in ['expandvars']
@@ -2985,7 +2959,6 @@ _cached_symbols_as_one_string[y] is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'f': appears in ['f_name2', 'f_name']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
@@ -3033,7 +3006,6 @@ _cached_symbols_as_one_string[y] is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'f': appears in ['f_name2', 'f_name']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -3089,19 +3061,9 @@ Fresh abbreviation file matches current one, as expected
 
 *******************************************************************************
 * Name        : TestCaseWithHelpers
-* Description : Test the unit testing framework
+* Description : Test the unit testing framework.
 *******************************************************************************
 
-
-
-*******************************************************************************
-* Name        : WhatCanISay
-* Description : self-test for WhatCanISay.py
-*******************************************************************************
-
-using test folder: d:\natlink\VCode\Data\Benchmark\WhatCanISayTestResults\C
-using test folder: d:\natlink\VCode\Data\Benchmark\WhatCanISayTestResults\perl
-using test folder: d:\natlink\VCode\Data\Benchmark\WhatCanISayTestResults\python
 
 
 *******************************************************************************
@@ -3827,7 +3789,6 @@ List of unresolved abbreviations
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
-'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
@@ -4271,7 +4232,6 @@ List of unresolved abbreviations
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
-'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
@@ -4866,7 +4826,6 @@ List of unresolved abbreviations
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
-'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
@@ -5388,7 +5347,6 @@ List of unresolved abbreviations
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
-'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
@@ -5832,7 +5790,6 @@ List of unresolved abbreviations
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
-'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
@@ -9221,9 +9178,9 @@ Heard rate divide equals time new statement
 * Description : testing persistence between VoiceCode sessions
 *******************************************************************************
 
-As best as I can tell from SF Browse CVS, this test was 
-    introduced in revision vcode vcode-0-0-7, and broken before 
-    vcode-0-0-8, and has never since worked in the manner the 
+As best as I can tell from SF Browse CVS, this test was
+    introduced in revision vcode vcode-0-0-7, and broken before
+    vcode-0-0-8, and has never since worked in the manner the
     printed >>> comments indicate, until now -- DCF
 
 
@@ -10920,38 +10877,6 @@ Heard zero less-than one less-than two
 104:                 0 < 1 < 2<CURSOR>
 
 *** End of source buffer ***
-Saying: ['previous less-than', 'previous less-than']
-Heard previous less-than previous less-than
-101:                 0#1#2
-102:                 0::1::2
-103:                 0~1~2
-104:                 0 < <CURSOR>1 < 2
-
-*** End of source buffer ***
-Saying: ['after less-than']
-Heard after less-than
-101:                 0#1#2
-102:                 0::1::2
-103:                 0~1~2
-104:                 0 < 1 < <CURSOR>2
-
-*** End of source buffer ***
-Saying: ['before previous less-than']
-Heard before previous less-than
-101:                 0#1#2
-102:                 0::1::2
-103:                 0~1~2
-104:                 0 < 1<CURSOR> < 2
-
-*** End of source buffer ***
-Saying: ['before next less-than']
-Heard before next less-than
-101:                 0#1#2
-102:                 0::1::2
-103:                 0~1~2
-104:                 0 < 1<CURSOR> < 2
-
-*** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
 102:                 0::1::2
@@ -10960,44 +10885,58 @@ Heard new statement
 105:                 <CURSOR>
 
 *** End of source buffer ***
+Saying: ['previous less-than-sign', 'previous less-than-sign']
+Heard previous less-than-sign previous less-than-sign
+101:                 0#1#2
+102:                 0::1::2
+103:                 0~1~2
+104:                 0 < <CURSOR>1 < 2
+105:                 
+
+*** End of source buffer ***
+Saying: ['after less-than-sign']
+Heard after less-than-sign
+101:                 0#1#2
+102:                 0::1::2
+103:                 0~1~2
+104:                 0 < 1 < <CURSOR>2
+105:                 
+
+*** End of source buffer ***
+Saying: ['before previous less-than-sign']
+Heard before previous less-than-sign
+101:                 0#1#2
+102:                 0::1::2
+103:                 0~1~2
+104:                 0 < 1<CURSOR> < 2
+105:                 
+
+*** End of source buffer ***
+Saying: ['before next less-than-sign']
+Heard before next less-than-sign
+101:                 0#1#2
+102:                 0::1::2
+103:                 0~1~2
+104:                 0 < 1<CURSOR> < 2
+105:                 
+
+*** End of source buffer ***
+Saying: ['new statement']
+Heard new statement
+102:                 0::1::2
+103:                 0~1~2
+104:                 0 < 1 < 2
+105:                 <CURSOR>
+106:                 
+
+*** End of source buffer ***
 Saying: ['0\\zero', '>\\greater-than', '1\\one', '>\\greater-than', '2\\two']
 Heard zero greater-than one greater-than two
 102:                 0::1::2
 103:                 0~1~2
 104:                 0 < 1 < 2
 105:                 0 > 1 > 2<CURSOR>
-
-*** End of source buffer ***
-Saying: ['previous greater-than', 'previous greater-than']
-Heard previous greater-than previous greater-than
-102:                 0::1::2
-103:                 0~1~2
-104:                 0 < 1 < 2
-105:                 0 > <CURSOR>1 > 2
-
-*** End of source buffer ***
-Saying: ['after greater-than']
-Heard after greater-than
-102:                 0::1::2
-103:                 0~1~2
-104:                 0 < 1 < 2
-105:                 0 > 1 > <CURSOR>2
-
-*** End of source buffer ***
-Saying: ['before previous greater-than']
-Heard before previous greater-than
-102:                 0::1::2
-103:                 0~1~2
-104:                 0 < 1 < 2
-105:                 0 > 1<CURSOR> > 2
-
-*** End of source buffer ***
-Saying: ['before next greater-than']
-Heard before next greater-than
-102:                 0::1::2
-103:                 0~1~2
-104:                 0 < 1 < 2
-105:                 0 > 1<CURSOR> > 2
+106:                 
 
 *** End of source buffer ***
 Saying: ['new statement']
@@ -11006,558 +10945,867 @@ Heard new statement
 104:                 0 < 1 < 2
 105:                 0 > 1 > 2
 106:                 <CURSOR>
+107:                 
+
+*** End of source buffer ***
+Saying: ['previous greater-than-sign', 'previous greater-than-sign']
+Heard previous greater-than-sign previous greater-than-sign
+102:                 0::1::2
+103:                 0~1~2
+104:                 0 < 1 < 2
+105:                 0 > <CURSOR>1 > 2
+106:                 
+107:                 
+
+*** End of source buffer ***
+Saying: ['after greater-than-sign']
+Heard after greater-than-sign
+102:                 0::1::2
+103:                 0~1~2
+104:                 0 < 1 < 2
+105:                 0 > 1 > <CURSOR>2
+106:                 
+107:                 
+
+*** End of source buffer ***
+Saying: ['before previous greater-than-sign']
+Heard before previous greater-than-sign
+102:                 0::1::2
+103:                 0~1~2
+104:                 0 < 1 < 2
+105:                 0 > 1<CURSOR> > 2
+106:                 
+107:                 
+
+*** End of source buffer ***
+Saying: ['before next greater-than-sign']
+Heard before next greater-than-sign
+102:                 0::1::2
+103:                 0~1~2
+104:                 0 < 1 < 2
+105:                 0 > 1<CURSOR> > 2
+106:                 
+107:                 
+
+*** End of source buffer ***
+Saying: ['new statement']
+Heard new statement
+103:                 0~1~2
+104:                 0 < 1 < 2
+105:                 0 > 1 > 2
+106:                 <CURSOR>
+107:                 
+108:                 
+
+*** End of source buffer ***
+Saying: ['0\\zero', '>\\greater-than-sign', '1\\one', '>\\greater-than-sign', '2\\two']
+Heard zero greater-than-sign one greater-than-sign two
+103:                 0~1~2
+104:                 0 < 1 < 2
+105:                 0 > 1 > 2
+106:                 0>1>2<CURSOR>
+107:                 
+108:                 
+
+*** End of source buffer ***
+Saying: ['previous greater-than-sign', 'previous greater-than-sign']
+Heard previous greater-than-sign previous greater-than-sign
+103:                 0~1~2
+104:                 0 < 1 < 2
+105:                 0 > 1 > 2
+106:                 0><CURSOR>1>2
+107:                 
+108:                 
+
+*** End of source buffer ***
+Saying: ['after greater-than-sign']
+Heard after greater-than-sign
+103:                 0~1~2
+104:                 0 < 1 < 2
+105:                 0 > 1 > 2
+106:                 0>1><CURSOR>2
+107:                 
+108:                 
+
+*** End of source buffer ***
+Saying: ['before previous greater-than-sign']
+Heard before previous greater-than-sign
+103:                 0~1~2
+104:                 0 < 1 < 2
+105:                 0 > 1 > 2
+106:                 0>1<CURSOR>>2
+107:                 
+108:                 
+
+*** End of source buffer ***
+Saying: ['before next greater-than-sign']
+Heard before next greater-than-sign
+103:                 0~1~2
+104:                 0 < 1 < 2
+105:                 0 > 1 > 2
+106:                 0>1<CURSOR>>2
+107:                 
+108:                 
+
+*** End of source buffer ***
+Saying: ['new statement']
+Heard new statement
+104:                 0 < 1 < 2
+105:                 0 > 1 > 2
+106:                 0>1>2
+107:                 <CURSOR>
+108:                 
+109:                 
 
 *** End of source buffer ***
 Saying: ['0\\zero', '=\\equal-sign', '1\\one', '=\\equal-sign', '2\\two']
 Heard zero equal-sign one equal-sign two
-103:                 0~1~2
 104:                 0 < 1 < 2
 105:                 0 > 1 > 2
-106:                 0=1=2<CURSOR>
+106:                 0>1>2
+107:                 0=1=2<CURSOR>
+108:                 
+109:                 
 
 *** End of source buffer ***
 Saying: ['previous equal-sign', 'previous equal-sign']
 Heard previous equal-sign previous equal-sign
-103:                 0~1~2
 104:                 0 < 1 < 2
 105:                 0 > 1 > 2
-106:                 0=<CURSOR>1=2
+106:                 0>1>2
+107:                 0=<CURSOR>1=2
+108:                 
+109:                 
 
 *** End of source buffer ***
 Saying: ['after equal-sign']
 Heard after equal-sign
-103:                 0~1~2
 104:                 0 < 1 < 2
 105:                 0 > 1 > 2
-106:                 0=1=<CURSOR>2
+106:                 0>1>2
+107:                 0=1=<CURSOR>2
+108:                 
+109:                 
 
 *** End of source buffer ***
 Saying: ['before previous equal-sign']
 Heard before previous equal-sign
-103:                 0~1~2
 104:                 0 < 1 < 2
 105:                 0 > 1 > 2
-106:                 0=1<CURSOR>=2
+106:                 0>1>2
+107:                 0=1<CURSOR>=2
+108:                 
+109:                 
 
 *** End of source buffer ***
 Saying: ['before next equal-sign']
 Heard before next equal-sign
-103:                 0~1~2
 104:                 0 < 1 < 2
 105:                 0 > 1 > 2
-106:                 0=1<CURSOR>=2
+106:                 0>1>2
+107:                 0=1<CURSOR>=2
+108:                 
+109:                 
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-104:                 0 < 1 < 2
 105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 <CURSOR>
+106:                 0>1>2
+107:                 0=1=2
+108:                 <CURSOR>
+109:                 
+110:                 
+
+*** End of source buffer ***
+Saying: ['0\\zero', 'equal', '1\\one', 'equal', '2\\two']
+Heard zero equal one equal two
+105:                 0 > 1 > 2
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = 1 = 2<CURSOR>
+109:                 
+110:                 
+
+*** End of source buffer ***
+Saying: ['previous equal-sign', 'previous equal-sign']
+Heard previous equal-sign previous equal-sign
+105:                 0 > 1 > 2
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = <CURSOR>1 = 2
+109:                 
+110:                 
+
+*** End of source buffer ***
+Saying: ['after equal-sign']
+Heard after equal-sign
+105:                 0 > 1 > 2
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = 1 = <CURSOR>2
+109:                 
+110:                 
+
+*** End of source buffer ***
+Saying: ['before previous equal-sign']
+Heard before previous equal-sign
+105:                 0 > 1 > 2
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = 1<CURSOR> = 2
+109:                 
+110:                 
+
+*** End of source buffer ***
+Saying: ['before next equal-sign']
+Heard before next equal-sign
+105:                 0 > 1 > 2
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = 1<CURSOR> = 2
+109:                 
+110:                 
+
+*** End of source buffer ***
+Saying: ['new statement']
+Heard new statement
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 <CURSOR>
+110:                 
+111:                 
 
 *** End of source buffer ***
 Saying: ['between parens', '1\\one']
 Heard between parens one
-104:                 0 < 1 < 2
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (1<CURSOR>)
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (1<CURSOR>)
+110:                 
+111:                 
 
 *** End of source buffer ***
 Saying: ['before previous paren']
 Heard before previous paren
-104:                 0 < 1 < 2
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                <CURSOR> (1)
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                <CURSOR> (1)
+110:                 
+111:                 
 
 *** End of source buffer ***
 Saying: ['after paren']
 Heard after paren
-104:                 0 < 1 < 2
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (<CURSOR>1)
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (<CURSOR>1)
+110:                 
+111:                 
 
 *** End of source buffer ***
 Saying: ['before paren']
 Heard before paren
-104:                 0 < 1 < 2
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (1<CURSOR>)
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (1<CURSOR>)
+110:                 
+111:                 
 
 *** End of source buffer ***
 Saying: ['previous paren']
 Heard previous paren
-104:                 0 < 1 < 2
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (<CURSOR>1)
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (<CURSOR>1)
+110:                 
+111:                 
 
 *** End of source buffer ***
 Saying: ['out of parens']
 Heard out of parens
-104:                 0 < 1 < 2
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (1)<CURSOR>
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (1)<CURSOR>
+110:                 
+111:                 
 
 *** End of source buffer ***
 Saying: ['before previous paren']
 Heard before previous paren
-104:                 0 < 1 < 2
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (1<CURSOR>)
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (1<CURSOR>)
+110:                 
+111:                 
 
 *** End of source buffer ***
 Saying: ['back out of parens']
 Heard back out of parens
-104:                 0 < 1 < 2
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                <CURSOR> (1)
+106:                 0>1>2
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                <CURSOR> (1)
+110:                 
+111:                 
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (1)
-108:                 <CURSOR>
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 <CURSOR>
+111:                 
+112:                 
 
 *** End of source buffer ***
 Saying: ['between brackets', '1\\one']
 Heard between brackets one
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (1)
-108:                 [1<CURSOR>]
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [1<CURSOR>]
+111:                 
+112:                 
 
 *** End of source buffer ***
 Saying: ['before previous bracket']
 Heard before previous bracket
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (1)
-108:                <CURSOR> [1]
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (1)
+110:                <CURSOR> [1]
+111:                 
+112:                 
 
 *** End of source buffer ***
 Saying: ['after bracket']
 Heard after bracket
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (1)
-108:                 [<CURSOR>1]
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [<CURSOR>1]
+111:                 
+112:                 
 
 *** End of source buffer ***
 Saying: ['before bracket']
 Heard before bracket
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (1)
-108:                 [1<CURSOR>]
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [1<CURSOR>]
+111:                 
+112:                 
 
 *** End of source buffer ***
 Saying: ['previous bracket']
 Heard previous bracket
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (1)
-108:                 [<CURSOR>1]
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [<CURSOR>1]
+111:                 
+112:                 
 
 *** End of source buffer ***
 Saying: ['out of brackets']
 Heard out of brackets
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (1)
-108:                 [1]<CURSOR>
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [1]<CURSOR>
+111:                 
+112:                 
 
 *** End of source buffer ***
 Saying: ['before previous bracket']
 Heard before previous bracket
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (1)
-108:                 [1<CURSOR>]
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [1<CURSOR>]
+111:                 
+112:                 
 
 *** End of source buffer ***
 Saying: ['back out of brackets']
 Heard back out of brackets
-105:                 0 > 1 > 2
-106:                 0=1=2
-107:                 (1)
-108:                <CURSOR> [1]
+107:                 0=1=2
+108:                 0 = 1 = 2
+109:                 (1)
+110:                <CURSOR> [1]
+111:                 
+112:                 
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-106:                 0=1=2
-107:                 (1)
-108:                 [1]
-109:                 <CURSOR>
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [1]
+111:                 <CURSOR>
+112:                 
+113:                 
 
 *** End of source buffer ***
 Saying: ['between braces', '1\\one']
 Heard between braces one
-106:                 0=1=2
-107:                 (1)
-108:                 [1]
-109:                 {1<CURSOR>}
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [1]
+111:                 {1<CURSOR>}
+112:                 
+113:                 
 
 *** End of source buffer ***
 Saying: ['before previous brace']
 Heard before previous brace
-106:                 0=1=2
-107:                 (1)
-108:                 [1]
-109:                <CURSOR> {1}
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [1]
+111:                <CURSOR> {1}
+112:                 
+113:                 
 
 *** End of source buffer ***
 Saying: ['after brace']
 Heard after brace
-106:                 0=1=2
-107:                 (1)
-108:                 [1]
-109:                 {<CURSOR>1}
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [1]
+111:                 {<CURSOR>1}
+112:                 
+113:                 
 
 *** End of source buffer ***
 Saying: ['before brace']
 Heard before brace
-106:                 0=1=2
-107:                 (1)
-108:                 [1]
-109:                 {1<CURSOR>}
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [1]
+111:                 {1<CURSOR>}
+112:                 
+113:                 
 
 *** End of source buffer ***
 Saying: ['previous brace']
 Heard previous brace
-106:                 0=1=2
-107:                 (1)
-108:                 [1]
-109:                 {<CURSOR>1}
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [1]
+111:                 {<CURSOR>1}
+112:                 
+113:                 
 
 *** End of source buffer ***
 Saying: ['out of braces']
 Heard out of braces
-106:                 0=1=2
-107:                 (1)
-108:                 [1]
-109:                 {1}<CURSOR>
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [1]
+111:                 {1}<CURSOR>
+112:                 
+113:                 
 
 *** End of source buffer ***
 Saying: ['before previous brace']
 Heard before previous brace
-106:                 0=1=2
-107:                 (1)
-108:                 [1]
-109:                 {1<CURSOR>}
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [1]
+111:                 {1<CURSOR>}
+112:                 
+113:                 
 
 *** End of source buffer ***
 Saying: ['back out of braces']
 Heard back out of braces
-106:                 0=1=2
-107:                 (1)
-108:                 [1]
-109:                <CURSOR> {1}
+108:                 0 = 1 = 2
+109:                 (1)
+110:                 [1]
+111:                <CURSOR> {1}
+112:                 
+113:                 
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-107:                 (1)
-108:                 [1]
-109:                 {1}
-110:                 <CURSOR>
+109:                 (1)
+110:                 [1]
+111:                 {1}
+112:                 <CURSOR>
+113:                 
+114:                 
 
 *** End of source buffer ***
 Saying: ['between angles', '1\\one']
 Heard between angles one
-107:                 (1)
-108:                 [1]
-109:                 {1}
-110:                 <1<CURSOR>>
+109:                 (1)
+110:                 [1]
+111:                 {1}
+112:                 <1<CURSOR>>
+113:                 
+114:                 
 
 *** End of source buffer ***
 Saying: ['before previous angle']
 Heard before previous angle
-107:                 (1)
-108:                 [1]
-109:                 {1}
-110:                <CURSOR> <1>
+109:                 (1)
+110:                 [1]
+111:                 {1}
+112:                <CURSOR> <1>
+113:                 
+114:                 
 
 *** End of source buffer ***
 Saying: ['after angle']
 Heard after angle
-107:                 (1)
-108:                 [1]
-109:                 {1}
-110:                 <<CURSOR>1>
+109:                 (1)
+110:                 [1]
+111:                 {1}
+112:                 <<CURSOR>1>
+113:                 
+114:                 
 
 *** End of source buffer ***
 Saying: ['before angle']
 Heard before angle
-107:                 (1)
-108:                 [1]
-109:                 {1}
-110:                 <1<CURSOR>>
+109:                 (1)
+110:                 [1]
+111:                 {1}
+112:                 <1<CURSOR>>
+113:                 
+114:                 
 
 *** End of source buffer ***
 Saying: ['previous angle']
 Heard previous angle
-107:                 (1)
-108:                 [1]
-109:                 {1}
-110:                 <<CURSOR>1>
+109:                 (1)
+110:                 [1]
+111:                 {1}
+112:                 <<CURSOR>1>
+113:                 
+114:                 
 
 *** End of source buffer ***
 Saying: ['out of angles']
 Heard out of angles
-107:                 (1)
-108:                 [1]
-109:                 {1}
-110:                 <1><CURSOR>
+109:                 (1)
+110:                 [1]
+111:                 {1}
+112:                 <1><CURSOR>
+113:                 
+114:                 
 
 *** End of source buffer ***
 Saying: ['before previous angle']
 Heard before previous angle
-107:                 (1)
-108:                 [1]
-109:                 {1}
-110:                 <1<CURSOR>>
+109:                 (1)
+110:                 [1]
+111:                 {1}
+112:                 <1<CURSOR>>
+113:                 
+114:                 
 
 *** End of source buffer ***
 Saying: ['back out of angles']
 Heard back out of angles
-107:                 (1)
-108:                 [1]
-109:                 {1}
-110:                <CURSOR> <1>
+109:                 (1)
+110:                 [1]
+111:                 {1}
+112:                <CURSOR> <1>
+113:                 
+114:                 
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-108:                 [1]
-109:                 {1}
-110:                 <1>
-111:                 <CURSOR>
+110:                 [1]
+111:                 {1}
+112:                 <1>
+113:                 <CURSOR>
+114:                 
+115:                 
 
 *** End of source buffer ***
 Saying: ['between single-quotes', '1\\one']
 Heard between single-quotes one
-108:                 [1]
-109:                 {1}
-110:                 <1>
-111:                 '1<CURSOR>'
+110:                 [1]
+111:                 {1}
+112:                 <1>
+113:                 '1<CURSOR>'
+114:                 
+115:                 
 
 *** End of source buffer ***
 Saying: ['before previous single-quote']
 Heard before previous single-quote
-108:                 [1]
-109:                 {1}
-110:                 <1>
-111:                <CURSOR> '1'
+110:                 [1]
+111:                 {1}
+112:                 <1>
+113:                <CURSOR> '1'
+114:                 
+115:                 
 
 *** End of source buffer ***
 Saying: ['after single-quote']
 Heard after single-quote
-108:                 [1]
-109:                 {1}
-110:                 <1>
-111:                 '<CURSOR>1'
+110:                 [1]
+111:                 {1}
+112:                 <1>
+113:                 '<CURSOR>1'
+114:                 
+115:                 
 
 *** End of source buffer ***
 Saying: ['before single-quote']
 Heard before single-quote
-108:                 [1]
-109:                 {1}
-110:                 <1>
-111:                 '1<CURSOR>'
+110:                 [1]
+111:                 {1}
+112:                 <1>
+113:                 '1<CURSOR>'
+114:                 
+115:                 
 
 *** End of source buffer ***
 Saying: ['previous single-quote']
 Heard previous single-quote
-108:                 [1]
-109:                 {1}
-110:                 <1>
-111:                 '<CURSOR>1'
+110:                 [1]
+111:                 {1}
+112:                 <1>
+113:                 '<CURSOR>1'
+114:                 
+115:                 
 
 *** End of source buffer ***
 Saying: ['out of single-quotes']
 Heard out of single-quotes
-108:                 [1]
-109:                 {1}
-110:                 <1>
-111:                 '1'<CURSOR>
+110:                 [1]
+111:                 {1}
+112:                 <1>
+113:                 '1'<CURSOR>
+114:                 
+115:                 
 
 *** End of source buffer ***
 Saying: ['before previous single-quote']
 Heard before previous single-quote
-108:                 [1]
-109:                 {1}
-110:                 <1>
-111:                 '1<CURSOR>'
+110:                 [1]
+111:                 {1}
+112:                 <1>
+113:                 '1<CURSOR>'
+114:                 
+115:                 
 
 *** End of source buffer ***
 Saying: ['back out of single-quotes']
 Heard back out of single-quotes
-108:                 [1]
-109:                 {1}
-110:                 <1>
-111:                <CURSOR> '1'
+110:                 [1]
+111:                 {1}
+112:                 <1>
+113:                <CURSOR> '1'
+114:                 
+115:                 
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-109:                 {1}
-110:                 <1>
-111:                 '1'
-112:                 <CURSOR>
+111:                 {1}
+112:                 <1>
+113:                 '1'
+114:                 <CURSOR>
+115:                 
+116:                 
 
 *** End of source buffer ***
 Saying: ['between quotes', '1\\one']
 Heard between quotes one
-109:                 {1}
-110:                 <1>
-111:                 '1'
-112:                 "1<CURSOR>"
+111:                 {1}
+112:                 <1>
+113:                 '1'
+114:                 "1<CURSOR>"
+115:                 
+116:                 
 
 *** End of source buffer ***
 Saying: ['before previous quote']
 Heard before previous quote
-109:                 {1}
-110:                 <1>
-111:                 '1'
-112:                <CURSOR> "1"
+111:                 {1}
+112:                 <1>
+113:                 '1'
+114:                <CURSOR> "1"
+115:                 
+116:                 
 
 *** End of source buffer ***
 Saying: ['after quote']
 Heard after quote
-109:                 {1}
-110:                 <1>
-111:                 '1'
-112:                 "<CURSOR>1"
+111:                 {1}
+112:                 <1>
+113:                 '1'
+114:                 "<CURSOR>1"
+115:                 
+116:                 
 
 *** End of source buffer ***
 Saying: ['before quote']
 Heard before quote
-109:                 {1}
-110:                 <1>
-111:                 '1'
-112:                 "1<CURSOR>"
+111:                 {1}
+112:                 <1>
+113:                 '1'
+114:                 "1<CURSOR>"
+115:                 
+116:                 
 
 *** End of source buffer ***
 Saying: ['previous quote']
 Heard previous quote
-109:                 {1}
-110:                 <1>
-111:                 '1'
-112:                 "<CURSOR>1"
+111:                 {1}
+112:                 <1>
+113:                 '1'
+114:                 "<CURSOR>1"
+115:                 
+116:                 
 
 *** End of source buffer ***
 Saying: ['out of quotes']
 Heard out of quotes
-109:                 {1}
-110:                 <1>
-111:                 '1'
-112:                 "1"<CURSOR>
+111:                 {1}
+112:                 <1>
+113:                 '1'
+114:                 "1"<CURSOR>
+115:                 
+116:                 
 
 *** End of source buffer ***
 Saying: ['before previous quote']
 Heard before previous quote
-109:                 {1}
-110:                 <1>
-111:                 '1'
-112:                 "1<CURSOR>"
+111:                 {1}
+112:                 <1>
+113:                 '1'
+114:                 "1<CURSOR>"
+115:                 
+116:                 
 
 *** End of source buffer ***
 Saying: ['back out of quotes']
 Heard back out of quotes
-109:                 {1}
-110:                 <1>
-111:                 '1'
-112:                <CURSOR> "1"
+111:                 {1}
+112:                 <1>
+113:                 '1'
+114:                <CURSOR> "1"
+115:                 
+116:                 
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-110:                 <1>
-111:                 '1'
-112:                 "1"
-113:                 <CURSOR>
+112:                 <1>
+113:                 '1'
+114:                 "1"
+115:                 <CURSOR>
+116:                 
+117:                 
 
 *** End of source buffer ***
 Saying: ['between backquotes', '1\\one']
 Heard between backquotes one
-110:                 <1>
-111:                 '1'
-112:                 "1"
-113:                 `1<CURSOR>`
+112:                 <1>
+113:                 '1'
+114:                 "1"
+115:                 `1<CURSOR>`
+116:                 
+117:                 
 
 *** End of source buffer ***
 Saying: ['before previous backquote']
 Heard before previous backquote
-110:                 <1>
-111:                 '1'
-112:                 "1"
-113:                <CURSOR> `1`
+112:                 <1>
+113:                 '1'
+114:                 "1"
+115:                <CURSOR> `1`
+116:                 
+117:                 
 
 *** End of source buffer ***
 Saying: ['after backquote']
 Heard after backquote
-110:                 <1>
-111:                 '1'
-112:                 "1"
-113:                 `<CURSOR>1`
+112:                 <1>
+113:                 '1'
+114:                 "1"
+115:                 `<CURSOR>1`
+116:                 
+117:                 
 
 *** End of source buffer ***
 Saying: ['before backquote']
 Heard before backquote
-110:                 <1>
-111:                 '1'
-112:                 "1"
-113:                 `1<CURSOR>`
+112:                 <1>
+113:                 '1'
+114:                 "1"
+115:                 `1<CURSOR>`
+116:                 
+117:                 
 
 *** End of source buffer ***
 Saying: ['previous backquote']
 Heard previous backquote
-110:                 <1>
-111:                 '1'
-112:                 "1"
-113:                 `<CURSOR>1`
+112:                 <1>
+113:                 '1'
+114:                 "1"
+115:                 `<CURSOR>1`
+116:                 
+117:                 
 
 *** End of source buffer ***
 Saying: ['out of backquotes']
 Heard out of backquotes
-110:                 <1>
-111:                 '1'
-112:                 "1"
-113:                 `1`<CURSOR>
+112:                 <1>
+113:                 '1'
+114:                 "1"
+115:                 `1`<CURSOR>
+116:                 
+117:                 
 
 *** End of source buffer ***
 Saying: ['before previous backquote']
 Heard before previous backquote
-110:                 <1>
-111:                 '1'
-112:                 "1"
-113:                 `1<CURSOR>`
+112:                 <1>
+113:                 '1'
+114:                 "1"
+115:                 `1<CURSOR>`
+116:                 
+117:                 
 
 *** End of source buffer ***
 Saying: ['back out of backquotes']
 Heard back out of backquotes
-110:                 <1>
-111:                 '1'
-112:                 "1"
-113:                <CURSOR> `1`
+112:                 <1>
+113:                 '1'
+114:                 "1"
+115:                <CURSOR> `1`
+116:                 
+117:                 
 
 *** End of source buffer ***
 Saying: ['new statement']
 Heard new statement
-111:                 '1'
-112:                 "1"
-113:                 `1`
-114:                 <CURSOR>
+113:                 '1'
+114:                 "1"
+115:                 `1`
+116:                 <CURSOR>
+117:                 
+118:                 
 
 *** End of source buffer ***
 
@@ -16613,5 +16861,5 @@ WARNING: Call to deprecated method TestCaseWithHelpers.assert_sequences_have_sam
 
 
 -----------------------------------------------
-Test suite completed in:  601.04700017 secs
+Test suite completed in:  597.358999968 secs
 -----------------------------------------------

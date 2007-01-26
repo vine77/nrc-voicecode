@@ -31,6 +31,7 @@ from copy import copy
 from cont_gen import *
 from Context import scope_order, valid_scope
 from CSCmd import CSCmdList
+import util
 
 class WhatCanISay(Object):
     """
@@ -306,7 +307,8 @@ class WhatCanISay(Object):
         except:
             pass
         if not os.path.isdir(self.html_folder):
-            raise Exception('not a valid directory for What Can I Say website: %s'% self.html_folder)
+            raise Exception('not a valid directory for What Can I Say website: %s'% \
+                            util.within_VCode(self.html_folder))
         return self.html_folder
         
     
@@ -344,7 +346,7 @@ class WhatCanISay(Object):
         doc.append(self.html_footer(page, page_type=page_type, page_html=page_html))
         outfile = os.path.join(self.html_folder, 'index.html')
    
-        trace('WhatCanISay.files', 'making page: %s'% outfile)
+        trace('WhatCanISay.files', 'making page: %s'% util.within_VCode(outfile))
         doc.write(outfile)
 
     def get_left_menu(self, me, page_type, pages):
@@ -416,7 +418,7 @@ class WhatCanISay(Object):
         doc.append(tlpage)
         doc.append(self.html_footer(page, page_type=page_type, page_html=page_html))
         outfile = os.path.join(self.html_folder, page_html)
-        trace('WhatCanISay.files', 'making page: %s'% outfile)
+        trace('WhatCanISay.files', 'making page: %s'% util.within_VCode(outfile))
         doc.write(outfile)
                   
     def html_csc_page(self, page):
@@ -472,7 +474,7 @@ class WhatCanISay(Object):
             doc.append(tlpage)
             doc.append(self.html_footer(page, page_type=page_type, page_html=page_html))
         outfile = os.path.join(self.html_folder, page_html)
-        trace('WhatCanISay.files', 'making page: %s'% outfile)
+        trace('WhatCanISay.files', 'making page: %s'% util.within_VCode(outfile))
         doc.write(outfile)
                   
     def html_header(self, page, page_type, page_html):
