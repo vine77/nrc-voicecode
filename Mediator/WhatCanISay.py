@@ -33,7 +33,7 @@ from Context import scope_order, valid_scope
 from CSCmd import CSCmdList
 import util
 
-class WhatCanISay(Object):
+class WhatCanISay(object):
     """
     A class for generating, and displaying an index of all the active
     voice commands.
@@ -47,13 +47,20 @@ class WhatCanISay(Object):
 
     
     """
-    def __init__(self, **args):
-        self.deep_construct(WhatCanISay, 
-                            {'lsa_index': {}, 'csc_index': {}, 'languages': [],}, 
-                            args)
-
-    def load_commands_from_interpreter(self, cmd_interp):
+    def __init__(self):
+        self.index = {}      # non trivial index
+        self.std_punc = {}   # irrespective of language (lsa)
+        self.std_punc_nav = {}   # irrespective of language (csc)
+        
+            
+    def load_commands_from_interpreter(self, cmd_interp, curr_lang, curr_context=None, all_lang=None):
         """Get a dictionary of all commands from the interpreter
+
+        enter the curr_lang
+        default is only current language, with all contexts
+
+        as extension the current context can be taken (yo what can i say now), or
+        all_languages can be taken (yo what can I say complete)
 
         The list of languages goes in self.languages
 
@@ -61,7 +68,7 @@ class WhatCanISay(Object):
          with keys None and all the possible languages.
          and values:  a list of tuples (wordList, LSAentry)
 
-        The CSC commands are put in self.csc_index.
+        The CSC commands are put in self.index.
          with keys: the languages
          with values: a dict with keys 'spoken form'
                              and values: [(context key, action),...]
@@ -70,27 +77,36 @@ class WhatCanISay(Object):
         self.create_html_folder()            
         self.languages = cmd_interp.supported_languages()
         self.languages.sort()
-        
+        if all_lang:
+            self.languages = all_languages
+        else:
+            self.languages = (curr_lang, )
+        self.curr_context = curr_context
         self.index_lsas(cmd_interp)
-        self.index_cscs(cmd_interp)        
-
+        self.index_cscs(cmd_interp)
+        # per language (keys):
+        # values dict with spoken_form as keys, values a list of
+        # string (lsa) or list (csc, info form of context, action combinations)
 
     def index_lsas(self, cmd_interp):
-        self.lsa_index = {}
         for a_language in self.languages:
-            self.lsa_index[a_language] = []
+            self.index.setdefault(a_language, {})
             wTrie = cmd_interp.language_specific_aliases[a_language]
             for an_LSA in wTrie.items():
                 wordList, entry = an_LSA
+                # get the info dict of an aliasmeaning:
+                info = entry.get_info()
                 spoken_form_text = ' '.join(wordList)
-                self.lsa_index[a_language].append((spoken_form_text, entry))
+                                
+                if  info['setname'] == 'standard punctuation':
+                    if spoken_form_text not in self.std_punc:
+                        self.std_punc.setdefault(spoken_form_text, []).append(info)
+                else:
+                    self.index[a_language].setdefault(spoken_form_text, []).append(info)
 
     def index_cscs(self, cmd_interp):
-        self.csc_index = {}
         for a_language in self.languages:
-            if a_language == None:
-                continue
-            self.csc_index[a_language] = {}
+            self.index.setdefault(a_language, {})
         
         wTrie = cmd_interp.commands
         for a_csc_entry in wTrie.items():
@@ -99,18 +115,38 @@ class WhatCanISay(Object):
             trace('WhatCanISay.index_cscs', "** Processing a_csc_entry: the_spoken_form: %s, the_meanings: %s" % \
                   (the_spoken_form, the_meanings))
             self.index_contextual_meanings(the_spoken_form, the_meanings)
-           
-    def index_contextual_meanings(self, spoken_form, meanings_list):
-        for a_context, an_action in meanings_list:
-           trace('WhatCanISay.index_contextual_meanings', "** Processing a_context=%s, an_action: %s" % \
-                 (repr(a_context), repr(an_action)))
 
-           for a_language in self.languages:
-               for_this_language = meanings_list.clone()
-               if not self.context_applies_for_lang(a_language, a_context):
-                   for_this_language.remove((a_context, an_action))
-                   visible = for_this_language.get_visible_list()
-                   self.csc_index[a_language].setdefault(spoken_form, []).append("||||".join(visible))
+    def info_is_csc(self, info):
+        """info is a list"""
+        return isinstance(info, list)
+    def info_is_lsa(self, info):
+        """info is a dict"""
+        return isinstance(info, dict)
+
+    def index_contextual_meanings(self, spoken_form, meanings_list):
+        for a_language in self.languages:
+            for_this_language = meanings_list.clone()
+
+            for a_context, an_action in meanings_list:
+                trace('WhatCanISay.index_contextual_meanings', "** Processing a_context=%s, an_action: %s" % \
+                 (a_context.equivalence_key(), an_action.doc() or "action???"))
+
+                if not self.context_applies_for_lang(a_language, a_context):
+                    for_this_language.remove((a_context, an_action))
+                    # get the info list of dicts of a CSCmdList:
+                
+            info = for_this_language.get_info()
+            if info:
+                trace('WhatCanISay.index_contextual_meanings', "** adding info to %s spoken form %s\n%s"% \
+                      (info, a_language, spoken_form))
+                if info[0]['setname'] == 'standard punctuation navigation':
+                    self.std_punc_nav.setdefault(spoken_form, []).append(info)
+                    break
+                else:
+                    self.index[a_language].setdefault(spoken_form, []).append(info)
+            else:
+                trace('WhatCanISay.index_contextual_meanings', "** empty info, not adding")
+                
                  
            
     def context_applies_for_lang(self, language, context):
@@ -124,10 +160,13 @@ class WhatCanISay(Object):
         return answer
 
     def create_cmds(self, cmd_interp, curr_lang):
-        self.language = curr_lang
-        self.load_commands_from_interpreter(cmd_interp)
-        self.create_lsa_cmds(cmd_interp, self.language)
-        self.create_csc_cmds(cmd_interp, self.language)
+        self.load_commands_from_interpreter(cmd_interp, curr_lang)
+##        self.create_lsa_cmds(cmd_interp, self.language)
+##        self.create_csc_cmds(cmd_interp, self.language)
+        all = pprint.pformat(self.index)
+        filename = os.path.join(vc_globals.tmp, "wcisayindex.txt")
+        open(filename, 'w').write(all)
+        print 'written_to_file: %s'%  util.within_VCode(filename) 
 
     def create_lsa_cmds(self, cmd_interp, curr_lang):
         """Create all lsa commands, separated by language
@@ -142,9 +181,10 @@ class WhatCanISay(Object):
         the result is in self.all_commands
 
         """
+        
         all_commands = {}
-        for lang in self.lsa_index:
-            part = self.lsa_index[lang]
+        for lang in self.index:
+            part = self.index[lang]
             if lang == None:
                 lang = 'common'
             all_commands[lang] = []
@@ -173,10 +213,11 @@ class WhatCanISay(Object):
         """Create all csc commands, separated by language
 
         """
+        return
         all_commands = {}
-        for lang, part in self.csc_index.items():
+        for lang, part in self.index.items():
             if lang == None:
-                raise ValueError("value of self.csc_index[None] should not exist")
+                raise ValueError("value of self.index[None] should not exist")
             all_commands[lang] = []
             for words, visible in part.items():
                 vis = repr(visible)

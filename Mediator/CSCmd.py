@@ -81,9 +81,8 @@ class CSCmd(object):
         """
         self.spoken_forms = spoken_forms or []
         meanings = meanings or {}
-        self.meanings = CSCmdList(meanings, generate_discrete_cmd)
+        self.meanings = CSCmdList(meanings, generate_discrete_cmd, parent=self)
         self.docstring = docstring
-        self.description = ""   # should come from CSCmdSet...
         for key, val in attrs.items():
             setattr(self, key, val)
 
@@ -123,7 +122,7 @@ class CSCmd(object):
         *none* -- 
         """
         
-        return self.docstring
+        return self.docstring or ""
 
     def replace_spoken(self, spoken_forms):
         """replace the spoken forms of the command 
@@ -189,12 +188,13 @@ class CSCmdList(list):
     .. [Context] file:///./Context.Context.html
     .. [Action] file:///./Action.Action.html"""
         
-    def __init__(self, meanings={}, generate_discrete_cmd=0, **attrs):
+    def __init__(self, meanings={}, generate_discrete_cmd=0, parent=None, **attrs):
         """
 
         """           
         self.generate_discrete_cmd = generate_discrete_cmd
-        self._add_meanings(meanings)        
+        self._add_meanings(meanings)
+        self.parent = parent
 
     def clone(self):
         """returns a mixed deep-shallow copy of the object.  
@@ -204,11 +204,32 @@ class CSCmdList(list):
         """
         return copy.copy(self)
 
-    def get_visible_list(self):
-        """return a list with the visible items: scope|equivalencekey|actiondoc"""
+    def get_info(self):
+        """return a dict with the visible items"""
         visible = []
         for context, action in self:
-            vis = '%s||%s||%s'% (context.scope(), context.equivalence_key(), action.doc())
+            vis = dict(scope=context.scope(),
+                       equiv=context.equivalence_key(),
+                       action=action.doc())
+            if self.parent == None:
+                vis['doc'] = ""
+                vis['setdescription']  = "no description"
+                vis['setname'] = 'cscs'
+            else:
+                vis['doc'] = self.parent.docstring
+                try:
+                    description = self.parent.parent.description
+                except (KeyError, AttributeError):
+                    description = "no description"
+                try:
+                    name = self.parent.parent.name
+                except (KeyError, AttributeError):
+                    name = 'cscs'
+                description = description or "no description"
+                name = name or "cscs"
+                vis['setdescription']  = description
+                vis['setname']  = name
+                
             visible.append(vis)
         return visible
     

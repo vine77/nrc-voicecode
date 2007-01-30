@@ -54,13 +54,13 @@ import WinSystemMSW
 # activate some traces.
 debug.config_traces(status="off",
                     active_traces={\
-                                    'gotResults': 1,
-                                    'CmdInterp.interp': 1,
-##                                    'CmdInterp.add_lsa': 1,
+##                                    'gotResults': 1,
+##                                    'CmdInterp.interp': 1,
+##                                    'CmdInterp.add_csc': 1,
 ##                                   'WhatCanISay.index_cscs': 1,
 ##                                   'Context.conflicts_with': 1,
 ##                                   'ContLanguage.overlaps_with': 1,
-                                   'ContPyInsideArguments._applies': 1,
+##                                   'ContPyInsideArguments._applies': 1,
 ##                       'WhatCanISay.index_contextual_meanings': 1,
 ##                       'WhatCanISay.context_applies_for_lang': 1,
                        'now_you_can_safely_put_a_comma_after_the_last_entry_above': 0

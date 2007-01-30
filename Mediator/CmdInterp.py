@@ -97,7 +97,7 @@ class LSAlias(Object):
     symbol but cannot start one (e.g. digits)
     """
     def __init__(self, spoken_forms, meanings, spacing = 0, 
-        new_symbol = None, **args):
+        new_symbol = None, parent=None, name='', **args):
         """
         **INPUTS**
 
@@ -122,7 +122,9 @@ class LSAlias(Object):
                             {'spoken_forms': spoken_forms, 
                              'meanings': {}, 
                              'spacing': spacing, 
-                             'new_symbol': new_symbol
+                             'new_symbol': new_symbol,
+                             'parent': parent,
+                             'name': name
                             }, 
                             args)
 
@@ -164,13 +166,14 @@ class AliasMeaning(DeferInterp, symbol_formatting.SymElement):
     underscore, letter-alpha), or 'within' if it can appear within a
     symbol but cannot start one (e.g. digits)
     """
-    def __init__(self, written_form, spacing = 0, new_symbol = None, 
+    def __init__(self, written_form, spacing = 0, new_symbol = None, parent=None,
         **args):
         self.deep_construct(AliasMeaning, 
                             {
                              'written_form': written_form, 
                              'spacing_flag': spacing, 
-                             'new_symbol': new_symbol
+                             'new_symbol': new_symbol,
+                             'parent': parent
                             }, 
                             args)
     def written(self):
@@ -233,6 +236,39 @@ class AliasMeaning(DeferInterp, symbol_formatting.SymElement):
         *AliasElement*
         """
         return AliasElement(self.written(), spoken)
+
+    def get_info(self):
+        """get a dict of info for testing and WhatCanISay"""
+        info = dict(written_form=self.written(),
+                    spacing=self.spacing(),
+                    new_symbol=self.new_symbol
+                    )
+        if self.parent == None:
+            info['name'] = "unknown"
+        else:
+            try:
+                info['name'] = self.parent.name
+            except KeyError:
+                info['name'] =  "not there"
+            parent = self.parent
+            if parent.parent == None:
+                info['description'] = 'no description'
+                info['setname'] = 'lsas'
+            else:
+                try:
+                    description = self.parent.parent.description
+                except KeyError:
+                    description = "no description"
+                try:
+                    name = self.parent.parent.name
+                except KeyError:
+                    name = 'lsas'
+                description = description or "no description"
+                name = name or "lsas"
+                info['setdescription']  = description
+                info['setname']  = name
+                    
+        return info
             
 class AliasElement(symbol_formatting.SymElement):
     """LSAlias meaning as an element of a symbol
@@ -415,6 +451,8 @@ class CSCmdSet(Object):
         """
         if name is None:
             name = command.spoken_forms[0]
+        command.parent = self
+        trace('CmdInterp.add_csc', "add csc with description:  %s"% command.parent.description)
         self.commands[name] = command
 
     def replace_spoken(self, name, spoken_forms):
@@ -542,6 +580,7 @@ class LSAliasSet(Object):
         """
         if name is None:
             name = alias.spoken_forms[0]
+        alias.parent = self
         self.aliases[name] = alias
 
     def replace_spoken(self, name, spoken_forms):
@@ -2710,10 +2749,11 @@ class CmdInterp(OwnerObject):
                     if not self.language_specific_aliases.has_key(language):
                         self.language_specific_aliases[language] = \
                             WordTrie.WordTrie()
-
+                        
                     meaning = AliasMeaning(hacked_written_as, 
                         spacing = an_LSA.spacing, 
-                        new_symbol = an_LSA.new_symbol)
+                        new_symbol = an_LSA.new_symbol,
+                        parent=an_LSA)
                     phrase = string.split(clean_spoken)
                     self.language_specific_aliases[language].add_phrase(phrase, 
                         meaning)

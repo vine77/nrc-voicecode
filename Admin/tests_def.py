@@ -374,7 +374,7 @@ add_unittest('LSAlias', desc='Testing LSA definitions')
 # Testing WhatCanISay dialogs
 ##############################################################################
 
-##add_unittest('WhatCanISay', desc='self-test for WhatCanISay.py')
+add_unittest('WhatCanISay', desc='self-test for WhatCanISay.py')
 
 
 ##############################################################################
