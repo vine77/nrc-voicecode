@@ -2699,7 +2699,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CDF9F0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CF1A80>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -3062,6 +3062,13 @@ Fresh abbreviation file matches current one, as expected
 *******************************************************************************
 * Name        : TestCaseWithHelpers
 * Description : Test the unit testing framework.
+*******************************************************************************
+
+
+
+*******************************************************************************
+* Name        : WhatCanISay
+* Description : self-test for WhatCanISay.py
 *******************************************************************************
 
 
@@ -16861,5 +16868,5 @@ WARNING: Call to deprecated method TestCaseWithHelpers.assert_sequences_have_sam
 
 
 -----------------------------------------------
-Test suite completed in:  597.358999968 secs
+Test suite completed in:  526.859999895 secs
 -----------------------------------------------

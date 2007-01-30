@@ -6,7 +6,7 @@ import regression
 import itertools
 from pprint import pprint
 from copy import copy
-from CmdInterp import AliasMeaning, CmdInterp, LSAlias
+from CmdInterp import AliasMeaning, CmdInterp, LSAlias, CSCmdSet
 from CSCmd import CSCmd
 from cont_gen import *
 from actions_gen import *
@@ -101,11 +101,16 @@ class CSCmdTest(VoiceCodeRootTest.VoiceCodeRootTest):
          command2 = CSCmd(spoken_forms=['hello'],
                          meanings = {contPython: ActionInsert('hello python'),
                                          contC: ActionInsert('hello C')})
+         command3 = CSCmd(spoken_forms=['hello'],
+                         meanings = {ContLanguage('python'): ActionInsert('hello python'),
+                                         ContLanguage('C'): ActionInsert('hello C')})
          self.assert_equal(command2, command1, \
-                                 "Csc commands should have been the same with different ways to define")
+                                 "Csc commands 2 and 1 should have been the same with different ways to define")
+         self.assert_equal(command3, command1, \
+                                 "Csc commands 3 and 1 should have been the same with different ways to define")
 
 
-    def test_This_is_how_you_collect_all_the_CSC_commands(self):
+    def test_This_is_how_you_collect_all_the_CSC_commands_and_get_info(self):
          interp = CmdInterp()
          contAny = ContAny()
          actionHello = ActionInsert("hello")
@@ -125,15 +130,57 @@ class CSCmdTest(VoiceCodeRootTest.VoiceCodeRootTest):
          for spoken, cscmd_list in wTrie.items():
              
              if spoken == ['hello']:
-                 cscmd_list_expected = ["global||Any||Inserts 'hello^' in current buffer"]
+                 cscmd_list_expected = [{'action': "Inserts 'hello^' in current buffer",
+                                         'doc': 'hello',
+                                         'equiv': 'Any',
+                                         'scope': 'global',
+                                         'setdescription': 'no description',
+                                         'setname': 'cscs'}]
              elif spoken == ['there']:
-                 cscmd_list_expected = ["immediate||BlankLine: any||Inserts 'there^' in current buffer",
-                                        "global||Any||Inserts 'there otherwise^' in current buffer"]
-             
-             visible_list = cscmd_list.get_visible_list()
+                 cscmd_list_expected = [{'action': "Inserts 'there^' in current buffer",
+                                         'doc': 'there on blankline or otherwise',
+                                         'equiv': 'BlankLine: any',
+                                         'scope': 'immediate',
+                                         'setdescription': 'no description',
+                                         'setname': 'cscs'},
+                                        {'action': "Inserts 'there otherwise^' in current buffer",
+                                         'doc': 'there on blankline or otherwise',
+                                         'equiv': 'Any',
+                                         'scope': 'global',
+                                         'setdescription': 'no description',
+                                         'setname': 'cscs'}]
+             visible_list = cscmd_list.get_info()
              self.assert_equal(cscmd_list_expected, visible_list,
                                'wTrie CSCmdList of meanings with spoken form "%s" is not as expected'% repr(spoken))
              
+    def test_This_is_how_you_enter_and_get_info_through_CSCmdSet(self):
+         interp = CmdInterp()
+         actionHello = ActionInsert("csc hello")
+         contAny = ContAny()
+         cscs = CSCmdSet('csc demo set', description='description of csc demo set')
+         cscs.add_csc(CSCmd(spoken_forms=['hello'],
+                                     meanings={contAny: actionHello},
+                                     docstring="hello in csc set"))
+         interp.add_csc_set(cscs)
+         wTrie = interp.commands
+         for spoken, cscmd_list in wTrie.items():
+             
+             if spoken == ['hello']:
+                 cscmd_list_expected = [{'action': "Inserts 'csc hello^' in current buffer",
+                                         'doc': 'hello in csc set',
+                                         'equiv': 'Any',
+                                         'scope': 'global',
+                                         'setdescription': 'description of csc demo set',
+                                         'setname': 'csc demo set'}]
+             else:
+                 self.fail("should not come here, testing error, should have exactly 1 spoken form")
+             visible_list = cscmd_list.get_info()
+             self.assert_equal(cscmd_list_expected, visible_list,
+                               'wTrie CSCmdList of meanings with spoken form "%s" is not as expected'% repr(spoken))
+             break
+         else:
+             self.fail("no spoken forms in test, should not come here, testing error, should have 1 spoken form")
+
 
 ##########################################################
 # Unit tests lsa and general commands
