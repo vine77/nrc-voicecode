@@ -6,12 +6,13 @@ import vc_globals
 import os, glob, shutil
 import regression
 import itertools
-
+import pprint
 from copy import copy
 from CmdInterp import AliasMeaning, CmdInterp, LSAlias, LSAliasSet, CSCmdSet
 from CSCmd import CSCmd
 from cont_gen import *
-from WhatCanISay import WhatCanISay
+import WhatCanISay
+
 from actions_gen import gen_parens_pair, ActionInsertNewClause, ActionInsert
 from actions_C_Cpp import c_else
 from config_helpers import *
@@ -55,6 +56,9 @@ csc_equals_meanings ={ContPyInsideArguments(): ActionInsert("="),
                       ContAny(): ActionInsert(' = ')}
 csc_equals_docstring = 'equal sign'
 
+# lsa in case csc does not apply:
+lsa_equals_spoken_forms = ['equals']
+lsa_equals_meanings = {('python', 'C'):  ' = '}
 
 expected_index = {'python': {\
        'else': [[{'action': None,
@@ -63,18 +67,24 @@ expected_index = {'python': {\
                   'scope': 'buffer',
                   'setdescription': 'description of cscs',
                   'setname': 'cscs'}]],
-       'equals': [[{'action': "Inserts '=^' in current buffer",
-                    'doc': 'equal sign',
-                    'equiv': 'ContPyInsideArguments: python',
-                    'scope': 'immediate',
-                    'setdescription': 'description of cscs',
-                    'setname': 'cscs'},
-                   {'action': "Inserts ' = ^' in current buffer",
-                    'doc': 'equal sign',
-                    'equiv': 'Any',
-                    'scope': 'global',
-                    'setdescription': 'description of cscs',
-                    'setname': 'cscs'}]],
+       'equals':   [[{'action': "Inserts '=^' in current buffer",
+                      'doc': 'equal sign',
+                      'equiv': 'ContPyInsideArguments: python',
+                      'scope': 'immediate',
+                      'setdescription': 'description of cscs',
+                      'setname': 'cscs'},
+                     {'action': "Inserts ' = ^' in current buffer",
+                      'doc': 'equal sign',
+                      'equiv': 'Any',
+                      'scope': 'global',
+                      'setdescription': 'description of cscs',
+                      'setname': 'cscs'}],
+                    {'name': 'equals lsa',
+                     'new_symbol': None,
+                     'setdescription': 'description of lsas',
+                     'setname': 'lsas',
+                     'spacing': 0,
+                     'written_form': ' = '}],
        'multiply by': [{'name': 'multiply',
                         'new_symbol': None,
                         'setdescription': 'description of lsas',
@@ -192,13 +202,14 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
       VoiceCodeRootTest.VoiceCodeRootTest.__init__(self, name)
       
    def setUp(self):
-       self.wciSay = WhatCanISay()
+       self.wciSay = WhatCanISay.WhatCanISay()
        self.interp = CmdInterp()
 
        # lsa set:
        lsas = LSAliasSet("lsas", description="description of lsas")
        lsas.add_lsa(LSAlias(lsa_multiply_spoken_forms, lsa_multiply_meanings, name="multiply"))
        lsas.add_lsa(LSAlias(lsa_not_spoken_forms, lsa_not_meanings, name="not"))
+       lsas.add_lsa(LSAlias(lsa_equals_spoken_forms, lsa_equals_meanings, name="equals lsa"))
        self.interp.add_lsa_set(lsas)
 
        # csc set:
@@ -230,25 +241,23 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
       
 
    def test_This_is_how_you_create_a_WhatCanISay_instance(self):
-       """after this call the index and should be created"""
-       wciSay = WhatCanISay()
+       wciSay = WhatCanISay.WhatCanISay()
        interp = CmdInterp()
-       return
+       # load one lsa and one csc:
+       interp.add_csc(CSCmd(["equals"], meanings={contAny: ActionInsert("====")}, name="equals csc"))
+       interp.add_lsa(LSAlias(["plus"], meanings={all_languages: " + "}, name="plus sign"))
        wciSay.load_commands_from_interpreter(interp, 'C')
-       expected_index = {}
-       self.assert_equal(expected_index, wciSay.index, 'commands index should be equal (and nearly empty, no commands loaded)')
+       
 
    def test_This_is_how_you_create_the_commands_for_showing(self):
-       """after this call the lsa_commands and csc_commands should be created"""
-       wciSay = WhatCanISay()
+       wciSay = WhatCanISay.WhatCanISay()
        interp = CmdInterp()
-       return
-       wciSay.create_cmds(interp, 'C')
-       expected_index =  {'actual_sb__w': [], 'actual_sb_s': []}
-       self.assert_equal(expected_index, wciSay.index, "commands should be empty lists, nothing loaded yet")
-
-       expected_csc =  {}
-       self.assert_equal(expected_csc, wciSay.csc_commands, "csc_commands should be empty lists, nothing loaded yet")
+       # load one lsa and one csc:
+       interp.add_csc(CSCmd(["equals"], meanings={contAny: ActionInsert("====")}, name="equals csc"))
+       interp.add_lsa(LSAlias(["plus"], meanings={all_languages: " + "}, name="plus sign"))
+       wciSay.load_commands_from_interpreter(interp, 'C')
+       wciSay.create_cmds()
+##       self.assert_equal(expected_csc, wciSay.csc_commands, "csc_commands should be empty lists, nothing loaded yet")
 
 
 
@@ -267,13 +276,44 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
 # These tests check the internal workings of the class.
 ##########################################################
 
-   def test_the_index_of_WhatCanISay(self):
-       self.assert_equal(expected_index, self.wciSay.index, "test index of WhatCanISay is not as expected")
-       self.assert_equal(expected_punc, self.wciSay.std_punc, "test std_punc of WhatCanISay is not as expected")
-       self.assert_equal(expected_punc_nav, self.wciSay.std_punc_nav, "test std_punc_nav of WhatCanISay is not as expected")
+   def test_the_index_of_WhatCanISay_default(self):
+
+       # all_lang = None, curr_context = None, curr_lang = 'python' in this test case
+       self.assert_equal(expected_index, self.wciSay.index, "test index of WhatCanISay (default) is not as expected")
+
+       self.assert_equal({}, self.wciSay.std_punc, \
+                         "test std_punc of WhatCanISay (default) is not as expected")
+       self.assert_equal({}, self.wciSay.std_punc_nav, \
+                         "test std_punc_nav of WhatCanISay(default) is not as expected")
+
+   def test_the_index_of_WhatCanISay_all_lang(self):
+
+       # all_lang = 1, curr_context = None, curr_lang = 'python' in this test case
+       self.wciSay.index = {}
+       self.wciSay.std_punc = {}
+       self.wciSay.std_punc_nav = {}
+       self.wciSay.load_commands_from_interpreter(self.interp, 'python', all_lang=1)
+       expected_index_keys_all_lang = list(all_languages)
+       actual_keys = self.wciSay.index.keys()
+       actual_keys.sort()
+       self.assert_equal(expected_index_keys_all_lang, actual_keys, "test index of WhatCanISay .(all_lang) has not expected keys")
+       self.assert_equal(expected_punc, self.wciSay.std_punc, \
+                         "test std_punc of WhatCanISay (all_lang) is not as expected")
+       self.assert_equal(expected_punc_nav, self.wciSay.std_punc_nav, \
+                         "test std_punc_nav of WhatCanISay(all_lang) is not as expected")
+
+   def test_the_index_of_WhatCanISay_curr_context(self):
+
+       self._open_empty_test_file('temp.py')
+       self.wciSay.index = {}
+       self.wciSay.std_punc = {}
+       self.wciSay.std_punc_nav = {}
+       self.wciSay.load_commands_from_interpreter(self.interp, 'python', curr_context=1)
+       pprint.pprint(self.wciSay.index['python']['equals'])
        
+
    def test_the_index_of_simple_csc__and_an_lsa_definition(self):
-       wciSay = WhatCanISay()
+       wciSay = WhatCanISay.WhatCanISay()
        interp = CmdInterp()
        # do one csc and one lsa:
        interp.add_csc(CSCmd(["equals"], meanings={contAny: ActionInsert("====")}, name="equals csc"))
@@ -324,24 +364,6 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self.wciSay.extract_common_commands(D)
        self.assert_equal(expected, D,
                          "extract_common_commands result unexpected, no common commands")  
-
-
-
-
-   
-   def test_index_dict(self):
-       """testing self.index """
-       return
-       self.wciSay.create_cmds(self.interp, 'python')  
-       actual_languages = list(self.wciSay.languages)
-       self.failIf(None in actual_languages, "None should not be in supported languages")
-       actual_languages.sort()
-       self.assert_equal(expected_languages, actual_languages,
-                         "List of supported languages was wrong.")  
-       
-       self.assert_equal(expected_index,
-                         self.wciSay.index, 
-                         'Command index NOT as expected.')
 
  
    def test_lsa_commands(self):
@@ -514,3 +536,25 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
            dest = src.replace(src_dir, dest_dir)
            shutil.copyfile(src, dest)
            
+   def test_WhatCanISay_with_all_lang_and_curr_context_should_fail(self):
+       self.wciSay.index = {}
+       self.wciSay.std_punc = {}
+       self.wciSay.std_punc_nav = {}
+       self.assertRaises(ValueError, self.wciSay.load_commands_from_interpreter,
+                         self.interp, 'python', 1, 1)
+
+
+       
+        
+
+def _test():
+    reload(WhatCanISay)
+    wciSay = WhatCanISay.WhatCanISay()
+    wciSay.curr_lang = 'python'
+    wciSay.all_lang = None
+    wciSay.curr_context = None
+    wciSay.index = expected_index
+    wciSay.create_cmds()
+
+if __name__ == "__main__":
+    _test()

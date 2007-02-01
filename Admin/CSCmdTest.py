@@ -188,5 +188,13 @@ class CSCmdTest(VoiceCodeRootTest.VoiceCodeRootTest):
 # These tests check the internal workings of the class.
 ##########################################################
 
+
+
+    def test_Test_equivalent_ContLanguage_instances(self):
+        # see ContextTest.py
+        pass
+        
+
     def test_Test_conflicing_context_instances(self):
-          pass
+        pass
+        # see ContextTest.py

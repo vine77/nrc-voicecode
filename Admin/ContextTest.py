@@ -190,6 +190,14 @@ class ContextTest(VoiceCodeRootTest.VoiceCodeRootTest):
         self.assert_(self.contPython.conflicts_with(contL), "bufferscope subclass of ContLanguage should conflict with same language ContLanguage instance")
         self.failIf(self.contC.conflicts_with(contL), "bufferscope subclass of ContLanguage should NOT conflict with other language ContLanguage instance")
 
+    def test_ContLanguage_instances_languages_are_sorted(self):
+         contMixed1 = ContLanguage( ('python', 'perl') )
+         contMixed2 = ContLanguage( ('perl', 'python') )
+         self.assert_equal(contMixed2, contMixed1, \
+                           "language order of ContLanguage instances does not matter")
+         self.assert_equal(contMixed1.equivalence_key(), contMixed2.equivalence_key(), "the equivalence_keys should also be the same")
+
+                                    
 
     def test_Context_should_fail_with_invalid_input(self):
          self.assertRaises(ValueError, ContLanguage, "unknown")
