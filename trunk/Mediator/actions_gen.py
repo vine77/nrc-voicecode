@@ -26,7 +26,6 @@ import Object, vc_globals
 import debug
 import sr_interface
 import symbol_formatting
-from WhatCanISay import WhatCanISay
 
 class Action(Object.Object):
     """Base class for all actions.
@@ -1526,43 +1525,6 @@ class ActionPrintSymbols(Action):
              manager.interpreter().print_symbols()
            except AttributeError:
              print 'print symbols command not supported with old Mediator'
-
-class ActionWhatCanISay(Action):
-    """give what can I say info...
-    
-    **INSTANCE ATTRIBUTES**
-        
-    *none*
-        
-    CLASS ATTRIBUTES**
-        
-    *none* -- 
-    
-    Moves to instance of class WhatCanISay, written mainly by Quintijn Hoogenbooms
-    This instance makes a current language aware overview of LSAs (and later) CSCs.
-    The info is presented in HTML format and opened with webbrowser in the default browser.
-    
-    """
-
-    def __init__(self, buff_name=None, **args_super):
-        self.deep_construct(ActionWhatCanISay, \
-                            {}, \
-                                args_super, \
-                            {})
-                            
-    def doc(self):
-        return 'Give actual command info.';
-
-    def execute(self, app, cont, state = None):
-        """See [Action.execute] for details.
-        
-        .. [Action.execute] file:///./Action.Action.html#execute"""
-        
-        manager = app.current_manager()
-        if manager:
-            wciSay = WhatCanISay()
-            wciSay.show_cmds(manager.interpreter(), app.language_name())
-
 
 class ActionPrintAbbrevs(Action):
     """Print the list of all abbreviations (resolved and unresolved).

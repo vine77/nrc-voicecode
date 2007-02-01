@@ -52,6 +52,7 @@ from LangDef import LangDef
 from cont_gen import *
 from cont_emacs import *
 from actions_gen import *
+from actions_wcisay import *
 from actions_emacs import *
 from actions_C_Cpp import *
 from actions_py import *

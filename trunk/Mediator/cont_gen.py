@@ -62,7 +62,9 @@ class ContLanguage(Context):
             if lang not in all_languages:
                 raise(ValueError, 'ContLanguage is called with invalid language: "%s"\n'
                                   'valid languages are: %s'% (lang, repr(all_languages)))
-        self.language = language
+        language = list(language)
+        language.sort()
+        self.language = tuple(language)
         super(ContLanguage, self).__init__(**args_super)
 
     def scope(self):
