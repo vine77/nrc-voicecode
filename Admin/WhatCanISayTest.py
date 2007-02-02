@@ -61,7 +61,7 @@ lsa_equals_spoken_forms = ['equals']
 lsa_equals_meanings = {('python', 'C'):  ' = '}
 
 expected_index = {'python': {\
-       'else': [[{'action': None,
+       'else': [[{'action': 'no docstring available',
                   'doc': 'else clause',
                   'equiv': 'Language: python',
                   'scope': 'buffer',
@@ -110,15 +110,14 @@ expected_index = {'python': {\
                             'setdescription': 'description of cscs',
                             'setname': 'cscs'}]]}}
 
-expected_punc =   {'percent sign':\
+expected_boilerplate =  {\
+    'percent sign':\
                    [{'name': '',
                     'new_symbol': None,
                     'setdescription': 'dictating punctuation',
                     'setname': 'standard punctuation',
                     'spacing': 0,
-                    'written_form': '%'}]}
-
-expected_punc_nav =  {\
+                    'written_form': '%'}],
    'after next percent sign': \
         [[{'action': "Moves to next occurence of \\%. (can be repeated or qualified by subsequent utterance like: 'do that again' and 'previous one').",
            'doc': 'go after next percent-sign',
@@ -230,7 +229,7 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        punc.add('%', ['percent-sign'])
        punc.create(self.interp)
        
-       self.wciSay.load_commands_from_interpreter(self.interp, 'python')
+       self.wciSay.load_commands_from_interpreter(self._app(), self.interp, 'python')
 
       
 ##########################################################
@@ -246,7 +245,7 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        # load one lsa and one csc:
        interp.add_csc(CSCmd(["equals"], meanings={contAny: ActionInsert("====")}, name="equals csc"))
        interp.add_lsa(LSAlias(["plus"], meanings={all_languages: " + "}, name="plus sign"))
-       wciSay.load_commands_from_interpreter(interp, 'C')
+       wciSay.load_commands_from_interpreter(self._app(), interp, 'C')
        
 
    def test_This_is_how_you_create_the_commands_for_showing(self):
@@ -255,7 +254,7 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        # load one lsa and one csc:
        interp.add_csc(CSCmd(["equals"], meanings={contAny: ActionInsert("====")}, name="equals csc"))
        interp.add_lsa(LSAlias(["plus"], meanings={all_languages: " + "}, name="plus sign"))
-       wciSay.load_commands_from_interpreter(interp, 'C')
+       wciSay.load_commands_from_interpreter(self._app(), interp, 'C')
        wciSay.create_cmds()
 ##       self.assert_equal(expected_csc, wciSay.csc_commands, "csc_commands should be empty lists, nothing loaded yet")
 
@@ -281,34 +280,24 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        # all_lang = None, curr_context = None, curr_lang = 'python' in this test case
        self.assert_equal(expected_index, self.wciSay.index, "test index of WhatCanISay (default) is not as expected")
 
-       self.assert_equal({}, self.wciSay.std_punc, \
-                         "test std_punc of WhatCanISay (default) is not as expected")
-       self.assert_equal({}, self.wciSay.std_punc_nav, \
-                         "test std_punc_nav of WhatCanISay(default) is not as expected")
+       self.assert_equal({}, self.wciSay.boilerplate, \
+                         "test boilerplate of WhatCanISay (default) is not as expected")
 
    def test_the_index_of_WhatCanISay_all_lang(self):
 
        # all_lang = 1, curr_context = None, curr_lang = 'python' in this test case
-       self.wciSay.index = {}
-       self.wciSay.std_punc = {}
-       self.wciSay.std_punc_nav = {}
-       self.wciSay.load_commands_from_interpreter(self.interp, 'python', all_lang=1)
+       self.wciSay.load_commands_from_interpreter(self._app(), self.interp, 'python', all_lang=1)
        expected_index_keys_all_lang = list(all_languages)
        actual_keys = self.wciSay.index.keys()
        actual_keys.sort()
        self.assert_equal(expected_index_keys_all_lang, actual_keys, "test index of WhatCanISay .(all_lang) has not expected keys")
-       self.assert_equal(expected_punc, self.wciSay.std_punc, \
-                         "test std_punc of WhatCanISay (all_lang) is not as expected")
-       self.assert_equal(expected_punc_nav, self.wciSay.std_punc_nav, \
-                         "test std_punc_nav of WhatCanISay(all_lang) is not as expected")
+       self.assert_equal(expected_boilerplate, self.wciSay.boilerplate, \
+                         "test boilerplate of WhatCanISay (all_lang) is not as expected")
 
    def test_the_index_of_WhatCanISay_curr_context(self):
 
        self._open_empty_test_file('temp.py')
-       self.wciSay.index = {}
-       self.wciSay.std_punc = {}
-       self.wciSay.std_punc_nav = {}
-       self.wciSay.load_commands_from_interpreter(self.interp, 'python', curr_context=1)
+       self.wciSay.load_commands_from_interpreter(self._app(), self.interp, 'python', curr_context=1)
        pprint.pprint(self.wciSay.index['python']['equals'])
        
 
@@ -318,7 +307,7 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
        # do one csc and one lsa:
        interp.add_csc(CSCmd(["equals"], meanings={contAny: ActionInsert("====")}, name="equals csc"))
        interp.add_lsa(LSAlias(["plus"], meanings={all_languages: " + "}, name="plus sign"))
-       wciSay.load_commands_from_interpreter(interp, 'C')
+       wciSay.load_commands_from_interpreter(self._app(), interp, 'C')
        expected = {'C':\
                   {'equals': [[{'action': "Inserts '====^' in current buffer",
                                 'doc': None,
@@ -537,11 +526,8 @@ class WhatCanISayTest(VoiceCodeRootTest.VoiceCodeRootTest):
            shutil.copyfile(src, dest)
            
    def test_WhatCanISay_with_all_lang_and_curr_context_should_fail(self):
-       self.wciSay.index = {}
-       self.wciSay.std_punc = {}
-       self.wciSay.std_punc_nav = {}
        self.assertRaises(ValueError, self.wciSay.load_commands_from_interpreter,
-                         self.interp, 'python', 1, 1)
+                         self._app(), self.interp, 'python', 1, 1)
 
 
        
