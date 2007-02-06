@@ -36,8 +36,9 @@
  '(py-indent-offset 3))
 
 
-(setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$"
-"\*Completions\*"))
+(setq vr-deprecated-activation-list 
+         (list "\.py$" "\.c$" "\.cpp$" "\.h$" "\.js$" "\.R$"
+               "\*Completions\*"))
 
 
 ;;; Change this if you want to see more traces
@@ -272,7 +273,8 @@ in the 'vr-deprecated-log-buff-name buffer.")
 (cl-puthash "cpp" "C" vcode-language-name-map)
 (cl-puthash "java" "java" vcode-language-name-map)
 (cl-puthash "pl" "perl" vcode-language-name-map)
-
+(cl-puthash "js" "javascript" vcode-language-name-map)
+(cl-puthash "R" "C" vcode-language-name-map)
 
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
@@ -342,7 +344,9 @@ sent."
   (set-frame-height (selected-frame) 40)
  
   (vcode-close-all-buffers)
-  (setq vr-deprecated-activation-list (list "\.py$" "\.c$" "\.cpp$" "\.h$" "*Completions*"))
+  (setq vr-deprecated-activation-list 
+           (list "\.py$" "\.c$" "\.cpp$" "\.h$" "\.pl$" "\.R$"
+                 "\.js$" "*Completions*"))
   (vcode-configure-for-regression-testing t)
   (vcode-mode-toggle-to 1 "vcode-test")
   (setq vcode-is-test-editor t)

@@ -889,7 +889,8 @@ class MultiWindowDisplay(RemoteDisplay):
         *BOOL* -- true if the module allows the editor to change the
         window title
         """
-        debug.virtual('KnownTargetModule.variable_title')
+        return self.title_varies
+
     
     def new_window(self, window, title, editors, instance_name = None):
         """factory which creates a new TargetWindow object.

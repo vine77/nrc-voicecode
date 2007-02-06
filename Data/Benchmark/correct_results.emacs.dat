@@ -1,3 +1,4 @@
+
 creating wxMediator
 Loading test definitions...
 Configuring the mediator...
@@ -1826,7 +1827,7 @@ Heard after semi new paragraph
 *** Compiling symbols from file: %VCODE_HOME%\Data\TestData\used_to_test_C_Cpp_parsing.cpp ***
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_C_Cpp_std_sym.cpp'
-WARNING: source file 'd:\natlink\VCode\Data\TestData\used_to_test_C_Cpp_parsing.cpp' doesn't exist.
+WARNING: source file 'C:\Documents and Settings\Desiletsa\My Documents\eclipse_workspace\VCode\Data\TestData\used_to_test_C_Cpp_parsing.cpp' doesn't exist.
 
 
 Parsed symbols are: 
@@ -1835,6 +1836,7 @@ THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test 
 _cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  test_comment  test_procedure  testing_adding_above  testing_declaration  testing_other_pointers  testing_pointers  the_value  this  tiger  triangle  type  
 Unresolved abbreviations are:
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 
 *** End of compilation test ***
 
@@ -1873,7 +1875,7 @@ log10: ['log 10', 'log base 10', 'logarithm base 10']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['SQRT', 'square root']
+sqrt: ['sqirt', 'sqrt', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -2699,7 +2701,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CF1A80>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01E53D50>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2762,6 +2764,7 @@ _cached_symbols_as_one_string[y] is:
     y  
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
@@ -2893,6 +2896,7 @@ _cached_symbols_as_one_string[w] is:
 _cached_symbols_as_one_string[x] is:
     x  
 Unresolved abbreviations are:
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
 'execfile': appears in ['execfile']
 'expandvars': appears in ['expandvars']
@@ -2959,6 +2963,7 @@ _cached_symbols_as_one_string[y] is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'f': appears in ['f_name2', 'f_name']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
@@ -3006,6 +3011,7 @@ _cached_symbols_as_one_string[y] is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'f': appears in ['f_name2', 'f_name']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -3071,6 +3077,48 @@ Fresh abbreviation file matches current one, as expected
 * Description : self-test for WhatCanISay.py
 *******************************************************************************
 
+skipping: 
+skipping: 
+skipping: 
+MMMMaking wcisay website for lang: C, curr_context: None, all_lang: None
+{'C': {'equals': [[{'action': "Inserts '====^' in current buffer",
+                    'doc': None,
+                    'equiv': 'Any',
+                    'scope': 'global',
+                    'setdescription': 'no description',
+                    'setname': 'cscs'}]],
+       'plus': [{'description': 'no description',
+                 'name': 'plus sign',
+                 'new_symbol': None,
+                 'setname': 'lsas',
+                 'spacing': 0,
+                 'written_form': ' + '}]}}
+skipping: 
+skipping: 
+skipping: 
+skipping: 
+skipping: 
+skipping: 
+skipping: 
+skipping: 
+skipping: 
+skipping: 
+skipping: 
+skipping: 
+[[{'action': "Inserts '=^' in current buffer",
+   'doc': 'equal sign',
+   'equiv': 'ContPyInsideArguments: python',
+   'scope': 'immediate',
+   'setdescription': 'description of cscs',
+   'setname': 'cscs'},
+  {'action': "Inserts ' = ^' in current buffer",
+   'doc': 'equal sign',
+   'equiv': 'Any',
+   'scope': 'global',
+   'setdescription': 'description of cscs',
+   'setname': 'cscs'}]]
+skipping: 
+skipping: 
 
 
 *******************************************************************************
@@ -3288,7 +3336,7 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'d:\\natlink\\VCode\\Data\\TestData'
+'C:\\Documents and Settings\\Desiletsa\\My Documents\\eclipse_workspace\\VCode\\Data\\TestData'
 
 
 >>> Testing console command: compile_symbols([r'%VCODE_HOME%\Data\TestData\small_buff.c'])
@@ -3329,7 +3377,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['SQRT', 'square root']
+sqrt: ['sqirt', 'sqrt', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -3793,9 +3841,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'10': appears in ['log10']
+'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
@@ -4236,9 +4287,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'10': appears in ['log10']
+'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
@@ -4282,7 +4336,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['SQRT', 'square root']
+sqrt: ['sqirt', 'sqrt', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -4365,7 +4419,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['SQRT', 'square root']
+sqrt: ['sqirt', 'sqrt', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -4830,9 +4884,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'10': appears in ['log10']
+'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
@@ -4884,7 +4941,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['SQRT', 'square root']
+sqrt: ['sqirt', 'sqrt', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -5351,9 +5408,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'10': appears in ['log10']
+'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
@@ -5794,9 +5854,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'10': appears in ['log10']
+'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
@@ -9185,9 +9248,9 @@ Heard rate divide equals time new statement
 * Description : testing persistence between VoiceCode sessions
 *******************************************************************************
 
-As best as I can tell from SF Browse CVS, this test was
-    introduced in revision vcode vcode-0-0-7, and broken before
-    vcode-0-0-8, and has never since worked in the manner the
+As best as I can tell from SF Browse CVS, this test was 
+    introduced in revision vcode vcode-0-0-7, and broken before 
+    vcode-0-0-8, and has never since worked in the manner the 
     printed >>> comments indicate, until now -- DCF
 
 
@@ -9195,7 +9258,7 @@ As best as I can tell from SF Browse CVS, this test was
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'd:\natlink\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'C:\Documents and Settings\Desiletsa\My Documents\eclipse_workspace\VCode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -9233,7 +9296,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['SQRT', 'square root']
+sqrt: ['sqirt', 'sqrt', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -9317,7 +9380,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['SQRT', 'square root']
+sqrt: ['sqirt', 'sqrt', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -12072,7 +12135,7 @@ spoken_form_info: ['spoken form info', 'spoken form information']
 spoken_form_regexp: ['spoken form regexp', 'spoken form regular expression']
 spoken_forms: ['spoken forms']
 spoken_written_form: ['spoken written form']
-sqrt: ['SQRT', 'square root']
+sqrt: ['sqirt', 'sqrt', 'square root']
 sr_interface: ['S. R. interface', 'SR interface']
 start: ['start']
 stdin: ['S. T. D. in', 'standard in', 'standard input', 'stdin']
@@ -12244,7 +12307,7 @@ Heard define method initialize add argument on application equals none comma
   9: import EdSim, SymDict
  10: import sr_interface
  11: class CmdInterp(Object):
- 12:     def __init__(self, on_app=None, <CURSOR>):
+ 12:     def __init__(self, on_app = None, <CURSOR>):
  13:         
 
 *** End of source buffer ***
@@ -12252,7 +12315,7 @@ Saying: ['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'd
 Heard symbol dictionary pickle file equals none comma double asterisk attributes method body
  10: import sr_interface
  11: class CmdInterp(Object):
- 12:     def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
+ 12:     def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:         <CURSOR>
 
 *** End of source buffer ***
@@ -12260,7 +12323,7 @@ Saying: ['self', 'dot', 'declare', 'attributes', 'with', 'arguments', 'brace', '
 Heard self dot declare attributes with arguments brace pair
  10: import sr_interface
  11: class CmdInterp(Object):
- 12:     def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
+ 12:     def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:         self.decl_attrs({<CURSOR>})
 
 *** End of source buffer ***
@@ -12268,21 +12331,21 @@ Saying: ['single', 'quotes', 'un', 'translated', 'text', 'start', 'jump', 'out',
 Heard single quotes un translated text start jump out colon none comma
  10: import sr_interface
  11: class CmdInterp(Object):
- 12:     def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
+ 12:     def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:         self.decl_attrs({'_untranslated_text_start': None, <CURSOR>})
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement']
 Heard single quotes un translated text end jump out colon none new statement
  11: class CmdInterp(Object):
- 12:     def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
+ 12:     def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:         self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:         <CURSOR>
 
 *** End of source buffer ***
 Saying: ['self', 'dot', 'deep', 'construct', 'with', 'arguments', 'command', 'interpreter', 'comma', 'continue', 'statement']
 Heard self dot deep construct with arguments command interpreter comma continue statement
- 12:     def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
+ 12:     def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:         self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:         self.deep_construct(CmdInterp, \
  15:                             <CURSOR>)
@@ -12290,7 +12353,7 @@ Heard self dot deep construct with arguments command interpreter comma continue 
 *** End of source buffer ***
 Saying: ['brace', 'pair', 'single', 'quotes', 'on', 'application', 'jump', 'out', ':\\colon', 'on', 'application', 'comma']
 Heard brace pair single quotes on application jump out colon on application comma
- 12:     def __init__(self, on_app=None, symdict_pickle_file=None, **attrs):
+ 12:     def __init__(self, on_app = None, symdict_pickle_file = None, **attrs):
  13:         self.decl_attrs({'_untranslated_text_start': None, '_untranslated_text_end': None})
  14:         self.deep_construct(CmdInterp, \
  15:                             {'on_app': on_app, <CURSOR>})
@@ -12622,7 +12685,7 @@ Heard define method initialize add argument on application equals none comma
   9: import ed_simulator, symbol_dictionary
  10: import sr_interface
  11: class CommandInterpreter(object):
- 12:     def initialize(self, on_application=None, <CURSOR>):
+ 12:     def initialize(self, on_application = None, <CURSOR>):
  13:         
 
 *** End of source buffer ***
@@ -12630,7 +12693,7 @@ Saying: ['symbol', 'dictionary', 'pickle', 'file', 'equals', 'none', 'comma', 'd
 Heard symbol dictionary pickle file equals none comma double asterisk attributes method body
  10: import sr_interface
  11: class CommandInterpreter(object):
- 12:     def initialize(self, on_application=None, symbol_dictionary_pickle_file=None, **attributes):
+ 12:     def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:         <CURSOR>
 
 *** End of source buffer ***
@@ -12638,7 +12701,7 @@ Saying: ['self', 'dot', 'declare', 'attributes', 'with', 'arguments', 'brace', '
 Heard self dot declare attributes with arguments brace pair
  10: import sr_interface
  11: class CommandInterpreter(object):
- 12:     def initialize(self, on_application=None, symbol_dictionary_pickle_file=None, **attributes):
+ 12:     def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:         self.declare_attributes({<CURSOR>})
 
 *** End of source buffer ***
@@ -12646,21 +12709,21 @@ Saying: ['single', 'quotes', 'un', 'translated', 'text', 'start', 'jump', 'out',
 Heard single quotes un translated text start jump out colon none comma
  10: import sr_interface
  11: class CommandInterpreter(object):
- 12:     def initialize(self, on_application=None, symbol_dictionary_pickle_file=None, **attributes):
+ 12:     def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:         self.declare_attributes({'un_translated_text_start': None, <CURSOR>})
 
 *** End of source buffer ***
 Saying: ['single', 'quotes', 'un', 'translated', 'text', 'end', 'jump', 'out', ':\\colon', 'none', 'new', 'statement']
 Heard single quotes un translated text end jump out colon none new statement
  11: class CommandInterpreter(object):
- 12:     def initialize(self, on_application=None, symbol_dictionary_pickle_file=None, **attributes):
+ 12:     def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:         self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:         <CURSOR>
 
 *** End of source buffer ***
 Saying: ['self', 'dot', 'deep', 'construct', 'with', 'arguments', 'command', 'interpreter', 'comma', 'continue', 'statement']
 Heard self dot deep construct with arguments command interpreter comma continue statement
- 12:     def initialize(self, on_application=None, symbol_dictionary_pickle_file=None, **attributes):
+ 12:     def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:         self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:         self.deep_construct(CommandInterpreter, \
  15:                             <CURSOR>)
@@ -12668,7 +12731,7 @@ Heard self dot deep construct with arguments command interpreter comma continue 
 *** End of source buffer ***
 Saying: ['brace', 'pair', 'single', 'quotes', 'on', 'application', 'jump', 'out', ':\\colon', 'on', 'application', 'comma']
 Heard brace pair single quotes on application jump out colon on application comma
- 12:     def initialize(self, on_application=None, symbol_dictionary_pickle_file=None, **attributes):
+ 12:     def initialize(self, on_application = None, symbol_dictionary_pickle_file = None, **attributes):
  13:         self.declare_attributes({'un_translated_text_start': None, 'un_translated_text_end': None})
  14:         self.deep_construct(CommandInterpreter, \
  15:                             {'on_application': on_application, <CURSOR>})
@@ -12998,7 +13061,7 @@ some_argument: ['some argument']
 some_array: ['some array']
 some_other_method: ['some other method']
 some_variable: ['some variable']
-sqrt: ['SQRT', 'square root']
+sqrt: ['sqirt', 'sqrt', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -13534,7 +13597,7 @@ move_vert: ['move vert', 'move vertical', 'move vertically']
 repr: ['rep', 'repr', 'represent', 'representation']
 sin: ['sin', 'sine']
 sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['SQRT', 'square root']
+sqrt: ['sqirt', 'sqrt', 'square root']
 str: ['S. T. R.', 'str', 'string']
 tan: ['tan', 'tangent']
 tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
@@ -16868,5 +16931,5 @@ WARNING: Call to deprecated method TestCaseWithHelpers.assert_sequences_have_sam
 
 
 -----------------------------------------------
-Test suite completed in:  526.859999895 secs
+Test suite completed in:  817.846000195 secs
 -----------------------------------------------
