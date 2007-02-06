@@ -1519,7 +1519,7 @@ class SymDict(OwnerObject):
             #
             # If the file doesn't exist, we just do nothing
             #
-            print 'WARNING: source file \'%s\' doesn\'t exist.' % file_name
+            print 'WARNING: source file \'%s\' doesn\'t exist.' % util.within_VCode(file_name)
         else:
             source = source_file.read()
             

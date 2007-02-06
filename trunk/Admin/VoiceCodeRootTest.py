@@ -56,6 +56,12 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
          utterance = utterance.split()
       self._commands().say(utterance, user_input, never_bypass_sr_recog, echo_utterance, echo_cmd)
       
+   def _goto(self, pos):
+      self._app().goto(self)
+      
+   def _set_selection(self, range, cursor_at = 1):
+      self._app().set_selection(range, cursor_at)
+      
    def _open_empty_test_file(self, file_name):
        fpath = os.path.join(vc_globals.tmp, file_name)
        self._open_file(fpath)  
