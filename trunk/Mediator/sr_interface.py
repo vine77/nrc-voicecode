@@ -491,11 +491,13 @@ def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
 # select words with different written and spoken form, which, in
 # natspeak 7, get reported as written\spoken\t (That's backslash and t,
 # not a tab character) - DCF
+# But careful... if the word spoken was "backslash", then the written form is
+# "\" (at least in NatSpeak 8 and 9). - AD
         spoken = a_match.group(2)
         trace('sr_interface.spoken_written_form', 
             'initial spoken, written = "%s", "%s"' % (spoken, written))
         extra = string.find(written, '\\')
-        if extra >= 0:
+        if extra >= 0 and written != "\\":
             was_written = written
             written = was_written[:extra]
             spoken = was_written[extra+1:]

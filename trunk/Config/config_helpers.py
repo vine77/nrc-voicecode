@@ -534,30 +534,30 @@ class SinglePunctuation(PunctuationSet):
 # from accidentally adding back punctuation which the user has deleted from
 # the vocabulary, or adding NaturallySpeaking US English spoken forms 
 # for punctuation to the vocabulary of a different edition or different
-# speech engine
+# speech engine - DFC
+#
+# Actually, checking if word exists in the vocab, has been causing a lot of problems 
+# due to the fact that different versions of NatSpeak
+# use different voc entries for punctuation. The latest in date is that 
+# backslash is not being added in NatSpeak 8 and 9, because the word does not 
+# exist, and therefore when the user says "backslash", nothing happens.
+# So... just add the punctuation mark, even if there is no voc entry for it 
+# in the vocab. Worst case scenario is that you will add a spoken form which 
+# is reasonable, but does not correspond to the spoken form used in that version 
+# of NatSpeak. This is much better than having the punctuation mark not work - AD
+
                     if interp.has_lsa(spoken, language = self.language):
                         debug.trace('SinglePunctuation.create',
                             'single form "%s" already exists in language %s' % (spoken, self.language))
                         continue
                     entry = sr_interface.vocabulary_entry(spoken,
                         self.written_forms[i])
-                    if sr_interface.word_exists(entry):
-                        add_spoken_forms.append(spoken)
-                    else:
-                        debug.trace('SinglePunctuation.create',
-                            "word '%s' doesn't exist" % entry)
+                    add_spoken_forms.append(spoken)
             if add_spoken_forms:
                 self._add_lsa(aliases, self.written_forms[i], 
                     add_spoken_forms, self.spacing[i], new_symbol =
                     self.new_symbol[i])
                 if not dictation_only:
-#                    if force:
-#                        nav_spoken = []
-#                        for spoken in add_spoken_forms:
-#                            if interp.has_csc
-#                    else:
-#                        nav_spoken = add_spoken_forms
-#                        
                     self._add_single_navigation(commands, i, add_spoken_forms)
         interp.add_lsa_set(aliases)
         interp.add_csc_set(commands)
