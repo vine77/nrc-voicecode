@@ -67,6 +67,8 @@ class DeferInterp(Object):
         *BOOL* -- if true, the object should be interpreted now
         """
         debug.virtual('DeferInterp.interp_now')
+    def get_info(self):
+        return {'set': "DeferInterp object", 'name': "???", 'setname': "DeferInterp"}
 
 class LSAlias(Object):
     """

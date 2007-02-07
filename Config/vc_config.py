@@ -169,7 +169,17 @@ mediator_ctrl.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['voice coder what can I say', 'yo what can I say'],
              meanings={all_languages: ActionWhatCanISay()},
-             docstring='Give active commands')
+             docstring='Give commands of current (active) language')
+mediator_ctrl.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['voice coder what can I say now', 'yo what can I say now'],
+             meanings={all_languages: ActionWhatCanISay(curr_context=1)},
+             docstring='Give active commands (in the current context)')
+mediator_ctrl.add_csc(acmd)
+
+acmd = CSCmd(spoken_forms=['voice coder what can I say all', 'yo what can I say all'],
+             meanings={all_languages: ActionWhatCanISay(all_lang=1)},
+             docstring='Give commands of all languages, including common commands')
 mediator_ctrl.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['show abbreviations', 'print abbreviations'],
