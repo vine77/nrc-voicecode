@@ -4670,12 +4670,9 @@ def test_temporary():
 
     commands.open_file('blah1.py')
 
-    commands.say(['define', 'method', 'blah', 'add', 'arguments', 'hello', 'comma', 'hi', 'equals', 'zero'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['do', 'the', 'following'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['self', 'dot', 'hello', 'less', 'than', 'some', 'function', 'with', 'arguments', 'hi'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['select', '<\\less-than'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['equals'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
-    commands.say(['yo', 'what', 'can', 'I', 'say'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['backslash'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['back', 'slash'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
+    commands.say(['\\\\backslash'], user_input='2\n2\n2\n2\n2\n2\n2\n', echo_utterance=1)
 
 
 
