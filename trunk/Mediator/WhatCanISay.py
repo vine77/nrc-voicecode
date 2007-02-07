@@ -49,12 +49,20 @@ class WhatCanISay(object):
     """
     def __init__(self):
         self.index = {}      # non trivial index
-        self.std_punc = {}   # irrespective of language (lsa)
-        self.std_punc_nav = {}   # irrespective of language (csc)
+        self.boilerplate = {}   # irrespective of language (lsa)
         self.all_lang = None
         self.curr_context = None
-            
-    def load_commands_from_interpreter(self, cmd_interp, curr_lang, curr_context=None, all_lang=None):
+        self.boilerplate_groups = ('standard grouping (US English) navigation',
+                                   'standard punctuation (US English) navigation',
+                                   'standard punctuation',
+                                   'standard punctuation navigation',
+                                   'alternate grouping navigation',
+                                   'alternative punctuation navigation',
+                                   'escaped characters',
+                                   'military letters',
+                                   'US small numbers')
+                                   
+    def load_commands_from_interpreter(self, app, interp, curr_lang, curr_context=None, all_lang=None):
         """Get a dictionary of all commands from the interpreter
 
         enter the curr_lang
@@ -75,7 +83,10 @@ class WhatCanISay(object):
                              and values: [(context key, action),...]
 
         """
-        self.cmd_interp = cmd_interp    # needed only for yo what can I say now (so curr_context = 1)
+        self.index = {}
+        self.boilerplate = {}
+        self.app = app
+        self.cmd_interp = interp   # needed only for yo what can I say now (so curr_context = 1)
         self.all_lang = all_lang
         self.curr_context = curr_context
         self.curr_lang = curr_lang
@@ -85,7 +96,7 @@ class WhatCanISay(object):
             raise ValueError('WhatCanISay cannot be called with both "all_lang" and "curr_context" set')
             
         self.create_html_folder()            
-        self.languages = cmd_interp.supported_languages()
+        self.languages = self.cmd_interp.supported_languages()
         self.languages.sort()
         if all_lang:
             self.languages = self.languages
@@ -115,12 +126,13 @@ class WhatCanISay(object):
                 info = entry.get_info()
                 spoken_form_text = ' '.join(wordList)
 
-                if  info['setname'] == 'standard punctuation':
+                set_name = info['setname']
+                if  set_name in self.boilerplate_groups:
                     if not self.all_lang:
-                        print 'skipping: %s'% info['name']
                         continue   # Common commands only if all_lang is asked for
-                    if spoken_form_text not in self.std_punc:
-                        self.std_punc.setdefault(spoken_form_text, []).append(info)
+                    if spoken_form_text not in self.boilerplate:
+                        # Assume here this lsa (spoken_form) in all_languages, maybe should be tested
+                        self.boilerplate.setdefault(spoken_form_text, []).append(info)
                 else:
                     if self.curr_context and spoken_form_text in curr_index:
                         continue # apparently a csc is already there, that applies
@@ -154,8 +166,7 @@ class WhatCanISay(object):
                 trace('WhatCanISay.index_contextual_meanings', "** Processing a_context=%s, an_action: %s" % \
                  (a_context.equivalence_key(), an_action.doc() or "action???"))
                 if self.curr_context:
-                    continue  # here comes testing for rigth context
-                    if not a_context.applies(self.cmd_interp.mediator):
+                    if not a_context.applies(self.app):
                         for_this_language.remove((a_context, an_action))
                 else:
                     if not self.context_applies_for_lang(a_language, a_context):
@@ -167,10 +178,11 @@ class WhatCanISay(object):
             if info:
                 trace('WhatCanISay.index_contextual_meanings', "** adding info to %s spoken form %s\n%s"% \
                       (info, a_language, spoken_form))
-                if info[0]['setname'] == 'standard punctuation navigation':
+                set_name = info[0]['setname']
+                if set_name in self.boilerplate_groups:
                     if not self.all_lang:
                         break      # Common commands only if all_lang is asked for
-                    self.std_punc_nav.setdefault(spoken_form, []).append(info)
+                    self.boilerplate.setdefault(spoken_form, []).append(info)
                     break
                 else:
                     self.index[a_language].setdefault(spoken_form, []).append(info)
@@ -190,9 +202,25 @@ class WhatCanISay(object):
         return answer
 
     def create_cmds(self):
-        print 'MMMMaking wcisay website for lang: %s, curr_context: %s, all_lang: %s'% \
+        print 'In future make wcisay website for lang: %s, curr_context: %s, all_lang: %s'% \
               (self.curr_lang, self.curr_context, self.all_lang)
-        pprint.pprint(self.index)
+        all = pprint.pformat(self.index)
+        if self.curr_context:
+            outfile = os.path.join(self.html_folder, "%s_curr_context.txt"% self.curr_lang)
+        elif self.all_lang:
+            outfile = os.path.join(self.html_folder, "all_lang.txt")
+        else:
+            outfile = os.path.join(self.html_folder, "%s_default.txt"% self.curr_lang)
+
+        total = "self.index = %s\n"% all        
+        open(outfile, "w").write(total)
+        print "contents of WCISay written to: %s"% util.within_VCode(outfile)
+        if self.all_lang:
+            boilerplate = pprint.pformat(self.boilerplate)
+            total = "self.boilerplate = %s\n"% boilerplate
+            outfile = os.path.join(self.html_folder, "boilerplate.txt")
+            open(outfile, "w").write(total)
+            
 
     def create_lsa_cmds(self, cmd_interp, curr_lang):
         """Create all lsa commands, separated by language
@@ -350,14 +378,15 @@ class WhatCanISay(object):
             List.remove(item)
             List.insert(0, item)
 
-    def show_cmds(self, cmd_interp, curr_lang):
+    def show_cmds(self):
         """Do all the steps to make and show  the WhatCanISay website
 
         collect the commands
         create the html files,
         then show with webbrowser
         """
-        self.create_cmds(cmd_interp,curr_lang)
+        print 'coming ASAP'
+        return
         index_page = self.create_html_pages()
         webbrowser.open_new(index_page)
 

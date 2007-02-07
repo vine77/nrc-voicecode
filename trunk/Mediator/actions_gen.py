@@ -18,9 +18,7 @@
 # (C)2000, National Research Council of Canada
 #
 ##############################################################################
-
 """Action functions that span different languages"""
-
 import copy, exceptions, os, re
 import Object, vc_globals
 import debug
@@ -142,7 +140,8 @@ class Action(Object.Object):
         
         *none* -- 
         """
-        
+        if getattr(self, 'docstring', None) == None:
+            return "no docstring available"
         return self.docstring
 
 
@@ -236,7 +235,7 @@ class ActionStyling(Action):
         
         *none* -- 
         """
-        if self.docstring:
+        if getattr(self, 'docstring', None) != None:
             return self.docstring
         else:
             return "Format the next symbol with %s" % self.builder
@@ -561,7 +560,7 @@ class ActionInsert(Action):
         *none* -- 
         """
 
-        if self.docstring != None:
+        if getattr(self, 'docstring', None) != None:
             the_doc = self.docstring
         else:
             the_doc = 'Inserts \'%s\' in current buffer' % (self.code_bef + '^' + self.code_after)
@@ -609,7 +608,7 @@ class ActionIncrIndentation(ActionRepeatable):
         *none* -- 
         """
 
-        if self.docstring != None:
+        if getattr(self, 'docstring', None) != None:
             the_doc = self.docstring
         else:
             the_doc = 'Increase indentation of selected code by %s levels' % self.levels
@@ -656,8 +655,8 @@ class ActionDecrIndentation(ActionRepeatable):
         
         *none* -- 
         """
-
-        if self.docstring != None:
+        
+        if getattr(self, 'docstring', None) != None:
             the_doc = self.docstring
         else:
             the_doc = 'Decrease indentation of selected code by %s levels' % self.levels
@@ -705,7 +704,7 @@ class ActionAutoIndent(Action):
         *none* -- 
         """
 
-        if self.docstring != None:
+        if getattr(self, 'docstring', None) != None:
             the_doc = self.docstring
         else:
             the_doc = 'Indent selected code by appropriate amount'
@@ -963,7 +962,7 @@ class ActionSearch(ActionBidirectional):
         .. [Action.doc] file:///./actions_gen.Action.html#doc
         """
         
-        if self.docstring != None:
+        if getattr(self, 'docstring', None) != None:
             the_doc = self.docstring
         else:
             if self.num == 1:
