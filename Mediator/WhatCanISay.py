@@ -20,25 +20,29 @@
 ##############################################################################
 from HTMLgen import *
 from debug import trace
-from Object import Object
 import vc_globals
 import pprint
 import webbrowser
 import re, os
-reIsInt = re.compile(r'^\d+$')
-reIsLetter = re.compile(r'^[a-zA-Z]$')
 from copy import copy
 from cont_gen import *
 from Context import scope_order, valid_scope
 from CSCmd import CSCmdList
 import util
+from utilsqh import normaliseaccentedchars
+try:
+    set
+except NameError:
+    from sets import Set as set
+
+number_of_columns = 3
 
 class WhatCanISay(object):
     """
     A class for generating, and displaying an index of all the active
     voice commands.
 
-    Written mainly by Quintijn Hoogenboom, Dec 2006.
+    Written mainly by Quintijn Hoogenboom, Dec 2006 -- Febr 2007
 
     Collects all commands (LSA and CSC (later)), and puts them in a website.
 
@@ -48,19 +52,36 @@ class WhatCanISay(object):
     
     """
     def __init__(self):
+        # for overview page:
+        self.number_of_columns = number_of_columns
         self.index = {}      # non trivial index
         self.boilerplate = {}   # irrespective of language (lsa)
         self.all_lang = None
         self.curr_context = None
         self.boilerplate_groups = ('standard grouping (US English) navigation',
                                    'standard punctuation (US English) navigation',
+                                   'standard grouping (US English)',
+                                   'standard punctuation (US English)',
                                    'standard punctuation',
                                    'standard punctuation navigation',
                                    'alternate grouping navigation',
                                    'alternative punctuation navigation',
                                    'escaped characters',
                                    'military letters',
-                                   'US small numbers')
+                                   'US small numbers',
+                                   'between standard grouping (US English)',
+                                   'between standard quotes (US English)',
+                                    'between alternate grouping',
+                                    'between alternate quotes',
+                                    'alternate grouping',
+                                    'alternate quotes',
+                                    'alternate quotes navigation',
+                                    'alternate punctuation',
+                                    'standard quotes (US English)',
+                                    'standard quotes (US English) navigation',
+                                    'alternative punctuation',
+                                   
+                                   )
                                    
     def load_commands_from_interpreter(self, app, interp, curr_lang, curr_context=None, all_lang=None):
         """Get a dictionary of all commands from the interpreter
@@ -130,9 +151,9 @@ class WhatCanISay(object):
                 if  set_name in self.boilerplate_groups:
                     if not self.all_lang:
                         continue   # Common commands only if all_lang is asked for
-                    if spoken_form_text not in self.boilerplate:
-                        # Assume here this lsa (spoken_form) in all_languages, maybe should be tested
-                        self.boilerplate.setdefault(spoken_form_text, []).append(info)
+##                     if spoken_form_text not in self.boilerplate:
+##                         # Assume here this lsa (spoken_form) in all_languages, maybe should be tested
+##                         self.boilerplate.setdefault(spoken_form_text, []).append(info)
                 else:
                     if self.curr_context and spoken_form_text in curr_index:
                         continue # apparently a csc is already there, that applies
@@ -168,6 +189,11 @@ class WhatCanISay(object):
                 if self.curr_context:
                     if not a_context.applies(self.app):
                         for_this_language.remove((a_context, an_action))
+                    else:
+                        # take only this one, delete rest:
+                        while len(for_this_language) > 1:
+                            del for_this_language[-1]
+                        break
                 else:
                     if not self.context_applies_for_lang(a_language, a_context):
                         for_this_language.remove((a_context, an_action))
@@ -182,10 +208,7 @@ class WhatCanISay(object):
                 if set_name in self.boilerplate_groups:
                     if not self.all_lang:
                         break      # Common commands only if all_lang is asked for
-                    self.boilerplate.setdefault(spoken_form, []).append(info)
-                    break
-                else:
-                    self.index[a_language].setdefault(spoken_form, []).append(info)
+                self.index[a_language].setdefault(spoken_form, []).append(info)
             else:
                 trace('WhatCanISay.index_contextual_meanings', "** empty info, not adding")
                 
@@ -202,84 +225,87 @@ class WhatCanISay(object):
         return answer
 
     def create_cmds(self):
-        print 'In future make wcisay website for lang: %s, curr_context: %s, all_lang: %s'% \
-              (self.curr_lang, self.curr_context, self.all_lang)
-        all = pprint.pformat(self.index)
-        if self.curr_context:
-            outfile = os.path.join(self.html_folder, "%s_curr_context.txt"% self.curr_lang)
-        elif self.all_lang:
-            outfile = os.path.join(self.html_folder, "all_lang.txt")
-        else:
-            outfile = os.path.join(self.html_folder, "%s_default.txt"% self.curr_lang)
+##        self.create_html_folder()   # only for test, remove afterwards        
+##        print 'In future make wcisay website for lang: %s, curr_context: %s, all_lang: %s'% \
+##              (self.curr_lang, self.curr_context, self.all_lang)
+##        all = pprint.pformat(self.index)
+##        if self.curr_context:
+##            outfile = os.path.join(self.html_folder, "%s_curr_context.txt"% self.curr_lang)
+##        elif self.all_lang:
+##            outfile = os.path.join(self.html_folder, "all_lang.txt")
+##        else:
+##            outfile = os.path.join(self.html_folder, "%s_default.txt"% self.curr_lang)
 
-        total = "self.index = %s\n"% all        
-        open(outfile, "w").write(total)
-        print "contents of WCISay written to: %s"% util.within_VCode(outfile)
+## only when doing the webpages from the _run command of WhatCanISayTest::::
+##        total = "self.index = %s\n"% all        
+##        execfile(outfile)
+##        print 'collecting from %s'% outfile
+##        open(outfile, "w").write(total)
+##        print "contents of WCISay written to: %s"% util.within_VCode(outfile)
+        self.top_menu = self.create_top_menu()
+        if not self.top_menu:
+            raise ValueError("no language(s) present in WhatCanISay index")
+        self.top_menu_keys = self.top_menu.keys()
+        self.top_menu_keys.sort()
+        self.left_menu = {}
+        self.left_menu_keys = {}
+        # collect data:
+        for top in self.top_menu_keys:
+            self.part_index = self.index[top]
+            self.left_menu[top] = self.create_left_menu(top=top)
+            keys = self.left_menu[top].keys()
+            keys.sort()
+            self.left_menu_keys[top] = keys
+
+    def create_html_pages(self):
+        """now on to the html"""
+        self.create_html_folder()
+        global_page = self.html_command_index()
+        for top in self.top_menu_keys:
+            self.anchors = {}  # make anchors per language
+            specific_page = self.html_overview_page(page=self.top_menu[top], part=top)
+            left_menu = self.left_menu[top]
+            left_keys = left_menu.keys()
+            left_keys.sort()
+            for left in left_keys:
+                self.html_detail_page(page=left_menu[left], part=top, detail=left)
+        # index_page needed in the next step:
         if self.all_lang:
-            boilerplate = pprint.pformat(self.boilerplate)
-            total = "self.boilerplate = %s\n"% boilerplate
-            outfile = os.path.join(self.html_folder, "boilerplate.txt")
-            open(outfile, "w").write(total)
-            
+            self.index_page =  global_page
+        else:
+            self.index_page =  specific_page
 
-    def create_lsa_cmds(self, cmd_interp, curr_lang):
-        """Create all lsa commands, separated by language
+    def create_top_menu(self):
+        """make a dict of all languages that come in the top"""
+        m = {}
+        for k in self.index.keys():
+            m[k] = '%s_overview.html'% k.lower()
+        return m
 
-        First all LSA commands are extracted from self.lsa_index.
+    def create_left_menu(self, top):
+        """make a dict of all subjects of the (language dependent) index"""
+        m = {}
+        for entry in self.part_index.keys():
+            result = self.part_index[entry]
+            setnames = self.get_setnames(result)  # this is a list of lsa or csc defs
+                                             # so a meanings list...
+            for s in setnames:
+                self.add_to_dict(m, s, top)
+        return m
 
-        Commands that are in None, or appear to be equal in all languages come in language 'global'.
+    def add_to_dict(self, Dict, name, top):
+        """ make entry to a dictionary of left menu
 
-        The wordList is joined into a string,
-        The written_form is extracted from the LSA entry.
-
-        the result is in self.all_commands
-
+        keys are setname (without spaces, values are the pages
         """
+        if name in Dict:
+            return
+        output_name = normaliseaccentedchars(name).lower()
+        Dict[name] = '%s_%s.html'% (top.lower(),output_name)
+##        print 'html page name: %s'% Dict[name]
         
-        all_commands = {}
-        for lang in self.index:
-            part = self.index[lang]
-            if lang == None:
-                lang = 'common'
-            all_commands[lang] = []
-            for tup in part:
-                words = tup[0]
-                written = getattr(tup[1], 'written_form', '')
-                if not written:
-                    all_commands[lang].append((words, written))
-                elif reIsInt.match(written):
-                    all_commands.setdefault('numbers', []).append((words, written))
-                elif reIsLetter.match(written):
-                    all_commands.setdefault('letters', []).append((words, written))
-                else:
-                    all_commands[lang].append((words, written))
 
-        # manipulating all_commands (in place):
-##        print '1: %s'% all_commands.keys()
-        self.extract_common_commands(all_commands)
-##        print '2: %s'% all_commands.keys()
-        self.elaborate_commands(all_commands)
-##        print '3: %s'% all_commands.keys()
-        self.lsa_commands = all_commands
-
-
-    def create_csc_cmds(self, cmd_interp, curr_lang):
-        """Create all csc commands, separated by language
-
-        """
-        return
-        all_commands = {}
-        for lang, part in self.index.items():
-            if lang == None:
-                raise ValueError("value of self.index[None] should not exist")
-            all_commands[lang] = []
-            for words, visible in part.items():
-                vis = repr(visible)
-                print 'words: %s, vis: %s'% (words, vis)
-            
-                all_commands[lang].append((words, vis))
-        self.csc_commands = all_commands
-
+    
     def get_written_form_from_action(self, action):
         try:
             doc = action.doc()
@@ -287,90 +313,6 @@ class WhatCanISay(object):
             doc = 'no doc for %s'% repr(action).split()[0][1:]
         return doc
 
-    def extract_common_commands(self, all_commands):
-        """change (inplace) the Commands dict
-
-        input:  all_commands: a dict like {'common': [(...), (...)], 'C': [(...), ...],
-                                     'python': [(...), (...)], ...}
-                              a dict like {'C': [(...), ...],
-                                     'python': [(...), (...)], ...} ('common' created in this function)
-        output: tuples that are common to all specific languages are put in 'common' and
-        deleted from specific.
-
-        'letters' and 'numbers' are kept separate and ignored in this function
-
-        """
-        specific_languages = [k for k in all_commands if k not in ('common', 'letters', 'numbers')]
-        common = all_commands.setdefault('common', [])
-        if len(specific_languages) <= 1:
-            return
-        first, rest = all_commands[specific_languages[0]], [all_commands[k] for k in specific_languages[1:]]
-        # first changes, so copy the list:
-        for item in copy(first):
-            for c in rest:
-                if item not in c: break
-            else:
-                # command is global, add and delete:
-                if item not in common:
-                    common.append(item)
-                for c in rest:
-                    c.remove(item)
-                first.remove(item)
-    
-    def elaborate_commands(self, all_commands):
-        """Extend the commands dictionary
-
-        1. with actual commands
-        2. make two versions sbs (sorted by spoken), sbw (sorted by written)
-        """
-        # here I make an entry for actual commands (LSA), being global + language specific:
-        all_commands.setdefault('actual', copy(all_commands['common']))
-        # we have at least actual and common commands, possibly empty.
-        if self.language in all_commands:
-            for c in all_commands[self.language]:
-                if c not in all_commands['actual']:
-                    all_commands['actual'].append(c)
-                
-        # here I make two groups of each, sorted by written and sorted by spoken form:
-        for group, cmds in copy(all_commands.items()):
-            if cmds == []:
-                # remove empty groups, except for "actual"
-                if group != 'actual':
-                    del all_commands[group]
-                    continue
-                
-            if group not in ('numbers','letters'):
-                cmds = self.sort_by_spoken(cmds)
-                all_commands[group + '_sb_s'] = cmds[:]
-            cmds = self.sort_by_written(cmds)
-            if group not in ('numbers','letters'):
-                del all_commands[group]
-                group = group + '_sb__w'
-            all_commands[group] = cmds[:]
-            
-        
-    def create_html_pages(self):
-        """Created the actual pages, using HTMLgen
-        
-        the input is from the self.lsa_commands dict for the lsa menu
-        and from csc_commands (future) for the csc menu
-        
-        returns the entry pages for the webbrowser
-        """
-        self.top_menu = ['lsa', 'csc'] 
-        self.lsa_pages = self.lsa_commands.keys()
-        self.lsa_pages.sort()
-        want_in_top = ['actual_sb__w', 'actual_sb_s', 'common_sb__w', 'common_sb_s',
-                       self.language + '_sb__w', self.language + '_sb_s', 'letters', 'numbers']
-        want_in_top.reverse()
-        for w in want_in_top:
-            self.bring_to_top(self.lsa_pages, w)
-        self.csc_pages = 'dummy'
-        self.html_command_index()
-        for top in self.top_menu:
-            self.html_command_pages(top)
-        index_page = os.path.join(self.html_folder, 'index.html')
-        return index_page
 
     def bring_to_top(self, List, item):
         """Change inplace the list"""
@@ -379,16 +321,10 @@ class WhatCanISay(object):
             List.insert(0, item)
 
     def show_cmds(self):
-        """Do all the steps to make and show  the WhatCanISay website
+        """show the commands after the previous steps...
 
-        collect the commands
-        create the html files,
-        then show with webbrowser
         """
-        print 'coming ASAP'
-        return
-        index_page = self.create_html_pages()
-        webbrowser.open_new(index_page)
+        webbrowser.open_new(self.index_page)
 
     def create_html_folder(self):
         """create a folder for the WhatCanISay website
@@ -406,7 +342,6 @@ class WhatCanISay(object):
             raise Exception('not a valid directory for What Can I Say website: %s'% \
                             util.within_VCode(self.html_folder))
         return self.html_folder
-        
     
     
     def html_command_index(self):
@@ -416,95 +351,120 @@ class WhatCanISay(object):
         page = 'index.html'
         page_type = 'index'
         page_html = 'index.html'
-        doc.append(self.html_header(page, page_type=page_type, page_html=page_html))
+        doc.append(self.html_header(page, part=page_type, detail='home'))
         tlpage = FullTable(Class="page")
         trpage = TR()
         tdpage = TD(Class="body")
         # produce the menu (left):
         # produce the body:
         VcodeWebsite = Href("http://voicecode.iit.nrc.ca/VoiceCode/public/ywiki.cgi", "Voice Code website", target="_blank")
-        text =[ 'This is the What Can I Say (actual) information of your VoiceCode instance.', '',
-               'The lsa section gives the Language Sensitive Aliases, in different categories.',
-                'The "numbers" and the "letters" are taken apart for better readability of the other commands.',
-                'The different sections are sorted by written form (sb written) and  by spoken form (sb spoken)',
+
+        text =['This is the What Can I Say (actual) information of your VoiceCode instance.', '',
+               'By default (with "yo what can I say") you get information for the current programming language, excluding common commands like punctuation and navigation on punctuation.', '',
+                'If you call "yo what can I say now" only commands that apply at the moment you call this command will be shown.<br>(Note: this information does not go through exactly the same routine, so could differ from the real information.)', ''
+
+
+'If you call "yo what can I say all" all information is shown, including "common" commands, and for all languages available.',
                 '', '',
-                'The csc part is not ready yet. It is going to contain the Context Sensitive Aliases',
                 '', '',
                 'For the general information please consult the '+VcodeWebsite+'.',
                 '',
-                '']
+                '']        
         for t in text:
             if t:
                 tdpage.append(Paragraph(t))
             else:
                 tdpage.append(Paragraph("&nbsp;", Class="blank"))
         doc.append(tlpage(trpage(tdpage)))
-        doc.append(self.html_footer(page, page_type=page_type, page_html=page_html))
+        doc.append(self.html_footer(page, part=page_type, nice_name='home'))
         outfile = os.path.join(self.html_folder, 'index.html')
    
         trace('WhatCanISay.files', 'making page: %s'% util.within_VCode(outfile))
         doc.write(outfile)
+        return outfile
 
-    def get_left_menu(self, me, page_type, pages):
+    def get_left_menu(self, me, part):
         """produce a menu with me without link
 
-        me = name of calling page, page_type is to be included before the link name
+        me = name of calling page, page_type (part) is to be included before the link name
 
         """
         td = TD(Class="leftmenu")
-        for p in pages:
+        pages = self.left_menu[part]
+        pages_keys = self.left_menu_keys[part]
+        for p in pages_keys:
             niceP = p
-            if niceP.endswith('_sb_s'):
-                niceP = p.replace('_sb_s', ' (sb spoken)')
-            if niceP.endswith('_sb__w'):
-                niceP = p.replace('_sb__w', ' (sb written)')
-                
-            if p == me:
+            if pages[p] == me:
                 td.append(Paragraph(niceP, Class="lefton"))
-            else:                
-                td.append(Paragraph(Href('%s_%s.html'% (page_type, p), niceP), Class="leftoff"))
+            else:
+                to_page = pages[p]
+                td.append(Paragraph(Href(to_page, niceP), Class="leftoff"))
         return td
 
-    def html_command_pages(self, page_type):
-        """generate the pages"""
-
-        if page_type == 'lsa':
-            for p in self.lsa_pages:
-                self.html_lsa_page(p)
-        else:
-            self.html_csc_page('index')
-
-    def html_lsa_page(self, page):
-        """generate one lsa page, with a menu to the other pages"""
+    def html_overview_page(self, page, part):
+        """generate a overview page of all commands in a language"""
         doc = SimpleDocument()
         doc.stylesheet = "vc.css"
-        page_type = 'lsa'
+
+        index = self.index[part]
+        names = index.keys()
+        names.sort()
+        left_menu = self.left_menu[part]
+        page_html = page
         
-        content = self.lsa_commands[page]
-        page_html = 'lsa_%s.html'% page
-        doc.append(self.html_header(page, page_type=page_type, page_html=page_html))
+        content = names
+        
+        doc.append(self.html_header(page, part, 'overview'))
         tlpage = FullTable(Class="page")
         trpage = TR()
         # produce the menu (left):
-        leftMenu = self.get_left_menu(page, page_type=page_type, pages=self.lsa_pages)
+        leftMenu = self.get_left_menu(page, part)
         trpage.append(leftMenu)
 
         # now the contents:        
         tl = FullTable(Class="body")
         tr = TR()
-        per_col = 3
+        # define in top, possibly configure in vc_config or user_config.
+        per_col = self.number_of_columns
         tdspacer = TD("&nbsp;", Class="spacer")
         rows = len(content)/per_col
         if len(content)%per_col:
             rows += 1
         cell_num = 0
+        
         for start in range(rows):
             cell_num = start % 2
             for col in range(start, len(content), rows):
                 cell_num += 1
-                k, v = content[col]
-                tr.append(TD(v, Class="spoken%s"% (cell_num%2,)))
-                tr.append(TD(k, Class="written%s"% (cell_num%2,)))
+                k = content[col]
+                setnames = self.get_setnames(index[k])
+                links = []
+                nice_names = []
+                for s in setnames:
+                    if s in left_menu:
+                        links.append(left_menu[s])
+                        nice_names.append(s)
+                    else:
+                        raise ValueError("WhatCanISay, setname not in left menu: %s (key: %s)"%
+                                         (s, k))
+                if not links:
+                    tr.append(TD(k, Class="written%s"% (cell_num%2,)))
+                elif len(links) == 1:
+                    anchor = self.get_anchor(k)
+                    link = '%s#%s'% (links[0], anchor)
+                    link = Href(link, k)
+                    tr.append(TD(link, Class="written%s"% (cell_num%2,)))
+                else:
+                    to = []
+                    for link, nice in zip(links, nice_names):
+                        # more entries!!!!!
+                        anchor = self.get_anchor(k)
+                        the_link = '%s#%s'% (link, anchor)
+                        text = "%s (%s)"% (k, nice)
+                        link = Href(link, text)
+                        to.append(str(link))
+                    tr.append(TD('<br>'.join(to), Class="written%s"% (cell_num%2,)))
+                        
                 tr.append(tdspacer())
             tl.append(tr)
             tr.empty()
@@ -512,76 +472,198 @@ class WhatCanISay(object):
         trpage.append(TD(tl, Class="body"))
         tlpage.append(trpage)
         doc.append(tlpage)
-        doc.append(self.html_footer(page, page_type=page_type, page_html=page_html))
+        doc.append(self.html_footer(page, part=part, nice_name=part))
         outfile = os.path.join(self.html_folder, page_html)
         trace('WhatCanISay.files', 'making page: %s'% util.within_VCode(outfile))
         doc.write(outfile)
+        return outfile
+
+    def has_setname(self, list_of_meanings, name):
+        """see if name is present in the meanings dict"""
+        for item in list_of_meanings:
+            if self.info_is_lsa(item):
+                # lsa:
+                setname = item.get('setname', 'xxx')
+                if setname == name: return 1
+            elif self.info_is_csc(item):
+                for inner_item in item:
+                    # csc, do all parts:
+                    setname = inner_item.get('setname', 'xxx')
+                    if setname == name: return 1            
+            else:
+                raise ValueError('invalid type for WhatCanISay entry for %s: %s'% 
+                                 (entry, `item`)  )      
+        # fall through: false
+
+                                 
+    def get_setnames(self, list_of_meanings):
+        """get the setnames from a meanings dict
+
+        note: returns a list (with possibly 'unnamed' in it!
+        """
+        S = set()
+        for item in list_of_meanings:
+            if self.info_is_lsa(item):
+                # lsa:
+                setname = item.get('setname', 'unnamed')
+                S.add(setname)
+            elif self.info_is_csc(item):
+                for inner_item in item:
+                    # csc, do all parts:
+                    setname = inner_item.get('setname', 'unnamed')
+                    S.add(setname)
+            
+            else:
+                raise ValueError('invalid type for WhatCanISay entry for %s: %s'% 
+                                 (entry, `item`))
+        return list(S)
                   
-    def html_csc_page(self, page):
-        """generate one csc page"""
+    def html_detail_page(self, page, part, detail):
+        """generate a detail page on one setname"""
+        
         doc = SimpleDocument()
         doc.stylesheet = "vc.css"
-        page_type = 'csc'
-        page_html = 'csc_%s.html'% page
-        content = self.csc_commands['python']
-        trace('WhatCanISay.html_csc_page', 'csc_commands: %s'% content)
-        doc.append(self.html_header(page, page_type=page_type, page_html=page_html))
+        page_type = part
+        page_html = page
+
+
+        
+        trace('WhatCanISay.html_detail_page', 'page: %s, part: %s, detail: %s'%
+              (page, part, detail))
+
+        content = self.index[part]
+        keys = [k for (k, v) in content.items() if self.has_setname(v, detail)]
+        keys.sort()
+        trace('WhatCanISay.html_detail_page', 'keys:  %s'% keys)
+        doc.append(self.html_header(page, part=page_type, detail=detail))
 
         if 1:
             tlpage = FullTable(Class="page")
-            doc.append(Header(1, 'begin of csc commands, python'))
+##            doc.append(Header(1, 'begin of csc commands, python'))
             trpage = TR()
 
             # produce the menu (left):
-#            leftMenu = self.get_left_menu(page, page_type=page_type, pages=self.lsa_pages)
-#            trpage.append(leftMenu)
+            leftMenu = self.get_left_menu(page, part)
+            trpage.append(leftMenu)
             
             # now the contents:        
             tl = FullTable(Class="body")
             tr = TR()
-            per_col = 1
+            cell_num = 0
             tdspacer = TD("&nbsp;", Class="spacer")
-            rows = len(content)/per_col
-            if len(content)%per_col:
-                rows += 1
-            for start in range(rows):
-                cell_num = start%2
-                for col in range(start, len(content), rows):
-                    cell_num += 1
-                    class_name = "written%s"% (cell_num%2,)
-                    k, v = content[col]
-                    rows_inside = len(v)
-                    tr.append(TD(k, Class=class_name, rowspan=rows_inside))
-                    if rows_inside > 1:
-                        v = self.sort_csc_values_by_scope(v)
-                        v.reverse()
-                    for row_inside in v:
-                        cont, scope, value = row_inside
-                        tr.append(TD(value, Class=class_name))
-                        tr.append(TD(scope, Class=class_name))
-                        tr.append(TD(cont, Class=class_name))
-                        tr.append(tdspacer())
-                        tl.append(tr)
-                        tr.empty()
-                tr.empty()
+            all_meanings = {}  #of tuples 1: list of keys
+                               #          2: the item
+            # collect in all_meanings:            
+            for k in keys:
+                the_key = ''
+                item = content[k]
+                for meaning in item:
+                    if self.info_is_csc(meaning):
+                        m = meaning[0]
+                        cont = m['equiv']
+                        scope = m['scope']
+                        action = m['action']
+                    elif self.info_is_lsa(meaning):
+                        cont = 'lsa'
+                        scope = ''
+                        action = meaning.get('written_form','')
+                    the_key += action + scope + cont
+                if the_key in all_meanings:
+                    all_meanings[the_key][0].append(k)
+                else:
+                    all_meanings[the_key] = ([k], item)
+
+
+            meaning_keys = all_meanings.keys()
+            meaning_keys.sort()
+            for k in meaning_keys:
+                Keys, Meanings = all_meanings[k]
+                
+                cell_num += 1
+                class_name = "written%s"% (cell_num%2,)
+                
+                trmeanings = []
+                rows_inside = 0
+                meaning_num = 0
+                for meaning in Meanings:
+                    if self.info_is_csc(meaning):
+                        for m in meaning:
+                            meaning_num += 1
+                            class_name_meanings = "%s%s"% (class_name, meaning_num%2)
+                            cont = m['equiv']
+                            scope = m['scope']
+                            action = m['action']
+                            trmeanings.append(self.fill_row(cont, scope, action, class_name_meanings))
+                            rows_inside += 1
+                    elif self.info_is_lsa(meaning):
+                        meaning_num += 1
+                        class_name_meanings = "%s%s"% (class_name, meaning_num%2)
+                        cont = 'lsa'
+                        scope = ''
+                        action = meaning.get('written_form','')
+                        trmeanings.append(self.fill_row(cont, scope, action, class_name_meanings))
+                        rows_inside += 1
+
+                    else:
+                        raise ValueError("WhatCanISay, invalid meaning at key: %s (%s)"%
+                                         (Keys, `meaning`))
+                key_part = []
+                Keys.sort()
+                for spoken in Keys:
+                    anchorname = self.get_anchor(spoken)
+                    anchor = '<a name="%s">'% anchorname
+                    spoken = spoken.replace(' ', "&nbsp;")
+                    key_part.append(anchor+spoken+"</a>")
+                trmeanings[0].prepend(TD('<br>'.join(key_part), Class=class_name, rowspan=rows_inside))
+                for tr in trmeanings:
+                    tl.append(tr)
         
             trpage.append(TD(tl, Class="body"))
             tlpage.append(trpage)
             doc.append(tlpage)
-            doc.append(self.html_footer(page, page_type=page_type, page_html=page_html))
+            doc.append(self.html_footer(page, part=page_type, nice_name=detail))
         outfile = os.path.join(self.html_folder, page_html)
         trace('WhatCanISay.files', 'making page: %s'% util.within_VCode(outfile))
         doc.write(outfile)
-                  
-    def html_header(self, page, page_type, page_html):
-        """produce the header at the top of the html page, with the name mentioned
 
-        Include the top menu, lsa, csc...
+    def fill_row(self, cont, scope, action, class_name):
+        tr = TR()
+        tr.append(TD(action, Class=class_name))
+        tr.append(TD(scope, Class=class_name))
+        tr.append(TD(cont, Class=class_name))
+        return tr
+
+    def get_anchor(self, anchor):
+        """in order to prevent duplicate anchors in a page
+        get from self.anchors
+
+        """
+        if anchor in self.anchors:
+            return self.anchors[anchor]
+        
+        i = 0
+        squeezed = normaliseaccentedchars(anchor).lower()  # remove spaces etc
+        anchor_values = self.anchors.values()
+        if squeezed not in self.anchors.values():
+            self.anchors[anchor] = squeezed
+            return squeezed
+        while 1:
+            i += 1
+            new_squeezed = "%s%s"% (squeezed, i)
+            if new_squeezed not in anchor_values:
+                self.anchors[anchor] = new_squeezed
+                return new_squeezed
+                
+            
+                  
+    def html_header(self, page, part, detail):
+        """produce the header at the top of the html page, with the name mentioned
 
         page_type can be 'index', 'lsa', 'csc'
 
-
         """
+        page_type = part
+        page_html = page
         # assume height of picture = 90, h2 is height of top_menu
         h_pic = 90
         h2 = 28
@@ -597,24 +679,28 @@ class WhatCanISay(object):
             im = Href('index.html', im)
 
         if page_type != 'index':
-            niceP = '%s commands, %s'% (page_type, page)
-            niceP = niceP.replace('_sb_s', ' (sorted by spoken forms)')
-            niceP = niceP.replace('_sb__w', ' (sorted by written forms)')
+            niceP = '%s'% detail
         else:
             niceP = 'home'
+        if self.all_lang:
+            niceP += '<br>(all languages, including common commands)'
+        elif self.curr_context:
+            niceP += '<br>(only commands that are valid in the current context, but excluding common commands)'
             
-        text = "VoiceCoder What Can I Say (%s): %s"% (self.language, niceP)
+            
+        text = "VoiceCoder What Can I Say (%s): %s"% (self.curr_lang, niceP)
         tl = FullTable(Class="header")
         tl_menu = FullTable(Class="header", height=h2)
         tl.append(TR(TD(im, Class="bannerim", rowspan=2, width=w, height=h_pic),
                      TD(text, Class="bannertext", height=h1)))
         # make the top menu:
         tr = TR()
-        for menu in self.top_menu:
+        keys = ['home'] + self.top_menu_keys
+        for menu in keys:
             start_page = self.get_first_page(menu)
 #            print 'menu: %s, start_page: %s, page: %s, page_html: %s'% \
 #                  (menu, start_page, page, page_html)
-            if page_html.startswith(menu):
+            if page.startswith(menu) or page == start_page:
                 if page_html == start_page:
                     tr.append(TD(menu, Class="topon"))
                 else:
@@ -626,17 +712,16 @@ class WhatCanISay(object):
         tl.append(TR(TD(tl_menu, Class="topmenu")))
         return tl
 
-    def html_footer(self, page, page_type, page_html):
+    def html_footer(self, page, part, nice_name):
         """construct a footer for the webpage"""
+        page_type = part
+        page_html = page
         
         tl = FullTable(Class="footer")
         if page_type == 'index' and page == 'index.html':
             scramble = 'home'
         else:
-            niceP = page
-            niceP = niceP.replace('_sb_s', ' (sorted by spoken forms)')
-            niceP = niceP.replace('_sb__w', ' (sorted by written forms)')
-            scramble = join(Href('index.html', 'home'), ' &gt; ', niceP)
+            scramble = join(Href('index.html', 'home'), ' &gt; ', nice_name)
         scramble += " &gt; " + str(Href("javascript:scrollTo(0,0);", " top"))
         tim = time.localtime(time.time())
         copyright = time.strftime("%a, %d %b %Y", tim)
@@ -646,54 +731,54 @@ class WhatCanISay(object):
 
     def get_first_page(self, menu):
         """Extract from the list of pages the first page to display"""
-        if menu == 'lsa':
-            return 'lsa_%s.html'% self.lsa_pages[0]
-        elif menu == 'csc':
-            return 'csc_%s.html'% 'index'
+        if menu in self.left_menu_keys:
+            return "%s_overview.html"% menu
+##            key = self.left_menu_keys[menu][0]
+##            return self.left_menu[menu][key]
         else:
             return 'index.html'
         
 
-    def sort_by_spoken(self, cmds):
-        """sort list of tuples by the first key
-
-        note the presentation is the other way
-        each cmd is (spoken, written), but presentation in
-        html is (written, spoken)
-
-        """
-        cmds.sort()
-        return cmds
-
-    def sort_by_written(self, cmds):
-        """sort list of tuples by the second key
-        
-        note the presentation is the other way
-        each cmd is (spoken, written), but presentation in
-        html is (written, spoken)
-
-        """
-        decorated = [(s,w) for (w,s) in cmds]
-        decorated.sort()
-        undecorated = [(s,w) for (w,s) in decorated]
-        return undecorated
-
-    def sort_csc_values_by_scope(self, csc_values):
-        """sort list of tuples by skope
-
-        [(str context_equivalence, str skop, str docs), ...]
-        """
-        for  csc_value in  csc_values:
-            a, skope, c = csc_value
-            if not valid_scope(skope):
-                trace("WhatCanISay.sort_csc_value_by_scope",
-                      "WARNING: invalid skope in csc entry WhatCanISay: %s"% \
-                      repr(csc_value))
-                return csc_values
-        scope_order_list = scope_order()
-        dec = [(scope_order_list.index(skope), (a, skope, c)) for (a, skope, c) in csc_values]
-        dec.sort()
-        return [b for (a,b) in dec]
+##    def sort_by_spoken(self, cmds):
+##        """sort list of tuples by the first key
+##
+##        note the presentation is the other way
+##        each cmd is (spoken, written), but presentation in
+##        html is (written, spoken)
+##
+##        """
+##        cmds.sort()
+##        return cmds
+##
+##    def sort_by_written(self, cmds):
+##        """sort list of tuples by the second key
+##        
+##        note the presentation is the other way
+##        each cmd is (spoken, written), but presentation in
+##        html is (written, spoken)
+##
+##        """
+##        decorated = [(s,w) for (w,s) in cmds]
+##        decorated.sort()
+##        undecorated = [(s,w) for (w,s) in decorated]
+##        return undecorated
+##
+##    def sort_csc_values_by_scope(self, csc_values):
+##        """sort list of tuples by skope
+##
+##        [(str context_equivalence, str skop, str docs), ...]
+##        """
+##        for  csc_value in  csc_values:
+##            a, skope, c = csc_value
+##            if not valid_scope(skope):
+##                trace("WhatCanISay.sort_csc_value_by_scope",
+##                      "WARNING: invalid skope in csc entry WhatCanISay: %s"% \
+##                      repr(csc_value))
+##                return csc_values
+##        scope_order_list = scope_order()
+##        dec = [(scope_order_list.index(skope), (a, skope, c)) for (a, skope, c) in csc_values]
+##        dec.sort()
+##        return [b for (a,b) in dec]
 
 # defaults for vim - otherwise ignore
 # vim:sw=4
