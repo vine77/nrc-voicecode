@@ -77,6 +77,7 @@ class ActionWhatCanISay(Action):
             wciSay.load_commands_from_interpreter(app, manager.interpreter(), app.language_name(),
                                                   curr_context=self.curr_context, all_lang=self.all_lang)
             wciSay.create_cmds()
+            wciSay.create_html_pages()  
             wciSay.show_cmds()
 
 

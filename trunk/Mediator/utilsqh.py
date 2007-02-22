@@ -1,42 +1,22 @@
-from __future__ import generators
-##############################################################################
-# VoiceCode, a programming-by-voice environment
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-# (C)2000, National Research Council of Canada
-#
-##############################################################################
-
-#
 #$Revision$, $Date$, $Author$
-# miscelaneous utility functions from Quintijn, used in unimacro, voicecoder (WhatCanISay funcionality)
-# and local programs.
-# Quintijn Hoogenboom,  QH software, training & advies (q.hoogenboom@antenna.nl)g
-#
-#
+#misc utility functions from Quintijn, used in unimacro and in
+#local programs.
+#copyright Quintijn Hoogenboom,  QH software, training & advies
+from __future__ import generators
 import types, string, os, shutil
 import glob, re, sys, traceback
 import time, filecmp
 import win32com.client
 from win32gui import GetClassName, EnumWindows, GetWindowText
 import urllib
+from htmlentitydefs import codepoint2name
 
 
 class QHError(Exception):
     pass
+
+
+_allchars = string.maketrans('', '')
 
 def translator(frm='', to='', delete='', keep=None):
     """closure function to implement the string.translate functie
@@ -50,8 +30,7 @@ def translator(frm='', to='', delete='', keep=None):
         to = to * len(frm)
     trans = string.maketrans(frm, to)
     if keep is not None:
-        self.allchars = string.maketrans('', '')
-        delete = allchars.translate(allchars, keep.translate(allchars, delete))
+        delete = _allchars.translate(_allchars, keep.translate(_allchars, delete))
     def translate(s):
         return s.translate(trans, delete)
     return translate
@@ -59,6 +38,27 @@ def translator(frm='', to='', delete='', keep=None):
 fixwordquotes = translator('\x91\x92\x93\x94', "''\"\"")
 ###removenoncharacters = translator('
 
+## function to make translation from e acute to e etc. goes into a translate function with translator
+def isaccented(c):
+    t = chr(c)
+    try:
+        name = codepoint2name[c]
+    except KeyError:
+        return
+    if name == t:
+        return
+    if len(name) > 1:
+        return name[0]
+        
+accented = [(chr(c), isaccented(c)) for c in range(192,256) if isaccented(c)]
+ffrom = ''.join([c for (c,d) in accented])
+tto = ''.join([d for (c,d) in accented])
+normaliseaccentedchars = translator(ffrom, tto, keep=ffrom + string.letters + string.digits + "-_")
+del ffrom
+del tto
+del accented
+del isaccented
+del codepoint2name
 
 def curry(func, *args, **kwds):
     """curry from python cookbook, example 15.7,
@@ -190,8 +190,6 @@ def ifelse(var, ifyes, ifno):
     else:
         return ifno
 
-# for path conversion to unix, only [a-zA-Z0-9_] allowed:
-reUnix=re.compile(r'[^\w-]')
 
 ##import sys, traceback
 def print_exc_plus(filename=None, skiptypes=None, takemodules=None, specials=None):
@@ -1082,8 +1080,47 @@ def copyIfOutOfDate(inf, out, reverse=None):
                 raise QHError('copyIfOutOfDate: target %s is newer than source: %s'% (out, inf))
         elif reverse:
             copyIfOutOfDate(out, inf)
-            
-    
+
+def checkIfOutOfDate(inputfiles, outputfile):
+    """if inputfile or files are newer than outputfile, return true
+
+>>> folderName = path('c:\\qhtemp')
+>>> makeEmptyFolder(folderName)
+>>> touch(folderName, 'older.ini', 'a.ini', 'b.ini', 'c.ini')
+>>> time.sleep(2)
+>>> touch(folderName, 'a.ini', 'b.ini', 'c.ini')
+>>> time.sleep(2)
+>>> touch(folderName, 'newer.ini')
+>>> a, b, c = folderName/'a.ini', folderName/'b.ini', folderName/'c.ini'
+>>> older, newer = folderName/'older.ini', folderName/'newer.ini'
+>>> checkIfOutOfDate(newer, a)
+True
+>>> checkIfOutOfDate(older, a)
+False
+>>> checkIfOutOfDate([newer, older, a], b)
+True
+>>> checkIfOutOfDate([c, a], newer)
+False
+
+
+
+    """
+    outDate = getFileDate(outputfile)
+    if isinstance(inputfiles, basestring):
+        inDate = getFileDate(inputfiles)
+        if inDate == 0:
+            raise IOError("checkIfOutOfDate: inputfile not present: %s"% inputfiles)
+        return inDate >= outDate
+    else:
+        for inp in inputfiles:
+            inDate = getFileDate(inp)
+            if inDate == 0:
+                raise IOError("checkIfOutOfDate: inputfile not present: %s"% inp)
+            if inDate >= outDate:
+                return True
+        else:
+            return False
+                          
 
 def getFileDate(fileName):
     """returns the date on a file or 0 if the file does not exist
@@ -1651,6 +1688,14 @@ class path(str):
         >>> path("C:/A?Bc/C- - +    98/A.B.C. .txt").unix()
         'C:/abc/c--98/abc.txt'
 
+        # with e acute and Y acute
+        >>> path("C:/d\xe9\xddf").unix()
+        'C:/deyf'
+
+        # path starting with a digit:
+        >>> path("C:/3d/4a.txt").unix()
+        'C:/_3d/_4a.txt'
+
         """
         if self.endswith(":/"):
             return self
@@ -1658,7 +1703,9 @@ class path(str):
             L = [path(k).unix(lowercase=lowercase) for k in self.splitall()]
             return path(L)
         n, e = self.splitext()
-        n = reUnix.sub('', n)
+        n = normaliseaccentedchars(n)
+        if n and n[0] in string.digits:
+            n = "_" + n
         if lowercase:
             return path(n.lower() + e.lower())
         else:
