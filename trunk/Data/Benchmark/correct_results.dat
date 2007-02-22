@@ -759,53 +759,6 @@ Starting background tests...
 
 >>> Dictating C/C++ when only standard symbols are known <<<
 
-THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
-THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-__abs__: ['abs', 'underscore abs', 'underscore absolute', 'underscore absolute value']
-abs: ['abs', 'absolute', 'absolute value']
-abspath: ['abs path', 'absolute path', 'abspath']
-accept: ['accept']
-accept2dyear: ['accept 2 dyear', 'accept two D. year']
-access: ['access']
-acos: ['A. cos', 'acos', 'arc cos', 'arc cosine']
-acquire: ['acquire']
-asin: ['A. sine', 'arc sine', 'asin']
-atan: ['A. tan', 'arc tan', 'arc tangent', 'atan']
-atan2: ['A. tan 2', 'arc tan 2', 'arc tangent 2', 'atan 2']
-atanh: ['A. tan H.', 'arc tan H.', 'arc tangent H.', 'atanh', 'hyperbolic arc tangent']
-ceil: ['ceil', 'ceiling']
-cos: ['cos', 'cosine']
-cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
-exp: ['exp', 'exponential']
-fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
-floor: ['floor']
-len: ['len', 'length']
-log: ['log', 'logarithm']
-log10: ['log 10', 'log base 10', 'logarithm base 10']
-repr: ['rep', 'repr', 'represent', 'representation']
-sin: ['sin', 'sine']
-sinh: ['hyperbolic sine', 'sinch', 'sine H.', 'sinh']
-sqrt: ['sqirt', 'sqrt', 'square root']
-str: ['S. T. R.', 'str', 'string']
-tan: ['tan', 'tangent']
-tanh: ['hyperbolic tangent', 'tan H.', 'tanh']
-type: ['type']
-_cached_symbols_as_one_string[a] is:
-    __abs__  abs  abspath  accept  accept2dyear  access  acos  acquire  asin  atan  atan2  atanh  
-_cached_symbols_as_one_string[c] is:
-    ceil  cos  cosh  
-_cached_symbols_as_one_string[e] is:
-    exp  
-_cached_symbols_as_one_string[f] is:
-    fabs  floor  
-_cached_symbols_as_one_string[l] is:
-    len  log  log10  
-_cached_symbols_as_one_string[r] is:
-    repr  
-_cached_symbols_as_one_string[s] is:
-    sin  sinh  sqrt  str  
-_cached_symbols_as_one_string[t] is:
-    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  type  
 WARNING: source file 'blah.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
@@ -1856,7 +1809,7 @@ Heard with superclass important superclass
 115:   }
 116: }
 117: 
-118: class ReallyGreatStuff: important_superclass<CURSOR>
+118: class ReallyGreatStuff: ImportantSuperclass<CURSOR>
 119: {
 120: 
 121: public:
@@ -1879,7 +1832,7 @@ Heard new line int foo semicolon
 Heard jump back out
 116: }
 117: 
-118: class ReallyGreatStuff: important_superclass
+118: class ReallyGreatStuff: ImportantSuperclass
 119: <CURSOR>{
 120: 
 121: public:
@@ -2148,7 +2101,6 @@ Unresolved abbreviations are:
 *******************************************************************************
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\edit_this_buff.cpp'
-WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 >>> Known symbols are: 
 THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
@@ -2202,7 +2154,6 @@ _cached_symbols_as_one_string[t] is:
 *** Executing edit test: insert an import statement in middle of a file ***
 *********************
 
-WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2226,7 +2177,6 @@ Heard import some module
 *** Executing edit test: create new class ***
 *********************
 
-WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2262,7 +2212,6 @@ Heard define method new method method body pass
 *** Executing edit test: change subclass of existing class ***
 *********************
 
-WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2291,7 +2240,6 @@ Heard new super class
 *** Executing edit test: add_method_to_existing_class_test ***
 *********************
 
-WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2315,7 +2263,6 @@ Heard add method some method method body pass
 *** Executing edit test: add_argument_to_existing_method_test ***
 *********************
 
-WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2339,7 +2286,6 @@ Heard add argument extra argument
 *** Executing edit test: change_existing_argument_of_a_method_test ***
 *********************
 
-WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2368,7 +2314,6 @@ Heard new argument
 *** Executing edit test: insert_line_of_code_in_method_test ***
 *********************
 
-WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2399,7 +2344,6 @@ Heard some array equals none
 *** Executing edit test: change_arguments_in_method_call_test ***
 *********************
 
-WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2437,7 +2381,6 @@ Heard after paren none
 *** Executing edit test: nested_if_then_else_test ***
 *********************
 
-WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2501,7 +2444,6 @@ Heard else do some stuff without arguments
 *** Executing edit test: add_else_clause_test ***
 *********************
 
-WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2528,7 +2470,6 @@ Heard else clause
 *** Executing edit test: add_except_clause_test ***
 *********************
 
-WARNING: source file 'C:\eclipse\workspace\VCode\Data\TestData\edit_this_buff.cpp' doesn't exist.
 *** Start of source buffer ***
   1: <CURSOR>
 
@@ -2696,6 +2637,45 @@ EdSim instance EdSim(0) connected
   6: class AClass(ASuper):
   7:     """This is a dummy class"""
   8:     
+
+
+*******************************************************************************
+* Name        : ContBlankLine
+* Description : Tests for the blank line context class.
+*******************************************************************************
+
+
+
+*******************************************************************************
+* Name        : ContLanguage
+* Description : Tests for different language contexts.
+*******************************************************************************
+
+
+
+*******************************************************************************
+* Name        : ContPyInsideArguments
+* Description : Tests for being inside the argument list of a function.
+*******************************************************************************
+
+Heard select inside
+Heard select inside
+Heard select inside
+Heard select outside
+Heard select three
+Heard select four
+Heard select five
+Heard select six
+Heard select seven
+Heard select test
+Heard select none
+
+
+*******************************************************************************
+* Name        : Context
+* Description : Tests for conflicting contexts.
+*******************************************************************************
+
 
 
 *******************************************************************************
@@ -2924,6 +2904,20 @@ EdSim.__del__
 
 
 *******************************************************************************
+* Name        : LSAlias
+* Description : Testing LSA definitions
+*******************************************************************************
+
+
+
+*******************************************************************************
+* Name        : LessThanGreaterThan
+* Description : testing variants of less than and greater than
+*******************************************************************************
+
+
+
+*******************************************************************************
 * Name        : Object
 * Description : self-test for Object.py
 *******************************************************************************
@@ -2968,6 +2962,13 @@ Class with private *init_file* attribute*
 
 Subclassing from non-standard class AnimatedCharacter.*
    AnimatedPerson(name='Alain', animation_file='C:/People/Alain.dat') -> result={'animation_file': 'C:/People/Alain.dat', 'frames_per_sec': 40, 'name': 'Alain', 'citizenship': None}
+
+
+*******************************************************************************
+* Name        : SourceBuff
+* Description : Unit tests for the SourceBuff class and subclasses.
+*******************************************************************************
+
 
 
 *******************************************************************************
@@ -3315,11 +3316,28 @@ Fresh abbreviation file matches current one, as expected
 * Description : Testing SymbolResult.
 *******************************************************************************
 
-..
-----------------------------------------------------------------------
-Ran 2 tests in 0.000s
 
-OK
+
+*******************************************************************************
+* Name        : TestCaseWithHelpers
+* Description : Test the unit testing framework.
+*******************************************************************************
+
+
+
+*******************************************************************************
+* Name        : WhatCanISay
+* Description : self-test for WhatCanISay.py
+*******************************************************************************
+
+In future make wcisay website for lang: C, curr_context: None, all_lang: None
+contents of WCISay written to: %VCODE_HOME%\Data\whatCanISay\C_default.txt
+[[{'action': "Inserts ' = ^' in current buffer",
+   'doc': 'equal sign',
+   'equiv': 'Any',
+   'scope': 'global',
+   'setdescription': 'description of cscs',
+   'setname': 'cscs'}]]
 
 
 *******************************************************************************
@@ -6088,7 +6106,7 @@ recent dictation is empty, as expected
 ')
 Heard class clown inherits from student
 *** Start of source buffer ***
-  1: class Clown(student<CURSOR>):
+  1: class Clown(Student<CURSOR>):
   2:     
 
 *** End of source buffer ***
@@ -6097,7 +6115,7 @@ Heard class clown inherits from student
 >>> Testing console command: say(['class', 'body'], user_input='')
 Heard class body
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     <CURSOR>
 
 *** End of source buffer ***
@@ -6107,7 +6125,7 @@ Heard class body
 ')
 Heard define method popularity method body
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     def popularity(self):
   3:         <CURSOR>
 
@@ -6117,7 +6135,7 @@ Heard define method popularity method body
 >>> Testing console command: say(['return', 'eight'], user_input='')
 Heard return eight
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     def popularity(self):
   3:         return 8<CURSOR>
 
@@ -6137,7 +6155,7 @@ Heard return eight
 scratching 1
 
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     def popularity(self):
   3:         <CURSOR>
 
@@ -6153,7 +6171,7 @@ scratch 1 succeeded as expected
 ***Moving cursor manually***
 
 *** Start of source buffer ***
-  1: <CURSOR>class Clown(student):
+  1: <CURSOR>class Clown(Student):
   2:     def popularity(self):
   3:         
 
@@ -6164,7 +6182,7 @@ scratch 1 succeeded as expected
 scratching 1
 
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     <CURSOR>
 
 *** End of source buffer ***
@@ -6182,7 +6200,7 @@ scratch 1 succeeded as expected
 ')
 Heard define method grades method body return B.
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     def grades(self):
   3:         return b<CURSOR>
 
@@ -6198,7 +6216,7 @@ Heard define method grades method body return B.
 >>> Testing console command: say(['select', 'Clown'], user_input='None')
 Heard select clown
 *** Start of source buffer ***
-  1: class <SEL_START>Clown<SEL_END>(student):
+  1: class <SEL_START>Clown<SEL_END>(Student):
   2:     def grades(self):
   3:         return b
 
@@ -6207,7 +6225,7 @@ Heard select clown
 ***Manually changing text
 
 *** Start of source buffer ***
-  1: class president<CURSOR>(student):
+  1: class president<CURSOR>(Student):
   2:     def grades(self):
   3:         return b
 
@@ -6234,7 +6252,7 @@ symbol Cloud did not exist, as expected
 ')
 Heard class cloud inherits from student
 *** Start of source buffer ***
-  1: class Cloud(student<CURSOR>):
+  1: class Cloud(Student<CURSOR>):
   2:     
 
 *** End of source buffer ***
@@ -6243,7 +6261,7 @@ Heard class cloud inherits from student
 >>> Testing console command: say(['class', 'body'], user_input='')
 Heard class body
 *** Start of source buffer ***
-  1: class Cloud(student):
+  1: class Cloud(Student):
   2:     <CURSOR>
 
 *** End of source buffer ***
@@ -6253,7 +6271,7 @@ Heard class body
 ')
 Heard fine method popularity method body
 *** Start of source buffer ***
-  1: class Cloud(student):
+  1: class Cloud(Student):
   2:     fine_method_popularity<CURSOR>
 
 *** End of source buffer ***
@@ -6262,7 +6280,7 @@ Heard fine method popularity method body
 >>> Testing console command: say(['return', 'eight'], user_input='')
 Heard return eight
 *** Start of source buffer ***
-  1: class Cloud(student):
+  1: class Cloud(Student):
   2:     fine_method_popularityreturn 8<CURSOR>
 
 *** End of source buffer ***
@@ -6290,18 +6308,18 @@ utterance 2 was changed
 utterance 2 was corrected
 about to reinterpret
 *** Start of source buffer ***
-  1: class Cloud(student):
+  1: class Cloud(Student):
   2:     <CURSOR>
 
 *** End of source buffer ***
 *** Start of source buffer ***
-  1: class Cloud(student):
+  1: class Cloud(Student):
   2:     def popularity(self):
   3:         <CURSOR>
 
 *** End of source buffer ***
 *** Start of source buffer ***
-  1: class Cloud(student):
+  1: class Cloud(Student):
   2:     def popularity(self):
   3:         return 8<CURSOR>
 
@@ -6337,23 +6355,23 @@ about to reinterpret
 
 *** End of source buffer ***
 *** Start of source buffer ***
-  1: class Clown(student<CURSOR>):
+  1: class Clown(Student<CURSOR>):
   2:     
 
 *** End of source buffer ***
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     <CURSOR>
 
 *** End of source buffer ***
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     def popularity(self):
   3:         <CURSOR>
 
 *** End of source buffer ***
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     def popularity(self):
   3:         return 8<CURSOR>
 
@@ -6384,7 +6402,7 @@ symbol excess did not exist, as expected
 >>> Testing console command: say(['new', 'line'], user_input='')
 Heard new line
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     def popularity(self):
   3:         return 8
   4:     <CURSOR>
@@ -6395,7 +6413,7 @@ Heard new line
 >>> Testing console command: say(['back indent'], user_input='')
 Heard back indent
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     def popularity(self):
   3:         return 8
   4: <CURSOR>
@@ -6407,7 +6425,7 @@ Heard back indent
 ')
 Heard excess equals zero
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     def popularity(self):
   3:         return 8
   4: excess = 0<CURSOR>
@@ -6421,7 +6439,7 @@ symbol excess has spoken forms ['excess']
 ***Manually changing text
 
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     def popularity(self):
   3:         return 8
   4: excess<CURSOR>
@@ -6474,7 +6492,7 @@ symbol results did not exist, as expected
 ***Fixing error manually***
 
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     def popularity(self):
   3:         return 8
   4: <CURSOR>
@@ -6570,7 +6588,7 @@ utterance 2 was changed
 utterance 2 was corrected
 about to reinterpret
 *** Start of source buffer ***
-  1: class Clown(student):
+  1: class Clown(Student):
   2:     def popularity(self):
   3:         return 8
   4: <CURSOR>
@@ -6797,7 +6815,7 @@ symbol actOut has spoken forms ['act out']
 ***Moving cursor manually***
 
 *** Start of source buffer ***
-  1: <CURSOR>class Clown(student):
+  1: <CURSOR>class Clown(Student):
   2:     def popularity(self):
   3:         return 8
   4: success = 1
@@ -7454,6 +7472,43 @@ Heard next one
  16:     - pretty printing???
  17:     
  18: 
+
+
+*******************************************************************************
+* Name        : commands_that_set_format_of_subsequent_symbols
+* Description : Testing commands that specify formatting of subsequent symbols.
+*******************************************************************************
+
+Testing Python commands.
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['class', 'some', 'python', 'class', 'inherits', 'from', 'some', 'python', 'super', 'class'], user_input='None')
+Heard class some python class inherits from some python super class
+*** Start of source buffer ***
+  1: class SomePythonClass(SomePythonSuperClass<CURSOR>):
+  2:     
+
+*** End of source buffer ***
+Testing C++ commands.
+WARNING: source file 'blah.cpp' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['class', 'some', 'Cclass', 'inherits', 'from', 'some', 'C', 'super', 'class'], user_input='None')
+Heard class some Cclass inherits from some C super class
+*** Start of source buffer ***
+  1: class SomeCclass: SomeCSuperclass <CURSOR>
+  2: {
+  3: 
+  4: public:
 
 
 *******************************************************************************
@@ -8280,6 +8335,14 @@ WARNING: source file 'dummy.cpp' doesn't exist.
 
 Language for this file is: C
 
+WARNING: source file 'fileWithMultipleDots.InItsName.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+
+Language for this file is: python
+
 
 
 *******************************************************************************
@@ -8860,6 +8923,23 @@ Heard less-than greater-than equal-sign
   1:  <  > =<CURSOR>
 
 *** End of source buffer ***
+
+
+*******************************************************************************
+* Name        : navigation_within_buffer
+* Description : unit testing navigation commands like page up/down etc.
+*******************************************************************************
+
+Heard yo page down
+Heard do that again
+Heard again two times
+Heard yo page up
+Heard do that again
+Heard again two times
+Heard go to end of line
+Heard go to beginning of line
+Heard yo top of file
+Heard yo bottom of file
 
 
 *******************************************************************************
