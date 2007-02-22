@@ -3040,47 +3040,16 @@ version number unchanged
 
 comparing symdict.dict created from scratch with
 the reference dictionary current_symdict.dict
-ERROR: contents of persistent SymDict dictionary appears
-to have changed, without a change in the version number.
-Both current_symdict.dict and symdict.dict
-(the latter created from scratch) have version 5
-but the following differences were found:
+no differences found
 
-element 1 of attribute 'spoken_forms' of item 'O_APPEND' of item 'symbol_info'
-missing from first argument
+initializing SymDict from dictionary
 
-element 1 of attribute 'spoken_forms' of item 'O_RSYNC' of item 'symbol_info'
-missing from first argument
+initialization from dictionary was successful
+Abbreviation file was unchanged, as expected
+initializing fresh SymDict from dictionary
 
-element 1 of attribute 'spoken_forms' of item 'o_sample_rate' of item 'symbol_info'
-missing from first argument
-
-
-These differences could be due to a change to
-the persistent SymDict format without a corresponding
-increment in current_version in SymDict.py.  They could
-also be due to changes to the algorithm for generating
-spoken forms for known symbols, or to the input files
-py_abbrevs.py and selected_py_sym.py in
-%VCODE_HOME%\Data\TestData
-
-If these differences do reflect changes made to
-the persistent SymDict format, you must:
-  1. increment current_version in SymDict.py
-  2. create a new SingleVersionDictConverter to
-     convert from the old version
-  3. prepend this converter to the global symdict_cvtr
-     in SymDict.py
-  4. re-run this test to verify that the old version
-     can be properly converted
-
-
-If these differences are simply due to changes
-in the input files or the algorithms, then you must
-verify the new stored symdict.dict in 
-%VCODE_HOME%\Data\TestData
-manually, and then copy it to current_symdict.dict
-in the same directory.
+initialization from dictionary was successful
+Fresh abbreviation file matches current one, as expected
 
 
 *******************************************************************************
