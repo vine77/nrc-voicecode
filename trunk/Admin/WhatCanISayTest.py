@@ -12,7 +12,7 @@ from CmdInterp import AliasMeaning, CmdInterp, LSAlias, LSAliasSet, CSCmdSet
 from CSCmd import CSCmd
 from cont_gen import *
 import WhatCanISay
-
+import util
 from actions_gen import gen_parens_pair, ActionInsertNewClause, ActionInsert
 from actions_C_Cpp import c_else
 from config_helpers import *
@@ -367,16 +367,17 @@ the "equals" csc and lsa should (for python) show up with
     def test_resulting_websites(self):
         """check if all the files are equal"""
         for lang in expected_languages:
-            print 'testing resulting website for language: %s'% lang
+            print '\ntesting default wcisay website for language: %s'% lang
             self.do_test_resulting_website(lang, all_lang=None, curr_context=None, comment=None)
   
             if lang in ('C', 'python'):
                 
-                print 'testing the current context for language: %s'% lang
                 ext = dict(C='c', python='py')[lang]
                 self._open_empty_test_file('temp.%s'% ext)
+                print '\ntesting the current context website "blank" for language: %s'% lang
                 self.do_test_resulting_website(lang, all_lang=None, curr_context=1, comment="blank")
                 self._insert_in_active_buffer("now line is (inside arguments list")
+                print '\ntesting the current context website "filled" for language: %s'% lang
                 self.do_test_resulting_website(lang, curr_context=1, comment="filled")
 
         # all languages produce (should) same result with all_lang flag on:
@@ -421,7 +422,7 @@ the "equals" csc and lsa should (for python) show up with
             old_files = glob.glob(os.path.join(test_folder , "*.html"))
             if not old_files:
                 print 'empty folder for language %s assume correct results, copy to %s'% \
-                      (lang, test_folder)
+                      (lang, util.within_VCode(test_folder))
                 self.copy_html_files(html_folder, test_folder)
                 return
         else:
