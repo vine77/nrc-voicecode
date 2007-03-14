@@ -315,9 +315,12 @@ def relative_name(path, head, prefix=''):
     p.extend(remove_common(path,head))
     return apply(os.path.join, p)
 
+def replace_all_within_VCode(text, prefix='%VCODE_HOME%' ):
+    return text.replace(vc_globals.home, prefix)
+
 def within_VCode(path):
 #    return relative_name(path, vc_globals.home)
-    return relative_name(path, vc_globals.home, prefix = '%VCODE_HOME%')
+    return relative_name(path, vc_globals.home, prefix='%VCODE_HOME%')
 #    return relative_name(path, vc_globals.home, 
 #        prefix = os.path.basename(vc_globals.home))
 
