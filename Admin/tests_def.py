@@ -119,8 +119,8 @@ def add_unittest(name, desc, foreground=0):
 
    
     def test_function():
-        unittest.TextTestRunner(). \
-             run(unittest.makeSuite(test_class, 'test')) 
+        return unittest.TextTestRunner(). \
+                run(unittest.makeSuite(test_class, 'test')) 
 
     add_test(test_name, test_function, desc=desc, foreground=foreground)
 
@@ -354,6 +354,8 @@ add_unittest('Context', desc='Tests for conflicting contexts.')
 add_unittest('ContBlankLine', desc='Tests for the blank line context class.')
 
 add_unittest('ContPyInsideArguments', desc='Tests for being inside the argument list of a function.')
+
+add_unittest('ContPyBeforeArguments', desc='Tests for being before open paren of a function def or call.')
 
 add_unittest('ContLanguage', desc='Tests for different language contexts.')
 

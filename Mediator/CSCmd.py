@@ -188,12 +188,15 @@ class CSCmdList(list):
     .. [Context] file:///./Context.Context.html
     .. [Action] file:///./Action.Action.html"""
         
-    def __init__(self, meanings={}, generate_discrete_cmd=0, parent=None, **attrs):
+    def __init__(self, meanings=None, generate_discrete_cmd=0, parent=None, **attrs):
         """
 
-        """           
+        """
+        if meanings == None:
+            pass
+        else:
+            self._add_meanings(meanings)
         self.generate_discrete_cmd = generate_discrete_cmd
-        self._add_meanings(meanings)
         self.parent = parent
 
     def clone(self):
@@ -275,8 +278,6 @@ class CSCmdList(list):
                 # a tuple or string means do a language context on the languages in the tuple:
                 context = ContLanguage(context)
             self._add_a_meaning(context, action)
-
-        self._sort_meanings()
             
 
     def _add_a_meaning(self, context, action):
@@ -289,8 +290,17 @@ class CSCmdList(list):
                           (prev_context.__class__, prev_context.scope(), prev_context.equivalence_key(),
                            context.__class__, context.scope(), context.equivalence_key())
                     raise DuplicateContextKeys(msg)
-            # no conflicts, just add to the list:
-            self.append((context, action))
+            # no conflicts, just add to the list, at the desired place:
+            for i, (c,a) in enumerate(self):
+                if context.scope_number() < c.scope_number():
+                    self.insert(i, (context, action))
+                    break
+                if context.scope_number() == c.scope_number():
+                    if context.equivalence_key() < c.equivalence_key():
+                        self.insert(i, (context, action))
+                        break
+            else:
+                self.append((context, action))
 
 
 
@@ -299,14 +309,6 @@ class CSCmdList(list):
         """
         for context, action in cscmd_list:
             self._add_a_meaning(context, action)
-
-    def _sort_meanings(self):
-        """sort by scope and classname and equivalence key"""
-        decorated = [(context.scope_number(), context.__class__, context.equivalence_key(), context, action) for
-                     context, action in self]
-        decorated.sort()
-        self = [(context, action) for (a,b,c, context, action) in decorated]
-        
 
     def applies(self, app, preceding_symbol = 0):
         """test whether any of its contexts applies, and returns
@@ -335,13 +337,18 @@ class CSCmdList(list):
         #
 #        print '-- CSCmd.interpret: self.meanings=%s' % self.meanings
         last_scope = -1
-        result = []
+        # make a nearly identical CSCmdList instance, for WhatCanISay purposes, for the CmdInterp
+        # only the list of context,action tuples is interesting:
+        result = CSCmdList(generate_discrete_cmd=self.generate_discrete_cmd, parent=self.parent)
         for context, action in self:
+##            print 'context: %s, scope: %s'% (context, context.scope_number())
             if result and context.scope_number() > last_scope:
+##                print 'result and new scope number (last_scope): %s'% last_scope
                 return result
             last_scope = context.scope_number()
             if context.applies(app, preceding_symbol):
                 result.append((context, action))
-                
+##                print 'applies, length now: %s'% len(result)
+                                
         return result or None
     

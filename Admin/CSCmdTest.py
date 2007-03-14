@@ -97,7 +97,7 @@ class CSCmdTest(VoiceCodeRootTest.VoiceCodeRootTest):
     def test_This_is_how_you_create_a_CSCmd_instance(self):
          command1 = CSCmd(spoken_forms=['hello'],
                          meanings = {'python': ActionInsert('hello python'),
-                                         'C': ActionInsert('hello C')})
+                                         'C': ActionInsert('hello CCCC')})
          command2 = CSCmd(spoken_forms=['hello'],
                          meanings = {contPython: ActionInsert('hello python'),
                                          contC: ActionInsert('hello C')})
@@ -190,10 +190,155 @@ class CSCmdTest(VoiceCodeRootTest.VoiceCodeRootTest):
 
 
 
-    def test_Test_equivalent_ContLanguage_instances(self):
+    def test_Test_correct_order_of_CSCmdList1(self):
+         interp = CmdInterp()
+         actionHello = ActionInsert("csc hello")
+         actionBlankLine = ActionInsert("csc blank")
+         actionBeforeArguments = ActionInsert("csc before arguments")
+         contBlankLine = ContBlankLine()
+         contAny = ContAny()
+         cscs = CSCmdSet('csc demo set', description='description of csc demo set')
+         # test the sorting of the csc :
+         cscs.add_csc(CSCmd(spoken_forms=['hello'],
+                                     meanings={ContPyBeforeArguments(): actionBeforeArguments,
+                                               contAny: actionHello,
+                                               contBlankLine: actionBlankLine},
+                                    docstring="hello in csc set testlist1"))                                 
+         interp.add_csc_set(cscs)
+         wTrie = interp.commands
+         for spoken, cscmd_list in wTrie.items():
+             
+             if spoken == ['hello']:
+                 cscmd_list_expected = \
+   [{'action': "Inserts 'csc blank^' in current buffer",
+  'doc': 'hello in csc set testlist1',
+  'equiv': 'BlankLine: any',
+  'scope': 'immediate',
+  'setdescription': 'description of csc demo set',
+  'setname': 'csc demo set'},
+ {'action': "Inserts 'csc before arguments^' in current buffer",
+  'doc': 'hello in csc set testlist1',
+  'equiv': 'ContPyBeforeArguments: python',
+  'scope': 'immediate',
+  'setdescription': 'description of csc demo set',
+  'setname': 'csc demo set'},
+ {'action': "Inserts 'csc hello^' in current buffer",
+  'doc': 'hello in csc set testlist1',
+  'equiv': 'Any',
+  'scope': 'global',
+  'setdescription': 'description of csc demo set',
+  'setname': 'csc demo set'}]
+
+             else:
+                 self.fail("should not come here, testing error, should have exactly 1 spoken form")
+             visible_list = cscmd_list.get_info()
+             self.assert_equal(cscmd_list_expected, visible_list,
+                               'wTrie CSCmdList of meanings with spoken form "%s" is not as expected'% repr(spoken))
+             break
+         else:
+             self.fail("no spoken forms in test, should not come here, testing error, should have 1 spoken form")
+ 
+    def test_Test_correct_order_of_CSCmdList2(self):
+         interp = CmdInterp()
+         actionHello = ActionInsert("csc inverted")
+         actionBlankLine = ActionInsert("csc blank")
+         # test the sorting of the csc inverted:
+         contAny = ContAny()
+         contBlankLine = ContBlankLine()
+         cscs = CSCmdSet('csc demo set', description='description of csc demo set')
+         cscs.add_csc(CSCmd(spoken_forms=['inverted'],
+                                     meanings={contBlankLine: actionBlankLine,
+                                               contAny: actionHello},
+                                    docstring="hello in csc set testlist2"))                                 
+                                 
+         interp.add_csc_set(cscs)
+         wTrie = interp.commands
+         for spoken, cscmd_list in wTrie.items():
+             
+             if spoken == ['inverted']:
+                 cscmd_list_expected =    [\
+ {'action': "Inserts 'csc blank^' in current buffer",
+  'doc': 'hello in csc set testlist2',
+  'equiv': 'BlankLine: any',
+  'scope': 'immediate',
+  'setdescription': 'description of csc demo set',
+  'setname': 'csc demo set'},
+ {'action': "Inserts 'csc inverted^' in current buffer",
+  'doc': 'hello in csc set testlist2',
+  'equiv': 'Any',
+  'scope': 'global',
+  'setdescription': 'description of csc demo set',
+  'setname': 'csc demo set'}]
+             else:
+                 self.fail("should not come here, testing error, should have exactly 1 spoken form")
+             visible_list = cscmd_list.get_info()
+             self.assert_equal(cscmd_list_expected, visible_list,
+                               'wTrie CSCmdList of meanings with spoken form "%s" is not as expected'% repr(spoken))
+             break
+         else:
+             self.fail("no spoken forms in test, should not come here, testing error, should have 1 spoken form")
         # see ContextTest.py
-        pass
         
+
+    def test_Test_correct_order_of_CSCmdList_permutations_test(self):
+        """Add meanings in different orders, placing in CSCmdList should be sorted right away"""
+        actionHello = ActionInsert("csc hello")
+        actionBlankLine = ActionInsert("csc blank")
+        actionBeforeArguments = ActionInsert("csc before arguments")
+        contBlankLine = ContBlankLine()
+        contAny = ContAny()
+        CAList = [(ContPyBeforeArguments(), actionBeforeArguments),
+                  (contAny, actionHello), 
+                  (contBlankLine, actionBlankLine)]
+
+        for permutation in [(1,2,0), (2,0,1), (0,2,1), (1,0,2), (2,1,0), (0,1,2)]:
+             interp = CmdInterp()
+             CAListPermuted = [CAList[i] for i in permutation]
+             cscs = CSCmdSet('csc demo set', description='description of csc demo set')
+             # test the sorting of the csc. order of dict not important, always returning same CSCmdList:
+             meanings = dict()
+             for (c,a) in CAListPermuted:
+                 meanings[c] = a
+             csc = CSCmd(spoken_forms=['hello'],
+                                     meanings=meanings,
+                                     docstring="hello in csc test permutations")
+             cscs.add_csc(csc)
+             interp.add_csc_set(cscs)
+             wTrie = interp.commands
+             for spoken, cscmd_list in wTrie.items():
+                 
+                 if spoken == ['hello']:
+                     cscmd_list_expected = \
+  [{'action': "Inserts 'csc blank^' in current buffer",
+  'doc': 'hello in csc test permutations',
+  'equiv': 'BlankLine: any',
+  'scope': 'immediate',
+  'setdescription': 'description of csc demo set',
+  'setname': 'csc demo set'},
+ {'action': "Inserts 'csc before arguments^' in current buffer",
+  'doc': 'hello in csc test permutations',
+  'equiv': 'ContPyBeforeArguments: python',
+  'scope': 'immediate',
+  'setdescription': 'description of csc demo set',
+  'setname': 'csc demo set'},
+ {'action': "Inserts 'csc hello^' in current buffer",
+  'doc': 'hello in csc test permutations',
+  'equiv': 'Any',
+  'scope': 'global',
+  'setdescription': 'description of csc demo set',
+  'setname': 'csc demo set'}]
+
+                 else:
+                     self.fail("should not come here, testing error, should have exactly 1 spoken form")
+                 visible_list = cscmd_list.get_info()
+                 self.assert_equal(cscmd_list_expected, visible_list,
+                                   'wTrie CSCmdList of meanings with spoken form "%s" (permutation: %s) is not as expected'% \
+                                   (repr(spoken), permutation))
+                 break
+             else:
+                 self.fail("no spoken forms in test, should not come here, testing error, should have 1 spoken form")
+
+
 
     def test_Test_conflicing_context_instances(self):
         pass

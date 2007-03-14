@@ -1163,6 +1163,10 @@ class NewMediatorObject(Object.OwnerObject):
                     self.test_suite.run_background(profile_prefix =
                         self.profile_prefix)
                 self.testing = 0
+                if self.test_suite.foreground_count() + self.test_suite.background_count() > 1:
+                    util.bell(5)
+                else:
+                    util.bell(1)
                 app.mediator_closing()
             except messaging.SocketError:
                 sys.stdout.write('**** Test editor disconnected unexpectedly')

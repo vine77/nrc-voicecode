@@ -427,7 +427,59 @@ class ContPyInsideArguments(ContLanguage):
 
         *STR* -- the key
         """
-        return "ContPyInsideArguments: python"
+        return ContLanguage.equivalence_key(self, prefix="ContPyInsideArguments")
+
+class ContPyBeforeArguments(ContLanguage):
+    """This context should apply if the cursor is at a variable with parens just after
+
+
+    For python:
+
+    here() applies
+
+    and not_here does not apply
+
+    This context can be used for formatting integrating the with arguments CSC with add arguments 
+    (QH, febr 2007
+
+    """
+    # matches letters "(" with optional empty space in between:
+    re_before_open_paren = re.compile(r'\w*\s*[(]')
+
+    def __init__(self, **attrs):
+        super(ContPyBeforeArguments, self).__init__(language='python', **attrs)
+
+       
+    def _applies(self, app, preceding_symbol = 0):
+        """return 1 if context applies"""
+        answer = 0
+        # test for language:
+        if not super(ContPyBeforeArguments, self)._applies(app, preceding_symbol):
+            return answer
+
+        buff = app.curr_buffer()
+        current_pos = buff.cur_pos()
+        num = buff.line_num_of(current_pos)
+        end = buff.end_of_line()
+        line_from_here = buff.get_text(current_pos, end)
+        just_before_open_paren = self.re_before_open_paren.match(line_from_here) 
+        if just_before_open_paren:
+            return 1
+        return answer
+
+    def scope(self):
+        """skope of ContPyBeforeArguments is immediate
+
+        *STR* -- the string identifying the scope
+        """
+        return "immediate"
+
+    def equivalence_key(self):
+        """returns the equivalence_key of ContPyBeforeArguments
+
+        *STR* -- the key
+        """
+        return ContLanguage.equivalence_key(self, prefix="ContPyBeforeArguments")
 
 
 class ContTextIsSelected(Context):
