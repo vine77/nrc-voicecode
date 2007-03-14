@@ -97,7 +97,7 @@ class CSCmdTest(VoiceCodeRootTest.VoiceCodeRootTest):
     def test_This_is_how_you_create_a_CSCmd_instance(self):
          command1 = CSCmd(spoken_forms=['hello'],
                          meanings = {'python': ActionInsert('hello python'),
-                                         'C': ActionInsert('hello CCCC')})
+                                         'C': ActionInsert('hello C')})
          command2 = CSCmd(spoken_forms=['hello'],
                          meanings = {contPython: ActionInsert('hello python'),
                                          contC: ActionInsert('hello C')})

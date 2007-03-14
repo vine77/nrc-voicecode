@@ -128,7 +128,7 @@ class TestSuite(Object):
     def clean_result(self, testResult, filesToSkip=None):
         """return the enhanced result of test"""
         if testResult.wasSuccessful():
-            return "tests OK"
+            return "tests passed"
         L = []
         L.append(self.clean_part_of_results(testResult.errors, 'errors',
                                             filesToSkip=self.files_to_skip_in_report))
@@ -145,6 +145,8 @@ class TestSuite(Object):
         for case, tb in part:
             L.append('\n---------- %s --------\n'% case)
             cleanTb = cleanTraceback(tb, filesToSkip)
+            # special for VCode::
+            cleanTb = util.replace_all_within_VCode(cleanTb)
             L.append(cleanTb)
         return '\n'.join(L)
 

@@ -1,5 +1,5 @@
 #$Revision$, $Date$, $Author$
-#misc utility functions from Quintijn, used in unimacro and in
+#misc utility functions from Quintijn, used in unimacro, voicecode and in 
 #local programs.
 #copyright Quintijn Hoogenboom,  QH software, training & advies
 from __future__ import generators

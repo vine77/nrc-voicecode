@@ -133,6 +133,10 @@ def add_unittest(name, desc, foreground=0):
 
 add_unittest('TestCaseWithHelpers', desc='Test the unit testing framework.')
 
+add_unittest('DeliberateOutput',
+             desc='Testing the output that failures and errors of unittesting'
+                  'should give in the output file when run from the mediator test')
+
 
 ##############################################################################
 # Testing SymDict

@@ -495,7 +495,7 @@ Starting background tests...
 * Description : Testing CSCmd
 *******************************************************************************
 
-
+tests passed
 
 *******************************************************************************
 * Name        : C_Cpp
@@ -2389,14 +2389,30 @@ EdSim instance EdSim(0) connected
 * Description : Tests for the blank line context class.
 *******************************************************************************
 
-
+tests passed
 
 *******************************************************************************
 * Name        : ContLanguage
 * Description : Tests for different language contexts.
 *******************************************************************************
 
+tests passed
 
+*******************************************************************************
+* Name        : ContPyBeforeArguments
+* Description : Tests for being before open paren of a function def or call.
+*******************************************************************************
+
+Heard select here
+Heard select foxtrot
+Heard select foxtrot
+Heard select outside
+Heard select func
+Heard select four
+Heard select five
+Heard select test
+Heard select none
+tests passed
 
 *******************************************************************************
 * Name        : ContPyInsideArguments
@@ -2414,12 +2430,70 @@ Heard select six
 Heard select seven
 Heard select test
 Heard select none
-
+tests passed
 
 *******************************************************************************
 * Name        : Context
 * Description : Tests for conflicting contexts.
 *******************************************************************************
+
+tests passed
+
+*******************************************************************************
+* Name        : DeliberateOutput
+* Description : Testing the output that failures and errors of unittestingshould give in the output file when run from the mediator test
+*******************************************************************************
+
+
+--------------- errors -----------------
+
+
+---------- test_show_deliberate_output_assertRaises (DeliberateOutputTest.DeliberateOutputTest) --------
+
+  File "%VCODE_HOME%\Admin\DeliberateOutputTest.py", line 31, in test_show_deliberate_output_assertRaises
+    self.assertRaises(KeyError, "Key" + 3)
+TypeError: cannot concatenate 'str' and 'int' objects
+
+
+--------------- failures -----------------
+
+
+---------- test_show_deliberate_output_always_fail (DeliberateOutputTest.DeliberateOutputTest) --------
+
+  File "%VCODE_HOME%\Admin\DeliberateOutputTest.py", line 35, in test_show_deliberate_output_always_fail
+    self.fail("always fail, should produce output in foo.txt")
+  ...
+AssertionError: always fail, should produce output in foo.txt
+
+
+---------- test_show_deliberate_output_assertEqual (DeliberateOutputTest.DeliberateOutputTest) --------
+
+  File "%VCODE_HOME%\Admin\DeliberateOutputTest.py", line 19, in test_show_deliberate_output_assertEqual
+    self.assertEqual("assert", "Equal", "this test should produce output in foo.txt")
+  ...
+AssertionError: this test should produce output in foo.txt
+
+
+---------- test_show_deliberate_output_assert_ (DeliberateOutputTest.DeliberateOutputTest) --------
+
+  File "%VCODE_HOME%\Admin\DeliberateOutputTest.py", line 23, in test_show_deliberate_output_assert_
+    self.assert_("assert_" == "foo", "this test should produce output in foo.txt")
+  ...
+AssertionError: this test should produce output in foo.txt
+
+
+---------- test_show_deliberate_output_assert_equal (DeliberateOutputTest.DeliberateOutputTest) --------
+
+  File "%VCODE_HOME%\Admin\DeliberateOutputTest.py", line 14, in test_show_deliberate_output_assert_equal
+    self.assert_equal("assert_", "_equal", "this test should produce output in foo.txt")
+  ...
+AssertStringEqualsFailed: this test should produce output in foo.txt
+----
+Strings differed. See triple tilde (~~~) position below.
+Expected:
+   '~~~assert_'
+Got:
+   '~~~_equal'
 
 
 
@@ -2653,14 +2727,14 @@ EdSim.__del__
 * Description : Testing LSA definitions
 *******************************************************************************
 
-
+tests passed
 
 *******************************************************************************
 * Name        : LessThanGreaterThan
 * Description : testing variants of less than and greater than
 *******************************************************************************
 
-
+tests passed
 
 *******************************************************************************
 * Name        : Object
@@ -2699,7 +2773,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CE1C30>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01D1B630>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2714,7 +2788,7 @@ Subclassing from non-standard class AnimatedCharacter.*
 * Description : Unit tests for the SourceBuff class and subclasses.
 *******************************************************************************
 
-
+tests passed
 
 *******************************************************************************
 * Name        : SymDict
@@ -2731,8 +2805,8 @@ Parsed symbols are:
 API_function: ['A. P. I. function', 'API function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['F. name']
-f_name2: ['F. name 2']
+f_name: ['F. name', 'f name']
+f_name2: ['F. name 2', 'f name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -2762,7 +2836,6 @@ _cached_symbols_as_one_string[y] is:
     y  
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -2926,8 +2999,8 @@ Parsed symbols are:
 API_function: ['A. P. I. function', 'API function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['F. name']
-f_name2: ['F. name 2']
+f_name: ['F. name', 'f name']
+f_name2: ['F. name 2', 'f name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -2959,7 +3032,6 @@ _cached_symbols_as_one_string[y] is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name2', 'f_name']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -2973,8 +3045,8 @@ After accepting those symbols, known symbols are:
 API_function: ['A. P. I. function', 'API function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['F. name']
-f_name2: ['F. name 2']
+f_name: ['F. name', 'f name']
+f_name2: ['F. name 2', 'f name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -3006,7 +3078,6 @@ _cached_symbols_as_one_string[y] is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
-'f': appears in ['f_name2', 'f_name']
 'x': appears in ['x']
 'y': appears in ['y']
 
@@ -3040,16 +3111,53 @@ version number unchanged
 
 comparing symdict.dict created from scratch with
 the reference dictionary current_symdict.dict
-no differences found
+ERROR: contents of persistent SymDict dictionary appears
+to have changed, without a change in the version number.
+Both current_symdict.dict and symdict.dict
+(the latter created from scratch) have version 5
+but the following differences were found:
 
-initializing SymDict from dictionary
+element 1 of attribute 'spoken_forms' of item 'F_FRSIZE' of item 'symbol_info'
+missing from first argument
 
-initialization from dictionary was successful
-Abbreviation file was unchanged, as expected
-initializing fresh SymDict from dictionary
+element 1 of attribute 'spoken_forms' of item 'O_APPEND' of item 'symbol_info'
+missing from first argument
 
-initialization from dictionary was successful
-Fresh abbreviation file matches current one, as expected
+element 1 of attribute 'spoken_forms' of item 'O_RSYNC' of item 'symbol_info'
+missing from first argument
+
+element 1 of attribute 'spoken_forms' of item 'f_lineno' of item 'symbol_info'
+missing from first argument
+
+element 1 of attribute 'spoken_forms' of item 'o_sample_rate' of item 'symbol_info'
+missing from first argument
+
+
+These differences could be due to a change to
+the persistent SymDict format without a corresponding
+increment in current_version in SymDict.py.  They could
+also be due to changes to the algorithm for generating
+spoken forms for known symbols, or to the input files
+py_abbrevs.py and selected_py_sym.py in
+%VCODE_HOME%\Data\TestData
+
+If these differences do reflect changes made to
+the persistent SymDict format, you must:
+  1. increment current_version in SymDict.py
+  2. create a new SingleVersionDictConverter to
+     convert from the old version
+  3. prepend this converter to the global symdict_cvtr
+     in SymDict.py
+  4. re-run this test to verify that the old version
+     can be properly converted
+
+
+If these differences are simply due to changes
+in the input files or the algorithms, then you must
+verify the new stored symdict.dict in 
+%VCODE_HOME%\Data\TestData
+manually, and then copy it to current_symdict.dict
+in the same directory.
 
 
 *******************************************************************************
@@ -3057,14 +3165,14 @@ Fresh abbreviation file matches current one, as expected
 * Description : Testing SymbolResult.
 *******************************************************************************
 
-
+tests passed
 
 *******************************************************************************
 * Name        : TestCaseWithHelpers
 * Description : Test the unit testing framework.
 *******************************************************************************
 
-
+tests passed
 
 *******************************************************************************
 * Name        : WhatCanISay
@@ -3111,11 +3219,20 @@ second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: Bla
 Warning: when adding CSC spoken form ['else', 'duplicate'],
 Trying to define conflicting contexts
 first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)testing resulting website for language: C
-testing the current context for language: C
-testing resulting website for language: perl
-testing resulting website for language: python
-testing the current context for language: python
+second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
+testing default wcisay website for language: C
+
+testing the current context website "blank" for language: C
+
+testing the current context website "filled" for language: C
+
+testing default wcisay website for language: perl
+
+testing default wcisay website for language: python
+
+testing the current context website "blank" for language: python
+
+testing the current context website "filled" for language: python
 
 =======setting up WhatCanISay test instance
 Warning: when adding CSC spoken form ['else', 'duplicate'],
@@ -3136,7 +3253,7 @@ second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: Bla
 Warning: when adding CSC spoken form ['else', 'duplicate'],
 Trying to define conflicting contexts
 first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
+second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)tests passed
 
 *******************************************************************************
 * Name        : am_dictionaries
@@ -3379,8 +3496,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name']
-f_name2: ['F. name 2']
+f_name: ['F. name', 'f name']
+f_name2: ['F. name 2', 'f name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 float: ['float']
 floor: ['floor']
@@ -3862,7 +3979,6 @@ List of unresolved abbreviations
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
 'dyear': appears in ['accept2dyear']
-'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -4305,7 +4421,6 @@ List of unresolved abbreviations
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
 'dyear': appears in ['accept2dyear']
-'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -4332,8 +4447,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name']
-f_name2: ['F. name 2']
+f_name: ['F. name', 'f name']
+f_name2: ['F. name 2', 'f name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 float: ['float']
 floor: ['floor']
@@ -4415,8 +4530,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name']
-f_name2: ['F. name 2']
+f_name: ['F. name', 'f name']
+f_name2: ['F. name 2', 'f name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 float: ['float']
 floor: ['floor']
@@ -4899,7 +5014,6 @@ List of unresolved abbreviations
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
 'dyear': appears in ['accept2dyear']
-'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
 'y': appears in ['y']
 
@@ -4933,8 +5047,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name']
-f_name2: ['F. name 2']
+f_name: ['F. name', 'f name']
+f_name2: ['F. name 2', 'f name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 file_name: ['file name']
 float: ['float']
@@ -5420,7 +5534,6 @@ List of unresolved abbreviations
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
 'dyear': appears in ['accept2dyear']
-'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
 'y': appears in ['y']
 
@@ -5863,7 +5976,6 @@ List of unresolved abbreviations
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
 'dyear': appears in ['accept2dyear']
-'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
 'y': appears in ['y']
 
@@ -8637,8 +8749,8 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 API_function: ['A. P. I. function', 'API function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['F. name']
-f_name2: ['F. name 2']
+f_name: ['F. name', 'f name']
+f_name2: ['F. name 2', 'f name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -9283,8 +9395,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name']
-f_name2: ['F. name 2']
+f_name: ['F. name', 'f name']
+f_name2: ['F. name 2', 'f name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 float: ['float']
 floor: ['floor']
@@ -9367,8 +9479,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name']
-f_name2: ['F. name 2']
+f_name: ['F. name', 'f name']
+f_name2: ['F. name 2', 'f name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 float: ['float']
 floor: ['floor']
@@ -13584,8 +13696,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name']
-f_name2: ['F. name 2']
+f_name: ['F. name', 'f name']
+f_name2: ['F. name 2', 'f name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 float: ['float']
 floor: ['floor']
@@ -16933,5 +17045,5 @@ WARNING: Call to deprecated method TestCaseWithHelpers.assert_sequences_have_sam
 
 
 -----------------------------------------------
-Test suite completed in:  512.984999895 secs
+Test suite completed in:  464.671999931 secs
 -----------------------------------------------
