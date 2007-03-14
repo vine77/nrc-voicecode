@@ -176,6 +176,13 @@ class CorrectUtteranceEventWX(CorrectUtteranceEvent):
         self.deep_construct(CorrectUtteranceEventWX,
                             {'evt_handler': evt_handler},
                             args)
+
+    def notify(self, instance_name):
+        ##QH, just trying:
+        debug.trace('CorrectThat.notify', 'invoked')
+        event = CorrectNthRecentEventWX(instance_name)
+##        event = UtteranceCorrectionEventWX(instance_name)
+        wxPostEvent(self.evt_handler, event)
                                                         
 class CorrectRecentEventWX(CorrectRecentEvent):
     """implementation of CorrectRecentEvent using custom wxPython

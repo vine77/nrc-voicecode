@@ -862,8 +862,9 @@ functional_pairs = CSCmdSet('functional pairs',
 
 acmd = CSCmd(spoken_forms=['with arguments', 'with argument', 'call with',
                            'called with', 'function of'],
-             meanings={all_languages: gen_parens_pair},
-             docstring='argument list for function')
+             meanings={all_languages: gen_parens_pair,
+                       ContPyBeforeArguments():  py_function_add_argument},
+             docstring='argument list for function, python: add or go into argument list')
 functional_pairs.add_csc(acmd)
 
 acmd = CSCmd(spoken_forms=['dictionary with elements', 'hash with elements',

@@ -181,20 +181,14 @@ class WhatCanISay(object):
 
     def index_contextual_meanings(self, spoken_form, meanings_list):
         for a_language in self.languages:
-            for_this_language = meanings_list.clone()
+            if self.curr_context:
+                for_this_language = meanings_list.applies(self.app, preceding_symbol=None)
+            else:
+                for_this_language = meanings_list.clone()
 
-            for a_context, an_action in meanings_list:
-                trace('WhatCanISay.index_contextual_meanings', "** Processing a_context=%s, an_action: %s" % \
-                 (a_context.equivalence_key(), an_action.doc() or "action???"))
-                if self.curr_context:
-                    if not a_context.applies(self.app):
-                        for_this_language.remove((a_context, an_action))
-                    else:
-                        # take only this one, delete rest:
-                        while len(for_this_language) > 1:
-                            del for_this_language[-1]
-                        break
-                else:
+                for a_context, an_action in meanings_list:
+                    trace('WhatCanISay.index_contextual_meanings', "** Processing a_context=%s, an_action: %s" % \
+                     (a_context.equivalence_key(), an_action.doc() or "action???"))
                     if not self.context_applies_for_lang(a_language, a_context):
                         for_this_language.remove((a_context, an_action))
 

@@ -190,7 +190,30 @@ def ifelse(var, ifyes, ifno):
     else:
         return ifno
 
+def sendkeys_escape(str):
+    """escape with {} keys that have a special meaning in sendkeys
+    + ^ % ~ { } [ ]
 
+>>> sendkeys_escape('abcd')
+'abcd'
+>>> sendkeys_escape('+bcd')
+'{+}bcd'
+>>> sendkeys_escape('+a^b%c~d{f}g[h]i')
+'{+}a{^}b{%}c{~}d{{}f{}}g{[}h{]}i'
+>>> sendkeys_escape('+^%~{}[]')
+'{+}{^}{%}{~}{{}{}}{[}{]}'
+
+    """
+    return ''.join(map(_sendkeys_escape, str))
+def _sendkeys_escape(s):
+    """Escape one character in the set or return if different"""
+    if s in ('+', '^', '%', '~', '{' , '}' , '[' , ']' ) :
+        return '{%s}' % s
+    else:
+        return s
+    
+    
+                   
 ##import sys, traceback
 def print_exc_plus(filename=None, skiptypes=None, takemodules=None, specials=None):
     """ Print the usual traceback information, followed by a listing of
@@ -315,6 +338,46 @@ def print_exc_plus(filename=None, skiptypes=None, takemodules=None, specials=Non
     sys.stderr.write(callback)
     return callback, specialsDict
 
+def cleanTraceback(tb, filesToSkip=None):
+    """strip boilerplate in traceback (unittest)
+
+    the purpose is to skip the lines "Traceback" (only if filesToSkip == True),
+    and to skip traceback lines from modules that are in filesToSkip.
+
+    in use with unimacro unittest and voicecode unittesting.
+
+    filesToSkip are (can be "unittest.py" and "TestCaseWithHelpers.py"    
+
+    """
+    L = tb.split('\n')
+    snip = "  ..." # leaving a sign of the stripping!
+    if filesToSkip:
+        singleLineSkipping = ["Traceback (most recent call last):"]
+    else: 
+        singleLineSkipping = None
+    M = []
+    skipNext = 0
+    for line in L:
+        # skip the traceback line:
+        if singleLineSkipping and line in singleLineSkipping:
+            continue
+        # skip trace lines from one one the filesToSkip and the next one
+        # UNLESS there are no leading spaces, in case we hit on the error line itself.
+        if skipNext and line.startswith(" "):
+            skipNext = 0
+            continue
+        if filesToSkip:
+            for f in filesToSkip:
+                if line.find(f + '", line') >= 0:
+                    skipNext = 1
+                    if M[-1] != snip:
+                        M.append(snip)
+                    break
+            else:
+                skipNext = 0
+                M.append(line)
+       
+    return '\n'.join(M)
 
     # calculate the relative path, if ffrom and fto are files (not directoryies)
 def relpathdirs(ffrom, fto):

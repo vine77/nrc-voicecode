@@ -31,7 +31,7 @@ import util
 from debug import trace
 from Object import Object
 import exceptions
-
+from utilsqh import cleanTraceback
 test_reg = {}
 
 foreground_tests = 0x1
@@ -87,6 +87,9 @@ class TestSuite(Object):
 
     *{STR: BOOL}* is_foreground -- map from test names to flag indicating 
     whether the test is a foreground or a background test
+    *{List} (QH) files_to_skip_in_report: to strip lines in the error report
+    (now the result of unittest testing also comes back in foo.txt)
+    
     """
     def __init__(self, **args):
         self.deep_construct(TestSuite, 
@@ -94,7 +97,8 @@ class TestSuite(Object):
                              'background': [],
                              'tests': {},
                              'descriptions': {},
-                             'is_foreground': {}
+                             'is_foreground': {},
+                             'files_to_skip_in_report': ['unittest.py', 'TestCaseWithHelpers.py']
                             },
                             args)
 
@@ -109,15 +113,41 @@ class TestSuite(Object):
             desc = self.descriptions[test]
             fct = self.tests[test]
             sys.stdout.write(test_header(test, desc))
-            sys.stdout.flush()
             if profile_prefix is None:
-                apply(fct)
+                result = apply(fct)
+                if result:
+                    sys.stdout.write(self.clean_result(result))
+                    sys.stdout.flush()
             else:
                 import __main__
                 __main__.test_to_profile = fct
                 outfile = profile_prefix + '.' + test + '.dat'
                 profile.run('test_to_profile()', outfile)
             sys.stdout.flush()
+
+    def clean_result(self, testResult, filesToSkip=None):
+        """return the enhanced result of test"""
+        if testResult.wasSuccessful():
+            return "tests OK"
+        L = []
+        L.append(self.clean_part_of_results(testResult.errors, 'errors',
+                                            filesToSkip=self.files_to_skip_in_report))
+        L.append(self.clean_part_of_results(testResult.failures, 'failures',
+                                            filesToSkip=self.files_to_skip_in_report))
+        return '\n'.join(L)
+
+    def clean_part_of_results(self, part, name, filesToSkip):
+        """produce a cleaned string for 'errors' and 'failures' of a test result"""
+        if not part:
+            return ""
+        L = []
+        L.append('\n--------------- %s -----------------\n'% name)
+        for case, tb in part:
+            L.append('\n---------- %s --------\n'% case)
+            cleanTb = cleanTraceback(tb, filesToSkip)
+            L.append(cleanTb)
+        return '\n'.join(L)
+
 
     def run_foreground(self, profile_prefix = None):
         """

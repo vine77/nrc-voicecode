@@ -2015,11 +2015,10 @@ class CmdInterp(OwnerObject):
                     % spoken_list[:CSC_consumes]
                 msg = msg + \
                     'has more than one applicable context with the same'
-                msg = msg + '\nscope %s:\n' % context.scope()
                 for context, action in applicable:
-                    msg = msg + 'context: %s, action: %s\n' \
-                        % (context, action)
-                msg = msg + 'Applying the first context'
+                    msg = msg + '\ncontext: %s (scope: %s), \n\t\taction: %s' \
+                        % (context, context.scope(), action)
+                msg = msg + '\nApplying the first context'
                 config_warning(msg)
             csc_applies = 1
 # flush untranslated words before executing action
