@@ -33,12 +33,12 @@
 (pc-selection-mode)
 (load-file (substitute-in-file-name "$VCODE_HOME/Environments/Emacs/python-mode.el"))
 (custom-set-variables
- '(py-indent-offset 3))
+ '(py-indent-offset 4))
 
 
 (setq vr-deprecated-activation-list 
-         (list "\.py$" "\.c$" "\.cpp$" "\.h$" "\.js$" "\.R$"
-               "\*Completions\*"))
+           (list "\.py$" "\.c$" "\.cpp$" "\.h$" "\.pl$" "\.R$" "\.hpp$" "\.java$"
+                 "\.js$" "*Completions*" "\.php$"))
 
 
 ;;; Change this if you want to see more traces
@@ -271,9 +271,11 @@ in the 'vr-deprecated-log-buff-name buffer.")
 (cl-puthash "c" "C" vcode-language-name-map)
 (cl-puthash "h" "C" vcode-language-name-map)
 (cl-puthash "cpp" "C" vcode-language-name-map)
+(cl-puthash "hpp" "C" vcode-language-name-map) 
 (cl-puthash "java" "java" vcode-language-name-map)
 (cl-puthash "pl" "perl" vcode-language-name-map)
 (cl-puthash "js" "javascript" vcode-language-name-map)
+(cl-puthash "php" "php" vcode-language-name-map)
 (cl-puthash "R" "C" vcode-language-name-map)
 
 (defvar vcode-traces-on (make-hash-table :test 'string=)
@@ -345,8 +347,8 @@ sent."
  
   (vcode-close-all-buffers)
   (setq vr-deprecated-activation-list 
-           (list "\.py$" "\.c$" "\.cpp$" "\.h$" "\.pl$" "\.R$"
-                 "\.js$" "*Completions*"))
+           (list "\.py$" "\.c$" "\.cpp$" "\.h$" "\.pl$" "\.R$" "\.hpp$" "\.java$"
+                 "\.js$" "*Completions*" "\.php$"))
   (vcode-configure-for-regression-testing t)
   (vcode-mode-toggle-to 1 "vcode-test")
   (setq vcode-is-test-editor t)
