@@ -43,14 +43,16 @@ csc_with_arguments_meanings = {all_languages: gen_parens_pair}
 csc_with_arguments_docstring = 'giving the parens after a function call, position inside'
 csc_else_spoken_forms = ['else']
 csc_else_duplicate_spoken_forms = ['else duplicate']
-csc_else_meanings ={ContBlankLine('python'): ActionInsertNewClause('($|\n)',
+csc_python_else_meanings ={ContBlankLine('python'): ActionInsertNewClause('($|\n)',
                                                      code_bef = 'else on blank line',
                                                      code_after = '',
                                                      where = -1),
-                    contPython: ActionInsert("else on non blank line"),
-                    c_style_languages: c_else}
+                    contPython: ActionInsert("else on non blank line")}
+csc_c_else_meanings = {contC: c_else}
 
-csc_else_docstring = 'else clause'
+
+csc_python_else_docstring = 'else clause only python'
+csc_c_else_docstring = 'else clause only c'
 csc_equals_spoken_forms = ['equals']
 csc_equals_meanings ={ContPyInsideArguments(): ActionInsert("="),
                        ContAny(): ActionInsert(' = ')}
@@ -60,80 +62,79 @@ csc_equals_docstring = 'equal sign'
 lsa_equals_spoken_forms = ['equals']
 lsa_equals_meanings = {('python', 'C'):  ' = '}
 
-expected_index = {'python': {\
-        'else':    [[{'action': 'no docstring available',
-                      'doc': 'else clause',
-                      'equiv': 'BlankLine: python',
-                      'scope': 'immediate',
-                      'setdescription': 'description of CSCS',
-                      'setname': 'csc commands'},
-                     {'action': "Inserts 'else on non blank line^' in current buffer",
-                      'doc': 'else clause',
-                      'equiv': 'Language: python',
-                      'scope': 'buffer',
-                      'setdescription': 'description of CSCS',
-                      'setname': 'csc commands'}]],
-        'else duplicate':    [[{'action': 'no docstring available',
-                                'doc': 'else clause',
-                                'equiv': 'BlankLine: python',
-                                'scope': 'immediate',
-                                'setdescription': 'description of CSCS',
-                                'setname': 'csc commands'},
-                               {'action': "Inserts 'else on non blank line^' in current buffer",
-                                'doc': 'else clause',
-                                'equiv': 'Language: python',
-                                'scope': 'buffer',
-                                'setdescription': 'description of CSCS',
-                                'setname': 'csc commands'}]],
-        'equals':   [[{'action': "Inserts '=^' in current buffer",
-                       'doc': 'equal sign',
-                       'equiv': 'ContPyInsideArguments: python',
+expected_index = \
+   {'python': {'else': [[{'action': 'no docstring available',
+                       'doc': 'else clause only python',
+                       'equiv': 'BlankLine: python',
                        'scope': 'immediate',
                        'setdescription': 'description of CSCS',
                        'setname': 'csc commands'},
-                      {'action': "Inserts ' = ^' in current buffer",
-                       'doc': 'equal sign',
-                       'equiv': 'Any',
-                       'scope': 'global',
+                      {'action': "Inserts 'else on non blank line^' in current buffer",
+                       'doc': 'else clause only python',
+                       'equiv': 'Language: python',
+                       'scope': 'buffer',
                        'setdescription': 'description of CSCS',
-                       'setname': 'csc commands'}],
-                    {'name': 'equals lsa',
-                      'new_symbol': None,
-                      'setdescription': 'description of LSAS',
-                      'setname': 'lsa/ commands',
-                      'spacing': 0,
-                      'written_form': ' = '}],
-        'multiply by': [{'name': 'multiply',
+                       'setname': 'csc commands'}]],
+            'else duplicate': [[{'action': 'no docstring available',
+                                 'doc': 'else clause only python',
+                                 'equiv': 'BlankLine: python',
+                                 'scope': 'immediate',
+                                 'setdescription': 'description of CSCS',
+                                 'setname': 'csc commands'},
+                                {'action': "Inserts 'else on non blank line^' in current buffer",
+                                 'doc': 'else clause only python',
+                                 'equiv': 'Language: python',
+                                 'scope': 'buffer',
+                                 'setdescription': 'description of CSCS',
+                                 'setname': 'csc commands'}]],
+            'equals': [[{'action': "Inserts '=^' in current buffer",
+                         'doc': 'equal sign',
+                         'equiv': 'ContPyInsideArguments: python',
+                         'scope': 'immediate',
+                         'setdescription': 'description of CSCS',
+                         'setname': 'csc commands'},
+                        {'action': "Inserts ' = ^' in current buffer",
+                         'doc': 'equal sign',
+                         'equiv': 'Any',
+                         'scope': 'global',
+                         'setdescription': 'description of CSCS',
+                         'setname': 'csc commands'}],
+                       {'name': 'equals lsa',
                         'new_symbol': None,
                         'setdescription': 'description of LSAS',
                         'setname': 'lsa/ commands',
                         'spacing': 0,
-                        'written_form': ' * '}],
-        'n o t': [{'name': 'not',
-            'new_symbol': None,
-            'setdescription': 'description of LSAS',
-            'setname': 'lsa/ commands',
-            'spacing': 0,
-            'written_form': 'not'}],
-        
-        'not': [{'name': 'not',
-                'new_symbol': None,
-                'setdescription': 'description of LSAS',
-                'setname': 'lsa/ commands',
-                'spacing': 0,
-                'written_form': 'not'}],
-        'times': [{'name': 'multiply',
-                  'new_symbol': None,
-                  'setdescription': 'description of LSAS',
-                  'setname': 'lsa/ commands',
-                  'spacing': 0,
-                  'written_form': ' * '}],
-        'with arguments': [[{'action': 'Insert parens and puts cursor in between',
-                             'doc': 'giving the parens after a function call, position inside',
-                             'equiv': 'Language: any',
-                             'scope': 'buffer',
-                             'setdescription': 'description of CSCS',
-                             'setname': 'csc commands'}]]}}
+                        'written_form': ' = '}],
+            'multiply by': [{'name': 'multiply',
+                             'new_symbol': None,
+                             'setdescription': 'description of LSAS',
+                             'setname': 'lsa/ commands',
+                             'spacing': 0,
+                             'written_form': ' * '}],
+            'n o t': [{'name': 'not',
+                       'new_symbol': None,
+                       'setdescription': 'description of LSAS',
+                       'setname': 'lsa/ commands',
+                       'spacing': 0,
+                       'written_form': 'not'}],
+            'not': [{'name': 'not',
+                     'new_symbol': None,
+                     'setdescription': 'description of LSAS',
+                     'setname': 'lsa/ commands',
+                     'spacing': 0,
+                     'written_form': 'not'}],
+            'times': [{'name': 'multiply',
+                       'new_symbol': None,
+                       'setdescription': 'description of LSAS',
+                       'setname': 'lsa/ commands',
+                       'spacing': 0,
+                       'written_form': ' * '}],
+            'with arguments': [[{'action': 'Insert parens and puts cursor in between',
+                                 'doc': 'giving the parens after a function call, position inside',
+                                 'equiv': 'Language: any',
+                                 'scope': 'buffer',
+                                 'setdescription': 'description of CSCS',
+                                 'setname': 'csc commands'}]]}}
 
 # files testing (required apart from generated html files:
 required_non_html_files = ['vc.css', 'vcodeuser.jpg', 'waveform.gif']
@@ -181,15 +182,21 @@ the "equals" csc and lsa should (for python) show up with
         cscs.add_csc(CSCmd(spoken_forms=csc_with_arguments_spoken_forms,
                            meanings=csc_with_arguments_meanings,
                            docstring=csc_with_arguments_docstring))
+
+        # here the tricky one: else only for python:        
         cscs.add_csc(CSCmd(spoken_forms=csc_else_spoken_forms,
-                           meanings=csc_else_meanings,
-                           docstring=csc_else_docstring))
+                           meanings=csc_python_else_meanings,
+                           docstring=csc_python_else_docstring))
+        # else duplicate, only for python:
         cscs.add_csc(CSCmd(spoken_forms=csc_else_duplicate_spoken_forms,
-                           meanings=csc_else_meanings,
-                           docstring=csc_else_docstring))
-        cscs2.add_csc(CSCmd(spoken_forms=csc_else_duplicate_spoken_forms,
-                           meanings=csc_else_meanings,
-                           docstring=csc_else_docstring))
+                           meanings=csc_python_else_meanings,
+                           docstring=csc_python_else_docstring))
+        # csc_c_else_meanings only for c, group should be : csc commands too!
+
+        # and inanother set: else for c! should come in set cscs commands too!!!        
+        cscs2.add_csc(CSCmd(spoken_forms=csc_else_spoken_forms,
+                           meanings=csc_c_else_meanings,
+                           docstring=csc_c_else_docstring))
         cscs.add_csc(CSCmd(spoken_forms=csc_equals_spoken_forms,
                            meanings=csc_equals_meanings,
                            docstring=csc_equals_docstring))
@@ -286,24 +293,51 @@ the "equals" csc and lsa should (for python) show up with
 ##                          "test boilerplate of WhatCanISay (all_lang) is not as expected")
         # move on to the commands:
         self.wciSay.create_cmds()
-        expected_top_menu =   {'C': 'c_overview.html',
-                               'perl': 'perl_overview.html',
-                               'python': 'python_overview.html'}
+        # changes with new languages:
+        expected_top_menu =       {'C': 'c_overview.html',
+ 'java': 'java_overview.html',
+ 'javascript': 'javascript_overview.html',
+ 'perl': 'perl_overview.html',
+ 'php': 'php_overview.html',
+ 'python': 'python_overview.html'}
+        
+        # changes with new languages:
         expected_left_menu = \
-         {'C': {'csc commands': 'c_csccommands.html',
-                'lsa/ commands': 'c_lsacommands.html',
-                'standard punctuation navigation': 'c_standardpunctuationnavigation.html'},
-          'perl': {'csc commands': 'perl_csccommands.html',
-                   'lsa/ commands': 'perl_lsacommands.html',
-                   'standard punctuation navigation': 'perl_standardpunctuationnavigation.html'},
-          'python': {'csc commands': 'python_csccommands.html',
-                      'lsa/ commands': 'python_lsacommands.html',
-                      'standard punctuation navigation': 'python_standardpunctuationnavigation.html'}}
-        expected_left_menu_keys = \
-            {'C': ['csc commands', 'lsa/ commands', 'standard punctuation navigation'],
-             'perl': ['csc commands', 'lsa/ commands', 'standard punctuation navigation'],
-             'python': ['csc commands', 'lsa/ commands', 'standard punctuation navigation']}
-        expected_top_menu_keys = ['C', 'perl', 'python']
+   {'C': {'csc commands': 'c_csccommands.html',
+       'csc commands too': 'c_csccommandstoo.html',
+       'lsa/ commands': 'c_lsacommands.html',
+       'standard punctuation': 'c_standardpunctuation.html',
+       'standard punctuation navigation': 'c_standardpunctuationnavigation.html'},
+ 'java': {'csc commands': 'java_csccommands.html',
+          'standard punctuation': 'java_standardpunctuation.html',
+          'standard punctuation navigation': 'java_standardpunctuationnavigation.html'},
+ 'javascript': {'csc commands': 'javascript_csccommands.html',
+                'standard punctuation': 'javascript_standardpunctuation.html',
+                'standard punctuation navigation': 'javascript_standardpunctuationnavigation.html'},
+ 'perl': {'csc commands': 'perl_csccommands.html',
+          'lsa/ commands': 'perl_lsacommands.html',
+          'standard punctuation': 'perl_standardpunctuation.html',
+          'standard punctuation navigation': 'perl_standardpunctuationnavigation.html'},
+ 'php': {'csc commands': 'php_csccommands.html',
+         'standard punctuation': 'php_standardpunctuation.html',
+         'standard punctuation navigation': 'php_standardpunctuationnavigation.html'},
+ 'python': {'csc commands': 'python_csccommands.html',
+            'lsa/ commands': 'python_lsacommands.html',
+            'standard punctuation': 'python_standardpunctuation.html',
+            'standard punctuation navigation': 'python_standardpunctuationnavigation.html'}}
+
+        # changes with mew languages:
+        expected_top_menu_keys = ['C', 'java', 'javascript', 'perl', 'php', 'python']
+        expected_left_menu_keys =   \
+            {'C': ['csc commands', 'csc commands too', 'lsa/ commands',
+                   'standard punctuation', 'standard punctuation navigation'],
+             'java': ['csc commands', 'standard punctuation', 'standard punctuation navigation'],
+             'python': ['csc commands', 'lsa/ commands', 'standard punctuation',
+                        'standard punctuation navigation'],
+             'javascript': ['csc commands', 'standard punctuation', 'standard punctuation navigation'],
+             'perl': ['csc commands', 'lsa/ commands', 'standard punctuation',
+                      'standard punctuation navigation'],
+             'php': ['csc commands', 'standard punctuation', 'standard punctuation navigation']}
         
         self.assert_equal(expected_top_menu, self.wciSay.top_menu, "top menu of WhatCanISay (all_lang) not as expected")
         self.assert_equal(expected_left_menu, self.wciSay.left_menu, "left menu of WhatCanISay (all_lang) not as expected")
@@ -320,9 +354,9 @@ the "equals" csc and lsa should (for python) show up with
         self.wciSay.create_cmds()
         expected_top_menu =   {'python': 'python_overview.html'}
         expected_top_menu_keys = ['python']
-        expected_left_menu =     {'python': {'csc commands': 'python_csccommands.html',
-                                 'lsa/ commands': 'python_lsacommands.html'}}
-        expected_left_menu_keys = {'python': ['csc commands', 'lsa/ commands']}
+        expected_left_menu =        {'python': {'csc commands': 'python_csccommands.html',
+            'lsa/ commands': 'python_lsacommands.html'}}
+        expected_left_menu_keys =   {'python': ['csc commands', 'lsa/ commands']}
         self.assert_equal(expected_top_menu, self.wciSay.top_menu, "top menu of WhatCanISay (curr_context) not as expected")
         self.assert_equal(expected_left_menu, self.wciSay.left_menu, "left menu of WhatCanISay (curr_context) not as expected")
         self.assert_equal(expected_top_menu_keys, self.wciSay.top_menu_keys, " menu keys of WhatCanISay (curr_context) not as expected")
@@ -336,20 +370,76 @@ the "equals" csc and lsa should (for python) show up with
         interp.add_csc(CSCmd(["equals"], meanings={contAny: ActionInsert("====")}, name="equals csc"))
         interp.add_lsa(LSAlias(["plus"], meanings={all_languages: " + "}, name="plus sign"))
         wciSay.load_commands_from_interpreter(self._app(), interp, 'C')
-        expected = {'C':\
-                  {'equals': [[{'action': "Inserts '====^' in current buffer",
-                                'doc': None,
-                                'equiv': 'Any',
-                                'scope': 'global',
-                                'setdescription': 'no description',
-                                'setname': 'cscs'}]],
-                  'plus': [{'description': 'no description',
-                             'name': 'plus sign',
-                             'new_symbol': None,
-                             'setname': 'lsas',
-                             'spacing': 0,
-                             'written_form': ' + '}]}}
+        expected = \
+   {'C': {'equals': [[{'action': "Inserts '====^' in current buffer",
+                    'doc': None,
+                    'equiv': 'Any',
+                    'scope': 'global',
+                    'setdescription': 'no description',
+                    'setname': 'cscs'}]],
+       'plus': [{'description': 'no description',
+                 'name': 'plus sign',
+                 'new_symbol': None,
+                 'setname': 'lsas',
+                 'spacing': 0,
+                 'written_form': ' + '}]}}
         self.assert_equal(expected, wciSay.index, "index of one CSC and one LSA command is not as expected")
+
+
+    def test_the_index_of_c_else_with_different_csc_set_name_as_python_else(self):
+        wciSay = WhatCanISay.WhatCanISay()
+        interp = CmdInterp()
+        # do a csc set for python and a csc set for c
+        # note: for try all went well in C, except for the setname
+        cscs1 = CSCmdSet('try command python', description='description of CSCS')
+        cscs2 = CSCmdSet('try command C', description='description duplicates of CSCS')
+        cscs2.add_csc(CSCmd(spoken_forms=csc_else_spoken_forms,
+                           meanings=csc_c_else_meanings,
+                           docstring=csc_c_else_docstring))
+        cscs1.add_csc(CSCmd(spoken_forms=csc_else_spoken_forms,
+                           meanings=csc_python_else_meanings,
+                           docstring=csc_python_else_docstring))
+        interp.add_csc_set(cscs2)
+        interp.add_csc_set(cscs1)
+        interp.add_lsa(LSAlias(["plus"], meanings={all_languages: " + "}, name="plus sign"))
+
+        wciSay.load_commands_from_interpreter(self._app(), interp, 'C')
+        expected = \
+   {'C': {'else': [[{'action': 'else clause of a C conditional',
+                  'doc': 'else clause only c',
+                  'equiv': 'Language: C',
+                  'scope': 'buffer',
+                  'setdescription': 'description duplicates of CSCS',
+                  'setname': 'try command C'}]],
+       'plus': [{'description': 'no description',
+                 'name': 'plus sign',
+                 'new_symbol': None,
+                 'setname': 'lsas',
+                 'spacing': 0,
+                 'written_form': ' + '}]}}                 
+        self.assert_equal(expected, wciSay.index, "index of else csc set in C different from expected")
+
+        wciSay.load_commands_from_interpreter(self._app(), interp, 'python')
+        expected = \
+   {'python': {'else': [[{'action': 'no docstring available',
+                       'doc': 'else clause only python',
+                       'equiv': 'BlankLine: python',
+                       'scope': 'immediate',
+                       'setdescription': 'description of CSCS',
+                       'setname': 'try command python'},
+                      {'action': "Inserts 'else on non blank line^' in current buffer",
+                       'doc': 'else clause only python',
+                       'equiv': 'Language: python',
+                       'scope': 'buffer',
+                       'setdescription': 'description of CSCS',
+                       'setname': 'try command python'}]],
+            'plus': [{'description': 'no description',
+                      'name': 'plus sign',
+                      'new_symbol': None,
+                      'setname': 'lsas',
+                      'spacing': 0,
+                      'written_form': ' + '}]}}
+        self.assert_equal(expected, wciSay.index, "index of else csc set in python different from expected")
 
 
  
