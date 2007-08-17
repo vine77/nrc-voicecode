@@ -148,16 +148,15 @@ class WhatCanISay(object):
                 spoken_form_text = ' '.join(wordList)
 
                 set_name = info['setname']
-                if  set_name in self.boilerplate_groups:
-                    if not self.all_lang:
-                        continue   # Common commands only if all_lang is asked for
+                if  set_name in self.boilerplate_groups and not self.all_lang:
+                    continue   # Common commands only if all_lang is asked for
 ##                     if spoken_form_text not in self.boilerplate:
 ##                         # Assume here this lsa (spoken_form) in all_languages, maybe should be tested
 ##                         self.boilerplate.setdefault(spoken_form_text, []).append(info)
-                else:
-                    if self.curr_context and spoken_form_text in curr_index:
-                        continue # apparently a csc is already there, that applies
-                    curr_index.setdefault(spoken_form_text, []).append(info)
+                if self.curr_context and spoken_form_text in curr_index:
+                    # some csc already applies obviously (probably)
+                    continue
+                curr_index.setdefault(spoken_form_text, []).append(info)
 
     def index_cscs(self):
         cmd_interp = self.cmd_interp
@@ -168,8 +167,8 @@ class WhatCanISay(object):
         for a_csc_entry in wTrie.items():
             the_spoken_form = ' '.join(a_csc_entry[0])
             the_meanings = a_csc_entry[1]
-            trace('WhatCanISay.index_cscs', "** Processing a_csc_entry: the_spoken_form: %s, the_meanings: %s" % \
-                  (the_spoken_form, the_meanings))
+##            trace('WhatCanISay.index_cscs', "** Processing a_csc_entry: the_spoken_form: %s, the_meanings: %s" % \
+##                  (the_spoken_form, the_meanings))
             self.index_contextual_meanings(the_spoken_form, the_meanings)
 
     def info_is_csc(self, info):
@@ -180,31 +179,32 @@ class WhatCanISay(object):
         return isinstance(info, dict)
 
     def index_contextual_meanings(self, spoken_form, meanings_list):
+        
         for a_language in self.languages:
             if self.curr_context:
                 for_this_language = meanings_list.applies(self.app, preceding_symbol=None)
             else:
-                for_this_language = meanings_list.clone()
+                for_this_language = CSCmdList()
+                for a_context, an_action, a_ref in meanings_list:
+##                    trace('WhatCanISay.index_contextual_meanings', "** Processing a_context=%s, an_action: %s" % \
+##                     (a_context.equivalence_key(), an_action.doc() or "action???"))
+                    if self.context_applies_for_lang(a_language, a_context):
+                        for_this_language.append((a_context, an_action, a_ref))
 
-                for a_context, an_action in meanings_list:
-                    trace('WhatCanISay.index_contextual_meanings', "** Processing a_context=%s, an_action: %s" % \
-                     (a_context.equivalence_key(), an_action.doc() or "action???"))
-                    if not self.context_applies_for_lang(a_language, a_context):
-                        for_this_language.remove((a_context, an_action))
-
-            # now get the info list of dicts of a CSCmdList:
-                
-            info = for_this_language.get_info()
-            if info:
-                trace('WhatCanISay.index_contextual_meanings', "** adding info to %s spoken form %s\n%s"% \
-                      (info, a_language, spoken_form))
-                set_name = info[0]['setname']
-                if set_name in self.boilerplate_groups:
-                    if not self.all_lang:
-                        break      # Common commands only if all_lang is asked for
+            # now get the info of the CSCmdList:
+            if for_this_language:
+                info = for_this_language.get_info()
+                setnames = list(set([i['setname'] for i in info]))
+                if len(setnames) > 1:
+                    print 'WhatCanISay, index_contextual_meanings: duplicate setnames for command: %s: %s'%\
+                          (spoken_form, setnames)
+                    setnames.sort()
+                setname = setnames[0]
+                if setname in self.boilerplate_groups and not self.all_lang:
+##                        trace('WhatCanISay.index_contextual_meanings', "** boilerplate: %s"% \
+##                              set_name)
+                        continue      # Common commands only if all_lang is asked for
                 self.index[a_language].setdefault(spoken_form, []).append(info)
-            else:
-                trace('WhatCanISay.index_contextual_meanings', "** empty info, not adding")
                 
                  
            

@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-import os, re, string, sys
+import os, re, string, sys, types
 import copy, traceback
 import debug
 
@@ -29,7 +29,7 @@ from debug import trace, config_warning, trace_is_active
 from actions_C_Cpp import *
 from actions_py import *
 from AppState import AppState
-from CSCmd import CSCmd, DuplicateContextKeys
+from CSCmd import CSCmd, DuplicateContextKeys, CSCmdList
 from Object import Object, OwnerObject
 import SymDict
 import symbol_formatting
@@ -453,8 +453,11 @@ class CSCmdSet(Object):
         """
         if name is None:
             name = command.spoken_forms[0]
-        command.parent = self
-        trace('CmdInterp.add_csc', "add csc with description:  %s"% command.parent.description)
+        for c,a,info in command.meanings:
+            # insert csc_set info in all meanings items:
+            info['setname'] = self.name
+            info['setdescription'] = self.description
+        trace('CmdInterp.add_csc', "add csc with info:  %s"% command.meanings[0][-1])
         self.commands[name] = command
 
     def replace_spoken(self, name, spoken_forms):
@@ -1688,11 +1691,16 @@ class CmdInterp(OwnerObject):
         if self._spoken_commands_gram_rule == None:
            known_spoken_forms = {}
            if not empty:          
-              for cmd_dict in  self.commands.items():
-                 if cmd_dict[1].generate_discrete_cmd:
-                    spoken_form = string.join(cmd_dict[0])
-                    debug.trace("CmdInterp.gram_spec_spoken_cmd", "** adding %s" % spoken_form)
-                    known_spoken_forms[spoken_form] = 1
+              for spoken, cscmdlist in  self.commands.items():
+##                  print 'gram_spec_spoken_cmd, spoken: %s, cscmdlist: %s'% (spoken, cscmdlist)
+                  if not isinstance(cscmdlist, CSCmdList):
+                      raise TypeError("gram_spec_spoken_cmd not valid CSCmdList instance: %s,\n"
+                                      "spoken: %s"% (cscmdlist, spoken))
+                  generate_discrete_cmd = cscmdlist.generate_discrete_cmd
+                  if generate_discrete_cmd:
+                      spoken_form = ' '.join(spoken)
+                      debug.trace("CmdInterp.gram_spec_spoken_cmd", "** adding %s" % spoken_form)
+                      known_spoken_forms[spoken_form] = 1
  
 # For now, never add LSAs... later, allow adding discrete commands for LSAs where
 # generate_discrete_cmd = 1                 
@@ -2007,7 +2015,7 @@ class CmdInterp(OwnerObject):
             applicable = meanings.applies(app, preceding_symbol)
             if not applicable:
                 continue
-            context, action = applicable[0]
+            context, action, ref = applicable[0]
             trace('CmdInterp.apply_CSC', 
                 'applicable = %s' % repr(applicable))
             if len(applicable) > 1:
@@ -2015,7 +2023,7 @@ class CmdInterp(OwnerObject):
                     % spoken_list[:CSC_consumes]
                 msg = msg + \
                     'has more than one applicable context with the same'
-                for context, action in applicable:
+                for context, action, ref in applicable:
                     msg = msg + '\ncontext: %s (scope: %s), \n\t\taction: %s' \
                         % (context, context.scope(), action)
                 msg = msg + '\nApplying the first context'
@@ -2621,8 +2629,10 @@ class CmdInterp(OwnerObject):
 
 #        debug.trace('CmdInterp.index_csc', 'acmd=%s, acmd.spoken_forms=%s, =%s' % (acmd, acmd.spoken_forms, acmd.meanings))
         debug.trace('CmdInterp.index_csc', 'spoken_forms=%s' % acmd.spoken_forms)
-        cmd_dict = acmd.get_meanings()
-
+        cmd_list = acmd.get_meanings()
+        if not isinstance(cmd_list, CSCmdList):
+            raise TypeError('index_csc: cmd_list should be instance of CSCmdList, not: %s\n'
+                            '%s'% (type(cmd_list), cmd_list))
         for a_spoken_form in acmd.spoken_forms:
             #
             # Remove leading, trailing and double blanks from the spoken form
@@ -2637,8 +2647,12 @@ class CmdInterp(OwnerObject):
             meanings = self.commands.complete_match(phrase)
             trace('CmdInterp.index_csc', 'adding phrase %s' % phrase)
             if meanings:
+                if not isinstance(meanings, CSCmdList):
+                    raise TypeError('index_csc: meanings should be instance of CSCmdList, not: %s\n'
+                                    '%s'% (type(meanings), meanings))
+                
                 try:
-                    meanings.merge(cmd_dict)
+                    meanings.merge(cmd_list)
                 except DuplicateContextKeys, e:
                     msg = 'Warning: when adding CSC spoken form %s,\n' % phrase
                     msg = msg + e.msg
@@ -2652,7 +2666,7 @@ class CmdInterp(OwnerObject):
                 # First time indexed. Create a new list of CSCs for that
                 # spoken form, and add it to the SR vocabulary.
                 #
-                self.commands.add_phrase(phrase, cmd_dict)
+                self.commands.add_phrase(phrase, cmd_list)
                 if (self.add_sr_entries_for_LSAs_and_CSCs):
                     sr_interface.addWord(orig_spoken)
 # we had some problems in regression testing because the individual

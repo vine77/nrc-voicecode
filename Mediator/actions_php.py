@@ -19,19 +19,17 @@
 #
 ##############################################################################
 
-"""Action functions for perl language """
+"""Action functions for php language (in places where different from c) """
 
 from actions_gen import Action, ActionInsert
 
-perl_else_if = \
-    ActionInsert(code_bef='*** action perl_else_if not implemented yet ***')
-
-perl_function_declaration = \
+php_function_declaration = \
     ActionInsert(code_bef='',
                  code_after='();',
-                 docstring = """Types template code for a perl function (no function body)""")
+                 docstring = """Types template code for a php function (no function body)""")
 
-perl_function_definition = \
+php_function_definition = \
     ActionInsert(code_bef='',
                  code_after='()\n{\n\t\n}',
-                 docstring = """Types template code for a perl function (including body)""")
+                 docstring = """Types template code for a php function (including body)""")
+
