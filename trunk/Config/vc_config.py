@@ -988,7 +988,10 @@ acmd = CSCmd(spoken_forms=['while', 'while loop'],
                        ContBlankLine('python'): ActionInsert('while ', ':\n\t')},
              docstring='while loop')
 ctrl_structures.add_csc(acmd)
-acmd = CSCmd(spoken_forms=['do', 'do the following', 'loop body', 'for body',
+## acmd = CSCmd(spoken_forms=['do', 'do the following', 'loop body', 'for body',
+##                            'while body'],
+## 'do' interferes with lots of variable names!
+acmd = CSCmd(spoken_forms=['do the following', 'loop body', 'for body',
                            'while body'],
              meanings={c_style_languages: c_goto_body, contPython: py_goto_body},
              docstring = 'move to body of loop')

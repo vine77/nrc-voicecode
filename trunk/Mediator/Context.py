@@ -41,6 +41,7 @@ class Context(object):
     """
     
     def __init__(self, doc_string=None, doc_topics=None, **attrs):
+        self.csc = None #  to be filled by calling csc...
         self.doc_string = doc_string
         self.doc_topics = doc_topics or []
         for key, val in attrs.items():
