@@ -102,7 +102,7 @@ def dictate_pseudo_C_Cpp(commands):
     
     commands.say(['while','loop'])
     commands.say(['conditional','function','with','argument','index'])
-    commands.say(['do','some','stuff'])
+    commands.say(['do', 'the', 'following', 'some','stuff'])
     commands.say(['empty','parens','semicolon'])
     commands.say(['after','semi','new','line'])
 
@@ -118,7 +118,7 @@ def dictate_pseudo_C_Cpp(commands):
     commands.say(['case','single-quotes','a\\alpha'])
     commands.say(['after','colon','new','line','some','procedure','with','arguments','jump','out','semi','new','line','break'])
     commands.say(['case','single-quotes','b\\bravo'])
-    commands.say(['after','colon','new','line','do','something','different','parens','jump','out','semi','new','line'])
+    commands.say(['after','colon','new','line','do','the', 'following','something','different','parens','jump','out','semi','new','line'])
     commands.say(['break','default','foo','bar','equals','4\\four','semi','jump','out','new','paragraph'])
 
     # typeid()
@@ -396,10 +396,10 @@ def change_arguments_in_method_call_test(commands):
 def nested_if_then_else_test(commands):
    commands.goto_line(11)
    commands.say(['new', 'statement', 'if', 'some', 'flag', 'then'], user_input="1\n1\n")
-   commands.say(['do', 'some', 'more', 'stuff', 'with', 'arguments', 'some', 'argument'], user_input="1\n1\n")
-   commands.say(['else', 'do', 'some', 'stuff', 'again', 'with', 'arguments', 'some', 'other', 'argument'], user_input="1\n1\n")
+   commands.say(['do', 'the', 'following', 'some', 'more', 'stuff', 'with', 'arguments', 'some', 'argument'], user_input="1\n1\n")
+   commands.say(['else', 'do', 'the', 'following', 'some', 'stuff', 'again', 'with', 'arguments', 'some', 'other', 'argument'], user_input="1\n1\n")
    commands.say(['bug', 'below', 'dot', 'following', 'one', 'will', 'not', 'be', 'inserted', 'at', 'the', 'right', 'level'], user_input="1\n1\n1\n1\n1\n1\n1\n1\n1\n")
-   commands.say(['else', 'do', 'some', 'stuff', 'without', 'arguments'])
+   commands.say(['else', 'do', 'the', 'following', 'some', 'stuff', 'without', 'arguments'])
    
    
 def add_else_clause_test(commands):
