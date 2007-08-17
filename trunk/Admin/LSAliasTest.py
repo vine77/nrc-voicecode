@@ -18,10 +18,13 @@ eindex_contents = []
                   
 expected_lsa_index = {}
 expected_lsa_index['C'] = [('multiply by', " * "),('not', '!'), ('times', " * ")]
+# new javascript, php, only " * "::::
+expected_lsa_index['javascript'] = [('multiply by', " * "), ('times', " * ")]
+expected_lsa_index['php'] = [('multiply by', " * "), ('times', " * ")]
+
 expected_lsa_index['perl'] =[('multiply by', " * "), ('not', '!'), ('times', " * ")]
 expected_lsa_index['python'] = [('multiply by', " * "), ('not', 'not'), ('times', " * ")]
-                            
-#
+
 
 class LSAliasTest(VoiceCodeRootTest.VoiceCodeRootTest):
     """tests of CSCmd and CSCmdDict
