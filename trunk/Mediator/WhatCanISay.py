@@ -246,7 +246,7 @@ class WhatCanISay(object):
         # collect data:
         for top in self.top_menu_keys:
             self.part_index = self.index[top]
-            self.left_menu[top] = self.create_left_menu(top=top)
+            self.left_menu[top] = self.create_left_menu(top=top.lower())  # make all pages lowercase
             keys = self.left_menu[top].keys()
             keys.sort()
             self.left_menu_keys[top] = keys
@@ -295,7 +295,7 @@ class WhatCanISay(object):
         if name in Dict:
             return
         output_name = normaliseaccentedchars(name).lower()
-        Dict[name] = '%s_%s.html'% (top.lower(),output_name)
+        Dict[name] = '%s_%s.html'% (top,output_name)
 ##        print 'html page name: %s'% Dict[name]
         
 
@@ -694,13 +694,19 @@ class WhatCanISay(object):
             start_page = self.get_first_page(menu)
 #            print 'menu: %s, start_page: %s, page: %s, page_html: %s'% \
 #                  (menu, start_page, page, page_html)
-            if page.startswith(menu) or page == start_page:
+            # check with lowercase pages names:
+            topmenu_name = page.split('_')[0]
+            menu_nice_name = menu
+            if len(menu) < 3:
+                 menu_nice_name = "&nbsp;" + menu + "&nbsp;"  # make a little longer for showing
+             
+            if topmenu_name == menu.lower() or page == start_page:
                 if page_html == start_page:
-                    tr.append(TD(menu, Class="topon"))
+                    tr.append(TD(menu_nice_name, Class="topon"))
                 else:
-                    tr.append(TD(Href(start_page, menu), onclick="location='%s';"%start_page, Class="topon", height=h2))
+                    tr.append(TD(Href(start_page, menu_nice_name), onclick="location='%s';"%start_page, Class="topon", height=h2))
             else:
-                tr.append(TD(Href(start_page, menu), onclick="location='%s';"%start_page, Class="topoff", height=h2))
+                tr.append(TD(Href(start_page, menu_nice_name), onclick="location='%s';"%start_page, Class="topoff", height=h2))
             tr.append(TD('&nbsp;', Class="blank"))
         tl_menu.append(tr)
         tl.append(TR(TD(tl_menu, Class="topmenu")))
@@ -726,7 +732,7 @@ class WhatCanISay(object):
     def get_first_page(self, menu):
         """Extract from the list of pages the first page to display"""
         if menu in self.left_menu_keys:
-            return "%s_overview.html"% menu
+            return "%s_overview.html"% menu.lower()
 ##            key = self.left_menu_keys[menu][0]
 ##            return self.left_menu[menu][key]
         else:
