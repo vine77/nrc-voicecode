@@ -19,19 +19,13 @@
 #
 ##############################################################################
 
-"""Action functions for perl language """
+"""Action functions for javascript language """
 
 from actions_gen import Action, ActionInsert
 
-perl_else_if = \
-    ActionInsert(code_bef='*** action perl_else_if not implemented yet ***')
+javascript_function_definition = \
+    ActionInsert(code_bef='function ',
+                 code_after='(){\n\t\n}',
+                 docstring = """Types template code for a javascript function (including body)""")
 
-perl_function_declaration = \
-    ActionInsert(code_bef='',
-                 code_after='();',
-                 docstring = """Types template code for a perl function (no function body)""")
-
-perl_function_definition = \
-    ActionInsert(code_bef='',
-                 code_after='()\n{\n\t\n}',
-                 docstring = """Types template code for a perl function (including body)""")
+javascript_function_declaration = javascript_function_definition

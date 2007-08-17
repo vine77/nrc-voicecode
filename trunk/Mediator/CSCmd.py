@@ -81,8 +81,8 @@ class CSCmd(object):
         """
         self.spoken_forms = spoken_forms or []
         meanings = meanings or {}
-        self.meanings = CSCmdList(meanings, generate_discrete_cmd, parent=self)
         self.docstring = docstring
+        self.meanings = CSCmdList(meanings, generate_discrete_cmd, parent=self)
         for key, val in attrs.items():
             setattr(self, key, val)
 
@@ -90,6 +90,8 @@ class CSCmd(object):
         """returns the reference of the meanings list...
         """
         return self.meanings
+
+
 
     def applies(self, app, preceding_symbol = 0):
         """test whether any of its contexts applies, and returns
@@ -168,6 +170,25 @@ class CSCmd(object):
                 new_spoken.append(spoken)
         self.spoken_forms = new_spoken
 
+    def get_info(self):
+        """return the csc and csc_set info of this cscmd instance...
+
+        the resulting dict has keys: doc (of csc), setdescription and setname (of cscset)
+
+        """
+        info = dict(doc=self.docstring)
+        try:
+            description = self.parent.description
+        except (KeyError, AttributeError):
+            description = "no description"
+        try:
+            name = self.parent.name
+        except (KeyError, AttributeError):
+            name = 'cscs'
+        info['setdescription']  = description
+        info['setname']  = name
+        return info
+
 class CSCmdList(list):
     """underlying class used to store CSCmd context and action data 
     internally for CSCmd and also once the commands have been indexed 
@@ -192,12 +213,12 @@ class CSCmdList(list):
         """
 
         """
+        self.generate_discrete_cmd = generate_discrete_cmd
+        self.parent = parent
         if meanings == None:
             pass
         else:
             self._add_meanings(meanings)
-        self.generate_discrete_cmd = generate_discrete_cmd
-        self.parent = parent
 
     def clone(self):
         """returns a mixed deep-shallow copy of the object.  
@@ -205,37 +226,7 @@ class CSCmdList(list):
 
         *CSCmdList* -- the copy
         """
-        return copy.copy(self)
-
-    def get_info(self):
-        """return a dict with the visible items"""
-        visible = []
-        for context, action in self:
-            vis = dict(scope=context.scope(),
-                       equiv=context.equivalence_key(),
-                       action=action.doc())
-            if self.parent == None:
-                vis['doc'] = ""
-                vis['setdescription']  = "no description"
-                vis['setname'] = 'cscs'
-            else:
-                vis['doc'] = self.parent.docstring
-                try:
-                    description = self.parent.parent.description
-                except (KeyError, AttributeError):
-                    description = "no description"
-                try:
-                    name = self.parent.parent.name
-                except (KeyError, AttributeError):
-                    name = 'cscs'
-                description = description or "no description"
-                name = name or "cscs"
-                vis['setdescription']  = description
-                vis['setname']  = name
-                
-            visible.append(vis)
-        return visible
-    
+        return copy.copy(self)    
 
     def _extract_meanings(self):
         """private method which converts the actions and contexts from a
@@ -253,7 +244,7 @@ class CSCmdList(list):
         and value is an action object to be fired if that context applies.
         """
         meanings = {}
-        for context, action in self:
+        for context, action, dummy in self:
             
             meanings[context] = action
         return meanings
@@ -273,16 +264,17 @@ class CSCmdList(list):
         *none*
         """
         self.duplicates = []
+        info = self.parent.get_info()
         for context, action in meanings.items():
             if isinstance(context, (tuple, basestring)):
                 # a tuple or string means do a language context on the languages in the tuple:
                 context = ContLanguage(context)
-            self._add_a_meaning(context, action)
-            
+            self._add_a_meaning(context, action, info)            
 
-    def _add_a_meaning(self, context, action):
+    def _add_a_meaning(self, context, action, info):
             """add one meaning to the """
-            for prev_context, prev_action in self:
+            dummy = None
+            for prev_context, prev_action, prev_info in self:
                 if prev_context.conflicts_with(context):
                     msg = "Trying to define conflicting contexts\n" \
                           "first:  %s (scope: %s, equivalence_key: %s)\n" \
@@ -291,24 +283,24 @@ class CSCmdList(list):
                            context.__class__, context.scope(), context.equivalence_key())
                     raise DuplicateContextKeys(msg)
             # no conflicts, just add to the list, at the desired place:
-            for i, (c,a) in enumerate(self):
+            for i, (c,a,inf) in enumerate(self):
                 if context.scope_number() < c.scope_number():
-                    self.insert(i, (context, action))
+                    self.insert(i, (context, action, info))
                     break
                 if context.scope_number() == c.scope_number():
                     if context.equivalence_key() < c.equivalence_key():
-                        self.insert(i, (context, action))
+                        self.insert(i, (context, action, info))
                         break
             else:
-                self.append((context, action))
+                self.append((context, action, info))
 
 
 
     def merge(self, cscmd_list):
         """merges another CSCmdList into this one
         """
-        for context, action in cscmd_list:
-            self._add_a_meaning(context, action)
+        for context, action, info in cscmd_list:
+            self._add_a_meaning(context, action, info)
 
     def applies(self, app, preceding_symbol = 0):
         """test whether any of its contexts applies, and returns
@@ -340,15 +332,30 @@ class CSCmdList(list):
         # make a nearly identical CSCmdList instance, for WhatCanISay purposes, for the CmdInterp
         # only the list of context,action tuples is interesting:
         result = CSCmdList(generate_discrete_cmd=self.generate_discrete_cmd, parent=self.parent)
-        for context, action in self:
+        for context, action, dummy in self:
 ##            print 'context: %s, scope: %s'% (context, context.scope_number())
             if result and context.scope_number() > last_scope:
 ##                print 'result and new scope number (last_scope): %s'% last_scope
                 return result
             last_scope = context.scope_number()
             if context.applies(app, preceding_symbol):
-                result.append((context, action))
+                result.append((context, action, dummy))
 ##                print 'applies, length now: %s'% len(result)
                                 
         return result or None
+    
+    def get_info(self):
+        """gives a list of info dicts for testing purposes only.
+
+        For WhatCanISay, you need to use the direct values of each context, action together
+        with info dict of CSCmd, which was generated at starting time
+        """
+        all_info = []
+        for c, a, csc_info in self:
+            info = copy.copy(csc_info)
+            info['scope'] = c.scope()
+            info['equiv'] = c.equivalence_key()
+            info['action'] = a.doc()
+            all_info.append(info)
+        return all_info
     
