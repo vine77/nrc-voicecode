@@ -269,11 +269,16 @@ class CSCmdList(list):
             if isinstance(context, (tuple, basestring)):
                 # a tuple or string means do a language context on the languages in the tuple:
                 context = ContLanguage(context)
-            self._add_a_meaning(context, action, info)            
+            if context:
+                self._add_a_meaning(context, action, info)            
+            else:
+                print 'empty context, skipping'
 
     def _add_a_meaning(self, context, action, info):
             """add one meaning to the """
             dummy = None
+            if not context:
+                return
             for prev_context, prev_action, prev_info in self:
                 if prev_context.conflicts_with(context):
                     msg = "Trying to define conflicting contexts\n" \

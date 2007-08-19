@@ -33,20 +33,20 @@ The following variables are defined in this module
 
 """
 
-import os, sys
+import os, sys, copy
 #
 # special error for deprecated things
 #
 class DeprecationError(Exception):
     pass
+
+
 #
 # Various directories
 #
 home = os.environ['VCODE_HOME']
-
 admin = os.path.join(home, 'Admin')
 unit_tests_dir = os.path.join(admin, 'UnitTests')
-
 config = os.path.join(home, 'Config')
 data = os.path.join(home, 'Data')
 mediator_dir = os.path.join(home, 'Mediator')
@@ -70,12 +70,28 @@ regression_user_config_file = os.path.join(config, 'regression_config.py')
 sym_state_file = os.path.join(state, 'symdict.dict')
 
 # Add some paths to $PYTHONPATH
-sys.path = [admin] + sys.path
-sys.path = [mediator_dir] + sys.path
+for p in [admin, config, mediator_dir]:
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
-all_languages = ['C', 'python', 'perl', 'javascript', 'php', 'java']
+
+# max_all_languages is all the languages that are supported,
+# all_languages can be defined in user_globals, restricting the
+# size of your voicecoder session...
+max_all_languages = ['C', 'python', 'perl', 'javascript', 'php', 'java']
+max_all_languages.sort()
+max_all_languages = tuple(max_all_languages)
+try:
+    from user_globals import all_languages
+except ImportError:
+    all_languages = list(max_all_languages)
 all_languages.sort()
 all_languages = tuple(all_languages)
-c_style_languages = ['C', 'perl', 'javascript', 'php', 'java']
-c_style_languages.sort()
-c_style_languages = tuple(c_style_languages)
+
+
+# likewise c_style_languages can be restricted in the user_globals:
+all_c_style_languages = ['C', 'perl', 'javascript', 'php', 'java']
+all_c_style_languages.sort()
+c_style_languages = tuple([c for c in all_c_style_languages if c in all_languages])
+del all_c_style_languages
+    
