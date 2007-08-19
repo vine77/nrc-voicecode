@@ -71,8 +71,15 @@ import sr_interface
 # language context instances:
 # so use contPython, contC etc or contAnyLanguage in definitions of csc commands
 # can also use 'python' or all_languages or c_style_languages in definitions
-for lang in all_languages:
-   exec('cont%s = ContLanguage("%s")'% (lang.capitalize(), lang))
+# also take cont... for languages that may be exluded in the user_globals:
+for lang in max_all_languages:
+   if lang in all_languages:
+##      print 'make variable "cont%s" for active language'% lang.capitalize()
+      exec('cont%s = ContLanguage("%s")'% (lang.capitalize(), lang))
+   else:
+      # make variable, but ignore at definition phase:
+##      print 'make dummy variable "cont%s" for non active language'% lang.capitalize()
+      exec('cont%s = None'% lang.capitalize())
 contAnyLanguage = ContLanguage(all_languages)
 contCStyleLanguage = ContLanguage(c_style_languages)
 
@@ -988,10 +995,7 @@ acmd = CSCmd(spoken_forms=['while', 'while loop'],
                        ContBlankLine('python'): ActionInsert('while ', ':\n\t')},
              docstring='while loop')
 ctrl_structures.add_csc(acmd)
-## acmd = CSCmd(spoken_forms=['do', 'do the following', 'loop body', 'for body',
-##                            'while body'],
-## 'do' interferes with lots of variable names!
-acmd = CSCmd(spoken_forms=['do the following', 'loop body', 'for body',
+acmd = CSCmd(spoken_forms=['do', 'do the following', 'loop body', 'for body',
                            'while body'],
              meanings={c_style_languages: c_goto_body, contPython: py_goto_body},
              docstring = 'move to body of loop')
@@ -1288,7 +1292,7 @@ python_comparisons.add_lsa(LSAlias(['is same', 'same as', 'is same as'], {'pytho
 # Python-specific quotes
 
 python_quotes = PairedQuotes(name = 'Python-specific quotes',
-        plural_pair = ['between %s', '%s'], context = contPython)
+        plural_pair = ['between %s', '%s'], context = contPython, language='python')
 python_quotes.add('"""', ['triple-quote', 'triple-quotes'], ['triple-quotes'],
     no_empty = 1)
 python_quotes.add("'''", ['triple-single-quote', 'three-single-quote', 'three-single'], ['triple-single-quotes', 'three-single-quotes', 'three-singles'],
@@ -1806,6 +1810,11 @@ define_language('php',
                         regexps_no_symbols=['/\*[\s\S]*?\*/', '//[^\n]*\n',
                                             '"([^"]|\\")*?"',
                                             '\'([^\']|\\\')*?\'']))
+php_special_lsas = LSAliasSet('php special commands',
+    description = "php special commands like dollar before a variable")
+php_special_lsas.add_lsa(LSAlias(['dollar'], {'php': '$'}))
+
+
 ###############################################################################
 # Java (rudimentary) as one of the c_style_languages
 ###############################################################################

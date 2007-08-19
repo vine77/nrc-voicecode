@@ -62,8 +62,9 @@ class LSAliasTest(VoiceCodeRootTest.VoiceCodeRootTest):
         all_lsas = interp.language_specific_aliases
         languages = all_lsas.keys()
         languages.sort()
-        expected = ['C', 'python']
-        self.assert_equal(expected, languages, "LSAs, languages not as expected")
+        expected = list(all_languages)  # list (of keys)
+        self.assert_equal(expected, languages, "LSAs, all languages should have a key, this was not as expected")
+        expected = all_languages  # tuple
         self.assert_equal(expected, interp.supported_languages(),
                           "LSAs, languages not as expected through interp method")
         python_lsas = all_lsas['python']
