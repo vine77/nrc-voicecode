@@ -103,7 +103,13 @@ def test(i=5):
         self.failIf(self.context.applies(self._app()), '5 should not apply')
         self._say("select test")
         self.assert_(self.context.applies(self._app()), 'at test should apply')
-        self._say("select none")
+        self._say("select None")
+        self._assert_active_buffer_content_is("""g = None
+h = func(3, 4)
+i = None<CURSOR>'
+def test(i=5):
+    j = i + 6
+    k = test(i=7)""")
         self.failIf(self.context.applies(self._app()), 'at None should NOT apply')
         
         
