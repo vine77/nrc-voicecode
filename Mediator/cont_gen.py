@@ -58,13 +58,16 @@ class ContLanguage(Context):
         else:
             raise TypeError("Language of ContLanguage instance must be a string or tuple, not: %s"% \
                             repr(language))
+        list_of_valid_languages = []
         for lang in language:
-            if lang not in all_languages:
+            if lang not in max_all_languages:
                 raise(ValueError, 'ContLanguage is called with invalid language: "%s"\n'
                                   'valid languages are: %s'% (lang, repr(all_languages)))
-        language = list(language)
-        language.sort()
-        self.language = tuple(language)
+            if lang in all_languages:
+                # only take languages that currently defined
+                list_of_valid_languages.append(lang)
+        list_of_valid_languages.sort()  # maybe empty...
+        self.language = tuple(list_of_valid_languages)
         super(ContLanguage, self).__init__(**args_super)
 
     def scope(self):

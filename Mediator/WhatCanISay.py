@@ -118,7 +118,7 @@ class WhatCanISay(object):
             
         self.create_html_folder()            
         self.languages = self.cmd_interp.supported_languages()
-        self.languages.sort()
+##        self.languages.sort()
         if all_lang:
             self.languages = self.languages
         else:

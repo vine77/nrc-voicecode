@@ -137,14 +137,14 @@ class LSAlias(Object):
             if isinstance(language, tuple):
                 for lang in language:
                     if lang in all_languages:
-                        self.meanings[language] = written_as
-                    else:
+                        self.meanings[lang] = written_as
+                    elif lang not in max_all_languages:
                         raise ValueError('invalid language "%s" in LSA definition (with: "%s"), spoken_forms: %s'%
                                          (lang, repr(language), spoken_forms))
             else:
                 if language in all_languages:
                     self.meanings[language] = written_as
-                else:
+                elif language not in max_all_languages:
                     raise ValueError('invalid language "%s" in LSA definition with spoken_forms: %s'%
                                      (language, spoken_forms))
                 
@@ -451,6 +451,9 @@ class CSCmdSet(Object):
 
         *none*
         """
+        if not command.meanings:
+            print 'no meanings for csc'
+            return
         if name is None:
             name = command.spoken_forms[0]
         for c,a,info in command.meanings:
@@ -583,6 +586,9 @@ class LSAliasSet(Object):
 
         *none*
         """
+        if not alias.meanings:
+            print 'skip adding empty lsa'
+            return
         if name is None:
             name = alias.spoken_forms[0]
         alias.parent = self
@@ -1400,11 +1406,14 @@ class CmdInterp(OwnerObject):
         self.known_symbols = SymDict.SymDict(sym_file = sym_file, interp = self)
         self.styling_state = SymStyling(self.builder_factory)
         self.state_interface = InterpState(self.styling_state)
+        # initialise for all valid languages:
+        for l in all_languages:
+            self.language_specific_aliases[l] = WordTrie.WordTrie()
                 
     def supported_languages(self):
         languages = self.language_specific_aliases.keys()
         languages.sort()
-        return languages
+        return all_languages
                 
     #inserted from what_can_i_say:
     def what_can_I_say(self):
@@ -1429,178 +1438,178 @@ class CmdInterp(OwnerObject):
             print traceback.print_exc()
             print sys.exc_info()[0], sys.exc_info()[1]
 
-
-    def index_cmds_by_topic(self):
-        """Creates an index of LSAs and CSC by language and topic.
-        
-        **INPUTS**
-        
-        *none* -- 
-        
-
-        **OUTPUTS**
-        
-        *{STR: {STR: (STR, STR)}* index -- Key is the name of a
-         language and value is a dictionary indexing the LSAs and CSCs
-         for that language by topic. The key of the later dictionary
-         is a topic and the value is a 2ple giving the spoken form of
-         the command and a description of its action.
-        
-        """
-        index = {}
-
-        #
-        # First, index the LSAs
-        #
-        all_languages = self.supported_languages()
-        all_languages.sort()
-        for a_language in all_languages:
-            index[a_language] = []
-            wTrie = self.language_specific_aliases[a_language]
-            for an_LSA in wTrie.items():
-                debug.trace('CmdInterp.index_cmds_by_topic', 
-                            '** an_LSA=%s, len an_LSA: %s' % 
-                            (an_LSA, len(an_LSA)))
-                wordList, entry = an_LSA
-                index[a_language].append((wordList, entry))
-                debug.trace('CmdInterp.index_cmds_by_topic', 
-                            '** written %s:  %s'% (' '.join(wordList), entry.written()))
+##QH is in WhatCanISay I would think:::
+##    def index_cmds_by_topic(self):
+##        """Creates an index of LSAs and CSC by language and topic.
+##        
+##        **INPUTS**
+##        
+##        *none* -- 
+##        
 ##
-##                for at in dir(entry):
-##                    if at == '__doc__' or not at.startswith('__'):
-##                        print 'at: %s: %s'% (at, getattr(entry, at))
-               
-##                spoken, written = sr_interface.spoken_written_form(an_LSA.voc_entry)
-##                print 'spoken: %s, written: %s'% (spoken, written)
-##                written = re.sub('\n', '\\n', written)
-##                descr = 'insert \'written\''
-##                for a_topic in an_LSA.topics:                    
-##                    self.html_create_index_entry(a_language, a_topic, spoken, descr)
-
-        #
-        # Then the CSCs
-        #
-##        for a_CSC in self.cmd_index:
-##            for spoken in a_CSC.spoken_forms:
-##                for a_topic in a_CSC.topics:
-##                    for a_context, an_action in a_CSC.meanings:
-##                        descr = an_action.doc()
-##                        try:
-##                            a_language = a_context.language
-##                        except:
-##                            # context is not a language context
-##                            a_language = None
-##                        if a_language:
-##                            self.html_create_index_entry(a_language, a_topic, spoken, descr)
-
-        return index
-            
-
-
-
-
-    def html_cmd_outline(self, index):
-        """Writes HTML code outlining the list of commands.
-        
-        **INPUTS**
-        
-        *{STR: {STR: (STR, STR)}}* index -- Index of commands. See
-        [html_index_cmds_by_topic] for details.
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-
-        .. [html_index_cmds_by_topic] file:///./CmdInterp.CmdInterp.html#html_index_cmds_by_topic"""
-        
-        outline = """
-<HTML>
-<HEADER>
-<TITLE>VoiceCode: What can I say?</TITLE>
-</HEADER>
-<BODY>
-
-<H1>VoiceCode: What can I say?</H1>
-
-<H2>Index</H2>
-
-<UL>"""
-
-        languages = self.supported_languages()
-        languages.sort()
-        debug.trace('CmdInterp.html_cmd_outline', '** index=%s, languages=%s' % (index, languages))
-        for a_language in languages:
-            
-            if not a_language:
-                a_lang_name = 'Global'
-            else:
-                a_lang_name = a_language
-
-            outline = outline +  "\n" + \
-                      '<LI><A HREF="#%s">%s</A>\n' % (a_lang_name, a_lang_name)
-   
-# AD: Not sure what you mean by a topic, so I'm commenting this out for now.
-#
-#            topics = index[a_language].keys().sort()
-#            for a_topic in topics:
-#                url = a_lang_name + '-' + a_topic
-#                outline = outline + "\n" + \
-#                          '      <LI><A HREF="#%s">%s</A>' % (url, a_topic)
-#            outline = outline + "\n" + \
-#                      '   </UL>'
-
-        outline = outline + "\n" + '</UL>\n<HR>'
-        
-        return outline
-
-
-
-
-    def html_cmds_by_topic(self, index):
-        """Prints HTML index of commands by topic
-        
-        **INPUTS**
-        
-        *{STR: {STR: (STR, STR)}}* index -- See
-        [html_index_cmds_by_topic] for details.
-        
-
-        **OUTPUTS**
-        
-        *none* -- 
-
-        .. [html_index_cmds_by_topic] file:///./CmdInterp.CmdInterp.html#html_index_cmds_by_topic"""
-        
-        html = ""    
-        all_languages = self.supported_languages()
-        all_languages.sort()
-        for a_language in all_languages:        
-            if not a_language:
-                a_lang_name = 'Global'
-            else:
-                a_lang_name = a_language
-
-            html = html + "\n" + \
-                   '<H2><A NAME="%s">%s commands</A></H2>\n\n' % (a_lang_name, a_lang_name)
-
-# AD: Not sure what you mean by a topic, so I'm commenting this out for now.        
-#            topics = index[a_language].keys().sort()
-#            for a_topic in topics:
-#                url = a_lang_name + '-' + a_topic
-#                print '<H3><A NAME="%s">%s</A></H3>\n\n' % (url, a_topic)
-#                for spoken, descr in index[a_language][a_topic]:
-#                    print '<STRONG>"%s"</STRONG><BR><DD>%s' % (spoken, descr)
-#        
-
-        html = html + "\n" + '</BODY>\n</HTML>'
-        
-        return html
-
-         
-    def html_cmds_alphabetically(self, index):
-        """Does nothing for now"""
-        return ""
+##        **OUTPUTS**
+##        
+##        *{STR: {STR: (STR, STR)}* index -- Key is the name of a
+##         language and value is a dictionary indexing the LSAs and CSCs
+##         for that language by topic. The key of the later dictionary
+##         is a topic and the value is a 2ple giving the spoken form of
+##         the command and a description of its action.
+##        
+##        """
+##        index = {}
+##
+##        #
+##        # First, index the LSAs
+##        #
+##        all_languages = self.supported_languages()
+##        all_languages.sort()
+##        for a_language in all_languages:
+##            index[a_language] = []
+##            wTrie = self.language_specific_aliases[a_language]
+##            for an_LSA in wTrie.items():
+##                debug.trace('CmdInterp.index_cmds_by_topic', 
+##                            '** an_LSA=%s, len an_LSA: %s' % 
+##                            (an_LSA, len(an_LSA)))
+##                wordList, entry = an_LSA
+##                index[a_language].append((wordList, entry))
+##                debug.trace('CmdInterp.index_cmds_by_topic', 
+##                            '** written %s:  %s'% (' '.join(wordList), entry.written()))
+####
+####                for at in dir(entry):
+####                    if at == '__doc__' or not at.startswith('__'):
+####                        print 'at: %s: %s'% (at, getattr(entry, at))
+##               
+####                spoken, written = sr_interface.spoken_written_form(an_LSA.voc_entry)
+####                print 'spoken: %s, written: %s'% (spoken, written)
+####                written = re.sub('\n', '\\n', written)
+####                descr = 'insert \'written\''
+####                for a_topic in an_LSA.topics:                    
+####                    self.html_create_index_entry(a_language, a_topic, spoken, descr)
+##
+##        #
+##        # Then the CSCs
+##        #
+####        for a_CSC in self.cmd_index:
+####            for spoken in a_CSC.spoken_forms:
+####                for a_topic in a_CSC.topics:
+####                    for a_context, an_action in a_CSC.meanings:
+####                        descr = an_action.doc()
+####                        try:
+####                            a_language = a_context.language
+####                        except:
+####                            # context is not a language context
+####                            a_language = None
+####                        if a_language:
+####                            self.html_create_index_entry(a_language, a_topic, spoken, descr)
+##
+##        return index
+##            
+##
+##
+##
+##
+##    def html_cmd_outline(self, index):
+##        """Writes HTML code outlining the list of commands.
+##        
+##        **INPUTS**
+##        
+##        *{STR: {STR: (STR, STR)}}* index -- Index of commands. See
+##        [html_index_cmds_by_topic] for details.
+##        
+##
+##        **OUTPUTS**
+##        
+##        *none* -- 
+##
+##        .. [html_index_cmds_by_topic] file:///./CmdInterp.CmdInterp.html#html_index_cmds_by_topic"""
+##        
+##        outline = """
+##<HTML>
+##<HEADER>
+##<TITLE>VoiceCode: What can I say?</TITLE>
+##</HEADER>
+##<BODY>
+##
+##<H1>VoiceCode: What can I say?</H1>
+##
+##<H2>Index</H2>
+##
+##<UL>"""
+##
+##        languages = self.supported_languages()
+##        languages.sort()
+##        debug.trace('CmdInterp.html_cmd_outline', '** index=%s, languages=%s' % (index, languages))
+##        for a_language in languages:
+##            
+##            if not a_language:
+##                a_lang_name = 'Global'
+##            else:
+##                a_lang_name = a_language
+##
+##            outline = outline +  "\n" + \
+##                      '<LI><A HREF="#%s">%s</A>\n' % (a_lang_name, a_lang_name)
+##   
+### AD: Not sure what you mean by a topic, so I'm commenting this out for now.
+###
+###            topics = index[a_language].keys().sort()
+###            for a_topic in topics:
+###                url = a_lang_name + '-' + a_topic
+###                outline = outline + "\n" + \
+###                          '      <LI><A HREF="#%s">%s</A>' % (url, a_topic)
+###            outline = outline + "\n" + \
+###                      '   </UL>'
+##
+##        outline = outline + "\n" + '</UL>\n<HR>'
+##        
+##        return outline
+##
+##
+##
+##
+##    def html_cmds_by_topic(self, index):
+##        """Prints HTML index of commands by topic
+##        
+##        **INPUTS**
+##        
+##        *{STR: {STR: (STR, STR)}}* index -- See
+##        [html_index_cmds_by_topic] for details.
+##        
+##
+##        **OUTPUTS**
+##        
+##        *none* -- 
+##
+##        .. [html_index_cmds_by_topic] file:///./CmdInterp.CmdInterp.html#html_index_cmds_by_topic"""
+##        
+##        html = ""    
+##        all_languages = self.supported_languages()
+##        all_languages.sort()
+##        for a_language in all_languages:        
+##            if not a_language:
+##                a_lang_name = 'Global'
+##            else:
+##                a_lang_name = a_language
+##
+##            html = html + "\n" + \
+##                   '<H2><A NAME="%s">%s commands</A></H2>\n\n' % (a_lang_name, a_lang_name)
+##
+### AD: Not sure what you mean by a topic, so I'm commenting this out for now.        
+###            topics = index[a_language].keys().sort()
+###            for a_topic in topics:
+###                url = a_lang_name + '-' + a_topic
+###                print '<H3><A NAME="%s">%s</A></H3>\n\n' % (url, a_topic)
+###                for spoken, descr in index[a_language][a_topic]:
+###                    print '<STRONG>"%s"</STRONG><BR><DD>%s' % (spoken, descr)
+###        
+##
+##        html = html + "\n" + '</BODY>\n</HTML>'
+##        
+##        return html
+##
+##         
+##    def html_cmds_alphabetically(self, index):
+##        """Does nothing for now"""
+##        return ""
                 
     def set_mediator(self, mediator):
         """sets the parent mediator which owns this CmdInterp instance
@@ -2726,7 +2735,6 @@ class CmdInterp(OwnerObject):
         """
 
         for language, written_as in an_LSA.meanings.items():
-
 # DCF temporary spacing hack until we put in the real system
             hacked_written_as = written_as
             if an_LSA.spacing & hard_space:
@@ -2761,9 +2769,10 @@ class CmdInterp(OwnerObject):
     #                if clean_spoken == 'ellipsis':
     #                    print "ellipsis spacing %d, written-as '%s'" \
     #                        % (an_LSA.spacing, written_as)
-                    if not self.language_specific_aliases.has_key(language):
-                        self.language_specific_aliases[language] = \
-                            WordTrie.WordTrie()
+## do this when initialising the CmdInterp
+##                    if not self.language_specific_aliases.has_key(language):
+##                        self.language_specific_aliases[language] = \
+##                            WordTrie.WordTrie()
                         
                     meaning = AliasMeaning(hacked_written_as, 
                         spacing = an_LSA.spacing, 
