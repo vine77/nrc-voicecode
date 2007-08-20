@@ -928,7 +928,7 @@ comment_commands.add_lsa(LSAlias(['comment line', 'new comment', 'comment below'
     {'python': '\n#', c_style_languages: '\n//', 'perl': '\n#'}, spacing = no_space_before))
 acmd = CSCmd(spoken_forms=['comment above', 'add comment above',
                            'new comment above', 'comment line above'],
-             meanings={ContLanguage('python'): ActionPyCommentAbove()},
+                           meanings={ContLanguage('python'): ActionPyCommentAbove()},
              docstring='add a new comment line above current one.')
 
 comment_commands.add_csc(acmd)

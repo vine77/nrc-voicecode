@@ -557,6 +557,9 @@ class WhatCanISay(object):
                         cont = m['equiv']
                         scope = m['scope']
                         action = m['action']
+                        if action.startswith('no doc'):
+                            if m['doc']:
+                                action = m['doc']
                     elif self.info_is_lsa(meaning):
                         cont = 'lsa'
                         scope = ''

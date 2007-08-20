@@ -2808,23 +2808,6 @@ class CmdInterp(OwnerObject):
 
         self.index_csc(acmd)
 
-    def add_csc_set(self, set):
-        """add CSCs from a set
-
-        **INPUTS**
-
-        *CSCmdSet set* -- the set of commands to add
-
-        **OUTPUTS**
-
-        *none*
-        """
-        debug.trace('CmdInterp.add_csc_set', 
-            'adding CSCs from set %s' % set.name)
-        for cmd in set.commands.values():
-#            print cmd.spoken_forms
-            self.add_csc(cmd)
-
     def add_cmd_set(self, set):
         """integrated add_csc_set and add_lsa_set
         """
@@ -2832,7 +2815,9 @@ class CmdInterp(OwnerObject):
             self.add_csc(cmd)
         for alias in set.aliases.values():
             self.add_lsa(alias)
-            
+
+    add_csc_set = add_cmd_set
+
 
     def add_lsa(self, an_LSA):
         """Add a language specific word.
@@ -2967,19 +2952,7 @@ class CmdInterp(OwnerObject):
 #                        % (clean_spoken, hacked_written_as, entry)
                 sr_interface.addWord(vc_entry)
 
-    def add_lsa_set(self, set):
-        """add LSAs from a set
-
-        **INPUTS**
-
-        *LSAliasSet set* -- the set of aliases to add
-
-        **OUTPUTS**
-
-        *none*
-        """
-        for alias in set.aliases.values():
-            self.add_lsa(alias)
+    add_lsa_set = add_cmd_set
 
     def add_capitalization_word_set(self, set):
         """add CapitalizationWords from a set

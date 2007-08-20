@@ -54,9 +54,10 @@ csc_c_else_meanings = {contC: c_else}
 csc_python_else_docstring = 'else clause only python'
 csc_c_else_docstring = 'else clause only c'
 csc_equals_spoken_forms = ['equals']
-csc_equals_meanings ={ContPyInsideArguments(): ActionInsert("="),
-                       ContAny(): ActionInsert(' = ')}
-csc_equals_docstring = 'equal sign'
+# only python, otherwise lsa:
+csc_equals_meanings ={ContPyInsideArguments(): ActionInsert("=")}  
+                       
+csc_equals_docstring = 'equal sign inside arguments'
 
 # lsa in case csc does not apply:
 lsa_equals_spoken_forms = ['equals']
@@ -88,45 +89,39 @@ expected_index = \
                                  'setdescription': 'description of CSCS',
                                  'setname': 'csc commands'}]],
             'equals': [[{'action': "Inserts '=^' in current buffer",
-                         'doc': 'equal sign',
+                         'doc': 'equal sign inside arguments',
                          'equiv': 'ContPyInsideArguments: python',
                          'scope': 'immediate',
-                         'setdescription': 'description of CSCS',
-                         'setname': 'csc commands'},
-                        {'action': "Inserts ' = ^' in current buffer",
-                         'doc': 'equal sign',
-                         'equiv': 'Any',
-                         'scope': 'global',
-                         'setdescription': 'description of CSCS',
-                         'setname': 'csc commands'}],
+                         'setdescription': 'description of commands',
+                         'setname': 'mixed commands'}],
                        {'name': 'equals lsa',
                         'new_symbol': None,
-                        'setdescription': 'description of LSAS',
-                        'setname': 'lsa/ commands',
+                        'setdescription': 'description of commands',
+                        'setname': 'mixed commands',
                         'spacing': 0,
                         'written_form': ' = '}],
             'multiply by': [{'name': 'multiply',
                              'new_symbol': None,
-                             'setdescription': 'description of LSAS',
-                             'setname': 'lsa/ commands',
+                             'setdescription': 'description of commands',
+                             'setname': 'mixed commands',
                              'spacing': 0,
                              'written_form': ' * '}],
             'n o t': [{'name': 'not',
                        'new_symbol': None,
-                       'setdescription': 'description of LSAS',
-                       'setname': 'lsa/ commands',
+                       'setdescription': 'description of commands',
+                       'setname': 'mixed commands',
                        'spacing': 0,
                        'written_form': 'not'}],
             'not': [{'name': 'not',
                      'new_symbol': None,
-                     'setdescription': 'description of LSAS',
-                     'setname': 'lsa/ commands',
+                     'setdescription': 'description of commands',
+                     'setname': 'mixed commands',
                      'spacing': 0,
                      'written_form': 'not'}],
             'times': [{'name': 'multiply',
                        'new_symbol': None,
-                       'setdescription': 'description of LSAS',
-                       'setname': 'lsa/ commands',
+                       'setdescription': 'description of commands',
+                       'setname': 'mixed commands',
                        'spacing': 0,
                        'written_form': ' * '}],
             'with arguments': [[{'action': 'Insert parens and puts cursor in between',
@@ -169,16 +164,20 @@ the "equals" csc and lsa should (for python) show up with
         self.interp = CmdInterp()
 
         # lsa set:
-        lsas = LSAliasSet("lsa/ commands", description="description of LSAS")
-        lsas.add_lsa(LSAlias(lsa_multiply_spoken_forms, lsa_multiply_meanings, name="multiply"))
-        lsas.add_lsa(LSAlias(lsa_not_spoken_forms, lsa_not_meanings, name="not"))
-        lsas.add_lsa(LSAlias(lsa_not_duplicate_spoken_forms, lsa_not_meanings, name="not"))
-        lsas.add_lsa(LSAlias(lsa_equals_spoken_forms, lsa_equals_meanings, name="equals lsa"))
-        self.interp.add_lsa_set(lsas)
+        commands = CmdSet("mixed commands", description="description of commands")
+        commands.add_lsa(LSAlias(lsa_multiply_spoken_forms, lsa_multiply_meanings, name="multiply"))
+        commands.add_lsa(LSAlias(lsa_not_spoken_forms, lsa_not_meanings, name="not"))
+        commands.add_lsa(LSAlias(lsa_not_duplicate_spoken_forms, lsa_not_meanings, name="not"))
+        commands.add_lsa(LSAlias(lsa_equals_spoken_forms, lsa_equals_meanings, name="equals lsa"))
+        # also add an equals csc to these commands:
+        commands.add_csc(CSCmd(spoken_forms=csc_equals_spoken_forms,
+                           meanings=csc_equals_meanings,
+                           docstring=csc_equals_docstring))
+        self.interp.add_cmd_set(commands)
 
         # csc set:
-        cscs = CSCmdSet('csc commands', description='description of CSCS')
-        cscs2 = CSCmdSet('csc commands too', description='description duplicates of CSCS')
+        cscs = CmdSet('csc commands', description='description of CSCS')
+        cscs2 = CmdSet('csc commands too', description='description duplicates of CSCS')
         cscs.add_csc(CSCmd(spoken_forms=csc_with_arguments_spoken_forms,
                            meanings=csc_with_arguments_meanings,
                            docstring=csc_with_arguments_docstring))
@@ -193,13 +192,10 @@ the "equals" csc and lsa should (for python) show up with
                            docstring=csc_python_else_docstring))
         # csc_c_else_meanings only for c, group should be : csc commands too!
 
-        # and inanother set: else for c! should come in set cscs commands too!!!        
+        # and in another set: else for c! should come in set cscs commands too!!!        
         cscs2.add_csc(CSCmd(spoken_forms=csc_else_spoken_forms,
                            meanings=csc_c_else_meanings,
                            docstring=csc_c_else_docstring))
-        cscs.add_csc(CSCmd(spoken_forms=csc_equals_spoken_forms,
-                           meanings=csc_equals_meanings,
-                           docstring=csc_equals_docstring))
         self.interp.add_csc_set(cscs)
         self.interp.add_csc_set(cscs2)
         
@@ -270,10 +266,10 @@ the "equals" csc and lsa should (for python) show up with
         self.assert_equal(expected_index, self.wciSay.index, "test index of WhatCanISay (default) is not as expected")
         self.wciSay.create_cmds()
         expected_top_menu =   {'python': 'python_overview.html'}
-        expected_left_menu =        {'python': {'csc commands': 'python_csccommands.html',
-                                               'lsa/ commands': 'python_lsacommands.html'}}
+        expected_left_menu =      {'python': {'csc commands': 'python_csccommands.html',
+            'mixed commands': 'python_mixedcommands.html'}}
         expected_top_menu_keys = ['python']
-        expected_left_menu_keys = {'python': ['csc commands', 'lsa/ commands']}
+        expected_left_menu_keys = {'python': ['csc commands', 'mixed commands']}
         self.assert_equal(expected_top_menu, self.wciSay.top_menu, "top menu of WhatCanISay (default) not as expected")
         self.assert_equal(expected_left_menu, self.wciSay.left_menu, "left menu of WhatCanISay (default) not as expected")
         self.assert_equal(expected_top_menu_keys, self.wciSay.top_menu_keys, "top menu keys of WhatCanISay (default) not as expected")
@@ -305,7 +301,7 @@ the "equals" csc and lsa should (for python) show up with
         expected_left_menu = \
    {'C': {'csc commands': 'c_csccommands.html',
        'csc commands too': 'c_csccommandstoo.html',
-       'lsa/ commands': 'c_lsacommands.html',
+       'mixed commands': 'c_mixedcommands.html',
        'standard punctuation': 'c_standardpunctuation.html',
        'standard punctuation navigation': 'c_standardpunctuationnavigation.html'},
  'java': {'csc commands': 'java_csccommands.html',
@@ -315,29 +311,43 @@ the "equals" csc and lsa should (for python) show up with
                 'standard punctuation': 'javascript_standardpunctuation.html',
                 'standard punctuation navigation': 'javascript_standardpunctuationnavigation.html'},
  'perl': {'csc commands': 'perl_csccommands.html',
-          'lsa/ commands': 'perl_lsacommands.html',
+          'mixed commands': 'perl_mixedcommands.html',
           'standard punctuation': 'perl_standardpunctuation.html',
           'standard punctuation navigation': 'perl_standardpunctuationnavigation.html'},
  'php': {'csc commands': 'php_csccommands.html',
          'standard punctuation': 'php_standardpunctuation.html',
          'standard punctuation navigation': 'php_standardpunctuationnavigation.html'},
  'python': {'csc commands': 'python_csccommands.html',
-            'lsa/ commands': 'python_lsacommands.html',
+            'mixed commands': 'python_mixedcommands.html',
             'standard punctuation': 'python_standardpunctuation.html',
             'standard punctuation navigation': 'python_standardpunctuationnavigation.html'}}
 
         # changes with mew languages:
         expected_top_menu_keys = ['C', 'java', 'javascript', 'perl', 'php', 'python']
         expected_left_menu_keys =   \
-            {'C': ['csc commands', 'csc commands too', 'lsa/ commands',
-                   'standard punctuation', 'standard punctuation navigation'],
-             'java': ['csc commands', 'standard punctuation', 'standard punctuation navigation'],
-             'python': ['csc commands', 'lsa/ commands', 'standard punctuation',
-                        'standard punctuation navigation'],
-             'javascript': ['csc commands', 'standard punctuation', 'standard punctuation navigation'],
-             'perl': ['csc commands', 'lsa/ commands', 'standard punctuation',
-                      'standard punctuation navigation'],
-             'php': ['csc commands', 'standard punctuation', 'standard punctuation navigation']}
+   {'C': ['csc commands',
+       'csc commands too',
+       'mixed commands',
+       'standard punctuation',
+       'standard punctuation navigation'],
+ 'java': ['csc commands',
+          'standard punctuation',
+          'standard punctuation navigation'],
+ 'javascript': ['csc commands',
+                'standard punctuation',
+                'standard punctuation navigation'],
+ 'perl': ['csc commands',
+          'mixed commands',
+          'standard punctuation',
+          'standard punctuation navigation'],
+ 'php': ['csc commands',
+         'standard punctuation',
+         'standard punctuation navigation'],
+ 'python': ['csc commands',
+            'mixed commands',
+            'standard punctuation',
+            'standard punctuation navigation']}
+
         
         self.assert_equal(expected_top_menu, self.wciSay.top_menu, "top menu of WhatCanISay (all_lang) not as expected")
         self.assert_equal(expected_left_menu, self.wciSay.left_menu, "left menu of WhatCanISay (all_lang) not as expected")
@@ -354,9 +364,11 @@ the "equals" csc and lsa should (for python) show up with
         self.wciSay.create_cmds()
         expected_top_menu =   {'python': 'python_overview.html'}
         expected_top_menu_keys = ['python']
-        expected_left_menu =        {'python': {'csc commands': 'python_csccommands.html',
-            'lsa/ commands': 'python_lsacommands.html'}}
-        expected_left_menu_keys =   {'python': ['csc commands', 'lsa/ commands']}
+        expected_left_menu = \
+   {'python': {'csc commands': 'python_csccommands.html',
+            'mixed commands': 'python_mixedcommands.html'}}
+
+        expected_left_menu_keys =   {'python': ['csc commands', 'mixed commands']}
         self.assert_equal(expected_top_menu, self.wciSay.top_menu, "top menu of WhatCanISay (curr_context) not as expected")
         self.assert_equal(expected_left_menu, self.wciSay.left_menu, "left menu of WhatCanISay (curr_context) not as expected")
         self.assert_equal(expected_top_menu_keys, self.wciSay.top_menu_keys, " menu keys of WhatCanISay (curr_context) not as expected")
@@ -388,27 +400,40 @@ the "equals" csc and lsa should (for python) show up with
     def test_the_index_of_a_cmdset_with_an_lsa_and_a_csc_in_it(self):
         wciSay = WhatCanISay.WhatCanISay()
         interp = CmdInterp()
+        # the new CmdSet can contain both CSCs and LSAs...
         # do one csc and one lsa:
-        cmds = CmdSet("commands set")
+        cmds = CmdSet("commands set",  description="generic commands set")
         cmds.add_lsa(LSAlias(["plus"], meanings={all_languages: " + "}, name="plus sign"))
-        cmds.add_csc(CSCmd(["equals"], meanings={contAny: ActionInsert("====")}, name="equals csc"))
+        # without docstring:
+        cmds.add_csc(CSCmd(["equals"], meanings={contAny: ActionInsert("====")}))
+        # with docstring:
+        cmds.add_csc(CSCmd(["not equal"], meanings={contAny: ActionInsert(" != ")},
+                           docstring="csc not equal"))
         
         interp.add_cmd_set(cmds)
         wciSay.load_commands_from_interpreter(self._app(), interp, 'C')
         expected = \
-    {'C': {'equals': [[{'action': "Inserts '====^' in current buffer",
+   {'C': {'equals': [[{'action': "Inserts '====^' in current buffer",
                     'doc': None,
                     'equiv': 'Any',
                     'scope': 'global',
-                    'setdescription': None,
+                    'setdescription': 'generic commands set',
                     'setname': 'commands set'}]],
+       'not equal': [[{'action': "Inserts ' != ^' in current buffer",
+                       'doc': 'csc not equal',
+                       'equiv': 'Any',
+                       'scope': 'global',
+                       'setdescription': 'generic commands set',
+                       'setname': 'commands set'}]],
        'plus': [{'name': 'plus sign',
                  'new_symbol': None,
-                 'setdescription': 'no description',
+                 'setdescription': 'generic commands set',
                  'setname': 'commands set',
                  'spacing': 0,
                  'written_form': ' + '}]}}
         self.assert_equal(expected, wciSay.index, "index of one CSC and one LSA command is not as expected")
+
+
 
 
     def test_the_index_of_c_else_with_different_csc_set_name_as_python_else(self):
