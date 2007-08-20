@@ -695,12 +695,17 @@ class NewMediatorObject(Object.OwnerObject):
             if console:
                 okay = console.copy_user_config(user_file, vc_globals.sample_config)
             if not okay:
-                sys.stderr.write("\n\nVCode ERROR: non-existant user ")
+                sys.stderr.write("\n\nVCode ERROR: non-existent user ")
                 sys.stderr.write("configuration file \n'%s'\n" % user_file)
                 sys.stderr.write("Create this file by copying one of the ")
                 sys.stderr.write("sample configuration files from \n")
                 sys.stderr.write("%s, and re-run the mediator.\n" \
                     % vc_globals.sample_config)
+                sys.stderr.write("\n\n***Note Optionally you can also restrict the languages you can run\n")
+                sys.stderr.write("by defining this in 'user_globals.py' in the config directory.\n")
+                sys.stderr.write("A sample is given in the 'samples' directory.\n\n")
+                sys.stderr.write("If you want to do this, please copy this file\n")
+                sys.stderr.write("into the config directory and edit as appropriate.\n")
                 return 0
                 
         execfile(user_file, config_dict)
@@ -790,6 +795,7 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['add_csc_set'] = do_nothing
             config_dict['add_lsa'] = do_nothing
             config_dict['add_lsa_set'] = do_nothing
+            config_dict['add_cmd_set'] = do_nothing
             config_dict['add_capitalization_word'] = do_nothing
             config_dict['add_capitalization_word_set'] = do_nothing
             config_dict['clear_standard_symbols_file_list'] = do_nothing            
@@ -805,6 +811,7 @@ class NewMediatorObject(Object.OwnerObject):
             config_dict['add_csc_set'] = self.add_csc_set
             config_dict['add_lsa'] = self.add_lsa
             config_dict['add_lsa_set'] = self.add_lsa_set
+            config_dict['add_cmd_set'] = self.add_cmd_set
             config_dict['add_capitalization_word'] = \
                 self.add_capitalization_word
             config_dict['add_capitalization_word_set'] = \
@@ -1306,6 +1313,19 @@ class NewMediatorObject(Object.OwnerObject):
         *none*
         """
         self.interp.add_csc_set(set)
+
+    def add_cmd_set(self, set):
+        """add CSCs from a set
+
+        **INPUTS**
+
+        *CSCmdSet set* -- the set of commands to add
+
+        **OUTPUTS**
+
+        *none*
+        """
+        self.interp.add_cmd_set(set)
 
     def has_lsa(self, spoken_form, language = None):
         """check if there is already an LSA defined with this spoken

@@ -108,6 +108,9 @@ class LSAlias(Object):
         *{STR: STR}* meanings -- Dictionary of language specific
          meanings. Key is the language name and value is the written form
          of the LSA for that langugage. The key None is not permitted any more.
+        also a tuple of languages may be given as key, these are interpreted
+        first, before string argument keys are done.  Longest tuples first.
+
          
         *INT* spacing -- spacing flags, from SpacingState (CURRENTLY
         IGNORED BUT MUST BE SPECIFIED PROPERLY TO INSURE FUTURE
@@ -129,11 +132,25 @@ class LSAlias(Object):
                              'name': name
                             }, 
                             args)
+        language_keys = meanings.keys()
+        if not language_keys:
+            return
+        if None in language_keys:
+            raise DeprecationError('LSAlias "%s"with language "None" is deprecated,\n'
+                                   'use the vc_globals variable  "all_languages" instead'%
+                                   spoken_forms)
 
-        for language, written_as in meanings.items():
-            if language == None:
-                raise DeprecationError('LSAlias with language "None" is deprecated,\n'
-                                       'use the vc_globals variable  "all_languages" instead')
+
+        # sort keys by tuples first, longest then, in order to be able to
+        # make exceptions for for example all_languages
+        # {all_languages: 'aaa', c_style_languages: 'bbb', 'C': 'ccc'} will then
+        # end up correctly
+        decorated = [(type(k)!=types.TupleType, -len(k), k) for k in language_keys]
+        decorated.sort()
+        language_keys = [k for (d1, d2, k) in decorated]
+##        print 'language_keys: %s'% language_keys
+        for language in language_keys:
+            written_as = meanings[language]
             if isinstance(language, tuple):
                 for lang in language:
                     if lang in all_languages:
@@ -141,12 +158,18 @@ class LSAlias(Object):
                     elif lang not in max_all_languages:
                         raise ValueError('invalid language "%s" in LSA definition (with: "%s"), spoken_forms: %s'%
                                          (lang, repr(language), spoken_forms))
+                    else:
+                        # if all_languages is restricted, pass silent extraneous definitions
+                        pass
             else:
                 if language in all_languages:
                     self.meanings[language] = written_as
                 elif language not in max_all_languages:
                     raise ValueError('invalid language "%s" in LSA definition with spoken_forms: %s'%
                                      (language, spoken_forms))
+                else:
+                    # if all_languages is restricted, pass silent extraneous definitions
+                    pass
                 
 
 class AliasMeaning(DeferInterp, symbol_formatting.SymElement):
@@ -408,7 +431,7 @@ class CapsModifierElement(symbol_formatting.SymElement):
         """
         builder.change_caps(self.caps, one_word = self.one_word)
 
-class CSCmdSet(Object):
+class CmdSet(Object):
     """a collection of context-sensitive commands which may be deleted,
     renamed, or giving synonyms prior to adding them to the command
     interpreter.
@@ -436,7 +459,7 @@ class CSCmdSet(Object):
         """
         self.deep_construct(CSCmdSet, 
                             {'name': name, 'description': description, 
-                             'commands': {}}, args)
+                             'commands': {}, 'aliases': {}}, args)
     def add_csc(self, command, name = None):
         """add a context-sensitive command to the set
 
@@ -463,115 +486,6 @@ class CSCmdSet(Object):
         trace('CmdInterp.add_csc', "add csc with info:  %s"% command.meanings[0][-1])
         self.commands[name] = command
 
-    def replace_spoken(self, name, spoken_forms):
-        """replace the spoken forms of a command with the given name
-
-        **INPUTS**
-
-        *STR name* -- unique name of the command given when it was added
-
-        *[STR] spoken_forms* -- the new spoken forms
-
-        **OUTPUTS**
-
-        *BOOL* -- true if a command by that name existed
-        """
-        try:
-            command = self.commands[name]
-            command.replace_spoken(spoken_forms)
-        except KeyError:
-            return 0
-        return 1
-
-    def add_spoken(self, name, spoken_forms):
-        """add the given spoken forms to a command with the given name
-
-        **INPUTS**
-
-        *STR name* -- unique name of the command given when it was added
-
-        *[STR] spoken_forms* -- the spoken forms to add
-
-        **OUTPUTS**
-
-        *BOOL* -- true if a command by that name existed
-        """
-        try:
-            command = self.commands[name]
-            command.add_spoken(spoken_forms)
-        except KeyError:
-            return 0
-        return 1
-
-
-    def remove_spoken(self, name, spoken_forms):
-        """remove the given spoken forms of a command with the given name
-
-        **INPUTS**
-
-        *STR name* -- unique name of the command given when it was added
-
-        *[STR] spoken_forms* -- the spoken forms to remove
-
-        **OUTPUTS**
-
-        *BOOL* -- true if a command by that name existed
-        """
-        try:
-            command = self.commands[name]
-            command.remove_spoken(spoken_forms)
-        except KeyError:
-            return 0
-        return 1
-
-
-    def remove_command(self, name):
-        """remove a command with the given name
-
-        **INPUTS**
-
-        *STR name* -- unique name of the command given when it was added
-
-        **OUTPUTS**
-
-        *BOOL* -- true if a command by that name existed
-        """
-        try:
-            del self.commands[name]
-        except KeyError:
-            return 0
-        return 1
-
-class LSAliasSet(Object):
-    """a collection of language-specific aliases which may be deleted,
-    renamed, or giving synonyms prior to adding them to the command
-    interpreter.
-
-    **INSTANCE ATTRIBUTES**
-
-    *STR* name -- name of the alias set (to be used for automatic 
-    generation of documentation)
-
-    *STR* description -- description of the alias set (to be used 
-    for automatic generation of documentation)
-
-    *{STR: LSAlias}* aliases -- map from unique names to
-    language-specific aliases
-    """
-    def __init__(self, name, description = None, **args):
-        """
-        **INPUTS**
-
-        *STR* name -- name of the alias set (to be used for automatic 
-        generation of documentation)
-
-        *STR* description -- description of the alias set (to be used 
-        for automatic generation of documentation)
-        """
-        self.deep_construct(LSAliasSet, 
-                            {'name': name, 'description': description, 
-                             'aliases': {}}, args)
-
     def add_lsa(self, alias, name = None):
         """add a language-specific alias to the set
 
@@ -587,94 +501,283 @@ class LSAliasSet(Object):
         *none*
         """
         if not alias.meanings:
-            print 'skip adding empty lsa'
+##            print 'skip adding empty lsa'
             return
         if name is None:
             name = alias.spoken_forms[0]
         alias.parent = self
         self.aliases[name] = alias
 
-    def replace_spoken(self, name, spoken_forms):
-        """replace the spoken forms of an alias with the given name
+CSCmdSet = CmdSet
+LSAliasSet = CmdSet
 
-        **INPUTS**
-
-        *STR name* -- unique name of the alias given when it was added
-
-        *[STR] spoken_forms* -- the new spoken forms
-
-        **OUTPUTS**
-
-        *BOOL* -- true if a command by that name existed
-        """
-        try:
-            self.aliases[name].spoken_forms = spoken_forms[:]
-        except KeyError:
-            return 0
-        return 1
-
-    def add_spoken(self, name, spoken_forms):
-        """add the given spoken forms to a command with the given name
-
-        **INPUTS**
-
-        *STR name* -- unique name of the command given when it was added
-
-        *[STR] spoken_forms* -- the spoken forms to add
-
-        **OUTPUTS**
-
-        *BOOL* -- true if an alias by that name existed
-        """
-        try:
-            alias = self.aliases[name]
-        except KeyError:
-            return 0
-        for spoken in spoken_forms:
-            alias.spoken_forms.append(spoken)
-        return 1
-
-    def remove_spoken(self, name, spoken_forms):
-        """remove the given spoken forms of an alias with the given name
-
-        **INPUTS**
-
-        *STR name* -- unique name of the alias given when it was added
-
-        *[STR] spoken_forms* -- the spoken forms to remove
-
-        **OUTPUTS**
-
-        *BOOL* -- true if an alias by that name existed
-        """
-        try:
-            alias = self.aliases[name]
-        except KeyError:
-            return 0
-        new_spoken = []
-        for spoken in alias.spoken_forms:
-            if spoken not in spoken_forms:
-                new_spoken.append(spoken)
-        alias.spoken_forms = new_spoken
-        return 1
-
-
-    def remove_alias(self, name):
-        """remove an alias with the given name
-
-        **INPUTS**
-
-        *STR name* -- unique name of the alias given when it was added
-
-        **OUTPUTS**
-
-        *BOOL* -- true if an alias by that name existed
-        """
-        try:
-            del self.aliases[name]
-        except KeyError:
-            return 0
-        return 1
+##class CSCmdSet(Object):
+##    """a collection of context-sensitive commands which may be deleted,
+##    renamed, or giving synonyms prior to adding them to the command
+##    interpreter.
+##
+##    **INSTANCE ATTRIBUTES**
+##
+##    *STR* name -- name of the command set (to be used for automatic 
+##    generation of documentation)
+##
+##    *STR* description -- description of the command set (to be used 
+##    for automatic generation of documentation)
+##
+##    *{STR: CSCmd}* commands -- map from unique command names to
+##    context-sensitive commands
+##    """
+##    def __init__(self, name, description = None, **args):
+##        """
+##        **INPUTS**
+##
+##        *STR* name -- name of the command set (to be used for automatic 
+##        generation of documentation)
+##
+##        *STR* description -- description of the command set (to be used 
+##        for automatic generation of documentation)
+##        """
+##        self.deep_construct(CSCmdSet, 
+##                            {'name': name, 'description': description, 
+##                             'commands': {}}, args)
+##    def add_csc(self, command, name = None):
+##        """add a context-sensitive command to the set
+##
+##        **INPUTS**
+##
+##        *CSCmd command* -- the command
+##
+##        *STR name* -- a unique name for the command, or None to use the
+##        first item in the spoken form list
+##
+##        **OUTPUTS**
+##
+##        *none*
+##        """
+##        if not command.meanings:
+##            print 'no meanings for csc'
+##            return
+##        if name is None:
+##            name = command.spoken_forms[0]
+##        for c,a,info in command.meanings:
+##            # insert csc_set info in all meanings items:
+##            info['setname'] = self.name
+##            info['setdescription'] = self.description
+##        trace('CmdInterp.add_csc', "add csc with info:  %s"% command.meanings[0][-1])
+##        self.commands[name] = command
+##
+##    def replace_spoken(self, name, spoken_forms):
+##        """replace the spoken forms of a command with the given name
+##
+##        **INPUTS**
+##
+##        *STR name* -- unique name of the command given when it was added
+##
+##        *[STR] spoken_forms* -- the new spoken forms
+##
+##        **OUTPUTS**
+##
+##        *BOOL* -- true if a command by that name existed
+##        """
+##        try:
+##            command = self.commands[name]
+##            command.replace_spoken(spoken_forms)
+##        except KeyError:
+##            return 0
+##        return 1
+##
+##    def add_spoken(self, name, spoken_forms):
+##        """add the given spoken forms to a command with the given name
+##
+##        **INPUTS**
+##
+##        *STR name* -- unique name of the command given when it was added
+##
+##        *[STR] spoken_forms* -- the spoken forms to add
+##
+##        **OUTPUTS**
+##
+##        *BOOL* -- true if a command by that name existed
+##        """
+##        try:
+##            command = self.commands[name]
+##            command.add_spoken(spoken_forms)
+##        except KeyError:
+##            return 0
+##        return 1
+##
+##
+##    def remove_spoken(self, name, spoken_forms):
+##        """remove the given spoken forms of a command with the given name
+##
+##        **INPUTS**
+##
+##        *STR name* -- unique name of the command given when it was added
+##
+##        *[STR] spoken_forms* -- the spoken forms to remove
+##
+##        **OUTPUTS**
+##
+##        *BOOL* -- true if a command by that name existed
+##        """
+##        try:
+##            command = self.commands[name]
+##            command.remove_spoken(spoken_forms)
+##        except KeyError:
+##            return 0
+##        return 1
+##
+##
+##    def remove_command(self, name):
+##        """remove a command with the given name
+##
+##        **INPUTS**
+##
+##        *STR name* -- unique name of the command given when it was added
+##
+##        **OUTPUTS**
+##
+##        *BOOL* -- true if a command by that name existed
+##        """
+##        try:
+##            del self.commands[name]
+##        except KeyError:
+##            return 0
+##        return 1
+##
+##class LSAliasSet(Object):
+##    """a collection of language-specific aliases which may be deleted,
+##    renamed, or giving synonyms prior to adding them to the command
+##    interpreter.
+##
+##    **INSTANCE ATTRIBUTES**
+##
+##    *STR* name -- name of the alias set (to be used for automatic 
+##    generation of documentation)
+##
+##    *STR* description -- description of the alias set (to be used 
+##    for automatic generation of documentation)
+##
+##    *{STR: LSAlias}* aliases -- map from unique names to
+##    language-specific aliases
+##    """
+##    def __init__(self, name, description = None, **args):
+##        """
+##        **INPUTS**
+##
+##        *STR* name -- name of the alias set (to be used for automatic 
+##        generation of documentation)
+##
+##        *STR* description -- description of the alias set (to be used 
+##        for automatic generation of documentation)
+##        """
+##        self.deep_construct(LSAliasSet, 
+##                            {'name': name, 'description': description, 
+##                             'aliases': {}}, args)
+##
+##    def add_lsa(self, alias, name = None):
+##        """add a language-specific alias to the set
+##
+##        **INPUTS**
+##
+##        *LSAlias alias* -- the alias
+##
+##        *STR name* -- a unique name for the alias, or None to use the
+##        first item in the spoken form list
+##
+##        **OUTPUTS**
+##
+##        *none*
+##        """
+##        if not alias.meanings:
+####            print 'skip adding empty lsa'
+##            return
+##        if name is None:
+##            name = alias.spoken_forms[0]
+##        alias.parent = self
+##        self.aliases[name] = alias
+##
+##    def replace_spoken(self, name, spoken_forms):
+##        """replace the spoken forms of an alias with the given name
+##
+##        **INPUTS**
+##
+##        *STR name* -- unique name of the alias given when it was added
+##
+##        *[STR] spoken_forms* -- the new spoken forms
+##
+##        **OUTPUTS**
+##
+##        *BOOL* -- true if a command by that name existed
+##        """
+##        try:
+##            self.aliases[name].spoken_forms = spoken_forms[:]
+##        except KeyError:
+##            return 0
+##        return 1
+##
+##    def add_spoken(self, name, spoken_forms):
+##        """add the given spoken forms to a command with the given name
+##
+##        **INPUTS**
+##
+##        *STR name* -- unique name of the command given when it was added
+##
+##        *[STR] spoken_forms* -- the spoken forms to add
+##
+##        **OUTPUTS**
+##
+##        *BOOL* -- true if an alias by that name existed
+##        """
+##        try:
+##            alias = self.aliases[name]
+##        except KeyError:
+##            return 0
+##        for spoken in spoken_forms:
+##            alias.spoken_forms.append(spoken)
+##        return 1
+##
+##    def remove_spoken(self, name, spoken_forms):
+##        """remove the given spoken forms of an alias with the given name
+##
+##        **INPUTS**
+##
+##        *STR name* -- unique name of the alias given when it was added
+##
+##        *[STR] spoken_forms* -- the spoken forms to remove
+##
+##        **OUTPUTS**
+##
+##        *BOOL* -- true if an alias by that name existed
+##        """
+##        try:
+##            alias = self.aliases[name]
+##        except KeyError:
+##            return 0
+##        new_spoken = []
+##        for spoken in alias.spoken_forms:
+##            if spoken not in spoken_forms:
+##                new_spoken.append(spoken)
+##        alias.spoken_forms = new_spoken
+##        return 1
+##
+##
+##    def remove_alias(self, name):
+##        """remove an alias with the given name
+##
+##        **INPUTS**
+##
+##        *STR name* -- unique name of the alias given when it was added
+##
+##        **OUTPUTS**
+##
+##        *BOOL* -- true if an alias by that name existed
+##        """
+##        try:
+##            del self.aliases[name]
+##        except KeyError:
+##            return 0
+##        return 1
 
 class CapitalizationWordSet(Object):
     """a collection of CapitalizationWord objects which may be deleted,
@@ -2721,6 +2824,15 @@ class CmdInterp(OwnerObject):
         for cmd in set.commands.values():
 #            print cmd.spoken_forms
             self.add_csc(cmd)
+
+    def add_cmd_set(self, set):
+        """integrated add_csc_set and add_lsa_set
+        """
+        for cmd in set.commands.values():
+            self.add_csc(cmd)
+        for alias in set.aliases.values():
+            self.add_lsa(alias)
+            
 
     def add_lsa(self, an_LSA):
         """Add a language specific word.

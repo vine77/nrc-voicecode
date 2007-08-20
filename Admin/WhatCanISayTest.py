@@ -8,7 +8,7 @@ import regression
 import itertools
 import pprint
 from copy import copy
-from CmdInterp import AliasMeaning, CmdInterp, LSAlias, LSAliasSet, CSCmdSet
+from CmdInterp import AliasMeaning, CmdInterp, LSAlias, LSAliasSet, CSCmdSet, CmdSet
 from CSCmd import CSCmd
 from cont_gen import *
 import WhatCanISay
@@ -381,6 +381,31 @@ the "equals" csc and lsa should (for python) show up with
                  'name': 'plus sign',
                  'new_symbol': None,
                  'setname': 'lsas',
+                 'spacing': 0,
+                 'written_form': ' + '}]}}
+        self.assert_equal(expected, wciSay.index, "index of one CSC and one LSA command is not as expected")
+
+    def test_the_index_of_a_cmdset_with_an_lsa_and_a_csc_in_it(self):
+        wciSay = WhatCanISay.WhatCanISay()
+        interp = CmdInterp()
+        # do one csc and one lsa:
+        cmds = CmdSet("commands set")
+        cmds.add_lsa(LSAlias(["plus"], meanings={all_languages: " + "}, name="plus sign"))
+        cmds.add_csc(CSCmd(["equals"], meanings={contAny: ActionInsert("====")}, name="equals csc"))
+        
+        interp.add_cmd_set(cmds)
+        wciSay.load_commands_from_interpreter(self._app(), interp, 'C')
+        expected = \
+    {'C': {'equals': [[{'action': "Inserts '====^' in current buffer",
+                    'doc': None,
+                    'equiv': 'Any',
+                    'scope': 'global',
+                    'setdescription': None,
+                    'setname': 'commands set'}]],
+       'plus': [{'name': 'plus sign',
+                 'new_symbol': None,
+                 'setdescription': 'no description',
+                 'setname': 'commands set',
                  'spacing': 0,
                  'written_form': ' + '}]}}
         self.assert_equal(expected, wciSay.index, "index of one CSC and one LSA command is not as expected")
