@@ -49,10 +49,11 @@ import CmdInterp
 
 from CSCmd import CSCmd
 from CmdInterp import LSAlias, CapitalizationWord
-from CmdInterp import LSAliasSet, CSCmdSet, CapitalizationWordSet
+from CmdInterp import LSAliasSet, CSCmdSet, CmdSet, CapitalizationWordSet
 from LangDef import LangDef
 from cont_gen import *
 from cont_emacs import *
+
 from actions_gen import *
 from actions_wcisay import *
 from actions_emacs import *
@@ -918,12 +919,10 @@ functional_pairs.add_csc(acmd)
 
 # aliases for dictating comments
 
-comment_aliases = LSAliasSet('comment aliases',
-    description = "aliases for dictating comments")
-comment_commands = CSCmdSet('comment commands',
+comment_commands = CmdSet('comment commands',
     description = "commands for dictating comments")
 
-comment_aliases.add_lsa(LSAlias(['comment line', 'new comment', 'comment below', 'new comment below'],
+comment_commands.add_lsa(LSAlias(['comment line', 'new comment', 'comment below', 'new comment below'],
     {'python': '\n#', 'C': '\n//', 'perl': '\n#'}, spacing = no_space_before))
 acmd = CSCmd(spoken_forms=['comment above', 'add comment above',
                            'new comment above', 'comment line above'],
@@ -931,12 +930,12 @@ acmd = CSCmd(spoken_forms=['comment above', 'add comment above',
              docstring='add a new comment line above current one.')
 
 comment_commands.add_csc(acmd)
-comment_aliases.add_lsa(LSAlias(['begin comment'],
+comment_commands.add_lsa(LSAlias(['begin comment'],
     {'python': '# ', ('C', 'php', 'java', 'javascript'): '// ',
      'perl': '# '}))
-comment_aliases.add_lsa(LSAlias(['begin long comment'],
+comment_commands.add_lsa(LSAlias(['begin long comment'],
     {c_style_languages: '/* '}))
-comment_aliases.add_lsa(LSAlias(['end long comment'],
+comment_commands.add_lsa(LSAlias(['end long comment'],
     {c_style_languages: '*/'}))
 
 
