@@ -80,7 +80,98 @@ class LSAliasTest(VoiceCodeRootTest.VoiceCodeRootTest):
             self.assert_equal(expected_written_form, written_form_text,
                                "LSA written form is not as expected")
             break
-        
+
+    def test_This_is_how_you_can_make_a_special_case_for_one_language(self):
+
+        interp = CmdInterp()        
+##        In next test all languages are first set to "ccc",
+##        and then for python is changed to 'qqq'.
+        interp.add_lsa(LSAlias(['spoken', 'form'],
+                                    {'python': 'qqq', all_languages:  'ccc'}))
+                                                         
+        all_lsas = interp.language_specific_aliases
+        python_lsas = all_lsas['python']
+        # extract and check only one item:
+        for an_LSA in python_lsas.items():
+            wordList, entry = an_LSA
+            spoken_form_text = ' '.join(wordList)
+            written_form_text = getattr(entry, 'written_form', '')
+            expected_spoken_form = 'spoken'
+            expected_written_form = 'qqq'
+            self.assert_equal(expected_spoken_form, spoken_form_text,
+                               "LSA spoken form is not as expected")
+            self.assert_equal(expected_written_form, written_form_text,
+                               "LSA written form is not as expected")
+            break
+        c_lsas = all_lsas['C']
+        # extract and check only one item:
+        for an_LSA in c_lsas.items():
+            wordList, entry = an_LSA
+            spoken_form_text = ' '.join(wordList)
+            written_form_text = getattr(entry, 'written_form', '')
+            expected_spoken_form = 'spoken'
+            expected_written_form = 'ccc'
+            self.assert_equal(expected_spoken_form, spoken_form_text,
+                               "LSA spoken form is not as expected")
+            self.assert_equal(expected_written_form, written_form_text,
+                               "LSA written form is not as expected")
+            break
+
+    def test_This_is_how_you_can_make_a_special_case_c_style_languages(self):
+
+        interp = CmdInterp()        
+##        In next test all languages are first set to "aaa",
+##        next c_style_languages to ccc, and
+##        after that java and python to something more specific
+##        and then for python is changed to 'qqq'.
+        interp.add_lsa(LSAlias(['spoken', 'form'], 
+                                    {'java': 'jjj','python': 'pppp', all_languages:  'aaa',
+                                     c_style_languages: 'ccc'}))
+                                                         
+        all_lsas = interp.language_specific_aliases
+        python_lsas = all_lsas['python']
+        # extract and check only one item:
+        for an_LSA in python_lsas.items():
+            wordList, entry = an_LSA
+            spoken_form_text = ' '.join(wordList)
+            written_form_text = getattr(entry, 'written_form', '')
+            expected_spoken_form = 'spoken'
+            expected_written_form = 'pppp'
+            self.assert_equal(expected_spoken_form, spoken_form_text,
+                               "LSA spoken form is not as expected")
+            self.assert_equal(expected_written_form, written_form_text,
+                               "LSA written form is not as expected")
+            break
+        c_lsas = all_lsas['C']
+        # extract and check only one item:
+        for an_LSA in c_lsas.items():
+            wordList, entry = an_LSA
+            spoken_form_text = ' '.join(wordList)
+            written_form_text = getattr(entry, 'written_form', '')
+            expected_spoken_form = 'spoken'
+            expected_written_form = 'ccc'
+            self.assert_equal(expected_spoken_form, spoken_form_text,
+                               "LSA spoken form is not as expected")
+            self.assert_equal(expected_written_form, written_form_text,
+                               "LSA written form is not as expected")
+            break
+    
+        java_lsas = all_lsas['java']
+        # extract and check only one item:
+        for an_LSA in java_lsas.items():
+            wordList, entry = an_LSA
+            spoken_form_text = ' '.join(wordList)
+            written_form_text = getattr(entry, 'written_form', '')
+            expected_spoken_form = 'spoken'
+            expected_written_form = 'jjj'
+            self.assert_equal(expected_spoken_form, spoken_form_text,
+                               "LSA spoken form is not as expected")
+            self.assert_equal(expected_written_form, written_form_text,
+                               "LSA written form is not as expected")
+            break
+    
+
+            
             
 ##########################################################
 # Unit tests lsa and general commands

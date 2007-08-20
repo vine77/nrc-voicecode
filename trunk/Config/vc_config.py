@@ -918,12 +918,14 @@ functional_pairs.add_csc(acmd)
 
 
 # aliases for dictating comments
-
+comment_aliases = CmdSet('obsolete comment commands',
+                         description='Obsolete, can be removed if not present in user_config anymore') 
 comment_commands = CmdSet('comment commands',
     description = "commands for dictating comments")
 
+# experiment, perl is a c_style_language, but is an exception here.
 comment_commands.add_lsa(LSAlias(['comment line', 'new comment', 'comment below', 'new comment below'],
-    {'python': '\n#', 'C': '\n//', 'perl': '\n#'}, spacing = no_space_before))
+    {'python': '\n#', c_style_languages: '\n//', 'perl': '\n#'}, spacing = no_space_before))
 acmd = CSCmd(spoken_forms=['comment above', 'add comment above',
                            'new comment above', 'comment line above'],
              meanings={ContLanguage('python'): ActionPyCommentAbove()},

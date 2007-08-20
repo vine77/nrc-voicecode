@@ -326,9 +326,15 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         path
         """
         message = """The user_config.py file does not exist.  
-              One must be created before the mediator can be started.
-              Select one of the sample user configuration files to use
-              as an initial user file (which can then be customized)."""
+One must be created before the mediator can be started.
+Select one of the sample user configuration files to use
+as an initial user file (which can then be customized).
+
+Optional: if you want to restrict your sessions to less languages, also
+copy (manually) the file "user_globals.py" from the samples folder
+into to config folder.  See instructions in this file.
+
+              """
         caption = "Missing user configuration file"
         wxMessageBox(message, caption, wxOK, self.main_frame)
         message = "Choose a sample user configuration file"
