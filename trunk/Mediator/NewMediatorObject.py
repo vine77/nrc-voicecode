@@ -808,9 +808,9 @@ class NewMediatorObject(Object.OwnerObject):
         else:
             config_dict['interpreter'] = self
             config_dict['add_csc'] = self.add_csc
-            config_dict['add_csc_set'] = self.add_csc_set
+            config_dict['add_csc_set'] = self.add_cmd_set
             config_dict['add_lsa'] = self.add_lsa
-            config_dict['add_lsa_set'] = self.add_lsa_set
+            config_dict['add_lsa_set'] = self.add_cmd_set
             config_dict['add_cmd_set'] = self.add_cmd_set
             config_dict['add_capitalization_word'] = \
                 self.add_capitalization_word
@@ -1301,21 +1301,8 @@ class NewMediatorObject(Object.OwnerObject):
 
         self.interp.add_csc(acmd)
 
-    def add_csc_set(self, set):
-        """add CSCs from a set
-
-        **INPUTS**
-
-        *CSCmdSet set* -- the set of commands to add
-
-        **OUTPUTS**
-
-        *none*
-        """
-        self.interp.add_csc_set(set)
-
     def add_cmd_set(self, set):
-        """add CSCs from a set
+        """add CSCs AND LSAs from a set
 
         **INPUTS**
 
@@ -1326,6 +1313,20 @@ class NewMediatorObject(Object.OwnerObject):
         *none*
         """
         self.interp.add_cmd_set(set)
+    add_csc_set = add_cmd_set
+##    def add_csc_set(self, set):
+##        """add CSCs from a set, obsolete, use add_cmd_set instead...
+##
+##        **INPUTS**
+##
+##        *CSCmdSet set* -- the set of commands to add
+##
+##        **OUTPUTS**
+##
+##        *none*
+##        """
+##        self.interp.add_csc_set(set)
+
 
     def has_lsa(self, spoken_form, language = None):
         """check if there is already an LSA defined with this spoken
@@ -1370,19 +1371,19 @@ class NewMediatorObject(Object.OwnerObject):
         """
         
         self.interp.add_capitalization_word(word)
-
-    def add_lsa_set(self, set):
-        """add LSAs from a set
-
-        **INPUTS**
-
-        *LSAliasSet set* -- the set of aliases to add
-
-        **OUTPUTS**
-
-        *none*
-        """
-        self.interp.add_lsa_set(set)
+    add_lsa_set = add_cmd_set
+##    def add_lsa_set(self, set):
+##        """add LSAs from a set, obsolete, use add_cmd_set
+##
+##        **INPUTS**
+##
+##        *LSAliasSet set* -- the set of aliases to add
+##
+##        **OUTPUTS**
+##
+##        *none*
+##        """
+##        self.interp.add_lsa_set(set)
 
     def add_capitalization_word_set(self, set):
         """add CapitalizationWords from a set
