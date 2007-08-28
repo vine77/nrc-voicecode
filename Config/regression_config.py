@@ -5,7 +5,14 @@
 # uncomment the following line if you want RecogStartMgr to trust 
 # the current window
 # trust_current_window(1)
-
+for lang in max_all_languages:
+   if lang in all_languages:
+##      print 'make variable "cont%s" for active language'% lang.capitalize()
+      exec('cont%s = ContLanguage("%s")'% (lang.capitalize(), lang))
+   else:
+      # make variable, but ignore at definition phase:
+##      print 'make dummy variable "cont%s" for non active language'% lang.capitalize()
+      exec('cont%s = None'% lang.capitalize())
 
 ######################################################################
 # These words are abbreviations that are used in test code and
