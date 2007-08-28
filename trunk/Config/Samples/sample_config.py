@@ -106,59 +106,59 @@ abbreviations_in(abbrev_files)
 
 add_capitalization_word_set(manual_formatting)
 
-add_csc_set(manual_styling)
-add_csc_set(mediator_ctrl)
-add_csc_set(out_of_balance)
-add_csc_set(indent_cmds)
-add_csc_set(change_direction)
-add_lsa_set(math_ops)
-add_lsa_set(logic_ops)
-add_lsa_set(comparisons)
-add_lsa_set(empty_pairs)
-add_csc_set(functional_pairs)
-add_lsa_set(comment_aliases)
-add_csc_set(comment_commands)
-add_lsa_set(misc_aliases)
-add_csc_set(new_statement)
-add_csc_set(compound_statements)
-add_csc_set(ctrl_structures)
-add_csc_set(data_structures)
-add_csc_set(function_definitions)
-add_csc_set(navigation_within_buffer)
-add_csc_set(insertion_deletions)
+add_cmd_set(manual_styling)
+add_cmd_set(mediator_ctrl)
+add_cmd_set(out_of_balance)
+add_cmd_set(indent_cmds)
+add_cmd_set(change_direction)
+add_cmd_set(math_ops)
+add_cmd_set(logic_ops)
+add_cmd_set(comparisons)
+add_cmd_set(empty_pairs)
+add_cmd_set(functional_pairs)
+##add_cmd_set(comment_aliases) # obsolete
+add_cmd_set(comment_commands)
+add_cmd_set(misc_aliases)
+add_cmd_set(new_statement)
+add_cmd_set(compound_statements)
+add_cmd_set(ctrl_structures)
+add_cmd_set(data_structures)
+add_cmd_set(function_definitions)
+add_cmd_set(navigation_within_buffer)
+add_cmd_set(insertion_deletions)
 
 # new: QH
-add_csc_set(operator_cmds)
+##add_cmd_set(operator_cmds) # obsolete
 
 
 # Python-specific
 
-add_lsa_set(misc_python)
-add_csc_set(misc_python_cmds)
-add_lsa_set(python_statements)
-add_csc_set(python_compound)
-add_lsa_set(python_imports)
-add_csc_set(python_imports_cscs)
-add_lsa_set(python_comparisons)
-add_lsa_set(python_operators)
-add_lsa_set(python_string_qualifiers)
-add_csc_set(python_functional)
+add_cmd_set(misc_python)
+add_cmd_set(misc_python_cmds)
+add_cmd_set(python_statements)
+add_cmd_set(python_compound)
+add_cmd_set(python_imports)
+add_cmd_set(python_imports_cscs)
+add_cmd_set(python_comparisons)
+add_cmd_set(python_operators)
+add_cmd_set(python_string_qualifiers)
+add_cmd_set(python_functional)
 py_std_func_calls.create(interpreter) 
 
 # C/C++-specific
 
-add_csc_set(c_preprocessor_cmds)
-add_csc_set(c_navigation)
-add_csc_set(c_type_declarations)
-add_csc_set(c_type_casts)
-add_csc_set(c_statements)
-add_lsa_set(c_preprocessor)
-add_lsa_set(c_syntax)
-add_lsa_set(c_reserved_words)
+add_cmd_set(c_preprocessor_cmds)
+add_cmd_set(c_navigation)
+add_cmd_set(c_type_declarations)
+add_cmd_set(c_type_casts)
+add_cmd_set(c_statements)
+add_cmd_set(c_preprocessor)
+add_cmd_set(c_syntax)
+add_cmd_set(c_reserved_words)
 
 # Emacs specific
 
-add_csc_set(emacs_ctrl)
+add_cmd_set(emacs_ctrl)
 
 #######################################
 # add generated sets
@@ -169,16 +169,16 @@ add_csc_set(emacs_ctrl)
 
 add_letters(military_letters, prefix = "")
 add_letters(military_letters, prefix = "letter-")
-add_lsa_set(military_letters)
+add_cmd_set(military_letters)
 
 add_escaped_characters(escaped_characters)
-add_csc_set(escaped_characters)
+add_cmd_set(escaped_characters)
 
 add_repeats(repeat_last)
-add_csc_set(repeat_last)
+add_cmd_set(repeat_last)
 
 add_backspacing(backspacing)
-add_csc_set(backspacing)
+add_cmd_set(backspacing)
 
 #######################################
 # add punctuation sets
