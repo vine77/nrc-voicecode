@@ -357,11 +357,11 @@ class ContBlankLine(ContLanguage):
         return ContLanguage.equivalence_key(self, prefix="BlankLine")
 
 
-class ContPyInsideArguments(ContLanguage):
+class ContInsideArguments(ContLanguage):
     """This context should apply if the cursor is inside the arguments section
 
 
-    For python, inside a function definition or a function call.  So between the parens.
+    For example in python, inside a function definition or a function call.  So between the parens.
 
     def f(here):
         pass
@@ -371,19 +371,19 @@ class ContPyInsideArguments(ContLanguage):
     x = f(here)
 
     This context can be used for formatting the "=" without spacing when inside. 
-    (QH, dec 2006)
+    (QH, dec 2006, august 2007: extended for all languages...
 
     """   
     re_function_call = re.compile(r'\w\s*[(]')
 
-    def __init__(self, **attrs):
-        super(ContPyInsideArguments, self).__init__(language='python', **attrs)
+    def __init__(self, language, **attrs):
+        super(ContInsideArguments, self).__init__(language=language, **attrs)
 
        
     def _applies(self, app, preceding_symbol = 0):
         """return 1 if context applies"""
         answer = 0
-        if not super(ContPyInsideArguments, self)._applies(app, preceding_symbol):
+        if not super(ContInsideArguments, self)._applies(app, preceding_symbol):
             return answer
 
         buff = app.curr_buffer()
@@ -392,15 +392,15 @@ class ContPyInsideArguments(ContLanguage):
         start = buff.beginning_of_line()
         lineleft = buff.get_text(start, current_pos)
         buff.goto(current_pos)
-        trace('ContPyInsideArguments._applies', 'lineleft: %s'% lineleft)
+        trace('ContInsideArguments._applies', 'lineleft: %s'% lineleft)
         has_function_call = self.re_function_call.search(lineleft)
         if has_function_call:
-            trace('ContPyInsideArguments._applies', 're_function_call.search OK: %s'% has_function_call)
+            trace('ContInsideArguments._applies', 're_function_call.search OK: %s'% has_function_call)
             return 1
         while num > 0:
             num -= 1
             line = buff.get_text_of_line(num)
-            trace('ContPyInsideArguments._applies', 'testing line num %s: "%s"'% \
+            trace('ContInsideArguments._applies', 'testing line num %s: "%s"'% \
                   (num, line))
             line = line.strip()
             for ending in ('\\', '"', "'", ','):
@@ -411,28 +411,28 @@ class ContPyInsideArguments(ContLanguage):
                 return answer
             has_function_call = self.re_function_call.search(line)
             if has_function_call:
-                trace('ContPyInsideArguments._applies', 're_function_call.search OK: %s'% has_function_call)
+                trace('ContInsideArguments._applies', 're_function_call.search OK: %s'% has_function_call)
                 return 1
 
         
-        trace('ContPyInsideArguments._applies', 'fall through, not apply')
+        trace('ContInsideArguments._applies', 'fall through, not apply')
         return answer
 
     def scope(self):
-        """skope of ContPyInsideArguments is immediate
+        """skope of ContInsideArguments is immediate
 
         *STR* -- the string identifying the scope
         """
         return "immediate"
 
     def equivalence_key(self):
-        """returns the equivalence_key of ContPyInsideArguments
+        """returns the equivalence_key of ContInsideArguments
 
         *STR* -- the key
         """
-        return ContLanguage.equivalence_key(self, prefix="ContPyInsideArguments")
+        return ContLanguage.equivalence_key(self, prefix="ContInsideArguments")
 
-class ContPyBeforeArguments(ContLanguage):
+class ContBeforeArguments(ContLanguage):
     """This context should apply if the cursor is at a variable with parens just after
 
 
@@ -449,15 +449,15 @@ class ContPyBeforeArguments(ContLanguage):
     # matches letters "(" with optional empty space in between:
     re_before_open_paren = re.compile(r'\w*\s*[(]')
 
-    def __init__(self, **attrs):
-        super(ContPyBeforeArguments, self).__init__(language='python', **attrs)
+    def __init__(self, language, **attrs):
+        super(ContBeforeArguments, self).__init__(language=language, **attrs)
 
        
     def _applies(self, app, preceding_symbol = 0):
         """return 1 if context applies"""
         answer = 0
         # test for language:
-        if not super(ContPyBeforeArguments, self)._applies(app, preceding_symbol):
+        if not super(ContBeforeArguments, self)._applies(app, preceding_symbol):
             return answer
 
         buff = app.curr_buffer()
@@ -471,18 +471,18 @@ class ContPyBeforeArguments(ContLanguage):
         return answer
 
     def scope(self):
-        """skope of ContPyBeforeArguments is immediate
+        """skope of ContBeforeArguments is immediate
 
         *STR* -- the string identifying the scope
         """
         return "immediate"
 
     def equivalence_key(self):
-        """returns the equivalence_key of ContPyBeforeArguments
+        """returns the equivalence_key of ContBeforeArguments
 
         *STR* -- the key
         """
-        return ContLanguage.equivalence_key(self, prefix="ContPyBeforeArguments")
+        return ContLanguage.equivalence_key(self, prefix="ContBeforeArguments")
 
 
 class ContTextIsSelected(Context):

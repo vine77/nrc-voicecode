@@ -357,9 +357,9 @@ add_unittest('Context', desc='Tests for conflicting contexts.')
 
 add_unittest('ContBlankLine', desc='Tests for the blank line context class.')
 
-add_unittest('ContPyInsideArguments', desc='Tests for being inside the argument list of a function.')
+add_unittest('ContInsideArguments', desc='Tests for being inside the argument list of a function.')
 
-add_unittest('ContPyBeforeArguments', desc='Tests for being before open paren of a function def or call.')
+add_unittest('ContBeforeArguments', desc='Tests for being before open paren of a function def or call.')
 
 add_unittest('ContLanguage', desc='Tests for different language contexts.')
 

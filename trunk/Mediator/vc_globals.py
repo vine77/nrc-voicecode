@@ -81,10 +81,14 @@ for p in [admin, config, mediator_dir]:
 max_all_languages = ['C', 'python', 'perl', 'javascript', 'php', 'java']
 max_all_languages.sort()
 max_all_languages = tuple(max_all_languages)
-try:
-    from user_globals import all_languages
-except ImportError:
-    all_languages = list(max_all_languages)
+##try:
+##    from user_globals import all_languages
+##except ImportError:
+# this construction makes it possible to restrict to less languages
+# possibly giving better performance. This was not the case in a
+# simple -t all test though, so leave all_languages the same as max_all_languages
+# presently...
+all_languages = list(max_all_languages)
 all_languages.sort()
 all_languages = tuple(all_languages)
 

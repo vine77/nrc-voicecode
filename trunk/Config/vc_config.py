@@ -49,7 +49,7 @@ import CmdInterp
 
 from CSCmd import CSCmd
 from CmdInterp import LSAlias, CapitalizationWord
-from CmdInterp import LSAliasSet, CSCmdSet, CmdSet, CapitalizationWordSet
+from CmdInterp import CmdSet, CapitalizationWordSet
 from LangDef import LangDef
 from cont_gen import *
 from cont_emacs import *
@@ -168,7 +168,7 @@ add_prefix('dumbEdSim', 'Dumbo')
 # I don't have the time to define a command grammar for them.
 # -- AD
 #
-mediator_ctrl = CSCmdSet(name = 'mediator control',
+mediator_ctrl = CmdSet(name = 'mediator control',
     description = 'commands to control the mediator')
 acmd = CSCmd(spoken_forms=['compile symbols'],
              meanings={all_languages: ActionCompileSymbols()},
@@ -396,14 +396,14 @@ alt_US_quotes.add('`', ['backquote', 'reverse-quote'],
 # Letters using military pronunciation
 #
 
-military_letters = LSAliasSet(name = 'military letters',
+military_letters = CmdSet(name = 'military letters',
     descriptions = 'letters using military pronunciation')
 
 #
 # Escaped characters (back slash a., a, alpha, etc.)
 #
 
-escaped_characters = CSCmdSet(name = 'escaped characters',
+escaped_characters = CmdSet(name = 'escaped characters',
     description = 'characters escaped with backslashes')
 
 ######################################################################
@@ -441,7 +441,7 @@ manual_formatting.add_capitalization_word(word)
 # Styling commands
 ######################################################################
 
-manual_styling = CSCmdSet("manual symbol styling",
+manual_styling = CmdSet("manual symbol styling",
     description = "manually choose the style for the following symbol")
 
 aCSC = CSCmd(spoken_forms = ['inter caps', 'cap Hungarian', 'Hungarian',
@@ -496,7 +496,7 @@ manual_styling.add(aCSC)
 
 
 
-out_of_balance = CSCmdSet("balanced expression navigation",
+out_of_balance = CmdSet("balanced expression navigation",
             description = """jumping out of any balanced expression""")
 
 #
@@ -526,7 +526,7 @@ std_US_small_numbers = EnglishSmallNumbersSet()
 #############################################################################
 # Code indentation
 #############################################################################
-indent_cmds = CSCmdSet("indentation commands",
+indent_cmds = CmdSet("indentation commands",
             description = """commands to manually adjust indentation""")
 
 acmd = CSCmd(spoken_forms=['indent', 'tab', 'tab key'],
@@ -557,7 +557,7 @@ indent_cmds.add(acmd)
 # N times.
 #
 
-repeat_last = CSCmdSet(name = 'repeat last command',
+repeat_last = CmdSet(name = 'repeat last command',
     description = """Repeat last command.
         Note: If "N times" is used immediatly after the command to be repeated
         (e.g. ['page down', '3 times']), then the command is repeated only N-1
@@ -585,7 +585,7 @@ repeat_last.add(acmd, name = 'repeat once')
 # Changing direction of last command
 #############################################################################
 
-change_direction = CSCmdSet(name = 'change direction of last command',
+change_direction = CmdSet(name = 'change direction of last command',
     description = "Repeat last command (e.g. search) " + \
                   "in the opposite direction.")
 
@@ -609,7 +609,7 @@ change_direction.add(acmd)
 # Navigation within a buffer
 #############################################################################
 
-navigation_within_buffer = CSCmdSet(name = 'move up or down the page',
+navigation_within_buffer = CmdSet(name = 'move up or down the page',
                              description = "move up or down the page")
 
 acmd = CSCmd(spoken_forms=['yo page down', 'page down'],
@@ -669,10 +669,10 @@ navigation_within_buffer.add(acmd)
 # repeatable backspace commands (back space / delete backwards "" and 2 to 5
 #
 
-backspacing  = CSCmdSet(name = 'backspace multiple times',
+backspacing  = CmdSet(name = 'backspace multiple times',
     description = "backspace 1 to n times.")
 
-insertion_deletions  = CSCmdSet(name = 'insert and deleting text',
+insertion_deletions  = CmdSet(name = 'insert and deleting text',
                                 descriptions = "commands for inserting and deleting text")
 acmd = CSCmd(spoken_forms = ['delete that line'],
              meanings = {ContAny(): ActionDeleteCurrentLine()},
@@ -723,7 +723,7 @@ insertion_deletions.add(acmd)
 
 ## mathematical  operators
 
-math_ops = LSAliasSet('mathematical operators',
+math_ops = CmdSet('mathematical operators',
     description = "mathematical operators")
 
 math_ops.add(LSAlias(['multiply by', 'multiplied by', 'times'],
@@ -807,7 +807,7 @@ math_ops.add(LSAlias(['caret equals', 'exclusive or equals',
 
 ## logical operators
 
-logic_ops = LSAliasSet('logical operators',
+logic_ops = CmdSet('logical operators',
     description = "logical operators")
 logic_ops.add(LSAlias(['not'], {'python': 'not '}, ),
     name = 'python logical not')
@@ -820,11 +820,9 @@ logic_ops.add(LSAlias(['and'],
     {'python': ' and ', c_style_languages: ' && '}))
 
 # comparison operators
-comparisons = LSAliasSet('comparison operators',
+comparisons = CmdSet('comparison operators',
     description = "comparison operators")
 
-##changed to csc (QH)    comparisons.add(LSAlias(['equals', 'equal', 'is assigned', 'assign value'],
-##        {'python': ' = ', 'C': ' = '}, comparison_operator))
 comparisons.add(LSAlias(['less than', 'is less than'],
         {all_languages: ' < '},
         comparison_operator))
@@ -851,7 +849,7 @@ comparisons.add(LSAlias(['equal to', 'is equal to', 'is equal'],
 # functional names for empty pairs (as opposed to the literal names like
 # empty parens defined by std_grouping)
 
-empty_pairs = LSAliasSet('empty pairs',
+empty_pairs = CmdSet('empty pairs',
     description = 'functional names for empty pairs of punctuation symbols')
 
 empty_pairs.add(LSAlias(['without arguments', 'with no arguments', 'without argument',
@@ -867,13 +865,14 @@ empty_pairs.add(LSAlias(['empty dictionary', 'empty hash'], {'python': '{}', 'pe
 # current cursor location (as opposed to the literal names like
 # paren pair defined by std_grouping)
 
-functional_pairs = CSCmdSet('functional pairs',
+functional_pairs = CmdSet('functional pairs',
     description = 'functional names for paired punctuation')
 
 acmd = CSCmd(spoken_forms=['with arguments', 'with argument', 'call with',
                            'called with', 'function of'],
              meanings={all_languages: gen_parens_pair,
-                       ContPyBeforeArguments():  py_function_add_argument},
+                       ContBeforeArguments('python'):  py_function_add_argument,
+		       ContBeforeArguments(c_style_languages): c_function_add_argument},
              docstring='argument list for function, python: add or go into argument list')
 functional_pairs.add(acmd)
 
@@ -943,7 +942,7 @@ comment_commands.add(LSAlias(['end long comment'],
 
 # miscellaneous - should really have a better name for this set
 
-misc_aliases = LSAliasSet('miscellaneous aliases',
+misc_aliases = CmdSet('miscellaneous aliases',
     description = 'miscellaneous commands')
 misc_aliases.add(LSAlias(['print'], {'python': 'print ', 'perl': 'print '}))
 misc_aliases.add(LSAlias(['return'], {('python', 'C', 'javascript', 'php'): 'return '}))
@@ -955,7 +954,7 @@ misc_aliases.add(LSAlias(['continue'], {'python': 'continue\n',
 
 # new statement
 
-new_statement = CSCmdSet('new statement',
+new_statement = CmdSet('new statement',
 description = 'new statement commands')
 
 acmd = CSCmd(spoken_forms=['new statement', 'new statement below'],
@@ -972,7 +971,7 @@ new_statement.add(acmd)
 
 # compound statement dictation/navigation
 
-compound_statements = CSCmdSet('compound statements',
+compound_statements = CmdSet('compound statements',
     description = 'commands for dictation and navigating compound statements')
 
 acmd = CSCmd(spoken_forms=['body', 'go to body'],
@@ -983,7 +982,7 @@ compound_statements.add(acmd)
 
 # control structures (conditionals and loops)
 
-ctrl_structures = CSCmdSet('control structures',
+ctrl_structures = CmdSet('control structures',
     description = 'commands for dictation and navigation of control structures')
 
 acmd = CSCmd(spoken_forms=['for', 'for loop', 'for each'],
@@ -1015,7 +1014,7 @@ acmd = CSCmd(spoken_forms=['if', 'if statement'],
                        contPhp: ActionInsert('if (', ') {\n\t\n}',
                            spacing = no_space_after),
                        contJavascript: ActionInsert('if (', ') {\n\t\n}',
-                           spacing = no_space_after)},
+                          spacing = no_space_after)},
              docstring = 'if statement')
 ctrl_structures.add(acmd)
 acmd = CSCmd(spoken_forms=['else if', 'else if clause',
@@ -1052,11 +1051,11 @@ acmd = CSCmd(spoken_forms=['then', 'then do', 'then do the following',
 ctrl_structures.add(acmd)
 
 # assign, equals....
-operator_cmds = CSCmdSet('operator commands',
+operator_cmds = CmdSet('operator commands',
                             description = "operator commands like equal sign")
 
 acmd = CSCmd(spoken_forms=['equals', 'equal', 'is assigned', 'assign value'],
-             meanings={ContPyInsideArguments(): ActionInsert("=")},
+             meanings={ContInsideArguments(all_languages): ActionInsert("=")},
              docstring='equal sign inside arguments without spacing (python)')
 lsa = LSAlias(['equals', 'equal', 'is assigned', 'assign value'],
               {all_languages: ' = '})
@@ -1065,7 +1064,7 @@ operator_cmds.add(lsa)
 
 # data structures (C struct, C++ and Python classes, etc.)
 
-data_structures = CSCmdSet('data structures',
+data_structures = CmdSet('data structures',
     description = 'commands for dictation of commands to define new data types')
 
 acmd = CSCmd(spoken_forms=['struct','structure','define structure','declare structure'],
@@ -1097,7 +1096,7 @@ data_structures.add(acmd)
 
 # function definitions
 
-function_definitions = CSCmdSet('function definitions',
+function_definitions = CmdSet('function definitions',
     description = 'commands for defining new functions')
 
 acmd = CSCmd(spoken_forms=['declare method', 'add method'],
@@ -1143,6 +1142,23 @@ acmd = CSCmd(spoken_forms=['function body', 'method body'],
              docstring='move to body of a function definition')
 function_definitions.add(acmd)
 
+##############################################################################
+# declare variables
+##############################################################################
+declare_variables = CmdSet('declaring variables',
+                           description='Declare variables in different languages')
+acmd = CSCmd(spoken_forms=['define variable', 'declare variable'],
+             meanings={contJavascript:  ActionInsert('var ', ';')})
+declare_variables.add(acmd)
+
+acmd = CSCmd(spoken_forms=['define global variable', 'declare global variable'],
+             meanings={contPython: ActionInsert('global ', '')})
+declare_variables.add(acmd)
+
+acmd = CSCmd(spoken_forms=['define array variable', 'declare array variable'],
+             meanings={contJavascript:  ActionInsert('var ', ' = new Array();')})
+declare_variables.add(acmd)
+
 
 ###############################################################################
 # Python specific stuff
@@ -1170,10 +1186,10 @@ define_language('python',
 
 # misc Python aliases and CSCs
 
-misc_python = LSAliasSet('miscellaneous Python fragments',
+misc_python = CmdSet('miscellaneous Python fragments',
     description = "miscellaneous Python expressions and constructs")
 
-misc_python_cmds = CSCmdSet('miscellaneous Python commands',
+misc_python_cmds = CmdSet('miscellaneous Python commands',
     description = "miscellaneous Python commands")
 
 misc_python.add(LSAlias(['none'], {'python': 'None'}))
@@ -1209,7 +1225,7 @@ misc_python_cmds.add(acmd)
 
 # simple Python statements
 
-python_statements = LSAliasSet('simple Python statements',
+python_statements = CmdSet('simple Python statements',
     description = 'aliases for simple Python statements')
 
 python_statements.add(LSAlias(['global', 'global variable', 'global variables'],
@@ -1229,7 +1245,7 @@ python_statements.add(LSAlias(['raise', 'raise exception'], {'python': 'raise '}
 
 # compound python statements
 
-python_compound = CSCmdSet('Python compound statements',
+python_compound = CmdSet('Python compound statements',
     description = "commands for dictating Python-specific compound statements")
 
 acmd = CSCmd(spoken_forms=['lambda'],
@@ -1253,9 +1269,9 @@ python_compound.add(acmd)
 
 # Python import statements
 
-python_imports = LSAliasSet('Python import statements',
+python_imports = CmdSet('Python import statements',
     description = "Python import module statements")
-python_imports_cscs = CSCmdSet('Python import statements',
+python_imports_cscs = CmdSet('Python import statements',
     description = "Python import module statements")
 
 python_imports_cscs.add(CSCmd(spoken_forms=['from', 'from module'],
@@ -1278,7 +1294,7 @@ python_imports.add(LSAlias(['import all'], {'python': ' import *'}))
 
 # Python-specific comparison operators
 
-python_comparisons = LSAliasSet('Python comparison operators',
+python_comparisons = CmdSet('Python comparison operators',
     description = "Python-specific comparison operators")
 python_comparisons.add(LSAlias(['in list', 'in sequence', 'is in', 'is in list', 'is in sequence'], {'python': ' in '}))
 
@@ -1306,7 +1322,7 @@ python_quotes.create(interpreter, force = 1)
 
 # Python-specific string variants
 
-python_string_qualifiers = LSAliasSet('Python-specific string qualifiers',
+python_string_qualifiers = CmdSet('Python-specific string qualifiers',
    description = 'Qualifiers for Python-specific string types\n' +
                  '("r" for raw strings, "u" for Unicode strings)')
 
@@ -1317,7 +1333,7 @@ python_string_qualifiers.add(LSAlias(['Unicode string'], {'python': 'u'},
 
 # Python-specific operators
 
-python_operators = LSAliasSet('Python operators',
+python_operators = CmdSet('Python operators',
     description = 'Python-specific operators')
 python_operators.add(LSAlias(['concatenate', 'concatenate with'],
     {'python': ' + '}, binary_operator))
@@ -1330,7 +1346,7 @@ python_operators.add(LSAlias(['collect keyword arguments','collect keyword argum
 
 # functional names for Python-specific paired punctuation
 
-python_functional = CSCmdSet('Python paired punctuation',
+python_functional = CmdSet('Python paired punctuation',
     description = "Python-specific paired punctuation")
 
 acmd = CSCmd(spoken_forms=['tuple with elements', 'new tuple',
@@ -1352,7 +1368,7 @@ python_functional.add(acmd)
 
 # CSCs for calling standard python functions and methods
 
-py_standard_function_calls = CSCmdSet('standard function calls',
+py_standard_function_calls = CmdSet('standard function calls',
     description = \
     'CSCs for calling predefined functions and methods definitions')
 
@@ -1440,7 +1456,7 @@ define_language('C',
                                             '\'([^\']|\\\')*?\'']))
 # C preprocessor commands and aliases
 
-c_preprocessor_cmds = CSCmdSet('C pre-processor',
+c_preprocessor_cmds = CmdSet('C pre-processor',
 description = """dictating C pre-processor commands""")
 
 acmd = CSCmd(spoken_forms=['header wrapper', 'wrap header'],
@@ -1463,7 +1479,7 @@ acmd = CSCmd(spoken_forms=['macro if N. def', 'pound if N. def', 'macro if not d
              docstring='insert code template for #ifndef')
 c_preprocessor_cmds.add(acmd)
 
-c_preprocessor = LSAliasSet('C pre-processor aliases',
+c_preprocessor = CmdSet('C pre-processor aliases',
 description = """aliases for dictating C pre-processor commands""")
 
 c_preprocessor.add(LSAlias(['macro define', 'pound define'], {'C': '#define '}))
@@ -1475,7 +1491,7 @@ c_preprocessor.add(LSAlias(['macro undo define', 'undefine', 'pound undefine'], 
 
 
 # Other C/C++ statements
-c_statements = CSCmdSet('C/C++ statements',
+c_statements = CmdSet('C/C++ statements',
                         description = """dictating miscellaneous C/C++ statements""")
 
 acmd = CSCmd(spoken_forms=['try'],
@@ -1524,7 +1540,7 @@ data_structures.add(acmd)
 
 
 # C/C++ specific syntax
-c_syntax = LSAliasSet('C/C++ -specific syntax',
+c_syntax = CmdSet('C/C++ -specific syntax',
     description = 'aliases for syntactical stuff that is C/C++ specific')
 
 # could give this a more meaningful name: e.g. pointer-to-member?
@@ -1559,7 +1575,7 @@ c_syntax.add(LSAlias(['input pipe', 'input to'],
 
 # type declarations
 
-c_type_declarations = CSCmdSet('C/C++ type declarations',
+c_type_declarations = CmdSet('C/C++ type declarations',
     description = "commands for dictating types and their declarations in C and C++")
 
 acmd = CSCmd(spoken_forms=['pointer to'],
@@ -1587,7 +1603,7 @@ acmd = CSCmd(spoken_forms=['declare enumerator','define enumerator','enumerator'
              docstream='insert enumerator declaration template')
 c_type_declarations.add(acmd)
 
-c_type_casts = CSCmdSet('C/C++ type casts',
+c_type_casts = CmdSet('C/C++ type casts',
     description = "commands for dictating type casts in C and C++")
 
 # just use "parens" for this, don't need a separate command?
@@ -1666,7 +1682,7 @@ c_type_casts.add(acmd)
 
 # C/C++-specific navigation
 
-c_navigation = CSCmdSet('C/C++ navigation',
+c_navigation = CmdSet('C/C++ navigation',
 description = """Special navigational commands for C/C++""")
 
 # it would be nicer if this could look backwards...
@@ -1692,7 +1708,7 @@ c_navigation.add(acmd)
 
 # C/C++ reserved words
 
-c_reserved_words = LSAliasSet('C/C++ keywords',
+c_reserved_words = CmdSet('C/C++ keywords',
     description = 'aliases for reserved words in C/C++')
 
 # this is compiler-dependent... :-(
@@ -1782,7 +1798,7 @@ define_language('javascript',
                                             '"([^"]|\\")*?"',
                                             '\'([^\']|\\\')*?\'']))
 
-javascript_reserved_words = LSAliasSet('javascript keywords',
+javascript_reserved_words = CmdSet('javascript keywords',
     description = 'aliases for reserved words in javascript')
 
 javascript_reserved_words.add(LSAlias(['var', 'variable'],
@@ -1815,7 +1831,7 @@ define_language('php',
                         regexps_no_symbols=['/\*[\s\S]*?\*/', '//[^\n]*\n',
                                             '"([^"]|\\")*?"',
                                             '\'([^\']|\\\')*?\'']))
-php_special_lsas = LSAliasSet('php special commands',
+php_special_lsas = CmdSet('php special commands',
     description = "php special commands like dollar before a variable")
 php_special_lsas.add(LSAlias(['dollar'], {'php': '$'}))
 
@@ -1831,9 +1847,9 @@ define_language('java',
                                             '\'([^\']|\\\')*?\'']))
 
 
-# java importy statements
+# java import statements
 
-java_imports_cscs = CSCmdSet('java import statements',
+java_imports_cscs = CmdSet('java import statements',
     description = "java import module statements")
 
 java_imports_cscs.add(CSCmd(spoken_forms=['import'],
@@ -1846,7 +1862,7 @@ java_imports_cscs.add(CSCmd(spoken_forms=['import'],
 # Emacs specific stuff
 ###############################################################################
 
-emacs_ctrl = CSCmdSet(name = 'emacs control',
+emacs_ctrl = CmdSet(name = 'emacs control',
     description = 'commands to control Emacs')
 acmd = CSCmd(spoken_forms=['yo list buffers', 'yo switch to buffer',
                            'yo switch buffer', 'yo list files', 'yo switch to file',

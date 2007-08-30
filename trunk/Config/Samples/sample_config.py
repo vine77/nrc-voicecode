@@ -116,7 +116,7 @@ add_cmd_set(logic_ops)
 add_cmd_set(comparisons)
 add_cmd_set(empty_pairs)
 add_cmd_set(functional_pairs)
-##add_cmd_set(comment_aliases) # obsolete
+add_cmd_set(comment_aliases)
 add_cmd_set(comment_commands)
 add_cmd_set(misc_aliases)
 add_cmd_set(new_statement)
@@ -128,10 +128,12 @@ add_cmd_set(navigation_within_buffer)
 add_cmd_set(insertion_deletions)
 
 # new: QH
-##add_cmd_set(operator_cmds) # obsolete
+add_cmd_set(declare_variables)
+add_cmd_set(operator_cmds)
 
-
+#######################################
 # Python-specific
+#######################################
 
 add_cmd_set(misc_python)
 add_cmd_set(misc_python_cmds)
@@ -145,7 +147,9 @@ add_cmd_set(python_string_qualifiers)
 add_cmd_set(python_functional)
 py_std_func_calls.create(interpreter) 
 
+#######################################
 # C/C++-specific
+#######################################
 
 add_cmd_set(c_preprocessor_cmds)
 add_cmd_set(c_navigation)
@@ -156,7 +160,19 @@ add_cmd_set(c_preprocessor)
 add_cmd_set(c_syntax)
 add_cmd_set(c_reserved_words)
 
+#######################################
+# JavaScript-specific
+#######################################
+add_cmd_set(javascript_reserved_words)
+
+#######################################
+# php-specific
+#######################################
+add_cmd_set(php_special_lsas)
+
+#######################################
 # Emacs specific
+#######################################
 
 add_cmd_set(emacs_ctrl)
 
@@ -215,8 +231,19 @@ std_quotes.create(interpreter)
 #######################################
 # add sets for dictating 2-digit numbers
 #######################################
-
 std_small_numbers.create(interpreter, numeral_prefix = "numeral ")
 
+
+#######################################
+# variable formatting preferences
+#######################################
+
+##next lines set normal variables in several languages to lowerHungarian:
+#set_builder_preferences(['std_lower_intercaps', 'std_underscores', 'std_run_together'],
+#                        language=('python', 'javascript', 'php'))
+
+#next lines set variables after a class statement to UpperHungarian:
+#set_builder_preferences(['std_intercaps', 'std_underscores',
+#    'std_all_caps_underscores'], language=('python', 'java'), identifier = 'class')
 
 

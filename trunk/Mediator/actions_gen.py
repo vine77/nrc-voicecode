@@ -220,6 +220,7 @@ class ActionStyling(Action):
         .. [AppState] file:///./AppState.AppState.html"""
         debug.trace('ActionStyling.execute', 'state is %s' % repr(state))
         if state:
+            state.force_styling()   # let interpreter know a manual styling commands has been given
             styling = state.styling_state()
             styling.prefer(self.builder)
 

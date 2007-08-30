@@ -808,6 +808,7 @@ class NewMediatorObject(Object.OwnerObject):
         else:
             config_dict['interpreter'] = self
             config_dict['add_csc'] = self.add_csc
+            config_dict['add'] = self.add
             config_dict['add_csc_set'] = self.add_cmd_set
             config_dict['add_lsa'] = self.add_lsa
             config_dict['add_lsa_set'] = self.add_cmd_set
@@ -1357,6 +1358,20 @@ class NewMediatorObject(Object.OwnerObject):
         """
         
         self.interp.add_lsa(an_LSA)
+
+    def add(self, a_CSC_or_LSA):
+        """Add a language specific word.
+
+        **INPUTS**
+        
+        *LSAlias an_LSA* -- language-specific alias (see CmdInterp)
+        
+        **OUTPUTS**
+        
+        *none* -- 
+        """
+        
+        self.interp.add(a_CSC_or_LSA)
 
     def add_capitalization_word(self, an_LSA):
         """Add a capitalization word.
