@@ -246,4 +246,18 @@ std_small_numbers.create(interpreter, numeral_prefix = "numeral ")
 #set_builder_preferences(['std_intercaps', 'std_underscores',
 #    'std_all_caps_underscores'], language=('python', 'java'), identifier = 'class')
 
+###example adding you own commands 1:
+##acmd = CSCmd(spoken_forms=['new method'],
+##             meanings={contC: c_function_definition,
+##                      contPython: py_method_declaration},
+##             docstring='function definition')
+##add(acmd)
 
+###example adding you own commands with command set (2):
+##my_cmds = CmdSet('my commands')
+##acmd = CSCmd(spoken_forms=['new method'],
+##             meanings={contC: c_function_definition,
+##                      contPython: py_method_declaration},
+##             docstring='function definition')
+##my_cmds.add(acmd)
+##add_cmd_set(my_cmds)
