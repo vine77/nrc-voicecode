@@ -55,7 +55,7 @@ csc_python_else_docstring = 'else clause only python'
 csc_c_else_docstring = 'else clause only c'
 csc_equals_spoken_forms = ['equals']
 # only python, otherwise lsa:
-csc_equals_meanings ={ContPyInsideArguments(): ActionInsert("=")}  
+csc_equals_meanings ={ContInsideArguments('python'): ActionInsert("=")}  
                        
 csc_equals_docstring = 'equal sign inside arguments'
 
@@ -90,7 +90,7 @@ expected_index = \
                                  'setname': 'csc commands'}]],
             'equals': [[{'action': "Inserts '=^' in current buffer",
                          'doc': 'equal sign inside arguments',
-                         'equiv': 'ContPyInsideArguments: python',
+                         'equiv': 'ContInsideArguments: python',
                          'scope': 'immediate',
                          'setdescription': 'description of commands',
                          'setname': 'mixed commands'}],

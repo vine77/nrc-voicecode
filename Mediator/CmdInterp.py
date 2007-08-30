@@ -432,7 +432,7 @@ class CapsModifierElement(symbol_formatting.SymElement):
         builder.change_caps(self.caps, one_word = self.one_word)
 
 class CmdSet(Object):
-    """a collection of context-sensitive commands which may be deleted,
+    """a collection of context-sensitive commands a
     renamed, or giving synonyms prior to adding them to the command
     interpreter.
 
@@ -460,6 +460,29 @@ class CmdSet(Object):
         self.deep_construct(CSCmdSet, 
                             {'name': name, 'description': description, 
                              'commands': {}, 'aliases': {}}, args)
+        
+    def add(self, command, name = None):
+        """add a context-sensitive command OR an LSAlias command to the set
+
+        **INPUTS**
+
+        *CSCmd command* -- the command OR LSAlias command
+
+        *STR name* -- a unique name for the command, or None to use the
+        first item in the spoken form list
+
+        **OUTPUTS**
+
+        *none*
+        """
+        if isinstance(command, CSCmd):
+            self.add_csc(command, name)
+        elif isinstance(command, LSAlias):
+            self.add_lsa(command, name)
+        else:
+            raise TypeError("Invalid type for command that must be added to set %s: %s"% 
+                            (self.name, type(command)))
+
     def add_csc(self, command, name = None):
         """add a context-sensitive command to the set
 
@@ -1013,7 +1036,8 @@ class InterpState(OwnerObject):
         """
         self.deep_construct(InterpState, 
                             {
-                             'sym_style': sym_style
+                             'sym_style': sym_style,
+                             'manual_style': 0
                             }, 
                             args)
         self.add_owned('sym_style')
@@ -1025,6 +1049,18 @@ class InterpState(OwnerObject):
         Note: InterpState retains ownership of the SymStyling object
         """
         return self.sym_style
+
+    def set_manual_style(self):
+        self.manual_style = 1
+
+    def clear_manual_style(self):
+        """at begin of utterance clear manual_style flag"""
+        self.manual_style = 0
+
+    def force_styling(self):
+        """returns 1 if manual styling has been performed"""
+        return self.manual_style
+        
 
 class SymStyling(OwnerObject):
     """interface to the symbol styling methods of CmdInterp
@@ -1931,7 +1967,6 @@ class CmdInterp(OwnerObject):
             app.bind_to_buffer(initial_buffer)
 
         symbols = SymbolConstruction(self, app, self.builder_factory)
-
         if clear_state:
             self.styling_state.clear()
         
@@ -2808,6 +2843,15 @@ class CmdInterp(OwnerObject):
 
         self.index_csc(acmd)
 
+    def add(self, acmd_or_an_LSA):
+        """add either csc or lsa"""
+        if isinstance(acmd_or_an_LSA, CSCmd):
+            self.index_csc(acmd_or_an_LSA)
+        elif isinstance(acmd_or_an_LSA, LSAlias):
+            self.add_lsa(acmd_or_an_LSA)
+        else:
+            print 'invalid type of command for adding: %s'% type(acmd_or_an_LSA)
+            
     def add_cmd_set(self, set):
         """integrated add_csc_set and add_lsa_set
         """

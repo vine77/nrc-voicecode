@@ -77,25 +77,16 @@ class ContPyBeforeArgumentsTest(VoiceCodeRootTest.VoiceCodeRootTest):
         """testing the results in a python buffer"""
 
         self._open_empty_test_file('temp.py')
-        self._insert_in_active_buffer("""g = None
+        self._insert_in_active_buffer(\
+"""g = None
 h = func(3, 4)
 i = None'
 def test(i=5):
 j = i + 6
 k = test(i=7)""")
-        self._assert_active_buffer_content_is("""g = None
-h = func(3, 4)
-i = None'
-def test(i=5):
-    j = i + 6
-    k = test(i=7)<CURSOR>""")
+        self._assert_current_line_content_is("    k = test(i=7)<CURSOR>""")
         self._say("select func")
-        self._assert_active_buffer_content_is("""g = None
-h = func<CURSOR>(3, 4)
-i = None'
-def test(i=5):
-    j = i + 6
-    k = test(i=7)""")
+        self._assert_current_line_content_is("    h = func<CURSOR>(3, 4)") 
         self.assert_(self.context.applies(self._app()), 'func should apply, because before a function call')
         self._say("select four")
         self.failIf(self.context.applies(self._app()), '4 should not apply')
@@ -104,12 +95,7 @@ def test(i=5):
         self._say("select test")
         self.assert_(self.context.applies(self._app()), 'at test should apply')
         self._say("select None")
-        self._assert_active_buffer_content_is("""g = None
-h = func(3, 4)
-i = None<CURSOR>'
-def test(i=5):
-    j = i + 6
-    k = test(i=7)""")
+        self._assert_current_line_content_is("    i = None<CURSOR>")
         self.failIf(self.context.applies(self._app()), 'at None should NOT apply')
         
         

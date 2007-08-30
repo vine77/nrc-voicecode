@@ -44,9 +44,9 @@ expected_csc_index =  {\
          {'function of': [(contPython, gen_parens_pair)],
           'with arguments': [(contPython, gen_parens_pair)],
           'assign value': [(ContAny(), ActionInsert(" = ")),
-                                 (ContPyInsideArguments(), ActionInsert("="))],
+                                 (ContInsideArguments('python'), ActionInsert("="))],
           'equals': [(ContAny(), ActionInsert(" = ")),
-                         (ContPyInsideArguments(), ActionInsert("="))],
+                         (ContInsideArguments('python'), ActionInsert("="))],
           'else': [(contPython, ActionInsertNewClause('($|\n)',
                                                                      code_bef = 'else:\n\t',
                                                                      code_after = ''))]},
@@ -200,7 +200,7 @@ class CSCmdTest(VoiceCodeRootTest.VoiceCodeRootTest):
          cscs = CSCmdSet('csc demo set', description='description of csc demo set')
          # test the sorting of the csc :
          cscs.add_csc(CSCmd(spoken_forms=['hello'],
-                                     meanings={ContPyBeforeArguments(): actionBeforeArguments,
+                                     meanings={ContBeforeArguments(all_languages): actionBeforeArguments,
                                                contAny: actionHello,
                                                contBlankLine: actionBlankLine},
                                     docstring="hello in csc set testlist1"))                                 
@@ -218,7 +218,7 @@ class CSCmdTest(VoiceCodeRootTest.VoiceCodeRootTest):
   'setname': 'csc demo set'},
  {'action': "Inserts 'csc before arguments^' in current buffer",
   'doc': 'hello in csc set testlist1',
-  'equiv': 'ContPyBeforeArguments: python',
+  'equiv': 'ContBeforeArguments: any',
   'scope': 'immediate',
   'setdescription': 'description of csc demo set',
   'setname': 'csc demo set'},
@@ -287,7 +287,7 @@ class CSCmdTest(VoiceCodeRootTest.VoiceCodeRootTest):
         actionBeforeArguments = ActionInsert("csc before arguments")
         contBlankLine = ContBlankLine()
         contAny = ContAny()
-        CAList = [(ContPyBeforeArguments(), actionBeforeArguments),
+        CAList = [(ContBeforeArguments('python'), actionBeforeArguments),
                   (contAny, actionHello), 
                   (contBlankLine, actionBlankLine)]
 
@@ -317,7 +317,7 @@ class CSCmdTest(VoiceCodeRootTest.VoiceCodeRootTest):
   'setname': 'csc demo set'},
  {'action': "Inserts 'csc before arguments^' in current buffer",
   'doc': 'hello in csc test permutations',
-  'equiv': 'ContPyBeforeArguments: python',
+  'equiv': 'ContBeforeArguments: python',
   'scope': 'immediate',
   'setdescription': 'description of csc demo set',
   'setname': 'csc demo set'},

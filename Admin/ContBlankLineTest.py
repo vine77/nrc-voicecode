@@ -23,7 +23,7 @@ class ContBlankLineTest(VoiceCodeRootTest.VoiceCodeRootTest):
        self.assert_(isinstance(context, cont_gen.ContBlankLine))
        self.assert_(isinstance(context, Context.Context))
        # next one should be false:
-       self.failIf(isinstance(context, cont_gen.ContPyInsideArguments))
+       self.failIf(isinstance(context, cont_gen.ContInsideArguments))
        
    def test_ContBlankLine_only_applies_if_cursor_is_on_a_blank_line(self):
        self._open_empty_test_file('temp.py')

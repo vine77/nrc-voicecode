@@ -557,7 +557,7 @@ class WhatCanISay(object):
                         cont = m['equiv']
                         scope = m['scope']
                         action = m['action']
-                        if action.startswith('no doc'):
+                        if action == 'no docstring available':
                             if m['doc']:
                                 action = m['doc']
                     elif self.info_is_lsa(meaning):
@@ -590,6 +590,10 @@ class WhatCanISay(object):
                             cont = m['equiv']
                             scope = m['scope']
                             action = m['action']
+                            if action == 'no docstring available':
+                                if m['doc']:
+                                    action = m['doc']
+
                             trmeanings.append(self.fill_row(cont, scope, action, class_name_meanings))
                             rows_inside += 1
                     elif self.info_is_lsa(meaning):
