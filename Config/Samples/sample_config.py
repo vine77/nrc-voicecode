@@ -246,18 +246,37 @@ std_small_numbers.create(interpreter, numeral_prefix = "numeral ")
 #set_builder_preferences(['std_intercaps', 'std_underscores',
 #    'std_all_caps_underscores'], language=('python', 'java'), identifier = 'class')
 
-###example adding you own commands 1:
+#####example adding you own commands 1:
 ##acmd = CSCmd(spoken_forms=['new method'],
 ##             meanings={contC: c_function_definition,
 ##                      contPython: py_method_declaration},
 ##             docstring='function definition')
 ##add(acmd)
+#####end example
 
-###example adding you own commands with command set (2):
-##my_cmds = CmdSet('my commands')
-##acmd = CSCmd(spoken_forms=['new method'],
-##             meanings={contC: c_function_definition,
-##                      contPython: py_method_declaration},
-##             docstring='function definition')
-##my_cmds.add(acmd)
-##add_cmd_set(my_cmds)
+###### Example adding your own commands in a new CmdSet:
+##hello_cmds = CmdSet(name = 'hello commands',
+##                    description = 'just illustrating how to create a Command set')
+### Create the first CSC command and add it to the set
+##acmd = CSCmd(spoken_forms=['hello to planet', 'greetings to planet'], 
+##             meanings={ContAny(): 
+##                       ActionInsert('Hello to planet ', 
+##                                     '!!!')}, 
+##             docstring='prints a hello to plane.')
+##hello_cmds.add(acmd)
+### Create a second CSC command and add it to the set directly:
+##hello_cmds.add(CSCmd(spoken_forms=['hello from planet', 'greetings from planet'], 
+##                     meanings={ContAny(): 
+##                        ActionInsert('Hello from planet: !!')}))  # docstring is optional
+### Create afirst LSAlias command and add it to the set:
+##acmd = LSAlias(['hello to you', 'greeting to you'], 
+##     {all_languages: 'hello to you'}, name = 'hello_to_you')
+##hello_cmds.add(acmd)
+##
+### Create a second LSAlias command and add it to the set directly
+### for 'java' (one of the c_style_languases) the command will be in all caps:
+##hello_cmds.add(LSAlias(['hello from me', 'greeting from me'], 
+##     {c_style_languages: 'hello from me', 'java': 'HELLO FROM ME'}))
+### Add the command set to the command interpreter (CmdInterp):
+##add_cmd_set(hello_cmds)
+##### end example...
