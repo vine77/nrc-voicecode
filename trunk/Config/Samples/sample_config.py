@@ -1,3 +1,4 @@
+
 #  should the RecogStartMgr trust that the current
 #  window corresponds to the editor when the editor first connects to
 #  VoiceCode, or when it notifies VoiceCode of a new window.
@@ -233,19 +234,6 @@ std_quotes.create(interpreter)
 #######################################
 std_small_numbers.create(interpreter, numeral_prefix = "numeral ")
 
-
-#######################################
-# variable formatting preferences
-#######################################
-
-##next lines set normal variables in several languages to lowerHungarian:
-#set_builder_preferences(['std_lower_intercaps', 'std_underscores', 'std_run_together'],
-#                        language=('python', 'javascript', 'php'))
-
-#next lines set variables after a class statement to UpperHungarian:
-#set_builder_preferences(['std_intercaps', 'std_underscores',
-#    'std_all_caps_underscores'], language=('python', 'java'), identifier = 'class')
-
 #####example adding you own commands 1:
 ##acmd = CSCmd(spoken_forms=['new method'],
 ##             meanings={contC: c_function_definition,
@@ -280,3 +268,16 @@ std_small_numbers.create(interpreter, numeral_prefix = "numeral ")
 ### Add the command set to the command interpreter (CmdInterp):
 ##add_cmd_set(hello_cmds)
 ##### end example...
+
+#######################################
+# variable formatting preferences
+#######################################
+
+####next lines set normal variables in several languages to lowerHungarian:
+##set_builder_preferences(['std_lower_intercaps', 'std_underscores', 'std_run_together'],
+##                        language=('python', 'javascript', 'php'))
+##
+###next lines set variables after a class statement to UpperHungarian:
+##set_builder_preferences(['std_intercaps', 'std_underscores',
+##    'std_all_caps_underscores'], language=all_languages, identifier = 'class')
+
