@@ -1909,9 +1909,9 @@ add_identifier('attribute')
 add_identifier('private attribute', 'attribute')
 
 set_builder_preferences(['std_underscores', 'std_intercaps',
-    'std_all_caps_underscores'])
+    'std_all_caps_underscores'], language=all_languages)
 set_builder_preferences(['std_intercaps', 'std_underscores',
-    'std_all_caps_underscores'], identifier = 'class')
+    'std_all_caps_underscores'], identifier = 'class', language=all_languages)
 
 ###############################################################################
 # Add words which are missing from the SR vocab
