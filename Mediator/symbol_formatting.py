@@ -28,7 +28,7 @@ import vc_globals
 import util
 import debug
 
-import copy, exceptions, os, re, string, sys
+import copy, exceptions, os, re, string, sys, types
 import traceback
 
 
@@ -437,6 +437,13 @@ class SymBuilderFactory(Object):
 
         *none*
         """
+        if language == None:
+          	raise vc_globals.DeprecationError("set_builder_preferences: 'None' deprecated, use 'all_languages' instead")
+        if type(language) == types.TupleType:
+        	  for lang in language:
+        	  	  self.set_preferences(builders, identifier, lang)
+        	  return
+        # now for a string language:
         try:
             preferences = self.preferences[language]
         except KeyError:

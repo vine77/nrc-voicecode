@@ -86,7 +86,10 @@ class LSAlias(Object):
 
     *{STR: STR}* meanings -- Dictionary of language specific
      meanings. Key is the language name and value is the written form
-     of the LSA for that langugage. The key None is not permitted any more...
+     of the LSA for that langugage. The key None is not permitted any more.
+     A key is a string ('C', 'python', ...) or a tuple of strings:
+     ('C', 'perl', 'javascript'), ...
+     predefined tuples are in all_languages and in c_style_languages.
 
     *INT* spacing -- spacing flags, from SpacingState (Note: only a
     handful of these spacing flags are currently used)
