@@ -23,12 +23,18 @@
 """
 
 from Object import Object, OwnerObject
+from utilsqh import peek_ahead 
 import debug
 import re
 import string
 import actions_gen
 
 import CmdInterp, AppState
+
+#construct regular expression for speeding up at runtime:
+# eg reNext etc.
+for t in ('next', 'previous', 'before', 'after', 'back', 'kill', 'select', 'go', 'through', 'until'):
+    exec('re%s = re.compile(r"%s", re.I)'% (t.capitalize(), t))
 
 
 class GramCommon(Object):
@@ -255,6 +261,34 @@ class WinGram(GramCommon, OwnerObject):
                 "Full utterance was %s" % repr(words))
         return s
 
+    def get_smaller_ranges_only(self, ranges):
+        """return a list of ranges with smallest possible length
+
+        so if (1,10) and (1,20) are in ranges only (1,10) is returned
+        and if (3,20) and (12,20) are in ranges, only (12,20) is returned.
+
+        """
+        if not ranges: return ranges # empty list
+        # first rule out larger ranges with same start:
+        reversed = []
+        prev_start = -1
+        for (start, end) in ranges:
+            if start == prev_start:
+                continue   # new entry with same start is a larger range
+            prev_start = start
+            reversed.append( (-end, -start) )
+
+        reversed.sort()
+        result = []
+        prev_end = 1
+        for (end, start) in reversed:
+            if end == prev_end:
+                continue   # new entry with same start is a larger range
+            prev_end = end
+            result.append( (-start, -end) )
+        result.sort()
+        return result
+        
         
 class DictWinGram(WinGram):
     """abstract base class for window-specific dictation grammar interfaces
@@ -489,27 +523,38 @@ class SelectWinGram(WinGram):
         debug.trace('SelectWinGram.find_closest', 'verb=%s, spoken_form=%s, ranges=%s' % 
                                                    (verb, spoken_form, repr(ranges)))
         direction = None
-        if re.search('previous', verb, re.IGNORECASE):
-            direction = -1
-        if re.search('next', verb, re.IGNORECASE):                
+        if reThrough.search(verb) or reKill.search(verb) or reUntil.search(verb):
             direction = 1
+        # select back until or select back through is included here:
+        if rePrevious.search(verb) or reBack.search(verb):
+            direction = -1
+        if reNext.search(verb):
+            direction = 1
+        
 
         mark_selection = 1
-        if re.search('go', verb, re.IGNORECASE) or \
-                re.search('before', verb, re.IGNORECASE) or \
-                re.search('after', verb, re.IGNORECASE):
+        if reGo.search(verb) or \
+                reBefore.search(verb) or \
+                reAfter.search(verb):
             mark_selection = 0
 
         where = 1
-        if re.search('before', verb, re.IGNORECASE):
+        if reBefore.search(verb):
             where = -1
-        if re.search('after', verb, re.IGNORECASE):
+        if reAfter.search(verb):
             where = 1
-
-
-        debug.trace('SelectWinGram.find_closest', 'direction=%s, where=%s' % (direction, where))
+        through = until = 0
+        if reThrough.search(verb):
+            through = 1
+        if reUntil.search(verb):
+            until = 1
+            
+        debug.trace('SelectWinGram.find_closest', 'direction=%s, where=%s, through=%s, until=%s' %
+                    (direction, where, through, until))
  
         ranges.sort()
+        # rule out duplicate larger ranges
+        ranges = self.get_smaller_ranges_only(ranges)
         closest_range_index = \
             self.app.closest_occurence_to_cursor(ranges, 
                 regexp=spoken_form, 
@@ -537,12 +582,38 @@ class SelectWinGram(WinGram):
         debug.trace('SelectWinGram.find_closest', '** move_curs_to_pos=%s, self.app.cur_pos()=%s' % 
                     (move_curs_to_pos, self.app.cur_pos()))
 
+        if through:
+            # extend ranges to cursor pos
+            start, end = self.app.get_selection()
+            new_ranges = []
+            for x in ranges:
+                if start < x[0]:
+                    new_ranges.append( (start, x[1]) )
+                else:
+                    new_ranges.append( (x[0], end) )
+            ranges = new_ranges
+            debug.trace('SelectWinGram.find_closest', '** THROUGH with direction: %s, new range: %s'%
+                        (direction, ranges))
+        elif until:
+            # extend ranges to cursor pos, excluding selected range!
+            start, end = self.app.get_selection()
+            new_ranges = []
+            for x in ranges:
+                if start < x[0]:
+                    new_ranges.append( (start, x[0]) )
+                else:
+                    new_ranges.append( (x[1], end) )
+            ranges = new_ranges
+            debug.trace('SelectWinGram.find_closest', '** UNTIL with direction: %s, new range: %s'%
+                        (direction, ranges))
         #
         # Mark selection and/or move cursor  to the appropriate end of
         # the selection.
         #
         debug.trace('SelectWinGram.find_closest', 
             '** mark_selection=%s' % mark_selection)
+        debug.trace('SelectWinGram.find_closest', 
+            '** index: %s range of this index: %s' % (closest_range_index, ranges[closest_range_index]))
         a = actions_gen.ActionNavigateByPseudoCode(possible_ranges = ranges, 
             select_range_no = closest_range_index,
             buff_name = self.buff_name, cursor_at=where, 
@@ -567,6 +638,7 @@ class SelectWinGram(WinGram):
             match=ranges[closest_range_index],
             buff_name = self.buff_name)
 
+        
 
 class BasicCorrectionWinGram(WinGram):
     """abstract base class for window-specific grammar for basic
@@ -785,6 +857,9 @@ class WinGramFactory(Object):
     can be used to specify the direction in which the search will be done
     for a SelectPseudocode utterance.
 
+    [STR] *select_delete_words = ['select through', 'select back until', etc]* -- list of words that
+    can be used to select from the current cursor position. To be augmented with 'kill through', etc.
+
     STR *through_word* -- word for selecting a range with the 
     selection grammars
 
@@ -811,6 +886,10 @@ class WinGramFactory(Object):
         select_verbs = ['select'], 
         select_cursor_position_words = ['go before', 'go after', 
             'insert before', 'insert after', 'before', 'after'],
+        select_delete_words = ['select through', 'select back through', 
+##                               'kill through',	'kill back through',
+##                               'kill until', 'kill back until',
+                               'select until', 'select back until'],
         select_direction_words = ['next', 'previous'],
         through_word = 'through',
         scratch_words = None,
@@ -825,13 +904,15 @@ class WinGramFactory(Object):
         [STR] *select_verbs = ['go', 'select', 'insert', 'correct']* -- list 
         of verbs to specify the action to be done by a SelectPseudocode utterance.
 
-        [STR] *select_cursor_position_words = ['before', 'after']* -- list of words that can be 
+        [STR] *sixition_words = ['before', 'after']* -- list of words that can be 
         used to specify the position of the cursor in a SelectPseudocode utterance.
     
         [STR] *select_direction_words = ['next', 'previous']* -- list of words that
         can be used to specify the direction in which the search will be done
         for a SelectPseudocode utterance.
 
+				[STR] *select_delete_words: words that do a single selection, from the cursor until first
+								occurrence of word...
 
         *STR* through_word -- word for selecting a range with the 
         selection grammars
@@ -854,6 +935,7 @@ class WinGramFactory(Object):
 
              'select_cursor_position_words': select_cursor_position_words,
              'select_direction_words': select_direction_words,
+             'select_delete_words': select_delete_words,
              'through_word' : through_word,
              'scratch_words': scratch_words,
              'correct_words': correct_words,
@@ -977,6 +1059,9 @@ class WinGramFactory(Object):
                this_phrase = '%s %s' % (put_cursor, direction)
                phrases.append(this_phrase)
                 
+       for sel_del in self.select_delete_words:
+           phrases.append(sel_del)
+           
        debug.trace('WinGramFactory._select_phrases', 'returning phrases=%s' % repr(phrases))
        return phrases
 
@@ -1957,6 +2042,8 @@ class SimpleSelection(WinGram):
         #
         direction = None
         if re.search('previous', verb, re.IGNORECASE):
+            direction = -1
+        if re.search('back', verb, re.IGNORECASE):
             direction = -1
         if re.search('next', verb, re.IGNORECASE):                
             direction = 1

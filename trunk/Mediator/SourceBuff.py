@@ -262,6 +262,7 @@ class SourceBuff(OwnerObject):
         **OUTPUTS**
         
         *INT* distance -- distance between the two regions of text
+              
         """
 
         distance = min(abs(region1_start - region2_start), abs(region1_start - region2_end), abs(region1_end - region2_start), abs(region1_end - region2_end))
@@ -1697,66 +1698,46 @@ class SourceBuff(OwnerObject):
               'occurences=%s, direction=%s, regexp="%s", where=%s' % 
               (repr(occurences), direction, regexp, where))
                       
-        closest_index = None
+        closest_index = 0
+        if not occurences: return None
         
         #
         # Look in the list of occurences for the one closest to the cursor
         # in the right direction
         #
         shortest_distance = None
-        for ii in range(len(occurences)):
+        length_of_closest_region = 1000 # further away not considered...
+        for ii, occurence in enumerate(occurences):
         
             debug.trace('SourceBuff.closest_occurence_to_cursor', 
-                        'ii=%s, cur_pos()=%s, occurences[ii]=%s' % (ii, self.cur_pos(), occurences[ii]))
+                        'ii=%s, cur_pos()=%s, occurence=%s' % (ii, self.cur_pos(), occurence))
 
-            if self.ignore_occurence(occurences[ii], ignore_overlapping_with_cursor,
+            if self.ignore_occurence(occurence, ignore_overlapping_with_cursor,
                                     ignore_left_of_cursor,
                                     ignore_right_of_cursor):
                debug.trace('SourceBuff.closest_occurence_to_cursor', 
-                           'skipping occurences[ii]=%s' % repr(occurences[ii]))                                                    
+                           'skipping occurence=%s' % repr(occurence))                                                    
                continue
-
-            if direction == None:
-                #
-                # Don't care if closest occurence is before or after cursor
-                #
-                distance = self.region_distance(occurences[ii][0], occurences[ii][1], self.cur_pos(), self.cur_pos())
-                if ((shortest_distance == None or distance < shortest_distance)
-                    and not self.same_as_previous_search(regexp, direction,
-                                                         where, occurences[ii])):
-                    shortest_distance = distance
-                    closest_index = ii
-            elif direction < 0:
-                #
+            if direction < 0:
                 # Looking for closest occurence before cursor ...
-                #
-                if occurences[ii][0] > self.cur_pos():
-                    #
+                if occurence[0] > self.cur_pos():
                     # We have passed cursor.
-                    #
                     break
-                else:
-                    #
-                    # We haven't passed the cursor. So this is
-                    # closest occurence before cursor yet.
-                    #
-                    if not self.same_as_previous_search(regexp, direction,
-                                                   where, occurences[ii]):
-                        closest_index = ii
-            else:
-                #
-                # Looking for closest occurence after cursor ...
-                #                
-                if occurences[ii][1] >= self.cur_pos():
-                    #
-                    # ... and we have just passed cursor. So this
-                    # is the closest occurence after cursor
-                    #
-                    if not self.same_as_previous_search(regexp, direction,
-                                                   where, occurences[ii]):
-                        closest_index = ii
-                        break
+            elif direction > 0:
+                # Looking for closest occurence before cursor ...
+                if occurence[1] < self.cur_pos():
+                    # ignore
+                    continue
 
+            distance = self.region_distance(occurence[0], occurence[1], self.cur_pos(), self.cur_pos())
+            debug.trace('SourceBuff.closest_occurence_to_cursor', 
+                       'checking: %s, distance: %s' % (repr(occurence), distance))
+
+            if ((shortest_distance == None or distance < shortest_distance)
+                and not self.same_as_previous_search(regexp, direction,
+                                                     where, occurence)):
+                shortest_distance = distance
+                closest_index = ii
         return closest_index
 
     def ignore_occurence(self, occurence, ignore_overlapping_with_cursor,

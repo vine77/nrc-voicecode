@@ -57,7 +57,7 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       self._commands().say(utterance, user_input, never_bypass_sr_recog, echo_utterance, echo_cmd)
       
    def _goto(self, pos):
-      self._app().goto(self)
+      self._app().goto(pos)
       
    def _set_selection(self, range, cursor_at = 1):
       self._app().set_selection(range, cursor_at)
@@ -113,6 +113,18 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       got_cur_pos = self._app().find_buff(buff_name).cur_pos()
       got_content = got_content[:got_cur_pos] + "<CURSOR>" + got_content[got_cur_pos:]      
       return got_content      
+
+   def _get_buffer_content_with_selection_position(self, buff_name=None):
+      got_content = self._app().find_buff(buff_name).contents()
+      start, end = self._app().find_buff(buff_name).get_selection()
+      if start > end:
+         raise ValueError("test error, start > end: %s, %s"% (start, end))
+      elif start == end:
+         got_content = got_content[:start] + "<CURSOR>" + got_content[start:]
+      else:
+         got_content = got_content[:start] + "<SEL_START>" + got_content[start:end] + \
+                            "<SEL_END>" + got_content[end:]
+      return got_content      
       
       
    def _len(self):
@@ -143,6 +155,11 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       
    def _assert_active_buffer_content_is(self, exp_content, mess=""):
       got_content = self._get_buffer_content_with_cursor_position()
+      self.assert_equal(exp_content, got_content, 
+                        mess + "\nContent of the active buffer was not as expected.")
+         
+   def _assert_active_buffer_content_with_selection_is(self, exp_content, mess=""):
+      got_content = self._get_buffer_content_with_selection_position()
       self.assert_equal(exp_content, got_content, 
                         mess + "\nContent of the active buffer was not as expected.")
          

@@ -604,6 +604,7 @@ add_test('mediator_console', test_mediator_console, desc='testing mediator conso
 # Testing Select Pseudocode console
 ###############################################################################
 
+add_unittest('SelectText', desc='Tests for select text, including through')
 
 def test_select_pseudocode():
 
