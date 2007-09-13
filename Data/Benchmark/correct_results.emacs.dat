@@ -953,7 +953,7 @@ Heard integer index equals zero
  44: char *Foo::bar()
  45: {
  46: 
- 47: for (int index = 0<CURSOR>; ; )
+ 47: for (int index=0<CURSOR>; ; )
  48:   {
  49: 
  50:   }
@@ -961,7 +961,7 @@ Heard after semi index
  44: char *Foo::bar()
  45: {
  46: 
- 47: for (int index = 0; index<CURSOR>; )
+ 47: for (int index=0; index<CURSOR>; )
  48:   {
  49: 
  50:   }
@@ -969,7 +969,7 @@ Heard is less or equal to
  44: char *Foo::bar()
  45: {
  46: 
- 47: for (int index = 0; index <= <CURSOR>; )
+ 47: for (int index=0; index <= <CURSOR>; )
  48:   {
  49: 
  50:   }
@@ -977,7 +977,7 @@ Heard platypus count
  44: char *Foo::bar()
  45: {
  46: 
- 47: for (int index = 0; index <= platypus_count<CURSOR>; )
+ 47: for (int index=0; index <= platypus_count<CURSOR>; )
  48:   {
  49: 
  50:   }
@@ -985,13 +985,13 @@ Heard after semi index increment
  44: char *Foo::bar()
  45: {
  46: 
- 47: for (int index = 0; index <= platypus_count; index++<CURSOR>)
+ 47: for (int index=0; index <= platypus_count; index++<CURSOR>)
  48:   {
  49: 
  50:   }
 Heard loop body
  46: 
- 47: for (int index = 0; index <= platypus_count; index++)
+ 47: for (int index=0; index <= platypus_count; index++)
  48:   {
  49: <CURSOR>
  50:   }
@@ -999,7 +999,7 @@ Heard loop body
  52: #endif
 Heard while loop
  46: 
- 47: for (int index = 0; index <= platypus_count; index++)
+ 47: for (int index=0; index <= platypus_count; index++)
  48:   {
  49:     while (<CURSOR>)
  50:       {
@@ -1007,13 +1007,13 @@ Heard while loop
  52:       }
 Heard conditional function with argument index
  46: 
- 47: for (int index = 0; index <= platypus_count; index++)
+ 47: for (int index=0; index <= platypus_count; index++)
  48:   {
  49:     while (conditional_function(index<CURSOR>))
  50:       {
  51: 
  52:       }
-Heard do some stuff
+Heard do the following some stuff
  48:   {
  49:     while (conditional_function(index))
  50:       {
@@ -1093,7 +1093,7 @@ Heard case single-quotes bravo
  59: 
  60: 
  61: 	}
-Heard after colon new line do something different parens jump out semi new line
+Heard after colon new line do the following something different parens jump out semi new line
  57: 	  break;
  58: 	case 'b':
  59: 	  something_different();
@@ -1835,6 +1835,7 @@ THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test 
 _cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  test_comment  test_procedure  testing_adding_above  testing_declaration  testing_other_pointers  testing_pointers  the_value  this  tiger  triangle  type  
 Unresolved abbreviations are:
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 
 *** End of compilation test ***
 
@@ -2143,7 +2144,7 @@ Heard new statement if some flag then
   5: 
 
 *** End of source buffer ***
-Heard do some more stuff with arguments some argument
+Heard do the following some more stuff with arguments some argument
 *** Start of source buffer ***
   1: if (some_flag)
   2:   {
@@ -2152,7 +2153,7 @@ Heard do some more stuff with arguments some argument
   5: 
 
 *** End of source buffer ***
-Heard else do some stuff again with arguments some other argument
+Heard else do the following some stuff again with arguments some other argument
   5: 
   6: else
   7: {
@@ -2170,7 +2171,7 @@ Heard bug below dot following one will not be inserted at the right level
  10: 
 
 *** End of source buffer ***
-Heard else do some stuff without arguments
+Heard else do the following some stuff without arguments
  10: 
  11: else
  12: {
@@ -2385,27 +2386,22 @@ EdSim instance EdSim(0) connected
 
 
 *******************************************************************************
-* Name        : ContBlankLine
-* Description : Tests for the blank line context class.
-*******************************************************************************
-
-tests passed
-
-*******************************************************************************
-* Name        : ContLanguage
-* Description : Tests for different language contexts.
-*******************************************************************************
-
-tests passed
-
-*******************************************************************************
-* Name        : ContPyBeforeArguments
+* Name        : ContBeforeArguments
 * Description : Tests for being before open paren of a function def or call.
 *******************************************************************************
 
 Heard select here
+Heard select here
+Heard select here
+Heard select here
+Heard select here
+Heard before here
 Heard select foxtrot
 Heard select foxtrot
+Heard select outside
+Heard select outside
+Heard select outside
+Heard select outside
 Heard select outside
 Heard select func
 Heard select four
@@ -2415,10 +2411,23 @@ Heard select none
 tests passed
 
 *******************************************************************************
-* Name        : ContPyInsideArguments
+* Name        : ContBlankLine
+* Description : Tests for the blank line context class.
+*******************************************************************************
+
+tests passed
+
+*******************************************************************************
+* Name        : ContInsideArguments
 * Description : Tests for being inside the argument list of a function.
 *******************************************************************************
 
+Heard select inside
+Heard select inside
+Heard select inside
+Heard select inside
+Heard select inside
+Heard select inside
 Heard select inside
 Heard select inside
 Heard select inside
@@ -2430,6 +2439,22 @@ Heard select six
 Heard select seven
 Heard select test
 Heard select none
+Heard select three
+Heard select four
+Heard select five
+Heard select bravo
+Heard select charlie
+Heard select kilo
+Heard select test
+Heard select none
+Heard select x-ray
+tests passed
+
+*******************************************************************************
+* Name        : ContLanguage
+* Description : Tests for different language contexts.
+*******************************************************************************
+
 tests passed
 
 *******************************************************************************
@@ -2773,7 +2798,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01D1B630>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01D949F0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2836,6 +2861,7 @@ _cached_symbols_as_one_string[y] is:
     y  
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -2966,6 +2992,7 @@ _cached_symbols_as_one_string[w] is:
 _cached_symbols_as_one_string[x] is:
     x  
 Unresolved abbreviations are:
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'constr': appears in ['profConstrLargeNonObj', 'profConstrLargeObj', 'profConstrSmallNonObj', 'profConstrSmallObj']
 'execfile': appears in ['execfile']
 'expandvars': appears in ['expandvars']
@@ -3032,6 +3059,7 @@ _cached_symbols_as_one_string[y] is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -3078,6 +3106,7 @@ _cached_symbols_as_one_string[y] is:
 
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'x': appears in ['x']
 'y': appears in ['y']
 
@@ -3181,45 +3210,21 @@ tests passed
 
 
 =======setting up WhatCanISay test instance
-Warning: when adding CSC spoken form ['else', 'duplicate'],
-Trying to define conflicting contexts
-first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
+
 =======setting up WhatCanISay test instance
-Warning: when adding CSC spoken form ['else', 'duplicate'],
-Trying to define conflicting contexts
-first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
+
 =======setting up WhatCanISay test instance
-Warning: when adding CSC spoken form ['else', 'duplicate'],
-Trying to define conflicting contexts
-first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
+
 =======setting up WhatCanISay test instance
-Warning: when adding CSC spoken form ['else', 'duplicate'],
-Trying to define conflicting contexts
-first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
+
 =======setting up WhatCanISay test instance
-Warning: when adding CSC spoken form ['else', 'duplicate'],
-Trying to define conflicting contexts
-first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
+
 =======setting up WhatCanISay test instance
-Warning: when adding CSC spoken form ['else', 'duplicate'],
-Trying to define conflicting contexts
-first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
+
 =======setting up WhatCanISay test instance
-Warning: when adding CSC spoken form ['else', 'duplicate'],
-Trying to define conflicting contexts
-first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
+
 =======setting up WhatCanISay test instance
-Warning: when adding CSC spoken form ['else', 'duplicate'],
-Trying to define conflicting contexts
-first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
+
 testing default wcisay website for language: C
 
 testing the current context website "blank" for language: C
@@ -3235,25 +3240,17 @@ testing the current context website "blank" for language: python
 testing the current context website "filled" for language: python
 
 =======setting up WhatCanISay test instance
-Warning: when adding CSC spoken form ['else', 'duplicate'],
-Trying to define conflicting contexts
-first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
+
 =======setting up WhatCanISay test instance
-Warning: when adding CSC spoken form ['else', 'duplicate'],
-Trying to define conflicting contexts
-first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
+
 =======setting up WhatCanISay test instance
-Warning: when adding CSC spoken form ['else', 'duplicate'],
-Trying to define conflicting contexts
-first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
+
 =======setting up WhatCanISay test instance
-Warning: when adding CSC spoken form ['else', 'duplicate'],
-Trying to define conflicting contexts
-first:  <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)
-second: <class 'cont_gen.ContBlankLine'> (scope: immediate, equivalence_key: BlankLine: python)tests passed
+
+=======setting up WhatCanISay test instance
+
+=======setting up WhatCanISay test instance
+tests passed
 
 *******************************************************************************
 * Name        : am_dictionaries
@@ -3978,6 +3975,7 @@ List of unresolved abbreviations
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
@@ -4420,6 +4418,7 @@ List of unresolved abbreviations
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
@@ -5013,6 +5012,7 @@ List of unresolved abbreviations
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -5533,6 +5533,7 @@ List of unresolved abbreviations
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -5975,6 +5976,7 @@ List of unresolved abbreviations
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -8783,7 +8785,7 @@ _cached_symbols_as_one_string[y] is:
 >>> Testing console command: say(['for', 'loop', 'horiz_pos\\horizontal position', 'equals', '0\\zero', 'loop', 'body'], user_input='None')
 Heard for loop horizontal position equals zero loop body
 *** Start of source buffer ***
-  1: for (horiz_pos = 0; ; )
+  1: for (horiz_pos=0; ; )
   2: {
   3: <CURSOR>
   4: }
@@ -8796,7 +8798,7 @@ Heard for loop horizontal position equals zero loop body
 
 Heard select horizontal position equals
 *** Start of source buffer ***
-  1: for (<SEL_START>horiz_pos =<SEL_END> 0; ; )
+  1: for (<SEL_START>horiz_pos=<SEL_END>0; ; )
   2: {
   3: 
   4: }
@@ -17045,5 +17047,5 @@ WARNING: Call to deprecated method TestCaseWithHelpers.assert_sequences_have_sam
 
 
 -----------------------------------------------
-Test suite completed in:  464.671999931 secs
+Test suite completed in:  831.765000105 secs
 -----------------------------------------------
