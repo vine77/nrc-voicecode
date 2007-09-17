@@ -2798,7 +2798,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01DB5BD0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01DB5BA0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -3227,28 +3227,7 @@ in the same directory.
 *******************************************************************************
 
 Heard new variable equals old variable
-
-
---------------- failures -----------------
-
-
----------- test_builder_preferences_python (SymbolResultTest.SymbolResultTest) --------
-
-  File "%VCODE_HOME%\Admin\SymbolResultTest.py", line 46, in test_builder_preferences_python
-    self._assert_active_buffer_content_is('newVariable = oldVariable<CURSOR>')
-  File "%VCODE_HOME%\Admin\VoiceCodeRootTest.py", line 159, in _assert_active_buffer_content_is
-    mess + "\nContent of the active buffer was not as expected.")
-  ...
-AssertStringEqualsFailed: 
-Content of the active buffer was not as expected.
-----
-Strings differed. See triple tilde (~~~) position below.
-Expected:
-   'new~~~Variable = oldVariable<CURSOR>'
-Got:
-   'new~~~_variable = old_variable<CURSOR>'
-
-
+tests passed
 
 *******************************************************************************
 * Name        : TestCaseWithHelpers
@@ -17097,5 +17076,5 @@ WARNING: Call to deprecated method TestCaseWithHelpers.assert_sequences_have_sam
 
 
 -----------------------------------------------
-Test suite completed in:  929.094000101 secs
+Test suite completed in:  861.342999935 secs
 -----------------------------------------------
