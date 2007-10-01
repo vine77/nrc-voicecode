@@ -281,7 +281,7 @@ in the 'vr-deprecated-log-buff-name buffer.")
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
 
-(cl-puthash "vcode-cmd-delete" 1 vcode-traces-on)
+;;;; (cl-puthash "vcode-cmd-delete" 1 vcode-traces-on)
 
 (defvar vr-deprecated-log-send nil "*If non-nil, vr-deprecated mode logs all data sent to the vr-deprecated
 subprocess in the 'vr-deprecated-log-buff-name buffer.")

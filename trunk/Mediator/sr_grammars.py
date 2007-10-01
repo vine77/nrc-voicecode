@@ -455,9 +455,23 @@ class SelectWinGram(WinGram):
         """
         debug.virtual('SelectWinGram._set_visible')
 
+    def _get_visible(self, vis_start=None, vis_end=None):
+        """return, as string, the visible part of the buffer
+
+        if vis_start and vis_end NOT given, get them from the app
+        """
+        if vis_start == None or vis_end == None:
+            vis_start, vis_end = self.app.get_visible(buff_name = self.buff_name)
+            self.vis_start = vis_start
+            self.vis_end = vis_end
+        return self.app.get_text(self.vis_start, self.vis_end, buff_name = self.buff_name)
+
+
     def find_visible(self):
         """find the currently visible range for self.buff_name
         and checks with buffer for the currently visible range.
+        
+        side effect of _get_visible: set self.vis_start and self.vis_end
 
         **INPUTS**
 
@@ -467,12 +481,7 @@ class SelectWinGram(WinGram):
 
         *none*
         """
-        buff_name = self.buff_name
-        vis_start, vis_end = self.app.get_visible(buff_name = buff_name)
-        self.vis_start = vis_start
-        visible = \
-            self.app.get_text(vis_start, vis_end, buff_name = buff_name)
-        self._set_visible(visible)
+        self._set_visible(self._get_visible())
 
     def activate(self, buff_name):
         """activates the grammar for recognition tied to the current window,
@@ -552,9 +561,6 @@ class SelectWinGram(WinGram):
         debug.trace('SelectWinGram.find_closest', 'direction=%s, where=%s, through=%s, until=%s' %
                     (direction, where, through, until))
  
-        ranges.sort()
-        # rule out duplicate larger ranges
-        ranges = self.get_smaller_ranges_only(ranges)
         closest_range_index = \
             self.app.closest_occurence_to_cursor(ranges, 
                 regexp=spoken_form, 
@@ -587,9 +593,11 @@ class SelectWinGram(WinGram):
             start, end = self.app.get_selection()
             new_ranges = []
             for x in ranges:
-                if start < x[0]:
+                # take non empty ranges only, change left pos to start or
+                # right pos to end...
+                if start <= x[0] and start < x[1]:
                     new_ranges.append( (start, x[1]) )
-                else:
+                elif end >= x[1]  and end > x[0]:
                     new_ranges.append( (x[0], end) )
             ranges = new_ranges
             debug.trace('SelectWinGram.find_closest', '** THROUGH with direction: %s, new range: %s'%
@@ -599,9 +607,10 @@ class SelectWinGram(WinGram):
             start, end = self.app.get_selection()
             new_ranges = []
             for x in ranges:
+                # take non empty ranges only...
                 if start < x[0]:
                     new_ranges.append( (start, x[0]) )
-                else:
+                elif end > x[1]:
                     new_ranges.append( (x[1], end) )
             ranges = new_ranges
             debug.trace('SelectWinGram.find_closest', '** UNTIL with direction: %s, new range: %s'%
@@ -887,7 +896,7 @@ class WinGramFactory(Object):
         select_cursor_position_words = ['go before', 'go after', 
             'insert before', 'insert after', 'before', 'after'],
         select_delete_words = ['select through', 'select back through', 
-##                               'kill through',	'kill back through',
+##                               'kill through',    'kill back through',
 ##                               'kill until', 'kill back until',
                                'select until', 'select back until'],
         select_direction_words = ['next', 'previous'],
@@ -911,8 +920,8 @@ class WinGramFactory(Object):
         can be used to specify the direction in which the search will be done
         for a SelectPseudocode utterance.
 
-				[STR] *select_delete_words: words that do a single selection, from the cursor until first
-								occurrence of word...
+                [STR] *select_delete_words: words that do a single selection, from the cursor until first
+                                occurrence of word...
 
         *STR* through_word -- word for selecting a range with the 
         selection grammars

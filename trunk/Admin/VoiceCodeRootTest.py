@@ -19,7 +19,8 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       
       self._test_data_file_pathes = \
               {
-               'large_buff_py': vc_globals.test_data + os.sep + 'large_buff.py'
+               'large_buff_py': vc_globals.test_data + os.sep + 'large_buff.py',
+               'lots_of_parens_py': vc_globals.test_data + os.sep + 'lots_of_parens.py'
               }
               
    def __del__(self):              
@@ -126,6 +127,21 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
                             "<SEL_END>" + got_content[end:]
       return got_content      
       
+   def _get_lines_with_selection_position(self, buff_name=None):
+      start, end = self._app().find_buff(buff_name).get_selection()
+      selected_lines, offset = self._app().find_buff(buff_name).get_text_of_selection()
+      # make start, end relative to selected_lines
+      start -= offset
+      end -= offset
+      if start > end:
+         raise ValueError("test error, start > end: %s, %s"% (start, end))
+      elif start == end:
+         
+         selected_lines = selected_lines[:start] + "<CURSOR>" + selected_lines[start:]
+      else:
+         selected_lines= selected_lines[:start] + "<SEL_START>" + selected_lines[start:end] + \
+                            "<SEL_END>" + selected_lines[end:]
+      return selected_lines
       
    def _len(self):
       return self._app().len()      
@@ -173,6 +189,17 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       after_cursor = current_line_text[cur_pos - start_of_line_pos:]
       got_text = before_cursor + '<CURSOR>' + after_cursor
       mess = mess + "\nContent of current line in the active buffer was wrong."
+      if not compare_as_regexp:
+         self.assert_equal(expected_text, got_text, mess)    
+      else:
+         mess = mess + "\nExpected to match regexp:\n'%s'\nGot:\n'%s'" % (expected_text, got_text)
+         self.assert_(re.match(expected_text, got_text, regexp_flags), mess)
+      
+   def _assert_lines_with_selection_content_is(self, expected_text, mess="",
+                                       compare_as_regexp=False, regexp_flags=''):
+
+      got_text = self._get_lines_with_selection_position()
+      mess = mess + "\nContent of selected lines in the active buffer was wrong."
       if not compare_as_regexp:
          self.assert_equal(expected_text, got_text, mess)    
       else:
