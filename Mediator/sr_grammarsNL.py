@@ -21,7 +21,11 @@
 
 """implementation of sr_grammars classes using natlink
 """
-
+try:
+    import set
+except ImportError:
+    from sets import Set as set
+    
 from Object import Object
 import sr_interface
 from sr_grammars import *
@@ -478,63 +482,112 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
     
     def gotResultsObject(self,recogType,resObj):
         debug.trace('SelectWinGramNL.gotResultsObject', '** invoked, resObj=%s' % repr(resObj))
-        if recogType == 'self':
-            utterance = sr_interface.SpokenUtteranceNL(resObj)
-            self.results_callback(utterance)
-            debug.trace('SelectWinGramNL.gotResultsObject', '** recogType = self')        
-            # If there are multiple matches in the text we need to scan through
-            # the list of choices to find every entry which has the highest.
+        if not recogType == 'self': return
+        
+        utterance = sr_interface.SpokenUtteranceNL(resObj)
+        self.results_callback(utterance)
+        debug.trace('SelectWinGramNL.gotResultsObject', '** recogType = self: %s')        
+        # If there are multiple matches in the text we need to scan through
+        # the list of choices to find every entry which has the highest.
+        
+        ranges = []        
+        try:
+            bestScore = resObj.getWordInfo(0)[0][2]
+            verb = resObj.getWordInfo(0)[0][0]
+            #
+            # Collect selection ranges with highest score
+            #
+            for i in range(105):
+                #
+                # The candidate regions are sorted from best to worst scores.
+                # Loop through candidate regions until we reach one whose
+                # score is not the same as the first score (or until a
+                # natlink.outOfRange exception is raised to signal the end
+                # of the list of candidate regions).
+                #
+                wordInfo = resObj.getWordInfo(i)
+##                    debug.trace('SelectWinGramNL.gotResultsObject', '** i=%s, len(wordInfo)=%s' % (i, len(wordInfo)))
+##                    debug.trace('SelectWinGramNL.gotResultsObject', '** i=%s, len(wordInfo[0])=%s' % (i, len(wordInfo[0])))                    
+                if wordInfo[0][2] != bestScore:
+                    #
+                    # All remaining regions don't have as good a score as the
+                    # first ones.
+                    debug.trace('SelectWinGramNL.gotResultsObject',
+                                '** bestScore: %s, lesser score %s, break at i=%s'%
+                                (bestScore, wordInfo[0][2], i))       
+                if i > 100:
+                   print 'gotResultsObject, more than 100 ranges found: %s'% i
+                   break
+                #
+                # This region has the same score as the first ones. Add it
+                # to the candidate selection ranges.
+                #
+                #QH: if a results object is not of this Select Grammar
+                #also break
+                try:
+                    region = resObj.getSelectInfo(self.gramObj, i)
+                except natlink.WrongType:
+                    continue
+                if debug.tracing('SelectWinGramNL.gotResultsObject'):
+                    debug.trace('SelectWinGramNL.gotResultsObject', 'adding region=%s' % repr(region))
+##              do this later:
+##                true_region = (region[0] + self.vis_start,
+##                  region[1] + self.vis_start)
+                #
+                # For some reason, NatSpeak may return duplicate ranges
+                #
+                if not region in ranges:
+                   ranges.append(region)
+
+        except natlink.OutOfRange:
+            debug.trace('SelectWinGramNL.gotResultsObject',
+                        '** error OutOfRange at i=%s'% i)        
+            pass
+        except exceptions.IndexError:
+            debug.trace('SelectWinGramNL.gotResultsObject',
+                        '** IndexError at i=%s'% i)        
+            pass
+
+        spoken = self.selection_spoken_form(resObj)
+        debug.trace('SelectWinGramNL.gotResultsObject', 'verb=%s, spoken=%s, ranges=%s' % (verb, spoken, repr(ranges)))
+
+        # clean up list of ranges:
+        ranges.sort()
+        # rule out duplicate larger ranges
+        ranges = self.get_smaller_ranges_only(ranges)
+        if len(ranges) > 20:
+            print "%s ranges found, try to get more"% len(ranges)
+            self.extend_ranges(self._get_visible(self.vis_start, self.vis_end), ranges)
+            print "total number of ranges found %s"% len(ranges)
             
-            ranges = []        
-            try:
-                bestScore = resObj.getWordInfo(0)[0][2]
-                verb = resObj.getWordInfo(0)[0][0]
-                #
-                # Collect selection ranges with highest score
-                #
-                for i in range(100):
-                    #
-                    # The candidate regions are sorted from best to worst scores.
-                    # Loop through candidate regions until we reach one whose
-                    # score is not the same as the first score (or until a
-                    # natlink.outOfRange exception is raised to signal the end
-                    # of the list of candidate regions).
-                    #
-                    wordInfo = resObj.getWordInfo(i)
-#                    debug.trace('SelectWinGramNL.gotResultsObject', '** i=%s, len(wordInfo)=%s' % (i, len(wordInfo)))
-#                    debug.trace('SelectWinGramNL.gotResultsObject', '** i=%s, len(wordInfo[0])=%s' % (i, len(wordInfo[0])))                    
-                    if wordInfo[0][2] != bestScore:
-                        #
-                        # All remaining regions don't have as good a score as the
-                        # first ones.
-                        break
-                    else:
-                        #
-                        # This region has the same score as the first ones. Add it
-                        # to the candidate selection ranges.
-                        #
-                        #QH: if a results object is not of this Select Grammar
-                        #also break
-                        try:
-                            region = resObj.getSelectInfo(self.gramObj, i)
-                        except natlink.WrongType:
-                            continue
-                        if debug.tracing('SelectWinGramNL.gotResultsObject'):
-                            debug.trace('SelectWinGramNL.gotResultsObject', 'adding region=%s' % repr(region))
-                        true_region = (region[0] + self.vis_start,
-                          region[1] + self.vis_start)
-                        #
-                        # For some reason, NatSpeak may return duplicate ranges
-                        #
-                        if not true_region in ranges:
-                           ranges.append(true_region)
+        vis_start = self.vis_start
+        true_ranges = [(x+vis_start,y+vis_start) for (x,y) in ranges]
+        self.find_closest(verb, spoken, true_ranges)
 
-            except natlink.OutOfRange, exceptions.IndexError:
-                pass
+    def extend_ranges(self, visible, ranges):
+        """extend ranges (in place) (list of (start,end) tuples),
 
-            spoken = self.selection_spoken_form(resObj)
-            debug.trace('SelectWinGramNL.gotResultsObject', 'verb=%s, spoken=%s, ranges=%s' % (verb, spoken, repr(ranges)))
-            self.find_closest(verb, spoken, ranges)
+        with patterns that are found in visible (string)
+        """ 
+        patterns = set()
+        for r in ranges:
+            patterns.add(visible[r[0]:r[1]])
+        patterns = list(patterns)
+        for p in patterns:
+            length = len(p)
+            if not length: continue  # defensive!
+            start = 0
+            while 1:
+                new_start = visible.find(p, start)
+                if new_start == -1: break
+                end = new_start + length
+                if (new_start, end) not in ranges:
+                    ranges.append( (new_start, end) )
+                start = end
+        ranges.sort()
+        # no return, ranges are in place
+        
+        
 
     def selection_spoken_form(self, resObj):
 

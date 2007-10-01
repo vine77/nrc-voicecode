@@ -20,7 +20,7 @@ class SelectTextTest(VoiceCodeRootTest.VoiceCodeRootTest):
 # These tests illustrate how to use the class.
 ##########################################################
       
-    def test_This_is_how_you_select_text(self):
+    def tttest_This_is_how_you_select_text(self):
         self._open_empty_test_file('temp.py')
         self._insert_in_active_buffer("small = small + 1\nlarge = large + small\n")
         self._say("select small")
@@ -69,7 +69,7 @@ large<SEL_END> = large + small
 ''')
                    
         
-    def test_This_is_how_you_select_in_explicit_direction(self):
+    def tttest_This_is_how_you_select_in_explicit_direction(self):
         self._open_empty_test_file('temp.py')
         self._insert_in_active_buffer("small = small + 1\ncenter = 3\nlarge = large + small\n")
         self._say("select center")
@@ -102,7 +102,7 @@ large = large + small
 
 
 
-    def test_This_is_how_you_select_through_or_until_text_from_cursor(self):
+    def tttest_This_is_how_you_select_through_or_until_text_from_cursor(self):
         self._open_empty_test_file('temp.c')
         self._insert_in_active_buffer("small = small + 1;\ncenter = 3\nlarge = large + small\n")
         self._say("select center")
@@ -222,6 +222,66 @@ large = large + small<SEL_END>
         expected = [(1,3), (5,10), (35,40)]
         smaller_ranges = win_gram.get_smaller_ranges_only(ranges)
         self.assert_equal(expected, smaller_ranges, "get_smaller_ranges_only result not as expected")
+
+    def test_This_is_how_you_get_to_nearest_if_selection_is_there_already(self):
+        self._open_empty_test_file('temp.py')
+        self._insert_in_active_buffer('small = small + "abc"\nlarge = large + "def"\n')
+
+        # until, cursor at pos already, take next one        
+        self._say("after abc")
+        self._assert_active_buffer_content_is(\
+'''small = small + "abc<CURSOR>"
+large = large + "def"
+''')
+        self._say(["select until", '"\\close-quote'])
+        self._assert_active_buffer_content_with_selection_is(\
+'''small = small + "abc<SEL_START>"
+large = large + "def<SEL_END>"
+''')
+
+        # through, cursor at pos already, take this one:
+        self._say("after abc")
+        self._assert_active_buffer_content_is(\
+'''small = small + "abc<CURSOR>"
+large = large + "def"
+''')
+        self._say(["select through", '"\\close-quote'])
+        self._assert_active_buffer_content_with_selection_is(\
+'''small = small + "abc<SEL_START>"<SEL_END>
+large = large + "def"
+''')
+
+    def test_This_test_of_enough_ranges_in_large_text(self):
+
+        # large file, in order to test the visible range also
+        # and more occurrences of ")" than can be held in the NatSpeak/natlink
+        # range of ranges, VoiceCode must enhance this list!
+        self._open_file(self._get_test_data_file_path('lots_of_parens_py'))
+        self._goto_line(290)
+        self._say("select center")
+        self._say(["select through", ")\\close-paren"])
+        self._assert_lines_with_selection_content_is(\
+'''   <SEL_START>center = 1
+   calc5 = (x.function1()<SEL_END> + y.function2()) /(z.function1() + z.function2())''')
+        self._say(["next one"])
+        self._assert_lines_with_selection_content_is(\
+'''   <SEL_START>center = 1
+   calc5 = (x.function1() + y.function2()<SEL_END>) /(z.function1() + z.function2())''')
+        self._say(["previous one"])
+        self._say(["previous one"])
+        self._say(["previous one"])
+        self._say(["previous one"])
+        self._say(["previous one"])
+        self._say(["previous one"])
+        self._say(["previous one"])
+        self._say(["previous one"])
+        self._assert_lines_with_selection_content_is(\
+'''   calc3 = (x.function1() + y.function2()) /( z.function1() + z.function2()<SEL_START>)
+   calc4 = (x.function1() + y.function2()) /( z.function1() + z.function2())
+   center<SEL_END> = 1''')
+        
+        
+
 
 ###############################################################
 # Assertions.

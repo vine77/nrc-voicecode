@@ -408,6 +408,19 @@ class SourceBuff(OwnerObject):
         self.goto(old_pos)
         return self.get_text(start, end)
 
+    def get_text_of_selection(self):
+        """returns the line(s) that contain the selection.
+ 
+        Also return the offset from the beginning of the buffer
+        """
+        old_pos = self.cur_pos()
+        start, end = self.get_selection()
+        start_of_start = self.beginning_of_line(start)
+        end_of_end = self.end_of_line(end)
+        self.goto(old_pos)
+        return self.get_text(start_of_start, end_of_end), start_of_start
+
+
     def set_text(self, text, start = None, end = None):
         """changes a portion of the buffer
 
@@ -1953,8 +1966,13 @@ class SourceBuff(OwnerObject):
         """
         pass
 
-    def print_buff(self):
-        """Prints lines around the cursor to STDOUT.
+    def get_buff(self):
+        """gets lines around the cursor
+
+        subsequently print these lines with print_buff...
+
+        (the trace statements are named "print_buff", because this function
+        has been split off, for other use too)
 
         This is mostly used when running regression test on an
         external editor (or the EdSim simulation editor).
@@ -1965,9 +1983,10 @@ class SourceBuff(OwnerObject):
         
         **OUTPUTS**
         
-        *none* -- 
+        printed: string being the buffer part being printed
+        (start, end, at_start, at_end): tuple giving start pos and end pos of string in the
+        buffer, and (logical) if printed is at_start and/or at_end of the buffer.
         """
-
         #
         # Figure out the text before/within/after the selection
         #
@@ -2059,8 +2078,14 @@ class SourceBuff(OwnerObject):
             printed = printed + selection_content
             printed = printed + '<SEL_END>'
         printed = printed + after_content
+        return printed, (start, end, at_start, at_end)
 
 
+    def print_buff(self):
+        """first do get_buff, in this function print to stdout
+
+        """        
+        printed, (start,end, at_start, at_end) = self.get_buff()
         from_line = self.line_num_of(start)
         lines_with_num = self.number_lines(printed, startnum =
             from_line)
