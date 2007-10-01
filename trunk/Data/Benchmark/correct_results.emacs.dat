@@ -2798,7 +2798,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01DB5BA0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01CB48A0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2813,31 +2813,24 @@ Subclassing from non-standard class AnimatedCharacter.*
 * Description : Tests for select text, including through
 *******************************************************************************
 
-Heard select center
-Heard select next small
-Heard select previous small
-Heard select next equal-sign
-Heard select previous plus-sign
-Heard select small
-Heard previous one
-Heard select large
-Heard select plus-sign
-Heard next one
-Heard select center
-Heard select until small
-Heard previous one
-Heard select center
-Heard select through small
-Heard previous one
-Heard select center
-Heard select back until small
-Heard next one
-Heard select center
-Heard select back through small
-Heard previous one
-Heard next one next one
-Heard next one
+Heard after abc
+Heard select until close-quote
+Heard after abc
+Heard select through close-quote
 Heard select small through large
+Heard select center
+Heard select through close-paren
+30 ranges found, try to get more
+total number of ranges found 49
+Heard next one
+Heard previous one
+Heard previous one
+Heard previous one
+Heard previous one
+Heard previous one
+Heard previous one
+Heard previous one
+Heard previous one
 tests passed
 
 *******************************************************************************
@@ -17076,5 +17069,5 @@ WARNING: Call to deprecated method TestCaseWithHelpers.assert_sequences_have_sam
 
 
 -----------------------------------------------
-Test suite completed in:  861.342999935 secs
+Test suite completed in:  863.75 secs
 -----------------------------------------------
