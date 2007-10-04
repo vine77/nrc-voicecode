@@ -21,6 +21,10 @@
 
 """abstract interfaces for dictation and selection grammars
 """
+try:
+    import set
+except ImportError:
+    from sets import Set as set
 
 from Object import Object, OwnerObject
 from utilsqh import peek_ahead 
@@ -267,6 +271,7 @@ class WinGram(GramCommon, OwnerObject):
         so if (1,10) and (1,20) are in ranges only (1,10) is returned
         and if (3,20) and (12,20) are in ranges, only (12,20) is returned.
 
+        examples and testing: see SelectTextText.py
         """
         if not ranges: return ranges # empty list
         # first rule out larger ranges with same start:
@@ -288,7 +293,67 @@ class WinGram(GramCommon, OwnerObject):
             result.append( (-start, -end) )
         result.sort()
         return result
-        
+
+    def get_shortest_ranges(self, start_ranges, end_ranges):
+        """get all the ranges that are shortest
+
+        in use at SelectWinGramNL, with the through ranges.
+
+        Take a list of start_ranges and a list of end_ranges
+        and return a list of smallest ranges that match.
+
+        examples and testing: see SelectTextText.py
+        """
+        ranges = []        
+        it_start = peek_ahead(start_ranges)
+        it_end = iter(end_ranges)
+        try:
+            while 1:
+                s_start, s_end = it_start.next()
+                e_start, e_end = it_end.next()
+                while e_start <= s_end:
+                    e_start, e_end = it_end.next()
+                while it_start.preview != peek_ahead.sentinel and \
+                      it_start.preview[1] < e_start:
+                    s_start, s_end = it_start.next()
+                ranges.append((s_start, e_end))
+        except StopIteration:
+            return ranges
+
+    def get_all_ranges(self, visible, patterns):
+        """get all start,end combinations for patterns in visible string
+
+                
+
+        use regular expressions, with Ignore case and word boundaries
+        input: visible (string, being the visible range of the screen)
+               list of patterns
+        output: list of ranges that match the patterns in visible, sorted.
+
+        examples and testing: see SelectTextText.py
+        """
+        ranges = set()
+        for p in patterns:
+            reg = []
+            # build up appropriate regular expression:
+            if p[0] in string.ascii_letters:
+                reg.append(r'\b')
+            for q in p:
+                if q not in string.ascii_letters:
+                    if q == '\\':
+                        q = q + q
+                    reg.append('[' + q + ']')
+                else:
+                    reg.append(q)
+            if p[-1] in string.ascii_letters:
+                reg.append(r'\b')
+            # and search case insensitive:
+            reg = re.compile(''.join(reg), re.I)
+            for found in reg.finditer(visible):
+                ranges.add( (found.start(), found.end()) )
+        ranges = list(ranges)
+        ranges.sort()
+        return ranges
         
 class DictWinGram(WinGram):
     """abstract base class for window-specific dictation grammar interfaces
