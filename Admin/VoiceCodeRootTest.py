@@ -20,7 +20,8 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       self._test_data_file_pathes = \
               {
                'large_buff_py': vc_globals.test_data + os.sep + 'large_buff.py',
-               'lots_of_parens_py': vc_globals.test_data + os.sep + 'lots_of_parens.py'
+               'lots_of_parens_py': vc_globals.test_data + os.sep + 'lots_of_parens.py',
+               'lots_of_selections_py': vc_globals.test_data + os.sep + 'lots_of_selections.py'
               }
               
    def __del__(self):              
