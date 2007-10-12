@@ -1,4 +1,4 @@
-##############################################################################
+###############################################################################
 # VoiceCode, a programming-by-voice environment
 #
 # This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ from Object import Object, OwnerObject
 from utilsqh import peek_ahead 
 import debug
 import re
-import string
+import string, types
 import actions_gen
 
 import CmdInterp, AppState
@@ -326,33 +326,58 @@ class WinGram(GramCommon, OwnerObject):
                 
 
         use regular expressions, with Ignore case and word boundaries
+
+        between two parts of the phrase 1 space, _ . or - can occur, or nothing...
+        
         input: visible (string, being the visible range of the screen)
-               list of patterns
+               list of patterns (each pattern being a list of strings...
+               
         output: list of ranges that match the patterns in visible, sorted.
+
 
         examples and testing: see SelectTextText.py
         """
+        glue = r'[ -_.]?'   # can be found in between words
+        if type(patterns) != types.ListType:
+            raise TypeError("sr_grammars, get_all_ranges, patterns must be a list of strings, not: %s"%
+                            `patterns`)
         ranges = set()
         for p in patterns:
+
+            if isinstance(p, basestring):
+                raise TypeError("sr_grammars, all patterns must be a list of strings not: %s"% `p`)
             reg = []
-            # build up appropriate regular expression:
-            if p[0] in string.ascii_letters:
-                reg.append(r'\b')
-            for q in p:
-                if q not in string.ascii_letters:
-                    if q == '\\':
-                        q = q + q
-                    reg.append('[' + q + ']')
-                else:
-                    reg.append(q)
-            if p[-1] in string.ascii_letters:
-                reg.append(r'\b')
+
+            for i, part in enumerate(p):
+
+                # build up appropriate regular expression:
+                if part[0] in string.ascii_letters:
+                    reg.append(r'\b')
+                for q in part:
+                    if q not in string.ascii_letters:
+                        if q == '\\':
+                            q = q + q
+                        reg.append('[' + q + ']')
+                    else:
+                        reg.append(q)
+                if part[-1] in string.ascii_letters:
+                    reg.append(r'\b')
+                if i < len(p)-1:
+                    reg.append(glue)
             # and search case insensitive:
-            reg = re.compile(''.join(reg), re.I)
+            reg = ''.join(reg)
+            debug.trace('WinGram.get_all_ranges', 
+                "try with pattern: %s, reg: %s" % (p, reg))
+            reg = re.compile(reg, re.I)
+            
             for found in reg.finditer(visible):
                 ranges.add( (found.start(), found.end()) )
         ranges = list(ranges)
         ranges.sort()
+        ranges = self.get_smaller_ranges_only(ranges)
+        debug.trace('WinGram.get_all_ranges', 
+            "%s ranges found: %s" % (len(ranges), ranges))
+
         return ranges
         
 class DictWinGram(WinGram):
@@ -614,7 +639,7 @@ class SelectWinGram(WinGram):
 
         where = 1
         if reBefore.search(verb):
-            where = -1
+            where = -1#<CURSOR
         if reAfter.search(verb):
             where = 1
         through = until = 0
@@ -633,8 +658,8 @@ class SelectWinGram(WinGram):
                 ignore_overlapping_with_cursor=0,
                 buff_name = self.buff_name)
                 
-        if debug.tracing('SelectWinGram.find_closest'):
-            debug.trace('SelectWinGram.find_closest', '** ranges=%s, closest_range_index=%s' % (repr(ranges), closest_range_index))
+        debug.trace('SelectWinGram.find_closest', '** ranges=%s, closest_range_index=%s' %
+                    (repr(ranges), closest_range_index))
         if closest_range_index == None:
             return
 
@@ -2271,4 +2296,5 @@ class TextModeTogglingGram(WinGram):
         'correction', or 'text_mode')
         """
         return 'text_mode'
+    
     

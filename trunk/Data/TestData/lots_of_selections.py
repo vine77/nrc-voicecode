@@ -1,10 +1,13 @@
-""" This test file has lots of pieces that can be selected by
+a""" This test file has lots of pieces that can be selected by
 select ABC through XYZ.
 
 Test the possibilities of extending the range of found ranges by natlink/NatSpeak
 with the voicecoder function extend_ranges
 
 """
+
+# words to recognise: function one, function-one, function-1, function 1.
+
 
 class Lots(object):
    def __init__(self, a, b):

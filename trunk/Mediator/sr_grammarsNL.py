@@ -31,7 +31,7 @@ import sr_interface
 from sr_grammars import *
 import natlink
 import debug
-import exceptions
+import exceptions, types
 from natlinkutils import *
 import string
 import sys
@@ -488,11 +488,16 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         
         utterance = sr_interface.SpokenUtteranceNL(resObj)
         self.results_callback(utterance)
-        debug.trace('SelectWinGramNL.gotResultsObject', '** recogType = self: %s')        
         # If there are multiple matches in the text we need to scan through
         # the list of choices to find every entry which has the highest.
+
+        # collect the patterns that are recognised:
+        start_pats = set()
+        end_pats = set()
+        total_pats = set()
         
-        ranges = []
+        ranges = set()
+        word_infos = set()
         try:
             bestScore = resObj.getWordInfo(0)[0][2]
             verb = resObj.getWordInfo(0)[0][0]
@@ -520,8 +525,9 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
                     break
                 
                 if i > 100:
-                   print 'gotResultsObject, more than 100 ranges found: %s'% i
-                   break
+                    print 'gotResultsObject, more than 100 ranges found: %s'% i
+                    break
+                
                 #
                 # This region has the same score as the first ones. Add it
                 # to the candidate selection ranges.
@@ -540,8 +546,11 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
                 #
                 # For some reason, NatSpeak may return duplicate ranges
                 #
-                if not region in ranges:
-                   ranges.append(region)
+                word_infos.add(self.get_word_info_written_spoken(wordInfo))
+                writtenList = self.selection_written_form(wordInfo)
+                self.add_written_to_start_end_total_patterns(writtenList,
+                                                             start_pats, end_pats, total_pats)
+                ranges.add(region)
 
         except natlink.OutOfRange:
             debug.trace('SelectWinGramNL.gotResultsObject',
@@ -556,51 +565,68 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         debug.trace('SelectWinGramNL.gotResultsObject', 'verb=%s, spoken=%s, ranges=%s' % (verb, spoken, repr(ranges)))
 
         # clean up list of ranges:
+        ranges = list(ranges)
         ranges.sort()
         # rule out duplicate larger ranges
+        visible = self._get_visible(self.vis_start, self.vis_end)
         ranges = self.get_smaller_ranges_only(ranges)
         debug.trace('SelectWinGramNL.gotResultsObject', 'after "get_smaller_ranges_only": verb=%s, spoken=%s, ranges=%s' % (verb, spoken, repr(ranges)))
+        debug.trace('SelectWinGramNL.gotResultsObject', 'text of ranges: %s' % (self.get_from_text(visible, ranges)))
         debug.trace('SelectWinGramNL.gotResultsObject', 'number hits from natlink/natspeak: %s'% i)
 
         if not ranges:
             return
+        start_pats = list(start_pats)
+        end_pats = list(end_pats)
+        total_pats = list(total_pats)
+        debug.trace('SelectWinGramNL.gotResultsObject', "patterns found: start_pats: %s, end_pats: %s, total_pats: %s"%
+                                                        (start_pats, end_pats, total_pats))
+        # print the word info's:
+        wordInfo0 = self.get_word_info_written_spoken(resObj.getWordInfo(0))
+        word_infos = list(word_infos)
+        debug.trace('SelectWinGramNL.gotResultsObject', "the command was: %s"% verb)
+        debug.trace('SelectWinGramNL.gotResultsObject', 'first wordinfo: %s'% list(wordInfo0))
+        for w in word_infos:
+            if w != wordInfo0:
+                debug.trace('SelectWinGramNL.gotResultsObject','additional wordinfo: %s'% list(w))
 
         if i > 10:
             # try to get more ranges, possibly not all are caught
             # search in next part inside the visible range:
-            visible = self._get_visible(self.vis_start, self.vis_end)
-            if spoken.find(self.through_word) > 0:
+            debug.trace('SelectWinGramNL.gotResultsObject',
+                        '** trying to get more ranges, i: %s'% i)
+            if start_pats and end_pats:
+                if total_pats:
+                    debug.trace('SelectWinGramNL.gotResultsObject',  "AND start_pats AND end_pats AND total_pats found: %s, %s, %s (ignore total)"%\
+                          (start_pats, end_pats, total_pats))
                 # select ABC through XYZ
                 # get all patterns which match start and get all ranges which match end
-                writtenList = self.selection_written_form(resObj)
-                if len(writtenList) == 3:
-                    print "%s through ranges found, try to get more"% len(ranges)
-                    first_start_word = writtenList[0]
-                    first_end_word = writtenList[2]
-                    ranges = self.extend_through_ranges(visible, ranges,
-                                           len(first_start_word), len(first_end_word))
-                    debug.trace('SelectWinGramNL.gotResultsObject', "total number of through ranges found: %s"% len(ranges))
-                    debug.trace('SelectWinGramNL.gotResultsObject', "through ranges found: %s"% ranges)
-                    print "total number of through ranges found %s"% len(ranges)
-                else:
-                    print "%s through ranges found, writtenList does not fit, so cannot find more"% len(ranges)
-                    debug.trace('SelectWinGramNL.gotResultsObject', "selection_written_form, invalid list: %s"%
-                                writtenList)
+                ranges = self.extend_through_ranges(visible, ranges,
+                                       start_pats, end_pats)
+                debug.trace('SelectWinGramNL.gotResultsObject', "total number of through ranges found: %s"% len(ranges))
+                debug.trace('SelectWinGramNL.gotResultsObject', "through ranges found: %s"% ranges)
                     
-            else:
+            elif total_pats:
                 # select without the "through" word:
+                if start_pats or end_pats:
+                    debug.trace('SelectWinGramNL.gotResultsObject', "total_pats, but ALSO start_pats OR end_pats AND total_pats found: %s, %s, %s (take total)"%\
+                          (start_pats, end_pats, total_pats))
                 debug.trace('SelectWinGramNL.gotResultsObject', "%s ranges found, try to get more"% len(ranges))
                 print "%s ranges found, try to get more"% len(ranges)
-                ranges = self.extend_ranges(visible, ranges)
+                ranges = self.extend_ranges(visible, ranges, total_pats)
                 debug.trace('SelectWinGramNL.gotResultsObject', "total number of ranges found %s"% len(ranges))
                 print "total number of ranges found %s"% len(ranges)
+            else:
+                print "inconsistent pats found: start_pats, end_pats, total_pats: %s, %s, %s (ignore all)"%\
+                          (start_pats, end_pats, total_pats)
+                
 
         # correct for the offset of the visible range in the total buffer:  
         vis_start = self.vis_start
         true_ranges = [(x+vis_start,y+vis_start) for (x,y) in ranges]
         self.find_closest(verb, spoken, true_ranges)
 
-    def extend_ranges(self, visible, ranges):
+    def extend_ranges(self, visible, ranges, patterns):
         """extend ranges (in place) (list of (start,end) tuples),
 
         with patterns that are found in visible (string)
@@ -609,26 +635,24 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
                 ranges  list of (start,end) tuples, are changed in place!
 
         return the ranges again        
-        """ 
-        patterns = set()
+        """
+        new_ranges = self.get_all_ranges(visible, patterns)
+        list_changed = 0
         for r in ranges:
-            patterns.add(visible[r[0]:r[1]])
-        patterns = list(patterns)
-        for p in patterns:
-            length = len(p)
-            if not length: continue  # defensive!
-            start = 0
-            while 1:
-                new_start = visible.find(p, start)
-                if new_start == -1: break
-                end = new_start + length
-                if (new_start, end) not in ranges:
-                    ranges.append( (new_start, end) )
-                start = end
-        ranges.sort()
-        return ranges
+            if r not in new_ranges:
+                # original ranges have other ranges than search action from voicecode,
+                # append them:
+                if not list_changed:
+                    # print only one message.
+                    print "extend_ranges: old range %s not found in new_ranges: %s"% \
+                        (self.get_from_text(visible, r), self.get_from_text(visible, new_ranges))
+                    list_changed = 1
+                new_ranges.append(r)
+        if list_changed:
+            new_ranges.sort()
+        return new_ranges
         
-    def extend_through_ranges(self, visible, ranges, len_start_pat, len_end_pat):
+    def extend_through_ranges(self, visible, ranges, start_pats, end_pats):
         """extend through ranges (in place) (list of (start,end) tuples),
 
         go through the visible string.
@@ -638,7 +662,8 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         third find all smallest ranges
 
 
-        len_start_pat, len_end_pat: length of start and end patterns to search for.
+        start_pats, end_pats: lists of lists of strings
+        [['self', 'extra'], ['selfextra']]
 
         Note: only patterns that are found already in the ranges are searched for
         next.
@@ -646,34 +671,37 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         """ 
         # get start pats:         
         debug.trace('SelectWinGramNL.extend_through_ranges', "ranges at start: %s"% ranges)
-        debug.trace('SelectWinGramNL.extend_through_ranges', "len_start_pat: %s, len_end_pat: %s"%
-                    (len_start_pat, len_end_pat))
-        self.start_patterns = set()
-        for s,e in ranges:
-            if e-s >= len_start_pat:
-                self.start_patterns.add(visible[s:s+len_start_pat])
-        self.start_patterns = list(self.start_patterns)
-
-        # get end pats:
-        self.end_patterns = set()
-        for s,e in ranges:
-            if e-s >= len_end_pat:
-                self.end_patterns.add(visible[e-len_end_pat:e])
-        self.end_patterns = list(self.end_patterns)
-        debug.trace('SelectWinGramNL.extend_through_ranges', "start_patterns:  %s"% self.start_patterns)
-        debug.trace('SelectWinGramNL.extend_through_ranges', "end_patterns:  %s"% self.end_patterns)
+        debug.trace('SelectWinGramNL.extend_through_ranges', "start_patterns:  %s"% start_pats)
+        debug.trace('SelectWinGramNL.extend_through_ranges', "end_patterns:  %s"% end_pats)
         # get all start ranges  and all end ranges:
-        start_ranges = self.get_all_ranges(visible, self.start_patterns)
-        end_ranges = self.get_all_ranges(visible, self.end_patterns)
+        start_ranges = self.get_all_ranges(visible, start_pats)
+        end_ranges = self.get_all_ranges(visible, end_pats)
 
         debug.trace('SelectWinGramNL.extend_through_ranges', "start_ranges:  %s"% start_ranges)
         debug.trace('SelectWinGramNL.extend_through_ranges', "end_ranges:  %s"% end_ranges)
 
         # make it a new list:
-        ranges = self.get_shortest_ranges(start_ranges, end_ranges)
-        ranges.sort()
-        return ranges
+        new_ranges = self.get_shortest_ranges(start_ranges, end_ranges)
+        # check the original is still in the list:
+        list_changed = 0
+        for r in ranges:
+            if r not in new_ranges:
+                if not list_changed:
+                    # print only one message
+                    print "extend_through_ranges: old range %s not found in new_ranges: %s"% \
+                        (self.get_from_text(visible, r), self.get_from_text(visible, new_ranges))
+                list_changed = 1
+                new_ranges.append(r)
+        new_ranges.sort()
+        return new_ranges
         
+    def get_from_text(self, visible, range_or_ranges):
+        """extract the text for presentation"""
+        if type(range_or_ranges) == types.TupleType:
+            return visible[range_or_ranges[0]:range_or_ranges[1]]
+        if type(range_or_ranges) == types.ListType:
+            return [self.get_from_text(visible, r) for r in range_or_ranges]
+        # should not fall through...        
         
 ##    def get_all_ranges(self, visible, patterns):
 ##    moved to sr_grammars.py
@@ -710,23 +738,49 @@ class SelectWinGramNL(SelectWinGram, SelectGramBase):
         
         return spoken_form
 
-    def selection_written_form(self, resObj):
+    def get_word_info_written_spoken(self, wordInfo):
+        """get as a tuple the written\\spoken items of wordInfo
 
-        """Returns the written form, for re insert in recognitionMimic.
+        exclude the command (item 0) itself        
+        """
+        List =  [x[0] for x in wordInfo[1:]]
         
+        return tuple(List)
+        
+
+    def selection_written_form(self, wordInfo):
+        """Returns the written form, for find actions in visible region
+               
         **INPUTS**
         
-        *ResObj* resObj -- The *ResObj* returned by the *Select* grammar.
-        
+        *wordInfo: the getWordInfo(xxx) object from the resObj        
 
         **OUTPUTS**
         
-        *spoken_form* -- The spoken form of the selected code.
+        *spoken_form* -- The spoken form of the selected code, as a list of words
         """
-        writtenList =  [x[0].split("\\")[0] for x in resObj.getWordInfo(0)[1:]]
+        writtenList =  [x[0].split("\\")[0] for x in wordInfo[1:]]
         debug.trace('SelectWinGramNL.selection_written_form', 'the getWordInfo: %s'% writtenList)
         
         return writtenList
+
+    def add_written_to_start_end_total_patterns(self, writtenList, start_pats, end_pats, total_pats):
+        """add the items of the written form list to the pattern sets
+
+        if "through" in list (not first or last), add start pattern to start_pats, and end pattern
+        if "through" not in list, or first or last: add pattern to total_pats
+
+        Note: Lists of words (often one word) are added
+        all converted to lowercase, as the regular expressions work with re.IGNORECASE,
+        """
+        if self.through_word in writtenList:
+            index_through = writtenList.index(self.through_word)
+            if index_through > 0 and index_through < len(writtenList)-1:
+                start_pats.add(tuple(map(string.lower, writtenList[:index_through])))
+                end_pats.add(tuple(map(string.lower, writtenList[index_through+1:])))
+                return
+        total_pats.add(tuple(map(string.lower, writtenList)))
+        
 
 class BasicCorrectionWinGramNL(BasicCorrectionWinGram, GrammarBase):
     """natlink implementation of BasicCorrectionWinGram for window-specific 
