@@ -265,7 +265,10 @@ class SourceBuff(OwnerObject):
               
         """
 
-        distance = min(abs(region1_start - region2_start), abs(region1_start - region2_end), abs(region1_end - region2_start), abs(region1_end - region2_end))
+        distance = min(abs(region1_start - region2_start), 
+        							 abs(region1_start - region2_end), 
+        							 abs(region1_end - region2_start), 
+        							 abs(region1_end - region2_end))
         return distance
 
     def cur_pos(self):
@@ -455,7 +458,7 @@ class SourceBuff(OwnerObject):
         """
         return self.get_text()
 
-    def distance_to_selection(self, start, *opt_end):
+    def distance_to_selection(self, start, opt_end=None, start_sel=None, end_sel=None):
         """Computes the distance of a region to the current selection.
         
         **INPUTS**
@@ -469,25 +472,19 @@ class SourceBuff(OwnerObject):
         
         *INT* -- the distance
         """
-        if len(opt_end) > 0:
-            end = opt_end[0]
-        else:
+        if opt_end == None:
             end = start
+        else:
+            end = opt_end
         # make sure start < end and start2 < end2
         if start > end:
-            tmp = end
-            end = start
-            start = tmp            
-        start2, end2 = self.get_selection()
+            start, end = end, start
+        if start_sel == None or end_sel == None:
+        	start_sel, end_sel = self.get_selection()
         # make sure start2 < end2
-        if start2 > end2:
-            tmp = end2
-            start2 = end2
-            end2 = tmp        
-        if start2 == None or end2 == None:
-            start2 = self.cur_pos()
-            end2 = start2
-        return self.region_distance(start, end, start2, end2)
+        if start_sel > end_sel:
+        	start_sel, end_sel = end_sel, start_sel
+        return self.region_distance(start, end, start_sel, end_sel)
         
     def get_visible(self):
         """ get start and end offsets of the currently visible region of
@@ -1718,55 +1715,75 @@ class SourceBuff(OwnerObject):
         # Look in the list of occurences for the one closest to the cursor
         # in the right direction
         #
-        shortest_distance = None
+        large = 999999
+        shortest_distance = large  # large for start
+        start_sel, end_sel = self.get_selection()
         length_of_closest_region = 1000 # further away not considered...
         for ii, occurence in enumerate(occurences):
         
             debug.trace('SourceBuff.closest_occurence_to_cursor', 
-                        'ii=%s, cur_pos()=%s, occurence=%s' % (ii, self.cur_pos(), occurence))
+                        'ii=%s, start_sel=%s, end_sel=%s, occurence=%s, direction=%s' %
+                        (ii, start_sel, end_sel, occurence, direction))
 
             if self.ignore_occurence(occurence, ignore_overlapping_with_cursor,
                                     ignore_left_of_cursor,
-                                    ignore_right_of_cursor):
+                                    ignore_right_of_cursor, start_sel, end_sel):
                debug.trace('SourceBuff.closest_occurence_to_cursor', 
                            'skipping occurence=%s' % repr(occurence))                                                    
                continue
-            if direction < 0:
+            if direction == -1:
                 # Looking for closest occurence before cursor ...
-                if occurence[0] > self.cur_pos():
+                if occurence[1] > start_sel:
                     # We have passed cursor.
+                    debug.trace('SourceBuff.closest_occurence_to_cursor', 
+                           'direction < 0, past cursor, break: %s, start_sel: %s' % (repr(occurence), start_sel))
                     break
-            elif direction > 0:
+            elif direction == 1:
                 # Looking for closest occurence before cursor ...
-                if occurence[1] < self.cur_pos():
+                if occurence[0] < end_sel:
                     # ignore
+                    debug.trace('SourceBuff.closest_occurence_to_cursor', 
+                           'direction > 0, cursor not reached, continue: %s, start_sel: %s' % (repr(occurence), end_sel))
                     continue
 
-            distance = self.region_distance(occurence[0], occurence[1], self.cur_pos(), self.cur_pos())
+            distance = self.distance_to_selection(occurence[0], occurence[1], start_sel, end_sel)
             debug.trace('SourceBuff.closest_occurence_to_cursor', 
-                       'checking: %s, distance: %s' % (repr(occurence), distance))
+                       'checking: %s with (%s,%s), distance: %s' %
+                        (repr(occurence), start_sel, end_sel, distance))
 
-            if ((shortest_distance == None or distance < shortest_distance)
-                and not self.same_as_previous_search(regexp, direction,
-                                                     where, occurence)):
+            if distance < shortest_distance:
+##                if self.same_as_previous_search(regexp, direction, where, occurence):
+##                    debug.trace('SourceBuff.closest_occurence_to_cursor', 
+##                       'same_as_previous_search, continue, regexp: %s, distance: %s' % (regexp, distance))
+##                    continue
                 shortest_distance = distance
                 closest_index = ii
+
+        if shortest_distance == large:
+            debug.trace('SourceBuff.closest_occurence_to_cursor', 
+               'no valid range found, ii: %s, closest_index: %s' % (ii, closest_index))
+            
         return closest_index
 
     def ignore_occurence(self, occurence, ignore_overlapping_with_cursor,
-                         ignore_left_of_cursor, ignore_right_of_cursor):
+                         ignore_left_of_cursor, ignore_right_of_cursor,
+                         start_sel, end_sel):
+        """check overlap, pass start_sel and end_sel in!
 
+        testing and examples: see SelectTextTest.py
+        """
+                
         if (ignore_overlapping_with_cursor and 
-            occurence[0] <= self.cur_pos() and
-            occurence[1] >= self.cur_pos()):
+            occurence[0] <= start_sel and
+            occurence[1] >= end_sel):
             return 1
                         
         if (ignore_left_of_cursor and 
-            occurence[1] == self.cur_pos()):
+            occurence[1] == end_sel):
             return 1
 
         if (ignore_right_of_cursor and 
-            occurence[0] == self.cur_pos()):
+            occurence[0] == start_sel):
             return 1
 
         return 0

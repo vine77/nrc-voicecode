@@ -4,6 +4,7 @@ import VoiceCodeRootTest
 from vc_globals import all_languages, c_style_languages
 import sr_grammars  # for test of WinGram function get_smaller_ranges_only
 import sr_grammarsNL  # for get_shortest_ranges test
+import SourceBuff
 
 class SelectTextTest(VoiceCodeRootTest.VoiceCodeRootTest):
     """Test different select results, with and without "through"
@@ -217,28 +218,70 @@ large = large + small<SEL_END>
 # These tests check the internal workings of the class.
 ##########################################################
 
-##    def test_get_all_ranges_numbers(self):
-## must elaborate on this:
-##        dummy = 1
-##        win_gram = sr_grammars.WinGram(dummy)
-##        visible = "abg1: def(self, g1, h): g2 = ((g1,i), (h,i), (g23, 24))"
-##        #         0123456789012345678901234567890123456789012345678901234
-##        #                   10        20        30      40          50
-##        expected = {'1':  [(3, 4), (17, 18), (32, 33)],
-##                    '2': [(15,16)],
-##                    '23': [(22,24)],
-##                    'g1': [(9,11)],
-##                    'g2': [()],
-##                    'g3': []}
-##                    
-##        for char in ['1', '2', '23', 'g1', 'g2']:
-##            all_ranges = win_gram.get_all_ranges(visible, [char])
-##            self.assert_equal(expected[char], all_ranges, "get_all_ranges result not as expected with: %s"% char)
-##            
-##
+    def test_get_all_ranges_text(self):
+
+        dummy = 1
+        # function in sr_grammars.py
+        win_gram = sr_grammars.WinGram(dummy)
+        visible = "abg1: def(self, self.selfish, g1, h): g2 = ((self.g1,i), (h,i), (g23, 24, g))"
+        #         0123456789012345678901234567890123456789012345678901234
+        #                   10        20        30      40          50
+        expected = {'g':  [(74, 75)],
+                    'self': [(10, 14), (16, 20), (45, 49)],
+                    'selfish': [(21,28)]}
+                    
+        for char in ['g', 'self', 'selfish']:
+            all_ranges = win_gram.get_all_ranges(visible, [[char]])
+            self.assert_equal(expected[char], all_ranges, "get_all_ranges result not as expected with: %s"% char)
+            
+    def test_get_all_ranges_spacing(self):
+
+        # see if multiple words can be separated by 0 or 1 space...        
+
+        dummy = 1
+        # function in sr_grammars.py
+        win_gram = sr_grammars.WinGram(dummy)
+        visible = "self.fish, self fish, self-fish, selffishness, selfish, noself."
+        #         0123456789012345678901234567890123456789012345678901234
+        #                   10        20        30      40          50
+        char = ['self', 'fish']
+        expected =  [(0, 9), (11, 20), (22, 31)]
+                    
+        all_ranges = win_gram.get_all_ranges(visible, [char])
+        self.assert_equal(expected, all_ranges, "get_all_ranges result not as expected with: %s"% char)
+
+        chars = [['self', 'fish'], ['self'], ['fish']]
+        expected =  [(0, 4), (5, 9), (11, 15), (16, 20), (22, 26), (27, 31)]
+        all_ranges = win_gram.get_all_ranges(visible,chars)
+        self.assert_equal(expected, all_ranges, "get_all_ranges result not as expected with: %s"% chars)
+        
+            
+    def test_get_all_ranges_numbers(self):
+        ## must elaborate on these:
+        dummy = 1
+        # function in sr_grammars.py
+        win_gram = sr_grammars.WinGram(dummy)
+        visible = "abg1: def(self, g1, h): g2 = ((g1,i), (h,i), (g23, 24))"
+        #         0123456789012345678901234567890123456789012345678901234
+        #                   10        20        30      40          50
+        expected = {'1':  [(3, 4), (17, 18), (32, 33)],
+                    '2': [(25, 26), (47, 48), (51, 52)],
+                    '23': [(47, 49)],
+                    'g1': [(16, 18), (31, 33)],
+                    'g2':  [(24, 26), (46, 48)],
+                    'g3': []}
+                    
+        for char in ['1', '2', '23', 'g1', 'g2']:
+            all_ranges = win_gram.get_all_ranges(visible, [[char]])
+            self.assert_equal(expected[char], all_ranges, "get_all_ranges result not as expected with: %s"% char)
+            
+
+
+
 
     def test_get_smaller_ranges_only(self):
         dummy = 1
+        # function in sr_grammars.py
         win_gram = sr_grammars.WinGram(dummy)
         ranges = [(1,3), (5,10), (5,20), (30,40), (35,40)]
         expected = [(1,3), (5,10), (35,40)]
@@ -247,6 +290,7 @@ large = large + small<SEL_END>
 
     def test_get_shortest_ranges(self):
         dummy = 1
+        # function in sr_grammars.py
         win_gram = sr_grammars.WinGram(dummy)
         start_ranges = [(1,3), (10,12), (20,22)]
         end_ranges = [(5,6), (7,8), (14,15)]
@@ -260,6 +304,55 @@ large = large + small<SEL_END>
         shortest_ranges = win_gram.get_shortest_ranges(start_ranges, end_ranges)
         self.assert_equal(expected, shortest_ranges, "get_shortest_ranges result not as expected")
 
+
+    def test_ignore_occurence(self):
+        dummy = 1
+        # function in SourceBuff.py
+        source_buff = SourceBuff.SourceBuff(dummy)
+        occurence = (10,20)
+        ignore_overlapping_with_cursor = 0
+        ignore_left_of_cursor = 0
+        ignore_right_of_cursor = 0
+        start_sel = 10
+        end_sel = 20
+        result = source_buff.ignore_occurence( occurence=occurence,
+                                            ignore_overlapping_with_cursor=ignore_overlapping_with_cursor,
+                                            ignore_left_of_cursor=ignore_left_of_cursor,
+                                            ignore_right_of_cursor=ignore_right_of_cursor,
+                                            start_sel=start_sel,
+                                            end_sel=end_sel)
+        self.assert_equal(0, result, "ignore_occurence, overlapping regions fails when parameters are all 0")
+
+        ignore_overlapping_with_cursor = 1
+        result = source_buff.ignore_occurence( occurence=occurence,
+                                            ignore_overlapping_with_cursor=ignore_overlapping_with_cursor,
+                                            ignore_left_of_cursor=ignore_left_of_cursor,
+                                            ignore_right_of_cursor=ignore_right_of_cursor,
+                                            start_sel=start_sel,
+                                            end_sel=end_sel)
+        self.assert_equal(1, result, "ignore_occurence, overlapping regions should match")
+
+
+        ignore_overlapping_with_cursor = 0
+        start_sel = end_sel = 0        
+        result = source_buff.ignore_occurence( occurence=occurence,
+                                            ignore_overlapping_with_cursor=ignore_overlapping_with_cursor,
+                                            ignore_left_of_cursor=ignore_left_of_cursor,
+                                            ignore_right_of_cursor=ignore_right_of_cursor,
+                                            start_sel=start_sel,
+                                            end_sel=end_sel)
+        self.assert_equal(0, result, "ignore_occurence, overlapping regions fails when parameters are all 0")
+
+
+        ignore_overlapping_with_cursor = 1
+        start_sel = end_sel = 0        
+        result = source_buff.ignore_occurence( occurence=occurence,
+                                            ignore_overlapping_with_cursor=ignore_overlapping_with_cursor,
+                                            ignore_left_of_cursor=ignore_left_of_cursor,
+                                            ignore_right_of_cursor=ignore_right_of_cursor,
+                                            start_sel=start_sel,
+                                            end_sel=end_sel)
+        self.assert_equal(0, result, "ignore_occurence, overlapping regions should fail, non overlapping regions")
 
     def test_This_is_how_you_get_to_nearest_if_selection_is_there_already(self):
         self._open_empty_test_file('temp.py')
@@ -317,6 +410,7 @@ large = large + "def"
 '''   calc3 = (x.function1() + y.function2()) /( z.function1() + z.function2()<SEL_START>)
    calc4 = (x.function1() + y.function2()) /( z.function1() + z.function2())
    center<SEL_END> = 1''')
+
         
     def test_This_test_of_lots_of_through_ranges(self):
 
@@ -329,15 +423,46 @@ large = large + "def"
         self._say("select center")
         self._say(["select", "x\\X.", "through", ")\\close-paren"])
         self._assert_lines_with_selection_content_is(\
-'''   calc4 = (<SEL_START>x.function1()<SEL_END> + y.function2()) /( z.function1() + z.function2())''')
+'''   calc5 = (<SEL_START>x.function1()<SEL_END> + y.function2()) /(z.function1() + z.function2())''')
+
+        self._say(["previous one"])
         self._say(["previous one"])
         self._say(["previous one"])
         self._say(["previous one"])
         self._assert_lines_with_selection_content_is(\
 '''   calc1 = (<SEL_START>x.function1(a, c, b)<SEL_END> + y.function2()) /( z.function1() + z.function2())''')
         
+        self._say(["previous one"])
+        self._say(["previous one"])
+        self._say(["previous one"])
+        self._say(["previous one"])
+        self._assert_lines_with_selection_content_is(\
+'''      return self.<SEL_START>x()<SEL_END> + self.b()''')
         
-        
+    def test_This_test_lots_of_combined_ranges(self):
+
+        # file with a lot of occurrences of function one, even function/one.
+        # special routines have to search for the failing natlink/natspeak ranges list
+        #
+        # range of ranges, VoiceCode must enhance this list!
+        self._open_file(self._get_test_data_file_path('lots_of_selections_py'))
+        self._goto_line(4)
+        self._say(["select", "function", "one"])
+        self._assert_lines_with_selection_content_is(\
+'''# words to recognise: <SEL_START>function one<SEL_END>, function-one, function-1, function 1.''')
+
+        self._say(["next one"])
+        self._assert_lines_with_selection_content_is(\
+'''# words to recognise: function one, <SEL_START>function-one<SEL_END>, function-1, function 1.''')
+        self._say(["next one"])
+        self._assert_lines_with_selection_content_is(\
+'''# words to recognise: function one, function-one, <SEL_START>function-1<SEL_END>, function 1.''')
+        self._say(["next one"])
+        self._assert_lines_with_selection_content_is(\
+'''# words to recognise: function one, function-one, function-1, <SEL_START>function 1<SEL_END>.''')
+        self._say(["next one"])
+        self._assert_lines_with_selection_content_is(\
+'''   def <SEL_START>function1<SEL_END>(self):''')
 
 
 ###############################################################
