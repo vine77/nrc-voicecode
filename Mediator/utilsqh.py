@@ -1,8 +1,10 @@
+from __future__ import generators
+# -*- coding: latin-1 -*-
+
 #$Revision$, $Date$, $Author$
 #misc utility functions from Quintijn, used in unimacro and in
 #local programs.
 #copyright Quintijn Hoogenboom,  QH software, training & advies
-from __future__ import generators
 
 import types, string, os, shutil, copy
 import glob, re, sys, traceback
@@ -16,6 +18,7 @@ locale.setlocale(locale.LC_ALL, '')
 
 class QHError(Exception):
     pass
+
 
 _allchars = string.maketrans('', '')
 
@@ -793,8 +796,8 @@ def getIEProcesses(filterClasses=None):
         ExploreWClass == Windows Explorer
         IEFrame == Internet Explorer
 
->>> getIEProcesses()
->>> getIEProcesses(filterClasses=['IEFrame'])
+###>>> getIEProcesses()
+###>>> getIEProcesses(filterClasses=['IEFrame'])
 
     """
     ShellWindowsCLSID = '{9BA05972-F6A8-11CF-A442-00A0C90A8F39}'
@@ -2664,7 +2667,7 @@ def normaliseLabel(label):
 >>> normaliseLabel('Prijs:')
 'prijs'
 >>> normaliseLabel('ideeën:')
-'idee\xebn'
+'idee\\xebn'
 
     """
     L = ' '.join(label.strip().split())
