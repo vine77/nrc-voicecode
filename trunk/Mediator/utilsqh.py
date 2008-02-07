@@ -1,31 +1,42 @@
 #$Revision$, $Date$, $Author$
-#misc utility functions from Quintijn, used in unimacro, voicecode and in 
+#misc utility functions from Quintijn, used in unimacro and in
 #local programs.
 #copyright Quintijn Hoogenboom,  QH software, training & advies
 from __future__ import generators
-import types, string, os, shutil
+
+import types, string, os, shutil, copy
 import glob, re, sys, traceback
 import time, filecmp
 import win32com.client
 from win32gui import GetClassName, EnumWindows, GetWindowText
 import urllib
 from htmlentitydefs import codepoint2name
-
+import locale
+locale.setlocale(locale.LC_ALL, '')
 
 class QHError(Exception):
     pass
-
 
 _allchars = string.maketrans('', '')
 
 def translator(frm='', to='', delete='', keep=None):
     """closure function to implement the string.translate functie
     python cookbook (2), ch 1 recipe 9
-    >>> fixwordquotes('\x91aa\x92')
-    "'aa'"
-    >>> fixwordquotes('\x93bb\x94')
-    '"bb"'
-    """    
+
+# functions below, see also testUtilsqh.py in unittest.
+>>> fixwordquotes('\x91aa\x92')
+"'aa'"
+>>> fixwordquotes('\x93bb\x94')
+'"bb"'
+
+>>> normaliseaccentedchars('d\xe9sir\xe9 //\xddf..# -..e.')
+'desireyf-e'
+
+# this one should go before normaliseaccentedchars
+#(and after splitting of the extension and folder parts)
+>>> fixdotslash('abc/-.def this is no extension.')
+'abc_-_def this is no extension_'
+    """
     if len(to) == 1:
         to = to * len(frm)
     trans = string.maketrans(frm, to)
@@ -49,11 +60,16 @@ def isaccented(c):
         return
     if len(name) > 1:
         return name[0]
-        
+
+# fast translator functions:
 accented = [(chr(c), isaccented(c)) for c in range(192,256) if isaccented(c)]
 ffrom = ''.join([c for (c,d) in accented])
-tto = ''.join([d for (c,d) in accented])
+tto = ''.join([d.lower() for (c,d) in accented])
 normaliseaccentedchars = translator(ffrom, tto, keep=ffrom + string.letters + string.digits + "-_")
+ffrom = './'
+tto = '__'
+fixdotslash = translator(ffrom, tto)
+
 del ffrom
 del tto
 del accented
@@ -64,16 +80,16 @@ def curry(func, *args, **kwds):
     """curry from python cookbook, example 15.7,
 
     and python cookbook two: example 16.4.
-    
+
     used for example for class FullTable, which is curried from TableLite
-    
+
     >>> from HTMLgen import TableLite
     >>> str(TableLite())
     '\\n<table></table>'
     >>> FullTable = curry(TableLite, border=0, cellpadding=0, cellspacing=0, width = '100%')
     >>> str(FullTable())
     '\\n<table border="0" cellpadding="0" cellspacing="0" width="100%"></table>'
-    
+
     """
     def curried(*moreargs, **morekwds):
         kw = kwds.copy()
@@ -88,7 +104,7 @@ class peek_ahead(object):
 
     The preview can be inspected through it.preview
 
-    ignoring duplicates:    
+    ignoring duplicates:
     >>> it = peek_ahead('122345567')
     >>> for i in it:
     ...     if it.preview == i:
@@ -109,9 +125,9 @@ class peek_ahead(object):
     ...                 break
     ...     else:
     ...         print i,
-    ...         
+    ...
     a bb c dddd e
-    
+
     """
     sentinel = object() #schildwacht
     def __init__(self, it):
@@ -135,17 +151,17 @@ class peek_ahead_stripped(peek_ahead):
 
     sentinel is just False, such that peeking ahead can check for truth input
 
-    >>> lines = '\\n'.join(['line1', '', ' one space ahead','', '   three spaces ahead, 1 empty line before'])    
+    >>> lines = '\\n'.join(['line1', '', ' one space ahead','', '   three spaces ahead, 1 empty line before'])
     >>> import StringIO
     >>> list(peek_ahead_stripped(StringIO.StringIO(lines)))
     [(0, 'line1'), (0, ''), (1, 'one space ahead'), (0, ''), (3, 'three spaces ahead, 1 empty line before')]
 
-    example of testing look ahead    
-    
-    >>> lines = '\\n'.join(['line1', '', 'line2 (last)'])    
-    >>> it = peek_ahead_stripped(StringIO.StringIO(lines)) 
+    example of testing look ahead
+
+    >>> lines = '\\n'.join(['line1', '', 'line2 (last)'])
+    >>> it = peek_ahead_stripped(StringIO.StringIO(lines))
     >>> for spaces, text in it:
-    ...     print 'current line: |', text, '|', 
+    ...     print 'current line: |', text, '|',
     ...     if it.preview is it.sentinel:
     ...         print ', cannot preview, end of peek_ahead_stripped'
     ...     elif it.preview[1]:
@@ -170,14 +186,14 @@ class peek_ahead_stripped(peek_ahead):
             self.preview = (len(line) - len(line.lstrip()), line.lstrip())
         except StopIteration: self.preview = self.sentinel
         return result
-        
 
-        
+
+
 def ifelse(var, ifyes, ifno):
     """ternary operator simulated, if var: True else: False
 
     idea from "learning python"
-    
+
     >>> x = []
     >>> print ifelse(x, 'a', 'b')
     b
@@ -189,6 +205,263 @@ def ifelse(var, ifyes, ifno):
         return ifyes
     else:
         return ifno
+
+# helper string functions:
+def replaceExt(fileName, ext):
+    """change extension of file
+
+>>> replaceExt("a.psd", ".jpg")
+'a.jpg'
+>>> replaceExt("a/b/c/d.psd", "jpg")
+\'a/b/c/d.jpg'
+    """
+    ext = addToStart(ext, ".")
+    fileName = str(fileName)
+    a, extOld = os.path.splitext(fileName)
+    return a + ext
+
+
+def removeFromStart(text, toRemove, ignoreCase=None):
+    """returns the text with "toRemove" stripped from the start if it matches
+>>> removeFromStart('abcd', 'a')
+'bcd'
+>>> removeFromStart('abcd', 'not')
+'abcd'
+
+working of ignoreCase:
+
+>>> removeFromStart('ABCD', 'a')
+'ABCD'
+>>> removeFromStart('ABCD', 'ab', ignoreCase=1)
+'CD'
+>>> removeFromStart('abcd', 'ABC', ignoreCase=1)
+'d'
+
+    """
+    if ignoreCase:
+        text2 = text.lower()
+        toRemove = toRemove.lower()
+    else:
+        text2 = text
+    if text2.startswith(toRemove):
+        return text[len(toRemove):]
+    else:
+        return text
+
+def removeFromEnd(text, toRemove, ignoreCase=None):
+    """returns the text with "toRemove" stripped from the end if it matches
+
+>>> removeFromEnd('a.jpg', '.jpg')
+'a'
+>>> removeFromEnd('b.jpg', '.gif')
+'b.jpg'
+
+working of ignoreCase:
+
+>>> removeFromEnd('C.JPG', '.jpg')
+'C.JPG'
+>>> removeFromEnd('D.JPG', '.jpg', ignoreCase=1)
+'D'
+>>> removeFromEnd('d.jpg', '.JPG', ignoreCase=1)
+'d'
+
+    """
+    if ignoreCase:
+        text2 = text.lower()
+        toRemove = toRemove.lower()
+    else:
+        text2 = text
+    if text2.endswith(toRemove):
+        return text[:-len(toRemove)]
+    else:
+        return text
+
+def addToStart(text, toAdd, ignoreCase=None):
+    """returns text with "toAdd" added at the start if it was not already there
+
+    if ignoreCase:
+        return the start of the string with the case as in "toAdd"
+
+>>> addToStart('a-text', 'a-')
+'a-text'
+>>> addToStart('text', 'b-')
+'b-text'
+
+working of ignoreCase:
+
+>>> addToStart('C-Text', 'c-', ignoreCase=1)
+'c-Text'
+>>> addToStart('d-Text', 'D-', ignoreCase=1)
+'D-Text'
+
+    """
+    if ignoreCase:
+        text2 = text.lower()
+        toAdd2 = toAdd.lower()
+    else:
+        text2 = text
+        toAdd2 = toAdd
+    if text2.startswith(toAdd2):
+        return toAdd + text[len(toAdd):]
+    else:
+        return toAdd + text
+
+def addToEnd(text, toAdd, ignoreCase=None):
+    """returns text with "toAdd" added at the end if it was not already there
+
+    if ignoreCase:
+        return the end of the string with the case as in "toAdd"
+
+>>> addToEnd('a.jpg', '.jpg')
+'a.jpg'
+>>> addToEnd('b', '.jpg')
+'b.jpg'
+
+working of ignoreCase:
+
+>>> addToEnd('Cd.JPG', '.jpg', ignoreCase=1)
+'Cd.jpg'
+>>> addToEnd('Ef.jpg', '.JPG', ignoreCase=1)
+'Ef.JPG'
+
+    """
+    if ignoreCase:
+        text2 = text.lower()
+        toAdd2 = toAdd.lower()
+    else:
+        text2 = text
+        toAdd2 = toAdd
+    if text2.endswith(toAdd2):
+        return text[:-len(toAdd)] + toAdd
+    else:
+        return text + toAdd
+
+def extToLower(fileName):
+    """leave name part intact, but change extension to lowercase
+>>> extToLower("aBc.jpg")
+'aBc.jpg'
+>>> extToLower("ABC.JPG")
+'ABC.jpg'
+>>> extToLower("D:/a/B/ABC.JPG")
+'D:/a/B/ABC.jpg'
+
+
+
+    """
+    f, ext = os.path.splitext(fileName)
+    return f + ext.lower()
+
+
+def appendBeforeExt(text, toAppend):
+    """append text just before the extension of the filename part
+
+>>> appendBeforeExt("short.html", '__t')
+'short__t.html'
+>>> appendBeforeExt("http://a/b/c/d/long.html", '__b')
+'http://a/b/c/d/long__b.html'
+    """
+    base, ext = os.path.splitext(text)
+    return base + toAppend + ext
+
+def getBaseFolder(globalsDict):
+    """get in a module the folder of this module.
+
+    either sys.argv[0] (when run direct) or
+    __file__, which can be empty. In that case take the working directory
+    """
+    baseFolder = ""
+    if globalsDict['__name__']  == "__main__":
+        baseFolder = os.path.split(sys.argv[0])[0]
+        print 'baseFolder from argv: %s'% baseFolder
+    elif globalsDict['__file__']:
+        baseFolder = os.path.split(globalsDict['__file__'])[0]
+        print 'baseFolder from __file__: %s'% baseFolder
+    if not baseFolder:
+        baseFolder = os.getcwd()
+        print 'baseFolder was empty, take wd: %s'% baseFolder
+    return baseFolder
+
+Classes = ('ExploreWClass', 'CabinetWClass')
+
+
+reUnix=re.compile(r'[^\w-]')
+def toUnixName(t, lowercase=1, canHaveExtension=1, canHaveFolders=1):
+    """get rid of unwanted characters, only letters and '-'
+    leading numbers get a _ in front
+
+    default: all to lowercase, if lowercase = 0: convert extension to lowercase anyway
+
+    default: file can have extension and folders. If set to 0, also \\, / and . are removed from name.
+
+    split into folder/file parts if needed.
+
+>>> toUnixName('')
+Traceback (most recent call last):
+ValueError: toUnixName, name has no valid characters: ||
+>>> toUnixName('-abcd')
+'_-abcd'
+
+>>> toUnixName('aDc')
+'adc'
+>>> toUnixName('a.b-99? .d')
+'a_b-99.d'
+>>> toUnixName('a.b-99? .d', canHaveExtension=0)
+'a_b-99_d'
+>>> toUnixName('.a^.jpg')
+'_a.jpg'
+>>> toUnixName('6-barge.txt')
+'_6-barge.txt'
+>>> toUnixName('-6-barge.html')
+'_-6-barge.html'
+
+>>> toUnixName('D:/abc.def/-6-barge.html')
+'D:/abc_def/_-6-barge.html'
+
+>>>
+
+
+    """
+    t = os.path.normpath(t)
+    t = t.replace('\\', '/')
+    if canHaveFolders and t.find('/') >= 0:
+        L  = []
+        parts = t.split('/')
+        for part in parts:
+            if part  != parts[ - 1]:
+                canHaveExtension2 = 0 # folder parts never extension
+            else:
+                canHaveExtension2 = canHaveExtension
+            L.append(toUnixName(part,lowercase=lowercase, canHaveFolders=0,
+                                canHaveExtension=canHaveExtension2))
+        return '/'.join(L)
+
+    if len(t) == 2 and t.endswith(":"):
+        return t.upper()
+    if t == "..":
+        return t
+    # now for the dir/file part:
+    if canHaveExtension:
+        trunk, ext = os.path.splitext(t)
+    else:
+        # also remove . and / (and \)
+        trunk, ext = t, ''
+    trunk = fixdotslash(trunk) # . --> _ and / -->> _
+    trunk = normaliseaccentedchars(trunk)
+    if lowercase:
+        trunk = trunk.lower()
+
+    # remove possible invalid chars from extension:
+    if ext and ext[0] == ".":
+        ext = "." + normaliseaccentedchars(ext[1:])
+        ext = ext.lower()  # always to lowercase
+
+    if not trunk:
+        raise ValueError("toUnixName, name has no valid characters: |%s|"% trunk)
+    if trunk[0] in '-0123456789':
+        trunk = "_" + trunk
+    return trunk + ext
+
+str2unix = toUnixName
 
 def sendkeys_escape(str):
     """escape with {} keys that have a special meaning in sendkeys
@@ -211,11 +484,12 @@ def _sendkeys_escape(s):
         return '{%s}' % s
     else:
         return s
-    
-    
-                   
+
+
+
 ##import sys, traceback
-def print_exc_plus(filename=None, skiptypes=None, takemodules=None, specials=None):
+def print_exc_plus(filename=None, skiptypes=None, takemodules=None,
+                   specials=None):
     """ Print the usual traceback information, followed by a listing of
     all the local variables in each frame.
     """
@@ -235,7 +509,7 @@ def print_exc_plus(filename=None, skiptypes=None, takemodules=None, specials=Non
     # keys that are in specialsSitegen are recorded in next array:
     specialsDict = {}
     push = L.append
-        
+
     push('traceback date/time: %s'% time.asctime(time.localtime(time.time())))
     pagename = ''
     menuname = ''
@@ -308,6 +582,8 @@ def print_exc_plus(filename=None, skiptypes=None, takemodules=None, specials=Non
                     # COULD cause any exception, so we MUST catch any...:
                     v = v.replace('\n', '|')
                     values.append(v)
+                if not keys:
+                    break
                 maxlenkeys = max(15, max(map(len, keys)))
                 allowedlength = 80-maxlenkeys
                 for k,v in zip(keys, values):
@@ -320,7 +596,7 @@ def print_exc_plus(filename=None, skiptypes=None, takemodules=None, specials=Non
                 print 'no self of HTMLDoc found'
 
     callback = []
-    
+
     if menuname:
         push('menu: %s'% menuname)
         callback.append('menu: %s'% menuname)
@@ -329,11 +605,11 @@ def print_exc_plus(filename=None, skiptypes=None, takemodules=None, specials=Non
         callback.append('page: %s'% pagename)
     push('\ntype: %s, value: %s'% (sys.exc_info()[0], sys.exc_info()[1]))
     callback.append('error: %s'%sys.exc_info()[1])
-    
+
     print '\nerror occurred:'
     callback = '\n'.join(callback)
     print callback
-    
+
     sys.stderr.write('\n'.join(L))
     sys.stderr.write(callback)
     return callback, specialsDict
@@ -346,14 +622,14 @@ def cleanTraceback(tb, filesToSkip=None):
 
     in use with unimacro unittest and voicecode unittesting.
 
-    filesToSkip are (can be "unittest.py" and "TestCaseWithHelpers.py"    
+    filesToSkip are (can be "unittest.py" and "TestCaseWithHelpers.py"
 
     """
     L = tb.split('\n')
     snip = "  ..." # leaving a sign of the stripping!
     if filesToSkip:
         singleLineSkipping = ["Traceback (most recent call last):"]
-    else: 
+    else:
         singleLineSkipping = None
     M = []
     skipNext = 0
@@ -370,19 +646,21 @@ def cleanTraceback(tb, filesToSkip=None):
             for f in filesToSkip:
                 if line.find(f + '", line') >= 0:
                     skipNext = 1
-                    if M[-1] != snip:
+                    if M and  M[-1] == snip:
+                        pass
+                    else:
                         M.append(snip)
                     break
             else:
                 skipNext = 0
                 M.append(line)
-       
+
     return '\n'.join(M)
 
     # calculate the relative path, if ffrom and fto are files (not directoryies)
 def relpathdirs(ffrom, fto):
     """calculate the relative directory's
-    
+
     >>> relpathdirs('a/b/c', 'a/d')
     '../../d'
     >>> relpathdirs(path('a/b/c'), 'a/d')
@@ -399,7 +677,7 @@ def relpathdirs(ffrom, fto):
     'a'
     >>> relpathdirs(path('a'), path('.'))
     '..'
-    
+
 
     """
     if type(ffrom) == types.StringType:
@@ -444,19 +722,19 @@ def relpathfiles(ffrom, fto):
     """calculate the relative files (tail1 is irrelevant)
 
     ffrom and fto are (if necessary) converted to path instances
-    
+
     >>> relpathfiles('a/b/c/t.txt', 'a/d/a.txt')
     '../../d/a.txt'
     >>> relpathfiles('a/t.txt', 'a/a.txt')
     'a.txt'
-    
+
 
     """
     if type(ffrom) == types.StringType:
         ffrom = path(ffrom)
     if type(fto) == types.StringType:
         fto = path(fto)
-    
+
     head1, tail1 = ffrom.split()
     head2, tail2 = fto.split()
     if tail1 and tail2:
@@ -464,12 +742,12 @@ def relpathfiles(ffrom, fto):
     else:
         return 'fout, tail1 of tail2 leeg'
 
-# 
+#
 foundHandle = None
 def getWindowWithTitle(wantedTitle, checkendstring=None):
     """find window that has the exact title. For kontrol
     check can be "endstring", look for endstring.
-    
+
     """
     global foundHandle
     foundHandle = None
@@ -477,12 +755,12 @@ def getWindowWithTitle(wantedTitle, checkendstring=None):
         EnumWindows(lookForWindowTextEnd, wantedTitle)
     else:
         EnumWindows(lookForWindowText, wantedTitle)
-        
+
     return foundHandle
-        
+
 def lookForWindowTextEnd(hwnd, text):
     global foundHandle
-    
+
     if GetWindowText(hwnd).strip().endswith(text):
         foundHandle = hwnd
         return
@@ -499,10 +777,10 @@ def lookForWindowText(hwnd, text, endstring):
 
 
 
-def getIEProcesses():
+def getIEProcesses(filterClasses=None):
     """get running IE, my computer and explorer processes
     ### getIEProcesses() return something like:
-    
+
     [('projects', 'file:///D:/projects', 262740, 'CabinetWClass'),
     ('Google', 'http://www.google.nl/', 394500, 'IEFrame'),
     ('Google', 'http://www.google.nl/', 2360846, 'IEFrame'),
@@ -515,7 +793,10 @@ def getIEProcesses():
         ExploreWClass == Windows Explorer
         IEFrame == Internet Explorer
 
-    """    
+>>> getIEProcesses()
+>>> getIEProcesses(filterClasses=['IEFrame'])
+
+    """
     ShellWindowsCLSID = '{9BA05972-F6A8-11CF-A442-00A0C90A8F39}'
     ShellWindows = win32com.client.Dispatch(ShellWindowsCLSID)
     L = []
@@ -527,11 +808,15 @@ def getIEProcesses():
 ##            print s.LocationURL
 ##            print s.HWND
 ##            print GetClassName(s.HWND)
+            ClassName = GetClassName(s.HWND)
+            if filterClasses and ClassName not in filterClasses:
+                continue
             try:
-                L.append((str(s.LocationName), str(s.LocationURL), s.HWND, GetClassName(s.HWND)))
+                L.append((str(s.LocationName), str(s.LocationURL), s.HWND, ))
             except UnicodeEncodeError:
                 pass # leave these alone
     return L
+
 
 # Utility functions QH softwaretraining & advies
 #
@@ -562,7 +847,7 @@ def splitLongString(S, maxLen=70, prefix='', prefixOnlyFirstLine=0):
     """Splits a (long) string into newline separated parts,
 
     a list of strings is returned.
-    
+
     possibly with a fixed prefix, or a prefix for the first line only.
     Possibly items inside the line are separated by a given separator
 
@@ -573,10 +858,10 @@ def splitLongString(S, maxLen=70, prefix='', prefixOnlyFirstLine=0):
     ['foo']
     >>> splitLongString(' foo   bar and another set of  words  ', 80)
     ['foo bar and another set of words']
-    >>> splitLongString(' foo   bar and another set of  words  ', 20, 
+    >>> splitLongString(' foo   bar and another set of  words  ', 20,
     ... prefix='    # ')
     ['    # foo bar and', '    # another set of', '    # words']
-    >>> splitLongString(' foo   bar and another set of  words  ', 20, 
+    >>> splitLongString(' foo   bar and another set of  words  ', 20,
     ... prefix='entry = ', prefixOnlyFirstLine=1)
     ['entry = foo bar and', '        another set', '        of words']
     """
@@ -588,9 +873,9 @@ def splitLongString(S, maxLen=70, prefix='', prefixOnlyFirstLine=0):
         if prefixOnlyFirstLine:
             prefix = ' '*len(prefix)
     return lOut
-            
 
-    
+
+
 def cleanString(s):
     """converts a string with leading and trailing and
     intermittent whitespace into a string that is stripped
@@ -603,7 +888,7 @@ def cleanString(s):
     'foo bar'
     >>> cleanString('')
     ''
-    
+
     """
     return ' '.join(map(lambda x: x.strip(), s.split()))
 
@@ -632,7 +917,7 @@ def formatListColumns(List, lineLen = 70, sort = 0):
     foo   longer entry
     bar
 
-    """    
+    """
     if sort:
         List.sort(caseIndependentSort)
     s = ', '.join(List)
@@ -643,10 +928,10 @@ def formatListColumns(List, lineLen = 70, sort = 0):
 
     maxLen = max(map(len, List))
 
-    # too long elements in list, return "\n" separated string:    
+    # too long elements in list, return "\n" separated string:
     if maxLen > lineLen:
         return '\n'.join(List)
-    
+
 
     nRow = len(s)/lineLen + 1
     lenList = len(List)
@@ -675,7 +960,7 @@ def caseIndependentSort(a,b):
     """sort alphabetically, all converted to lower case
 
     """
-    
+
     a, b = string.lower(a), string.lower(b)
     return cmp(a, b)
 
@@ -693,8 +978,8 @@ def splitList(L, n):
         yield O
 
 def opj(*args):
-    """smart os.path.join function, can accept also list/tuple 
-    
+    """smart os.path.join function, can accept also list/tuple
+
     always returns "/" instead of os.sep
     and returns a path instance!
 
@@ -762,14 +1047,14 @@ def looksLikeNumber(t):
 
     """
     t = str(t).strip()
-    
+
     for sep in '-', '/':
         if sep in t:
             res = None
             for T in t.split(sep):
                 res = looksLikeNumber(T.strip()) or res
             return res
-        
+
     if reNumberLike.match(t):
         return 1
 
@@ -791,7 +1076,7 @@ def isStringLike(anobj):
     try: anobj + ''
     except: return 0
     return 1
-    
+
 def checkFolderExistence(*args):
     """raises error if folder not valid (mostly non-existent)
 
@@ -813,7 +1098,7 @@ def checkFolderExistence(*args):
                 raise OSError, 'path exists, but is not a folder: %s'% a
             else:
                 raise OSError, 'folder does not exist: %s'% a
-        
+
         elif type(a) == types.ListType:
             apply(checkFolderExistence, tuple(a))
         elif type(a) == types.TupleType:
@@ -830,11 +1115,11 @@ def checkFileExistence(folderOrPath, *args):
 
 
     each time the folder is joined with the file part and checked
-    
+
     If all is okay, this function returns silent,
     otherwise raises OSError
 
-    >>> folderName = 'c:\\qhtemp'   
+    >>> folderName = 'c:\\qhtemp'
     >>> makeEmptyFolder(folderName)
     >>> touch(folderName, "a.ini", "b.ini")
     >>> checkFileExistence(folderName, 'a.ini')
@@ -860,7 +1145,7 @@ def checkFileExistence(folderOrPath, *args):
             for P in p:
                 checkFileExistence(P)
             return
-    
+
     # now process the other arguments, folderOrPath must be a folder
     folder = folderOrPath
     checkFolderExistence(folder)  # raises error if folder is not a valid folder
@@ -899,7 +1184,7 @@ def makeEmptyFolder(*args):
     >>> makeEmptyFolder([folderName])
     >>> os.listdir(folderName)
     []
-    
+
     """
     for a in args:
         if not a:
@@ -913,7 +1198,7 @@ def makeEmptyFolder(*args):
                 if os.path.exists(a):
                     raise OSError, 'path already exists, but is not a folder, or could not be deleted: %s'% a
             os.mkdir(a)
-        
+
         elif type(a) == types.ListType:
             apply(makeEmptyFolder, tuple(a))
         elif type(a) == types.TupleType:
@@ -960,7 +1245,7 @@ def createFolderIfNotExistent(*args):
                         os.makedirs(a)
                     except OSError:
                         raise OSError, 'cannot create folder: %s'% a
-        
+
         elif type(a) == types.ListType:
             apply(createIfNotExistent, tuple(a))
         elif type(a) == types.TupleType:
@@ -983,7 +1268,7 @@ def touch(folder, *args):
 
 
     each time the folder is joined with the file part and touched
-    
+
     If all is okay, this function returns silent,
     otherwise raises OSError
     >>> folderName = 'c:\\qhtemp'
@@ -1001,34 +1286,36 @@ def touch(folder, *args):
     >>> touch(listOfNames)
     >>> os.listdir(folderName)
     ['a.ini', 'b.ini', 'c.ini']
-    
-    
+
+
 
     """
     if isStringLike(folder):
         folder = str(folder)
-    
+
     if not args:
         # Only one argument, folder is the whole path!
+        # skip folders
         if isStringLike(folder):
             if os.path.exists(folder):
-                os.utime(folder, None)
+                if os.path.isfile(folder):
+                    os.utime(folder, None)  #skip folders!
             else:
                 fsock = open(folder, 'w')
                 fsock.close()
-                
+
         elif type(folder) == types.ListType or type(folder) == types.TupleType:
             for f in folder:
                 touch(f)
         return
-    
+
     for a in args:
         if not a:
             continue
         elif type(a) == types.StringType:
             p = os.path.join(folder, a)
             touch(p)
-        
+
         elif type(a) == types.ListType or type(a) == types.TupleType:
             for A in a:
                 p = os.path.join(folder, A)
@@ -1044,7 +1331,7 @@ def touch(folder, *args):
 ##    >>> time.sleep(1)
 ##    >>> touch(folderName, 'newer.ini')
 ##
-##    if out is newer, OutOfDate:    
+##    if out is newer, OutOfDate:
 ##    >>> isOutOfDate(folderName/'older.ini', folderName/'newer.ini')
 ##    True
 ##    >>> isOutOfDate(folderName/'newer.ini', folderName/'older.ini')
@@ -1065,7 +1352,7 @@ def touch(folder, *args):
 
 def copyIfOutOfDate(inf, out, reverse=None):
     """copy if section file is out of date
-    
+
     Copy file from source to object, if object is nonexistent,
     or source has been changed more recently than object.
     folders must exist before.
@@ -1079,7 +1366,7 @@ def copyIfOutOfDate(inf, out, reverse=None):
 ##            other: a QHError is raised.
 ##
 ##        the "reverse" function is called with text as first variable.
-##    
+##
 ##    >>> folderName = 'c:\\qhtemp'
 ##    >>> folderName2 = 'c:\\qhtemp\\notexist'
 ##    >>> makeEmptyFolder(folderName)
@@ -1101,7 +1388,7 @@ def copyIfOutOfDate(inf, out, reverse=None):
 ##
 ##    now call with 2 utility functions revTrue (giving "y"), revFalse (returning "n")
 ##    and revAbort (returning something else)
-##    
+##
 ##    >>> time.sleep(3)
 ##    >>> touch(opj(folderName, 'b.ini'))
 ##    >>> copyIfOutOfDate(opj(folderName, 'a.ini'), opj(folderName, 'b.ini'), reverse=revAbort)
@@ -1112,13 +1399,13 @@ def copyIfOutOfDate(inf, out, reverse=None):
 ##    copied file c:/qhtemp/b.ini to c:/qhtemp/a.ini
 ##
 ##    After the last call the dates are equal again:
-##    
+##
 ##    >>> copyIfOutOfDate(opj(folderName, 'a.ini'), opj(folderName, 'b.ini'))
-##    
 ##
 ##
 ##
-##    
+##
+##
 ##    """
     dateIn = getFileDate(inf)
     dateOut = getFileDate(out)
@@ -1132,15 +1419,15 @@ def copyIfOutOfDate(inf, out, reverse=None):
         print 'copied file %s to %s' % (inf, out)
     elif dateOut > dateIn:
         if type(reverse) in (types.FunctionType, types.MethodType):
+##            print 'func reverse: %s'% reverse
             p, shortname = os.path.split(inf)
             pr = 'file: %s\n\ntarget %s is newer than source: %s\n\ncopy target to source?'% (shortname, out, inf)
             res = apply(reverse, (pr,))
-            if res == 'y':
+            if res:
+##                print 'answer was y'
                 copyIfOutOfDate(out, inf)
-            elif res == 'n':
-                return
             else:
-                raise QHError('copyIfOutOfDate: target %s is newer than source: %s'% (out, inf))
+                return
         elif reverse:
             copyIfOutOfDate(out, inf)
 
@@ -1183,14 +1470,14 @@ False
                 return True
         else:
             return False
-                          
+
 
 def getFileDate(fileName):
     """returns the date on a file or 0 if the file does not exist
 
     >>> getFileDate('xtfg.dnv')
     0
-    >>> #getFileDate("c:\\sites\\qh\\qhhtml.rc") 
+    >>> #getFileDate("c:\\sites\\qh\\qhhtml.rc")
     # 1072694718 (not testable, changes all the time!)
     """
     try:
@@ -1238,18 +1525,18 @@ class PathError(Exception): pass
 class path(str):
     """helper class for path functions
 
-    p.isdir, p.isfile, p.exists, p.isabs (absolute path), p.mtime (modification time), 
+    p.isdir, p.isfile, p.exists, p.isabs (absolute path), p.mtime (modification time),
     p.split (in dirpart, filepart),    p.splitext (trunk, extension), p.splitall (dirpart, trunk, ext)
     p.basename (filepart without directory),    p.normpath, p.remove,
-    p.rename,   p.rmtree (folder), p.mkdir,  p.copy, p.touch, 
+    p.rename,   p.rmtree (folder), p.mkdir,  p.copy, p.touch,
     p.chdir, p.getcwd (changing and getting the working directory),
     p.glob(pattern="*", keepAbs=1, makePath=1)
     p.listdir(makePath=0) (giving all files in folder p)
-    p.walk(functionToDo, keepAbs=1, makePath=0)  
+    p.walk(functionToDo, keepAbs=1, makePath=0)
     p.internetformat, p.unix (for internet filenames)
-    
+
     p.encodePath, p.decodePath: file (dir)  (for gui)
- 
+
     See python cookbook 4.16
     >>> import sys
     >>> root = path(sys.prefix)
@@ -1284,9 +1571,9 @@ class path(str):
     ['C:', 'Python23', 'subfolder', 'trunc.txt']
     >>> path(L)
     'C:/Python23/subfolder/trunc.txt'
-    >>> path(L[0])/L[1:]    
+    >>> path(L[0])/L[1:]
     'C:/Python23/subfolder/trunc.txt'
-    
+
     >>> type(root)
     <class 'utilsqh.path'>
     >>> isStringLike(root)
@@ -1296,7 +1583,7 @@ class path(str):
     >>> (root/'test.txt').isfile()
     False
 
-    
+
     when a list is the constructor, the path is joined again:
 
     >>> L = path('C:/a/b/c.txt').splitall()
@@ -1305,7 +1592,7 @@ class path(str):
     'C:/a/b/c.txt'
 
 
-    
+
     """
     def __new__(self, val):
         """this is the constructor for in new instance!
@@ -1345,22 +1632,39 @@ class path(str):
             v = ''
         if v.endswith(":"):
             v += "/"
-##        print 'new path: %s'% v
+        if len(v) > 1 and v[1] == ':':
+            v = v[0].upper() + v[1:]
         return str.__new__(self, v)
+
+    def __eq__(self, other):
+        """compare normalised paths
+>>> path(r"C:\\abd\\def.ini") == r"C:\\abd\\def.ini"
+True
+>>> path(r"C:\\abd\\def.ini") == path(r"c:/abd/def.ini")
+True
+>>> path(r"C:\\abd\\def.ini") == path(r"c:/other")
+False
+
+        """
+        if not isinstance(other, self.__class__):
+            if isinstance(other, basestring):
+                other = path(other)
+        return str(self).lower() == str(other).lower()
+
 
     def __div__(self, other):
         """make new instance with "/" operator
 
         >>> v = path('c:/f')
         >>> v/''
-        'c:/f'
+        'C:/f'
         >>> v/'a/b/'
-        'c:/f/a/b'
+        'C:/f/a/b'
         >>> v/'.'
-        'c:/f'
+        'C:/f'
 
         side cases, in use with relpathdirs and relpathfiles:
-        
+
         >>> path('../'*1)/['a', 'b']
         '../a/b'
         >>> path('../'*2)/[]
@@ -1384,7 +1688,7 @@ class path(str):
             return path(com)
         else:
             return self
-        
+
     def __add__(self, other):
         """make new instance just adding the string
 
@@ -1427,7 +1731,7 @@ class path(str):
     def mtime(self):
         """give mod time"""
         return getFileDate(str(self))
-                            
+
     def isdir(self):
         """wrapper for os.path functions"""
         return os.path.isdir(self)
@@ -1472,24 +1776,39 @@ class path(str):
             os.remove(str(self))
         else:
             raise PathError('remove only for files, not for: %s'% (self))
-        
+
     def rename(self, other):
         """rename
         """
         os.rename(str(self), str(other))
-    
-    def rmtree(self):
+
+    def rmtree(self, ignore=None):
         """remove whole folder tree
+        possibly ignoring items from a list ([".svn"]) as folder names
+
 
         """
         if self.isdir():
-            shutil.rmtree(str(self))
-        else:
+            if ignore:
+                for f in self.listdir():
+                    f2 = self/f
+                    if f2.isdir():
+                        if f in ignore:
+                            continue
+                        else:
+                            f2.rmtree(ignore=ignore)
+                    else:
+                        f2.remove()
+            else:
+                shutil.rmtree(str(self))
+        elif self.exists():
             raise PathError('rmtree only for folders, not for: %s'% (self))
+        else:
+            raise PathError('output folder does not exist: %s'% (self))
 
     def mkdir(self, newpath=None):
         """make new folder
-        
+
 
         """
         if newpath:
@@ -1499,10 +1818,41 @@ class path(str):
 
     def copy(self, out):
         """copy file"""
-        try:
-            shutil.copy2(str(self), str(out))
-        except OSError:
-            raise PathError('cannot copy file %s to %s' % (self, out))
+        if self.isfile():
+            try:
+                shutil.copy2(str(self), str(out))
+            except OSError:
+                raise PathError('cannot copy file %s to %s' % (self, out))
+        elif self.isdir():
+            if path(out).isdir():
+                try:
+                    shutil.rmtree(str(out))
+                except OSError:
+                    raise PathError('cannot remove previous dir: %s' % out)
+            try:
+                shutil.copytree(str(self), str(out))
+            except OSError:
+                raise PathError('cannot copy folder %s to %s' % (self, out))
+
+
+    def copywithoutsvn(self, outPath):
+        """copy file, leave svn intact"""
+        outPath = path(outPath)
+        if outPath.isdir():
+            outPath.rmtree(ignore=[".svn"])
+        else:
+            outPath.mkdir()
+
+        allFiles = self.listdir()
+        for f in allFiles:
+            if (self/f).isdir():
+                if f == '.svn':
+                    continue
+                subdir = self/f
+                subOut = outPath/f
+                subdir.copywithoutsvn(subOut)
+            else:
+                (self/f).copy(outPath/f)
 
     def touch(self):
         """mark file or touch date
@@ -1518,54 +1868,57 @@ class path(str):
 
     def chdir(self):
         """change directory
+
+>>> makeEmptyFolder('C:/temp')
 >>> p = path('c:/temp')
 >>> p.chdir()
 >>> p.getcwd()
-'c:\\\\temp'
+'C:/temp'
+
 
         """
-        os.chdir(self)
+        os.chdir(str(self))
 
     def getcwd(self):
         """get working directory
 
         see above"""
-        return os.getcwd()
-    
+        return path(os.getcwd())
+
     def glob(self, pattern="*", keepAbs=1, makePath=1):
         """glob a path, default = "*"
 
         default options: give absolute paths as path instances
         Use listdir if you want all files relative to the path
-        
 
-        >>> folderName = path('c:\\qhtemp')
-        >>> makeEmptyFolder(folderName)
-        >>> touch(folderName, 'a.ini', 'b.txt')
-        >>> g = folderName.glob()
-        >>> g
-        ['c:/qhtemp/a.ini', 'c:/qhtemp/b.txt']
-        >>> type(g[0])
-        <class 'utilsqh.path'>
-        >>> g = folderName.glob('*.txt', keepAbs=0)
-        >>> g
-        ['b.txt']
-        >>> type(g[0])
-        <class 'utilsqh.path'>
-        >>> g = folderName.glob('*.txt', keepAbs=0, makePath=0)
-        >>> g
-        ['b.txt']
-        >>> type(g[0])
-        <type 'str'>
 
-        
+>>> folderName = path('c:\\qhtemp')
+>>> makeEmptyFolder(folderName)
+>>> touch(folderName, 'a.ini', 'b.txt')
+>>> g = folderName.glob()
+>>> g
+['C:/qhtemp/a.ini', 'C:/qhtemp/b.txt']
+>>> type(g[0])
+<class 'utilsqh.path'>
+>>> g = folderName.glob('*.txt', keepAbs=0)
+>>> g
+['b.txt']
+>>> type(g[0])
+<class 'utilsqh.path'>
+>>> g = folderName.glob('*.txt', keepAbs=0, makePath=0)
+>>> g
+['b.txt']
+>>> type(g[0])
+<type 'str'>
+
+
         """
         if not self.isdir():
             raise PathError("glob must start with folder, not with: %s"% self)
         L = glob.glob(str(self/pattern))
         return self._manipulateList(L, keepAbs, makePath)
-        
-    def listdir(self, makePath=0):    
+
+    def listdir(self):
         """give list relative to self, default strings, not path instances!
 
         >>> folderName = path('c:\\qhtemp')
@@ -1576,18 +1929,13 @@ class path(str):
         ['a.ini', 'b.txt']
         >>> type(L[0])
         <type 'str'>
-        >>> L = path(folderName).listdir(makePath=1)
-        >>> L
-        ['a.ini', 'b.txt']
-        >>> type(L[0])
-        <class 'utilsqh.path'>
 
         """
         if not self.isdir():
             raise PathError("listdir only works on folders, not with: %s"% self)
         L = os.listdir(str(self))
         # note keepAbs is a formality here, listdir gives relative files only:
-        return self._manipulateList(L, keepAbs=1, makePath=makePath)
+        return L
 
 
     def walk(self, functionToDo, keepAbs=1, makePath=0):
@@ -1608,41 +1956,41 @@ class path(str):
 
         setting up the files:
 
-        >>> folderName = path('c:\\qhtemp')
-        >>> makeEmptyFolder(folderName)
-        >>> makeEmptyFolder(folderName/"afolder")
-        >>> makeEmptyFolder(folderName/"bfolder")
-        >>> touch(folderName, 'f.ini', 'ff.txt')
-        >>> touch(folderName/"afolder", 'aa.ini')
-        >>> touch(folderName/"bfolder", 'b.ini', 'bb.txt')
+>>> folderName = path('c:\\qhtemp')
+>>> makeEmptyFolder(folderName)
+>>> makeEmptyFolder(folderName/"afolder")
+>>> makeEmptyFolder(folderName/"bfolder")
+>>> touch(folderName, 'f.ini', 'ff.txt')
+>>> touch(folderName/"afolder", 'aa.ini')
+>>> touch(folderName/"bfolder", 'b.ini', 'bb.txt')
 
-        trying the first test walk:
-        
-        >>> L = folderName.walk(testWalk)
-        >>> L
-        ['c:/qhtemp', 'afolder', 'bfolder', 'f.ini', 'ff.txt', 'c:/qhtemp\\\\afolder', 'aa.ini', 'c:/qhtemp\\\\bfolder', 'b.ini', 'bb.txt']
-        >>> L = folderName.walk(testWalk, keepAbs=0)
-        Traceback (most recent call last):
-        PathError: path._manipulateList with keepAbs: 0, 7 items of the list do not have c:/qhtemp as start
-        >>> L = folderName.walk(testWalk, keepAbs=1, makePath=1)
-        >>> L
-        ['c:/qhtemp', 'afolder', 'bfolder', 'f.ini', 'ff.txt', 'c:/qhtemp/afolder', 'aa.ini', 'c:/qhtemp/bfolder', 'b.ini', 'bb.txt']
+trying the first test walk:
 
-        trying the second test walk:
-        
-        >>> folderName.walk(testWalk2, makePath=1)
-        ['c:/qhtemp/afolder', 'c:/qhtemp/bfolder', 'c:/qhtemp/f.ini', 'c:/qhtemp/ff.txt', 'c:/qhtemp/afolder/aa.ini', 'c:/qhtemp/bfolder/b.ini', 'c:/qhtemp/bfolder/bb.txt']
-        >>> folderName.walk(testWalk2, keepAbs=0, makePath=1)
-        ['afolder', 'bfolder', 'f.ini', 'ff.txt', 'afolder/aa.ini', 'bfolder/b.ini', 'bfolder/bb.txt']
+>>> L = folderName.walk(testWalk)
+>>> L
+['C:/qhtemp', 'afolder', 'bfolder', 'f.ini', 'ff.txt', 'C:/qhtemp/afolder', 'aa.ini', 'C:/qhtemp/bfolder', 'b.ini', 'bb.txt']
+>>> L = folderName.walk(testWalk, keepAbs=0)
+Traceback (most recent call last):
+PathError: path._manipulateList with keepAbs: 0, 7 items of the list do not have C:/qhtemp as start
+>>> L = folderName.walk(testWalk, keepAbs=1, makePath=1)
+>>> L
+['C:/qhtemp', 'afolder', 'bfolder', 'f.ini', 'ff.txt', 'C:/qhtemp/afolder', 'aa.ini', 'C:/qhtemp/bfolder', 'b.ini', 'bb.txt']
 
-        third test, skip folders, note the list is path instances now,
-        converted back to strings or not by the parameter makePath:
+trying the second test walk:
 
-        >>> folderName.walk(walkOnlyFiles, makePath=1)
-        ['c:/qhtemp/f.ini', 'c:/qhtemp/ff.txt', 'c:/qhtemp/afolder/aa.ini', 'c:/qhtemp/bfolder/b.ini', 'c:/qhtemp/bfolder/bb.txt']
-        >>> folderName.walk(walkOnlyFiles, keepAbs=0, makePath=1)
-        ['f.ini', 'ff.txt', 'afolder/aa.ini', 'bfolder/b.ini', 'bfolder/bb.txt']
-        
+>>> folderName.walk(testWalk2, makePath=1)
+['C:/qhtemp/afolder', 'C:/qhtemp/bfolder', 'C:/qhtemp/f.ini', 'C:/qhtemp/ff.txt', 'C:/qhtemp/afolder/aa.ini', 'C:/qhtemp/bfolder/b.ini', 'C:/qhtemp/bfolder/bb.txt']
+>>> folderName.walk(testWalk2, keepAbs=0, makePath=1)
+['afolder', 'bfolder', 'f.ini', 'ff.txt', 'afolder/aa.ini', 'bfolder/b.ini', 'bfolder/bb.txt']
+
+third test, skip folders, note the list is path instances now,
+converted back to strings or not by the parameter makePath:
+
+>>> folderName.walk(walkOnlyFiles, makePath=1)
+['C:/qhtemp/f.ini', 'C:/qhtemp/ff.txt', 'C:/qhtemp/afolder/aa.ini', 'C:/qhtemp/bfolder/b.ini', 'C:/qhtemp/bfolder/bb.txt']
+>>> folderName.walk(walkOnlyFiles, keepAbs=0, makePath=1)
+['f.ini', 'ff.txt', 'afolder/aa.ini', 'bfolder/b.ini', 'bfolder/bb.txt']
+
 
         """
         arg = []
@@ -1650,50 +1998,50 @@ class path(str):
             raise PathError("walk must start with folder, not with: %s"% self)
         os.path.walk(str(self), functionToDo, arg)
         return self._manipulateList(arg, keepAbs, makePath)
-    
+
     def _manipulateList(self, List, keepAbs, makePath):
         """helper function for treating a result of listdir or glob
 
-        >>> folderName = path('c:\\qhtemp')
-        >>> makeEmptyFolder(folderName)
-        >>> touch(folderName, 'a.ini', 'b.txt')
-        >>> L = [folderName/'a.ini', folderName/'b.txt']
-        >>> F = folderName._manipulateList(L, keepAbs=1, makePath=0)
-        >>> F
-        ['c:/qhtemp/a.ini', 'c:/qhtemp/b.txt']
-        >>> type(F[0])
-        <type 'str'>
-        >>> F = folderName._manipulateList(L, keepAbs=1, makePath=1)
-        >>> F
-        ['c:/qhtemp/a.ini', 'c:/qhtemp/b.txt']
-        >>> type(F[0])
-        <class 'utilsqh.path'>
+>>> folderName = path('c:\\qhtemp')
+>>> makeEmptyFolder(folderName)
+>>> touch(folderName, 'a.ini', 'b.txt')
+>>> L = [folderName/'a.ini', folderName/'b.txt']
+>>> F = folderName._manipulateList(L, keepAbs=1, makePath=0)
+>>> F
+['C:/qhtemp/a.ini', 'C:/qhtemp/b.txt']
+>>> type(F[0])
+<type 'str'>
+>>> F = folderName._manipulateList(L, keepAbs=1, makePath=1)
+>>> F
+['C:/qhtemp/a.ini', 'C:/qhtemp/b.txt']
+>>> type(F[0])
+<class 'utilsqh.path'>
 
-        >>> F = folderName._manipulateList(L, keepAbs=0, makePath=0)
-        >>> F
-        ['a.ini', 'b.txt']
-        >>> type(F[0])
-        <type 'str'>
-        >>> F = folderName._manipulateList(L, keepAbs=0, makePath=1)
-        >>> F
-        ['a.ini', 'b.txt']
-        >>> type(F[0])
-        <class 'utilsqh.path'>
-        >>> L = [folderName/'a.ini', 'b.txt']
-        >>> F = folderName._manipulateList(L, keepAbs=1, makePath=1)
-        >>> F
-        ['c:/qhtemp/a.ini', 'b.txt']
-        >>> F = folderName._manipulateList(L, keepAbs=0, makePath=1)
-        Traceback (most recent call last):
-        PathError: path._manipulateList with keepAbs: 0, 1 items of the list do not have c:/qhtemp as start
-        
-        
+>>> F = folderName._manipulateList(L, keepAbs=0, makePath=0)
+>>> F
+['a.ini', 'b.txt']
+>>> type(F[0])
+<type 'str'>
+>>> F = folderName._manipulateList(L, keepAbs=0, makePath=1)
+>>> F
+['a.ini', 'b.txt']
+>>> type(F[0])
+<class 'utilsqh.path'>
+>>> L = [folderName/'a.ini', 'b.txt']
+>>> F = folderName._manipulateList(L, keepAbs=1, makePath=1)
+>>> F
+['C:/qhtemp/a.ini', 'b.txt']
+>>> F = folderName._manipulateList(L, keepAbs=0, makePath=1)
+Traceback (most recent call last):
+PathError: path._manipulateList with keepAbs: 0, 1 items of the list do not have C:/qhtemp as start
+
+
         """
         if not List:
             return List
         L = List[:]
         if not keepAbs:
-            # make relative:        
+            # make relative:
             length = len(self)
             strPath = str(self)
             if not self.endswith("/"):
@@ -1706,7 +2054,7 @@ class path(str):
         if makePath:
             return map(path, L)
         else:
-            return map(str, L)
+            return map(str, map(path, L))
 
     def internetformat(self):
         """convert to file:/// and fill with %20 etc
@@ -1726,54 +2074,57 @@ class path(str):
         else:
             return urllib.quote(str(self))
 
-    def unix(self, lowercase=1):
+    def unix(self, lowercase=1, canHaveExtension=1, canHaveFolders=1):
         """convert to unixlike name
 
-        "-" -->> "_"
+        no leading - or 0-9, put a _ in front
         no other characters than [a-zA-Z0-9_] allowed
 
         with lowercase = 0 uppercase is preserved. (Default = 1,
                            convert all to lowercase
-        >>> path('aap').unix()
-        'aap'
-        >>> path('aap.jpg').unix()
-        'aap.jpg'
-        >>> path('AAP.jpg').unix()
-        'aap.jpg'
-        >>> path('AAP.jpg').unix(lowercase=0)
-        'AAP.jpg'
-        >>> path('aap.JPG').unix(lowercase=0)
-        'aap.JPG'
-        >>> path('A 800-34.jpg').unix()
-        'a800-34.jpg'
-        >>> path("C:/A?Bc/C- - +    98/A .txt").unix()
-        'C:/abc/c--98/a.txt'
-        >>> path("C:/A?Bc/C- - +    98/A.B.C. .txt").unix()
-        'C:/abc/c--98/abc.txt'
 
-        # with e acute and Y acute
-        >>> path("C:/d\xe9\xddf").unix()
-        'C:/deyf'
+        if there are folders (and canHaveFolders=1), the folder parts are always
+        converted with canHaveExtension=0
 
-        # path starting with a digit:
-        >>> path("C:/3d/4a.txt").unix()
-        'C:/_3d/_4a.txt'
+        the extension is always converted to lowercase.
+        also see toUnixName above.
+
+>>> path('aap').unix()
+'aap'
+>>> path('aap.jpg').unix()
+'aap.jpg'
+>>> path('AAP.jpg').unix()
+'aap.jpg'
+>>> path('AAP.JPG').unix(lowercase=0)      # extension is always converted
+'AAP.jpg'
+>>> path('A 800-34.jpg').unix()
+'a800-34.jpg'
+>>> path("C:/A?Bc/C- - +    98/A .txt").unix()
+'C:/abc/c--98/a.txt'
+
+# with e acute and Y acute
+>>> path("C:/d\xe9\xddf").unix()
+'C:/deyf'
+
+# path starting with a digit:
+>>> path("C:/3d/4a.txt").unix()
+'C:/_3d/_4a.txt'
+
+# path starting with "-":
+>>> path("C:/-3d/-4a.txt").unix()
+'C:/_-3d/_-4a.txt'
 
         """
-        if self.endswith(":/"):
-            return self
-        if self.find("/") >= 0 and self.find(":/"):
-            L = [path(k).unix(lowercase=lowercase) for k in self.splitall()]
-            return path(L)
-        n, e = self.splitext()
-        n = normaliseaccentedchars(n)
-        if n and n[0] in string.digits:
-            n = "_" + n
-        if lowercase:
-            return path(n.lower() + e.lower())
-        else:
-            return path(n + e)
+        return path(toUnixName(str(self), lowercase=lowercase,
+                               canHaveExtension=canHaveExtension,
+                               canHaveFolders=canHaveFolders))
 
+
+    def replaceExt(self, ext):
+        """replace extension, sometimes because of uppercase
+
+        """
+        return path(replaceExt(self, ext))
 
     def encodePath(self):
         """encode to file (dir)
@@ -1793,32 +2144,14 @@ class path(str):
         Folder, File = self.split()
         return '%s (%s)'% (File, Folder)
 
-def str2unix(text):
-    """the text variant of path(...).unix()
->>> str2unix('')
-''
->>> str2unix('A bvc?-D.html')
-'abvc-d.html'
->>> str2unix('/a/b-c? l/C E F/e4 CAP.html')
-'/a/b-cl/cef/e4cap.html'
-
-also for safety:
-
->>> str2unix(path('a/b c/d?? ef.html'))
-'a/bc/def.html'
-
-
-    """
-    return str(path(text).unix())
-
 def decodePath(text):
     """decode to path (file or dir)
-    
->>> decodePath('b.txt (C:/a)') 
+
+>>> decodePath('b.txt (C:/a)')
 'C:/a/b.txt'
->>> decodePath('b.txt ()') 
+>>> decodePath('b.txt ()')
 'b.txt'
->>> decodePath(' (C:/)') 
+>>> decodePath(' (C:/)')
 'C:/'
 
 
@@ -1826,7 +2159,7 @@ def decodePath(text):
     """
     if '(' not in text:
         return str(text)
-    
+
     t = str(text)
     File, Folder = t.split('(', 1)
     Folder = Folder.rstrip(')')
@@ -1836,12 +2169,12 @@ def decodePath(text):
 
 def decodePathTuple(text):
     """decode to path (file or dir) Total, Folder, File
-    
->>> decodePathTuple('b.txt (C:/a)') 
+
+>>> decodePathTuple('b.txt (C:/a)')
 ('C:/a/b.txt', 'C:/a', 'b.txt')
->>> decodePathTuple('b.txt ()') 
+>>> decodePathTuple('b.txt ()')
 ('b.txt', '', 'b.txt')
->>> decodePathTuple(' (C:/)') 
+>>> decodePathTuple(' (C:/)')
 ('C:/', 'C:/', '')
 
 
@@ -1849,7 +2182,7 @@ def decodePathTuple(text):
     """
     if '(' not in text:
         return str(text)
-    
+
     t = str(text)
     File, Folder = t.split('(', 1)
     Folder = Folder.rstrip(')')
@@ -1941,7 +2274,7 @@ False
         """define maxRow"""
         self.maxRow = 0
         dict.__init__(self)
-        
+
     def __getitem__(self, i):
         """get from array, take 0 if non-existent"""
         self.maxRow = max(self.maxRow, i)
@@ -1961,7 +2294,7 @@ False
             return '\n'.join([justify(r) for r in doublelist])
         else:
             return str(doublelist)
-    
+
     def doublelistarray(self):
         """give array in double list, for inclusion in TABLE call"""
         maxCol = 0
@@ -2039,7 +2372,7 @@ class introw(dict):
 
     def hasvalue(self, i):
         return i in self
-        
+
     def __getitem__(self, i):
         """get from array, take 0 if non-existent"""
         return self.get(i, None)
@@ -2048,7 +2381,7 @@ class introw(dict):
         """keep maxCol"""
         if type(i) == types.IntType:
             self.maxCol = max(self.maxCol, i)
-        dict.__setitem__(self, i, v)        
+        dict.__setitem__(self, i, v)
 
 def justify(s):
     S = ''
@@ -2059,22 +2392,35 @@ def justify(s):
 def emptyFolders(arg, dirname, filenames):
     """return a list of empty folders through path.walk()
 
-    >>> makeEmptyFolder(r"c:\\empty")
-    >>> makeEmptyFolder(r"c:\\empty\\empty2")
-    >>> makeEmptyFolder(r"c:\\empty\\notempty")
-    >>> touch(r"c:\\empty\\notempty\\a.txt")
-    >>> print path(r"c:\\empty").walk(emptyFolders)
-    ['c:/empty\\\\empty2']
+    ignore .svn folders...
 
+>>> makeEmptyFolder(r"c:\\empty")
+>>> makeEmptyFolder(r"c:\\empty\\empty2")
+>>> makeEmptyFolder(r"c:\\empty\\empty2\\empty3")
+>>> makeEmptyFolder(r"c:\\empty\\notempty")
+>>> touch(r"c:\\empty\\notempty\\a.txt")
+>>> print path(r"c:\\empty").walk(emptyFolders)
+['C:/empty/empty2', 'C:/empty/empty2/empty3']
     """
     if not filenames:
+        if dirname.find("\\.svn") > 0 or dirname.find("/.svn") > 0:
+            return
         arg.append(dirname)
-            
-    
+    else:
+        for f in filenames:
+            f2 = path(dirname)/f
+            if f2.isdir():
+                if not f2.walk(emptyFolders):
+                    break
+            else:
+                break
+        else:
+            arg.append(dirname)
+
 def testWalk(arg, dir, files):
     """only for testing path.walk function
     append all names that walk receives
-    
+
     """
     arg.append(dir)
     arg.extend(files)
@@ -2089,25 +2435,57 @@ def walkOnlyFiles(arg, dir, files):
     """only for testing path.walk function
 
     do not append folders
-        
+
     """
     for f in files:
         dirplusf = path(dir)/f
         if dirplusf.isdir():
             continue
         arg.append(dirplusf)
-        
+def collectPsdFiles(arg, dir, files):
+    """collect only .psd files"""
+    ext = '.psd'
+    for f in files:
+        dirplusf = path(dir)/f
+        if dirplusf.isdir():
+            continue
+
+        if dirplusf.lower().endswith(ext):
+            # in case .PSD instead of .psd:
+            dirplusf.replaceExt(ext)
+            arg.append(dirplusf)
+
+def touchAllFiles(arg, dir, files):
+    """touch all files in folder"""
+    dir = path(dir)
+    touch(dir, files)
+    for f in files:
+        arg.append(dir/f)
+
+def collectTifFiles(arg, dir, files):
+    """collect only .tif files"""
+    ext = '.tif'
+    for f in files:
+        dirplusf = path(dir)/f
+        if dirplusf.isdir():
+            continue
+
+        if dirplusf.lower().endswith(ext):
+            # in case .PSD instead of .psd:
+            dirplusf.replaceExt(ext)
+            arg.append(dirplusf)
+
 def getRoot(*rootList):
     """returns the first valid directory in list
 
     Gives a path instance!!
 
-    note: the double \\ is here needed for doctest only!    
+    note: the double \\ is here needed for doctest only!
 
     >>> getRoot(r'c:\\program files', r'd:\\sites')
-    'c:/program files'
+    'C:/program files'
     >>> getRoot(r'c:\\temp', r'c:\\windows\\temp', r'c:\\winnt\\temp')
-    'c:/temp'
+    'C:/temp'
 
     """
     for d in rootList:
@@ -2128,33 +2506,50 @@ def openAnything(source):
     to have all the basic stdio read methods (read, readline, readlines).
     Just .close() the object when you're done with it.
 
-    Taken from Mark Pilgrim, book dive into python!
-    >>> sock = openAnything('hello world')
-    >>> print sock.read()
-    hello world
-    >>> sock.seek(0)
-    >>> for l in sock:
-    ...     print l
-    hello world
+Taken from Mark Pilgrim, book dive into python!
+>>> sock = openAnything('hello world')
+>>> print sock.read()
+hello world
+>>> sock.seek(0)
+>>> for l in sock:
+...     print l
+hello world
 
-    Make a short testfile and read it back:
+Make a short testfile and read it back:
 
-    >>> sock = open(r'c:\\temp\\test.txt', 'w')
-    >>> sock.write('one\\ntwo\\n    three')
-    >>> sock.close()
-    >>> sock = openAnything(r'c:\\temp\\test.txt')    
-    >>> for l in sock:
-    ...     print l.rstrip()
-    one
-    two
-        three
+>>> sock = open(r'c:\\temp\\test.txt', 'w')
+>>> sock.write('one\\ntwo\\n    three')
+>>> sock.close()
+>>> sock = openAnything(r'c:\\temp\\test.txt')
 
-    
+Read back:
+
+>>> for l in sock:
+...     print l.rstrip()
+one
+two
+    three
+
+Or in a one liner:
+
+>>> for l in openAnything(r'c:\\temp\\test.txt'):
+...     print l.rstrip()
+one
+two
+    three
+
+now just a string:
+
+>>> for l in openAnything('just a string'):
+...     print l.rstrip()
+just a string
+
+
     """
 
     if hasattr(source, "read"):
         return source
-    
+
     if source == "-":
         import sys
         return sys.stdin
@@ -2165,25 +2560,25 @@ def openAnything(source):
         return urllib.urlopen(source)
     except (IOError, OSError):
         pass
-    
+
     # try to open with native open function (if source is pathname)
     try:
         return open(source)
     except (IOError, OSError):
         pass
-    
+
     # treat source as string
     import StringIO
     return StringIO.StringIO(str(source))
 
 
-def checkKnownTest(basis, test="test", **kw):
+def checkKnownTest(basis, known="known", test="test", **kw):
     """test a test folder against a known folder, interactive decisions
 
     Give the basis, "test" must exist as sub folder, "known" is created
     as first case, if not yet present.
 
-    "Known" is assumed to be in CVS.    
+    "Known" is assumed to be in CVS.
 
     if they are the same, 1 is returned, otherwise, for a response is asked
     and if relevant, windiff is started.
@@ -2194,8 +2589,8 @@ def checkKnownTest(basis, test="test", **kw):
     The sub folders must be named exactly "known", "test", unless
     overridden by the variable test.
 
-    If "frame" in kw: take this for the YesNo function  
-    
+    If "frame" in kw: take this for the YesNo function
+
     """
     frame = kw.get("frame")
     basis = path(basis)
@@ -2205,34 +2600,34 @@ def checkKnownTest(basis, test="test", **kw):
     if not basis.isdir():
         raise IOError('not a folder: %s'% basis)
     test = basis/test
-    
+
     if not test.isdir():
         raise IOError('nothing to test: %s'% test)
-    
-    known = basis/'known'
+
+    known = basis/known
     if not known.isdir():
         if YesNo('known does not exist yet, assume "%s" is correct?'% test, frame):
             test.rename(known)
-            print 'do not forget to add "known" to CVS: %s'% known
+            print 'do not forget to add "known" to svn: %s'% known
             return
     d = filecmp.dircmp(str(known), str(test))
 #    d.doOutput(0)
     res = d.report_full_closure()
-    # only checking files now, assume no folders are present:    
+    # only checking files now, assume no folders are present:
     if not (d.left_only or d.right_only or d.diff_files):
         return 1
 
-    if d.right_only: 
+    if d.right_only:
         print 'new files in "test": %s'% d.right_only
         if YesNo('do you want to copy these to "known" (%s)?'% d.right_only, frame):
             for f in d.right_only:
                 shutil.copy(str(test/f), str(known/f))
                 print 'copied to "known": %s'% known
-                print 'do not forget to add to CVS: %s'% d.right_only
+                print 'do not forget to add to svn: %s'% d.right_only
 
-    if d.left_only: 
+    if d.left_only:
         print 'possibly obsolete files in "known": %s'% known
-        print 'please remove from CVS: %s'% d.left_only
+        print 'please remove from svn: %s'% d.left_only
 
     if d.diff_files:
         print 'different files: %s'% d.diff_files
@@ -2248,8 +2643,8 @@ def checkKnownTest(basis, test="test", **kw):
         print 'funny files: %s'% d.diff_files
 
 
-
-reCharsSpaces = re.compile(r'[^a-z0-9- ]')
+## keep locale characters intact...
+reCharsSpaces = re.compile(r'[^\w -]', re.L)
 
 def normaliseLabel(label):
     """lowercase if input is lowercase or capitalized or all uppercase
@@ -2268,6 +2663,8 @@ def normaliseLabel(label):
 '15m'
 >>> normaliseLabel('Prijs:')
 'prijs'
+>>> normaliseLabel('ideeën:')
+'idee\xebn'
 
     """
     L = ' '.join(label.strip().split())
@@ -2286,10 +2683,10 @@ def YesNo(prompt, frame=None):
             return 1
         elif a in 'nN':
             return
-    return 
-            
+    return
 
-    
+
+
 
 # three tester functions:
 def revTrue(t):
@@ -2302,7 +2699,7 @@ def revAbort(t):
 def _test():
     import doctest, utilsqh
     reload(utilsqh)
-    
+
     doctest.master = None
     return  doctest.testmod(utilsqh)
 
@@ -2324,3 +2721,4 @@ if __name__ == "__main__":
     def revAbort(t):
         return
     _test()
+
