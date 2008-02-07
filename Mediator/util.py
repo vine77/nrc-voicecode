@@ -48,7 +48,7 @@ def dict_merge(dict1, dict2):
 
 
 
-def gopt(opt_defs, cmd=sys.argv[1:]):
+def gopt(opt_defs, cmd=None):
     """High level wrapper around *getopt.getop*.
 
     *removes first argument from *cmd* when parsing from *sys.argv*
@@ -79,7 +79,8 @@ def gopt(opt_defs, cmd=sys.argv[1:]):
     *opts, args* -- *opts* is a dictionary of options names and
     values. *args* is the list of arguments.
     """
-
+    if cmd == None:
+        cmd = sys.argv[1:]
     opt_dict = {}
     args = []    
     
