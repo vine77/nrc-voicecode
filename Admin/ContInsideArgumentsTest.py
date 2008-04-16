@@ -194,6 +194,8 @@ x = y + 6""")
         self._assert_current_line_content_is("h = func(3<CURSOR>,")
         self.assert_(self.python_context.applies(self._app()), '3 should apply, because inside a function call')
         self._say("select four")
+        # if this test goes wrong, probably the automatic indent of
+        # emacs is not working well
         self._assert_current_line_content_is("                  4<CURSOR>)")
         self.assert_(self.python_context.applies(self._app()), '4 should apply, because inside a function call')
         self._say("select five")

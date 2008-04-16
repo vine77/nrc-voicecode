@@ -27,7 +27,7 @@ from WavePlayback import WavePlayback
 
 try:
     wx.Sound
-except NameError:
+except (NameError,  AttributeError):
     wx.Sound = None
     
 
