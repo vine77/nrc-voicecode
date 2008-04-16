@@ -45,7 +45,7 @@ import sr_interface, util
 
 import auto_test
 
-from wxPython.wx import *
+import wx
 
 import SaveSpeech
 from wxMediator import *
@@ -126,7 +126,7 @@ class wxMediatorSim(WaxEdSim.WaxEdSimBase, wxMediator):
             sys.stderr.write('NewMediatorObject.new_editor failed\n')
             app.cleanup()
             self.wax_console.on_exit()
-#        wxInitAllImageHandlers()
+#        wx.InitAllImageHandlers()
 
 # get actual namespace used by panel (which is a copy of the names we
 # passed to WaxEdSim)
@@ -151,7 +151,7 @@ class wxMediatorSim(WaxEdSim.WaxEdSimBase, wxMediator):
 
         **OUTPUTS**
 
-        *wxFrame* -- the main wxFrame
+        *wx.Frame* -- the main wx.Frame
         """
         return self.wax_console.initial_frame()
 
@@ -178,7 +178,7 @@ class wxMediatorSim(WaxEdSim.WaxEdSimBase, wxMediator):
         
         **INPUTS**
         
-        *BOOL test_server* -- true if the mediator has been started with
+        *BOOL test_server* -- True if the mediator has been started with
         a test suite and the server should listen for connections from a
         test client
         
@@ -193,7 +193,7 @@ class wxMediatorSim(WaxEdSim.WaxEdSimBase, wxMediator):
 ##############################################################################
 def run():
     """Start a ServerNewMediator/ServerMainThread with external message 
-    loop using wxWindows events and the new NewMediatorObject
+    loop using wx.Windows events and the new NewMediatorObject
     """
 
     sys.stderr.write('creating wxMediator\n')

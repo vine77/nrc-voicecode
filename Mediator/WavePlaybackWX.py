@@ -22,29 +22,29 @@
 """abstract interfaces for dictation and selection grammars
 """
 
-from wxPython.wx import *
+import wx
 from WavePlayback import WavePlayback
 
 try:
-    wxSound
+    wx.Sound
 except NameError:
-    wxSound = None
+    wx.Sound = None
     
 
 class WavePlaybackWX(WavePlayback):
-    """implementation of WavePlayback using the wxWave class of wxPython
+    """implementation of WavePlayback using the wx.Wave class of wx.Python
     """
     def __init__(self, **attrs):
         self.deep_construct(WavePlaybackWX,
             {'wave': None}, attrs)
         if self.data:
-# AD: Use one or the other depending on version of wxPython 2.5 used
+# AD: Use one or the other depending on version of wx.Python 2.5 used
 # trying this for different versions, QH:
-            if not wxSound is None:
-                wave = wxSound()
+            if not wx.Sound is None:
+                wave = wx.Sound()
                 wave.CreateFromData(self.data)
             else:
-                wave = wxWaveData(self.data)
+                wave = wx.WaveData(self.data)
             if wave.IsOk():
                 self.wave = wave
 
@@ -61,7 +61,7 @@ class WavePlaybackWX(WavePlayback):
 
         **OUTPUTS**
 
-        *BOOL* -- true if the wave data appears playable
+        *BOOL* -- True if the wave data appears playable
         """
         if self.wave and self.wave.IsOk():
             return 1
@@ -76,7 +76,7 @@ class WavePlaybackWX(WavePlayback):
 
         **OUTPUTS**
 
-        *BOOL* -- true if the wave data was played successfully
+        *BOOL* -- True if the wave data was played successfully
         """
         if self.check():
             self.wave.Play(0) # play synchronously

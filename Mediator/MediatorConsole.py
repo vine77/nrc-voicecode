@@ -22,7 +22,7 @@
 import sys
 import debug
 import Object, vc_globals
-from wxPython.wx import *
+import wx
 
 """Defines abstract interface for the mediator GUI console and all other
 GUI windows and dialog boxes
@@ -184,7 +184,7 @@ class MediatorConsole(Object.OwnerObject):
 
         **OUTPUTS**
 
-        *BOOL* -- true if the MediatorConsole implementation has a means
+        *BOOL* -- True if the MediatorConsole implementation has a means
         of displaying user messages 
         """
         return 0
@@ -226,7 +226,7 @@ class MediatorConsole(Object.OwnerObject):
 
         **OUTPUTS**
         
-        *BOOL* -- true if a modal dialog is active
+        *BOOL* -- True if a modal dialog is active
         """
         if self.dismiss_events:
             return 1
@@ -257,7 +257,7 @@ class MediatorConsole(Object.OwnerObject):
 
         **OUTPUTS**
 
-        *BOOL* -- true if there was a modal dialog on the stack
+        *BOOL* -- True if there was a modal dialog on the stack
         """
         if self.already_modal():
             del self.dismiss_events[-1]
@@ -275,7 +275,7 @@ class MediatorConsole(Object.OwnerObject):
 
         **OUTPUTS**
         
-        *BOOL* -- true if the modal dialog box was sucessfully dismissed
+        *BOOL* -- True if the modal dialog box was sucessfully dismissed
         (or if there wasn't one to start with)
         """
         if not self.already_modal():
@@ -299,7 +299,7 @@ class MediatorConsole(Object.OwnerObject):
 
         **OUTPUTS**
 
-        *BOOL* -- true if a file was selected and copied to the target
+        *BOOL* -- True if a file was selected and copied to the target
         path
         """
         debug.virtual('MediatorConsole.copy_user_config')
@@ -331,7 +331,7 @@ class MediatorConsole(Object.OwnerObject):
 
         **OUTPUTS**
 
-        *BOOL* -- true if the user made changes and approved them
+        *BOOL* -- True if the user made changes and approved them
         """
         editor_window = self.store_foreground_window()
         ok = self.show_correction_box(editor_name, utterance,
@@ -365,7 +365,7 @@ class MediatorConsole(Object.OwnerObject):
 
         **OUTPUTS**
 
-        *BOOL* -- true if the user made changes and approved them
+        *BOOL* -- True if the user made changes and approved them
         """
         debug.virtual('MediatorConsole.show_correction_box')
 
@@ -475,7 +475,7 @@ class MediatorConsole(Object.OwnerObject):
 
         **OUTPUTS**
 
-        *BOOL* -- true if the user made changes and approved them
+        *BOOL* -- True if the user made changes and approved them
         """
         editor_window = self.store_foreground_window()
         ok = self.show_reformatting_box(editor_name, symbol)

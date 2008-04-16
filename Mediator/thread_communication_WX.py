@@ -23,18 +23,18 @@
 """
 
 from thread_communication import *
-from wxPython.wx import *
+import wx
 
 # create a unique event types
-wxEVT_SOCKET_DATA = wxNewEventType()
-wxEVT_CORRECT_UTTERANCE = wxNewEventType()
-wxEVT_CORRECT_RECENT = wxNewEventType()
-wxEVT_CORRECT_NTH_RECENT = wxNewEventType()
-wxEVT_REFORMAT_RECENT = wxNewEventType()
+wxEVT_SOCKET_DATA = wx.NewEventType()
+wxEVT_CORRECT_UTTERANCE = wx.NewEventType()
+wxEVT_CORRECT_RECENT = wx.NewEventType()
+wxEVT_CORRECT_NTH_RECENT = wx.NewEventType()
+wxEVT_REFORMAT_RECENT = wx.NewEventType()
 
-class GenericEventWX(wxPyEvent):
+class GenericEventWX(wx.PyEvent):
     def __init__(self, evt_type):
-        wxPyEvent.__init__(self)
+        wx.PyEvent.__init__(self)
         self.SetEventType(evt_type)
 
 class SocketDataEventWX(GenericEventWX):
@@ -66,15 +66,15 @@ class CorrectNthRecentEventWX(GenericEventWX):
 
 
 class InterThreadEventWX(InterThreadEvent):
-    """implementation of InterThreadEvent using the wxPython custom
+    """implementation of InterThreadEvent using the wx.Python custom
     events module.
 
     **INSTANCE ATTRIBUTES**
 
-    *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+    *wx.EvtHandler evt_handler* -- wx.Window or wx.EvtHandler to which to
     post the event.
 
-    *WXTYPE evt_type* -- type/ID of the wxWindow event
+    *WXTYPE evt_type* -- type/ID of the wx.Window event
 
     **CLASS ATTRIBUTES**
 
@@ -84,7 +84,7 @@ class InterThreadEventWX(InterThreadEvent):
         """
         **INPUTS**
 
-        *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+        *wx.EvtHandler evt_handler* -- wx.Window or wx.EvtHandler to which to
         post the event.
         """
         self.deep_construct(InterThreadEventWX,
@@ -103,14 +103,14 @@ class InterThreadEventWX(InterThreadEvent):
         *none*
         """
         event = GenericEventWX(self.evt_type)
-        wxPostEvent(self.evt_handler, event)
+        wx.PostEvent(self.evt_handler, event)
 
 class SocketHasDataWX(SocketHasDataEvent):
-    """implementation of SocketHasDataEvent using wxPython events.
+    """implementation of SocketHasDataEvent using wx.Python events.
     
     **INSTANCE ATTRIBUTES**
 
-    *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+    *wx.EvtHandler evt_handler* -- wx.Window or wx.EvtHandler to which to
     post the event.
 
     *STR socket_ID* -- the unique ID of the socket
@@ -123,7 +123,7 @@ class SocketHasDataWX(SocketHasDataEvent):
         """
         **INPUTS**
 
-        *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+        *wx.EvtHandler evt_handler* -- wx.Window or wx.EvtHandler to which to
         post the event.
 
         *STR socket_ID* -- the unique ID of the socket
@@ -144,11 +144,11 @@ class SocketHasDataWX(SocketHasDataEvent):
         *none*
         """
         event = SocketDataEventWX(self.socket_ID)
-        wxPostEvent(self.evt_handler, event)
+        wx.PostEvent(self.evt_handler, event)
 
 
 class CorrectUtteranceEventWX(CorrectUtteranceEvent):
-    """implementation of CorrectUtteranceEvent using custom wxPython
+    """implementation of CorrectUtteranceEvent using custom wx.Python
     events
 
     Unlike InterThreadEvent and SocketHasDataEvent, this event is
@@ -159,7 +159,7 @@ class CorrectUtteranceEventWX(CorrectUtteranceEvent):
 
     **INSTANCE ATTRIBUTES**
 
-    *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+    *wx.EvtHandler evt_handler* -- wx.Window or wx.EvtHandler to which to
     post the event.
 
     **CLASS ATTRIBUTES**
@@ -170,7 +170,7 @@ class CorrectUtteranceEventWX(CorrectUtteranceEvent):
         """
         **INPUTS**
 
-        *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+        *wx.EvtHandler evt_handler* -- wx.Window or wx.EvtHandler to which to
         post the event.
         """
         self.deep_construct(CorrectUtteranceEventWX,
@@ -182,10 +182,10 @@ class CorrectUtteranceEventWX(CorrectUtteranceEvent):
         debug.trace('CorrectThat.notify', 'invoked')
         event = CorrectNthRecentEventWX(instance_name)
 ##        event = UtteranceCorrectionEventWX(instance_name)
-        wxPostEvent(self.evt_handler, event)
+        wx.PostEvent(self.evt_handler, event)
                                                         
 class CorrectRecentEventWX(CorrectRecentEvent):
-    """implementation of CorrectRecentEvent using custom wxPython
+    """implementation of CorrectRecentEvent using custom wx.Python
     events
 
     Unlike InterThreadEvent and SocketHasDataEvent, this event is
@@ -196,7 +196,7 @@ class CorrectRecentEventWX(CorrectRecentEvent):
 
     **INSTANCE ATTRIBUTES**
 
-    *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+    *wx.EvtHandler evt_handler* -- wx.Window or wx.EvtHandler to which to
     post the event.
 
     **CLASS ATTRIBUTES**
@@ -207,7 +207,7 @@ class CorrectRecentEventWX(CorrectRecentEvent):
         """
         **INPUTS**
 
-        *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+        *wx.EvtHandler evt_handler* -- wx.Window or wx.EvtHandler to which to
         post the event.
         """
         self.deep_construct(CorrectRecentEventWX,
@@ -227,10 +227,10 @@ class CorrectRecentEventWX(CorrectRecentEvent):
         *none*
         """
         event = RecentCorrectionEventWX(instance_name)
-        wxPostEvent(self.evt_handler, event)
+        wx.PostEvent(self.evt_handler, event)
 
 class CorrectNthEventWX(CorrectNthEvent):
-    """implementation of CorrectNEvent using custom wxPython
+    """implementation of CorrectNEvent using custom wx.Python
     events
 
     Unlike InterThreadEvent and SocketHasDataEvent, this event is
@@ -239,12 +239,12 @@ class CorrectNthEventWX(CorrectNthEvent):
     correct_n grammar's on_results method return immediately, so as to 
     allow speech input to the correction box (or other windows).
 
-    Particular implementations may wxPython custom
+    Particular implementations may wx.Python custom
     events or other means to communicate with the main thread.
 
     **INSTANCE ATTRIBUTES**
 
-    *wxEvtHandler evt_handler* -- event handler (usually a wxDialog subclass)
+    *wx.EvtHandler evt_handler* -- event handler (usually a wx.Dialog subclass)
     to which to post the event
 
     **CLASS ATTRIBUTES**
@@ -255,10 +255,10 @@ class CorrectNthEventWX(CorrectNthEvent):
         """
         **INPUTS**
 
-        *wxEvtHandler evt_handler* -- event handler (usually a wxDialog 
+        *wx.EvtHandler evt_handler* -- event handler (usually a wx.Dialog 
         subclass) to which to post the event
 
-        *WXTYPE evt_type* -- type/ID of the wxWindow event
+        *WXTYPE evt_type* -- type/ID of the wx.Window event
         """
         self.deep_construct(CorrectNthEventWX,
                             {'evt_handler': evt_handler},
@@ -277,10 +277,10 @@ class CorrectNthEventWX(CorrectNthEvent):
         *none*
         """
         event = CorrectNthRecentEventWX(recent_chosen)
-        wxPostEvent(self.evt_handler, event)
+        wx.PostEvent(self.evt_handler, event)
 
 class ReformatSymbolEventWX(ReformatSymbolEvent):
-    """implementation of ReformatSymbolEvent using custom wxPython
+    """implementation of ReformatSymbolEvent using custom wx.Python
     events
 
     Unlike InterThreadEvent and SocketHasDataEvent, this event is
@@ -291,7 +291,7 @@ class ReformatSymbolEventWX(ReformatSymbolEvent):
 
     **INSTANCE ATTRIBUTES**
 
-    *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+    *wx.EvtHandler evt_handler* -- wx.Window or wx.EvtHandler to which to
     post the event.
 
     **CLASS ATTRIBUTES**
@@ -303,7 +303,7 @@ class ReformatSymbolEventWX(ReformatSymbolEvent):
         """
         **INPUTS**
 
-        *wxEvtHandler evt_handler* -- wxWindow or wxEvtHandler to which to
+        *wx.EvtHandler evt_handler* -- wx.Window or wx.EvtHandler to which to
         post the event.
         """
         self.deep_construct(ReformatSymbolEventWX,
@@ -325,4 +325,4 @@ class ReformatSymbolEventWX(ReformatSymbolEvent):
         """
         debug.trace('ReformatSymbolEventWX.notify', 'invoked')
         event = RecentReformattingEventWX(instance_name)
-        wxPostEvent(self.evt_handler, event)
+        wx.PostEvent(self.evt_handler, event)

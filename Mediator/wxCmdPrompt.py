@@ -19,15 +19,15 @@
 #
 ##############################################################################
 
-"""concrete implementation of CmdPromptWithHistory using wxPython
-wxTextCtrl."""
+"""concrete implementation of CmdPromptWithHistory using wx.Python
+wx.TextCtrl."""
 
 import debug
 from Object import Object
 from CmdPrompt import *
-from wxPython.wx import *
+import wx
 
-# workaround for minor bug in wxPython 2.3.2.1 (should be fixed in later
+# workaround for minor bug in wx.Python 2.3.2.1 (should be fixed in later
 # versions, and the workaround will still work then)
 def fix_x_y(value):
     if len(value) == 3:
@@ -36,7 +36,7 @@ def fix_x_y(value):
 
 class wxCmdPromptWithHistory(CmdPromptWithHistory):
     """concrete implementation of CmdPromptWithHistory using a single
-    line wxTextCtrl.  Up and down arrows move through the history,
+    line wx.TextCtrl.  Up and down arrows move through the history,
     and enter enters the currently edited command.
 
     Note: to receive notification that a command has been entered, the
@@ -44,7 +44,7 @@ class wxCmdPromptWithHistory(CmdPromptWithHistory):
 
     **INSTANCE ATTRIBUTES**
 
-    *wxTextCtrl* text -- underlying wxTextCtrl 
+    *wx.TextCtrl* text -- underlying wx.TextCtrl 
 
     *STR* stored -- storage for partially edited command line buffer
     when we move back through the command history.
@@ -61,9 +61,9 @@ class wxCmdPromptWithHistory(CmdPromptWithHistory):
         """
         **INPUTS**
 
-        *wxTextCtrl* underlying -- existing wxTextCtrl.  Must have
-        wxTE_PROCESS_ENTER style, and be a single line control 
-        (not wxTE_MULTILINE)
+        *wx.TextCtrl* underlying -- existing wx.TextCtrl.  Must have
+        wx.TE_PROCESS_ENTER style, and be a single line control 
+        (not wx.TE_MULTILINE)
         """
 
         self.deep_construct(wxCmdPromptWithHistory,
@@ -72,15 +72,15 @@ class wxCmdPromptWithHistory(CmdPromptWithHistory):
             "text": underlying},
             args)
 
-        EVT_TEXT_ENTER(self.text, self.text.GetId(), self._on_command_enter)
-        EVT_CHAR(self.text, self._on_command_char)
+        wx.EVT_TEXT_ENTER(self.text, self.text.GetId(), self._on_command_enter)
+        wx.EVT_CHAR(self.text, self._on_command_char)
 
     def _on_command_char(self, key_event):
-        """internal command to handle wxWindows key events
+        """internal command to handle wx.Windows key events
 
         **INPUTS**
 
-        *wxKeyEvent* key_event -- the wxKeyEvent which triggered this
+        *wx.KeyEvent* key_event -- the wx.KeyEvent which triggered this
         handler.
 
         **OUTPUTS**
@@ -89,27 +89,27 @@ class wxCmdPromptWithHistory(CmdPromptWithHistory):
         """
     
         code = key_event.GetKeyCode()
-        if code == WXK_UP:
+        if code == wx.WXK_UP:
             new_buffer = self.previous()
             if new_buffer != None:
                 self.text.SetValue(new_buffer)
                 self.text.SetInsertionPointEnd()
-        elif code == WXK_DOWN:
+        elif code == wx.WXK_DOWN:
             new_buffer = self.next()
             if new_buffer != None:
                 self.text.SetValue(new_buffer)
                 self.text.SetInsertionPointEnd()
         else:
-# ignore other keys, allowing the default wxTextCtrl processing to proceed
+# ignore other keys, allowing the default wx.TextCtrl processing to proceed
             key_event.Skip()
 
     def _on_command_enter(self, event):
-        """internal command to handle wxWindows 
-        wxEVT_COMMAND_TEXT_ENTER events
+        """internal command to handle wx.Windows 
+        wx.wxEVT_COMMAND_TEXT_ENTER events
 
         **INPUTS**
 
-        *wxEvent* event -- the event which triggered this handler.
+        *wx.Event* event -- the event which triggered this handler.
 
         **OUTPUTS**
 
@@ -182,11 +182,11 @@ class wxCmdPromptWithHistory(CmdPromptWithHistory):
 
 
 class wxCmdLog(CmdLog):
-    """concrete implementation of CmdLog using a wxTextCtrl.  
+    """concrete implementation of CmdLog using a wx.TextCtrl.  
 
     **INSTANCE ATTRIBUTES**
 
-    *wxTextCtrl* log - underlying wxTextCtrl log window
+    *wx.TextCtrl* log - underlying wx.TextCtrl log window
 
     **CLASS ATTRIBUTES**
     
@@ -196,7 +196,7 @@ class wxCmdLog(CmdLog):
         """
         **INPUTS**
 
-        *wxTextCtrl* underlying_text - underlying wxTextCtrl log window.
+        *wx.TextCtrl* underlying_text - underlying wx.TextCtrl log window.
         Should be READ_ONLY
         """
         self.deep_construct(wxCmdLog,
@@ -216,7 +216,7 @@ class wxCmdLog(CmdLog):
         *none*
         """
         self.log.AppendText(string)
-#        self.log.SetScrollPos(wxVERTICAL, self.log.GetScrollRange(wxVERTICAL), 1)
+#        self.log.SetScrollPos(wx.VERTICAL, self.log.GetScrollRange(wx.VERTICAL), 1)
         p = self.log.GetLastPosition()
         width, height = self.log.GetClientSizeTuple()
         char_height = self.log.GetCharHeight()
@@ -243,7 +243,7 @@ class wxCmdLog(CmdLog):
 
         *none*
         """
-# I don't think that wxTextCtrl is buffered, and
+# I don't think that wx.TextCtrl is buffered, and
 # write already does ShowPosition
         pass
 

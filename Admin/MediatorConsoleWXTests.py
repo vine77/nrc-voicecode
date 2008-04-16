@@ -1,4 +1,4 @@
-from wxPython.wx import *
+import wx
 import WinSystemMSW
 import debug
 import TestCaseWithHelpers
@@ -135,8 +135,8 @@ class MediatorConsoleWXTestCase(TestCaseWithHelpers.TestCaseWithHelpers):
    """class for test cases that require a running mediator console ui."""
    def __init__(self, name):
       TestCaseWithHelpers.TestCaseWithHelpers.__init__(self, name)
-      frame = wxFrame(None, wxNewId(), "test console", 
-            wxDefaultPosition, wxDefaultSize)
+      frame = wx.Frame(None, wx.NewId(), "test console", 
+            wx.DefaultPosition, wx.DefaultSize)
  
       self.console = MediatorConsoleWX.MediatorConsoleWX(frame, win_sys = WinSystemMSW.WinSystemMSW())
       
@@ -380,7 +380,7 @@ class ReformatFromRecentTestCase(MediatorConsoleWXTestCase):
         self.assert_dialog_was_okayed()
  
     # For now, can't implement this test because no way of 
-    # programmatically sending a character to the wxListCtrl
+    # programmatically sending a character to the wx.ListCtrl
     def ___________test_move_around_suggestions_list_with_arrow_keys(self):
         pass
         self.dlg.do_move_down_alternate_forms_with_arrow_keys(2)

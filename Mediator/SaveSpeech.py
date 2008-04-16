@@ -29,7 +29,7 @@ import debug
 import Object
 import sr_interface, util
 
-from wxPython.wx import *
+import wx
 
 class SaveSpeech(Object.Object):
     """mix-in class with prompt to save speech files
@@ -41,7 +41,7 @@ class SaveSpeech(Object.Object):
     """
     def __init__(self, prompt = 1, **args):
         """
-        *BOOL prompt* -- true if the user should be prompted, false if
+        *BOOL prompt* -- True if the user should be prompted, False if
         not
         """
         self.deep_construct(SaveSpeech, 
@@ -53,7 +53,7 @@ class SaveSpeech(Object.Object):
 
         **INPUTS**
 
-        *BOOL prompt* -- true if the user should be prompted, false if
+        *BOOL prompt* -- True if the user should be prompted, False if
         not
 
         **OUTPUTS**
@@ -69,25 +69,25 @@ class SaveSpeech(Object.Object):
 
         **INPUTS**
 
-        *BOOL allow_cancel* -- true to allow the user to cancel exiting,
-        false if the message loop has exited and we must quit
+        *BOOL allow_cancel* -- True to allow the user to cancel exiting,
+        False if the message loop has exited and we must quit
 
-        *wxFrame frame* -- frame above which to display the dialog
+        *wx.Frame frame* -- frame above which to display the dialog
         
         **OUTPUTS**
 
-        *BOOL* -- true if the user saved or told the mediator to quit
-        without saving, false if the user cancelled.
+        *BOOL* -- True if the user saved or told the mediator to quit
+        without saving, False if the user cancelled.
         """
         if not self.prompt_to_save_speech_files:
             return 1
-        flags = wxICON_EXCLAMATION | wxYES_NO | wxNO_DEFAULT
+        flags = wx.ICON_EXCLAMATION | wx.YES_NO | wx.NO_DEFAULT
         if allow_cancel:
-            flags = flags | wxCANCEL
-        answer = wxMessageBox("Save speech files?", "Exiting", flags, frame)
-        if answer == wxCANCEL:
+            flags = flags | wx.CANCEL
+        answer = wx.MessageBox("Save speech files?", "Exiting", flags, frame)
+        if answer == wx.CANCEL:
             return 0
-        if answer == wxYES:
+        if answer == wx.YES:
             self.save_speech_files()
         return 1
  

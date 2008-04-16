@@ -28,18 +28,18 @@ import traceback
 import sys
 import code # for interpreting Python code at the command line
 import Object 
-#import wxEditor
-from wxPython.wx import *
+#import wx.Editor
+import wx
 
 try:
-    dummy_var = wxCHANGE_DIR
+    dummy_var = wx.CHANGE_DIR
     del dummy_var
 except NameError:
-    wxCHANGE_DIR = 0
+    wx.CHANGE_DIR = 0
 
 import TextBufferWX
 import GenEdit
-import wxCmdPrompt
+import wx.CmdPrompt
 import wxAutoSplitterWindow
 from wxFrameMenuMixIn import wxFrameMenuMixIn
 
@@ -64,7 +64,7 @@ class SingleBufferWindow:
 
         **OUTPUTS**
 
-        *wxTextCtrl* -- the editor window
+        *wx.TextCtrl* -- the editor window
         """
         debug.virtual('SingleBufferWindow.editor_window')
 
@@ -89,10 +89,10 @@ class SingleBufferWindow:
         *none*
 
         **OUTPUTS**
-        *BOOL* -- true if editor window has the focus
+        *BOOL* -- True if editor window has the focus
         """
         return 1
-        current = wxWindow_FindFocus()
+        current = wx.Window_FindFocus()
         if current and current.GetId() == self.editor_window().GetId():
             return 1
         return 0
@@ -106,7 +106,7 @@ class SingleBufferWindow:
 
         **OUTPUTS**
 
-        *wxFont* -- the current font
+        *wx.Font* -- the current font
         """
         return self.editor_window().GetFont()
 
@@ -115,7 +115,7 @@ class SingleBufferWindow:
 
         **INPUTS**
 
-        *wxFont font* -- the desired font
+        *wx.Font font* -- the desired font
 
         **OUTPUTS**
 
@@ -135,14 +135,14 @@ class EditorBuilder(Object.Object):
         
         **INPUTS**
         
-        *wxWindow parent* -- the parent of the editor window
+        *wx.Window parent* -- the parent of the editor window
 
         *BOOL use_rich* -- flag indicating whether we should use a
         standard text control or a rich edit control on Windows
 
         **OUTPUTS**
 
-        *(wxTextCtrl, TextBufferWX)* -- the editor window and its
+        *(wx.TextCtrl, TextBufferWX)* -- the editor window and its
         TextBufferWX wrapper
         """
         debug.virtual('EditorBuilder.build_editor_buffer')
@@ -159,37 +159,37 @@ class EditorBuilderBasic(EditorBuilder):
         
         **INPUTS**
         
-        *wxWindow parent* -- the parent of the editor window
+        *wx.Window parent* -- the parent of the editor window
 
         *BOOL use_rich* -- flag indicating whether we should use a
         standard text control or a rich edit control on Windows
 
         **OUTPUTS**
 
-        *(wxTextCtrl, TextBufferWX)* -- the editor window and its
+        *(wx.TextCtrl, TextBufferWX)* -- the editor window and its
         TextBufferWX wrapper
         """
-        flags = wxTE_MULTILINE | wxTE_NOHIDESEL  
+        flags = wx.TE_MULTILINE | wx.TE_NOHIDESEL  
         cr_bug = 0
         if sys.platform == 'win32':
             cr_bug = 1
             if use_rich:
 # allows text longer than 64K
-                flags = flags | wxTE_RICH
+                flags = flags | wx.TE_RICH
                 cr_bug = 0
 # rich text uses \r only for new lines, so offsets into internal and 
 # external buffers are the same
 
-        ID_EDITOR = wxNewId()
-        editor = wxTextCtrl(parent, ID_EDITOR, "", wxDefaultPosition,
-            wxDefaultSize, flags)
-#            self.GetClientSize(), wxTE_MULTILINE)
-#            wxDefaultSize, wxTE_MULTILINE | wxTE_NOHIDESEL)
+        ID_EDITOR = wx.NewId()
+        editor = wx.TextCtrl(parent, ID_EDITOR, "", wx.DefaultPosition,
+            wx.DefaultSize, flags)
+#            self.GetClientSize(), wx.TE_MULTILINE)
+#            wx.DefaultSize, wx.TE_MULTILINE | wx.TE_NOHIDESEL)
         wax_text_buffer = \
             TextBufferWX.TextBufferWX(editor, carriage_return_bug = cr_bug)
         return editor, wax_text_buffer
     
-class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
+class WaxPanel(wx.Panel, EditorBuilderBasic, SingleBufferWindow,
     Object.OwnerObject):
     """abstract base class for a main panel containing 
     a single text buffer 
@@ -204,11 +204,11 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
     specification, so that we can keep track of changes to the editor
     buffer.
 
-    *wxTextControl* editor -- underlying text control for editor window
+    *wx.TextControl* editor -- underlying text control for editor window
 
-    *WaxFrame, wxWindow parent* -- the parent frame window to the panel
+    *WaxFrame, wx.Window parent* -- the parent frame window to the panel
 
-    *BOOL* closing -- true if panel is closing (used to ensure that
+    *BOOL* closing -- True if panel is closing (used to ensure that
     event handlers don't continue to call other methods when the panel
     may not be in a sane state)
     """
@@ -241,7 +241,7 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
         """
         **INPUTS**
 
-        *WaxFrame, wxWindow parent* -- the parent frame window to the panel
+        *WaxFrame, wx.Window parent* -- the parent frame window to the panel
 
         *INT ID* -- the ID of the panel
 
@@ -256,13 +256,13 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
                              'closing': 0
                             },
                             args,
-                            exclude_bases = {wxPanel: 1, SingleBufferWindow: 1}
+                            exclude_bases = {wx.Panel: 1, SingleBufferWindow: 1}
                            )
-        wxPanel.__init__(self, parent, ID, wxDefaultPosition, 
-            wxDefaultSize)
+        wx.Panel.__init__(self, parent, ID, wx.DefaultPosition, 
+            wx.DefaultSize)
         self.name_parent('parent')
 
-        vbox = wxBoxSizer(wxVERTICAL)
+        vbox = wx.BoxSizer(wx.VERTICAL)
         self.prepend(vbox)
 
         editor, buffer = self.add_editor_buffer(vbox, use_rich = use_rich)
@@ -290,7 +290,7 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
         the controls when the panel exits), it 
         must be added to the subclass's remove_other_references method.
         
-        *wxBoxSizer vbox* -- the vertical box sizer to which the
+        *wx.BoxSizer vbox* -- the vertical box sizer to which the
         controls should be added.
 
         *BOOL use_rich* -- flag indicating whether we should use a
@@ -298,7 +298,7 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
 
         **OUTPUTS**
 
-        *(wxTextCtrl, TextBufferWX)* -- the editor window and its
+        *(wx.TextCtrl, TextBufferWX)* -- the editor window and its
         TextBufferWX wrapper
         """
         debug.virtual('WaxPanel.add_editor_buffer')
@@ -314,7 +314,7 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
 
         **INPUTS**
 
-        *wxBoxSizer vbox* -- the vertical box sizer to which the
+        *wx.BoxSizer vbox* -- the vertical box sizer to which the
         controls should be added.
 
         **OUTPUTS**
@@ -334,7 +334,7 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
 
         **INPUTS**
 
-        *wxBoxSizer vbox* -- the vertical box sizer to which the
+        *wx.BoxSizer vbox* -- the vertical box sizer to which the
         controls should be added.
 
         **OUTPUTS**
@@ -352,7 +352,7 @@ class WaxPanel(wxPanel, EditorBuilderBasic, SingleBufferWindow,
 
         **OUTPUTS**
 
-        *wxTextCtrl* -- the editor window
+        *wx.TextCtrl* -- the editor window
         """
         return self.editor
 
@@ -400,7 +400,7 @@ class SimpleWaxPanel(WaxPanel):
         the controls when the panel exits), it 
         must be added to the subclass's remove_other_references method.
         
-        *wxBoxSizer vbox* -- the vertical box sizer to which the
+        *wx.BoxSizer vbox* -- the vertical box sizer to which the
         controls should be added.
 
         *BOOL use_rich* -- flag indicating whether we should use a
@@ -408,14 +408,14 @@ class SimpleWaxPanel(WaxPanel):
 
         **OUTPUTS**
 
-        *(wxTextCtrl, TextBufferWX)* -- the editor window and its
+        *(wx.TextCtrl, TextBufferWX)* -- the editor window and its
         TextBufferWX wrapper
         """
         editor, buffer = \
             self.build_editor_buffer(parent = self, use_rich = use_rich)
 
 # because we put the editor in a panel, we need a sizer
-        vbox.Add(editor, 1, wxGROW)
+        vbox.Add(editor, 1, wx.GROW)
         return editor, buffer
 
 class WaxCmdPanel(WaxPanel):
@@ -439,12 +439,12 @@ class WaxCmdPanel(WaxPanel):
     *wxCmdLog* command_log -- handler to prove editable command-line 
     with history, and log
 
-    *wxTextCtrl* command_line -- the command-line GUI control itself
+    *wx.TextCtrl* command_line -- the command-line GUI control itself
 
     *InteractiveInterpreter* command_line_interp -- from standard module
     code
 
-    *wxTextControl* log -- text control for log window to display
+    *wx.TextControl* log -- text control for log window to display
     output, error messages, and command history
     """
     def __init__(self, command_space = None, prompt_text = 'Command> ', **args):
@@ -480,7 +480,7 @@ class WaxCmdPanel(WaxPanel):
         the controls when the panel exits), it 
         must be added to the subclass's remove_other_references method.
         
-        *wxBoxSizer vbox* -- the vertical box sizer to which the
+        *wx.BoxSizer vbox* -- the vertical box sizer to which the
         controls should be added.
 
         *BOOL use_rich* -- flag indicating whether we should use a
@@ -488,10 +488,10 @@ class WaxCmdPanel(WaxPanel):
 
         **OUTPUTS**
 
-        *(wxTextCtrl, TextBufferWX)* -- the editor window and its
+        *(wx.TextCtrl, TextBufferWX)* -- the editor window and its
         TextBufferWX wrapper
         """
-        ID_SPLITTER = wxNewId()
+        ID_SPLITTER = wx.NewId()
         top_and_bottom = wxAutoSplitterWindow.wxFixedFocusSplitter(self,
             ID_SPLITTER, 1)
         top_and_bottom.SetMinimumPaneSize(30)
@@ -502,34 +502,34 @@ class WaxCmdPanel(WaxPanel):
             self.build_editor_buffer(parent = top_and_bottom, 
             use_rich = use_rich)
 
-        flags = wxTE_MULTILINE | wxTE_READONLY
+        flags = wx.TE_MULTILINE | wx.TE_READONLY
         if use_rich:
 # allows text longer than 64K
-            flags = flags | wxTE_RICH
+            flags = flags | wx.TE_RICH
 
-        ID_LOG = wxNewId()
-        log = wxTextCtrl(top_and_bottom, ID_LOG, "", wxDefaultPosition,
-            wxDefaultSize, flags)
+        ID_LOG = wx.NewId()
+        log = wx.TextCtrl(top_and_bottom, ID_LOG, "", wx.DefaultPosition,
+            wx.DefaultSize, flags)
 
         self.log = log
-        self.command_log = wxCmdPrompt.wxCmdLog(log, prompt = self.prompt_text)
+        self.command_log = wx.CmdPrompt.wxCmdLog(log, prompt = self.prompt_text)
 
-        self.prompt_line = wxBoxSizer(wxHORIZONTAL)
+        self.prompt_line = wx.BoxSizer(wx.HORIZONTAL)
 
-        ID_PROMPT = wxNewId()
-        self.prompt = wxStaticText(self, ID_PROMPT, "Co&mmand")
+        ID_PROMPT = wx.NewId()
+        self.prompt = wx.StaticText(self, ID_PROMPT, "Co&mmand")
 
-        ID_COMMAND_LINE = wxNewId()
-        command_line = wxTextCtrl(self, ID_COMMAND_LINE, 
-            "", wxDefaultPosition, wxDefaultSize,
-            style =wxTE_PROCESS_ENTER)
+        ID_COMMAND_LINE = wx.NewId()
+        command_line = wx.TextCtrl(self, ID_COMMAND_LINE, 
+            "", wx.DefaultPosition, wx.DefaultSize,
+            style =wx.TE_PROCESS_ENTER)
         self.command_line = command_line
 
-        self.prompt_line.Add(self.prompt, 0, wxALL, 4)
-        self.prompt_line.Add(self.command_line, 1, wxALL, 4)
+        self.prompt_line.Add(self.prompt, 0, wx.ALL, 4)
+        self.prompt_line.Add(self.command_line, 1, wx.ALL, 4)
 
-#        EVT_SET_FOCUS(self, self.on_focus)
-#        EVT_SET_FOCUS(self.prompt, self.p_focus)
+#        wx.EVT_SET_FOCUS(self, self.on_focus)
+#        wx.EVT_SET_FOCUS(self.prompt, self.p_focus)
 
 
         if self.command_space == None:
@@ -537,7 +537,7 @@ class WaxCmdPanel(WaxPanel):
 
 # provide extra access for testing 
         self.command_space['the_pane'] = self
-        self.command_prompt = wxCmdPrompt.wxCmdPromptWithHistory(command_line,
+        self.command_prompt = wx.CmdPrompt.wxCmdPromptWithHistory(command_line,
             command_callback = self.on_command_enter)
 
         self.command_line_interp = \
@@ -545,8 +545,8 @@ class WaxCmdPanel(WaxPanel):
 
 
 # because we put the editor in a panel, we need a sizer
-        vbox.Add(top_and_bottom, 1, wxEXPAND | wxALL, 4)
-        vbox.Add(self.prompt_line, 0, wxEXPAND | wxALL, 4)
+        vbox.Add(top_and_bottom, 1, wx.EXPAND | wx.ALL, 4)
+        vbox.Add(self.prompt_line, 0, wx.EXPAND | wx.ALL, 4)
 
         self.top_and_bottom = top_and_bottom
 #        print self.top_and_bottom
@@ -578,7 +578,7 @@ class WaxCmdPanel(WaxPanel):
 
         **INPUTS**
 
-        *wxTextCtrl* command_line -- the command line
+        *wx.TextCtrl* command_line -- the command line
 
         *STR* command -- the command which was entered
 
@@ -619,7 +619,7 @@ class WaxCmdPanel(WaxPanel):
             self.parent.quit_now(None)
 
 
-class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
+class WaxFrameBase(wx.Frame, GenEdit.GenEditFrameActivateEvent,
     wxFrameMenuMixIn):
     """partially concrete base class containing GUI elements and
     behaviors common to many subclasses.  Note: this class does not
@@ -631,10 +631,10 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
     **INSTANCE ATTRIBUTES**
 
-    *wxWindow parent* -- the parent window, if any (usually not for
+    *wx.Window parent* -- the parent window, if any (usually not for
     single-frame applications)
 
-    *BOOL* closing -- true if frame is closing (used to ensure that
+    *BOOL* closing -- True if frame is closing (used to ensure that
     event handlers don't continue to call other methods when the frame
     may not be in a sane state)
 
@@ -642,7 +642,7 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
     entered at the command line (ignored by subclasses without command
     lines)
 
-    *wxWindow most_recent_focus* -- the control which had the focus when
+    *wx.Window most_recent_focus* -- the control which had the focus when
     the application was last deactivated
 
     others -- the various menus
@@ -671,11 +671,11 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
         **INPUTS**
 
-        *wxWindowID ID* -- the wxWindows ID for the frame window
+        *wx.WindowID ID* -- the wx.Windows ID for the frame window
 
-        *wxSize or (INT, INT) size* -- initial size for the frame
+        *wx.Size or (INT, INT) size* -- initial size for the frame
 
-        *wxWindow parent* -- the parent window, if any (usually not for
+        *wx.Window parent* -- the parent window, if any (usually not for
         single-frame applications)
         """
 
@@ -683,18 +683,18 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
                             {'closing': 0,
                              'ID': ID
                             }, args,
-                            exclude_bases = {wxFrame: 1},
+                            exclude_bases = {wx.Frame: 1},
                             enforce_value = {'ID': ID}
                            )
-        wxFrame.__init__(self, parent, self.ID, self.app_name, 
-            wxDefaultPosition, size)
+        wx.Frame.__init__(self, parent, self.ID, self.app_name, 
+            wx.DefaultPosition, size)
 
-        file_menu=wxMenu()
-        ID_OPEN_FILE = wxNewId()
-        ID_SAVE_FILE = wxNewId()
-        ID_SAVE_AS = wxNewId()
-        ID_EXIT = wxNewId()
-        ID_CLOSE_MENU = wxNewId()
+        file_menu=wx.Menu()
+        ID_OPEN_FILE = wx.NewId()
+        ID_SAVE_FILE = wx.NewId()
+        ID_SAVE_AS = wx.NewId()
+        ID_EXIT = wx.NewId()
+        ID_CLOSE_MENU = wx.NewId()
 #        print ID_OPEN_FILE
         file_menu.Append(ID_OPEN_FILE,"&Open...","Open a file")
         file_menu.Append(ID_SAVE_FILE,"&Save","Save current file")
@@ -702,14 +702,14 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
         file_menu.Append(ID_CLOSE_MENU,"&Close","Close window")
         file_menu.Append(ID_EXIT,"E&xit","Terminate")
 
-        ID_CHOOSE_FONT = wxNewId()
-        format_menu = wxMenu()
+        ID_CHOOSE_FONT = wx.NewId()
+        format_menu = wx.Menu()
         format_menu.Append(ID_CHOOSE_FONT, "&Font...")        
 
-        edit_menu = wxMenu()
+        edit_menu = wx.Menu()
 
-        menuBar=wxMenuBar()
-        EVT_CLOSE(self, self.on_close)        
+        menuBar=wx.MenuBar()
+        wx.EVT_CLOSE(self, self.on_close)        
         menuBar.Append(file_menu,"&File");
         menuBar.Append(edit_menu,"&Edit");
         menuBar.Append(format_menu,"F&ormat");        
@@ -718,13 +718,13 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
         self.CreateStatusBar()
 
         self.SetMenuBar(menuBar)
-        EVT_MENU(self, ID_EXIT, self.quit_now)
-        EVT_MENU(self, ID_CLOSE_MENU, self.close_now)
-        EVT_MENU(self, ID_OPEN_FILE, self.on_open_file)
-        EVT_MENU(self, ID_SAVE_FILE,self.on_save)
-        EVT_MENU(self, ID_SAVE_AS,self.on_save_as)        
-        EVT_MENU(self, ID_CHOOSE_FONT, self.choose_font)
-        EVT_ACTIVATE(self, self.OnActivate) 
+        wx.EVT_MENU(self, ID_EXIT, self.quit_now)
+        wx.EVT_MENU(self, ID_CLOSE_MENU, self.close_now)
+        wx.EVT_MENU(self, ID_OPEN_FILE, self.on_open_file)
+        wx.EVT_MENU(self, ID_SAVE_FILE,self.on_save)
+        wx.EVT_MENU(self, ID_SAVE_AS,self.on_save_as)        
+        wx.EVT_MENU(self, ID_CHOOSE_FONT, self.choose_font)
+        wx.EVT_ACTIVATE(self, self.OnActivate) 
         self.most_recent_focus = None
 
     def set_status_text(self, text):
@@ -756,7 +756,7 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
     def OnActivate(self, event):
         if self.closing:
             return
-        current = wxWindow_FindFocus()
+        current = wx.Window_FindFocus()
         if event.GetActive():
 # window is being activated
 
@@ -862,10 +862,10 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
     
     def open_file_dialog(self, init_dir):
         file_path = None
-        dlg = wxFileDialog(self, "Edit File", init_dir, "", "*.*",
-            wxOPEN | wxCHANGE_DIR)
+        dlg = wx.FileDialog(self, "Edit File", init_dir, "", "*.*",
+            wx.OPEN | wx.CHANGE_DIR)
         answer = dlg.ShowModal()
-        if answer == wxID_OK:
+        if answer == wx.ID_OK:
             file_path = dlg.GetPath()
         dlg.Destroy()
         return file_path
@@ -893,11 +893,11 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
         *STR* -- the specified path, or None if the user cancelled 
         """
-        dlg = wxFileDialog(self, "Save File", init_dir,  "", "*.*",
-            wxSAVE | wxCHANGE_DIR | wxOVERWRITE_PROMPT)
+        dlg = wx.FileDialog(self, "Save File", init_dir,  "", "*.*",
+            wx.SAVE | wx.CHANGE_DIR | wx.OVERWRITE_PROMPT)
         file_path = None
         answer = dlg.ShowModal()
-        if answer == wxID_OK:
+        if answer == wx.ID_OK:
             file_path = dlg.GetPath()
         dlg.Destroy()
         return file_path
@@ -930,17 +930,17 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
         
         **OUTPUTS**
 
-        *BOOL* -- true if the user saved or told WaxEdit to proceed
-        without saving, false if the user asked for the action causing
+        *BOOL* -- True if the user saved or told WaxEdit to proceed
+        without saving, False if the user asked for the action causing
         the buffer closing to be cancelled.
         """
-        answer = wxMessageBox("Save changes to document %s?" % buff_name, 
+        answer = wx.MessageBox("Save changes to document %s?" % buff_name, 
                 "Save Changes", 
-                wxICON_EXCLAMATION | wxYES_NO | wxCANCEL | wxYES_DEFAULT, 
+                wx.ICON_EXCLAMATION | wx.YES_NO | wx.CANCEL | wx.YES_DEFAULT, 
                 self)
-        if answer == wxCANCEL:
+        if answer == wx.CANCEL:
             return 0
-        if answer == wxYES:
+        if answer == wx.YES:
             new_buff_name = self.owner.save_file(buff_name, rename_buff = 0)
             if not new_buff_name:
                 return 0
@@ -955,7 +955,7 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
         **OUTPUTS**
 
-        *wxFont* -- the current font
+        *wx.Font* -- the current font
         """
         debug.virtual('WaxFrameBase.current_font')
 
@@ -964,7 +964,7 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
         **INPUTS**
 
-        *wxFont font* -- the desired font
+        *wx.Font font* -- the desired font
 
         **OUTPUTS**
 
@@ -974,12 +974,12 @@ class WaxFrameBase(wxFrame, GenEdit.GenEditFrameActivateEvent,
 
     def choose_font(self, event):
         current_font = self.current_font()
-        current_font_data = wxFontData()
+        current_font_data = wx.FontData()
         current_font_data.SetInitialFont(current_font)
-        dlg = wxFontDialog(self, current_font_data)
+        dlg = wx.FontDialog(self, current_font_data)
 # the line below passed the return value (None?) of SetInitialFont to the
 # dialog
-#        dlg = wxFontDialog(self, wxFontData().SetInitialFont(current_font))
+#        dlg = wx.FontDialog(self, wx.FontData().SetInitialFont(current_font))
         dlg.ShowModal()
         chosen_font = dlg.GetFontData().GetChosenFont()
         if chosen_font:
@@ -1007,7 +1007,7 @@ class WaxFrame(WaxFrameBase):
                              'curr_buffer_name': init_buff_name
                             }, args
                            ),
-        ID_PANE = wxNewId()
+        ID_PANE = wx.NewId()
         self.pane = self.add_pane(ID = ID_PANE)
         self.add_owned('pane')
 
@@ -1016,7 +1016,7 @@ class WaxFrame(WaxFrameBase):
 
         **INPUTS**
 
-        *wxWindowId ID* -- the ID of the panel
+        *wx.WindowId ID* -- the ID of the panel
         """
         debug.virtual('WaxPane.add_pane')
 
@@ -1065,7 +1065,7 @@ class WaxFrame(WaxFrameBase):
 
         **OUTPUTS**
 
-        *BOOL* -- false if the old buff_name was unknown, or the new
+        *BOOL* -- False if the old buff_name was unknown, or the new
         name is already present
         """
         if self.curr_buffer_name == buff_name:
@@ -1084,7 +1084,7 @@ class WaxFrame(WaxFrameBase):
        
         **OUTPUTS**
         
-        *BOOL* -- true if buff_name exists and the external application
+        *BOOL* -- True if buff_name exists and the external application
         successfully switches to it
         """
         if buff_name == self.curr_buffer_name:
@@ -1133,7 +1133,7 @@ class WaxFrame(WaxFrameBase):
 
         **OUTPUTS**
 
-        *wxFont* -- the current font
+        *wx.Font* -- the current font
         """
         return self.pane.current_font()
 
@@ -1142,7 +1142,7 @@ class WaxFrame(WaxFrameBase):
 
         **INPUTS**
 
-        *wxFont font* -- the desired font
+        *wx.Font font* -- the desired font
 
         **OUTPUTS**
 
@@ -1174,7 +1174,7 @@ class WaxFrame(WaxFrameBase):
         *none*
 
         **OUTPUTS**
-        *BOOL* -- true if editor window has the focus
+        *BOOL* -- True if editor window has the focus
         """
         return self.pane.editor_has_focus()
 
@@ -1203,7 +1203,7 @@ class SimpleWaxFrame(WaxFrame):
 
         **INPUTS**
 
-        *wxWindowId ID* -- the ID of the panel
+        *wx.WindowId ID* -- the ID of the panel
         """
         return SimpleWaxPanel(parent = self, ID = ID)
 
@@ -1238,7 +1238,7 @@ class WaxCmdFrame(WaxFrame):
 
         **INPUTS**
 
-        *wxWindowId ID* -- the ID of the panel
+        *wx.WindowId ID* -- the ID of the panel
         """
         return WaxCmdPanel(parent = self, ID = ID, 
             command_space = self.command_space)

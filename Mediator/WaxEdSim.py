@@ -23,7 +23,7 @@
 
 
 import debug
-from wxPython.wx import *
+import wx
 
 import Object
 import GenEdit
@@ -41,10 +41,10 @@ class WaxEdSimPanel(WaxCmdPanel):
 
     **INSTANCE ATTRIBUTES**
 
-    *wxBitmap green_light, grey_light, dark_grey_light* -- states for
+    *wx.Bitmap green_light, grey_light, dark_grey_light* -- states for
     the microphone button
 
-    *wxBitmapButton mic_button*
+    *wx.BitmapButton mic_button*
     """
     def remove_other_references(self):
         self.green_light = None
@@ -73,30 +73,30 @@ class WaxEdSimPanel(WaxCmdPanel):
 
         **INPUTS**
 
-        *wxBoxSizer vbox* -- the vertical box sizer to which the
+        *wx.BoxSizer vbox* -- the vertical box sizer to which the
         controls should be added.
 
         **OUTPUTS**
 
         *none*
         """
-        button_line = wxBoxSizer(wxHORIZONTAL)
+        button_line = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.green_light = wxBitmap("bitmaps/green.bmp", wxBITMAP_TYPE_BMP)
-#        self.grey_light = wxBitmap("bitmaps/yellow.bmp", wxBITMAP_TYPE_BMP)
-        self.grey_light = wxBitmap("bitmaps/grey.bmp", wxBITMAP_TYPE_BMP)
-        self.dark_grey_light = wxBitmap("bitmaps/darkgrey.bmp", wxBITMAP_TYPE_BMP)
-        ID_MIC_BUTTON = wxNewId()
-        self.mic_button = wxBitmapButton(self, ID_MIC_BUTTON, self.grey_light, 
-            wxDefaultPosition, 
+        self.green_light = wx.Bitmap("bitmaps/green.bmp", wx.BITMAP_TYPE_BMP)
+#        self.grey_light = wx.Bitmap("bitmaps/yellow.bmp", wx.BITMAP_TYPE_BMP)
+        self.grey_light = wx.Bitmap("bitmaps/grey.bmp", wx.BITMAP_TYPE_BMP)
+        self.dark_grey_light = wx.Bitmap("bitmaps/darkgrey.bmp", wx.BITMAP_TYPE_BMP)
+        ID_MIC_BUTTON = wx.NewId()
+        self.mic_button = wx.BitmapButton(self, ID_MIC_BUTTON, self.grey_light, 
+            wx.DefaultPosition, 
             (self.grey_light.GetWidth()+10,self.grey_light.GetHeight()+10))
 
-        ID_MIC_LABEL = wxNewId()
-        mic_label = wxStaticText(self, ID_MIC_LABEL, "Microphone: ")
+        ID_MIC_LABEL = wx.NewId()
+        mic_label = wx.StaticText(self, ID_MIC_LABEL, "Microphone: ")
 
-        button_line.Add(mic_label, 0, wxALIGN_CENTER)
+        button_line.Add(mic_label, 0, wx.ALIGN_CENTER)
         button_line.Add(self.mic_button, 0)
-        EVT_BUTTON(self, ID_MIC_BUTTON, self.on_mic_button)
+        wx.EVT_BUTTON(self, ID_MIC_BUTTON, self.on_mic_button)
 
         vbox.Add(button_line, 0)
 
@@ -203,13 +203,13 @@ class WaxEdSimFrameMixIn(Object.Object):
 
         *none*
         """
-        ID_CONF_SCRIPT = wxNewId()
+        ID_CONF_SCRIPT = wx.NewId()
         file_menu = self.get_menu_by_name('File')
 #        print file_menu
         config_item = self.make_menu_item(file_menu, ID_CONF_SCRIPT, 
             "Con&fig Script", help_string = "Execute a python configuration script for the environment (ex: a demo file)")
         self.insert_item_before_label(config_item, file_menu, 'Save')
-        EVT_MENU(self,ID_CONF_SCRIPT,self.on_execute_file)
+        wx.EVT_MENU(self,ID_CONF_SCRIPT,self.on_execute_file)
 
     def on_execute_file(self, event):
         self.owner.execute_file()
@@ -225,11 +225,11 @@ class WaxEdSimFrameMixIn(Object.Object):
 
         *STR* init_dir -- the initial directory for the dialog box
         """
-        dlg = wxFileDialog(self, "Execute Script File", init_dir, "",
-            "*.*", wxOPEN)
+        dlg = wx.FileDialog(self, "Execute Script File", init_dir, "",
+            "*.*", wx.OPEN)
         answer = dlg.ShowModal()
         file_path = None
-        if answer == wxID_OK:
+        if answer == wx.ID_OK:
             file_path = dlg.GetPath()
         dlg.Destroy()
         return file_path
@@ -300,7 +300,7 @@ class WaxEdSimFrame(WaxEdSimFrameMixIn, WaxCmdFrame):
 
         **INPUTS**
 
-        *wxWindowId ID* -- the ID of the panel
+        *wx.WindowId ID* -- the ID of the panel
         """
         return WaxEdSimPanel(parent = self, ID = ID, 
             command_space = self.command_space)
@@ -311,7 +311,7 @@ class SimConsole(GenEdit.ActivateEventMixIn, GenEdit.GenEditSingle):
 
     **INSTANCE ATTRIBUTES**
 
-    *WaxEdSim, wxApp app* -- the application which owns this object
+    *WaxEdSim, wx.App app* -- the application which owns this object
 
     *STR app_name* -- the name of the application
     """
@@ -380,7 +380,7 @@ class WaxEdSimConsole(SimConsole):
 
     **INSTANCE ATTRIBUTES**
 
-    *wxSize or (INT, INT) size* -- default size for frames
+    *wx.Size or (INT, INT) size* -- default size for frames
 
     *{STR: ANY}* initial_cmd_space -- initial name space for user commands
     entered at the command line 
@@ -405,7 +405,7 @@ class WaxEdSimConsole(SimConsole):
 
         **OUTPUTS**
 
-        *wxFrame* -- the main wxFrame
+        *wx.Frame* -- the main wx.Frame
         """
 # based on GenEditSingle, so only one frame
         return self.frames[self.only_ID]
@@ -427,12 +427,12 @@ class WaxEdSimConsole(SimConsole):
         added successfully
         """
         return WaxEdSimFrame(owner = self, app_name = self.app_name,
-                ID = wxNewId(), size = self.frame_size, 
+                ID = wx.NewId(), size = self.frame_size, 
                 init_buff_name = buff_name, 
                 command_space = self.initial_cmd_space)
 
 class WaxEdSimBase(Object.OwnerObject):
-    """base class for the wxApp application class for the WaxEdSim console
+    """base class for the wx.App application class for the WaxEdSim console
 
     **INSTANCE ATTRIBUTES**
 
@@ -510,7 +510,7 @@ class WaxEdSimBase(Object.OwnerObject):
         """
         self.wax_console.update_mic_button(state)
 
-class WaxEdSim(wxApp, WaxEdSimBase):
+class WaxEdSim(wx.App, WaxEdSimBase):
     """application class for the WaxEdSim console
 
     **INSTANCE ATTRIBUTES**
@@ -521,17 +521,17 @@ class WaxEdSim(wxApp, WaxEdSimBase):
                             {
                             },
                             args,
-                            exclude_bases = {wxApp:1}
+                            exclude_bases = {wx.App:1}
                            )
-        wxApp.__init__(self, 1, 'simcrash')
-#        wxApp.__init__(self, 0)
+        wx.App.__init__(self, 1, 'simcrash')
+#        wx.App.__init__(self, 0)
 
     def OnInit(self):
         self.wax_console = self.new_console()
         frame = self.wax_console.active_frame()
         self.SetTopWindow(frame)
         self.editor = AppStateGenEdit.AppStateGenEdit(self.wax_console)
-        return true
+        return True
 
     def new_console(self):
         return WaxEdSimConsole(app = self, app_name = 'WaxEdSim',

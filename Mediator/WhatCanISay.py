@@ -725,14 +725,26 @@ class WhatCanISay(object):
         page_html = page
         
         tl = FullTable(Class="footer")
+        scramble = []
         if page_type == 'index' and page == 'index.html':
-            scramble = 'home'
+            scramble.append('home')
         else:
-            scramble = join(Href('index.html', 'home'), ' &gt; ', nice_name)
-        scramble += " &gt; " + str(Href("javascript:scrollTo(0,0);", " top"))
+            scramble.append(Href('index.html', 'home'))
+            if page_type == nice_name:
+                # Overview page of language
+                scramble.append(nice_name)
+            else:
+                # insert link to overview page and page itself
+                link_to = "%s_overview.html"% page_type.lower()
+                scramble.append(Href(link_to, page_type))
+                scramble.append(nice_name)
+                
+        scramble.append(Href("javascript:scrollTo(0,0);", " top"))
+        scramble = map(str, scramble)
+        scrambleString = "&nbsp;&gt;&nbsp;".join(scramble)
         tim = time.localtime(time.time())
         copyright = time.strftime("%a, %d %b %Y", tim)
-        tl.append(TR(TD(scramble, Class="scramble"),
+        tl.append(TR(TD(scrambleString, Class="scramble"),
                      TD(copyright, Class="copyright")))
         return join(tl)
 

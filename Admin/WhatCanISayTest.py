@@ -631,9 +631,12 @@ the "equals" csc and lsa should (for python) show up with
     def copy_html_files(self, src_dir, dest_dir):
         """copy only html files from src to dest"""
         if os.path.isdir(dest_dir):
-           shutil.rmtree(dest_dir)
-        os.makedirs(dest_dir)
-        self.assert_(os.path.isdir(dest_dir), 'could not make empty folder %s'% dest_dir)
+           for f in os.listdir(dest_dir):
+              if f.endswith("html"):
+                 os.remove(os.path.join)(dest_dir, f)
+        else:
+           os.makedirs(dest_dir)
+           self.assert_(os.path.isdir(dest_dir), 'could not make empty folder %s'% dest_dir)
 
         html_files = glob.glob(src_dir + os.sep + '*.html')
         for src in html_files:

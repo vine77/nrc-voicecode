@@ -19,13 +19,13 @@
 #
 ##############################################################################
 
-"""Subclasses of various wxPython widgets with additional helper methods.
+"""Subclasses of various wx.Python widgets with additional helper methods.
 
 Among other things, those helper methods are useful for unit testing GUIs
 
 """
 
-from wxPython.wx import *
+import wx
 import util
 import debug
 
@@ -35,38 +35,38 @@ class CanBeSentKeys:
        pass
        
     def SendKey(self, key_code):
-        key_event = wxKeyEvent(wxEVT_CHAR)
+        key_event = wx.KeyEvent(wx.EVT_CHAR)
         key_event.m_keyCode = key_code
         self.ProcessEvent(key_event)
 
-class wxTextCtrlWithHelpers(wxTextCtrl):
+class wxTextCtrlWithHelpers(wx.TextCtrl):
     def __init__(self, id, init_value, pos, size, style):
-       wxTextCtrl.__init__(self, id, init_value, pos, size, style)
+       wx.TextCtrl.__init__(self, id, init_value, pos, size, style)
 
        
     def GetANSIValue(self):
        value = self.GetValue() 
-       if util.wxPython_is_unicode_build():
+       if util.wx.Python_is_unicode_build():
           value.encode("ascii", "ignore")
        return value
        
 
-class wxButtonWithHelpers(wxButton):
-    """A wxButton with methods for simulating user actions on it.
+class wxButtonWithHelpers(wx.Button):
+    """A wx.Button with methods for simulating user actions on it.
     """
     def __init__(self, parent, ID, Caption, position, size):
-        wxButton.__init__(self, parent, ID, Caption, position, size)
+        wx.Button.__init__(self, parent, ID, Caption, position, size)
     
     def Click(self):
-        click_event = wxCommandEvent(wxEVT_COMMAND_BUTTON_CLICKED, self.GetId())
+        click_event = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED, self.GetId())
         self.ProcessEvent(click_event)
 
-class wxListCtrlWithHelpers(wxListCtrl, CanBeSentKeys):
-    """A wxListCtrl subclass with helpers for finding more about the data
+class wxListCtrlWithHelpers(wx.ListCtrl, CanBeSentKeys):
+    """A wx.ListCtrl subclass with helpers for finding more about the data
     that is displayed in it.
     """
-    def __init__(self, frame, id, pos=wxDefaultPosition, size=wxDefaultSize, style=wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL):
-       wxListCtrl.__init__(self, frame, id, pos, size, style)
+    def __init__(self, frame, id, pos=wx.DefaultPosition, size=wx.DefaultSize, style=wx.LC_REPORT | wx.LC_HRULES | wx.LC_SINGLE_SEL):
+       wx.ListCtrl.__init__(self, frame, id, pos, size, style)
        CanBeSentKeys.__init__(self)
         
     def GetCellContentsString(self, row, column ):
@@ -109,9 +109,9 @@ class wxListCtrlWithHelpers(wxListCtrl, CanBeSentKeys):
        changes the selection without invoking the selection event handler.
        """   
        self.Select(nth)
-       evt = wxListEvent(wxEVT_COMMAND_LIST_ITEM_ACTIVATED, self.GetId())
+       evt = wx.ListEvent(wx.EVT_COMMAND_LIST_ITEM_ACTIVATED, self.GetId())
        
-       # AD: This fails in wxPython < 2.5 (m_itemIndex is private attribute)
+       # AD: This fails in wx.Python < 2.5 (m_itemIndex is private attribute)
        evt.m_itemIndex = nth
 
        self.ProcessEvent(evt)
@@ -134,9 +134,9 @@ class wxListCtrlWithHelpers(wxListCtrl, CanBeSentKeys):
        If the key was an arrow key, moves the cursor up or down the list.
        """
        direction = None       
-       if keycode == WXK_UP:
+       if keycode == wx.WXK_UP:
            direction = -1
-       elif keycode == WXK_DOWN:
+       elif keycode == wx.WXK_DOWN:
            direction = 1
 
        if direction:
@@ -146,37 +146,37 @@ class wxListCtrlWithHelpers(wxListCtrl, CanBeSentKeys):
 
        return direction
                
-class MockListSelectionEvent(wxListEvent):
+class MockListSelectionEvent(wx.ListEvent):
     def __init__(self, nth):
-       wxListEvent.__init__(self)
+       wx.ListEvent.__init__(self)
        self.nth = nth
 
     def GetIndex(self):
        return self.nth
        
-class Mock_wxListActivationEvent(wxListEvent):
+class Mock_wxListActivationEvent(wx.ListEvent):
     def __init__(self, list_id, item_index):
-       wxListEvent.__init__(self, wxEVT_COMMAND_LIST_ITEM_ACTIVATED, list_id)
+       wx.ListEvent.__init__(self, wx.EVT_COMMAND_LIST_ITEM_ACTIVATED, list_id)
        self._itemIndex = item_index
        
     def GetIndex(self):
        return self._itemIndex
        
-class wxDialogWithHelpers(wxDialog):
+class wxDialogWithHelpers(wx.Dialog):
     """a frame subclass with methods for simulating user events being
     done on elements of the frame (ex: button clicks)"""
     
     def __init__(self, parent, id, title, pos, size, style):
-       wxDialog.__init__(self, parent, id, title, pos, size, style)
+       wx.Dialog.__init__(self, parent, id, title, pos, size, style)
        
     def ClickButton(self, button):
         """simulate the event of a user clicking on a button
         
         **INPUTS**
         
-        *wxButton button* -- the button to be clicked.
+        *wx.Button button* -- the button to be clicked.
         """
-        button_event = wxCommandEvent(wxEVT_COMMAND_BUTTON_CLICKED, button.GetId())
+        button_event = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED, button.GetId())
         button.ProcessEvent(button_event)
           
        

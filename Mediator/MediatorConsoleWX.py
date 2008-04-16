@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-"""implementation of the MediatorConsole interface for a wxPython GUI mediator
+"""implementation of the MediatorConsole interface for a wx.Python GUI mediator
 (e.g. wxMediator)
 
 **MODULE VARIABLES**
@@ -33,7 +33,7 @@ import string
 import shutil
 import Object, vc_globals
 import MediatorConsole
-from wxPython.wx import *
+import wx
 from wxWindowsWithHelpers import *
 from thread_communication_WX import *
 import exceptions
@@ -42,7 +42,7 @@ import threading
 
 font_sz = None
 #font_sz=14
-font_wt=wxBOLD
+font_wt=wx.BOLD
 
 class DummyCapture:
     def __init__(self):
@@ -51,9 +51,9 @@ class DummyCapture:
 global possible_capture
 possible_capture = DummyCapture
 try:
-    import wxCapture
+    import wx.Capture
 #    global possible_capture 
-    possible_capture = wxCapture.ScreenShotCapture
+    possible_capture = wx.Capture.ScreenShotCapture
 except exceptions.ImportError:
     pass
 
@@ -74,14 +74,14 @@ def NO_EVT_MINE(evt_handler, evt_type, func):
     evt_handler.Disconnect(-1, -1, evt_type, func)
 
 # create a unique event types
-wxEVT_DISMISS_MODAL = wxNewEventType()
+wxEVT_DISMISS_MODAL = wx.NewEventType()
 
-wxID_DISMISS_MODAL = wxNewId()
+wx.ID_DISMISS_MODAL = wx.NewId()
 
-wxID_CORRECT_NEXT = wxNewId()
-wxID_CORRECT_PREV = wxNewId()
-wxID_CORRECT_MORE = wxNewId()
-wxID_DISCARD_CORRECTION = wxNewId()
+wx.ID_CORRECT_NEXT = wx.NewId()
+wx.ID_CORRECT_PREV = wx.NewId()
+wx.ID_CORRECT_MORE = wx.NewId()
+wx.ID_DISCARD_CORRECTION = wx.NewId()
 
 def resize_last_column(table):
     """Resize the last column of a table.
@@ -100,15 +100,15 @@ def set_text_font(control):
 
     **INPUTS**
 
-    *wxWindow control* -- The control (usually a wxTextCtrl, or
-    wxListBox) which supports SetFont 
+    *wx.Window control* -- The control (usually a wx.TextCtrl, or
+    wx.ListBox) which supports SetFont 
 
     **OUTPUTS**
 
     *none*
     """
     if font_sz:
-        control.SetFont(wxFont(font_sz, wxMODERN, wxNORMAL, font_wt))
+        control.SetFont(wx.Font(font_sz, wx.MODERN, wx.NORMAL, font_wt))
 
 
 class DismissModalFlagTimerWX(MediatorConsole.DismissModalEvent):
@@ -118,7 +118,7 @@ class DismissModalFlagTimerWX(MediatorConsole.DismissModalEvent):
     **INSTANCE ATTRIBUTES**
 
     *threading.Event bye* -- threading.Event object whose state will be
-    set to true if the dialog box should cancel.  
+    set to True if the dialog box should cancel.  
 
     **CLASS ATTRIBUTES**
 
@@ -141,14 +141,14 @@ class DismissModalFlagTimerWX(MediatorConsole.DismissModalEvent):
         *none*
         """
         self.bye.set()
-        wxWakeUpIdle()
+        wx.WakeUpIdle()
     
 
 class MediatorConsoleWX(MediatorConsole.MediatorConsole):
     """
     **INSTANCE ATTRIBUTES**
 
-    *wxFrame main_frame* -- the main frame window of the console, which
+    *wx.Frame main_frame* -- the main frame window of the console, which
     will be the parent for most modal dialogs
 
     *(INT, INT) corr_box_pos* -- most recent position of the correction
@@ -185,7 +185,7 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
 
         **OUTPUTS**
 
-        *BOOL* -- true if the MediatorConsole implementation has a means
+        *BOOL* -- True if the MediatorConsole implementation has a means
         of displaying user messages 
         """
         self.main_frame.set_status_text(message)
@@ -204,8 +204,8 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
 
         *none*
         """
-        box = wxMessageDialog(self.main_frame, message, "Error", wxOK,
-            wxDefaultPosition)
+        box = wx.MessageDialog(self.main_frame, message, "Error", wx.OK,
+            wx.DefaultPosition)
         box.ShowModal()
         box.Destroy()
 
@@ -272,7 +272,7 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
 # However, I'll leave them in until WinSystemMSW has been tested.
 
     def raise_wxWindow(self, window):
-        """makes the given wxWindow the foreground one (for the system)
+        """makes the given wx.Window the foreground one (for the system)
 
         **INPUTS**
 
@@ -322,7 +322,7 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
 
         **OUTPUTS**
 
-        *BOOL* -- true if a file was selected and copied to the target
+        *BOOL* -- True if a file was selected and copied to the target
         path
         """
         message = """The user_config.py file does not exist.  
@@ -332,13 +332,13 @@ as an initial user file (which can then be customized).
 
               """
         caption = "Missing user configuration file"
-        wxMessageBox(message, caption, wxOK, self.main_frame)
+        wx.MessageBox(message, caption, wx.OK, self.main_frame)
         message = "Choose a sample user configuration file"
         wild = "Python scripts (*.py)|*.py"
-        dlg = wxFileDialog(self.main_frame, message, directory, "",
-            wild, wxOPEN | wxHIDE_READONLY)
+        dlg = wx.FileDialog(self.main_frame, message, directory, "",
+            wild, wx.OPEN | wx.HIDE_READONLY)
         answer = dlg.ShowModal()
-        if answer != wxID_OK:
+        if answer != wx.ID_OK:
             dlg.Destroy()
             return 0
         path = dlg.GetPath()
@@ -371,20 +371,20 @@ as an initial user file (which can then be customized).
 
         **OUTPUTS**
 
-        *BOOL* -- true if the user made changes and approved them
+        *BOOL* -- True if the user made changes and approved them
         """
         original = utterance.words()
         validator = CorrectionValidatorSpoken(utterance = utterance)
         box = CorrectionBoxWX(self, self.main_frame, utterance, validator, 
             can_reinterpret, self.gram_factory, pos = self.corr_box_pos)
-#        app = wxGetApp()
-#        evt = wxActivateEvent(0, true)
+#        app = wx.GetApp()
+#        evt = wx.ActivateEvent(0, True)
 #        app.ProcessEvent(evt)
         answer = self.show_modal_dialog(box)
         self.corr_box_pos = box.GetPositionTuple()
         box.cleanup()
         box.Destroy()
-        if answer == wxID_OK:
+        if answer == wx.ID_OK:
             if should_adapt:
                 utterance.adapt_spoken(utterance.spoken_forms())
             return 1
@@ -419,7 +419,7 @@ as an initial user file (which can then be customized).
         self.corr_recent_pos = box.GetPositionTuple()
         changed = box.changed()  
         box.cleanup()
-        if answer == wxID_OK:
+        if answer == wx.ID_OK:
 #            print 'answer was OK'
             return changed
         else:
@@ -461,37 +461,37 @@ as an initial user file (which can then be customized).
 
 
 class DlgModelViewWX(MediatorConsole.DlgModelView):
-    """wxPython implementation of a Model-View Dialog.
+    """wx.Python implementation of a Model-View Dialog.
 
     **INSTANCE ATTRIBUTES**
 
     *threading.Event bye* -- threading.Event object whose state will be
-    set to true if the dialog box should cancel.  The class
+    set to True if the dialog box should cancel.  The class
     has a timer event which checks the state of the Event object
     and calls on_dismiss if the Event's state
-    becomes true.  The dialog box should then call EndModal with return
-    value wxID_DISMISS_MODAL.
+    becomes True.  The dialog box should then call EndModal with return
+    value wx.ID_DISMISS_MODAL.
 
     """    
     def __init__(self, **args):
         """
         """
-        ID_DISMISS_FLAG_TIMER = wxNewId()
+        ID_DISMISS_FLAG_TIMER = wx.NewId()
         self.deep_construct(DlgModelViewWX,
                             {
                              'bye': threading.Event(),
                              'the_timer': None
                             }, args,                             
-                            exclude_bases = {possible_capture: 1, wxDialog: 1})
-        EVT_TIMER(self.view(), ID_DISMISS_FLAG_TIMER, self.check_dismiss_flag)
+                            exclude_bases = {possible_capture: 1, wx.Dialog: 1})
+        wx.EVT_TIMER(self.view(), ID_DISMISS_FLAG_TIMER, self.check_dismiss_flag)
 
-# this doesn't work because of a bug in wxPython (modal dialog boxes 
+# this doesn't work because of a bug in wx.Python (modal dialog boxes 
 # which were started from a custom event handler are created from within
 # an idle event, so no other idle events get processed until 
 # the modal dialog box closes), so we'll need
 # another solution
-#        EVT_IDLE(wxGetApp(), self.check_dismiss_flag)
-#        EVT_IDLE(self, self.check_dismiss_flag)
+#        wx.EVT_IDLE(wx.GetApp(), self.check_dismiss_flag)
+#        wx.EVT_IDLE(self, self.check_dismiss_flag)
 
         
     def timer(self):
@@ -501,8 +501,8 @@ class DlgModelViewWX(MediatorConsole.DlgModelView):
        if self.the_timer:
           return the_timer
        else:
-          ID_DISMISS_FLAG_TIMER = wxNewId()
-          self.the_timer = wxTimer(self.view(), ID_DISMISS_FLAG_TIMER)
+          ID_DISMISS_FLAG_TIMER = wx.NewId()
+          self.the_timer = wx.Timer(self.view(), ID_DISMISS_FLAG_TIMER)
           self.the_timer.Start(50)
           return self.the_timer
           
@@ -513,12 +513,12 @@ class DlgModelViewWX(MediatorConsole.DlgModelView):
 #        print 'disconnecting event?'
         self.timer().Stop()
         self.delete_timer()
-# this doesn't work because of a bug in wxPython (modal dialog boxes 
+# this doesn't work because of a bug in wx.Python (modal dialog boxes 
 # which were started from a custom event handler are created from within
 # an idle event, so no other idle events get processed until 
 # the modal dialog box closes), so we'll need
 # another solution
-#        wxGetApp().Disconnect(-1, -1, wxEVT_IDLE)
+#        wx.GetApp().Disconnect(-1, -1, wxEVT_IDLE)
 #        print self.Disconnect(-1, -1, wxEVT_IDLE)
 
     def dismiss_event(self):
@@ -536,7 +536,7 @@ class DlgModelViewWX(MediatorConsole.DlgModelView):
         return DismissModalFlagTimerWX(self.bye)
         
 
-# this doesn't work because of a bug in wxPython (modal dialog boxes 
+# this doesn't work because of a bug in wx.Python (modal dialog boxes 
 # which were started from a custom event handler are created from within
 # an idle event, so no other idle events get processed until 
 # the modal dialog box closes), so we'll need
@@ -589,7 +589,7 @@ class CorrectionBoxWX(DlgModelViewWX):
         *MediatorConsoleWX console* -- the MediatorConsole object which owns
         the correction box
 
-        *wxWindow parent* -- the parent wxWindow
+        *wx.Window parent* -- the parent wx.Window
 
         *SpokenUtterance utterance* -- the utterance itself
 
@@ -625,7 +625,7 @@ class CorrectionBoxWX(DlgModelViewWX):
             pos = self.pos)
        
 
-class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture, Object.OwnerObject):
+class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wx.Dialog, possible_capture, Object.OwnerObject):
     """dialog box for correcting misrecognized dictation results
 
     **INSTANCE ATTRIBUTES**
@@ -658,7 +658,7 @@ class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
         *MediatorConsoleWX console* -- the MediatorConsole object which owns
         the correction box
 
-        *wxWindow parent* -- the parent wxWindow
+        *wx.Window parent* -- the parent wx.Window
 
         *SpokenUtterance utterance* -- the utterance itself
 
@@ -691,12 +691,12 @@ class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
                              'select_n_gram': None,
                              'selection_gram': None
                             }, args, 
-                            exclude_bases = {possible_capture: 1, wxDialog: 1}
+                            exclude_bases = {possible_capture: 1, wx.Dialog: 1}
                            )
         if pos is None:
-           pos = wxDefaultPosition
-        wxDialog.__init__(self, parent, wxNewId(), "Correct an Utterance", pos,
-            (600, 500), style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+           pos = wx.DefaultPosition
+        wx.Dialog.__init__(self, parent, wx.NewId(), "Correct an Utterance", pos,
+            (600, 500), style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
 
         self.name_parent('console')
         self.add_owned('choose_n_gram')
@@ -715,58 +715,58 @@ class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
                 gram_factory.make_simple_selection(get_visible_cbk = \
                 self.get_text, get_selection_cbk = self.get_selection,
                 select_cbk = self.on_select_text)
-        s = wxBoxSizer(wxVERTICAL)
-        intro = wxStaticText(self, wxNewId(), 
+        s = wx.BoxSizer(wx.VERTICAL)
+        intro = wx.StaticText(self, wx.NewId(), 
             "&Correct the text (use spoken forms)",
-            wxDefaultPosition, wxDefaultSize)
+            wx.DefaultPosition, wx.DefaultSize)
         set_text_font(intro)
         init_value = string.join(self.utterance.spoken_forms())
         init_value = ""
-# due to a bug in wxWindows, setting the initial value of a text control
+# due to a bug in wx.Windows, setting the initial value of a text control
 # with default size may cause some of the text to be cut off.
 #
 # instead, we now set the initial value from the validator
-        self.text = wxTextCtrl(self, wxNewId(), init_value, wxDefaultPosition,
-            (550, 40), style = wxTE_NOHIDESEL, validator = validator)
+        self.text = wx.TextCtrl(self, wx.NewId(), init_value, wx.DefaultPosition,
+            (550, 40), style = wx.TE_NOHIDESEL, validator = validator)
 
-#        s.Add(self.text, 0, wxEXPAND | wxALL)
+#        s.Add(self.text, 0, wx.EXPAND | wx.ALL)
         set_text_font(self.text)
-        middle_sizer = wxFlexGridSizer(3, 2, 5, 5)
+        middle_sizer = wx.FlexGridSizer(3, 2, 5, 5)
 # three rows, two columns, 5 pixels between rows and columns
-        number_sizer = wxBoxSizer(wxVERTICAL)
-        ID_CHOICES = wxNewId()
+        number_sizer = wx.BoxSizer(wx.VERTICAL)
+        ID_CHOICES = wx.NewId()
         n = 9
         alternatives = self.utterance.alternatives(n)
         spoken_alternatives = []
         for alternative in alternatives:
             spoken_alternatives.append(map(lambda x: x[0], alternative))
         self.choices = map(string.join, spoken_alternatives)
-        ID_NUMBERS = wxNewId()
+        ID_NUMBERS = wx.NewId()
         for i in range(1, 10):
-            st = wxStaticText(self, ID_NUMBERS + i, "%d" % i,
-                wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT)
+            st = wx.StaticText(self, ID_NUMBERS + i, "%d" % i,
+                wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_RIGHT)
             set_text_font(st)
-            number_sizer.Add(st, 0, wxALIGN_RIGHT | wxALIGN_BOTTOM)
-        self.choice_list = wxListBox(self, ID_CHOICES, wxDefaultPosition,
-             wxDefaultSize, self.choices, wxLB_SINGLE)
+            number_sizer.Add(st, 0, wx.ALIGN_RIGHT | wx.ALIGN_BOTTOM)
+        self.choice_list = wx.ListBox(self, ID_CHOICES, wx.DefaultPosition,
+             wx.DefaultSize, self.choices, wx.LB_SINGLE)
         set_text_font(self.choice_list)
-        EVT_LISTBOX(self.choice_list, ID_CHOICES, self.on_selected)
-        EVT_LISTBOX_DCLICK(self.choice_list, ID_CHOICES, self.on_double)
+        wx.EVT_LISTBOX(self.choice_list, ID_CHOICES, self.on_selected)
+        wx.EVT_LISTBOX_DCLICK(self.choice_list, ID_CHOICES, self.on_double)
         bitpath = os.path.join(vc_globals.home, 'Mediator', 'bitmaps')
-        yes = wxBitmap(os.path.join(bitpath, 'plus.bmp'), wxBITMAP_TYPE_BMP)
-        no = wxBitmap(os.path.join(bitpath, 'minus.bmp'), wxBITMAP_TYPE_BMP)
+        yes = wx.Bitmap(os.path.join(bitpath, 'plus.bmp'), wx.BITMAP_TYPE_BMP)
+        no = wx.Bitmap(os.path.join(bitpath, 'minus.bmp'), wx.BITMAP_TYPE_BMP)
         if can_reinterpret: 
             which = yes
         else:
             which = no
-        maybe = wxStaticBitmap(self, wxNewId(), which,
-            wxDefaultPosition, wxDefaultSize)
-        middle_sizer.AddMany([(maybe, 0, wxALIGN_CENTER),
-                              (intro, 0, wxEXPAND),
+        maybe = wx.StaticBitmap(self, wx.NewId(), which,
+            wx.DefaultPosition, wx.DefaultSize)
+        middle_sizer.AddMany([(maybe, 0, wx.ALIGN_CENTER),
+                              (intro, 0, wx.EXPAND),
                               (0, 0), #spacer
-                              (self.text, 0, wxEXPAND | wxALIGN_TOP, 3),
-                              (number_sizer, 0, wxEXPAND | wxALIGN_RIGHT),
-                              (self.choice_list, 0, wxEXPAND)])
+                              (self.text, 0, wx.EXPAND | wx.ALIGN_TOP, 3),
+                              (number_sizer, 0, wx.EXPAND | wx.ALIGN_RIGHT),
+                              (self.choice_list, 0, wx.EXPAND)])
         middle_sizer.AddGrowableRow(2)
 #        middle_sizer.AddGrowableRow(1)
         middle_sizer.AddGrowableCol(1)
@@ -774,38 +774,38 @@ class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
 # be now -- DCF
 #        if self.choices:
 #            self.choice_list.SetSelection(0, 0)
-        s.Add(middle_sizer, 1, wxEXPAND | wxALL)
-        button_sizer = wxBoxSizer(wxHORIZONTAL)
-        ok_button = wxButton(self, wxID_OK, "OK", wxDefaultPosition, 
-            wxDefaultSize)
-        cancel_button = wxButton(self, wxID_CANCEL, "Cancel", 
-            wxDefaultPosition, wxDefaultSize)
-        self.playback_button = wxButton(self, wxNewId(), "Playback", 
-            wxDefaultPosition, wxDefaultSize)
+        s.Add(middle_sizer, 1, wx.EXPAND | wx.ALL)
+        button_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        ok_button = wx.Button(self, wx.ID_OK, "OK", wx.DefaultPosition, 
+            wx.DefaultSize)
+        cancel_button = wx.Button(self, wx.ID_CANCEL, "Cancel", 
+            wx.DefaultPosition, wx.DefaultSize)
+        self.playback_button = wx.Button(self, wx.NewId(), "Playback", 
+            wx.DefaultPosition, wx.DefaultSize)
         if not utterance.playback_available():
             self.playback_button.Enable(0)
 
-        button_sizer.Add(ok_button, 0, wxALL)
-        button_sizer.Add(cancel_button, 0, wxALL)
-        button_sizer.Add(self.playback_button, 0, wxALL)
-        EVT_BUTTON(self, self.playback_button.GetId(), self.on_playback)
+        button_sizer.Add(ok_button, 0, wx.ALL)
+        button_sizer.Add(cancel_button, 0, wx.ALL)
+        button_sizer.Add(self.playback_button, 0, wx.ALL)
+        wx.EVT_BUTTON(self, self.playback_button.GetId(), self.on_playback)
         ok_button.SetDefault()
 # optionally, add additional buttons
         extra_buttons = self.more_buttons()
         if extra_buttons:
-            s.Add(extra_buttons, 0, wxEXPAND | wxALL, 10)
-        s.Add(button_sizer, 0, wxEXPAND | wxALL, 10)
-#        print 'ids', ok_button.GetId(), wxID_OK
+            s.Add(extra_buttons, 0, wx.EXPAND | wx.ALL, 10)
+        s.Add(button_sizer, 0, wx.EXPAND | wx.ALL, 10)
+#        print 'ids', ok_button.GetId(), wx.ID_OK
 #        win32gui.SetForegroundWindow(self.main_frame.handle)
-        EVT_ACTIVATE(self, self.on_activate)
-        EVT_CHAR(self.text, self.on_char_text)
-        EVT_SET_FOCUS(self.text, self.on_focus_text)
-        EVT_KILL_FOCUS(self.text, self.on_kill_focus_text)
+        wx.EVT_ACTIVATE(self, self.on_activate)
+        wx.EVT_CHAR(self.text, self.on_char_text)
+        wx.EVT_SET_FOCUS(self.text, self.on_focus_text)
+        wx.EVT_KILL_FOCUS(self.text, self.on_kill_focus_text)
         self.Raise()
         self.text.SetFocus()
 #        print 'before autolayout: text size is ', self.text.GetSize()
 #        print 'before autolayout: choice list size is ', self.choice_list.GetSize()
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(s)
         self.Layout()
 #        print 'before fit: text size is ', self.text.GetSize()
@@ -821,21 +821,21 @@ class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
 
         **INPUTS**
 
-        *wxBoxSizer button_sizer* -- the box sizer for the button row.
+        *wx.BoxSizer button_sizer* -- the box sizer for the button row.
         If None and if more_buttons wants to add buttons, it should
-        create a new horizontal wxBoxSizer.
+        create a new horizontal wx.BoxSizer.
       
 
         **OUTPUTS**
 
-        *wxBoxSizer* -- a reference to the same button sizer,
+        *wx.BoxSizer* -- a reference to the same button sizer,
         containing the added buttons, or None if none was passed to 
         more_buttons and no more buttons were added
         """
         return button_sizer
 
     def on_dismiss(self):
-        self.EndModal(wxID_DISMISS_MODAL)
+        self.EndModal(wx.ID_DISMISS_MODAL)
 
     def on_playback(self, event):
         ok = self.utterance.playback()
@@ -855,9 +855,9 @@ class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
 
     def on_char_text(self, event):
         k = event.GetKeyCode()
-        if k == WXK_UP:
+        if k == wx.WXK_UP:
             direction = -1
-        elif k == WXK_DOWN:
+        elif k == wx.WXK_DOWN:
             direction = 1
         else:
             event.Skip()
@@ -957,13 +957,13 @@ class CorrectionBoxViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
 
         *none*
         """
-        button_event = wxCommandEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK)
+        button_event = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED, wx.ID_OK)
         self.ProcessEvent(button_event)
         
-# DCF: For some reason, wxPostEvent doesn't work right if the correction
+# DCF: For some reason, wx.PostEvent doesn't work right if the correction
 # box was created from within my custom event handler (though it does if
-# it was created from within an EVT_BUTTON handler)
-#        wxPostEvent(self, button_event)
+# it was created from within an wx.EVT_BUTTON handler)
+#        wx.PostEvent(self, button_event)
 
     def on_double(self, event):
         self.select_choice(event.GetString())
@@ -1014,42 +1014,42 @@ class CorrectNextPrevWX(CorrectionBoxWX):
 
         **INPUTS**
 
-        *wxBoxSizer button_sizer* -- the box sizer for the button row.
+        *wx.BoxSizer button_sizer* -- the box sizer for the button row.
         If None and if more_buttons wants to add buttons, it should
-        create a new horizontal wxBoxSizer.
+        create a new horizontal wx.BoxSizer.
       
 
         **OUTPUTS**
 
-        *wxBoxSizer* -- a reference to the same button sizer,
+        *wx.BoxSizer* -- a reference to the same button sizer,
         containing the added buttons, or None if none was passed to 
         more_buttons and no more buttons were added
         """
         button_sizer = CorrectionBoxWX.more_buttons(self, button_sizer)
-        correct_previous = wxButton(self, wxNewId(), "Previous Phrase", 
-            wxDefaultPosition, wxDefaultSize)
-        correct_next = wxButton(self, wxNewId(), "Next Phrase", 
-            wxDefaultPosition, wxDefaultSize)
+        correct_previous = wx.Button(self, wx.NewId(), "Previous Phrase", 
+            wx.DefaultPosition, wx.DefaultSize)
+        correct_next = wx.Button(self, wx.NewId(), "Next Phrase", 
+            wx.DefaultPosition, wx.DefaultSize)
         if self.first_utterance:
             correct_previous.Enable(0)
         if self.last_utterance:
             correct_next.Enable(0)
         if button_sizer is None:
-            button_sizer = wxBoxSizer(wxHORIZONTAL)
-        button_sizer.Add(correct_previous, 0, wxALL)
-        button_sizer.Add(correct_next, 0, wxALL)
-        EVT_BUTTON(self, correct_previous.GetId(), 
+            button_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        button_sizer.Add(correct_previous, 0, wx.ALL)
+        button_sizer.Add(correct_next, 0, wx.ALL)
+        wx.EVT_BUTTON(self, correct_previous.GetId(), 
             self.on_correct_previous)
-        EVT_BUTTON(self, correct_next.GetId(), 
+        wx.EVT_BUTTON(self, correct_next.GetId(), 
             self.on_correct_next)
         return button_sizer
 
     def on_correct_previous(self, event):
         if self.Validate() and self.TransferDataFromWindow():
-            self.EndModal(wxID_CORRECT_PREV)
+            self.EndModal(wx.ID_CORRECT_PREV)
     def on_correct_next(self, event):
         if self.Validate() and self.TransferDataFromWindow():
-            self.EndModal(wxID_CORRECT_NEXT)
+            self.EndModal(wx.ID_CORRECT_NEXT)
 
 class CorrectFromRecentWX(CorrectNextPrevWX):
     """subclass of CorrectNextPrevWX which adds the option of returning to
@@ -1064,42 +1064,42 @@ class CorrectFromRecentWX(CorrectNextPrevWX):
 
         **INPUTS**
 
-        *wxBoxSizer button_sizer* -- the box sizer for the button row.
+        *wx.BoxSizer button_sizer* -- the box sizer for the button row.
         If None and if more_buttons wants to add buttons, it should
-        create a new horizontal wxBoxSizer.
+        create a new horizontal wx.BoxSizer.
       
 
         **OUTPUTS**
 
-        *wxBoxSizer* -- a reference to the same button sizer,
+        *wx.BoxSizer* -- a reference to the same button sizer,
         containing the added buttons, or None if none was passed to 
         more_buttons and no more buttons were added
         """
         button_sizer = CorrectNextPrevWX.more_buttons(self, button_sizer)
-        more_correction = wxButton(self, wxNewId(), "More Correction", 
-            wxDefaultPosition, wxDefaultSize)
-        discard_changes = wxButton(self, wxNewId(), "Discard Changes", 
-            wxDefaultPosition, wxDefaultSize)
-        EVT_BUTTON(self, more_correction.GetId(), 
+        more_correction = wx.Button(self, wx.NewId(), "More Correction", 
+            wx.DefaultPosition, wx.DefaultSize)
+        discard_changes = wx.Button(self, wx.NewId(), "Discard Changes", 
+            wx.DefaultPosition, wx.DefaultSize)
+        wx.EVT_BUTTON(self, more_correction.GetId(), 
             self.on_more_correction)
-        EVT_BUTTON(self, discard_changes.GetId(), 
+        wx.EVT_BUTTON(self, discard_changes.GetId(), 
             self.on_discard_changes)
         if button_sizer is None:
-            button_sizer = wxBoxSizer(wxHORIZONTAL)
-        button_sizer.Add(more_correction, 0, wxALL)
-        button_sizer.Add(discard_changes, 0, wxALL)
+            button_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        button_sizer.Add(more_correction, 0, wx.ALL)
+        button_sizer.Add(discard_changes, 0, wx.ALL)
         return button_sizer
 
     def on_more_correction(self, event):
         if self.Validate() and self.TransferDataFromWindow():
-            self.EndModal(wxID_CORRECT_MORE)
+            self.EndModal(wx.ID_CORRECT_MORE)
 
     def on_discard_changes(self, event):
-        self.EndModal(wxID_DISCARD_CORRECTION)
+        self.EndModal(wx.ID_DISCARD_CORRECTION)
 
 
 
-class CorrectionValidator(wxPyValidator, Object.Object):
+class CorrectionValidator(wx.PyValidator, Object.Object):
     """abstract base class for classes used to transfer (mis-)recognized text 
     to the correction box, and retreive corrected text from the 
     correction box when the ok button is pressed"""
@@ -1113,8 +1113,8 @@ class CorrectionValidator(wxPyValidator, Object.Object):
         self.deep_construct(CorrectionValidator,
                             {
                              'utterance': utterance
-                            }, args, exclude_bases = {wxPyValidator:1})
-        wxPyValidator.__init__(self)
+                            }, args, exclude_bases = {wx.PyValidator:1})
+        wx.PyValidator.__init__(self)
 
     def args_for_clone(self, dict):
         """adds keyword arguments needed to clone this class to a
@@ -1159,13 +1159,13 @@ class CorrectionValidator(wxPyValidator, Object.Object):
 
         **INPUTS**
 
-        *wxWindow win* -- wxTextCtrl representing the corrected text
+        *wx.Window win* -- wx.TextCtrl representing the corrected text
 
         **OUTPUTS**
 
-        *BOOL* -- true if the field contents are valid
+        *BOOL* -- True if the field contents are valid
         """
-        return true
+        return True
 
     def initial_value(self):
         """retrieve the initial value for the (mis-)recognized text
@@ -1191,7 +1191,7 @@ class CorrectionValidator(wxPyValidator, Object.Object):
 
         **OUTPUTS**
 
-        *BOOL* -- true if the corrected text was successfully converted 
+        *BOOL* -- True if the corrected text was successfully converted 
         (otherwise, the dialog box won't close)
         """
         debug.virtual('CorrectionValidator.convert_corrected')
@@ -1205,7 +1205,7 @@ class CorrectionValidator(wxPyValidator, Object.Object):
 
         **OUTPUTS**
 
-        *BOOL* -- true if data was successfully transfered to the text
+        *BOOL* -- True if data was successfully transfered to the text
         control
         """
         win = self.GetWindow()
@@ -1231,7 +1231,7 @@ class CorrectionValidator(wxPyValidator, Object.Object):
 #        print 'foreground, active = ', hf, ha
 #        print 'dialog shown: ', parent.IsShown()
 #        win32gui.SetForegroundWindow(ha)
-        return true
+        return True
 
 
     def TransferFromWindow(self):
@@ -1243,7 +1243,7 @@ class CorrectionValidator(wxPyValidator, Object.Object):
 
         **OUTPUTS**
 
-        *BOOL* -- true if data was successfully transfered from the text
+        *BOOL* -- True if data was successfully transfered from the text
         control
         """
         win = self.GetWindow()
@@ -1329,7 +1329,7 @@ class CorrectionValidatorSpoken(CorrectionValidator):
 
         **OUTPUTS**
 
-        *BOOL* -- true if the corrected text was successfully converted 
+        *BOOL* -- True if the corrected text was successfully converted 
         (otherwise, the dialog box won't close)
         """
         self.utterance.set_spoken(string.split(corrected))
@@ -1397,7 +1397,7 @@ class CorrectRecentWX(DlgModelViewWX):
         return self.view().changed()
 
 
-class CorrectRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture, Object.OwnerObject):
+class CorrectRecentViewWX(MediatorConsole.ViewLayer, wx.Dialog, possible_capture, Object.OwnerObject):
     """view layer for dialog box which lists recently dictated utterances, allowing the user 
     to select one for correction of misrecognized results or for symbol 
     reformatting
@@ -1451,34 +1451,34 @@ class CorrectRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
                              'corrected': {},
                              'correct_n_gram': None,
                             }, args, 
-                            exclude_bases = {possible_capture:1, wxDialog:1}
+                            exclude_bases = {possible_capture:1, wx.Dialog:1}
                            )
         if pos is None:
-           pos = wxDefaultPosition 
-        wxDialog.__init__(self, parent, wxNewId(), "Correct Recent Utterances", pos,
-           (600, 500), style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+           pos = wx.DefaultPosition 
+        wx.Dialog.__init__(self, parent, wx.NewId(), "Correct Recent Utterances", pos,
+           (600, 500), style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
         
         self.name_parent('console')
         self.add_owned('correct_n_gram')
         if gram_factory:
-            if wxMAJOR_VERSION > 2 or \
-                (wxMAJOR_VERSION == 2 and 
-                     (wxMINOR_VERSION > 3 or 
-                          (wxMINOR_VERSION == 3 and wxRELEASE_NUMBER >= 4)
+            if wx.MAJOR_VERSION > 2 or \
+                (wx.MAJOR_VERSION == 2 and 
+                     (wx.MINOR_VERSION > 3 or 
+                          (wx.MINOR_VERSION == 3 and wx.RELEASE_NUMBER >= 4)
                      )
                 ):
                 self.correct_n_gram = \
                     gram_factory.make_choices(choice_words = ['Correct'])
 
-        s = wxBoxSizer(wxVERTICAL)
-        intro = wxStaticText(self, wxNewId(), 
+        s = wx.BoxSizer(wx.VERTICAL)
+        intro = wx.StaticText(self, wx.NewId(), 
             "&Choose a phrase to correct",
-            wxDefaultPosition, wxDefaultSize)
+            wx.DefaultPosition, wx.DefaultSize)
         set_text_font(intro)
-        s.Add(intro, 0, wxEXPAND | wxALL)
-        recent = wxListCtrlWithHelpers(self, wxNewId(), wxDefaultPosition,
-            wxDefaultSize, 
-            style = wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL)
+        s.Add(intro, 0, wx.EXPAND | wx.ALL)
+        recent = wxListCtrlWithHelpers(self, wx.NewId(), wx.DefaultPosition,
+            wx.DefaultSize, 
+            style = wx.LC_REPORT | wx.LC_HRULES | wx.LC_SINGLE_SEL)
         set_text_font(recent)
         recent.InsertColumn(0, "#")
         recent.InsertColumn(1, "Spoken phrase")
@@ -1487,13 +1487,13 @@ class CorrectRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
         can_reinterpret = map(lambda x: x[2], utterances)
         index = range(len(phrases), 0, -1)
         bitpath = os.path.join(vc_globals.home, 'Mediator', 'bitmaps')
-        yes = wxBitmap(os.path.join(bitpath, 'small_plus.bmp'), wxBITMAP_TYPE_BMP)
-        no = wxBitmap(os.path.join(bitpath, 'small_minus.bmp'), wxBITMAP_TYPE_BMP)
-        self.images = wxImageList(16, 16)
+        yes = wx.Bitmap(os.path.join(bitpath, 'small_plus.bmp'), wx.BITMAP_TYPE_BMP)
+        no = wx.Bitmap(os.path.join(bitpath, 'small_minus.bmp'), wx.BITMAP_TYPE_BMP)
+        self.images = wx.ImageList(16, 16)
         index_no = self.images.Add(no)
         index_yes = self.images.Add(yes)
 # I'm guessing that LC_REPORT uses small images
-        recent.SetImageList(self.images, wxIMAGE_LIST_SMALL)
+        recent.SetImageList(self.images, wx.IMAGE_LIST_SMALL)
         for i in range(len(phrases)):
             if can_reinterpret[i]: 
                 which = index_yes
@@ -1501,25 +1501,25 @@ class CorrectRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
                 which = index_no
             recent.InsertImageStringItem(i, str(index[i]), which)
             recent.SetStringItem(i, 1, phrases[i])
-        recent.SetColumnWidth(0, wxLIST_AUTOSIZE)
-        recent.SetColumnWidth(1, wxLIST_AUTOSIZE)
+        recent.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+        recent.SetColumnWidth(1, wx.LIST_AUTOSIZE)
 
         recent.ScrollList(0, len(phrases))
         self.recent = recent
         self.phrases = phrases
-        s.Add(recent, 1, wxEXPAND | wxALL)
-        okb = wxButtonWithHelpers(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
-        cancelb = wxButtonWithHelpers(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)
-#        EVT_BUTTON(self, okb.GetId(), self.on_ok)
-        b_sizer = wxBoxSizer(wxHORIZONTAL)
+        s.Add(recent, 1, wx.EXPAND | wx.ALL)
+        okb = wxButtonWithHelpers(self, wx.ID_OK, "OK", wx.DefaultPosition, wx.DefaultSize)
+        cancelb = wxButtonWithHelpers(self, wx.ID_CANCEL, "Cancel", wx.DefaultPosition, wx.DefaultSize)
+#        wx.EVT_BUTTON(self, okb.GetId(), self.on_ok)
+        b_sizer = wx.BoxSizer(wx.HORIZONTAL)
         b_sizer.Add(okb, 0, 0)
         b_sizer.Add(cancelb, 0, 0)
-        s.Add(b_sizer, 0, wxEXPAND | wxALL)
+        s.Add(b_sizer, 0, wx.EXPAND | wx.ALL)
         
-        EVT_ACTIVATE(self, self.on_activate)
-        EVT_CHAR(self, self.on_char)
-        EVT_LIST_ITEM_ACTIVATED(self.recent, self.recent.GetId(), self.on_choose)        
-        self.SetAutoLayout(true)
+        wx.EVT_ACTIVATE(self, self.on_activate)
+        wx.EVT_CHAR(self, self.on_char)
+        wx.EVT_LIST_ITEM_ACTIVATED(self.recent, self.recent.GetId(), self.on_choose)        
+        self.SetAutoLayout(True)
         self.SetSizer(s)
         self.Layout()
         actual = s.GetSize()
@@ -1529,15 +1529,15 @@ class CorrectRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
         h = list_client_size.GetHeight()
         w = list_client_size.GetWidth()
         s.SetItemMinSize(self.recent, w, h)
-        s.SetMinSize(wxSize(0, actual.GetHeight()))
+        s.SetMinSize(wx.Size(0, actual.GetHeight()))
         q = s.GetMinSize()
         s.Fit(self)
-        s.SetMinSize(wxSize(q.GetWidth(), 0))
+        s.SetMinSize(wx.Size(q.GetWidth(), 0))
         self.resize_last_column()
         last = len(self.phrases)-1
         self.recent.EnsureVisible(last)
-        self.recent.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
-        self.recent.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
+        self.recent.SetItemState(last, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED)
+        self.recent.SetItemState(last, wx.LIST_STATE_FOCUSED, wx.LIST_STATE_FOCUSED)
         self.hook_events()
         
     def hook_events(self):
@@ -1599,17 +1599,17 @@ class CorrectRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
 
         box.cleanup()
 
-        if answer == wxID_OK:
+        if answer == wx.ID_OK:
             return 'ok'
-        elif answer == wxID_CANCEL:
+        elif answer == wx.ID_CANCEL:
             return 'cancel'
-        elif answer == wxID_CORRECT_NEXT:
+        elif answer == wx.ID_CORRECT_NEXT:
             return 'next'
-        elif answer == wxID_CORRECT_PREV:
+        elif answer == wx.ID_CORRECT_PREV:
             return 'previous'
-        elif answer == wxID_CORRECT_MORE:
+        elif answer == wx.ID_CORRECT_MORE:
             return 'more'
-        elif answer == wxID_DISCARD_CORRECTION:
+        elif answer == wx.ID_DISCARD_CORRECTION:
             return 'discard'
 # shouldn't happen, but ...
         return None
@@ -1619,7 +1619,7 @@ class CorrectRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
         original_words = self.utterances[-n][0].words()
         answer = self.correct_nth(n)
         if answer == 'cancel':
-            self.EndModal(wxID_CANCEL)
+            self.EndModal(wx.ID_CANCEL)
             return
         if answer == 'discard':
             self.utterances[-n][0].set_words(original_words)
@@ -1635,11 +1635,11 @@ class CorrectRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
             self.chose_from_list(i - 1)
         elif answer == 'ok':
             if self.Validate() and self.TransferDataFromWindow():
-                self.EndModal(wxID_OK)
+                self.EndModal(wx.ID_OK)
         self.focus_recent()
         return
 #        str = 'You chose item %d: "%s"' % (n, self.phrases[-n])
-#        m = wxMessageDialog(self, str, style = wxOK)
+#        m = wx.MessageDialog(self, str, style = wx.OK)
 #        m.ShowModal()
 #        m.Destroy()
 
@@ -1649,14 +1649,14 @@ class CorrectRecentViewWX(MediatorConsole.ViewLayer, wxDialog, possible_capture,
 
     def on_char(self, event):
         k = event.GetKeyCode()
-        if k == WXK_PRIOR:
+        if k == wx.WXK_PRIOR:
             top = self.recent.GetTopItem()
             page = self.recent.GetCountPerPage()
             new_top = top-page
             if new_top < 0:
                 new_top = 0
             self.recent.EnsureVisible(new_top)
-        elif k == WXK_NEXT:
+        elif k == wx.WXK_NEXT:
             top = self.recent.GetTopItem()
             page = self.recent.GetCountPerPage()
             last = self.recent.GetItemCount()
@@ -1719,7 +1719,7 @@ class ReformatRecentSymbols(DlgModelViewWX):
     *MediatorConsoleWX console* -- the MediatorConsole object which owns
     the correction box
     
-    *wxDialog parent* -- The parent window for this dialog.
+    *wx.Dialog parent* -- The parent window for this dialog.
 
     *WinGramFactory gram_factory* -- the grammar factory used to add
     speech grammars to the dialog box
@@ -1853,7 +1853,7 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
     *MediatorConsoleWX console* -- the MediatorConsole object which owns
     the correction box
     
-    *wxDialog parent* -- the parent window.
+    *wx.Dialog parent* -- the parent window.
 
     *WinGramFactory gram_factory* -- the grammar factory used to add
     speech grammars to the dialog box
@@ -1881,10 +1881,10 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
         """
         use_pos = pos
         if pos is None:
-            use_pos = wxDefaultPosition
-        wxDialogWithHelpers.__init__(self, parent, wxNewId(), "Reformat Recent Symbols", use_pos,
+            use_pos = wx.DefaultPosition
+        wxDialogWithHelpers.__init__(self, parent, wx.NewId(), "Reformat Recent Symbols", use_pos,
             (600, 400),
-            style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+            style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
            
         possible_capture.__init__(self)
         self.deep_construct(ReformatRecentSymbolsViewWX,
@@ -1904,10 +1904,10 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
         self.name_parent('console')
         self.add_owned('correct_n_gram')
         if gram_factory:
-            if wxMAJOR_VERSION > 2 or \
-                (wxMAJOR_VERSION == 2 and 
-                     (wxMINOR_VERSION > 3 or 
-                          (wxMINOR_VERSION == 3 and wxRELEASE_NUMBER >= 4)
+            if wx.MAJOR_VERSION > 2 or \
+                (wx.MAJOR_VERSION == 2 and 
+                     (wx.MINOR_VERSION > 3 or 
+                          (wx.MINOR_VERSION == 3 and wx.RELEASE_NUMBER >= 4)
                      )
                 ):
                 self.correct_n_gram = \
@@ -1915,16 +1915,16 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
         if pos is None:
             self.CenterOnScreen()
 
-        main_sizer = wxBoxSizer(wxVERTICAL)
-        intro = wxStaticText(self, wxNewId(), 
+        main_sizer = wx.BoxSizer(wx.VERTICAL)
+        intro = wx.StaticText(self, wx.NewId(), 
             "&Choose a symbol to correct",
-            wxDefaultPosition, wxDefaultSize)
+            wx.DefaultPosition, wx.DefaultSize)
         set_text_font(intro)
-        main_sizer.Add(intro, 0, wxEXPAND | wxALL)
+        main_sizer.Add(intro, 0, wx.EXPAND | wx.ALL)
         
-        recent = wxListCtrlWithHelpers(self, wxNewId(), wxDefaultPosition,
-            wxDefaultSize, 
-            style = wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL)
+        recent = wxListCtrlWithHelpers(self, wx.NewId(), wx.DefaultPosition,
+            wx.DefaultSize, 
+            style = wx.LC_REPORT | wx.LC_HRULES | wx.LC_SINGLE_SEL)
         set_text_font(recent)
         
         recent.InsertColumn(0, "")
@@ -1943,35 +1943,35 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
            recent.SetStringItem(ii, 3, 
                                  self.symbols[ii].in_utter_interp.phrase_as_string())
 
-        recent.SetColumnWidth(0, wxLIST_AUTOSIZE_USEHEADER)
-        recent.SetColumnWidth(1, wxLIST_AUTOSIZE_USEHEADER)
-        recent.SetColumnWidth(2, wxLIST_AUTOSIZE_USEHEADER)
-        recent.SetColumnWidth(3, wxLIST_AUTOSIZE_USEHEADER)
+        recent.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
+        recent.SetColumnWidth(1, wx.LIST_AUTOSIZE_USEHEADER)
+        recent.SetColumnWidth(2, wx.LIST_AUTOSIZE_USEHEADER)
+        recent.SetColumnWidth(3, wx.LIST_AUTOSIZE_USEHEADER)
 
         recent.ScrollList(0, len(symbols))
         self.recent = recent
         
         
-        main_sizer.Add(recent, 1, wxEXPAND | wxALL)
-        self.okb = wxButtonWithHelpers(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
-        self.cancelb = wxButtonWithHelpers(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)              
-        EVT_BUTTON(self, self.okb.GetId(), self.on_ok)
-        EVT_BUTTON(self, self.cancelb.GetId(), self.on_cancel)        
-        b_sizer = wxBoxSizer(wxHORIZONTAL)
+        main_sizer.Add(recent, 1, wx.EXPAND | wx.ALL)
+        self.okb = wxButtonWithHelpers(self, wx.ID_OK, "OK", wx.DefaultPosition, wx.DefaultSize)
+        self.cancelb = wxButtonWithHelpers(self, wx.ID_CANCEL, "Cancel", wx.DefaultPosition, wx.DefaultSize)              
+        wx.EVT_BUTTON(self, self.okb.GetId(), self.on_ok)
+        wx.EVT_BUTTON(self, self.cancelb.GetId(), self.on_cancel)        
+        b_sizer = wx.BoxSizer(wx.HORIZONTAL)
         b_sizer.Add(self.okb, 0, 0)
         b_sizer.Add(self.cancelb, 0, 0)
-        main_sizer.Add(b_sizer, 0, wxEXPAND | wxALL)
+        main_sizer.Add(b_sizer, 0, wx.EXPAND | wx.ALL)
 
 # note: neither of these handlers gets called if a child control 
 # has the focus.
 # I thought they would be called if the focused control didn't have a
 # handler
-        EVT_ACTIVATE(self, self.on_activate)
-        EVT_CHAR(self.recent, self.on_recent_char)
-        EVT_LIST_ITEM_SELECTED(self.recent, self.recent.GetId(), self.on_select)
-        EVT_LIST_ITEM_ACTIVATED(self.recent, self.recent.GetId(), self.on_choose)
+        wx.EVT_ACTIVATE(self, self.on_activate)
+        wx.EVT_CHAR(self.recent, self.on_recent_char)
+        wx.EVT_LIST_ITEM_SELECTED(self.recent, self.recent.GetId(), self.on_select)
+        wx.EVT_LIST_ITEM_ACTIVATED(self.recent, self.recent.GetId(), self.on_choose)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(main_sizer)
         self.Layout()
         actual = main_sizer.GetSize()
@@ -1981,25 +1981,25 @@ class ReformatRecentSymbolsViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers
         h = list_client_size.GetHeight()
         w = list_client_size.GetWidth()
         main_sizer.SetItemMinSize(self.recent, w, h)
-        main_sizer.SetMinSize(wxSize(0, actual.GetHeight()))
+        main_sizer.SetMinSize(wx.Size(0, actual.GetHeight()))
         q = main_sizer.GetMinSize()
         main_sizer.Fit(self)
-        main_sizer.SetMinSize(wxSize(q.GetWidth(), 0))
+        main_sizer.SetMinSize(wx.Size(q.GetWidth(), 0))
         resize_last_column(self.recent)
         last = len(self.symbols)-1
         self.recent.EnsureVisible(last)
-        self.recent.SetItemState(last, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
-        self.recent.SetItemState(last, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED)
+        self.recent.SetItemState(last, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED)
+        self.recent.SetItemState(last, wx.LIST_STATE_FOCUSED, wx.LIST_STATE_FOCUSED)
         
         
     def on_ok(self, event=None):
         self.model().on_ok(event)
-        self.EndModal(wxID_OK)
+        self.EndModal(wx.ID_OK)
         
     def on_cancel(self, event=None):
         self.model().on_cancel(event)
         debug.trace('ReformatRecentSymbolsViewWX.on_cancel', '** before EndModal, self=%s' % self)
-        self.EndModal(wxID_CANCEL)
+        self.EndModal(wx.ID_CANCEL)
         debug.trace('ReformatRecentSymbolsViewWX.on_cancel', '** after EndModal')
 
     def on_activate(self, event):
@@ -2065,19 +2065,19 @@ class ReformatFromRecentWX(DlgModelViewWX):
 
     *SymbolResults symbol* -- the symbol to be corrected.
     
-    *BOOL was_okayed=false* -- true IIF the dialog was OKayed as opposed to 
+    *BOOL was_okayed=False* -- True IIF the dialog was OKayed as opposed to 
     cancelled.
 
     *MediatorConsoleWX console* -- the MediatorConsole object which owns
     the correction box
     
-    *wxDialog parent* -- The parent window for this dialog.
+    *wx.Dialog parent* -- The parent window for this dialog.
     """
 
     def __init__(self, console, parent, symbol, **args):                                      
        self.deep_construct(ReformatFromRecentWX, 
                            {'symbol': symbol,
-                            'was_okayed': false,
+                            'was_okayed': False,
                             'console': console,
                             'parent': parent
                            },
@@ -2129,11 +2129,11 @@ class ReformatFromRecentWX(DlgModelViewWX):
        self.view().do_cancel()
        
     def on_cancel(self, event=None):
-       self.was_okayed = false
+       self.was_okayed = False
        self.symbol.reformat_to(None)         
 
     def on_ok(self, event=None):
-       self.was_okayed = true
+       self.was_okayed = True
        self.symbol.reformat_to(self.chosen_form())
        
     def do_ok(self):
@@ -2144,9 +2144,9 @@ class ReformatFromRecentWX(DlgModelViewWX):
 
     def on_format_pick_list_char(self, event):
         key = event.GetKeyCode()
-        if key == WXK_UP:
+        if key == wx.WXK_UP:
             direction = -1
-        elif key == WXK_DOWN:
+        elif key == wx.WXK_DOWN:
             direction = 1
         else:
             event.Skip()
@@ -2174,7 +2174,7 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
     *MediatorConsoleWX console* -- the MediatorConsole object which owns
     the correction box
     
-    *wxDialog parent* -- the parent window.
+    *wx.Dialog parent* -- the parent window.
     """
     def __init__(self, console, parent, **args):
             
@@ -2201,9 +2201,9 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
                            
         
 
-        wxDialogWithHelpers.__init__(self, parent, wxNewId(), "Reformat a Symbol", wxDefaultPosition,
+        wxDialogWithHelpers.__init__(self, parent, wx.NewId(), "Reformat a Symbol", wx.DefaultPosition,
             (600, 400),
-            style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
+            style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
         
         self.name_parent('console')
         
@@ -2212,41 +2212,41 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
         
 
     def set_layout(self):
-        main_sizer = wxBoxSizer(wxVERTICAL)
+        main_sizer = wx.BoxSizer(wx.VERTICAL)
 
-        self.txt_intro = wxStaticText(self, wxNewId(), 
+        self.txt_intro = wx.StaticText(self, wx.NewId(), 
             "dummy\ndummy",
-            wxDefaultPosition, wxDefaultSize)
+            wx.DefaultPosition, wx.DefaultSize)
         set_text_font(self.txt_intro)
-        main_sizer.Add(self.txt_intro, 0, wxEXPAND | wxALL)
+        main_sizer.Add(self.txt_intro, 0, wx.EXPAND | wx.ALL)
 
-        self.txt_chosen_form = wxTextCtrl(self, wxNewId(), "", wxDefaultPosition,
-            (550, 20), style = wxTE_NOHIDESEL)
+        self.txt_chosen_form = wx.TextCtrl(self, wx.NewId(), "", wx.DefaultPosition,
+            (550, 20), style = wx.TE_NOHIDESEL)
         set_text_font(self.txt_chosen_form)
-        main_sizer.Add(self.txt_chosen_form, 0, wxEXPAND | wxALL)
+        main_sizer.Add(self.txt_chosen_form, 0, wx.EXPAND | wx.ALL)
         
-        formats_pick_list = wxListCtrlWithHelpers(self, wxNewId(), wxDefaultPosition,
-            wxDefaultSize, 
-            style = wxLC_REPORT | wxLC_HRULES | wxLC_SINGLE_SEL)
+        formats_pick_list = wxListCtrlWithHelpers(self, wx.NewId(), wx.DefaultPosition,
+            wx.DefaultSize, 
+            style = wx.LC_REPORT | wx.LC_HRULES | wx.LC_SINGLE_SEL)
         set_text_font(formats_pick_list)
         
         formats_pick_list.InsertColumn(0, "")
         formats_pick_list.InsertColumn(1, "Written form")
 
-        formats_pick_list.SetColumnWidth(0, wxLIST_AUTOSIZE_USEHEADER)
-        formats_pick_list.SetColumnWidth(1, wxLIST_AUTOSIZE_USEHEADER)
+        formats_pick_list.SetColumnWidth(0, wx.LIST_AUTOSIZE_USEHEADER)
+        formats_pick_list.SetColumnWidth(1, wx.LIST_AUTOSIZE_USEHEADER)
 
         self.formats_pick_list = formats_pick_list
-        main_sizer.Add(formats_pick_list, 1, wxEXPAND | wxALL)
-        self.okb = wxButtonWithHelpers(self, wxID_OK, "OK", wxDefaultPosition, wxDefaultSize)
-        self.cancelb = wxButtonWithHelpers(self, wxID_CANCEL, "Cancel", wxDefaultPosition, wxDefaultSize)
-        b_sizer = wxBoxSizer(wxHORIZONTAL)
+        main_sizer.Add(formats_pick_list, 1, wx.EXPAND | wx.ALL)
+        self.okb = wxButtonWithHelpers(self, wx.ID_OK, "OK", wx.DefaultPosition, wx.DefaultSize)
+        self.cancelb = wxButtonWithHelpers(self, wx.ID_CANCEL, "Cancel", wx.DefaultPosition, wx.DefaultSize)
+        b_sizer = wx.BoxSizer(wx.HORIZONTAL)
         b_sizer.Add(self.okb, 0, 0)
         b_sizer.Add(self.cancelb, 0, 0)
-        main_sizer.Add(b_sizer, 0, wxEXPAND | wxALL)
+        main_sizer.Add(b_sizer, 0, wx.EXPAND | wx.ALL)
         self.okb.SetDefault()
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(main_sizer)
         self.Layout()
         actual = main_sizer.GetSize()
@@ -2256,29 +2256,29 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
         h = list_client_size.GetHeight()
         w = list_client_size.GetWidth()
         main_sizer.SetItemMinSize(self.formats_pick_list, w, h)
-        main_sizer.SetMinSize(wxSize(0, actual.GetHeight()))
+        main_sizer.SetMinSize(wx.Size(0, actual.GetHeight()))
         q = main_sizer.GetMinSize()
         main_sizer.Fit(self)
-        main_sizer.SetMinSize(wxSize(q.GetWidth(), 0))
+        main_sizer.SetMinSize(wx.Size(q.GetWidth(), 0))
         resize_last_column(self.formats_pick_list)
 
         # AD: Keep those at the end, otherwise some of the code above
         #     could callback some Model actions which in turn could
         #     invoke the view before it has been defined.
-        EVT_BUTTON(self, self.okb.GetId(), self.on_ok)
-        EVT_BUTTON(self, self.cancelb.GetId(), self.on_cancel)
-        EVT_LIST_ITEM_ACTIVATED(self.formats_pick_list, self.formats_pick_list.GetId(), 
+        wx.EVT_BUTTON(self, self.okb.GetId(), self.on_ok)
+        wx.EVT_BUTTON(self, self.cancelb.GetId(), self.on_cancel)
+        wx.EVT_LIST_ITEM_ACTIVATED(self.formats_pick_list, self.formats_pick_list.GetId(), 
                                 self.on_choose_alternate_form)
-        EVT_LIST_ITEM_SELECTED(self.formats_pick_list, self.formats_pick_list.GetId(), 
+        wx.EVT_LIST_ITEM_SELECTED(self.formats_pick_list, self.formats_pick_list.GetId(), 
                                self.on_select_alternate_form)
-        EVT_CHAR(self.formats_pick_list, self.on_format_pick_list_char)
+        wx.EVT_CHAR(self.formats_pick_list, self.on_format_pick_list_char)
         
 # note: neither of these handlers gets called if a child control 
 # has the focus.
 # I thought they would be called if the focused control didn't have a
 # handler
-        EVT_ACTIVATE(self, self.on_activate)
-        EVT_CHAR(self, self.on_dialog_char)
+        wx.EVT_ACTIVATE(self, self.on_activate)
+        wx.EVT_CHAR(self, self.on_dialog_char)
 
 
     def reset(self, symbol):
@@ -2327,12 +2327,12 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
 
     def on_ok(self, event=None):
        self.model().on_ok(event)
-       self.EndModal(wxID_OK)
+       self.EndModal(wx.ID_OK)
 
     def on_cancel(self, event=None):
        debug.trace('ReformatFromRecentViewWX.on_cancel', '** invoked, self=%s' % self)
        self.model().on_cancel(event)
-       self.EndModal(wxID_CANCEL)
+       self.EndModal(wx.ID_CANCEL)
 
     def on_activate(self, event):
        pass
@@ -2354,9 +2354,9 @@ class ReformatFromRecentViewWX(MediatorConsole.ViewLayer, wxDialogWithHelpers, p
        self.formats_pick_list.Select(nth)
 
     def do_choose_nth_form(self, nth):
-# AD: Eventually, when we migrate to wxPython 2.5, we'll be able
+# AD: Eventually, when we migrate to wx.Python 2.5, we'll be able
 # to invoke ActivateNth(). But for now it does not work in
-# wxPython 2.4 and the upgrade to 2.5 is a real bitch.
+# wx.Python 2.4 and the upgrade to 2.5 is a real bitch.
 # Delay it til after first release.
 #       self.formats_pick_list.ActivateNth(nth)
        self.formats_pick_list.Select(nth)

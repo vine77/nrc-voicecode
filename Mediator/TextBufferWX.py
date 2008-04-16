@@ -25,9 +25,9 @@
 import debug
 from Object import Object
 from TextBuffer import *
-from wxPython.wx import *
+import wx
 
-# workaround for minor bug in wxPython 2.3.2.1 (should be fixed in later
+# workaround for minor bug in wx.Python 2.3.2.1 (should be fixed in later
 # versions, and the workaround will still work then)
 def fix_x_y(value):
     if len(value) == 3:
@@ -36,11 +36,11 @@ def fix_x_y(value):
 
 class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
         NumberedLines):
-    """TextBufferChangeSpecify wrapper for wxTextCtrl
+    """TextBufferChangeSpecify wrapper for wx.TextCtrl
     
     **INSTANCE ATTRIBUTES**
 
-    *wxTextCtrl* underlying -- underlying text control - a wxPython
+    *wx.TextCtrl* underlying -- underlying text control - a wx.Python
     text control object
 
     *BOOL* program_initiated -- flag used internally to indicate to the
@@ -48,7 +48,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
     or to a user-initiated change.
 
     *BOOL* carriage_return_bug -- flag specifying whether the current
-    version of wxPython requires a workaround for the carriage return
+    version of wx.Python requires a workaround for the carriage return
     bug.  (see comments below)
 
     *STR* crnl -- rep of CR-NL pair in underlying buffer
@@ -64,11 +64,11 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
     *none* --
     """
     def __init__(self, underlying_control, carriage_return_bug = 1, **args):
-        """wraps underlying wxPython wxTextCtrl
+        """wraps underlying wx.Python wx.TextCtrl
 
         **INPUTS**
 
-        *wxTextCtrl* underlying_control -- underlying text control - a wxPython
+        *wx.TextCtrl* underlying_control -- underlying text control - a wx.Python
         text control object
     
         **OUTPUTS**
@@ -93,11 +93,11 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
             self.nl, self.crnl)
         parent = self.underlying.GetParent()
         ID = self.underlying.GetId()
-#        EVT_TEXT(self.underlying, ID, self._on_evt_text)
-        EVT_TEXT(parent, ID, self._on_evt_text)
+#        wx.EVT_TEXT(self.underlying, ID, self._on_evt_text)
+        wx.EVT_TEXT(parent, ID, self._on_evt_text)
       
     def _on_evt_text(self, event):
-        """handler for wxEVT_COMMAND_TEXT_UPDATED.
+        """handler for wx.EVT_COMMAND_TEXT_UPDATED.
         
         """
 # program initiated calls originate from set_text, which handles
@@ -126,7 +126,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
 
         **OUTPUTS**
 
-        *BOOL* -- true if the buffer has been modified since the last
+        *BOOL* -- True if the buffer has been modified since the last
         save (or load)
         """
         return self.underlying.IsModified()
@@ -140,7 +140,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
 
         **OUTPUTS**
 
-        *BOOL* -- true if the file was saved successfully
+        *BOOL* -- True if the file was saved successfully
         """
         return self.underlying.SaveFile(f_path)
 
@@ -153,14 +153,14 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
 
         **OUTPUTS**
 
-        *BOOL* -- true if the file was loaded successfully
+        *BOOL* -- True if the file was loaded successfully
         """
         success = self.underlying.LoadFile(f_path)
         return success
 
     def range_defaults(self, start = None, end = None):
         """translates from TextBuffer defaults for specifying start and
-        end of a range to the appropriate values for wxTextCtrl (except
+        end of a range to the appropriate values for wx.TextCtrl (except
         that we use external offsets here)
         
         **INPUTS**
@@ -375,7 +375,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
 
         *none* --
         """
-        # wxTextCtrl doesn't actually trigger a change notification (EVT_TEXT)
+        # wx.TextCtrl doesn't actually trigger a change notification (wx.EVT_TEXT)
         # on selection changes, but just in case we switch to a
         # different underlying buffer which does,
         # we should set program_initiated before setting the
@@ -446,7 +446,7 @@ class TextBufferWX(TextBufferChangeSpecify, VisibleBuffer, StoreableTextBuffer,
         """
 # check this
         screen  = self.line_height()
-        starting_line = self.underlying.GetScrollPos(wxVERTICAL)
+        starting_line = self.underlying.GetScrollPos(wx.VERTICAL)
         start = self.underlying.XYToPosition(0, starting_line)
         ending_line = starting_line + screen - 1
         lines = self.underlying.GetNumberOfLines()
