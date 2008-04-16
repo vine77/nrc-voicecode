@@ -20,7 +20,7 @@
 ##############################################################################
 
 """test implementation of a VoiceCode TCP/IP client using EdSim as its
-editor, but with a wxPython message loop.
+editor, but with a wx.Python message loop.
 """
 
 
@@ -38,7 +38,7 @@ import Queue
 import thread_communication_WX
 import tcp_client
 from tcp_threads import *
-from wxPython.wx import *
+import wx
 
 debug.config_traces(status="on",
               active_traces={
@@ -63,7 +63,7 @@ where OPTIONS are
 [-m] [-i] [--host host] [--listen listen_port] [--talk talk_port]
 
 runs an EdSim editor simulator as a TCP client to the mediator server
-using a simple wxPython GUI
+using a simple wx.Python GUI
 
 OPTIONS
 -------
@@ -92,10 +92,10 @@ def EVT_MINE(evt_handler, evt_type, func):
     evt_handler.Connect(-1, -1, evt_type, func)
 
 # create a unique event type
-wxEVT_SOCKET_DATA = wxNewEventType()
+wxEVT_SOCKET_DATA = wx.NewEventType()
 
-class ClientEdSimPane(wxPanel, Object.OwnerObject):
-    """wxPanel for client EdSim
+class ClientEdSimPane(wx.Panel, Object.OwnerObject):
+    """wx.Panel for client EdSim
 
     **INSTANCE ATTRIBUTES**
 
@@ -107,7 +107,7 @@ class ClientEdSimPane(wxPanel, Object.OwnerObject):
     *ClientConnection connection* -- the object representing the
     connection to the server
 
-    *wxButton connect_button* -- connect/disconnect button
+    *wx.Button connect_button* -- connect/disconnect button
 
     *BOOL exiting* -- a flag indicating that we are exiting, used to
     short-circuit certain event handlers which would cause exceptions
@@ -127,22 +127,22 @@ class ClientEdSimPane(wxPanel, Object.OwnerObject):
                              'talk_port': talk_port,
 #                             'text': None,
                              'exiting': 0
-                            }, args, exclude_bases = {wxPanel:1}) 
-        wxPanel.__init__(self, parent, ID, wxDefaultPosition, wxDefaultSize)
+                            }, args, exclude_bases = {wx.Panel:1}) 
+        wx.Panel.__init__(self, parent, ID, wx.DefaultPosition, wx.DefaultSize)
         self.name_parent('parent')
 
-        vbox = wxBoxSizer(wxVERTICAL)
-        ID_CONNECT_DISCONNECT = wxNewId()
-        ID_TEXT = wxNewId()
-        self.connect_button = wxButton(self, ID_CONNECT_DISCONNECT, "Connect", 
-            wxDefaultPosition, wxDefaultSize)
-#        self.text = wxStaticText(self, ID_TEXT, "", wxDefaultPosition, 
-#            wxDefaultSize)
+        vbox = wx.BoxSizer(wx.VERTICAL)
+        ID_CONNECT_DISCONNECT = wx.NewId()
+        ID_TEXT = wx.NewId()
+        self.connect_button = wx.Button(self, ID_CONNECT_DISCONNECT, "Connect", 
+            wx.DefaultPosition, wx.DefaultSize)
+#        self.text = wx.StaticText(self, ID_TEXT, "", wx.DefaultPosition, 
+#            wx.DefaultSize)
         vbox.Add(self.connect_button, 0) # don't stretch vertically (or horizontally)
-#        vbox.Add(self.text, 1, wxEXPAND) # stretch in both directions
+#        vbox.Add(self.text, 1, wx.EXPAND) # stretch in both directions
 
 
-        EVT_BUTTON(self, ID_CONNECT_DISCONNECT, self.on_toggle_connection)
+        wx.EVT_BUTTON(self, ID_CONNECT_DISCONNECT, self.on_toggle_connection)
         self.SetAutoLayout(1)
         self.SetSizer(vbox)
         vbox.Fit(self)
@@ -188,11 +188,11 @@ class ClientEdSimPane(wxPanel, Object.OwnerObject):
         """disconnect from server"""
         if not self.connection.is_connected():
             return 1
-        dlg = wxMessageDialog(self, "Disconnect: Are you sure?",
-            "Disconnect from Server", wxYES_NO | wxNO_DEFAULT)
+        dlg = wx.MessageDialog(self, "Disconnect: Are you sure?",
+            "Disconnect from Server", wx.YES_NO | wx.NO_DEFAULT)
         answer = dlg.ShowModal()
         dlg.Destroy()
-        if answer == wxID_YES:
+        if answer == wx.ID_YES:
             self.parent.disconnect_editor()
             self.connection.disconnect()
             self.connect_button.SetLabel("Connect")
@@ -215,9 +215,9 @@ class ClientEdSimPane(wxPanel, Object.OwnerObject):
         except socket.error:
             messengers = None
         if messengers == None:
-            dlg = wxMessageDialog(self, "Unable to connect to server",
+            dlg = wx.MessageDialog(self, "Unable to connect to server",
                 "Connection Error",
-                wxICON_ERROR | wxOK)
+                wx.ICON_ERROR | wx.OK)
             dlg.ShowModal()
             dlg.Destroy()
             self.connect_button.Enable(1)
@@ -233,8 +233,8 @@ class ClientEdSimPane(wxPanel, Object.OwnerObject):
         Object.OwnerObject.remove_other_references(self)
 #        self.text.Destroy()
 
-class ClientEdSimFrame(wxFrame, Object.OwnerObject):
-    """wxFrame for client EdSim
+class ClientEdSimFrame(wx.Frame, Object.OwnerObject):
+    """wx.Frame for client EdSim
 
     **INSTANCE ATTRIBUTES**
 
@@ -283,15 +283,15 @@ class ClientEdSimFrame(wxFrame, Object.OwnerObject):
                             {'app': app,
                              'pane': None,
                              'exiting': 0
-                            }, args, exclude_bases = {wxFrame:1}) 
-        wxFrame.__init__(self, parent, ID, title, wxDefaultPosition,
-            wxSize(300, 80))
+                            }, args, exclude_bases = {wx.Frame:1}) 
+        wx.Frame.__init__(self, parent, ID, title, wx.DefaultPosition,
+            wx.Size(300, 80))
         self.name_parent('app')
         self.add_owned('pane')
 
         self.pane = ClientEdSimPane(self, -1, client_name, host = host,
             listen_port = listen_port, talk_port = talk_port) 
-        EVT_CLOSE(self, self.on_close)        
+        wx.EVT_CLOSE(self, self.on_close)        
 
     def on_close(self, event):
         if not self.exiting:
@@ -341,16 +341,16 @@ class ClientEdSimFrame(wxFrame, Object.OwnerObject):
         """
         self.app.hook_data_event()
 
-class ClientEdSimWX(wxApp, Object.OwnerObject):
+class ClientEdSimWX(wx.App, Object.OwnerObject):
     """class for running the EdSim editor simulator as a TCP client, but
-    using the event mechanism of wxPython for inter-thread communication
+    using the event mechanism of wx.Python for inter-thread communication
 
     **INSTANCE ATTRIBUTES**
 
     ClientEditorChangeSpec *editor* -- the client wrapper for the EdSim 
     instance
 
-    BOOL *client_indentation* -- if true, use the name
+    BOOL *client_indentation* -- if True, use the name
     EdSimClientIndent when handshaking with the server, to ensure that
     the server will not override indentation on the server-side.
 
@@ -367,7 +367,7 @@ class ClientEdSimWX(wxApp, Object.OwnerObject):
         *BOOL multiple* -- should this EdSim allow for multiple open
         buffers?
 
-        BOOL *client_indentation* -- if true, use the name
+        BOOL *client_indentation* -- if True, use the name
         EdSimClientIndent when handshaking with the server, to ensure that
         the server will not override indentation on the server-side.
 
@@ -389,10 +389,10 @@ class ClientEdSimWX(wxApp, Object.OwnerObject):
                              'talk_port': talk_port,
                              'editor': None
                             }, args, 
-                            exclude_bases = {wxApp: 1})
+                            exclude_bases = {wx.App: 1})
         dummy = "ceswx.err"
         dummy = 0
-        wxApp.__init__(self, dummy)
+        wx.App.__init__(self, dummy)
 
         underlying_editor = EdSim.EdSim(multiple = multiple)
         self.editor = tcp_client.ClientEditorChangeSpec(editor = underlying_editor, 
@@ -422,12 +422,12 @@ class ClientEdSimWX(wxApp, Object.OwnerObject):
         frame = ClientEdSimFrame(self, NULL, -1, "ClientEdSim", client_name, 
             host = self.host, listen_port = self.listen_port, 
             talk_port = self.talk_port)
-        frame.Show(true)
+        frame.Show(True)
 #        frame.pane.initial_show()
         self.SetTopWindow(frame)
         self.frame = frame
         self.add_owned('frame')
-        return true
+        return True
 
     def on_data(self, event):
         """event handler for data events

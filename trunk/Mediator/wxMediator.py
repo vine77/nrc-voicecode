@@ -39,7 +39,7 @@ import sr_interface, util
 
 import auto_test
 
-from wxPython.wx import *
+import wx
 
 import SaveSpeech
 from WavePlaybackWX import WavePlaybackWX
@@ -90,15 +90,15 @@ def EVT_MINE(evt_handler, evt_type, func):
     evt_handler.Connect(-1, -1, evt_type, func)
 
 # create unique event types
-wxEVT_NEW_LISTEN_CONN = wxNewEventType()
-wxEVT_NEW_TALK_CONN = wxNewEventType()
+wx.EVT_NEW_LISTEN_CONN = wx.NewEventType()
+wx.EVT_NEW_TALK_CONN = wx.NewEventType()
 
 class wxTextControlTraceListener(debug.TraceListener):
-    """Listens for traces and prints them onto a wxTextControl
+    """Listens for traces and prints them onto a wx.TextControl
 
     **INSTANCE ATTRIBUTES**
 
-    *wxTextControl traces_log_text_control* -- The text control that traces will be logged onto."""
+    *wx.TextControl traces_log_text_control* -- The text control that traces will be logged onto."""
 
     def __init__(self, tracesTextControl):
         debug.TraceListener.__init__(self)
@@ -109,22 +109,22 @@ class wxTextControlTraceListener(debug.TraceListener):
         self.traces_log_text_control.WriteText(message)
     
 
-class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
+class wxMediatorMainFrame(wx.Frame, Object.OwnerObject):
     """main frame for the GUI mediator
 
     **INSTANCE ATTRIBUTES**
 
-    *wxMediator parent* -- the parent wxMediator (wxApp)
+    *wxMediator parent* -- the parent wxMediator (wx.App)
 
     *STR app_name* -- the application name
 
-    *BOOL* testing -- true if we are in the middle of regression testing
+    *BOOL* testing -- True if we are in the middle of regression testing
 
-    *BOOL* closing -- true if frame is closing (used to ensure that
+    *BOOL* closing -- True if frame is closing (used to ensure that
     event handlers don't continue to call other methods when the frame
     may not be in a sane state)
 
-    *BOOL* prompt_to_save -- false if the frame should tell its parent
+    *BOOL* prompt_to_save -- False if the frame should tell its parent
     to quit without prompting to save speech files or allowing the user
     to veto the command to exit (when it comes).
     """
@@ -140,27 +140,27 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
                              'prompt_to_save': 0
                             }, 
                             args,
-                            exclude_bases = {wxFrame:1}
+                            exclude_bases = {wx.Frame:1}
                            )
         self.name_parent('parent')
-        wxFrame.__init__(self, None, wxNewId(), self.app_name,
-            wxDefaultPosition, wxSize(5000, 5000), 
-#            wxDEFAULT_FRAME_STYLE | wxSTAY_ON_TOP)
-            wxDEFAULT_FRAME_STYLE)
-        self.layout = wxBoxSizer(wxVERTICAL)
-        file_menu=wxMenu()
-        ID_SAVE_SPEECH_FILES = wxNewId()
-        ID_EXIT = wxNewId()
+        wx.Frame.__init__(self, None, wx.NewId(), self.app_name,
+            wx.DefaultPosition, wx.Size(5000, 5000), 
+#            wx.DEFAULT_FRAME_STYLE | wx.STAY_ON_TOP)
+            wx.DEFAULT_FRAME_STYLE)
+        self.layout = wx.BoxSizer(wx.VERTICAL)
+        file_menu=wx.Menu()
+        ID_SAVE_SPEECH_FILES = wx.NewId()
+        ID_EXIT = wx.NewId()
         file_menu.Append(ID_SAVE_SPEECH_FILES,
             "&Save speech files","Save speech files")
         file_menu.Append(ID_EXIT,"E&xit","Terminate")
 
-        EVT_MENU(self, ID_EXIT, self.on_exit)
+        wx.EVT_MENU(self, ID_EXIT, self.on_exit)
         self.ID_EXIT = ID_EXIT
 
-        menuBar=wxMenuBar()
-        EVT_CLOSE(self, self.on_close)        
-        EVT_MENU(self, ID_SAVE_SPEECH_FILES, self.save_speech_files)
+        menuBar=wx.MenuBar()
+        wx.EVT_CLOSE(self, self.on_close)        
+        wx.EVT_MENU(self, ID_SAVE_SPEECH_FILES, self.save_speech_files)
 
         menuBar.Append(file_menu,"&File");
         self.CreateStatusBar()
@@ -170,18 +170,18 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
         # Text area for displaying a log of user messages and print traces
         #
         self.messages_log = \
-               wxTextCtrl(self, wxNewId(), '', wxDefaultPosition,
+               wx.TextCtrl(self, wx.NewId(), '', wx.DefaultPosition,
                           (700, 400),
-                          style=wxTE_MULTILINE)
+                          style=wx.TE_MULTILINE)
 
 ##QHpresents python errors, should provide more output in mediator window:
-##        style=wxTE_MULTILINE | wxTE_RICH2 | wxTE_NOHIDESEL)
-        self.messages_log.IsEditable = false
+##        style=wx.TE_MULTILINE | wx.TE_RICH2 | wx.TE_NOHIDESEL)
+        self.messages_log.IsEditable = False
         debug.add_trace_listener(wxTextControlTraceListener(self.messages_log))
 
-        self.layout.Add(self.messages_log, 0, wxEXPAND | wxALL)
+        self.layout.Add(self.messages_log, 0, wx.EXPAND | wx.ALL)
         
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(self.layout)
         self.Layout()
         self.layout.Fit(self)
@@ -294,8 +294,8 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
     
     def post_close_event(self, prompt = 1):
         self.prompt_to_save = prompt
-        evt = wxCommandEvent(wxEVENT_COMMAND_MENU_SELECTED, self.ID_EXIT)
-        wxPostEvent(self, evt)
+        evt = wx.CommandEvent(wx.EVENT_COMMAND_MENU_SELECTED, self.ID_EXIT)
+        wx.PostEvent(self, evt)
 
     def quit_now(self, prompt = 1):
 # owner will be responsible for prompting for the user to save files,
@@ -311,12 +311,12 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
         self.Close()
 
     def on_close(self, event):
-# this method is invoked to handle a wxCloseEvent, which can be triggered
+# this method is invoked to handle a wx.CloseEvent, which can be triggered
 # in two cases:
 #
 # (1) when the user clicks on the close button for the frame
-# (2) when another method (here, the wxMediator wxApp which owns the
-# frame) calls wxFrame.Close()
+# (2) when another method (here, the wxMediator wx.App which owns the
+# frame) calls wx.Frame.Close()
 #
 # In case (2), wxMediator will first call this frame's cleanup method,
 # which will set the closing flag.  In the former case, the closing flag
@@ -345,9 +345,9 @@ class wxMediatorMainFrame(wxFrame, Object.OwnerObject):
         if proceed:
             event.Skip()
 
-class wxMediator(wxApp, SaveSpeech.SaveSpeech,
+class wxMediator(wx.App, SaveSpeech.SaveSpeech,
     Object.OwnerObject):
-    """wxApp subclass for the mediator
+    """wx.App subclass for the mediator
 
     **INSTANCE ATTRIBUTES**
 
@@ -357,7 +357,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
 
     STR *test_suite=None* -- name of regression test suite to run
 
-    *BOOL* testing -- true if we are in the middle of regression testing
+    *BOOL* testing -- True if we are in the middle of regression testing
 
     *BOOL quitting* -- flag indicating that we are in the process of
     quitting
@@ -383,21 +383,21 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
                              'testing': 0,
                              'quitting':0
                             }, 
-                            args, exclude_bases = {wxApp: 1})
+                            args, exclude_bases = {wx.App: 1})
         self.add_owned('the_mediator')
         testing = not (test_suite is None)
         self.the_server = self.create_server(testing)
 
 # Note: the sequence here is a bit odd.
-# We call wxApp.__init__, which calls our OnInit, creating the main
+# We call wx.App.__init__, which calls our OnInit, creating the main
 # window.  Then, below, we use that window to create the console, so we
 # can pass it to the NewMediatorObject constructor.
 # I'm not sure if it is important to create the server before calling
-# wxApp.__init__, or whether that just happens to be where I put the
+# wx.App.__init__, or whether that just happens to be where I put the
 # create_server statement.
 
-        wxApp.__init__(self, 0)
-#        wxApp.__init__(self, 1, 'medcrash')
+        wx.App.__init__(self, 0)
+#        wx.App.__init__(self, 1, 'medcrash')
 
 # for now, our only implementation of WinSystem is the MS Windows
 # specific one
@@ -423,7 +423,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
 # if at all possible, NMO.__init__ should to construct the
 # mediator in a legal state, so that we can safely call
 # NMO.quit and NMO.cleanup.  NMO can then indicate to us that we must quit by
-# having NMO.configure return false.
+# having NMO.configure return False.
 #
 # However, if there is an unanticipated exception in the constructor, we
 # should destroy the main frame so that the application will
@@ -501,7 +501,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
 
         **OUTPUTS**
 
-        *wxFrame* -- the main wxFrame
+        *wx.Frame* -- the main wx.Frame
         """
         debug.virtual('wxMediator.main_frame')
 
@@ -667,7 +667,7 @@ class wxMediator(wxApp, SaveSpeech.SaveSpeech,
         
         **INPUTS**
         
-        *BOOL test_server* -- true if the mediator has been started with
+        *BOOL test_server* -- True if the mediator has been started with
         a test suite and the server should listen for connections from a
         test client
         
@@ -700,7 +700,7 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
 
         **OUTPUTS**
 
-        *wxFrame* -- the main wxFrame
+        *wx.Frame* -- the main wx.Frame
         """
         return self.frame
 
@@ -715,7 +715,7 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
 
         **OUTPUTS**
 
-        *BOOL* -- true if the editor is exiting in response to this
+        *BOOL* -- True if the editor is exiting in response to this
         call (unless, e.g., the user has hit cancel in response to a 
         save modified files dialog)
         """
@@ -753,7 +753,7 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
         
         **INPUTS**
         
-        *BOOL test_server* -- true if the mediator has been started with
+        *BOOL test_server* -- True if the mediator has been started with
         a test suite and the server should listen for connections from a
         test client
         
@@ -792,7 +792,7 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
         
         **OUTPUTS**
 
-        *wxMediatorMainFrame, wxFrame* -- the main frame 
+        *wxMediatorMainFrame, wx.Frame* -- the main frame 
         """
         self.frame = wxMediatorMainFrame(self)
 
@@ -809,9 +809,9 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
         """
         wxMediator.on_run(self)
         listener_evt = InterThreadEventWX(self,
-            wxEVT_NEW_LISTEN_CONN) 
+            wx.EVT_NEW_LISTEN_CONN) 
         talker_evt = InterThreadEventWX(self,
-            wxEVT_NEW_TALK_CONN) 
+            wx.EVT_NEW_TALK_CONN) 
         server = self.server()
         sys.stderr.write('Starting server threads...\n')
         sys.stderr.flush()
@@ -830,8 +830,8 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
         """
         wxMediator.hook_events(self)
         EVT_MINE(self, wxEVT_SOCKET_DATA, self.on_data)
-        EVT_MINE(self, wxEVT_NEW_LISTEN_CONN, self.new_listen_conn)
-        EVT_MINE(self, wxEVT_NEW_TALK_CONN, self.new_talk_conn)
+        EVT_MINE(self, wx.EVT_NEW_LISTEN_CONN, self.new_listen_conn)
+        EVT_MINE(self, wx.EVT_NEW_TALK_CONN, self.new_talk_conn)
 
     def on_data(self, event):
         """event handler for data events
@@ -855,7 +855,7 @@ class wxMediatorServer(tcp_server.DataEvtSource, wxMediator):
 def run(test_suite=None, profile_prefix = None, bypass_sr_recog = 0,
         num_words_training = 0,):
     """Start a ServerNewMediator/ServerMainThread with external message 
-    loop using wxWindows events and the new NewMediatorObject
+    loop using wx.Windows events and the new NewMediatorObject
     """
 
     sys.stderr.write('creating wxMediator\n')

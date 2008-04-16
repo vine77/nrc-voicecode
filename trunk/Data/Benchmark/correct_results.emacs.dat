@@ -2396,8 +2396,8 @@ Heard select here
 Heard select here
 Heard select here
 Heard before here
-Heard select foxtrot
-Heard select foxtrot
+Heard select f
+Heard select f
 Heard select outside
 Heard select outside
 Heard select outside
@@ -2407,7 +2407,7 @@ Heard select func
 Heard select four
 Heard select five
 Heard select test
-Heard select none
+Heard select None
 tests passed
 
 *******************************************************************************
@@ -2798,7 +2798,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01D6D030>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x0222E5A0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2842,6 +2842,14 @@ Heard previous one
 Heard next one next one
 Heard next one
 Heard select small through large
+Heard select function one
+15 ranges found, try to get more
+extend_ranges: old range function-1 not found in new_ranges: ['function one', 'function-one']
+total number of ranges found 15
+Heard next one
+Heard next one
+Heard next one
+Heard next one
 Heard select center
 Heard select through close-paren
 30 ranges found, try to get more
@@ -2857,8 +2865,11 @@ Heard previous one
 Heard previous one
 Heard select center
 Heard select X. through close-paren
-1 through ranges found, try to get more
-total number of through ranges found 12
+Heard previous one
+Heard previous one
+Heard previous one
+Heard previous one
+Heard previous one
 Heard previous one
 Heard previous one
 Heard previous one
@@ -3205,16 +3216,7 @@ but the following differences were found:
 element 1 of attribute 'spoken_forms' of item 'F_FRSIZE' of item 'symbol_info'
 missing from first argument
 
-element 1 of attribute 'spoken_forms' of item 'O_APPEND' of item 'symbol_info'
-missing from first argument
-
-element 1 of attribute 'spoken_forms' of item 'O_RSYNC' of item 'symbol_info'
-missing from first argument
-
 element 1 of attribute 'spoken_forms' of item 'f_lineno' of item 'symbol_info'
-missing from first argument
-
-element 1 of attribute 'spoken_forms' of item 'o_sample_rate' of item 'symbol_info'
 missing from first argument
 
 
@@ -3524,7 +3526,7 @@ WARNING: source file 'blah.c' doesn't exist.
   1: <CURSOR>
 
 *** End of source buffer ***
-'d:\\natlink\\VCode\\Data\\TestData'
+'D:\\natlink\\voicecode\\Data\\TestData'
 
 
 >>> Testing console command: compile_symbols([r'%VCODE_HOME%\Data\TestData\small_buff.c'])
@@ -6180,7 +6182,7 @@ Heard define method grades method body return B.
 
 
 >>> Testing console command: say(['select', 'Clown'], user_input='None')
-Heard select clown
+Heard select Clown
 *** Start of source buffer ***
   1: class <SEL_START>Clown<SEL_END>(Student):
   2:     def grades(self):
@@ -9431,7 +9433,7 @@ As best as I can tell from SF Browse CVS, this test was
 EdSim instance EdSim(0) connected
 
 
->>> Testing console command: compile_symbols([r'd:\natlink\VCode\Data\TestData\small_buff.c'])
+>>> Testing console command: compile_symbols([r'D:\natlink\voicecode\Data\TestData\small_buff.c'])
 
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 >>> Known symbols are: 
@@ -13526,32 +13528,32 @@ Heard some array equals none
  12:            
  13:         try:
 Heard select some array
-  5:     """This is a dummy class"""
-  6:     
   7:     def a_method(self, some_argument):
-  8:         some_variable = <SEL_START>some_array<SEL_END>[0]
+  8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:             do_some_stuff(some_array)
+ 10:             do_some_stuff(<SEL_START>some_array<SEL_END>)
  11:             do_some_more()
+ 12:            
+ 13:         try:
 Heard none
-  5:     """This is a dummy class"""
-  6:     
   7:     def a_method(self, some_argument):
-  8:         some_variable = None<CURSOR>[0]
+  8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:             do_some_stuff(some_array)
+ 10:             do_some_stuff(None<CURSOR>)
  11:             do_some_more()
-  8:         some_variable = None[0]
+ 12:            
+ 13:         try:
+  8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:             do_some_stuff(some_array)
+ 10:             do_some_stuff(None)
  11: <CURSOR>            do_some_more()
  12:            
  13:         try:
  14:             do_some_stuff()
 Heard after paren none
-  8:         some_variable = None[0]
+  8:         some_variable = some_array[0]
   9:         if some_variable:
- 10:             do_some_stuff(some_array)
+ 10:             do_some_stuff(None)
  11:             do_some_more(None<CURSOR>)
  12:            
  13:         try:
@@ -17100,5 +17102,5 @@ WARNING: Call to deprecated method TestCaseWithHelpers.assert_sequences_have_sam
 
 
 -----------------------------------------------
-Test suite completed in:  893.328000069 secs
+Test suite completed in:  704.141000032 secs
 -----------------------------------------------

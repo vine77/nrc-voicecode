@@ -1,4 +1,3 @@
-
 #  should the RecogStartMgr trust that the current
 #  window corresponds to the editor when the editor first connects to
 #  VoiceCode, or when it notifies VoiceCode of a new window.

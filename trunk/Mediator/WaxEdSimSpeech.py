@@ -23,7 +23,7 @@
 
 
 import debug
-from wxPython.wx import *
+import wx
 
 import WaxEdSim
 import SaveSpeech
@@ -74,13 +74,13 @@ class WaxEdSimFrameSpeech(WaxEdSim.WaxEdSimFrame):
         *none*
         """
         WaxEdSim.WaxEdSimFrame.finish_construction(self)
-        ID_SAVE_SPEECH_FILES = wxNewId()
+        ID_SAVE_SPEECH_FILES = wx.NewId()
         file_menu = self.get_menu_by_name('File')
 
         config_item = self.make_menu_item(file_menu, ID_SAVE_SPEECH_FILES, 
             "Save s&peech files", help_string = "Save the user's speech files")
         self.insert_item_before_label(config_item, file_menu, 'Exit')
-        EVT_MENU(self, ID_SAVE_SPEECH_FILES, self.save_speech_files)
+        wx.EVT_MENU(self, ID_SAVE_SPEECH_FILES, self.save_speech_files)
 
     def save_speech_files(self, event):
         self.parent.save_speech_files()
@@ -106,7 +106,7 @@ class WaxEdSimConsoleSpeech(WaxEdSim.WaxEdSimConsole, SaveSpeech.SaveSpeech):
 
         **OUTPUTS**
 
-        *BOOL* -- true if the editor is exiting in response to this
+        *BOOL* -- True if the editor is exiting in response to this
         event (unless, e.g., the user has hit cancel in response to a 
         save modified files dialog)
         """
@@ -150,7 +150,7 @@ class WaxEdSimConsoleSpeech(WaxEdSim.WaxEdSimConsole, SaveSpeech.SaveSpeech):
         added successfully
         """
         return WaxEdSimFrameSpeech(owner = self, app_name = self.app_name,
-                ID = wxNewId(), size = self.frame_size, 
+                ID = wx.NewId(), size = self.frame_size, 
                 init_buff_name = buff_name, 
                 command_space = self.initial_cmd_space)
 
