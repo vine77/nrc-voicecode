@@ -286,7 +286,7 @@ class MessengerBasic(Messenger):
         trace_id = 'send_mess.%s' % mess_name
         if tracing(trace_id):
 ##            trace(trace_id, 'self=%s, mess_name=\'%s\'' % (self, mess_name))
-            trace(trace_id, 'mess_name=\'%s\'' % mess_name)
+            trace(trace_id, '--mess_name=\'%s\'' % mess_name)
         if mess_argvals == None:
             tmp_args = {}
         else:
@@ -313,8 +313,8 @@ class MessengerBasic(Messenger):
         (STR, {STR: STR}) name_argvals_mess -- The message retrieved
          from external editor in *(mess_name, {arg:val})* format, or
          None if no message is available."""
-
-        trace('get_mess', 'self=%s, expecting %s' % (self, repr(expect)))
+        # leave away self here (see send_mess.) QH
+        trace('get_mess', '--expecting %s' % repr(expect))
         
         pkd_mess = self.packager.get_packed_mess(self.transporter)
         unpkd_mess = self.packager.unpack_mess(pkd_mess)
