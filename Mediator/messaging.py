@@ -392,7 +392,7 @@ class MixedMessenger(Messenger):
          from external editor in *(mess_name, {arg:val})* format, or
          None if no message is available."""
 
-        trace('get_mess', 'self=%s, expecting %s' % (self, repr(expect)))        
+        trace('get_mess', 'expecting %s' % repr(expect))
         
         try:
             name_argvals_mess = self.receiver.get(block=0)
