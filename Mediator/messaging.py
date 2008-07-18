@@ -285,7 +285,8 @@ class MessengerBasic(Messenger):
 
         trace_id = 'send_mess.%s' % mess_name
         if tracing(trace_id):
-            trace(trace_id, 'self=%s, mess_name=\'%s\'' % (self, mess_name))
+##            trace(trace_id, 'self=%s, mess_name=\'%s\'' % (self, mess_name))
+            trace(trace_id, 'mess_name=\'%s\'' % mess_name)
         if mess_argvals == None:
             tmp_args = {}
         else:
