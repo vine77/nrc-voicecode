@@ -1,4 +1,4 @@
-a""" This test file has lots of pieces that can be selected by
+""" This test file has lots of pieces that can be selected by
 select ABC through XYZ.
 
 Test the possibilities of extending the range of found ranges by natlink/NatSpeak
