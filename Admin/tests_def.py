@@ -67,6 +67,9 @@ import DiffCrawler
 import difflib
 import TextModeTest
 import VoiceCodeRootTest
+import JavaAcceptanceTest
+import JavascriptAcceptanceTest
+import PythonAcceptanceTest
 from pyUnitExample import SampleTestCase
 
 from config_helpers import alpha_bravo
@@ -124,6 +127,14 @@ def add_unittest(name, desc, foreground=0):
 
     add_test(test_name, test_function, desc=desc, foreground=foreground)
 
+
+##############################################################################
+# Acceptance testing of different languages (starting)
+##############################################################################
+
+add_unittest('JavaAcceptance', desc='Test statements in java (.java)')
+add_unittest('JavascriptAcceptance', desc='Test statements in javascript (.js)')
+add_unittest('PythonAcceptance', desc='Test statements in python (.py)')
 
 
 ##############################################################################
@@ -3913,6 +3924,9 @@ def test_insert_delete_commands():
    test_say(['back space 2'])
 
    commands.open_file(large_buff_py)
+   # next command seems to need in the foreground tests, which is OK when doing test all
+   # when testing insert_delete alone (-t insert_delete), the cursor jumps back to line 1 and
+   # the result is not as expected... (QH, July 18, 2008)
    commands.goto_line(5)
 
    test_say(['delete', 'that', 'line'])
