@@ -7,52 +7,120 @@ class JavaAcceptanceTest(VoiceCodeRootTest.VoiceCodeRootTest):
         VoiceCodeRootTest.VoiceCodeRootTest.__init__(self, name)
     
     def setUp(self):
-       self._init_simulator_regression(exclusive=0)
-       self._open_empty_test_file("blah.java")
-       self.source_buff = self._app().curr_buffer()
-                                                         
+        self._init_simulator_regression()
+        self._open_empty_test_file("blah.java")
+        self.collect_mode = 0   # return the contents of the buffer, for future tests
+                                # can be set in indiviual test to 1 if you wish, but reset
+                                # for real testing!
+        self.collect_data = []
+        
     def tearDown(self):
-        pass
+        if self.collect_mode:
+            print '\n'.join(self.collect_data)
       
 ###############################################################
 # Assertions.
 # 
-# Use these methods to check the state of the class.
+# Demo of statements, use collect_mode to set up...
 ###############################################################
 
     def test_dictate_some_statements(self):
-     #   self._open_empty_test_file("blah.cpp") 
-        
 
-        self._open_empty_test_file("blah.java")
-        
-        #self._insert_in_active_buffer("3")
-        #self._assert_active_buffer_content_is("3<CURSOR>")#passes
-        self._say("voice coder what can I say")
-        self._say("testing java")
-        self._say("with voicecode")
-        self._say("end long comment")
-        expected = ['/* ', 'testing java', '*/']
-        
-        self._assert_active_buffer_content_is('\n'.join(expected))
+## this was (stripped with all misrecognitions) the output of a voicecode
+## session, all the Heard lines copied and edited to self._say(" etc
+## note the self.collect_mode, the output of the test is the copied below
+## so serves for further testing. I plan to use for what can I say demo as well...
+##        self.collect_mode = 1
+##        self._say("new statement")
+##        self._say("import")
+##        self._say("example module")
+##        self._say("new statement")
+##        self._say("define function")
+##        self._say("hello")
+##        self._say("with argument India")
+##        self._say("do the following")
+##        self._say("new statement")
+##        self._say("india plus plus")
 
-        self._say("new paragraph")
+        self._say("new statement")
+        expected = """\
+<CURSOR>;
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        #QH: import must probably as special word be defined, see javascript examples in vc_config...
+        self._say("import")
+        expected = """\
+import<CURSOR>;
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("example module")
+        expected = """\
+importexample_module<CURSOR>;
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("new statement")
+        expected = """\
+importexample_module;
+<CURSOR>;
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
         self._say("define function")
-        self._say("testing")
-        self._assert_active_buffer_content_is('\n'.join(expected))
+        expected = """\
+importexample_module;
+function <CURSOR>(){
 
-        self._say("do the following")
-        self._say("if statement")
-        self._say("condition")
-        self._say("do the following")
-        self._say("new statement")
-        self._say("India")
-        self._say("equals one")
-        self._assert_active_buffer_content_is('\n'.join(expected))
-        
+    };
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("hello")
+        expected = """\
+importexample_module;
+function hello<CURSOR>(){
 
+    };
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("with argument India")
+        expected = """\
+importexample_module;
+function hello(i<CURSOR>){
+
+    };
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("do the following")
+        expected = """\
+importexample_module;
+function hello(i){
+<CURSOR>
+    };
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
         self._say("new statement")
+        expected = """\
+importexample_module;
+function hello(i){
+
+    <CURSOR>;
+};
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
         self._say("india plus plus")
-        self._say("jump out two times")
-        self._assert_active_buffer_content_is('\n'.join(expected))
+        expected = """\
+importexample_module;
+function hello(i){
 
+    i++<CURSOR>;
+};
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
