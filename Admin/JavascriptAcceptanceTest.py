@@ -7,46 +7,163 @@ class JavascriptAcceptanceTest(VoiceCodeRootTest.VoiceCodeRootTest):
         VoiceCodeRootTest.VoiceCodeRootTest.__init__(self, name)
     
     def setUp(self):
-       self._init_simulator_regression(exclusive=0)
-       self._open_empty_test_file("blah.js")
-       self.source_buff = self._app().curr_buffer()
-                                                         
+        self._init_simulator_regression()
+        self._open_empty_test_file("blah.js")
+        self.collect_mode = 0   # return the contents of the buffer, for future tests
+                                # can be set in indiviual test to 1 if you wish, but reset
+                                # for real testing!
+        self.collect_data = []
+        
     def tearDown(self):
-        pass
+        if self.collect_mode:
+            print '\n'.join(self.collect_data)
       
 ###############################################################
 # Assertions.
 # 
-# Use these methods to check the state of the class.
+# Demo of statements, use collect_mode to set up...
 ###############################################################
 
-    def test_dictate_some_statements(self):
+    def test_define_variable_and_function(self):
+        """the define variable statement sucks, to be studied!!!!"""
         
-        self._say("voice coder what can I say")
-        self._say("testing javascript")
-        self._say("with voicecode")
-        self._say("end long comment")
-        expected = ['/* ', 'testing javascript', '*/']
-        
-        self._assert_active_buffer_content_is('\n'.join(expected))
-
-        self._say("new paragraph")
+        self._say("new statement")
+        expected = """\
+<CURSOR>;
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("define variable")
+        expected = """\
+define_variable<CURSOR>;
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("example equals zero")
+        expected = """\
+define_variableexample = 0<CURSOR>;
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("new statement")
+        expected = """\
+define_variableexample = 0;
+<CURSOR>;
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
         self._say("define function")
-        self._say("testing")
-        self._assert_active_buffer_content_is('\n'.join(expected))
+        expected = """\
+define_variableexample = 0;
+function <CURSOR>(){
 
+  };
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("example function")
+        expected = """\
+define_variableexample = 0;
+function example_function<CURSOR>(){
+
+  };
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("with argument India")
+        expected = """\
+define_variableexample = 0;
+function example_function(i<CURSOR>){
+
+  };
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
         self._say("do the following")
-        self._say("if statement")
-        self._say("condition")
-        self._say("do the following")
+        expected = """\
+define_variableexample = 0;
+function example_function(i){
+<CURSOR>
+  };
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("example plus equals India")
+        expected = """\
+define_variableexample = 0;
+function example_function(i){
+example += i<CURSOR>
+  };
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
         self._say("new statement")
-        self._say("India")
-        self._say("equals one")
-        self._assert_active_buffer_content_is('\n'.join(expected))
-        
-
-        self._say("new statement")
-        self._say("india plus plus")
-        self._say("jump out two times")
-        self._assert_active_buffer_content_is('\n'.join(expected))
-
+        expected = """\
+define_variableexample = 0;
+function example_function(i){
+example += i
+  <CURSOR>;
+  };
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("alert")
+        expected = """\
+define_variableexample = 0;
+function example_function(i){
+example += i
+  alert<CURSOR>;
+  };
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("with arguments")
+        expected = """\
+define_variableexample = 0;
+function example_function(i){
+example += i
+  alert(<CURSOR>);
+  };
+"""
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("between quotes")
+        expected = '''\
+define_variableexample = 0;
+function example_function(i){
+example += i
+  alert("<CURSOR>");
+  };
+'''
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("new value colon")
+        expected = '''\
+define_variableexample = 0;
+function example_function(i){
+example += i
+  alert("new_value: <CURSOR>");
+  };
+'''
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("jump out")
+        expected = '''\
+define_variableexample = 0;
+function example_function(i){
+example += i
+  alert("new_value: "<CURSOR>);
+  };
+'''
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #
+        self._say("plus example")
+        expected = '''\
+define_variableexample = 0;
+function example_function(i){
+example += i
+  alert("new_value: " + example<CURSOR>);
+  };
+'''
+        self._assert_active_buffer_content_with_selection_is(expected)
+        #

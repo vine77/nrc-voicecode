@@ -1804,8 +1804,9 @@ define_language('javascript',
 javascript_reserved_words = CmdSet('javascript keywords',
     description = 'aliases for reserved words in javascript')
 
-javascript_reserved_words.add(LSAlias(['var', 'variable'],
-        {'javascript': 'var '}))
+## conflicts!!?? use define variable or declare variable...
+##javascript_reserved_words.add(LSAlias(['var', 'variable'],
+##        {'javascript': 'var '}))
 
 javascript_reserved_words.add(LSAlias(['void'], {'javascript': 'void '}))
 javascript_reserved_words.add(LSAlias(['with'], {'javascript': 'with '}))

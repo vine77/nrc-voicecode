@@ -16,13 +16,19 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       TestCaseWithHelpers.TestCaseWithHelpers.__init__(self, name)
       
       self._set_automatic_buffer_printing(0)
-      
-      self._test_data_file_pathes = \
-              {
-               'large_buff_py': vc_globals.test_data + os.sep + 'large_buff.py',
-               'lots_of_parens_py': vc_globals.test_data + os.sep + 'lots_of_parens.py',
-               'lots_of_selections_py': vc_globals.test_data + os.sep + 'lots_of_selections.py'
-              }
+      self.collect_data = [] # only for collect mode, see _say function and AcceptanceTests (PythonAcceptanceTest.py for example)
+      self.collect_mode = 0
+      self._test_data_file_pathes = {}
+      for name in ['large_buff_py', 'lots_of_parens_py', 'lots_of_selections_py']:
+          parts = name.split("_")
+          self.assert_(len(parts) > 1)
+          filename = '_'.join(parts[:-1])
+          ext = parts[-1]
+          full_path = os.path.join(vc_globals.test_data, filename + "." + ext)
+##          print 'full_path: %s'% full_path
+          self.assert_(os.path.isfile(full_path))
+          self._test_data_file_pathes[name] = full_path
+          self._test_data_file_pathes[name] = full_path
               
    def __del__(self):              
       self._set_automatic_buffer_printing(1)      
@@ -49,15 +55,43 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
       return  self._mediator_testing_namespace().namespace()['commands'] 
       
    def _say(self, utterance, user_input=None, never_bypass_sr_recog=0, echo_utterance=0, echo_cmd=0):
-      """do an utterance
+        """do an utterance, make collect_data mode possible for easier acceptance test setup...
 
-      an utterance must be a list of words, but if a string is passed, this string is
-      splitted into a list (by spaces)
-      """
-      if isinstance(utterance, basestring):
-         utterance = utterance.split()
-      self._commands().say(utterance, user_input, never_bypass_sr_recog, echo_utterance, echo_cmd)
-      
+        in that case (self.collect_mode is set to 1), the utterance and the buffer contents are printed to stdout,
+        for later input in the test you are working on.
+
+         Affects also   _assert_active_buffer_content_with_selection_is, because it is pypassed.
+         Forget about _assert_active_buffer_content_is, with no selection on the result is identical, but
+         with selection on the former one is better. (QH, july 2008)
+   
+        an utterance must be a list of words, but if a string is passed, this string is
+        splitted into a list (by spaces)
+        """
+        if isinstance(utterance, basestring):
+            if self.collect_mode:
+                self.collect_data.append(' '*8 + 'self._say("%s")'% utterance)
+            utterance = utterance.split()
+        else:
+            if self.collect_mode:
+                self.collect_data.append(' '*8 + 'self._say(%s)'% utterance)
+  
+        self._commands().say(utterance, user_input, never_bypass_sr_recog, echo_utterance, echo_cmd)
+  
+        if self.collect_mode:
+            got_content = self._get_buffer_content_with_selection_position()
+            if got_content.find('"') >= 0:
+               self.assert_(got_content.find("'")== -1, \
+                            "test result had single and double quotes, please invent another test\n%s"% got_content)
+               triple_quotes = "'''"
+            else:  
+               triple_quotes = '"""'
+               
+            self.collect_data.append(' '*8 + 'expected = %s\\'% triple_quotes)
+            self.collect_data.append(got_content + triple_quotes)
+            self.collect_data.append(' '*8 + 'self._assert_active_buffer_content_with_selection_is(expected)')
+            self.collect_data.append(' '*8 + '#')
+          
+    
    def _goto(self, pos):
       self._app().goto(pos)
       
@@ -176,10 +210,15 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
                         mess + "\nContent of the active buffer was not as expected.")
          
    def _assert_active_buffer_content_with_selection_is(self, exp_content, mess=""):
-      got_content = self._get_buffer_content_with_selection_position()
-      self.assert_equal(exp_content, got_content, 
-                        mess + "\nContent of the active buffer was not as expected.")
-         
+        """bypass checking if collect_mode is on, only when setting up acceptance tests
+        """
+        if self.collect_mode:
+            return
+        got_content = self._get_buffer_content_with_selection_position()
+        self.assert_equal(exp_content, got_content, 
+                          mess + "\nContent of the active buffer was not as expected.")
+
+
    def _assert_current_line_content_is(self, expected_text, mess="",
                                        compare_as_regexp=False, regexp_flags=''):
       current_line_text = self._app().get_text_of_line() 
@@ -212,3 +251,5 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
        pos = match.start()
        expected_translation = re.sub("\\^", "", expected_translation)
        return pos
+
+  
