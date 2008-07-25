@@ -1014,6 +1014,8 @@ acmd = CSCmd(spoken_forms=['if', 'if statement'],
                        contPhp: ActionInsert('if (', ') {\n\t\n}',
                            spacing = no_space_after),
                        contJavascript: ActionInsert('if (', ') {\n\t\n}',
+                          spacing = no_space_after),
+                       contJava: ActionInsert('if (', ') {\n\t\n}',
                           spacing = no_space_after)},
              docstring = 'if statement')
 ctrl_structures.add(acmd)
@@ -1110,6 +1112,7 @@ function_definitions.add(acmd)
 acmd = CSCmd(spoken_forms=['define function'],
              meanings={contC: c_function_definition,
                        contJavascript: javascript_function_definition,
+                       contJava: java_function_definition,
                        contPhp: php_function_definition,
                        contPerl: perl_function_definition, 
                        contPython: py_function_declaration},
