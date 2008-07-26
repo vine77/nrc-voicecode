@@ -59,14 +59,13 @@ def dictate_pseudo_C_Cpp(commands):
     commands.say(['jump','out'])
 
     commands.say(['new','paragraph'])
-    return  #temp
+
     # declarations
 
     commands.say(['declare','function','test','procedure'])
     commands.say(['add','argument','integer','count'])
     commands.say([',\\comma','float','divisor'])
     commands.say(['returning','void'])
-    
     commands.say(['new','statement'])
     commands.say(['declare','char','hello'])
     commands.say(['new','statement'])
@@ -397,7 +396,7 @@ def change_arguments_in_method_call_test(commands):
 def nested_if_then_else_test(commands):
    commands.goto_line(11)
    commands.say(['new', 'statement', 'if', 'some', 'flag', 'then'], user_input="1\n1\n")
-   commands.say([ 'do', 'the', 'following', 'new', 'statement','some', 'more', 'stuff', 'with', 'arguments', 'some', 'argument'], user_input="1\n1\n")
+   commands.say(['do', 'the', 'following', 'some', 'more', 'stuff', 'with', 'arguments', 'some', 'argument'], user_input="1\n1\n")
    commands.say(['else', 'do', 'the', 'following', 'some', 'stuff', 'again', 'with', 'arguments', 'some', 'other', 'argument'], user_input="1\n1\n")
    commands.say(['bug', 'below', 'dot', 'following', 'one', 'will', 'not', 'be', 'inserted', 'at', 'the', 'right', 'level'], user_input="1\n1\n1\n1\n1\n1\n1\n1\n1\n")
    commands.say(['else', 'do', 'the', 'following', 'some', 'stuff', 'without', 'arguments'])
