@@ -73,7 +73,7 @@ importexample_module;
 importexample_module;
 function <CURSOR>(){
 
-    };
+};
 """
         self._assert_active_buffer_content_with_selection_is(expected)
         #
@@ -82,7 +82,7 @@ function <CURSOR>(){
 importexample_module;
 function hello<CURSOR>(){
 
-    };
+};
 """
         self._assert_active_buffer_content_with_selection_is(expected)
         #
@@ -91,7 +91,7 @@ function hello<CURSOR>(){
 importexample_module;
 function hello(i<CURSOR>){
 
-    };
+};
 """
         self._assert_active_buffer_content_with_selection_is(expected)
         #
@@ -100,7 +100,7 @@ function hello(i<CURSOR>){
 importexample_module;
 function hello(i){
 <CURSOR>
-    };
+};
 """
         self._assert_active_buffer_content_with_selection_is(expected)
         #
