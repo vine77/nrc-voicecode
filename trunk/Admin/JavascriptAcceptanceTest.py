@@ -57,7 +57,7 @@ define_variableexample = 0;
 define_variableexample = 0;
 function <CURSOR>(){
 
-  };
+};
 """
         self._assert_active_buffer_content_with_selection_is(expected)
         #
@@ -66,7 +66,7 @@ function <CURSOR>(){
 define_variableexample = 0;
 function example_function<CURSOR>(){
 
-  };
+};
 """
         self._assert_active_buffer_content_with_selection_is(expected)
         #
@@ -75,16 +75,17 @@ function example_function<CURSOR>(){
 define_variableexample = 0;
 function example_function(i<CURSOR>){
 
-  };
+};
 """
         self._assert_active_buffer_content_with_selection_is(expected)
         #
-        self._say("do the following")
+        self._say("do the following new statement")
         expected = """\
 define_variableexample = 0;
 function example_function(i){
-<CURSOR>
-  };
+
+  <CURSOR>;
+};
 """
         self._assert_active_buffer_content_with_selection_is(expected)
         #
@@ -92,18 +93,21 @@ function example_function(i){
         expected = """\
 define_variableexample = 0;
 function example_function(i){
-example += i<CURSOR>
-  };
+
+  example += i<CURSOR>;
+};
 """
         self._assert_active_buffer_content_with_selection_is(expected)
+       
         #
         self._say("new statement")
         expected = """\
 define_variableexample = 0;
 function example_function(i){
-example += i
+
+  example += i;
   <CURSOR>;
-  };
+};
 """
         self._assert_active_buffer_content_with_selection_is(expected)
         #
@@ -111,9 +115,10 @@ example += i
         expected = """\
 define_variableexample = 0;
 function example_function(i){
-example += i
+
+  example += i;
   alert<CURSOR>;
-  };
+};
 """
         self._assert_active_buffer_content_with_selection_is(expected)
         #
@@ -121,9 +126,10 @@ example += i
         expected = """\
 define_variableexample = 0;
 function example_function(i){
-example += i
+
+  example += i;
   alert(<CURSOR>);
-  };
+};
 """
         self._assert_active_buffer_content_with_selection_is(expected)
         #
@@ -131,9 +137,10 @@ example += i
         expected = '''\
 define_variableexample = 0;
 function example_function(i){
-example += i
+
+  example += i;
   alert("<CURSOR>");
-  };
+};
 '''
         self._assert_active_buffer_content_with_selection_is(expected)
         #
@@ -141,9 +148,10 @@ example += i
         expected = '''\
 define_variableexample = 0;
 function example_function(i){
-example += i
+
+  example += i;
   alert("new_value: <CURSOR>");
-  };
+};
 '''
         self._assert_active_buffer_content_with_selection_is(expected)
         #
@@ -151,9 +159,10 @@ example += i
         expected = '''\
 define_variableexample = 0;
 function example_function(i){
-example += i
+
+  example += i;
   alert("new_value: "<CURSOR>);
-  };
+};
 '''
         self._assert_active_buffer_content_with_selection_is(expected)
         #
@@ -161,9 +170,10 @@ example += i
         expected = '''\
 define_variableexample = 0;
 function example_function(i){
-example += i
+
+  example += i;
   alert("new_value: " + example<CURSOR>);
-  };
+};
 '''
         self._assert_active_buffer_content_with_selection_is(expected)
         #
