@@ -77,21 +77,7 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
   
         self._commands().say(utterance, user_input, never_bypass_sr_recog, echo_utterance, echo_cmd)
   
-        if self.collect_mode:
-            got_content = self._get_buffer_content_with_selection_position()
-            if got_content.find('"') >= 0:
-               self.assert_(got_content.find("'")== -1, \
-                            "test result had single and double quotes, please invent another test\n%s"% got_content)
-               triple_quotes = "'''"
-            else:  
-               triple_quotes = '"""'
-               
-            self.collect_data.append(' '*8 + 'expected = %s\\'% triple_quotes)
-            self.collect_data.append(got_content + triple_quotes)
-            self.collect_data.append(' '*8 + 'self._assert_active_buffer_content_with_selection_is(expected)')
-            self.collect_data.append(' '*8 + '#')
-          
-    
+
    def _goto(self, pos):
       self._app().goto(pos)
       
