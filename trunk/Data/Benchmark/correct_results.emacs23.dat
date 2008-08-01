@@ -1,5 +1,8 @@
 creating wxMediator
 Loading test definitions...
+Warning, cannot import acceptance test for language perl: PerlAcceptanceTest
+Warning, cannot import acceptance test for language php: PhpAcceptanceTest
+****cannot find test class in test module, skipping test: PythonAcceptanceTest
 Configuring the mediator...
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_C_Cpp_std_sym.cpp'
@@ -480,6 +483,25 @@ Heard with arguments
 Finished foreground tests...
 Starting background tests...
 
+
+*******************************************************************************
+* Name        : CAcceptance
+* Description : Acceptance tests for C
+*******************************************************************************
+
+starting with acceptance test (C): demo_statement
+Heard new statement
+Heard example equals one
+Heard new statement
+reset working directory to: D:\natlink\voicecode\Mediator
+Warning, overwriting old demo file: D:\natlink\voicecode\Data\Demo\C\demo_statement.py
+Revert with SVN if this was not your intention!!
+Heard new statement
+Heard example equals one
+Heard new statement
+written acceptance_test_file: D:\natlink\voicecode\Data\Demo\C\demo_statement.py
+reset working directory to: D:\natlink\voicecode\Mediator
+tests passed
 
 *******************************************************************************
 * Name        : CSCmd
@@ -2740,26 +2762,20 @@ EdSim.__del__
 
 *******************************************************************************
 * Name        : JavaAcceptance
-* Description : Test statements in java (.java)
+* Description : Acceptance tests for Java
 *******************************************************************************
 
+starting with acceptance test (Java): demo_import
+Heard import module hello world
 Heard new statement
-Heard import
-Heard example module
-Heard new statement
-Heard define function
-Heard hello
-Heard with argument India
-Heard do the following
-Heard new statement
-Heard india plus plus
 tests passed
 
 *******************************************************************************
 * Name        : JavascriptAcceptance
-* Description : Test statements in javascript (.js)
+* Description : Acceptance tests for Javascript
 *******************************************************************************
 
+starting with acceptance test (Javascript): demo_define_function
 Heard new statement
 Heard define variable
 Heard example equals zero
@@ -2768,7 +2784,6 @@ Heard define function
 Heard example function
 Heard with argument India
 Heard do the following new statement
-Heard example plus equals India
 Heard new statement
 Heard alert
 Heard with arguments
@@ -2776,6 +2791,13 @@ Heard between quotes
 Heard new value colon
 Heard jump out
 Heard plus example
+starting with acceptance test (Javascript): demo_define_variable
+Heard define variable
+Heard example equals zero
+Heard new statement
+Heard india plus plus
+Heard new statement
+reset working directory to: D:\natlink\voicecode\Mediator
 tests passed
 
 *******************************************************************************
@@ -2829,7 +2851,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x02278BD0>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x0226E270>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -2838,27 +2860,6 @@ Class with private *init_file* attribute*
 Subclassing from non-standard class AnimatedCharacter.*
    AnimatedPerson(name='Alain', animation_file='C:/People/Alain.dat') -> result={'animation_file': 'C:/People/Alain.dat', 'frames_per_sec': 40, 'name': 'Alain', 'citizenship': None}
 
-
-*******************************************************************************
-* Name        : PythonAcceptance
-* Description : Test statements in python (.py)
-*******************************************************************************
-
-Heard total equals zero new statement
-Heard for india in list
-Heard range with arguments
-Heard ten do the following
-Heard square equals india times india new statement
-Heard print between quotes
-Heard square of colon
-Heard percent sierra
-Heard space-bar is colon
-Heard percent sierra
-Heard jump out percent-sign
-Heard between parens india comma square
-Heard new statement
-Heard total plus equals square
-tests passed
 
 *******************************************************************************
 * Name        : SelectText
@@ -17149,5 +17150,5 @@ WARNING: Call to deprecated method TestCaseWithHelpers.assert_sequences_have_sam
 
 
 -----------------------------------------------
-Test suite completed in:  1033.2809999 secs
+Test suite completed in:  1466.68799996 secs
 -----------------------------------------------
