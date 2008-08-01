@@ -5,7 +5,6 @@ import vc_globals
 
 import os, glob, shutil
 import regression
-import itertools
 import pprint
 from copy import copy
 from CmdInterp import AliasMeaning, CmdInterp, LSAlias, LSAliasSet, CSCmdSet, CmdSet
@@ -614,19 +613,6 @@ the "equals" csc and lsa should (for python) show up with
            
            self.assert_equal_files(e, a, "files are not equal:\n%s and\n%s"%
                                 (e, a))
-
-  
-    def assert_equal_files(self, expected_file, actual_file, mess):
-        for i, k, l in itertools.izip(itertools.count(1),
-                                      open(expected_file),
-                                      open(actual_file)):
-         
-           if k.find('class="copyright"') >= 0 and \
-               l.find('class="copyright"') >= 0:
-                continue  # dates can differ, is expected and accepted
-           self.assert_equal(k,l,mess + '\nthe two files------------\n%s\nand\n %s should have been equal\nThey differ in line %s'%
-                               (expected_file, actual_file, i))
-
 
     def copy_html_files(self, src_dir, dest_dir):
         """copy only html files from src to dest"""
