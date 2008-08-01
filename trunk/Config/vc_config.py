@@ -1856,6 +1856,7 @@ define_language('java',
 java_imports_cscs = CmdSet('java import statements',
     description = "java import module statements")
 
+##QH gives extra module_ in the next name in emacs-23. Old emacs seems correct...???
 java_imports_cscs.add(CSCmd(spoken_forms=['import'],
                             meanings={ContBlankLine('java'): ActionInsert('import '),
                                       contJava: ActionInsert(' import ')}))
