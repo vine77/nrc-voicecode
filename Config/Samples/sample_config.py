@@ -166,8 +166,15 @@ add_cmd_set(c_reserved_words)
 add_cmd_set(javascript_reserved_words)
 
 #######################################
+# Java-specific
+#######################################
+##add_cmd_set(java_reserved_words)
+add_cmd_set(java_imports_cscs)
+
+#######################################
 # php-specific
 #######################################
+##add_cmd_set(php_reserved_words)
 add_cmd_set(php_special_lsas)
 
 #######################################

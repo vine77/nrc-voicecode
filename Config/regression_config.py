@@ -158,9 +158,9 @@ add_csc_set(function_definitions)
 add_csc_set(navigation_within_buffer)
 add_csc_set(insertion_deletions)
 
-# new, QH:
-add_csc_set(operator_cmds)
-
+# new: QH
+add_cmd_set(declare_variables)
+add_cmd_set(operator_cmds)
 
 # Python-specific
 
@@ -187,6 +187,25 @@ add_csc_set(c_statements)
 add_lsa_set(c_preprocessor)
 add_lsa_set(c_syntax)
 add_lsa_set(c_reserved_words)
+
+#######################################
+# JavaScript-specific
+#######################################
+add_cmd_set(javascript_reserved_words)
+
+#######################################
+# Java-specific
+#######################################
+##add_cmd_set(java_reserved_words)
+add_cmd_set(java_imports_cscs)
+
+#######################################
+# php-specific
+#######################################
+##add_cmd_set(php_reserved_words)
+add_cmd_set(php_special_lsas)
+
+
 
 # Emacs specific
 

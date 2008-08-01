@@ -67,9 +67,6 @@ import DiffCrawler
 import difflib
 import TextModeTest
 import VoiceCodeRootTest
-import JavaAcceptanceTest
-import JavascriptAcceptanceTest
-import PythonAcceptanceTest
 from pyUnitExample import SampleTestCase
 
 from config_helpers import alpha_bravo
@@ -131,11 +128,20 @@ def add_unittest(name, desc, foreground=0):
 ##############################################################################
 # Acceptance testing of different languages (starting)
 ##############################################################################
+# import acceptance tests (if defined):
+# you need a file like JavascriptAcceptanceTest.py, and a directory Javascript in Data/Demo
+# see JavascriptAcceptanceTest.py for more instruction on setting up the tests...
 
-add_unittest('JavaAcceptance', desc='Test statements in java (.java)')
-add_unittest('JavascriptAcceptance', desc='Test statements in javascript (.js)')
-add_unittest('PythonAcceptance', desc='Test statements in python (.py)')
-
+for lang in vc_globals.all_languages:
+   mod_name = '%sAcceptanceTest'% lang.capitalize()
+   try:
+      exec('import %s'% mod_name)
+      test_name = '%sAcceptance'% lang.capitalize()
+      description = 'Acceptance tests for %s'% lang.capitalize()
+      add_unittest(test_name, desc=description)
+      
+   except ImportError:
+      print 'Warning, cannot import acceptance test for language %s: %s'% (lang, mod_name)
 
 ##############################################################################
 # Testing the test harness
