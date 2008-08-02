@@ -752,7 +752,7 @@ math_ops.add(LSAlias(['plus plus','increment'],
 math_ops.add(LSAlias(['minus minus','decrement'],
     {all_languages: '--'}, spacing = unary_operator),
     name = 'subtraction')
-math_ops.add(LSAlias(['modulo'], {'python': ' % ', 'C': ' % '},
+math_ops.add(LSAlias(['modulo'], {'python': ' % ', 'C': ' % ', 'java': ' % '},
     spacing = binary_operator))
 math_ops.add(LSAlias(['left shift', 'shift left'],
     {all_languages: ' << '},
@@ -786,10 +786,10 @@ math_ops.add(LSAlias(['shift right equals', 'right shift equals'],
     spacing = binary_operator),
     name = 'shift right and assign')
 
-math_ops.add(LSAlias(['binary and', 'bitwise and'], {'python': ' & ', 'C': ' & '}, spacing = binary_operator))
-math_ops.add(LSAlias(['binary or', 'bitwise or'], {'python': ' | ', 'C': ' | '}, spacing = binary_operator))
-math_ops.add(LSAlias(['binary not', 'bitwise not'], {'python': '~', 'C': '~'}, spacing = unary_operator))
-math_ops.add(LSAlias(['binary exclusive or', 'binary X. or', 'bitwise exclusive or', 'bitwise X. or'], {'python': ' ^ ', 'C': ' ^ '}, spacing = binary_operator))
+math_ops.add(LSAlias(['binary and', 'bitwise and'], {'python': ' & ', 'C': ' & ', 'java': ' & '}, spacing = binary_operator))
+math_ops.add(LSAlias(['binary or', 'bitwise or'], {'python': ' | ', 'C': ' | ', 'java': ' | '}, spacing = binary_operator))
+math_ops.add(LSAlias(['binary not', 'bitwise not'], {'python': '~', 'C': '~', 'java': ' ~ '}, spacing = unary_operator))
+math_ops.add(LSAlias(['binary exclusive or', 'binary X. or', 'bitwise exclusive or', 'bitwise X. or'], {'python': ' ^ ', 'C': ' ^ ', 'java': ' ^ '}, spacing = binary_operator))
 
 math_ops.add(LSAlias(['ampersand equals', 'binary and equals',
     'bitwise and equals'],
@@ -945,8 +945,8 @@ comment_commands.add(LSAlias(['end long comment'],
 misc_aliases = CmdSet('miscellaneous aliases',
     description = 'miscellaneous commands')
 misc_aliases.add(LSAlias(['print'], {'python': 'print ', 'perl': 'print '}))
-misc_aliases.add(LSAlias(['return'], {('python', 'C', 'javascript', 'php'): 'return '}))
-misc_aliases.add(LSAlias(['break'], {('python', 'C', 'javascript', 'php'): 'break;\n'},
+misc_aliases.add(LSAlias(['return'], {('python', 'C', 'java', 'javascript', 'php'): 'return '}))
+misc_aliases.add(LSAlias(['break'], {('python', 'C', 'java', 'javascript', 'php'): 'break;\n'},
     spacing = no_space_after))
 misc_aliases.add(LSAlias(['continue'], {'python': 'continue\n',
                                          c_style_languages: 'continue;\n'}, spacing = no_space_after))
@@ -1034,6 +1034,7 @@ acmd = CSCmd(spoken_forms=['else if', 'else if clause',
 # -- DCF
 #                           code_bef = 'elif ', code_after = ': \n\t', where = -1),
                        contC: c_else_if,
+                       contJava: java_else_if,
                        contPhp: c_else_if,
                        contJavascript: c_else_if,
                        contPerl: perl_else_if},
@@ -1082,17 +1083,29 @@ acmd = CSCmd(spoken_forms=['class', 'define class', 'declare class',
                            'class definition', 'class declaration',
                            'new class'],
              meanings={ContBlankLine('C'): cpp_class_definition,
+                       ContBlankLine('java'): java_class_definition,
                        ContBlankLine('python'): py_class_definition},
              docstring='class definition')
 data_structures.add(acmd)
+
+acmd = CSCmd(spoken_forms=['interface', 'define interface', 'declare interface',
+                           'interface definition', 'interface declaration',
+                           'new interface'],
+             meanings={ContBlankLine('java'): java_interface_definition},
+             docstring='interface definition')
+data_structures.add(acmd)
+
 acmd = CSCmd(spoken_forms=['sub class of', 'inherits from', 'is subclass',
                            'is subclass of', 'with superclass',
-                           'with superclasses'],
-             meanings={contC: cpp_subclass, contPython: py_subclass},
+                           'with superclasses', 'extends'],
+             meanings={contC: cpp_subclass, contJava: java_subclass,
+                       contPython: py_subclass},
              docstring='superclasses of a class')
 data_structures.add(acmd)
+
 acmd = CSCmd(spoken_forms=['class body'],
-             meanings={contC: cpp_class_body, contPython: py_class_body},
+             meanings={contC: cpp_class_body, contJava: java_class_body,
+                       contPython: py_class_body},
              docstring='move to body of class definition')
 data_structures.add(acmd)
 
@@ -1102,7 +1115,7 @@ function_definitions = CmdSet('function definitions',
     description = 'commands for defining new functions')
 
 acmd = CSCmd(spoken_forms=['declare method', 'add method'],
-             meanings={c_style_languages: c_function_declaration,
+             meanings={c_style_languages: c_function_declaration, 
                        contPython: py_method_declaration},
              docstring='method definition')
 function_definitions.add(acmd)
@@ -1119,8 +1132,9 @@ acmd = CSCmd(spoken_forms=['define function'],
              docstring='function definition')
 function_definitions.add(acmd)
 
-acmd = CSCmd(spoken_forms=['define method'],
+acmd = CSCmd(spoken_forms=['define method', 'method'],
              meanings={contC: c_function_definition,
+                       contJava: java_function_definition,
                        contJavascript: javascript_function_definition,
                        contPhp: php_function_definition,
                        contPerl: perl_function_definition, 
@@ -1449,6 +1463,7 @@ py_std_func_calls.add_function_name(['type'], 'type',
 # C/C++ specific stuff
 ###############################################################################
 
+
 #
 # Define native syntax of C/C++
 #
@@ -1457,6 +1472,8 @@ define_language('C',
                         regexps_no_symbols=['/\*[\s\S]*?\*/', '//[^\n]*\n',
                                             '"([^"]|\\")*?"',
                                             '\'([^\']|\\\')*?\'']))
+
+
 # C preprocessor commands and aliases
 
 c_preprocessor_cmds = CmdSet('C pre-processor',
@@ -1804,9 +1821,8 @@ define_language('javascript',
 javascript_reserved_words = CmdSet('javascript keywords',
     description = 'aliases for reserved words in javascript')
 
-## conflicts!!?? use define variable or declare variable...
-##javascript_reserved_words.add(LSAlias(['var', 'variable'],
-##        {'javascript': 'var '}))
+javascript_reserved_words.add(LSAlias(['var', 'variable'],
+        {'javascript': 'var '}))
 
 javascript_reserved_words.add(LSAlias(['void'], {'javascript': 'void '}))
 javascript_reserved_words.add(LSAlias(['with'], {'javascript': 'with '}))
@@ -1841,11 +1857,10 @@ php_special_lsas.add(LSAlias(['dollar'], {'php': '$'}))
 
 
 ###############################################################################
-# Java (rudimentary) as one of the c_style_languages
+# Java (one of the c_style_languages)
 ###############################################################################
-
 define_language('java',
-                LangDef(regexp_symbol='[a-zA-Z_][a-zA-Z0-9_]*',
+                LangDef(regexp_symbol='[a-zA-Z_\$][a-zA-Z0-9_\$]*',
                         regexps_no_symbols=['/\*[\s\S]*?\*/', '//[^\n]*\n',
                                             '"([^"]|\\")*?"',
                                             '\'([^\']|\\\')*?\'']))
@@ -1860,6 +1875,172 @@ java_imports_cscs = CmdSet('java import statements',
 java_imports_cscs.add(CSCmd(spoken_forms=['import'],
                             meanings={ContBlankLine('java'): ActionInsert('import '),
                                       contJava: ActionInsert(' import ')}))
+
+# Other Java statements: mostly misc. control statements
+java_statements = CmdSet('Java statements',
+                        description = """dictating miscellaneous Java statements""")
+
+acmd = CSCmd(spoken_forms=['try'],
+             meanings={contJava: ActionInsert('try {\n\t', '\n}',
+                                             spacing = no_space_after)},
+             docstring='insert code template for Java try block')
+java_statements.add(acmd)
+
+acmd = CSCmd(spoken_forms=['catch'],
+             meanings={contJava: ActionInsert('catch (', ') {\n\t\n}',
+                                             spacing = no_space_after)},
+             docstring='insert code template for Java catch block')
+java_statements.add(acmd)
+
+acmd = CSCmd(spoken_forms=['finally'],
+             meanings={contJava: ActionInsert('finally {\n\t','\n}')},
+             docstring='insert Java finally clause (for  try-catch-finally stmt)')
+java_statements.add(acmd)
+
+acmd = CSCmd(spoken_forms=['switch'],
+             meanings={contJava: ActionInsert('switch (', ') {\n\t\n}',
+                                             spacing = no_space_after)},
+             docstring='insert code template for Java switch block')
+java_statements.add(acmd)
+
+acmd = CSCmd(spoken_forms=['case'],
+             meanings={contJava: ActionCompound((ActionInsert('case ARG', ': ',
+                                                            spacing = no_space_after),
+                                               ActionSearch(regexp='ARG', direction=-1, where=1),
+                                               ActionBackspace(n_times=3)))},
+             docstring='insert Java case label template (for within a switch block)')
+java_statements.add(acmd)
+
+acmd = CSCmd(spoken_forms=['default'],
+             meanings={contJava: ActionInsert('default: ','')},
+             docstring='insert Java default label (for within a switch block)')
+java_statements.add(acmd)
+
+
+#acmd = CSCmd(spoken_forms=['in'],
+#             meanings={contJava: ActionInsert(':','')},
+#             docstring='in part of a Java for/in loop')
+#java_statements.add(acmd)
+
+
+
+# Java reserved words
+java_reserved_words = CmdSet('java keywords',
+    description = 'aliases for reserved words in java')
+
+
+acmd = CSCmd(spoken_forms=['new'],
+             meanings={contJava: ActionInsert('new ', '()',
+                                             spacing = no_space_after)},
+             docstring='new Java object')
+java_reserved_words.add(acmd)
+
+acmd = CSCmd(spoken_forms=['super'],
+             meanings={contJava: ActionInsert('super ', '()',
+                                             spacing = no_space_after)},
+             docstring='call to constructor of superclass')
+java_reserved_words.add(acmd)
+
+acmd = CSCmd(spoken_forms=['throw'],
+             meanings={contJava: ActionInsert('throw new ', '()',
+                                             spacing = no_space_after)},
+             docstring='throw statement')
+java_reserved_words.add(acmd)
+
+acmd = CSCmd(spoken_forms=['implements'],
+             meanings={contJava: ActionInsert(' implements ', ' ',
+                                             spacing = no_space_after)},
+             docstring='implements specifies the interface being implemented')
+java_reserved_words.add(acmd)
+
+
+
+#spoken form?..go check the python code for this.
+#mk into a CSC?
+java_reserved_words.add(LSAlias(['enum'], {'java': 'enum '}))
+
+java_reserved_words.add(LSAlias(['volatile'], {'java': 'volatile '}))
+java_reserved_words.add(LSAlias(['void'], {'java': ' void '}))
+java_reserved_words.add(LSAlias(['true'], {'java': 'true '}))
+java_reserved_words.add(LSAlias(['transient'], {'java': 'transient '}))
+java_reserved_words.add(LSAlias(['throws'], {'java': ' throws '}))
+java_reserved_words.add(LSAlias(['this'], {'java': 'this'}))
+java_reserved_words.add(LSAlias(['synchronized'], {'java': 'synchronized '}))
+java_reserved_words.add(LSAlias(['strict F. P.', 'strict floating point'], {'java': 'strictfp '}))
+java_reserved_words.add(LSAlias(['static'], {'java': 'static '}))
+java_reserved_words.add(LSAlias(['short'], {'java': 'short '}))
+java_reserved_words.add(LSAlias(['public'], {'java': 'public '}))
+java_reserved_words.add(LSAlias(['protected'], {'java': 'protected '}))
+java_reserved_words.add(LSAlias(['private'], {'java': 'private '}))
+java_reserved_words.add(LSAlias(['package'], {'java': 'package '}))#above
+java_reserved_words.add(LSAlias(['null'], {'java': 'null'}))
+java_reserved_words.add(LSAlias(['native'], {'java': 'native '}))#
+java_reserved_words.add(LSAlias(['long'], {'java': 'long '}))
+java_reserved_words.add(LSAlias(['int', 'integer'], {'java': 'int '}))
+java_reserved_words.add(LSAlias(['instanceof', 'instance of'], {'java': ' instanceof '}))
+#java_reserved_words.add(LSAlias(['implements'], {'java': ' implements '}))
+# java_reserved_words.add(LSAlias(['go to'], {'java': 'goto '})) #not supported any more.
+java_reserved_words.add(LSAlias(['float'], {'java': 'float '}))
+java_reserved_words.add(LSAlias(['final'], {'java': 'final '}))
+java_reserved_words.add(LSAlias(['false'], {'java': 'false '}))
+java_reserved_words.add(LSAlias(['double'], {'java': 'double '}))
+java_reserved_words.add(LSAlias(['const', 'constant'], {'java': 'const '}))
+java_reserved_words.add(LSAlias(['class'], {'java': 'class '}))
+java_reserved_words.add(LSAlias(['char', 'character','care'], {'java': 'char '}))
+java_reserved_words.add(LSAlias(['byte'], {'java': 'byte '}))
+java_reserved_words.add(LSAlias(['boolean'], {'java': 'boolean '}))
+java_reserved_words.add(LSAlias(['assert'], {'java': 'assert '}))
+java_reserved_words.add(LSAlias(['abstract'], {'java': 'abstract '}))
+
+
+
+# just use "parens" for this, don't need a separate command?
+java_type_casts = CmdSet('Java type casts',
+    description = "commands for dictating type casts in Java")
+
+acmd = CSCmd(spoken_forms=['cast'],
+             meanings={contJava: ActionInsert('(', ')')},
+             docstring='insert parens for a Java type cast')
+java_type_casts.add(acmd)
+
+acmd = CSCmd(spoken_forms=['cast to'],
+             meanings={contJava: ActionInsertNewClause(r'\w+(\s*::\s*\w*)?',
+             code_bef='(', code_after=') ', direction= -1, where = -1, add_lines = 0)},
+             docstring='position cursor before previous identifier, ready to dictate type to cast to')
+java_type_casts.add(acmd)
+
+# type declarations
+
+java_type_declarations = CmdSet('Java type declarations',
+    description = "commands for dictating types and their declarations in Java")
+
+acmd = CSCmd(spoken_forms=['of type'],
+             meanings={contJava: ActionInsertNewClause(r'\w+(\s*::\s*\w*)?',
+             '', '', direction= -1, where = -1, add_lines = 0)},
+             docstring='position cursor before previous identifier, ready to dictate type')
+java_type_declarations.add(acmd)
+
+acmd = CSCmd(spoken_forms=['returning'],
+             meanings={contJava: ActionInsertNewClause(r'\w+(\s*::\s*\w*)?(\([^\;\{\}\)]*)?',
+             '', '', direction= -1, where = -1, add_lines = 0)},
+             docstring='position cursor before previous function identifier (previous identifier, before any parameter list)')
+java_type_declarations.add(acmd)
+
+
+## Commands where it types a lot for you.  Placed separately so they'll be easier to turn off.
+java_verbose= CmdSet('Common Java commands',
+    description = "commands where more typing than usual is done for you")
+
+acmd = CSCmd(spoken_forms=['print line', 'print L. N.', 'print Lynn'],
+             meanings={contJava: ActionInsert('System.out.println(', ')')},
+             docstring='System.out.println(). Put cursor between parentheses, ready to dictate text.')
+java_verbose.add(acmd)
+
+acmd = CSCmd(spoken_forms=['main','main method'],
+             meanings={contJava: ActionInsert('public static void main(String[] args){\n\t', '\n}')},
+             docstring='main method. Put cursor in body.')
+java_verbose.add(acmd)
+
 
 
 
@@ -1912,11 +2093,24 @@ add_identifier('private method', 'method')
 add_identifier('operator', 'method')
 add_identifier('attribute')
 add_identifier('private attribute', 'attribute')
+add_identifier('extends') #test (this one and the next 2).
+add_identifier('interface')
+add_identifier('implements')
 
 set_builder_preferences(['std_underscores', 'std_intercaps',
     'std_all_caps_underscores'], language=all_languages)
 set_builder_preferences(['std_intercaps', 'std_underscores',
     'std_all_caps_underscores'], identifier = 'class', language=all_languages)
+
+#test ..should be contJava but wasnt working, so trying all_languages
+set_builder_preferences(['std_intercaps', 'std_underscores',
+    'std_all_caps_underscores'], identifier = 'extends', language=all_languages)
+set_builder_preferences(['std_intercaps', 'std_underscores',
+    'std_all_caps_underscores'], identifier = 'interface', language=all_languages)
+set_builder_preferences(['std_intercaps', 'std_underscores',
+    'std_all_caps_underscores'], identifier = 'implements', language=all_languages)
+
+
 
 ###############################################################################
 # Add words which are missing from the SR vocab
