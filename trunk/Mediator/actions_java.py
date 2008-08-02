@@ -21,11 +21,48 @@
 
 """Action functions for java language """
 
-from actions_gen import Action, ActionInsert
+from actions_gen import Action, ActionInsert,ActionSearch, ActionInsertNewClause
+
+
 
 java_function_definition = \
-    ActionInsert(code_bef='function ',
+    ActionInsert(code_bef='',
                  code_after='(){\n\t\n}',
                  docstring = """Types template code for a java function (including body)""")
 
 java_function_declaration = java_function_definition
+
+# this assumes the if ends with a '}' (not a one-liner)
+java_else_if = \
+                ActionInsertNewClause(end_of_clause_regexp='\}', 
+                                      where = 1, direction = 1,
+                                      add_lines = 1,
+                                      code_bef='\nelse if (', code_after='){\n\t\n}',
+                                      back_indent_by=0,
+                                      docstring='else-if clause of a Java conditional')
+
+java_class_body = \
+    ActionSearch(regexp=r'\{\s*',
+                 docstring="""Moves cursor to the body of a class""")
+
+java_class_definition = \
+    ActionInsert(code_bef='class ',
+                 code_after='\r\t{\n\t\n}',
+                 docstring = """Insert template code for a Java class""",
+                 expect="class")
+#   ActionInsert(code_bef='class ',
+#                  code_after='{\n\t\n}',
+#                  docstring = """Insert template code for a Java class""",
+#                  expect="class")
+
+
+java_interface_definition= \
+    ActionInsert(code_bef='interface ',
+                 code_after='\r\t{\n\t\n}',
+                 docstring = """Insert template code for a Java interface""",
+                 expect="interface")
+
+java_subclass = \
+    ActionInsert(code_bef=' extends ', code_after='',
+                 docstring = """Subclass definition""", expect='class')
+
