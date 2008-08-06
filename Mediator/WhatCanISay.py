@@ -18,7 +18,7 @@
 # (C) 2000, National Research Council of Canada
 #
 ##############################################################################
-from HTMLgen import *
+from HTMLgenVC import *
 from debug import trace
 import vc_globals
 import pprint

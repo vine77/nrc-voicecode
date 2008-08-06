@@ -86,13 +86,6 @@ def curry(func, *args, **kwds):
 
     used for example for class FullTable, which is curried from TableLite
 
-    >>> from HTMLgen import TableLite
-    >>> str(TableLite())
-    '\\n<table></table>'
-    >>> FullTable = curry(TableLite, border=0, cellpadding=0, cellspacing=0, width = '100%')
-    >>> str(FullTable())
-    '\\n<table border="0" cellpadding="0" cellspacing="0" width="100%"></table>'
-
     """
     def curried(*moreargs, **morekwds):
         kw = kwds.copy()
