@@ -67,7 +67,7 @@ def dictate_pseudo_C_Cpp(commands):
     commands.say([',\\comma','float','divisor'])
     commands.say(['returning','void'])
     commands.say(['new','statement'])
-    commands.say(['declare','char','hello'])
+    commands.say(['declare','char','hello', 'strange', 'result'])
     commands.say(['new','statement'])
     commands.say(['int\\int','count'])
     commands.say(['new','statement','integer','pointer','testing','pointers'])
