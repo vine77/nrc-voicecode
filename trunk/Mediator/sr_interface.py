@@ -311,7 +311,6 @@ def addWord(word, *rest):
         
     global word_info_flag
 
-#    trace('sr_interface.addWord', 'adding \'%s\'' % word)
     
     #
     # First, fix the written form of the word
@@ -330,8 +329,8 @@ def addWord(word, *rest):
     if word == 'g' or word == 'g\\g':
         raise RuntimeError('I thought we agreed not to add single letters')
     if getWordInfo(word) == None:
-        trace('sr_interface.addWord', 'this word is new to NatSpeak')
-                   
+        trace('sr_interface.addWord', 'this word is new to NatSpeak: %s'% word)
+##        trace_call_stack('sr_interface.addWord', '**')
         if len(rest) == 0:
             flag = word_info_flag
         elif len(rest) == 1:
@@ -360,7 +359,7 @@ def addWord(word, *rest):
         #
         word_no_special_chars = re.sub('{Spacebar}', '', word)
         if word_no_special_chars != word:
-#            trace('sr_interface.addWord', 'adding redundant form with no spaces \'%s\'' % word_no_special_chars)
+            trace('sr_interface.addWord', 'adding redundant form with no spaces \'%s\'' % word_no_special_chars)
             try:
                natlink.addWord(word_no_special_chars, flag)
             except:
@@ -377,15 +376,14 @@ def deleteWord(word, *rest):
     flag set and if the word is a phrase (single words might actually
     have ben added by the real Vocabulary Builder)"""
 
-#    trace('sr_interface.deleteWord', 'word=%s, rest=%s' % (word, rest))
     flag = getWordInfo(word)
     num_words = len(re.split('\s+', word))
     if addedByVC(flag) and num_words > 1:
-#            trace('sr_interface.deleteWord', 'actually deleting word %s' % word)
+        trace('sr_interface.deleteWord', 'actually deleting word %s' % word)
         sr_user_needs_saving = 1
         return natlink.deleteWord(word)
     else:
-#            trace('sr_interface.deleteWord', 'word not added by VoiceCode %s' % word)
+        trace('sr_interface.deleteWord', 'word not added by VoiceCode %s' % word)
         return None
 
 def clean_written_form(written_form, clean_for=None):
@@ -637,7 +635,8 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
         spoken_only = map(lambda x: x[0], word_list)
       
         self.deep_construct(SpokenUtteranceNL,
-            {'results' : results, 
+            {'results' : results,
+             'raw_words_original': copy.copy(raw_words),
             'wave': None,
             'word_list': word_list,
             'spoken_only': spoken_only,
@@ -765,6 +764,8 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
         """
         return spoken_written_form(entry, clean_spoken = 0)
 
+
+            
     def adapt(self, words):
         """changes the stored list of words so that 
         subsequent correction boxes can display the corrected list, and
@@ -780,17 +781,27 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
 
         *BOOL* -- true if the adaption was accepted
         """
+        
+
         list = []
         for spoken, written in words:
             list.append(vocabulary_entry(spoken, written, clean_written = 0))
         success = 0
+        nCorrect = 20
         try:
-            success = self.results.correction(list)
+            for i in range(nCorrect):
+                # adapt a number of times QH
+                success = self.results.correction(list)
+            if not success:
+                print 'failure of correction, break'
+                return 0
         except natlink.InvalidWord:
 # if the ResObj raises an InvalidWord exception, do not set the 
 #         word list
+            print 'failed to adapt'
             return 0
         self.set_words(words)
+        print 'correction with success (%s) %s times'% (success, nCorrect)
         return success
 
     def adapt_spoken(self, spoken_forms):

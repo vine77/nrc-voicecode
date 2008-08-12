@@ -1645,8 +1645,22 @@ class SymDict(OwnerObject):
         *BOOL* -- true if the symbol was only tentative.
         """
         is_tentative = 0
-        if self.tentative_symbols.has_key(symbol) and self.tentative_symbols[symbol]:
-           is_tentative = 1
+        debug.trace('SymDict.symbol_is_tentative', 
+                    'number of tentative_symbols: %s' % len(self.tentative_symbols))
+        
+        if self.tentative_symbols.has_key(symbol):
+            debug.trace('SymDict.symbol_is_tentative', 
+                        'symbol = %s, has_key' % symbol)
+            
+            value = self.tentative_symbols[symbol]
+            debug.trace('SymDict.symbol_is_tentative', 
+                            'value of %s: %s, return 1' % (symbol, self.tentative_symbols[symbol]))
+            if value:                
+                is_tentative = 1
+        else:
+            debug.trace('SymDict.symbol_is_tentative', 
+                    'symbol not in tentative_symbols: %s' % symbol)
+            
         return is_tentative
     
 
@@ -1757,7 +1771,7 @@ class SymDict(OwnerObject):
         return first_letter
 
 
-    def add_symbol(self, symbol, user_supplied_spoken_forms=[], 
+    def add_symbol(self, symbol, user_supplied_spoken_forms=None, 
                    tentative = 1, add_sr_entries=1):
         """Add a symbol to the dictionary
 
@@ -1787,11 +1801,16 @@ class SymDict(OwnerObject):
 
         .. [get_spoken_forms] file:///./SymDict.SymDict.html#get_spoken_forms
         .. [add_abbreviation] file:///./SymDict.SymDict.html#add_abbreviation"""
+
+        if user_supplied_spoken_forms is None:
+            user_supplied_spoken_forms = []
         
         if tracing('SymDict.add_symbol'):
             trace('SymDict.add_symbol', 'symbol=%s' % symbol)
 
         spoken_forms = user_supplied_spoken_forms[:]
+        if tracing('SymDict.add_symbol'):
+            trace('SymDict.add_symbol', 'initial spoken_forms: %s' % spoken_forms)
         
         if not self.symbol_info.has_key(symbol):
 
@@ -1802,8 +1821,8 @@ class SymDict(OwnerObject):
             
             self.tentative_symbols[symbol] = tentative
 
-            if tracing('SymDict.add_symbol'):
-                trace('SymDict.add_symbol', 'new symbol=%s' % symbol)
+##            if tracing('SymDict.add_symbol'):
+##                trace('SymDict.add_symbol', 'new symbol=%s' % symbol)
 
             #
             # Add the symbol to the string used for symbol matching
@@ -1812,16 +1831,17 @@ class SymDict(OwnerObject):
             new_string_entry = ' %s ' % symbol
 
             letter = self._add_symbol_starting_with(symbol)
-
+## what happens here? QH:
             if not self._cached_symbols_as_one_string.has_key(letter):
                 self._cached_symbols_as_one_string[letter] = new_string_entry
             else:
                 self._cached_symbols_as_one_string[letter] = \
                     self._cached_symbols_as_one_string[letter] + \
                     new_string_entry
-
             generated_forms = self.get_spoken_forms(symbol)
-            spoken_forms.extend(generated_forms)
+            if generated_forms:
+                trace('SymDict.add_symbol', 'generated spoken_forms: %s' % generated_forms)
+                spoken_forms.extend(generated_forms)
 
             self.symbol_info[symbol].add_spoken_forms(generated_forms)
 
@@ -2016,6 +2036,8 @@ class SymDict(OwnerObject):
         *none*
         """
         entry = None
+        debug.trace('SymDict.remove_vocabulary_entry', 
+                '--want to remove from vocabulary: %s\\%s' % (symbol, spoken_form))
         if vocabulary_symbols_with_written_form:
             #
             # Add the vocabulary entry as a written\\spoken
@@ -2034,7 +2056,11 @@ class SymDict(OwnerObject):
             if len(re.split('\s+', spoken_form)) > 1:
                 entry = sr_interface.vocabulary_entry(spoken_form)
                 
-        if entry: sr_interface.deleteWord(entry)        
+        if entry:
+        
+            debug.trace('SymDict.remove_vocabulary_entry', 
+                    '----removing from vocabulary: %s' % entry)
+            sr_interface.deleteWord(entry)        
 
 
     def get_spoken_forms(self, symbol):
@@ -2049,10 +2075,7 @@ class SymDict(OwnerObject):
         
         *[STR]* -- returns a list of spoken forms
         """
-
-#        print '-- SymDict.get_spoken_forms: symbol=%s, abbreviations:' % symbol; self.print_abbreviations()
-
-        
+        # modified this functions, QH august 2008...
         #
         # First, split the symbol into words or abbreviations
         #
@@ -2101,7 +2124,8 @@ class SymDict(OwnerObject):
 #        the_spoken_forms = filter(lambda form: form != symbol,
 #                                  the_spoken_forms)
             
-#        print '-- SymDict.get_spoken_forms: the_spoken_forms=%s' % the_spoken_forms        
+##        print '-- SymDict.get_spoken_forms: the_spoken_forms=%s' % the_spoken_forms
+    
         return the_spoken_forms
 
 
