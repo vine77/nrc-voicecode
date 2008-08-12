@@ -209,6 +209,36 @@ class MediatorConsoleWX(MediatorConsole.MediatorConsole):
         box.ShowModal()
         box.Destroy()
 
+    def yes_no_box(self, message, title="VoiceCode question", default="yes", parent=None):
+        """displays a question and returns yes or no (or nothing when clicked away?)
+
+        **INPUTS**
+
+        *STR message* -- the message
+        *STR title* -- the window title, optional
+        *STR default* -- the default button, optional
+
+        **OUTPUTS** 1 (yes) or 0 (no)
+
+        """
+        if default == 'yes':
+            default = wx.YES_DEFAULT
+        elif default == 'no':
+            default = wx.NO_DEFAULT
+        else:
+            default = 'yes'
+        if parent is None:
+            parent = self.main_frame
+        box = wx.MessageDialog(parent, message, title, 
+                               wx.YES_NO | wx.ICON_QUESTION, wx.DefaultPosition)
+        answer = box.ShowModal()
+        box.Destroy()
+        if answer == wx.ID_YES:
+            return 1
+        else:
+            return 0
+
+
     def starting_tests(self):
         """method used by NewMediatorObject to notify us that it is
         about to start regression testing
@@ -1586,6 +1616,7 @@ class CorrectRecentViewWX(MediatorConsole.ViewLayer, wx.Dialog, possible_capture
         """
         u = self.utterances[-n]
         utterance = u[0]
+        original = utterance.words()
         can_reinterpret = u[2]
         validator = CorrectionValidatorSpoken(utterance = utterance)
         box = CorrectFromRecentWX(console = self.console, parent = self, 
@@ -1598,21 +1629,33 @@ class CorrectRecentViewWX(MediatorConsole.ViewLayer, wx.Dialog, possible_capture
         self.console.corr_box_pos = box.GetPositionTuple()
 
         box.cleanup()
-
+        answer_word = None
         if answer == wx.ID_OK:
-            return 'ok'
+            answer_word = 'ok'
         elif answer == wx.ID_CANCEL:
-            return 'cancel'
+             answer_word = 'cancel'
         elif answer == wx.ID_CORRECT_NEXT:
-            return 'next'
+             answer_word = 'next'
         elif answer == wx.ID_CORRECT_PREV:
-            return 'previous'
+             answer_word = 'previous'
         elif answer == wx.ID_CORRECT_MORE:
-            return 'more'
+             answer_word = 'more'
         elif answer == wx.ID_DISCARD_CORRECTION:
-            return 'discard'
-# shouldn't happen, but ...
-        return None
+             answer_word = 'discard'
+        if answer_word in ['ok', 'next', 'previous', 'more']:
+            print 'going to adapt from %s to %s'% (original, utterance.spoken_forms())
+            # as side effect disturbing vocabulary words can be deleted (after user confirmation)
+##            utterance.clean_words(original, utterance, tentative=self.iyes_no_box=self.console.yes_no_box)
+            utterance.adapt_spoken(utterance.spoken_forms())
+            
+        elif answer_word in ['cancel', 'discard', None]:
+            print 'utterance words: %s'% utterance.words()
+            print 'reset words to %s'% original
+            utterance.set_words(original)
+            print 'utterance words now: %s'% utterance.words()
+        if answer_word == None:
+            print 'Warning: CorrectFromRecentWX should not return None!'
+        return answer_word 
 
     def chose_from_list(self, i):
         n = len(self.phrases) - i

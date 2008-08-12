@@ -3353,7 +3353,9 @@ def test_basic_correction():
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
-    print '\n***Testing symbol removal on correction***\n'
+    print '\n***Testing symbol removal on correction  THIS TEST CHANGED AND NOW FAILS QH***\n'
+    print '\n***This is because checking for wrong symbols is done in the correction step, not in the reinterpreting step***\n'
+    print '\n***Do not know how to thest the new strategy though***\n'
 
     check_symbol(interpreter, 'fine_method_popularity', expected = 0)
 

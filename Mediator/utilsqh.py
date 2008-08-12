@@ -202,6 +202,36 @@ def ifelse(var, ifyes, ifno):
     else:
         return ifno
 
+
+def isSubList(largerList, smallerList):
+    """returns 1 if smallerList is a sub list of largerList
+
+>>> isSubList([1,2,4,3,2,3], [2,3])
+1
+>>> isSubList([1,2,3,2,2,2,2], [2])
+1
+>>> isSubList([1,2,3,2], [2,4])
+
+
+    """
+    if not smallerList:
+        raise ValueError("isSubList: smallerList is empty: %s"% smallerList)
+    item0 = smallerList[0]
+    lenSmaller = len(smallerList)
+    lenLarger = len(largerList)
+    if lenSmaller > lenLarger:
+        return    # can not be sublist
+    # get possible relevant indexes for first item
+    indexes0 = [i for (i,item) in enumerate(largerList) if item == item0 and i <= lenLarger-lenSmaller]
+    if not indexes0:
+        return
+    for start in indexes0:
+        slice = largerList[start:start+lenSmaller]
+        if slice == smallerList:
+            return 1
+    
+
+
 # helper string functions:
 def replaceExt(fileName, ext):
     """change extension of file

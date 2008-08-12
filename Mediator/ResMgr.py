@@ -25,11 +25,11 @@
 from Object import Object, OwnerObject
 import debug
 import re
-import string
+import string, copy
 import threading
 import exceptions
 from SymbolResult import SymbolResult
-
+from utilsqh import isSubList
 import CmdInterp, AppState
 from SpokenUtterance import *
 
@@ -2520,6 +2520,7 @@ class ResMgrBasic(ResMgrStd):
                 native = symbol.native_symbol()
                 debug.trace('ResMgrBasic.remove_symbols', 
                     'removing symbol %s' % native)
+##  try later (QH):                interpreter.remove_symbol_if_tentative_or_interactive(native, self.console().yes_no_box)
                 interpreter.remove_symbol_if_tentative(native)
 
     def reinterpret_recent(self, changed, delete_tentative_syms = 1):
@@ -2569,48 +2570,57 @@ class ResMgrBasic(ResMgrStd):
             'safe depth = %d' % m)
         m = min(m, n)
         debug.trace('ResMgrBasic.reinterpret_recent', 
-            'so popping %d' % m)
+            'so popping %d, %s' % (m, n))
         interpreter = self.interpreter()
 # for any utterances which were changed but can't be reinterpreted, we
 # should still remove symbols which no longer appear in them (just like
 # we adapt the speech engine based on those corrections)
-        if delete_tentative_syms: 
-            for i in range(m+1, n+1):
-                if i in i_possible:
-
-                    symbols = self.interpreted[-i].symbols()
-                    utterance = self.utterances[-i]
-                    new_spoken_forms = utterance.spoken_forms()
-                    spoken = string.join(new_spoken_forms)
-                    for symbol in symbols:
-                        spoken_symbol = string.join(symbol.spoken_phrase())
-                        native = symbol.native_symbol()
-                        if spoken.find(spoken_symbol) == -1:
-
-                            interpreter.remove_symbol_if_tentative(native)
+## deleted, in favour of deleting words after direct correction (QH)
+##        if delete_tentative_syms:
+##            for i in range(m+1, n+1):
+##                if i in i_possible:
+##                    debug.trace('ResMgrBasic.reinterpret_recent', 
+##                        'place 1:  %s' % i)
+##                    
+##                    symbols = self.interpreted[-i].symbols()
+##                    utterance = self.utterances[-i]
+##                    new_spoken_forms = utterance.spoken_forms()
+##                    spoken = string.join(new_spoken_forms)
+##                    for symbol in symbols:
+##                        spoken_symbol = string.join(symbol.spoken_phrase())
+##                        native = symbol.native_symbol()
+##                        if spoken.find(spoken_symbol) == -1:
+##                            interpreter.remove_symbol_if_tentative(native)
 # with ResMgrBasic, we must undo all utterances back to the first one to
 # be reinterpreted
         if not self.states.pop(app, m) and delete_tentative_syms:
 # for any utterances which were changed but can't be reinterpreted, we
 # should still remove symbols which no longer appear in them (just like
 # we adapt the speech engine based on those corrections)
-            for i in range(1, m+1):
-                if i in i_possible:
-                    symbols = self.interpreted[-i].symbols()
-                    utterance = self.utterances[-i]
-                    new_spoken_forms = utterance.spoken_forms()
-                    spoken = string.join(new_spoken_forms)
-                    for symbol in symbols:
-                        spoken_symbol = string.join(symbol.spoken_phrase())
-                        native = symbol.native_symbol()
-                        if spoken.find(spoken_symbol) == -1:
-                            interpreter.remove_symbol_if_tentative(native)
+## deleted, in favour of deleting words after direct correction (QH)
+##            for i in range(1, m+1):
+##                if i in i_possible:
+##                    debug.trace('ResMgrBasic.reinterpret_recent', 
+##                        'place 2: %s' % i)
+##
+##                    symbols = self.interpreted[-i].symbols()
+##                    utterance = self.utterances[-i]
+##                    new_spoken_forms = utterance.spoken_forms()
+##                    spoken = string.join(new_spoken_forms)
+##                    for symbol in symbols:
+##                        spoken_symbol = string.join(symbol.spoken_phrase())
+##                        native = symbol.native_symbol()
+##                        if spoken.find(spoken_symbol) == -1:
+##                            interpreter.remove_symbol_if_tentative(native)
             return None
 # and then reinterpret all those utterances.
 # First, pop information about those utterances off the top of the stack
-        
-        if delete_tentative_syms: 
-           self.remove_symbols(m)
+## deleted, in favour of deleting words after direct correction (QH)
+##        
+##        if delete_tentative_syms:
+##            debug.trace('ResMgrBasic.reinterpret_recent', 
+##                        'place 3, m: %s' % m)
+##            self.remove_symbols(m)
         to_do = self.utterances[-m:]
         buffers = self.initial_buffers[-m:]
         numbers = self.numbers[-m:]
@@ -2802,25 +2812,40 @@ class ResMgrBasic(ResMgrStd):
         interpreted = self.interpreted[:]
         if utterances:
             i_changed = console.correct_recent(self.name, utterances)
-            print "phrases changed were: ", i_changed
+##            print "phrases changed were: ", i_changed
             if i_changed:
                 changed = []
                 for i in i_changed:
                     changed.append(utterances[-i][1])
-                print "corresponding utterance numbers were: ", changed
                 reinterpreted = self.reinterpret_recent(changed)
                 interpreter = self.interpreter()
+##                for finding out the structure of the utterances:
+##                for i in range(len(utterances)):
+##                    utterance = utterances[-i][-1]
+##                    print 'utt %s, %s, %s'% (-i, utterance.utterance, utterance.phrase())
                 for n in i_changed:
-                    if not (n in reinterpreted):
-                        symbols = interpreted[-n].symbols()
-                        phrase = interpreted[-n].phrase()
-                        spoken = string.join(phrase)
-                        for symbol in symbols:
-                            spoken_symbol = string.join(symbol.spoken_phrase())
-                            native = symbol.native_symbol()
-                            if spoken.find(spoken_symbol) == -1:
-                                interpreter.remove_symbol_if_tentative(native)
-
+                    # remove symbols, as it is removed from
+                    symbols = interpreted[-n].symbols()
+##                    phrase = interpreted[-n].phrase()
+##                    spoken = string.join(phrase)
+                    utterance = utterances[-n][-1]
+                    spoken_new = utterance.phrase()
+                    print 'n: %s, spoken_new: %s'% (n, spoken_new)
+                    for symbol in symbols:
+                        native = symbol.native_symbol()
+                        spoken_forms = interpreter.get_symbol_spoken_forms(native)
+                        print 'spoken_forms: %s'% spoken_forms
+                        spoken_symbol = symbol.spoken_phrase()
+                        print 'symbol: %s, spoken_symbol: %s'% (symbol, spoken_symbol)
+                        native = symbol.native_symbol()
+                        if isSubList(spoken_new, spoken_symbol):
+                            debug.trace("ResMgrBasic.correct_recent_synchronous", "good symbol: %s\\%s"% (native, spoken_symbol))
+                            continue
+                        if interpreter.remove_symbol_if_tentative(native):
+                            debug.trace("ResMgrBasic.correct_recent_synchronous", "removed tentative symbol: %s"% native)
+                            continue
+                        result = interpreter.remove_symbol(native)
+                        print "removed symbol: %s, result: %s"% (native, result)
     
     def correct_last(self):
         """initiate user correction of the most recent dictation utterance 

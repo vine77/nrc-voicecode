@@ -1132,7 +1132,8 @@ acmd = CSCmd(spoken_forms=['define function'],
              docstring='function definition')
 function_definitions.add(acmd)
 
-acmd = CSCmd(spoken_forms=['define method', 'method'],
+# removed the word method, define is compulsory here QH:
+acmd = CSCmd(spoken_forms=['define method'],
              meanings={contC: c_function_definition,
                        contJava: java_function_definition,
                        contJavascript: javascript_function_definition,

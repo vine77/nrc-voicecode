@@ -2357,7 +2357,7 @@ class CmdInterp(OwnerObject):
         matches.reverse()
         return matches
         
-    def add_symbol(self, symbol, user_supplied_spoken_forms=[], \
+    def add_symbol(self, symbol, user_supplied_spoken_forms=None, \
                    tentative = 1, add_sr_entries=1):
         """Add a symbol to the dictionary
 
@@ -2384,10 +2384,23 @@ class CmdInterp(OwnerObject):
         
         *none* -- 
         """
+        
+        if user_supplied_spoken_forms is None:
+            user_supplied_spoken_forms = list()
         self.known_symbols.add_symbol(symbol, 
             user_supplied_spoken_forms, tentative = tentative, 
             add_sr_entries = add_sr_entries)
 
+    def get_symbol_spoken_forms(self, symbol):
+        """return a list of all spoken forms of a symbol
+
+        for correction purposes, because the CmdInterp has access to the
+        known_symbols, and the ResMgr has not.
+        Called from correct_recent_synchronous of ResMgrBasic
+        """
+##        print 'cmdinter get: %s'% symbol
+        return self.known_symbols.spoken_forms(symbol)
+    
     def correct_symbol(self, spoken_form, bad_written_form, correct_written_form):
         """Correct the written form of a symbol.
 
@@ -3136,7 +3149,29 @@ class CmdInterp(OwnerObject):
         the native symbol
         """
         return self.known_symbols.match_pseudo_symbol(pseudo_symbol)
-    
+
+    def remove_symbol_if_tentative_or_interactive(self, symbol, yes_no_box):
+        """if tentative, remove silent, otherwise prompt before removing
+
+		not clear if we want to use this, QH august 2008
+        the yes_no_box comes from the mediatorWX.        
+        """
+        if self.remove_symbol_if_tentative(symbol):
+            return
+            
+        if self.known_symbol(symbol):
+            spoken_list = self.spoken_forms(symbol)
+            word_list = ['%s\\%s'%(symbol, spoken) for spoken in spoken_list]
+            if filter(None, [s.find(' ') > 0 for s in word_list]):
+                # only take words with spoken forms consisting of more words
+                message = 'Do you want to remove from your NatSpeak vocabulary:\n\n%s'% "\n  ".join(word_list)
+                if yes_no_box(message, title="VoiceCode, remove symbol"):
+                    return self.remove_symbol(symbol)
+##            elif len(spoken_list) == 1 and symbol == spoken_list[0]:
+####                print 'remove_symbol_if_tentative_or_interactive:\n\twritten equals spoken, no delete: %s'% symbol
+##            else:
+####                print 'remove_symbol_if_tentative_or_interactive:\n\tno spaces in spoken form, no delete: "%s\\%s"'%(symbol, spoken_list[0])
+        
     def remove_symbol_if_tentative(self, symbol):
         """remove a symbol which was tentatively added
         from the dictionary
@@ -3151,6 +3186,21 @@ class CmdInterp(OwnerObject):
         was successfully removed
         """
         return self.known_symbols.remove_symbol_if_tentative(symbol)
+
+    def remove_symbol(self, symbol):
+        """remove a symbol 
+        from the dictionary
+
+        **INPUTS**
+
+        *STR* symbol -- native symbol to remove
+
+        **OUTPUTS**
+
+        *BOOL* -- true if the symbol was only tentative, and 
+        was successfully removed
+        """
+        return self.known_symbols.remove_symbol(symbol)
   
     def known_symbol(self, symbol):
         return self.known_symbols.known_symbol(symbol)
