@@ -1,0 +1,60 @@
+  ;;; sample .emacs file for emacs 23 (windows installer)
+  ;;; These are Common-Lisp extensions required by VoiceCode
+    (require 'cl)
+
+     ;;; This enables pc-selection-mode which makes Emacs behave 
+     ;;; a PC w.r.t. to text selection. This is necessary for 
+     ;;; VoiceCode to work.
+     (pc-selection-mode)
+
+     ;;; This is the `VCode-Mode` file itself
+    (load-file (substitute-in-file-name "$VCODE_HOME/Environments/Emacs/vcode-mode.el"))
+
+    ;; line numbering toggle, used by some unimacro commands, uncomment next line if you want to use:
+    ;; (load-file (substitute-in-file-name "$VCODE_HOME/Environments/Emacs/setnu.el"))
+
+    ;;; VoiceCode needs Emacs to put python buffers in python-mode. 
+     (setq auto-mode-alist
+           (cons '("\\.py$" . python-mode) auto-mode-alist))
+    ;;; for javascript, php, like c:
+     (setq auto-mode-alist (append '(("\\.js$" . c-mode)) auto-mode-alist))
+     (setq auto-mode-alist (append '(("\\.php$" . c-mode)) auto-mode-alist))
+     (setq interpreter-mode-alist
+           (cons '("python" . python-mode)
+                 interpreter-mode-alist))
+     (autoload 'python-mode "python-mode" "Python editing mode." t)
+ 
+;; recent files remember (uncomment next 2 lines if you want to use this feature):
+;; (require 'recentf)
+;; (recentf-mode 1)
+
+ ;; auto things:
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(appmenu-mode t)
+ '(case-fold-search t)
+ '(emacsw32-max-frames t)
+ '(emacsw32-style-frame-title t)
+ '(global-font-lock-mode t nil (font-lock))
+ '(hfyview-quick-print-in-files-menu t)
+ '(menuacc-mode t)
+ '(noprint-hide-print-in-menus t)
+ '(noprint-hide-ps-print-in-menus t)
+ '(ourcomments-ido-ctrl-tab t)
+ '(py-indent-offset 4)
+ '(rebind-keys-mode t)
+ '(recentf-mode t)
+ '(t nil t)
+ '(tabkey2-mode t)
+ ;;'(w32-meta-style (quote w32-lr))
+ ;;'(w32shell-shell (quote cmd)))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
