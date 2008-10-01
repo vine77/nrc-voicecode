@@ -1436,18 +1436,18 @@ def copyIfOutOfDate(inf, out, reverse=None):
     dateIn = getFileDate(inf)
     dateOut = getFileDate(out)
     if not (dateIn or dateOut):
-        raise QHError('cannot copy files, input "%s" and "%s" both do not exist'% (inf, out))
+        raise QHError('Cannot copy files, input "%s" and "%s" both do not exist\n\nWaarschijnlijk heb je een tikfout gemaakt bij het invoeren van de bestandsnaam.\n'% (inf, out))
     if dateIn > dateOut:
         try:
             shutil.copy2(inf, out)
         except OSError:
-            raise QHError('cannot copy file %s to %s' % (inf, out))
+            raise QHError('Cannot copy file %s to %s\n\nWaarschijnlijk is de uitvoerfile geopend. Soms moet je de computer opnieuw starten om deze melding kwijt te raken.\n' % (inf, out))
         print 'copied file %s to %s' % (inf, out)
     elif dateOut > dateIn:
         if type(reverse) in (types.FunctionType, types.MethodType):
 ##            print 'func reverse: %s'% reverse
             p, shortname = os.path.split(inf)
-            pr = 'file: %s\n\ntarget %s is newer than source: %s\n\ncopy target to source?'% (shortname, out, inf)
+            pr = 'file: %s\n\ntarget %s is newer than source: %s\n\ncopy target to source?\n\nDit is soms gevaarlijk. Kies "Nee" in twijfelgevallen en vraag zonodig QH.\n'% (shortname, out, inf)
             res = apply(reverse, (pr,))
             if res:
 ##                print 'answer was y'
