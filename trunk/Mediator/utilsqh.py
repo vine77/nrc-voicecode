@@ -86,6 +86,13 @@ def curry(func, *args, **kwds):
 
     used for example for class FullTable, which is curried from TableLite
 
+    >>> from HTMLgen import TableLite
+    >>> str(TableLite())
+    '\\n<table></table>'
+    >>> FullTable = curry(TableLite, border=0, cellpadding=0, cellspacing=0, width = '100%')
+    >>> str(FullTable())
+    '\\n<table border="0" cellpadding="0" cellspacing="0" width="100%"></table>'
+
     """
     def curried(*moreargs, **morekwds):
         kw = kwds.copy()
@@ -183,26 +190,6 @@ class peek_ahead_stripped(peek_ahead):
         except StopIteration: self.preview = self.sentinel
         return result
 
-
-
-def ifelse(var, ifyes, ifno):
-    """ternary operator simulated, if var: True else: False
-
-    idea from "learning python"
-
-    >>> x = []
-    >>> print ifelse(x, 'a', 'b')
-    b
-    >>> y = 'yes'
-    >>> print ifelse(y, 12, 23)
-    12
-    """
-    if var:
-        return ifyes
-    else:
-        return ifno
-
-
 def isSubList(largerList, smallerList):
     """returns 1 if smallerList is a sub list of largerList
 
@@ -230,6 +217,57 @@ def isSubList(largerList, smallerList):
         if slice == smallerList:
             return 1
     
+
+
+
+def ifelse(var, ifyes, ifno):
+    """ternary operator simulated, if var: True else: False
+
+    idea from "learning python"
+
+    >>> x = []
+    >>> print ifelse(x, 'a', 'b')
+    b
+    >>> y = 'yes'
+    >>> print ifelse(y, 12, 23)
+    12
+    """
+    if var:
+        return ifyes
+    else:
+        return ifno
+
+
+def isSubList(largerList, smallerList):
+    """returns 1 if smallerList is a sub list of largerList
+
+for use in voicecode...
+
+>>> isSubList([1,2,4,3,2,3], [2,3])
+1
+>>> isSubList([1,2,3,2,2,2,2], [2])
+1
+>>> isSubList([1,2,3,2], [2,4])
+
+
+    """
+    if not smallerList:
+        raise ValueError("isSubList: smallerList is empty: %s"% smallerList)
+    item0 = smallerList[0]
+    lenSmaller = len(smallerList)
+    lenLarger = len(largerList)
+    if lenSmaller > lenLarger:
+        return    # can not be sublist
+    # get possible relevant indexes for first item
+    indexes0 = [i for (i,item) in enumerate(largerList) if item == item0 and i <= lenLarger-lenSmaller]
+    if not indexes0:
+        return
+    for start in indexes0:
+        slice = largerList[start:start+lenSmaller]
+        if slice == smallerList:
+            return 1
+    
+
 
 
 # helper string functions:
@@ -1455,6 +1493,8 @@ def copyIfOutOfDate(inf, out, reverse=None):
             else:
                 return
         elif reverse:
+            # do the reverse action, because dates are ok, this will trigger
+            # no prompt...
             copyIfOutOfDate(out, inf)
 
 def checkIfOutOfDate(inputfiles, outputfile):
@@ -2093,12 +2133,21 @@ PathError: path._manipulateList with keepAbs: 0, 1 items of the list do not have
         >>> path("c:\").internetformat()
         'file:///C:/'
 
+        see testing in testPath
+
         """
         if len(self) > 2 and self[1:3] == ":/":
             start, rest = self[0], self[3:]
-            return 'file:///'+start.upper() + ":/" + urllib.quote(rest)
+            return 'file:///'+start.upper() + ":/" + self._quote_rest(rest)
         else:
-            return urllib.quote(str(self))
+            return self._quote_rest(str(self))
+        
+    def _quote_rest(self, restofurl):
+        """for internetformat above"""
+        
+        restList = restofurl.split("/")
+        quotedList = map(urllib.quote, restList)
+        return "/".join(quotedList)
 
     def unix(self, lowercase=1, canHaveExtension=1, canHaveFolders=1):
         """convert to unixlike name
