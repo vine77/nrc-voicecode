@@ -1478,7 +1478,7 @@ def copyIfOutOfDate(inf, out, reverse=None):
     if dateIn > dateOut:
         try:
             shutil.copy2(inf, out)
-        except OSError:
+        except (IOError, OSError):
             raise QHError('Cannot copy file %s to %s\n\nWaarschijnlijk is de uitvoerfile geopend. Soms moet je de computer opnieuw starten om deze melding kwijt te raken.\n' % (inf, out))
         print 'copied file %s to %s' % (inf, out)
     elif dateOut > dateIn:
