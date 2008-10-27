@@ -450,7 +450,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                     time.sleep(sleep_before_recognitionMimic)
 
                 sys.stderr.flush()
-
+##                print 'words: %s'% words
                 natlink.recognitionMimic(words)
                 sys.stderr.flush()
                 if not self.app.alive:

@@ -25,7 +25,7 @@
 import vc_globals
 
 import natlink, os, posixpath, pythoncom, re, select, socket
-import SocketServer, string, sys, threading, time, whrandom, win32event
+import SocketServer, string, sys, threading, time, random, win32event
 
 import AppStateEmacs, AppStateMessaging, auto_test, debug
 import messaging, Object
@@ -815,7 +815,7 @@ class ServerMainThread(Object.OwnerObject):
         # Assign a random ID to the external editor, and send it on the socket
         # connection.
         #
-        id = '%s_%s' % (app_name, repr(whrandom.random()))
+        id = '%s_%s' % (app_name, repr(random.random()))
         a_messenger.send_mess('your_id_is', {'value': id})
         a_messenger.get_mess(expect=['ok'])
 

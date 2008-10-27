@@ -24,7 +24,7 @@
 
 import debug
 
-import whrandom
+import random
 
 import exceptions
 from Object import Object
@@ -215,7 +215,7 @@ class KeyGeneratorRandom(KeyGenerator):
     def new_key(self):
         """return a new key
         """
-        return repr(whrandom.random())
+        return repr(random.random())
 
 
 class KeyedLeakyStack(Object):

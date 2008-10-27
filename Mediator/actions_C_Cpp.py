@@ -24,7 +24,7 @@
 
 from actions_gen import Action, ActionInsert, ActionSearch, ActionInsertNewClause, ActionTypeText, ActionCompound
 
-import whrandom
+import random
 import string
 import debug, sys
 
@@ -54,7 +54,7 @@ class ActionHeaderWrapper(Action):
         unique_str = str(string.upper(string.replace(app.curr_buffer_name(),'.','_')))
         # SN removing the random part for now, unless someone really likes it...
         # + \
-        # str(whrandom.randint(10**6,(10**7)-1))
+        # str(random.randint(10**6,(10**7)-1))
         before_string  = '#ifndef ' + unique_str + '\n' + '#define ' + unique_str + '\n\n'
         after_string = '\n\n\n#endif\n'
         app.insert_indent(before_string, after_string)

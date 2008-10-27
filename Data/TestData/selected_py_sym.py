@@ -270,6 +270,7 @@ py_resource
 qs
 quote
 r_reload
+random
 ratecv
 read_eager
 readable
@@ -441,7 +442,6 @@ which
 whichdb
 whitespace
 who
-whrandom
 wid
 width
 win

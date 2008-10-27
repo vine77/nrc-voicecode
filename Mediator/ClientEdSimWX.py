@@ -25,7 +25,7 @@ editor, but with a wx.Python message loop.
 
 
 import os, posixpath, pythoncom, re, select, socket
-import SocketServer, string, sys, threading, time, whrandom, win32event
+import SocketServer, string, sys, threading, time, random, win32event
 
 import AppState
 

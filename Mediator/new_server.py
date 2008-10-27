@@ -30,7 +30,7 @@ import tcp_server
 
 import exceptions
 import natlink, os, posixpath, pythoncom, re, select, socket
-import SocketServer, string, sys, threading, time, whrandom, win32event
+import SocketServer, string, sys, threading, time, random, win32event
 
 import AppStateEmacs, AppStateMessaging, auto_test, debug
 import messaging, Object

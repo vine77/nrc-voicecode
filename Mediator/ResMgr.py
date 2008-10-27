@@ -2824,7 +2824,7 @@ class ResMgrBasic(ResMgrStd):
 ##                    utterance = utterances[-i][-1]
 ##                    print 'utt %s, %s, %s'% (-i, utterance.utterance, utterance.phrase())
                 for n in i_changed:
-                    # remove symbols, as it is removed from
+                    # remove symbols, as it is removed from 
                     symbols = interpreted[-n].symbols()
 ##                    phrase = interpreted[-n].phrase()
 ##                    spoken = string.join(phrase)
@@ -2832,6 +2832,7 @@ class ResMgrBasic(ResMgrStd):
                     spoken_new = utterance.phrase()
                     print 'n: %s, spoken_new: %s'% (n, spoken_new)
                     for symbol in symbols:
+                        # must elaborate on here QH:
                         native = symbol.native_symbol()
                         spoken_forms = interpreter.get_symbol_spoken_forms(native)
                         print 'spoken_forms: %s'% spoken_forms
