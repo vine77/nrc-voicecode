@@ -3384,8 +3384,8 @@ class CmdInterp(OwnerObject):
            cmd_spoken_forms = self._cmd_spoken_forms()
            sym_spoken_forms = self._sym_spoken_forms()
            for ii in range(words_per_file/2):
-              file.write(" %s" % whrandom.choice(cmd_spoken_forms))
-              file.write(" %s" % whrandom.choice(sym_spoken_forms))
+              file.write(" %s" % random.choice(cmd_spoken_forms))
+              file.write(" %s" % random.choice(sym_spoken_forms))
               num_words = num_words - 2
            file_num = file_num + 1
 

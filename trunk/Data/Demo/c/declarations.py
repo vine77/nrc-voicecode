@@ -15,12 +15,12 @@ exp4 = "void <CURSOR>test_procedure(int count, float divisor);"
 utt5 = "new statement"
 exp5 = "void test_procedure(int count, float divisor);<CURSOR>;"
 
-utt6 = "declare char hello"
-exp6 = "void test_procedure(int count, float divisor);care_hello<CURSOR>;"
+utt6 = ['declare', 'char', 'hello']
+exp6 = "void test_procedure(int count, float divisor);char hello<CURSOR>;"
 
 utt7 = "new statement"
 exp7 = \
-"""void test_procedure(int count, float divisor);care_hello;
+"""void test_procedure(int count, float divisor);char hello;
 <CURSOR>;"""
 
 utt8 = "int count"

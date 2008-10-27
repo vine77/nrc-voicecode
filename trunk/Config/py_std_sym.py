@@ -1741,6 +1741,7 @@ r_unload
 radians
 radix
 randint
+random
 randrange
 ratecv
 raw_input
@@ -2239,7 +2240,6 @@ wfile
 whathdr
 whichdb
 whitespace
-whrandom
 wid
 windowbounds
 winsound

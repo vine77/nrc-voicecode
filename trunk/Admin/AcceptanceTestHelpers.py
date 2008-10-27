@@ -156,8 +156,11 @@ class AcceptanceTestHelpers(VoiceCodeRootTest.VoiceCodeRootTest):
         """make a list of saying (utterance)  and result for acceptance test file
         mark identical lines at start as <<n lines>>"""
         collect_data = []
-        quoted_utt = self.quote_string(utterance)
-        collect_data.append("%s = %s"%  (utt_name, quoted_utt))  
+        if isinstance(utterance, basestring):
+            quoted_utt = self.quote_string(utterance)
+            collect_data.append("%s = %s"%  (utt_name, quoted_utt))
+        elif isinstance(utterance, list):
+            collect_data.append("%s = %s"%  (utt_name, utterance))
         expected_name = utt_name.replace("utt", "exp")
         got_content = got_content.rstrip()  # not interested in newlines at EOF
         got_content_list = got_content.split("\n")
