@@ -292,6 +292,7 @@ the "equals" csc and lsa should (for python) show up with
         expected_top_menu =       {'C': 'c_overview.html',
  'java': 'java_overview.html',
  'javascript': 'javascript_overview.html',
+ 'matlab': 'matlab_overview.html',
  'perl': 'perl_overview.html',
  'php': 'php_overview.html',
  'python': 'python_overview.html'}
@@ -309,6 +310,9 @@ the "equals" csc and lsa should (for python) show up with
  'javascript': {'csc commands': 'javascript_csccommands.html',
                 'standard punctuation': 'javascript_standardpunctuation.html',
                 'standard punctuation navigation': 'javascript_standardpunctuationnavigation.html'},
+ 'matlab': {'csc commands': 'matlab_csccommands.html',
+                'standard punctuation': 'matlab_standardpunctuation.html',
+                'standard punctuation navigation': 'matlab_standardpunctuationnavigation.html'},
  'perl': {'csc commands': 'perl_csccommands.html',
           'mixed commands': 'perl_mixedcommands.html',
           'standard punctuation': 'perl_standardpunctuation.html',
@@ -322,7 +326,7 @@ the "equals" csc and lsa should (for python) show up with
             'standard punctuation navigation': 'python_standardpunctuationnavigation.html'}}
 
         # changes with mew languages:
-        expected_top_menu_keys = ['C', 'java', 'javascript', 'perl', 'php', 'python']
+        expected_top_menu_keys = ['C', 'java', 'javascript', 'matlab', 'perl', 'php', 'python']
         expected_left_menu_keys =   \
    {'C': ['csc commands',
        'csc commands too',

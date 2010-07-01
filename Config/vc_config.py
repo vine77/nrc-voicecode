@@ -63,6 +63,7 @@ from actions_javascript import *
 from actions_java import *
 from actions_php import *
 from actions_perl import *
+from actions_m import *
 from vc_globals import *
 
 import KnownTargetModule
@@ -142,12 +143,16 @@ mod_python = KnownTargetModule.LocalInterpreter(module_name = 'PYTHON',
 mod_pythonw = KnownTargetModule.LocalInterpreter(module_name = 'PYTHONW',
     title_varies = 1)
 
+mod_matlab = KnownTargetModule.LocalInterpreter(module_name = 'MATLAB',
+    title_varies = 1)
+
 #     add them to the RecogStartMgr
 add_module(mod_Emacs)
 add_module(mod_exceed)
 add_module(mod_ttssh)
 add_module(mod_python)
 add_module(mod_pythonw)
+add_module(mod_matlab)
 
 # Known editors and the prefixes used to form their unique instance
 # strings
@@ -340,7 +345,7 @@ std_US_grouping = \
 std_US_grouping.add('(',')',
     ['paren'], ['parens'])
 std_US_grouping.add('(',')',
-    ['parenthesis'])
+    ['parenthesis'], ['parentheses'])
 # added separately so that if the user overrides paren, the singular
 # LSAs for parenthesis are still added
 std_US_grouping.add('[',']',
@@ -731,7 +736,7 @@ math_ops.add(LSAlias(['multiply by', 'multiplied by', 'times'],
         spacing = binary_operator), name = 'multiplication')
 
 math_ops.add(LSAlias(['to the power', 'to the power of', 'power of'],
-        {'python': '**', 'perl': '**'}, spacing = no_spaces), name =
+        {'python': '**', 'perl': '**', 'matlab': '^'}, spacing = no_spaces), name =
         'exponentiation')
 math_ops.add(LSAlias(['divide by', 'divided by'],
         {all_languages: ' / '},
@@ -746,43 +751,45 @@ math_ops.add(LSAlias(['plus'],
 math_ops.add(LSAlias(['minus'],
     {all_languages: ' - '}, spacing = binary_operator),
     name = 'subtraction')
+# TEB: Matlab doesn't have these, but we should be able to add them with CSCs.
 math_ops.add(LSAlias(['plus plus','increment'],
-    {all_languages: '++'}, spacing = unary_operator),
+    {all_languages_without_matlab: '++'}, spacing = unary_operator),
     name = 'addition')
 math_ops.add(LSAlias(['minus minus','decrement'],
-    {all_languages: '--'}, spacing = unary_operator),
+    {all_languages_without_matlab: '--'}, spacing = unary_operator),
     name = 'subtraction')
 math_ops.add(LSAlias(['modulo'], {'python': ' % ', 'C': ' % ', 'java': ' % '},
     spacing = binary_operator))
+# TEB: Matlab doesn't have left/right shifts as operators.
 math_ops.add(LSAlias(['left shift', 'shift left'],
-    {all_languages: ' << '},
+    {all_languages_without_matlab: ' << '},
     spacing = binary_operator))
 math_ops.add(LSAlias(['right shift', 'shift right'],
-    {all_languages: ' >> '},
+    {all_languages_without_matlab: ' >> '},
     spacing = binary_operator))
 
 math_ops.add(LSAlias(['plus equals'],
-    {all_languages: ' += '}, spacing = binary_operator),
+    {all_languages_without_matlab: ' += '}, spacing = binary_operator),
     name = 'add and assign')
 math_ops.add(LSAlias(['minus equals'],
-    {all_languages: ' -= '}, spacing = binary_operator),
+    {all_languages_without_matlab: ' -= '}, spacing = binary_operator),
     name = 'subtract and assign')
 math_ops.add(LSAlias(['times equals', 'star equals'],
-    {all_languages: ' *= '}, spacing = binary_operator),
+    {all_languages_without_matlab: ' *= '}, spacing = binary_operator),
     name = 'multiply and assign')
 math_ops.add(LSAlias(['slash equals', 'divide equals'],
-    {all_languages: ' /= '}, spacing = binary_operator),
+    {all_languages_without_matlab: ' /= '}, spacing = binary_operator),
     name = 'divide and assign')
 
 math_ops.add(LSAlias(['percent equals', 'modulo equals'],
-    {all_languages: ' %= '}, spacing = binary_operator),
+    {all_languages_without_matlab: ' %= '}, spacing = binary_operator),
     name = 'assign remainder')
 math_ops.add(LSAlias(['shift left equals', 'left shift equals'],
-    {all_languages: ' <<= '},
+    {all_languages_without_matlab: ' <<= '},
     spacing = binary_operator),
     name = 'shift left and assign')
 math_ops.add(LSAlias(['shift right equals', 'right shift equals'],
-    {all_languages: ' >>= '},
+    {all_languages_without_matlab: ' >>= '},
     spacing = binary_operator),
     name = 'shift right and assign')
 
@@ -793,17 +800,27 @@ math_ops.add(LSAlias(['binary exclusive or', 'binary X. or', 'bitwise exclusive 
 
 math_ops.add(LSAlias(['ampersand equals', 'binary and equals',
     'bitwise and equals'],
-    {all_languages: ' &= '}, spacing = binary_operator),
+    {all_languages_without_matlab: ' &= '}, spacing = binary_operator),
     name = 'binary-and and assign')
 math_ops.add(LSAlias(['pipe equals', 'binary or equals',
     'bitwise and equals'],
-    {all_languages: ' |= '}, spacing = binary_operator),
+    {all_languages_without_matlab: ' |= '}, spacing = binary_operator),
     name = 'binary-or and assign')
 math_ops.add(LSAlias(['caret equals', 'exclusive or equals',
     'binary exclusive or equals', 'binary X. or equals',
     'bitwise exclusive or equals', 'bitwise X. or equals'],
-    {all_languages: ' ^= '}, spacing = binary_operator),
+    {all_languages_without_matlab: ' ^= '}, spacing = binary_operator),
     name = 'binary-exclusive-or and assign')
+
+math_ops.add(LSAlias(['elementwise and', 'element and'],
+    {'matlab': ' & '}, spacing = binary_operator),
+    name = 'elementwise and')
+math_ops.add(LSAlias(['elementwise or', 'element or'],
+    {'matlab': ' | '}, spacing = binary_operator),
+    name = 'elementwise or')
+math_ops.add(LSAlias(['elementwise exclusive or', 'element exclusive or', 'elementwise X. or', 'element X. or',],
+    {'matlab': ' | '}, spacing = binary_operator),
+    name = 'elementwise or')
 
 ## logical operators
 
@@ -813,11 +830,13 @@ logic_ops.add(LSAlias(['not'], {'python': 'not '}, ),
     name = 'python logical not')
 logic_ops.add(LSAlias(['not'],
     {c_style_languages: '!'}, spacing = like_bang), name = 'logical not')
+logic_ops.add(LSAlias(['not'],
+    {'matlab': '~'}, spacing = like_bang), name = 'logical not')
 
 logic_ops.add(LSAlias(['or'],
-    {'python': ' or ', c_style_languages: ' || '}))
+    {'python': ' or ', c_style_languages: ' || ', 'matlab': ' || '}))
 logic_ops.add(LSAlias(['and'],
-    {'python': ' and ', c_style_languages: ' && '}))
+    {'python': ' and ', c_style_languages: ' && ', 'matlab': ' && '}))
 
 # comparison operators
 comparisons = CmdSet('comparison operators',
@@ -839,7 +858,7 @@ comparisons.add(LSAlias(['greater or equal to', 'is greater or equal to', 'great
         comparison_operator))
 comparisons.add(LSAlias(['not equal', 'is not equal', 'not equal to', 'is not equal to',
         'is different from', 'differs from', 'bang equal'],
-        {all_languages: ' != '},
+        {all_languages: ' != ', 'matlab': ' ~= '},
         comparison_operator))
 comparisons.add(LSAlias(['equal to', 'is equal to', 'is equal'],
         {all_languages: ' == '},
@@ -861,6 +880,9 @@ empty_pairs.add(LSAlias(['empty list'], {'python': '[]', 'perl': '()'}))
 
 empty_pairs.add(LSAlias(['empty dictionary', 'empty hash'], {'python': '{}', 'perl': '{}'}))
 
+empty_pairs.add(LSAlias(['empty matrix', 'empty array'], {'matlab': '[]'}))
+empty_pairs.add(LSAlias(['empty cell', 'empty cell array'], {'matlab': '{}'}))
+
 # functional names for commands inserting paired punctuation around the
 # current cursor location (as opposed to the literal names like
 # paren pair defined by std_grouping)
@@ -872,7 +894,8 @@ acmd = CSCmd(spoken_forms=['with arguments', 'with argument', 'call with',
                            'called with', 'function of'],
              meanings={all_languages: gen_parens_pair,
                        ContBeforeArguments('python'):  py_function_add_argument,
-		       ContBeforeArguments(c_style_languages): c_function_add_argument},
+                       ContBeforeArguments(c_style_languages): c_function_add_argument,
+                       ContBeforeArguments('matlab'): m_function_add_argument},
              docstring='argument list for function, python: add or go into argument list')
 functional_pairs.add(acmd)
 
@@ -898,8 +921,15 @@ acmd = CSCmd(spoken_forms=['at index', 'indexed by'],
              meanings={contPython: ActionInsert('[', ']',
                                      spacing = like_open_paren),
                        c_style_languages: ActionInsert('[', ']',
+                                     spacing = like_open_paren),
+                       contMatlab: ActionInsert('(', ')',
                                      spacing = like_open_paren)},
              docstring='array element access')
+functional_pairs.add(acmd)
+acmd = CSCmd(spoken_forms=['at cell index', 'cell indexed by'],
+             meanings={contMatlab: ActionInsert('{', '}',
+                                      spacing = like_open_paren)},
+            docstring='cell array element access')
 functional_pairs.add(acmd)
 acmd = CSCmd(spoken_forms=['sliced at'],
              meanings={contPython: ActionInsert('[', ']',
@@ -924,16 +954,17 @@ comment_commands = CmdSet('comment commands',
 
 # experiment, perl is a c_style_language, but is an exception here.
 comment_commands.add(LSAlias(['comment line', 'new comment', 'comment below', 'new comment below'],
-    {'python': '\n#', c_style_languages: '\n//', 'perl': '\n#'}, spacing = no_space_before))
+    {'python': '\n#', c_style_languages: '\n//', 'perl': '\n#', 'matlab': '\n%'}, spacing = no_space_before))
 acmd = CSCmd(spoken_forms=['comment above', 'add comment above',
                            'new comment above', 'comment line above'],
-                           meanings={ContLanguage('python'): ActionPyCommentAbove()},
+                           meanings={ContLanguage('python'): ActionPyCommentAbove(),
+                           ContLanguage('matlab'): ActionMCommentAbove()},
              docstring='add a new comment line above current one.')
 
 comment_commands.add(acmd)
 comment_commands.add(LSAlias(['begin comment'],
     {'python': '# ', ('C', 'php', 'java', 'javascript'): '// ',
-     'perl': '# '}))
+     'perl': '# ', 'matlab': '% '}))
 comment_commands.add(LSAlias(['begin long comment'],
     {c_style_languages: '/* '}))
 comment_commands.add(LSAlias(['end long comment'],
@@ -945,11 +976,15 @@ comment_commands.add(LSAlias(['end long comment'],
 misc_aliases = CmdSet('miscellaneous aliases',
     description = 'miscellaneous commands')
 misc_aliases.add(LSAlias(['print'], {'python': 'print ', 'perl': 'print '}))
-misc_aliases.add(LSAlias(['return'], {('python', 'C', 'java', 'javascript', 'php'): 'return '}))
-misc_aliases.add(LSAlias(['break'], {('python', 'C', 'java', 'javascript', 'php'): 'break;\n'},
+# TEB: Might need to make this a function for Matlab (command forms aren't
+# necessary all the time anyway, but just in case):
+misc_aliases.add(LSAlias(['print', 'display'], {'matlab': 'disp '}))
+misc_aliases.add(LSAlias(['return'], {('python', 'C', 'javascript', 'php', 'matlab'): 'return '}))
+misc_aliases.add(LSAlias(['break'], {('python', 'C', 'javascript', 'php'): 'break;\n', 'matlab': 'break\n'},
     spacing = no_space_after))
 misc_aliases.add(LSAlias(['continue'], {'python': 'continue\n',
-                                         c_style_languages: 'continue;\n'}, spacing = no_space_after))
+                                         c_style_languages: 'continue;\n',
+                                         'matlab': 'continue\n'}, spacing = no_space_after))
 
 
 # new statement
@@ -958,13 +993,16 @@ new_statement = CmdSet('new statement',
 description = 'new statement commands')
 
 acmd = CSCmd(spoken_forms=['new statement', 'new statement below'],
-             meanings={contPython: py_new_statement, contCStyleLanguage: c_new_statement},
+             meanings={contPython: py_new_statement,
+                         contCStyleLanguage: c_new_statement,
+                         contMatlab: m_new_statement},
              docstring='start new statement on next line')
 new_statement.add(acmd)
 
 acmd = CSCmd(spoken_forms=['new statement above'],
              meanings={contPython: py_new_statement_above,
-                       c_style_languages: c_new_statement_above},
+                       c_style_languages: c_new_statement_above,
+                       contMatlab: m_new_statement_above},
              docstring='start new statement on previous line')
 new_statement.add(acmd)
 
@@ -975,7 +1013,9 @@ compound_statements = CmdSet('compound statements',
     description = 'commands for dictation and navigating compound statements')
 
 acmd = CSCmd(spoken_forms=['body', 'go to body'],
-             meanings={c_style_languages: c_goto_body, contPython: py_goto_body},
+             meanings={c_style_languages: c_goto_body,
+                         contPython: py_goto_body,
+                         contMatlab: m_goto_body},
              docstring = 'move to body of a compound statement')
 compound_statements.add(acmd)
 
@@ -987,18 +1027,22 @@ ctrl_structures = CmdSet('control structures',
 
 acmd = CSCmd(spoken_forms=['for', 'for loop', 'for each'],
              meanings={c_style_languages: c_simple_for,
-                       ContBlankLine('python'): py_simple_for},
+                       ContBlankLine('python'): py_simple_for,
+                       ContBlankLine('matlab'): m_simple_for},
              docstring='for loop')
 ctrl_structures.add(acmd)
 acmd = CSCmd(spoken_forms=['while', 'while loop'],
              meanings={c_style_languages: c_simple_while,
 #                       contPython: ActionInsert('while ', ':\n\t'),
-                       ContBlankLine('python'): ActionInsert('while ', ':\n\t')},
+                       ContBlankLine('python'): ActionInsert('while ', ':\n\t'),
+                       ContBlankLine('matlab'): ActionInsert('while ', '\n\t\nend\n')},
              docstring='while loop')
 ctrl_structures.add(acmd)
 acmd = CSCmd(spoken_forms=['do', 'do the following', 'loop body', 'for body',
                            'while body'],
-             meanings={c_style_languages: c_goto_body, contPython: py_goto_body},
+             meanings={c_style_languages: c_goto_body,
+                         contPython: py_goto_body,
+                         contMatlab: m_goto_body},
              docstring = 'move to body of loop')
 ctrl_structures.add(acmd)
 acmd = CSCmd(spoken_forms=['do while'],
@@ -1016,6 +1060,8 @@ acmd = CSCmd(spoken_forms=['if', 'if statement'],
                        contJavascript: ActionInsert('if (', ') {\n\t\n}',
                           spacing = no_space_after),
                        contJava: ActionInsert('if (', ') {\n\t\n}',
+                          spacing = no_space_after),
+                       contMatlab: ActionInsert('if (', ')\n\t\nend\n', 
                           spacing = no_space_after)},
              docstring = 'if statement')
 ctrl_structures.add(acmd)
@@ -1037,19 +1083,21 @@ acmd = CSCmd(spoken_forms=['else if', 'else if clause',
                        contJava: java_else_if,
                        contPhp: c_else_if,
                        contJavascript: c_else_if,
-                       contPerl: perl_else_if},
+                       contPerl: perl_else_if,
+                       contMatlab: m_else_if},
              docstring = 'else if clause of conditional statement')
 ctrl_structures.add(acmd)
 acmd = CSCmd(spoken_forms=['else clause', 'else'],
              meanings={contPython: ActionInsertNewClause('($|\n)',
                           code_bef = 'else:\n\t', code_after = '', where = -1),
 # try where = -1 here as well
-                       c_style_languages: c_else},
+                       c_style_languages: c_else,
+                       contMatlab: m_else},
              docstring = 'else clause of conditional statement')
 ctrl_structures.add(acmd)
 acmd = CSCmd(spoken_forms=['then', 'then do', 'then do the following',
                            'if body'],
-             meanings={contPython: py_goto_body, c_style_languages: c_goto_body},
+             meanings={contPython: py_goto_body, c_style_languages: c_goto_body, contMatlab: m_goto_body},
              docstring='move to body of a conditional')
 ctrl_structures.add(acmd)
 
@@ -1084,7 +1132,8 @@ acmd = CSCmd(spoken_forms=['class', 'define class', 'declare class',
                            'new class'],
              meanings={ContBlankLine('C'): cpp_class_definition,
                        ContBlankLine('java'): java_class_definition,
-                       ContBlankLine('python'): py_class_definition},
+                       ContBlankLine('python'): py_class_definition,
+                       ContBlankLine('matlab'): m_class_definition},
              docstring='class definition')
 data_structures.add(acmd)
 
@@ -1099,13 +1148,22 @@ acmd = CSCmd(spoken_forms=['sub class of', 'inherits from', 'is subclass',
                            'is subclass of', 'with superclass',
                            'with superclasses', 'extends'],
              meanings={contC: cpp_subclass, contJava: java_subclass,
-                       contPython: py_subclass},
+                       contPython: py_subclass, contMatlab: m_subclass},
              docstring='superclasses of a class')
+data_structures.add(acmd)
+
+acmd = CSCmd(spoken_forms=['alias', 'class alias', 'alias definition',
+                           'define alias', 'is alias of',
+                           'empty subclass', 'is empty subclass of',
+                           'new alias', 'empty subclass of'],
+             meanings={contMatlab: m_class_alias},
+             docstring='class alias (empty subclass)')
 data_structures.add(acmd)
 
 acmd = CSCmd(spoken_forms=['class body'],
              meanings={contC: cpp_class_body, contJava: java_class_body,
-                       contPython: py_class_body},
+                       contPython: py_class_body,
+                       contMatlab: m_class_body},
              docstring='move to body of class definition')
 data_structures.add(acmd)
 
@@ -1116,7 +1174,8 @@ function_definitions = CmdSet('function definitions',
 
 acmd = CSCmd(spoken_forms=['declare method', 'add method'],
              meanings={c_style_languages: c_function_declaration, 
-                       contPython: py_method_declaration},
+                       contPython: py_method_declaration,
+                       contMatlab: m_method_declaration},
              docstring='method definition')
 function_definitions.add(acmd)
 
@@ -1128,7 +1187,8 @@ acmd = CSCmd(spoken_forms=['define function'],
                        contJava: java_function_definition,
                        contPhp: php_function_definition,
                        contPerl: perl_function_definition, 
-                       contPython: py_function_declaration},
+                       contPython: py_function_declaration,
+                       contMatlab: m_function_declaration},
              docstring='function definition')
 function_definitions.add(acmd)
 
@@ -1145,18 +1205,22 @@ function_definitions.add(acmd)
 
 acmd = CSCmd(spoken_forms=['declare function'],
              meanings={c_style_languages: c_function_declaration,
-                       contPython: py_function_declaration},
+                       contPython: py_function_declaration,
+                       contMatlab: m_function_declaration},
              docstring='function definition')
 function_definitions.add(acmd)
 
 acmd = CSCmd(spoken_forms=['add argument', 'add arguments'],
              meanings={c_style_languages: c_function_add_argument,
-                       contPython: py_function_add_argument},
+                       contPython: py_function_add_argument,
+                       contMatlab: m_function_add_argument},
              docstring='move to end of argument list of a function call or declaration')
 
 function_definitions.add(acmd)
 acmd = CSCmd(spoken_forms=['function body', 'method body'],
-             meanings={c_style_languages: c_function_body, contPython: py_function_body},
+             meanings={c_style_languages: c_function_body,
+                       contPython: py_function_body,
+                       contMatlab: m_function_body},
              docstring='move to body of a function definition')
 function_definitions.add(acmd)
 
@@ -1170,7 +1234,8 @@ acmd = CSCmd(spoken_forms=['define variable', 'declare variable'],
 declare_variables.add(acmd)
 
 acmd = CSCmd(spoken_forms=['define global variable', 'declare global variable'],
-             meanings={contPython: ActionInsert('global ', '')})
+             meanings={contPython: ActionInsert('global ', ''),
+                       contMatlab: ActionInsert('global ', '')})
 declare_variables.add(acmd)
 
 acmd = CSCmd(spoken_forms=['define array variable', 'declare array variable'],
@@ -1388,7 +1453,8 @@ python_functional.add(acmd)
 
 py_standard_function_calls = CmdSet('standard function calls',
     description = \
-    'CSCs for calling predefined functions and methods definitions')
+    'CSCs for calling predefined functions and methods definitions',
+                                    language = 'python')
 
 py_std_func_calls = StandardFunctionCallsHelper('python')
 
@@ -2041,6 +2107,264 @@ acmd = CSCmd(spoken_forms=['main','main method'],
              meanings={contJava: ActionInsert('public static void main(String[] args){\n\t', '\n}')},
              docstring='main method. Put cursor in body.')
 java_verbose.add(acmd)
+
+
+###############################################################################
+# Matlab specific stuff
+###############################################################################
+
+#
+# Define the native syntax of Matlab
+#
+define_language('matlab',
+				# Note: Have to be careful about the start of the symbol so
+				#	   it doesn't match:
+				#		   - strings that start with a number
+				#		   - strings that only contain _ and no alphanums like "__"
+				#			 (not likely to appear in a matlab file, but the
+				#			 user could type it by mistake)
+				#
+				LangDef(regexp_symbol='([a-zA-Z])[a-zA-Z0-9_]*',
+						regexps_no_symbols=['%[^\n]*\n',
+											'\'([^\']|\\\')*?\'']))
+#
+# CSCs and LSAs specific to Matlab
+#
+
+# misc Matlab aliases and CSCs
+
+misc_matlab = CmdSet('miscellaneous Matlab fragments',
+	description = "miscellaneous Matlab expressions and constructs")
+
+misc_matlab_cmds = CmdSet('miscellaneous Matlab commands',
+	description = "miscellaneous Matlab commands")
+
+#misc_matlab.add(LSAlias(['none'], {'matlab': 'None'}))
+#misc_matlab.add(LSAlias(['self dot'], {'matlab': 'self.'}, spacing =
+#	no_space_after))
+
+#AD (2003-07-01) --
+#  I created this LSA so that 'self' would not be printed
+#  as __self__. This is a temporary fix. The right way to fix
+#  this problem would be to implement a smarter algorithm for
+#  choosing between homophonic symbols (e.g. chose most recent,
+#  choose one with closest occurence to the cursor, etc...)
+#
+
+#misc_matlab.add(LSAlias(['self'], {'matlab': 'self'}))
+
+#misc_matlab.add(LSAlias(['empty tuple'], {'matlab': '()'}))
+
+#misc_matlab.add(LSAlias(['format with'], {'matlab': ' % '}))
+
+acmd = CSCmd(spoken_forms=['continue statement'],
+			 meanings={contMatlab: ActionInsert('...\n', '',
+									 spacing = no_space_after)},
+			 docstring='matlab continue statement on next line')
+
+misc_matlab_cmds.add(acmd)
+
+#acmd = CSCmd(spoken_forms=['define in it', 'define init', 'define constructor'],
+#			 meanings={contMatlab: m_constructor_definition},
+#			 docstring='constructor definition')
+
+#misc_matlab_cmds.add(acmd)
+
+# simple Matlab statements
+
+matlab_statements = CmdSet('simple Matlab statements',
+	description = 'aliases for simple Matlab statements')
+
+matlab_statements.add(LSAlias(['global', 'global variable', 'global variables'],
+		{'matlab': 'global '}))
+
+#matlab_statements.add(LSAlias(['del', 'delete object',
+#		 'delete instance', 'delete item'],
+#		{'matlab': 'del '}))
+
+matlab_statements.add(LSAlias(['eval', 'evaluate'], {'matlab': 'eval '}))
+#matlab_statements.add(LSAlias(['pass'], {'matlab': 'pass\n'}))
+
+
+#matlab_statements.add(LSAlias(['assert'], {'matlab': 'assert '}))
+
+#matlab_statements.add(LSAlias(['raise', 'raise exception'], {'matlab': 'raise '}))
+
+# compound matlab statements
+
+matlab_compound = CmdSet('Matlab compound statements',
+	description = "commands for dictating Matlab-specific compound statements")
+
+
+#############################################################################
+# Need to implement exception handling!
+
+
+#acmd = CSCmd(spoken_forms=['try'],
+#			 meanings={ContBlankLine('matlab'): ActionInsert('try:\n\t', '',
+#				 spacing = no_space_after)},
+#			 docstring='matlab try statement')
+#matlab_compound.add(acmd)
+#acmd = CSCmd(spoken_forms=['except', 'except for', 'catch exceptions', 'except when', 'except clause'],
+#			 meanings={contMatlab: ActionInsertNewClause('($|\n)', code_bef='except ', code_after=': \n\t')},
+#			 docstring='matlab except statement')
+#matlab_compound.add(acmd)
+#acmd = CSCmd(spoken_forms=['finally', 'finally do'],
+#			 meanings={contMatlab: ActionInsertNewClause('($|\n)', code_bef='finally:\n\t')},
+#			 docstring='finally clause of matlab try statement')
+#matlab_compound.add(acmd)
+
+# Matlab import statements
+
+#matlab_imports = CmdSet('Matlab import statements',
+#	description = "Matlab import module statements")
+#matlab_imports_cscs = CmdSet('Matlab import statements',
+#	description = "Matlab import module statements")
+
+#matlab_imports_cscs.add(CSCmd(spoken_forms=['from', 'from module'],
+#							meanings={ContBlankLine('matlab'): ActionInsert('from ')}))
+#
+# Support two uses of the word import:
+#	import module_name
+#	from module_name import symbol_name
+#
+#matlab_imports_cscs.add(CSCmd(spoken_forms=['import'],
+#							meanings={ContBlankLine('matlab'): ActionInsert('import '), contMatlab: ActionInsert(' import ')}))
+
+
+# this form used for statements : import module1, module2, etc...
+#matlab_imports.add(LSAlias(['import module', 'import modules'], {'matlab': 'import '}))
+# this form used for statements like: from module symbol1, symbol2, etc...
+#matlab_imports.add(LSAlias(['import symbols', 'import symbol'], {'matlab': ' import '}))
+# this form used for statements like: from module import all
+#matlab_imports.add(LSAlias(['import all'], {'matlab': ' import *'}))
+
+# Matlab-specific comparison operators
+
+matlab_comparisons = CmdSet('Matlab comparison operators',
+	description = "Matlab-specific comparison operators")
+
+###############################
+# Note that you could effectively do this with a find() or == in certain cases...
+#matlab_comparisons.add(LSAlias(['in list', 'in sequence', 'is in', 'is in list', 'is in sequence'], {'matlab': ' in '}))
+
+#################################
+# Should either modify the global rule above (not all_languages) or see if this will work alongside (contrary to this note from Python section):
+
+# UGH - this would shadow the new form for dictation - either one could
+# be recognized
+#add_lsa(LSAlias(['not equal', 'is not equal', 'not equal to', 'is not equal to',
+#		'is different from', 'differs from', 'less greater',
+#		'less than greater than'],
+#		{'matlab': ' <> '}))
+
+matlab_comparisons.add(LSAlias(['not equal', 'is not equal', 'not equal to', 'is not equal to',
+		'is different from', 'differs from', 'less greater',
+		'less than greater than'],
+		{'matlab': ' ~= '}))
+#matlab_comparisons.add(LSAlias(['is same', 'same as', 'is same as'], {'matlab': ' is '}))
+
+
+# Matlab-specific operators
+
+matlab_operators = CmdSet('Matlab operators',
+	description = 'Matlab-specific operators')
+#matlab_operators.add(LSAlias(['concatenate', 'concatenate with'],
+#	{'matlab': ' + '}, binary_operator))
+#matlab_operators.add(LSAlias(['collect arguments', 'collect positinal arguments',
+#								  'collect arguments in', 'collect positinal arguments in'],
+#	{'matlab': '*'}, no_space_after))
+#matlab_operators.add(LSAlias(['collect keyword arguments','collect keyword arguments in'],
+#	{'matlab': '**'}, no_space_after))
+
+
+# functional names for Matlab-specific paired punctuation
+
+matlab_functional = CmdSet('Matlab paired punctuation',
+	description = "Matlab-specific paired punctuation")
+
+acmd = CSCmd(spoken_forms=['tuple with elements', 'new tuple',
+						   'tuple with items'],
+			 meanings={contMatlab: ActionInsert('(', ')',
+									 spacing = like_open_paren)},
+			 docstring='matlab tuple with enumerated elements')
+matlab_functional.add(acmd)
+
+acmd = CSCmd(spoken_forms=['range of'],
+			 meanings={contMatlab: ActionInsert('range(', ')',
+									 spacing = no_space_after)},
+			 docstring='types range(^)')
+acmd = CSCmd(spoken_forms=['in range of'],
+			 meanings={contMatlab: ActionInsert(' in range(', ')',
+									 spacing = no_space_after)},
+			 docstring='types range(^)')
+matlab_functional.add(acmd)
+
+# CSCs for calling standard matlab functions and methods
+
+m_standard_function_calls = CmdSet('Matlab standard function calls',
+	description = \
+	'CSCs for calling predefined functions and methods definitions',
+	language = 'matlab')
+
+m_std_func_calls = StandardFunctionCallsHelper('matlab')
+
+# m_std_func_calls.add_function_name(['A. two B. base sixty four'], 'a2b_base64')
+# m_std_func_calls.add_function_name(['A. two B. H. Q. X.'], 'a2b_hqx')
+# m_std_func_calls.add_function_name(['A. two B. U. U.'], 'a2b_uu')
+
+m_std_func_calls.add_function_name(['abs', 'absolute', 'absolute value'],
+	'abs')
+
+m_std_func_calls.add_function_name(['exponential'], 'exp')
+m_std_func_calls.add_function_name(['floor'], 'floor')
+m_std_func_calls.add_function_name(['ceiling'], 'ceil')
+
+m_std_func_calls.add_function_name(['F. abs', 'F.  absolute',
+	'F. absolute value', 'float abs', 'float absolute',
+	'float absolute value'], 'abs')
+
+m_std_func_calls.add_function_name(['cos', 'cosine'], 'cos')
+m_std_func_calls.add_function_name(['sine'], 'sin')
+m_std_func_calls.add_function_name(['tangent', 'tan'], 'tan')
+
+m_std_func_calls.add_function_name(['A. cos', 'arc cos', 'arc cosine'], 'acos')
+m_std_func_calls.add_function_name(['A. sine', 'arc sine'], 'asin')
+m_std_func_calls.add_function_name(['A. tan', 'arc tangent',
+	'arc tan'], 'atan')
+m_std_func_calls.add_function_name(['A. tan 2', 'arc tangent 2',
+	'arc tan 2'], 'atan2')
+
+m_std_func_calls.add_function_name(['square root'], 'sqrt')
+
+m_std_func_calls.add_function_name(['hyperbolic sine', 'sine H.'],
+	'sinh')
+m_std_func_calls.add_function_name(['hyperbolic cosine', 'cosine H.',
+	'cos H.'], 'cosh')
+m_std_func_calls.add_function_name(['hyperbolic tangent', 'tan H.'],
+	'tanh')
+
+m_std_func_calls.add_function_name(['A. tan H.', 'arc tan H.',
+	'arc tangent H.', 'hyperbolic arc tangent'], 'atanh')
+
+m_std_func_calls.add_function_name(['log', 'logarithm', 'natural log', 'natural logarithm'], 'log')
+m_std_func_calls.add_function_name(['log 10', 'log base 10', 'logarithm base 10'], 'log10')
+m_std_func_calls.add_function_name(['log 2', 'log base 2', 'logarithm base 2'], 'log2')
+
+m_std_func_calls.add_function_name(['length'], 'length')
+#	'short')
+m_std_func_calls.add_function_name(['type'], 'type',
+	'short')
+
+
+# End Matlab specific stuff
+
+
+
+
+
+
+
 
 
 

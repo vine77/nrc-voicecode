@@ -153,7 +153,7 @@ class SB_ServiceLangServerSide(SB_ServiceLang):
     """
     
     def __init__(self, language_names=None, **args_super):
-        self.init_attrs({'file_language': {'c': 'C', 'h': 'C', 'C': 'C', 'cpp': 'C', 'cc' : 'C', 'py': 'python'}})
+        self.init_attrs({'file_language': {'c': 'C', 'h': 'C', 'C': 'C', 'cpp': 'C', 'cc' : 'C', 'py': 'python', 'm': 'matlab', 'java': 'java', 'pde': 'java'}})
         self.deep_construct(SB_ServiceLang, 
                             {'language_names': language_names}, 
                             args_super, 

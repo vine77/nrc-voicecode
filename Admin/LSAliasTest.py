@@ -23,6 +23,7 @@ expected_lsa_index=  \
 {'C': [('multiply by', ' * '), ('not', '!'), ('times', ' * ')],
  'java': [('multiply by', ' * '), ('times', ' * ')],
  'javascript': [('multiply by', ' * '), ('times', ' * ')],
+ 'matlab': [('multiply by', ' * '), ('times', ' * ')],
  'perl': [('multiply by', ' * '), ('not', '!'), ('times', ' * ')],
  'php': [('multiply by', ' * '), ('times', ' * ')],
  'python': [('multiply by', ' * '), ('not', 'not'), ('times', ' * ')]}

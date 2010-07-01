@@ -32,13 +32,14 @@
 (require 'cl)
 (pc-selection-mode)
 (load-file (substitute-in-file-name "$VCODE_HOME/Environments/Emacs/python-mode.el"))
+(load-file (substitute-in-file-name "$VCODE_HOME/Environments/Emacs/matlab-mode.el"))
 (custom-set-variables
  '(py-indent-offset 4))
 
 
 (setq vr-deprecated-activation-list 
            (list "\.py$" "\.c$" "\.cpp$" "\.h$" "\.pl$" "\.R$" "\.hpp$" "\.java$"
-                 "\.js$" "*Completions*" "\.php$"))
+                 "\.js$" "*Completions*" "\.php$" "\.m$" "\.pde$"))
 
 
 ;;; Change this if you want to see more traces
@@ -273,10 +274,12 @@ in the 'vr-deprecated-log-buff-name buffer.")
 (cl-puthash "cpp" "C" vcode-language-name-map)
 (cl-puthash "hpp" "C" vcode-language-name-map) 
 (cl-puthash "java" "java" vcode-language-name-map)
+(cl-puthash "m" "matlab" vcode-language-name-map)
 (cl-puthash "pl" "perl" vcode-language-name-map)
 (cl-puthash "js" "javascript" vcode-language-name-map)
 (cl-puthash "php" "php" vcode-language-name-map)
 (cl-puthash "R" "C" vcode-language-name-map)
+(cl-puthash "pde" "java" vcode-language-name-map)
 
 (defvar vcode-traces-on (make-hash-table :test 'string=)
 "Set entries in this hashtable, to activate traces with that name.")
@@ -348,7 +351,7 @@ sent."
   (vcode-close-all-buffers)
   (setq vr-deprecated-activation-list 
            (list "\.py$" "\.c$" "\.cpp$" "\.h$" "\.pl$" "\.R$" "\.hpp$" "\.java$"
-                 "\.js$" "*Completions*" "\.php$"))
+                 "\.js$" "*Completions*" "\.php$" "\.m$" "\.pde$"))
   (vcode-configure-for-regression-testing t)
   (vcode-mode-toggle-to 1 "vcode-test")
   (setq vcode-is-test-editor t)
@@ -3764,7 +3767,7 @@ change reports it sends to VCode.
 ;	    (point) (mark) range delete-start delete-end text)
 	(vcode-trace "vcode-cmd-insert" "upon entry, (point)=%S,
 	    (mark)=%S, range=%S, delete-start=%S, delete-end=%S, text=%S\n" 
-	    (point) (mark) range delete-start delete-end text)
+	    (point) (if mark-active (mark) (point)) range delete-start delete-end text)
 
 
 	(set-buffer buff-name)
@@ -3894,7 +3897,7 @@ change reports it sends to VCode.
     (setq levels (cl-gethash "levels" mess-cont))
     (setq buff-name (vcode-get-buff-name-from-message mess-cont))
 
-    (vcode-trace "vcode-cmd-decr-indent-level" "upon entry, buff-name=%S, (point)=%S, (mark)=%S, range=%S, levels=%S\n" buff-name (point) (mark) range levels)
+    (vcode-trace "vcode-cmd-decr-indent-level" "upon entry, buff-name=%S, (point)=%S, (mark)=%S, range=%S, levels=%S\n" buff-name (point) (if mark-active (mark) (point)) range levels)
 
     ;;;
     ;;; Note: don't enclose this in a save-excursion because it causes problems
@@ -3921,7 +3924,7 @@ change reports it sends to VCode.
     (setq levels (cl-gethash "levels" mess-cont))
     (setq buff-name (vcode-get-buff-name-from-message mess-cont))
 
-    (vcode-trace "vcode-cmd-incr-indent-level" "upon entry, (point)=%S, (mark)=%S, range=%S, levels=%S\n" (point) (mark) range levels)
+    (vcode-trace "vcode-cmd-incr-indent-level" "upon entry, (point)=%S, (mark)=%S, range=%S, levels=%S\n" (point) (if mark-active (mark) (point)) range levels)
 
 
 
@@ -3972,7 +3975,7 @@ change reports it sends to VCode.
 (defun vcode-unindent-line (n-levels)
   (interactive "nNumber of levels: ")
   (let ((counter 0) (start-of-line))
-     (vcode-trace "vcode-unindent-line" "upon entry, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
+     (vcode-trace "vcode-unindent-line" "upon entry, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (if mark-active (mark) (point)) (buffer-substring (point-min) (point-max)))
       ;;;
       ;;; Move to the first non-blank character on the line, then simulate the
       ;;; backspace key multiple times.
@@ -4006,14 +4009,14 @@ change reports it sends to VCode.
 	  )
 ;	)
 
-     (vcode-trace "vcode-unindent-line" "upon exit, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
+     (vcode-trace "vcode-unindent-line" "upon exit, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (if mark-active (mark) (point)) (buffer-substring (point-min) (point-max)))
    )
 )
 
 (defun vcode-indent-line (n-levels)
   (interactive "nNumber of levels: ")
   (let ((counter 0) (start-of-line))
-     (vcode-trace "vcode-indent-line" "upon entry, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
+     (vcode-trace "vcode-indent-line" "upon entry, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (if mark-active (mark) (point)) (buffer-substring (point-min) (point-max)))
      (setq counter 0)
      (while (< counter n-levels)
         ;;; Execute a command string containing just the 
@@ -4022,7 +4025,7 @@ change reports it sends to VCode.
        (setq counter (1+ counter))
      )
 
-     (vcode-trace "vcode-indent-line" "upon exit, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (mark) (buffer-substring (point-min) (point-max)))
+     (vcode-trace "vcode-indent-line" "upon exit, n-levels=%S, (point)=%S, (mark)=%S, buffer contains: \n%S\n" n-levels (point) (if mark-active (mark) (point)) (buffer-substring (point-min) (point-max)))
    )
 )
 
@@ -4102,12 +4105,12 @@ change reports it sends to VCode.
 
        (set-buffer buff)
 
-       (message "vcode-cmd-copy-selection" "(mark)=%S, (point)=%S" (mark) (point))
-       (vcode-trace "vcode-cmd-copy-selection" "(mark)=%S, (point)=%S" (mark) (point))
+       (message "vcode-cmd-copy-selection" "(mark)=%S, (point)=%S" (if mark-active (mark) (point)) (point))
+       (vcode-trace "vcode-cmd-copy-selection" "(mark)=%S, (point)=%S" (if mark-active (mark) (point)) (point))
 
-       (copy-region-as-kill-nomark (mark) (point))
-       (vcode-trace "vcode-cmd-copy-selection" "after copy, (mark)=%S, (point)=%S" (mark) (point))
-       (vcode-report-goto-select-change (buffer-name) (mark) (point))
+       (copy-region-as-kill-nomark (if mark-active (mark) (point)) (point))
+       (vcode-trace "vcode-cmd-copy-selection" "after copy, (mark)=%S, (point)=%S" (if mark-active (mark) (point)) (point))
+       (vcode-report-goto-select-change (buffer-name) (if mark-active (mark) (point)) (point))
      )
 
      (vcode-send-queued-changes)
@@ -4124,7 +4127,7 @@ change reports it sends to VCode.
      (save-excursion
        (setq buff (cl-gethash 'buff_name mess-cont))
        (set-buffer buff)
-       (kill-region (mark) (point))
+       (kill-region (if mark-active (mark) (point)) (point))
        (vcode-send-queued-changes)
      )
   )

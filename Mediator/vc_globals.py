@@ -80,7 +80,7 @@ for p in [admin, config, mediator_dir]:
 # max_all_languages is all the languages that are supported,
 # all_languages can be defined in user_globals, restricting the
 # size of your voicecoder session...
-max_all_languages = ['C', 'python', 'perl', 'javascript', 'php', 'java']
+max_all_languages = ['C', 'python', 'perl', 'javascript', 'php', 'java', 'matlab']
 max_all_languages.sort()
 max_all_languages = tuple(max_all_languages)
 ##try:
@@ -100,4 +100,9 @@ all_c_style_languages = ['C', 'perl', 'javascript', 'php', 'java']
 all_c_style_languages.sort()
 c_style_languages = tuple([c for c in all_c_style_languages if c in all_languages])
 del all_c_style_languages
-    
+
+# TEB: maybe make a function all_languages_without()?
+all_languages_without_matlab = tuple([i for i in all_languages if i != 'matlab'])
+
+
+
