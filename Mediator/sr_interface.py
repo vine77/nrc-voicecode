@@ -281,7 +281,7 @@ def getWordInfo(word, flag = None):
     except:
        # In case the word's spelling is not allowed by
        # NatSpeak
-       print "WARNING: error trying to get info from vocabulary word '%s'\n" + \
+       print "WARNING: error trying to get info from vocabulary word '%s'\n" \
              "Maybe you forgot to start Dragon NaturallySpeaking before starting VoiceCode?" % repr(word)
 #       debug.print_call_stack()
        answer = None       
