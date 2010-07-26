@@ -21,9 +21,10 @@
 
 """implementation of sr_grammars classes using natlink
 """
+# not needed after python 2.4 I believe:
 try:
-    import set
-except ImportError:
+    set
+except NameError:
     from sets import Set as set
     
 from Object import Object

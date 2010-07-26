@@ -21,9 +21,10 @@
 
 """abstract interfaces for dictation and selection grammars
 """
+# can be removed soon (QH, july 2010)
 try:
-    import set
-except ImportError:
+    set
+except NameError:
     from sets import Set as set
 
 from Object import Object, OwnerObject
