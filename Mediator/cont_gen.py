@@ -20,6 +20,7 @@
 ##############################################################################
 
 """Context objects which are not tied to a specific language"""
+# can be removed soon (QH, july 2010)
 try:
     set
 except NameError:

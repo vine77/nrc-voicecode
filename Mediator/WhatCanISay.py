@@ -30,6 +30,8 @@ from Context import scope_order, valid_scope
 from CSCmd import CSCmdList
 import util
 from utilsqh import normaliseaccentedchars
+
+# nearly not needed anymore:
 try:
     set
 except NameError:
