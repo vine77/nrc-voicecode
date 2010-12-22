@@ -266,6 +266,9 @@ def getWordInfo(word, flag = None):
     if not word:
         trace('sr_interface.getWordInfo', 'getWordInfo, empty word: %s'% word)
         return
+    if word.find('.') >= 0:
+        trace('sr_interface.getWordInfo', 'getWordInfo, word with . in spoken forms, skip: %s'% word)
+        return
     if word.endswith('\\'):
         trace('sr_interface.getWordInfo', 'getWordInfo, empty spoken form: %s'% word)
         return
@@ -283,7 +286,7 @@ def getWordInfo(word, flag = None):
        # NatSpeak
        print "WARNING: error trying to get info from vocabulary word '%s'\n" \
              "Maybe you forgot to start Dragon NaturallySpeaking before starting VoiceCode?" % repr(word)
-#       debug.print_call_stack()
+       debug.print_call_stack()
        answer = None       
 
     return answer
