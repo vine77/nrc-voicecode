@@ -341,7 +341,7 @@ def addWord(word, *rest):
         raise RuntimeError('I thought we agreed not to add single letters')
     if getWordInfo(word) == None:
         trace('sr_interface.addWord', 'this word is new to NatSpeak: %s'% word)
-        trace_call_stack('sr_interface.addWord', '**')
+        #trace_call_stack('sr_interface.addWord', '**')
         if len(rest) == 0:
             flag = word_info_flag
         elif len(rest) == 1:
