@@ -52,7 +52,7 @@ import WinSystemMSW
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="off",
+debug.config_traces(status="on",
                     active_traces={\
 ##                                    'gotResults': 1,
 ##                                    'CmdInterp.interp': 1,
