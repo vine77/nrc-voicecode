@@ -61,16 +61,8 @@ def config_warning(warn):
 #   for now, just write to stderr.  Later, we may want to log this to a
 #   file 
     sys.stderr.write(warn)
-    
-def print_error_info(print_to_file=sys.stdout):
-    """Prints the call stack.
 
-    This is done by raising an exception, catching it and printing the
-    traceback object. In Python 2, there is a more direct way of doing this.
-    """
-    print_to_file.write("\nException info\n")
-    traceback.print_exc(file=print_to_file)
-    print_to_file.write("\n")
+
 
 def print_call_stack(print_to_file=sys.stdout):
     """Prints the call stack.
