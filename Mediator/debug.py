@@ -61,29 +61,46 @@ def config_warning(warn):
 #   for now, just write to stderr.  Later, we may want to log this to a
 #   file 
     sys.stderr.write(warn)
-
-
-
-def print_call_stack(print_to_file=sys.stdout):
+    
+def print_error_info(print_to_file=None):
     """Prints the call stack.
 
     This is done by raising an exception, catching it and printing the
     traceback object. In Python 2, there is a more direct way of doing this.
     """
+    if print_to_file is None:
+        print_to_file = sys.stdout
+    print_to_file.write("\nException info\n")
+    traceback.print_exc(file=print_to_file)
+    print_to_file.write("\n")
+
+def print_call_stack(print_to_file=None):
+    """Prints the call stack.
+
+    This is done by raising an exception, catching it and printing the
+    traceback object. In Python 2, there is a more direct way of doing this.
+    """
+    if print_to_file is None:
+        print_to_file = sys.stdout
     print_to_file.write("\nCall stack was:\n")
     try:
         raise exceptions.Exception()
-    except exceptions.Exception, err:        
+    except exceptions.Exception, err:
         traceback.print_stack(file=print_to_file)
         print_to_file.write("\n\n")
 
-def trace_call_stack(trace_id, location_id=None, print_to_file=sys.stdout):
+def trace_call_stack(trace_id, location_id=None, print_to_file=None):
+    if print_to_file is None:
+        print_to_file = sys.stdout
     if not location_id:
-       location_id = trace_id
+        location_id = trace_id
     if tracing(trace_id) and trace_is_active(trace_id):
-       print_to_file.write("-- %s: call stack at location '%s' is:\n" % 
-       (trace_id, location_id))
-       print_call_stack(print_to_file)
+        if print_to_file is None:
+            print "-- %s: call stack at location '%s' is:\n" % (trace_id, location_id)
+        else:
+            print_to_file.write("-- %s: call stack at location '%s' is:\n" % 
+            (trace_id, location_id))
+        print_call_stack(print_to_file)
 
 ###############################################################################
 # class introspection functions
