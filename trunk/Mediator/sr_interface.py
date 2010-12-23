@@ -23,7 +23,7 @@
 
 import re
 import string
-import natlink, natlinkmain
+import natlink, natlinkstatus
 from natlinkutils import *
 import debug
 from debug import trace, trace_call_stack
@@ -38,7 +38,7 @@ import SpokenUtterance
 #
 sr_is_connected = 0
 
-
+NLstatus = natlinkstatus.NatlinkStatus()
 # space or period space after letter spoken form(11) or (10 before)
 period_space_after_spoken_form_letter = '. '
 #
@@ -149,7 +149,7 @@ def connect(user_name, mic_state=None, mic_change_callback = None):
         natlink.setMicState(mic_state)
     if mic_change_callback:
         set_change_callback(mic_change_callback)
-    natspeak_version = natlinkmain.DNSversion
+    natspeak_version = NLstatus.getDNSVersion()
     if natspeak_version >= 11:
         period_space_after_spoken_form_letter = ' ' # new in NatSpeak 11
     trace('sr_interface.period_space_after_spoken_form_letter',
@@ -341,7 +341,7 @@ def addWord(word, *rest):
         raise RuntimeError('I thought we agreed not to add single letters')
     if getWordInfo(word) == None:
         trace('sr_interface.addWord', 'this word is new to NatSpeak: %s'% word)
-##        trace_call_stack('sr_interface.addWord', '**')
+        trace_call_stack('sr_interface.addWord', '**')
         if len(rest) == 0:
             flag = word_info_flag
         elif len(rest) == 1:
@@ -371,10 +371,7 @@ def addWord(word, *rest):
         word_no_special_chars = re.sub('{Spacebar}', '', word)
         if word_no_special_chars != word:
             trace('sr_interface.addWord', 'adding redundant form with no spaces \'%s\'' % word_no_special_chars)
-            try:
-               natlink.addWord(word_no_special_chars, flag)
-            except:
-               return None
+            natlink.addWord(word_no_special_chars, flag)
                
     return 1
  

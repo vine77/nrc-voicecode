@@ -917,8 +917,10 @@ if __name__ == '__main__':
         'p=', None, 'train=', 0])
     
     if opts['t']:
-       sys.stderr = sys.stdout
-
+        sys.stderr = sys.stdout
+        print 'starting tests'
+    else:
+        print 'starting Mediator for normal use'
     #
     # Start servers on the VC_LISTEN and VC_TALK ports
     #
