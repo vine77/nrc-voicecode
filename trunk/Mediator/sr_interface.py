@@ -23,7 +23,7 @@
 
 import re
 import string
-import natlink
+import natlink, natlinkmain
 from natlinkutils import *
 import debug
 from debug import trace, trace_call_stack
@@ -38,6 +38,9 @@ import SpokenUtterance
 #
 sr_is_connected = 0
 
+
+# space or period space after letter spoken form(11) or (10 before)
+period_space_after_spoken_form_letter = '. '
 #
 # microphone state change callback (None for no callback
 #
@@ -132,7 +135,7 @@ def connect(user_name, mic_state=None, mic_change_callback = None):
     *none* -- 
     """
     global sr_is_connected, vc_user_name, vc_base_model, vc_base_topic
-    global sr_mic_change_callback
+    global sr_mic_change_callback, natspeak_version, period_space_after_spoken_form_letter
     
     
     if not sr_is_connected:
@@ -146,7 +149,12 @@ def connect(user_name, mic_state=None, mic_change_callback = None):
         natlink.setMicState(mic_state)
     if mic_change_callback:
         set_change_callback(mic_change_callback)
-
+    natspeak_version = natlinkmain.DNSversion
+    if natspeak_version >= 11:
+        period_space_after_spoken_form_letter = ' ' # new in NatSpeak 11
+    trace('sr_interface.period_space_after_spoken_form_letter',
+                'natspeak_version: %s, type(natspeak_version), nperiod_space_after_spoken_form_letter: "%s"'%
+                    (natspeak_version, period_space_after_spoken_form_letter))
 
 def disconnect():
     """Dicsconnects from SR system.
@@ -286,7 +294,7 @@ def getWordInfo(word, flag = None):
        # NatSpeak
        print "WARNING: error trying to get info from vocabulary word '%s'\n" \
              "Maybe you forgot to start Dragon NaturallySpeaking before starting VoiceCode?" % repr(word)
-       debug.print_call_stack()
+       debug.print_error_info()
        answer = None       
 
     return answer
@@ -585,7 +593,8 @@ def spoken_acronym(acronym):
 # for right now, just use a Natspeak-specific implementation
     spoken = ''
     for letter in acronym:
-        spoken = spoken + string.upper(letter) + '. '
+        #spoken = spoken + string.upper(letter) + '. ' # distguish natspeak 10 and 11
+        spoken = spoken + string.upper(letter) + period_space_after_spoken_form_letter
     return spoken[:-1]
   
 
