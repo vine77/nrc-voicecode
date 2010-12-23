@@ -153,7 +153,7 @@ def connect(user_name, mic_state=None, mic_change_callback = None):
     if natspeak_version >= 11:
         period_space_after_spoken_form_letter = ' ' # new in NatSpeak 11
     trace('sr_interface.period_space_after_spoken_form_letter',
-                'natspeak_version: %s, type(natspeak_version), nperiod_space_after_spoken_form_letter: "%s"'%
+                'natspeak_version: %s, nperiod_space_after_spoken_form_letter: "%s"'%
                     (natspeak_version, period_space_after_spoken_form_letter))
 
 def disconnect():
