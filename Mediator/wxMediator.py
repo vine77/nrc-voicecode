@@ -52,20 +52,21 @@ import WinSystemMSW
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
-debug.config_traces(status="on",
+debug.config_traces(status="off",
                     active_traces={\
 ##                                    'gotResults': 1,
 ##                                    'CmdInterp.interp': 1,
 ##         'actions_wcisay.execute': 1,
 'sr_interface.deleteWord': 1,
 'sr_interface.addWord': 1,
-'SymDict.add_symbol': 1,
-'SymbolConstruction.insert_new_symbol': 1,
-
+#'SymDict.add_symbol': 1,
+#'SymbolConstruction.insert_new_symbol': 1,
+#'UtteranceInterpretation.phrase': 1,
+#'WinGram.results_callback': 1,
 ##'sr_interface.addWord': 1,
 ##'ResMgrBasic.reinterpret_recent': 1
 ##'ResMgrBasic.reinterpret_recent': 1,
-'SymbolConstruction.insert_new_symbol':1,
+#'SymbolConstruction.insert_new_symbol':1,
 "ResMgrBasic.correct_recent_synchronous": 1,
 'ResMgrBasic.remove_symbols': 1,
 'sr_interface.period_space_after_spoken_form_letter': 1,
@@ -73,7 +74,6 @@ debug.config_traces(status="on",
 ##'SymDict.remove_symbol_if_tentative':1,
 ##'SymDict.symbol_is_tentative':1,
 ##'SymDict.remove_vocabulary_entry': 1,
-##    'SymBuilderFactory.by_language': 1,
 ##   'SourceBuff.closest_occurence_to_cursor': 1,
 ##                        'CmdInterp.apply_CSC': 1,
 ##                        "ResMgrStd.interpret_dictation": 1,
