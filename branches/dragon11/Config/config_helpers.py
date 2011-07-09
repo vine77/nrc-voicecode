@@ -1489,6 +1489,7 @@ class StandardFunctionCallsHelper(Object):
         """
         
         #Correct any acronyms in the spoken forms for the current version of NatSpeak
+        spoken_forms = [sr_interface.clean_spoken_form(word) for word in spoken_forms]
         spoken_forms = [sr_interface.fix_acronyms_spoken_form(word) for word in spoken_forms]
         
         debug.trace('StandardFunctionCallsHelper.add_function_name', 

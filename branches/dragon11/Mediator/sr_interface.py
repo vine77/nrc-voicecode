@@ -39,6 +39,7 @@ import SpokenUtterance
 sr_is_connected = 0
 
 NLstatus = natlinkstatus.NatlinkStatus()
+
 # space or period space after letter spoken form(11) or (10 before)
 period_space_after_spoken_form_letter = '. '
 
@@ -468,12 +469,12 @@ def clean_spoken_form(spoken_form):
         # 
         clean_form = re.sub('[^a-z0-9]+', ' ', clean_form)    
          
-        #
-        # Remove leading, trailing and multiple blanks
-        #
-        clean_form = re.sub('\s+', ' ', clean_form)
-        clean_form = re.sub('^\s+', '', clean_form)
-        clean_form = re.sub('\s+$', '', clean_form)
+    #
+    # Remove leading, trailing and multiple blanks
+    # (do it always, QH)
+    clean_form = re.sub('\s+', ' ', clean_form)
+    clean_form = re.sub('^\s+', '', clean_form)
+    clean_form = re.sub('\s+$', '', clean_form)
 
 #    trace('sr_interface.clean_spoken_form', 'returning clean_form=\'%s\'' % clean_form)
     return clean_form
@@ -481,8 +482,9 @@ def clean_spoken_form(spoken_form):
 def fix_acronyms_spoken_form(word):
     """Function to spoken forms for versions of NatSpeak where periods should not be 
     included for acronyms"""
+    
     if period_space_after_spoken_form_letter == ' ' and '.' in word:
-        word = re.sub(r"""(?<=[A-Z])\.""", '', word)       
+        word = re.sub(r"""(?<=[A-Z])\.""", '', word)
     return word
 
 def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
