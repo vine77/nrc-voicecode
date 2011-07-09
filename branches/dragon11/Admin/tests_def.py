@@ -1944,7 +1944,7 @@ def test_operators():
         'statement'], echo_utterance = 1)
     commands.say(['bits', 'ampersand', 'equals', 'flag', 'shift', 'left', '1\\one', 'new',
         'statement'], echo_utterance = 1)
-    commands.say(['factor', 'star', 'equals', 'N.', 'new',
+    commands.say(['factor', 'star', 'equals', 'n\\N.', 'new',
         'statement'], echo_utterance = 1)
     commands.say(['value', 'slash', 'equals', 'parens', '1\\one',
         'plus', 'discount', 'rate', 'new', 'statement'], echo_utterance = 1)
@@ -2922,7 +2922,7 @@ def test_commands_that_set_format_of_subsequent_symbols():
     print 'Testing C++ commands.'
 
     commands.open_file('blah.cpp')
-    test_say(['class', 'some', 'C' 'class', 'inherits', 'from', 'some', 'C', 'super', 'class'])
+    test_say(['class', 'some', 'c\\C.', 'class', 'inherits', 'from', 'some', 'c\\C.', 'super', 'class'])
 
 
 
@@ -3264,7 +3264,7 @@ def test_basic_correction():
     check_stored_utterances(instance_name, expected = len(utterances))
     check_recent(instance_name, utterances, status)
 
-    utterances.append(string.split('define method grades method body return B.'))
+    utterances.append(string.split('define method grades method body return b\\B.'))
     input.append('0\n2\n')
     status.append(1)
 

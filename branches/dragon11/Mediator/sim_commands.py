@@ -148,7 +148,7 @@ import natlink
 import os, profile, re, string, sys, time
 import vc_globals
 from cStringIO import StringIO
-
+import sr_interface # for differences Dragon 11(...) and NatSpeak (...)10
 from debug import trace
 
 sys.path = sys.path + [vc_globals.config, vc_globals.admin]
@@ -357,10 +357,23 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
         if echo_cmd: self.echo_command('say', utterance, user_input, never_bypass_sr_recog, echo_utterance)
 
 
-#    print 'Saying: %s' % utterance
         sys.stdout.flush()
         if echo_utterance:
             print 'Saying: %s' % utterance
+
+        if util.islist(utterance) or util.istuple(utterance):
+             spoken = self.utterance_spoken_forms(utterance)
+        else:        
+             utterance = re.split('\s+', utterance)
+             spoken = utterance
+             
+        # assume utterances can be in 'old' format, like 'D.':
+        b_utt = map(self.fix_say_test_letters, utterance)
+        c_utt = map(sr_interface.fix_acronyms_spoken_form, b_utt)
+        if c_utt !=  utterance:
+            print 'changed: %s to %s'% (utterance, c_utt)
+            utterance = c_utt
+            spoken = self.utterance_spoken_forms(utterance)
 
         if user_input:
             #
@@ -386,13 +399,20 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
             if self.bypass_sr_recog and not never_bypass_sr_recog:
                 trace('SimCmdsObj.say', 'bypassing NatSpeak')
                 sys.stdout.flush()
-                if util.islist(utterance) or util.istuple(utterance):
-                    spoken = self.utterance_spoken_forms(utterance)
-                else:        
-                    utterance = re.split('\s+', utterance)
-                    spoken = utterance
+                #if util.islist(utterance) or util.istuple(utterance):
+                #    spoken = self.utterance_spoken_forms(utterance)
+                #else:        
+                #    utterance = re.split('\s+', utterance)
+                #    spoken = utterance
+                #    
+                ## assume utterances can be in 'old' format, like 'D.':
+                #b_utterance = map(sr_interface.fix_acronyms_spoken_form, utterance)
+                #if b_utterance !=  utterance:
+                #    print 'changed: %s to %s'% (utterance, b_utterance)
+                #    utterance = b_utterance
+                #    spoken = self.utterance_spoken_forms(utterance)
 
-                print "Heard %s" % string.join(spoken)
+                print "HHHeard %s" % string.join(spoken)
                 dictation_allowed = self.app.recog_begin(None)
                 self.app.synchronize_with_app()
                 buff_name = self.app.curr_buffer_name()
@@ -416,6 +436,10 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                     # (e.g. '\n' instead of '{Enter}'
                     #
                     for a_word in utterance:
+                        b_word = sr_interface.fix_acronyms_spoken_form(a_word)
+                        if a_word !=  b_word:
+                           print 'changed: %s to %s'% (a_word, b_word)
+                           a_word = b_word
                         # Make sure word is in-vocabulary
                         make_sure_word_is_in_vocab(a_word)
 # don't want to clean any more
@@ -472,6 +496,14 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                 sys.stdin = old_stdin
                 if not (temp_file is None):
                     temp_file.close()
+
+    def fix_say_test_letters(self, letters):
+      """change 'C.' into 'c\\C.', for compatibility purposes with Dragon 11
+      """
+      if len(letters) == 2 and letters[0] in string.ascii_uppercase and letters[1] == '.':
+         return '%s\\%s'% (letters[0].lower(), letters)
+      else:
+         return letters
 
     def goto(self, pos, echo_cmd=0):
         """Goes to position *INT pos* of the current buffer"""

@@ -51,7 +51,9 @@ def dictate_pseudo_C_Cpp(commands):
     # class template
 
     commands.say(['define','template'])
-    commands.say(['type','name'])
+    commands.say(['type','name', 'N.', 's\\S.'])
+    commands.say('type name  P. q\\Q.')
+    
     commands.say(['some','data','type'])
     commands.say([',\\comma','class','object','type'])
     commands.say(['after','angle','new','line','define','class','foo'])
@@ -123,7 +125,7 @@ def dictate_pseudo_C_Cpp(commands):
 
     # typeid()
 
-    commands.say(['if','type','I.','D.','of','some','variable','jump','out','is','equal','to','type','I.','D.','int\\int'])
+    commands.say(['if','type','i\\I.','d\\D.','of','some','variable','jump','out','is','equal','to','type','i\\I.','d\\D.','int\\int'])
     commands.say(['then','increment','some','variable','semicolon'])
     commands.say(['jump','out'])
 
@@ -235,7 +237,7 @@ def dictate_pseudo_C_Cpp(commands):
     commands.say(['new','statement'])
     commands.say(['float','input','literacy','rate'])
     commands.say(['new','statement'])
-    commands.say(['char','star','president'])
+    commands.say(['char\\character','star','president'])
     commands.say(['jump','out','sample','type'])
     commands.say(['after','semi','new','paragraph'])
 

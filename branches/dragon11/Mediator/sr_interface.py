@@ -838,7 +838,6 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
         NaturallySpeaking
 
         **OUTPUTS**
-
         *(STR, STR)* word -- word (as (spoken, written) 2-tuples) 
         """
         return spoken_written_form(entry, clean_spoken = 0)
