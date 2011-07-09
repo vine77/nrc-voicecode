@@ -20,7 +20,7 @@
 ##############################################################################
 """Interface to the Speech Recognition engine.
 """
-
+ 
 import re
 import string
 import natlink, natlinkstatus
@@ -524,9 +524,9 @@ def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
                 spoken = a_match.group(1)  
                 category = a_match.group(2)
                 extra = string.rfind(written, '\\')
-    			
+                
                 trace('sr_interface.spoken_written_form', 
-                    'initial spoken, written = "%s", "%s"' % (spoken, written)) 			
+                    'initial spoken, written = "%s", "%s"' % (spoken, written))             
                 
                 #test if vocabulary entry is in form written\category\spoken
                 # But careful... if the word spoken was "backslash", then the written form is
@@ -547,7 +547,7 @@ def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
                 #vocabulary entry is in form written
                 written = vocabulary_entry
                 spoken = vocabulary_entry
-    			
+                
                 trace('sr_interface.spoken_written_form', 'entry \'%s\' is just spoken ' % written )
     else:
         #Before dns10, look for written, written\spoken, written\spoken\t form
@@ -625,6 +625,10 @@ def vocabulary_entry(spoken_form, written_form = None, clean_written=1):
 #    spoken_form = clean_spoken_form(spoken_form)
 # instead, just remove leading and trailing spaces
     spoken_form = string.strip(spoken_form)
+    
+    #Try removing all excess spaces from inside the string
+    spoken_form = ' '.join(spoken_form.split())
+    
     entry = spoken_form
     if not (written_form is None) and spoken_form != written_form:
         #
