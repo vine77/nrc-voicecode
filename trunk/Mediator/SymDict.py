@@ -893,6 +893,10 @@ class SymDict(OwnerObject):
         #
 #        clean_word = sr_interface.clean_spoken_form(word)
 #        sr_interface.addWord(clean_word)
+
+		#Correct any acronyms in the spoken forms for the current version of NatSpeak
+        word = sr_interface.fix_acronyms_spoken_form(word)
+        
         if not self.abbreviations.has_key(word):
             self.abbreviations[word] = abbreviations
         else:
@@ -922,6 +926,10 @@ class SymDict(OwnerObject):
         """
 #        clean_word = sr_interface.clean_spoken_form(word)
 #        sr_interface.addWord(clean_word)
+
+		#Correct any acronyms in the spoken forms for the current version of NatSpeak
+        word = sr_interface.fix_acronyms_spoken_form(word)
+
         if not self.abbreviations.has_key(word):
             self.abbreviations[word] = [abbreviation]
         else:
@@ -948,6 +956,10 @@ class SymDict(OwnerObject):
         """
 #        clean_word = sr_interface.clean_spoken_form(word)
 #        sr_interface.addWord(clean_word)
+
+		#Correct any acronyms in the spoken forms for the current version of NatSpeak
+        word = sr_interface.fix_acronyms_spoken_form(word)
+        
         if not self.abbreviations.has_key(word):
             self.abbreviations[word] = abbreviations
         else:
@@ -977,6 +989,12 @@ class SymDict(OwnerObject):
         """
 #        clean_word = sr_interface.clean_spoken_form(word)
 #        sr_interface.addWord(clean_word)
+        #if sr_interface.period_space_after_spoken_form_letter == ' ':
+        #word = word.replace('.','')        
+		
+		#Correct any acronyms in the spoken forms for the current version of NatSpeak		
+        word = sr_interface.fix_acronyms_spoken_form(word)
+        
         if not self.alt_abbreviations.has_key(word):
             self.alt_abbreviations[word] = abbreviations
         else:

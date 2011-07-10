@@ -894,17 +894,29 @@ class LeftRightPunctuation(PairedPunctuation):
 # the vocabulary, or adding NaturallySpeaking US English spoken forms 
 # for punctuation to the vocabulary of a different edition or different
 # speech engine
+
+# Actually, checking if word exists in the vocab, has been causing a lot of problems 
+# due to the fact that different versions of NatSpeak
+# use different voc entries for punctuation. The latest in date is that 
+# backslash is not being added in NatSpeak 8 and 9, because the word does not 
+# exist, and therefore when the user says "backslash", nothing happens.
+# So... just add the punctuation mark, even if there is no voc entry for it 
+# in the vocab. Worst case scenario is that you will add a spoken form which 
+# is reasonable, but does not correspond to the spoken form used in that version 
+# of NatSpeak. This is much better than having the punctuation mark not work - AD
+
                         if interp.has_lsa(left_comp, language = self.language):
                             debug.trace('LeftRightPunctuation.create',
                                 'left form "%s" already exists in language %s' % (left_comp, self.language))
                             continue
                         entry = sr_interface.vocabulary_entry(left_comp,
                             self.open_written_forms[i])
-                        if sr_interface.word_exists(entry):
-                            open_spoken_forms.append(left_comp)
-                        else:
-                            debug.trace('LeftWritePunctuation.create',
-                                "word '%s' doesn't exist" % entry)
+                        open_spoken_forms.append(left_comp)
+                        #if sr_interface.word_exists(entry):
+                        #    open_spoken_forms.append(left_comp)
+                        #else:
+                        #    debug.trace('LeftWritePunctuation.create',
+                        #        "word '%s' doesn't exist" % entry)
                 for right in self.right_prefixes:
                     right_comp = "%s%s" % (right, spoken)
                     if force:
@@ -917,11 +929,12 @@ class LeftRightPunctuation(PairedPunctuation):
                             continue
                         entry = sr_interface.vocabulary_entry(right_comp,
                             self.close_written_forms[i])
-                        if sr_interface.word_exists(entry):
-                            close_spoken_forms.append(right_comp)
-                        else:
-                            debug.trace('LeftWritePunctuation.create',
-                                "word '%s' doesn't exist" % entry)
+                        close_spoken_forms.append(right_comp)
+                        #if sr_interface.word_exists(entry):
+                        #    close_spoken_forms.append(right_comp)
+                        #else:
+                        #    debug.trace('LeftWritePunctuation.create',
+                        #        "word '%s' doesn't exist" % entry)
             if open_spoken_forms or close_spoken_forms:
                 self._add_single(aliases, i, 
                     open_spoken_forms, close_spoken_forms)
@@ -1141,6 +1154,17 @@ class PairedQuotes(PairedPunctuation):
 # the vocabulary, or adding NaturallySpeaking US English spoken forms 
 # for punctuation to the vocabulary of a different edition or different
 # speech engine
+
+# Actually, checking if word exists in the vocab, has been causing a lot of problems 
+# due to the fact that different versions of NatSpeak
+# use different voc entries for punctuation. The latest in date is that 
+# backslash is not being added in NatSpeak 8 and 9, because the word does not 
+# exist, and therefore when the user says "backslash", nothing happens.
+# So... just add the punctuation mark, even if there is no voc entry for it 
+# in the vocab. Worst case scenario is that you will add a spoken form which 
+# is reasonable, but does not correspond to the spoken form used in that version 
+# of NatSpeak. This is much better than having the punctuation mark not work - AD
+
                         if interp.has_lsa(open_comp, language =
                             self.language):
                             debug.trace('PairedQuotes.create',
@@ -1148,11 +1172,12 @@ class PairedQuotes(PairedPunctuation):
                             continue
                         entry = sr_interface.vocabulary_entry(open_comp,
                             self.written_forms[i])
-                        if sr_interface.word_exists(entry):
-                            open_spoken_forms.append(open_comp)
-                        else:
-                            debug.trace('PairedQuotes.create',
-                                "word '%s' doesn't exist" % entry)
+                        open_spoken_forms.append(open_comp)
+                        #if sr_interface.word_exists(entry):
+                        #    open_spoken_forms.append(open_comp)
+                        #else:
+                        #    debug.trace('PairedQuotes.create',
+                        #        "word '%s' doesn't exist" % entry)
                 for close_prefix in self.close_prefixes:
                     close_comp = "%s%s" % (close_prefix, spoken)
                     if force:
@@ -1165,11 +1190,12 @@ class PairedQuotes(PairedPunctuation):
                             continue
                         entry = sr_interface.vocabulary_entry(close_comp,
                             self.written_forms[i])
-                        if sr_interface.word_exists(entry):
-                            close_spoken_forms.append(close_comp)
-                        else:
-                            debug.trace('PairedQuotes.create',
-                                "word '%s' doesn't exist" % entry)
+                        close_spoken_forms.append(close_comp)
+                        #if sr_interface.word_exists(entry):
+                        #    close_spoken_forms.append(close_comp)
+                        #else:
+                        #    debug.trace('PairedQuotes.create',
+                        #        "word '%s' doesn't exist" % entry)
             if open_spoken_forms or close_spoken_forms:
                 self._add_single(aliases, i, 
                     open_spoken_forms, close_spoken_forms)
@@ -1461,11 +1487,17 @@ class StandardFunctionCallsHelper(Object):
         *BOOL empty* -- if true, then the function may be called with
         empty arguments
         """
+        
+        #Correct any acronyms in the spoken forms for the current version of NatSpeak
+        spoken_forms = [sr_interface.clean_spoken_form(word) for word in spoken_forms]
+        spoken_forms = [sr_interface.fix_acronyms_spoken_form(word) for word in spoken_forms]
+        
         debug.trace('StandardFunctionCallsHelper.add_function_name', 
             'written_form = %s, empty = %d, forms = %s' \
             % (written_form, empty, forms))
         debug.trace('StandardFunctionCallsHelper.add_function_name', 
             'spoken_forms = %s' % spoken_forms)
+        
         self.functions[written_form] = (spoken_forms, empty, forms)
        
     def create(self, interp):

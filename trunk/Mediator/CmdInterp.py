@@ -126,6 +126,9 @@ class LSAlias(Object):
         underscore, letter-alpha), or 'within' if it can appear within a
         symbol but cannot start one (e.g. digits)
         """
+        #Correct any acronyms in the word for the current version of NatSpeak
+        spoken_forms = [sr_interface.fix_acronyms_spoken_form(word) for word in spoken_forms]
+        
         self.deep_construct(LSAlias, 
                             {'spoken_forms': spoken_forms, 
                              'meanings': {}, 
@@ -3153,7 +3156,7 @@ class CmdInterp(OwnerObject):
     def remove_symbol_if_tentative_or_interactive(self, symbol, yes_no_box):
         """if tentative, remove silent, otherwise prompt before removing
 
-		not clear if we want to use this, QH august 2008
+        not clear if we want to use this, QH august 2008
         the yes_no_box comes from the mediatorWX.        
         """
         if self.remove_symbol_if_tentative(symbol):

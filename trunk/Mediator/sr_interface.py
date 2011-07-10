@@ -20,7 +20,7 @@
 ##############################################################################
 """Interface to the Speech Recognition engine.
 """
-
+ 
 import re
 import string
 import natlink, natlinkstatus
@@ -39,8 +39,11 @@ import SpokenUtterance
 sr_is_connected = 0
 
 NLstatus = natlinkstatus.NatlinkStatus()
+
 # space or period space after letter spoken form(11) or (10 before)
 period_space_after_spoken_form_letter = '. '
+
+category_information_in_vocabulary_entries = False
 #
 # microphone state change callback (None for no callback
 #
@@ -135,7 +138,7 @@ def connect(user_name, mic_state=None, mic_change_callback = None):
     *none* -- 
     """
     global sr_is_connected, vc_user_name, vc_base_model, vc_base_topic
-    global sr_mic_change_callback, natspeak_version, period_space_after_spoken_form_letter
+    global sr_mic_change_callback, natspeak_version, period_space_after_spoken_form_letter, category_information_in_vocabulary_entries
     
     
     if not sr_is_connected:
@@ -152,6 +155,7 @@ def connect(user_name, mic_state=None, mic_change_callback = None):
     natspeak_version = NLstatus.getDNSVersion()
     if natspeak_version >= 11:
         period_space_after_spoken_form_letter = ' ' # new in NatSpeak 11
+        category_information_in_vocabulary_entries = True
     trace('sr_interface.period_space_after_spoken_form_letter',
                 'natspeak_version: %s, nperiod_space_after_spoken_form_letter: "%s"'%
                     (natspeak_version, period_space_after_spoken_form_letter))
@@ -336,10 +340,13 @@ def addWord(word, *rest):
     #
     # Make sure we are connected to SR system
     #
-                
+    
+    #ignore requests to add single letters - they should already exist
+    if word in string.ascii_letters:
+        return 1
     if word == 'g' or word == 'g\\g':
         raise RuntimeError('I thought we agreed not to add single letters')
-    if getWordInfo(word) == None:
+    if getWordInfo(word) is None:
         trace('sr_interface.addWord', 'this word is new to NatSpeak: %s'% word)
         #trace_call_stack('sr_interface.addWord', '**')
         if len(rest) == 0:
@@ -462,15 +469,23 @@ def clean_spoken_form(spoken_form):
         # 
         clean_form = re.sub('[^a-z0-9]+', ' ', clean_form)    
          
-        #
-        # Remove leading, trailing and multiple blanks
-        #
-        clean_form = re.sub('\s+', ' ', clean_form)
-        clean_form = re.sub('^\s+', '', clean_form)
-        clean_form = re.sub('\s+$', '', clean_form)
+    #
+    # Remove leading, trailing and multiple blanks
+    # (do it always, QH)
+    clean_form = re.sub('\s+', ' ', clean_form)
+    clean_form = re.sub('^\s+', '', clean_form)
+    clean_form = re.sub('\s+$', '', clean_form)
 
 #    trace('sr_interface.clean_spoken_form', 'returning clean_form=\'%s\'' % clean_form)
     return clean_form
+
+def fix_acronyms_spoken_form(word):
+    """Function to spoken forms for versions of NatSpeak where periods should not be 
+    included for acronyms"""
+    
+    if period_space_after_spoken_form_letter == ' ' and '.' in word:
+        word = re.sub(r"""(?<=[A-Z])\.""", '', word)
+    return word
 
 def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
     """Returns the written and spoken forms of a NatSpeak vocabulary entry
@@ -478,43 +493,96 @@ def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
     **INPUTS**
     
     *STR* vocabulary_entry -- the vocabulary entry in either
-    written or written\\spoken form.
+    written, written\spoken, written\spoken\t form (before DNS 11) or
+    written written\\spoken, written\category\spoken or written\category form (DNS 11 and higher)
     
     **OUTPUTS**
     
     *STR* (spoken, written) -- written and spoken forms of the vocabulary entry.
     """
-    a_match = re.match('^([\s\S]*)\\\\([^\\\\]*)$', vocabulary_entry)
-    if a_match:
-        trace('sr_interface.spoken_written_form', 'entry \'%s\' is spoken/written form' % vocabulary_entry)
+    
+    if category_information_in_vocabulary_entries:
+        #DNS11 or higher - match written written\\spoken, written\category\spoken or written\category form
         
-        #
-        # Note: need to check for things like {Enter} in written_form
-        # ignore for now
-        #
-        written = a_match.group(1)
-# the try block handles the special case of selection grammar utterances which
-# select words with different written and spoken form, which, in
-# natspeak 7, get reported as written\spoken\t (That's backslash and t,
-# not a tab character) - DCF
-# But careful... if the word spoken was "backslash", then the written form is
-# "\" (at least in NatSpeak 8 and 9). - AD
-        spoken = a_match.group(2)
-        trace('sr_interface.spoken_written_form', 
-            'initial spoken, written = "%s", "%s"' % (spoken, written))
-        extra = string.find(written, '\\')
-        if extra >= 0 and written != "\\":
-            was_written = written
-            written = was_written[:extra]
-            spoken = was_written[extra+1:]
+        #First, we try to match the default form: that is spoken\\written, with no category form
+        a_match = re.match('^([\s\S]*)\\\\\\\\([^\\\\]*)$', vocabulary_entry)
+        if a_match:
+            trace('sr_interface.spoken_written_form', 'entry \'%s\' is spoken/written form' % vocabulary_entry)
+            
+            written = a_match.group(1)
+            spoken = a_match.group(2)
             trace('sr_interface.spoken_written_form', 
-                'but extra = %d' % extra)
-            trace('sr_interface.spoken_written_form', 
-                'final spoken, written = "%s", "%s"' % (spoken, written))
+                'initial spoken, written = "%s", "%s"' % (spoken, written))
+            extra = string.find(written, '\\')
+           
+        else:
+            #Second, we try to match the forms written\category and written\category\spoken
+            a_match = re.match('^([\s\S]*)\\\\([^\\\\]*)$', vocabulary_entry)
+            if a_match:
+                
+                written = a_match.group(1)
+                spoken = a_match.group(1)  
+                category = a_match.group(2)
+                extra = string.rfind(written, '\\')
+                
+                trace('sr_interface.spoken_written_form', 
+                    'initial spoken, written = "%s", "%s"' % (spoken, written))             
+                
+                #test if vocabulary entry is in form written\category\spoken
+                # But careful... if the word spoken was "backslash", then the written form is
+                # "\" (at least in NatSpeak 8 and 9). - AD            
+                if extra >= 0 and written != "\\":
+                
+                    #written\category\spoken form: discard the category for now
+                    was_written = written
+                    written = was_written[:extra]
+                    category = was_written[extra + 1:]
+                    spoken = a_match.group(2)
+                    trace('sr_interface.spoken_written_form', 
+                        'but category = %s' % category)
+                    trace('sr_interface.spoken_written_form', 
+                        'final spoken, written = "%s", "%s"' % (spoken, written))                  
+                  
+            else:
+                #vocabulary entry is in form written
+                written = vocabulary_entry
+                spoken = vocabulary_entry
+                
+                trace('sr_interface.spoken_written_form', 'entry \'%s\' is just spoken ' % written )
     else:
-        trace('sr_interface.spoken_written_form', 'entry \'%s\' is just spoken ' % vocabulary_entry        )
-        written = vocabulary_entry
-        spoken = vocabulary_entry
+        #Before dns10, look for written, written\spoken, written\spoken\t form
+        a_match = re.match('^([\s\S]*)\\\\([^\\\\]*)$', vocabulary_entry)
+        if a_match:
+            trace('sr_interface.spoken_written_form', 'entry \'%s\' is spoken/written form' % vocabulary_entry)
+            
+            #
+            # Note: need to check for things like {Enter} in written_form
+            # ignore for now
+            #
+            written = a_match.group(1)
+            
+            # the try block handles the special case of selection grammar utterances which
+            # select words with different written and spoken form, which, in
+            # natspeak 7, get reported as written\spoken\t (That's backslash and t,
+            # not a tab character) - DCF
+            # But careful... if the word spoken was "backslash", then the written form is
+            # "\" (at least in NatSpeak 8 and 9). - AD
+            spoken = a_match.group(2)
+            trace('sr_interface.spoken_written_form', 
+                'initial spoken, written = "%s", "%s"' % (spoken, written))
+            extra = string.find(written, '\\')
+            if extra >= 0 and written != "\\":
+                was_written = written
+                written = was_written[:extra]
+                spoken = was_written[extra+1:]
+                trace('sr_interface.spoken_written_form', 
+                    'but extra = %d' % extra)
+                trace('sr_interface.spoken_written_form', 
+                    'final spoken, written = "%s", "%s"' % (spoken, written))
+        else:
+            trace('sr_interface.spoken_written_form', 'entry \'%s\' is just spoken ' % vocabulary_entry        )
+            written = vocabulary_entry
+            spoken = vocabulary_entry            
 
     #
     # Substitute special characters in written form (e.g. ' ', '\n') to the
@@ -557,6 +625,10 @@ def vocabulary_entry(spoken_form, written_form = None, clean_written=1):
 #    spoken_form = clean_spoken_form(spoken_form)
 # instead, just remove leading and trailing spaces
     spoken_form = string.strip(spoken_form)
+    
+    #Try removing all excess spaces from inside the string
+    spoken_form = ' '.join(spoken_form.split())
+    
     entry = spoken_form
     if not (written_form is None) and spoken_form != written_form:
         #
@@ -570,7 +642,11 @@ def vocabulary_entry(spoken_form, written_form = None, clean_written=1):
 # want identical written and spoken forms, omit written_form so it defaults 
 # to None
 #        if len(written_form) > 0:
-        entry = written_form + '\\' + entry
+
+        if category_information_in_vocabulary_entries:
+            entry = written_form + '\\\\' + entry
+        else:
+            entry = written_form + '\\' + entry
 
 #    trace('sr_interface.vocabulary_entry', 'returning entry=\'%s\'' % entry)
     return entry
@@ -768,7 +844,6 @@ class SpokenUtteranceNL(SpokenUtterance.SpokenUtterance):
         NaturallySpeaking
 
         **OUTPUTS**
-
         *(STR, STR)* word -- word (as (spoken, written) 2-tuples) 
         """
         return spoken_written_form(entry, clean_spoken = 0)
