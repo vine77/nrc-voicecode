@@ -1469,7 +1469,7 @@ py_std_func_calls.add_function_name(['exponential'], 'exp')
 py_std_func_calls.add_function_name(['floor'], 'floor')
 py_std_func_calls.add_function_name(['ceiling'], 'ceil')
 
-py_std_func_calls.add_function_name(['F. abs', 'F.  absolute',
+py_std_func_calls.add_function_name(['F. abs', 'F. absolute',
     'F. absolute value', 'float abs', 'float absolute',
     'float absolute value'], 'fabs')
 

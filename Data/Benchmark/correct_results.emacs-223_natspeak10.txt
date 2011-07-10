@@ -1,9 +1,11 @@
+starting tests
 creating wxMediator
 Loading test definitions...
+Warning, cannot import acceptance test for language matlab: MatlabAcceptanceTest
 Warning, cannot import acceptance test for language perl: PerlAcceptanceTest
 Warning, cannot import acceptance test for language php: PhpAcceptanceTest
 Configuring the mediator...
-Compiling symbols for filyou shoulde '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
 Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_C_Cpp_std_sym.cpp'
 Finished wxMediator init...
 Starting server threads...
@@ -246,7 +248,7 @@ Heard yo copy that
   4: autoTst = 0
   5:     """A  for all VoiceCode objects
   6: 
-  7:     This class implements <SEL_START>various useful<SEL_END> behaviors for generic
+  7:     This class implements various useful<CURSOR> behaviors for generic
   8:     objects, such as:
   9: 
  10:     - safe attribute setting
@@ -335,14 +337,13 @@ Heard yo paste that
 
 >>> Testing console command: say(['yo', 'copy', 'line'], user_input='None')
 Heard yo copy line
-*** Start of source buffer ***
-  1: 
   2: # This symbol is here because it is homophonic with auto_test. Just checking
   3: # to make sure that symbol match works with homophonic symbols.
-  4: <SEL_START>autoTst = 0
-  5: <SEL_END>    """A  for all VoiceCode objects
+  4: autoTst = 0
+  5: <CURSOR>    """A  for all VoiceCode objects
   6: 
   7:     This class implements various usefulvarious useful behaviors for generic
+  8:     objects, such as:
 
 
 >>> Testing console command: say(['yo', 'paste', 'that'], user_input='None')
@@ -469,6 +470,15 @@ Heard class dummy
 Heard yo switch to buffer
 Compiling symbols for *Completions*
 Done compiling symbols
+Heard select dummy
+Heard new line
+Heard yo switch to buffer
+Compiling symbols for *Completions*
+Done compiling symbols
+Heard select dummy
+Heard hello
+Heard select dummy
+Heard new line
 
 
 *******************************************************************************
@@ -504,7 +514,7 @@ Heard add argument integer count
 Heard comma float divisor
 Heard returning void
 Heard new statement
-Heard declare care hello
+Heard declare char hello
 Heard new statement
 Heard int count
 Heard new statement integer pointer testing pointers
@@ -535,58 +545,58 @@ Heard platypus count
 Heard after semi index increment
 Heard loop body
 starting with acceptance test (C): declare_statements
-Heard ['declare','function','test','procedure']
-Heard ['add','argument','integer','count']
-Heard comma','float','divisor']
-Heard ['returning','void']
-Heard ['new','statement']
-Heard ['declare','char','hello']
-Heard ['new','statement']
-Heard int','count']
-Heard ['new','statement','integer','pointer','testing','pointers']
-Heard ['comma','pointer','testing','other','pointers']
-Heard ['new','statement','declare','the','value','of','type','double']
-Heard int']
-Heard ['new','statement','declare','char','star','star','string','address']
-Heard ['after','semi']
-Heard ['new','paragraph']
-Heard ['declare','function','foo', 'two']
-Heard ['returning','some','pointer']
-Heard int']
-Heard ['after','semi']
-Heard ['new','paragraph']
-Heard ['declare','method','bar','scope','operator','fabulous','method','returning','char','star']
-Heard ['add','argument','integer','pointer','another','memory','address']
-Heard ['after','semi','new','paragraph']
-Heard ['define','function','foo','returning','some','pointer']
-Heard int']
-Heard ['jump','out','jump','out','new','paragraph']
-Heard ['define','method','foo','scope','bar','returning','pointer','to','char']
-Heard ['method','body']
-Heard ['for','loop']
-Heard zero']
-Heard ['after','semi','index']
-Heard ['is','less','or','equal','to']
-Heard ['platypus','count']
-Heard ['after','semi','index','increment']
-Heard ['loop','body']
+Heard declare function test procedure
+Heard add argument integer count
+Heard comma float divisor
+Heard returning void
+Heard new statement
+Heard declare char hello
+Heard new statement
+Heard int count
+Heard new statement integer pointer testing pointers
+Heard comma pointer testing other pointers
+Heard new statement declare the value of type double
+Heard new statement declare some variable of type static int
+Heard new statement declare char star star string address
+Heard after semi
+Heard new paragraph
+Heard declare function foo two
+Heard returning some pointer
+Heard add argument integer counter comma sum of type int
+Heard after semi
+Heard new paragraph
+Heard declare method bar scope operator fabulous method returning char star
+Heard add argument integer pointer another memory address
+Heard after semi new paragraph
+Heard define function foo returning some pointer
+Heard add argument integer counter comma sum of type int
+Heard jump out jump out new paragraph
+Heard define method foo scope bar returning pointer to char
+Heard method body
+Heard for loop
+Heard integer index equals zero
+Heard after semi index
+Heard is less or equal to
+Heard platypus count
+Heard after semi index increment
+Heard loop body
 starting with acceptance test (C): demo_statement
 Heard new statement
 Heard example equals one
 Heard new statement
 starting with acceptance test (C): macros
-Heard ['wrap','header']
-Heard ['pound', 'include','quotes','string','after','quotes']
-Heard ['new','line']
-Heard ['pound', 'include','angle-brackets','string']
-Heard ['after','angle']
-Heard ['new','paragraph']
+Heard wrap header
+Heard pound include quotes string after quotes
+Heard new line
+Heard pound include angle-brackets string
+Heard after angle
+Heard new paragraph
 starting with acceptance test (C): while_loop
-Heard ['while','loop']
-Heard ['conditional','function','with','argument','index']
-Heard ['do', 'the', 'following', 'some','stuff']
-Heard ['empty','parens','semicolon']
-Heard ['after','semi','new','line']
+Heard while loop
+Heard conditional function with argument index
+Heard do the following some stuff
+Heard empty parens semicolon
+Heard after semi new line
 reset working directory to: D:\natlink\voicecode\Mediator
 tests passed
 
@@ -740,11 +750,21 @@ Heard define template
  15: 
  16: 
  17: 
-Heard type name
+changed: ['type', 'name', 'N.', 's\\S.'] to ['type', 'name', 'n\\N.', 's\\S.']
+Heard type name N. S.
  11:    is_an_important
  12:    bit_of_information*/
  13: 
- 14: template <typename <CURSOR>>
+ 14: template <typename ns<CURSOR>>
+ 15: 
+ 16: 
+ 17: 
+changed: ['type', 'name', 'P.', 'q\\Q.'] to ['type', 'name', 'p\\P.', 'q\\Q.']
+Heard type name P. Q.
+ 11:    is_an_important
+ 12:    bit_of_information*/
+ 13: 
+ 14: template <typename nstypename pq<CURSOR>>
  15: 
  16: 
  17: 
@@ -752,7 +772,7 @@ Heard some data type
  11:    is_an_important
  12:    bit_of_information*/
  13: 
- 14: template <typename some_data_type<CURSOR>>
+ 14: template <typename nstypename pqsome_data_type<CURSOR>>
  15: 
  16: 
  17: 
@@ -760,14 +780,14 @@ Heard comma class object type
  11:    is_an_important
  12:    bit_of_information*/
  13: 
- 14: template <typename some_data_type, class object_type<CURSOR>>
+ 14: template <typename nstypename pqsome_data_type, class object_type<CURSOR>>
  15: 
  16: 
  17: 
 Heard after angle new line define class foo
  12:    bit_of_information*/
  13: 
- 14: template <typename some_data_type, class object_type>
+ 14: template <typename nstypename pqsome_data_type, class object_type>
  15: class Foo<CURSOR>
  16: {
  17: 
@@ -837,11 +857,11 @@ Heard new statement
  30: 
 
 *** End of source buffer ***
-Heard declare care hello strange result
+Heard declare char hello
  25: 
  26: 
  27: 
- 28: care_hello_strange_result<CURSOR>;
+ 28: char hello<CURSOR>;
  29: #endif
  30: 
 
@@ -849,7 +869,7 @@ Heard declare care hello strange result
 Heard new statement
  26: 
  27: 
- 28: care_hello_strange_result;
+ 28: char hello;
  29: <CURSOR>;
  30: #endif
  31: 
@@ -858,7 +878,7 @@ Heard new statement
 Heard int count
  26: 
  27: 
- 28: care_hello_strange_result;
+ 28: char hello;
  29: int count<CURSOR>;
  30: #endif
  31: 
@@ -866,7 +886,7 @@ Heard int count
 *** End of source buffer ***
 Heard new statement integer pointer testing pointers
  27: 
- 28: care_hello_strange_result;
+ 28: char hello;
  29: int count;
  30: int * testing_pointers<CURSOR>;
  31: #endif
@@ -875,7 +895,7 @@ Heard new statement integer pointer testing pointers
 *** End of source buffer ***
 Heard comma pointer testing other pointers
  27: 
- 28: care_hello_strange_result;
+ 28: char hello;
  29: int count;
  30: int * testing_pointers, * testing_other_pointers<CURSOR>;
  31: #endif
@@ -883,7 +903,7 @@ Heard comma pointer testing other pointers
 
 *** End of source buffer ***
 Heard new statement declare the value of type double
- 28: care_hello_strange_result;
+ 28: char hello;
  29: int count;
  30: int * testing_pointers, * testing_other_pointers;
  31: double <CURSOR>the_value;
@@ -1888,11 +1908,11 @@ Heard new statement
 146: 
 
 *** End of source buffer ***
-Heard care star president
+Heard character star president
 140: 
 141:   int number_of_states;
 142:   float input_literacy_rate;
-143:   care*president<CURSOR>;
+143:   character*president<CURSOR>;
 144: };
 145: #endif
 146: 
@@ -1901,14 +1921,14 @@ Heard care star president
 Heard jump out sample type
 141:   int number_of_states;
 142:   float input_literacy_rate;
-143:   care*president;
+143:   character*president;
 144: }sample_type<CURSOR>;
 145: #endif
 146: 
 
 *** End of source buffer ***
 Heard after semi new paragraph
-143:   care*president;
+143:   character*president;
 144: }sample_type;
 145: 
 146: <CURSOR>
@@ -2266,7 +2286,7 @@ Heard bug below dot following one will not be inserted at the right level
   5: 
   6: else
   7:   {
-  8:     some_stuff_again(some_other_argumentbug_below.following1will!be_inserted_at_the_right_level<CURSOR>)
+  8:     some_stuff_again(some_other_argumentbug_below.following1will_not_be_inserted_at_the_right_level<CURSOR>)
   9:   };
  10: 
 
@@ -2496,8 +2516,8 @@ Heard select here
 Heard select here
 Heard select here
 Heard before here
-Heard select f
-Heard select f
+Heard select foxtrot
+Heard select foxtrot
 Heard select outside
 Heard select outside
 Heard select outside
@@ -2587,7 +2607,6 @@ TypeError: cannot concatenate 'str' and 'int' objects
 
   File "%VCODE_HOME%\Admin\DeliberateOutputTest.py", line 35, in test_show_deliberate_output_always_fail
     self.fail("always fail, should produce output in foo.txt")
-  ...
 AssertionError: always fail, should produce output in foo.txt
 
 
@@ -2595,7 +2614,6 @@ AssertionError: always fail, should produce output in foo.txt
 
   File "%VCODE_HOME%\Admin\DeliberateOutputTest.py", line 19, in test_show_deliberate_output_assertEqual
     self.assertEqual("assert", "Equal", "this test should produce output in foo.txt")
-  ...
 AssertionError: this test should produce output in foo.txt
 
 
@@ -2603,7 +2621,6 @@ AssertionError: this test should produce output in foo.txt
 
   File "%VCODE_HOME%\Admin\DeliberateOutputTest.py", line 23, in test_show_deliberate_output_assert_
     self.assert_("assert_" == "foo", "this test should produce output in foo.txt")
-  ...
 AssertionError: this test should produce output in foo.txt
 
 
@@ -2853,9 +2870,31 @@ EdSim.__del__
 *******************************************************************************
 
 starting with acceptance test (Java): demo_import
-Heard import module hello world
+Heard import hello world
 Heard new statement
-tests passed
+after assert error: 1
+---------
+buffer after saying "import hello world"
+(utterance utt1) should be equal in
+test acceptance test for "Java"
+test: "demo import"
+file: "D:\natlink\voicecode\Data\Demo\Java\demo_import.py"
+expected:
+import module_hello_world<CURSOR>
+got:
+import hello_world<CURSOR>
+=========
+
+
+--------------- failures -----------------
+
+
+---------- test_acceptance_tests (JavaAcceptanceTest.JavaAcceptanceTest) --------
+
+  File "%VCODE_HOME%\Admin\JavaAcceptanceTest.py", line 102, in test_acceptance_tests
+    self.fail("%s of the acceptance tests of %s failed"% (nFail, self.language_name))
+AssertionError: 1 of the acceptance tests of Java failed
+
 
 *******************************************************************************
 * Name        : JavascriptAcceptance
@@ -2918,7 +2957,7 @@ Trying to set the value of attribute 'name', $PY_DEBUG_OBJECT=None
 
 
 Trying to get the value of attribute 'nonexistant', $PY_DEBUG_OBJECT=None
-   -> Caught AttributeError exception: '[{'args': ("SmallObject instance has no attribute 'nonexistant'",)}]'
+   -> Caught AttributeError exception: '[{}]'
 
 
 Trying to set the value of attribute 'nonexistant', $PY_DEBUG_OBJECT=None
@@ -2938,7 +2977,7 @@ Enforcing 'Canadian eh?' as the value of *citizenship*
    Canadian(name='Alain') -> result={'name': 'Alain', 'citizenship': 'Canadian eh?'}
 
 Trying to change enforced value 'Canadian eh?' of *citizenship*
-   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x01E40300>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
+   Canadian(citizenship='US') -> Test OK. EnforcedConstrArg was correctly raised: 'The value of argument citizenship in <class __builtin__.Canadian at 0x03CF0780>.__init__ is enforced at 'Canadian eh?', and cannot be changed.'
 
 Person2.__init__ received init_file=C:/temp.txt
 Class with private *init_file* attribute*
@@ -3001,6 +3040,9 @@ Heard next one next one
 Heard next one
 Heard select small through large
 Heard select function one
+15 ranges found, try to get more
+extend_ranges: old range function-1 not found in new_ranges: ['function one', 'function-one']
+total number of ranges found 15
 Heard next one
 Heard next one
 Heard next one
@@ -3008,7 +3050,7 @@ Heard next one
 Heard select center
 Heard select through close-paren
 30 ranges found, try to get more
-total number of ranges found 33
+total number of ranges found 49
 Heard next one
 Heard previous one
 Heard previous one
@@ -3049,8 +3091,8 @@ Parsed symbols are:
 API_function: ['A. P. I. function', 'API function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['F. name', 'f name']
-f_name2: ['F. name 2', 'f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -3081,6 +3123,7 @@ _cached_symbols_as_one_string[y] is:
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
+'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -3245,8 +3288,8 @@ Parsed symbols are:
 API_function: ['A. P. I. function', 'API function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['F. name', 'f name']
-f_name2: ['F. name 2', 'f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -3279,6 +3322,7 @@ _cached_symbols_as_one_string[y] is:
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
+'f': appears in ['f_name2', 'f_name']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -3292,8 +3336,8 @@ After accepting those symbols, known symbols are:
 API_function: ['A. P. I. function', 'API function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['F. name', 'f name']
-f_name2: ['F. name 2', 'f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -3326,6 +3370,7 @@ _cached_symbols_as_one_string[y] is:
 Unresolved abbreviations are:
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
+'f': appears in ['f_name2', 'f_name']
 'x': appears in ['x']
 'y': appears in ['y']
 
@@ -3365,10 +3410,16 @@ Both current_symdict.dict and symdict.dict
 (the latter created from scratch) have version 5
 but the following differences were found:
 
-element 1 of attribute 'spoken_forms' of item 'F_FRSIZE' of item 'symbol_info'
+item 'whrandom' of attribute 'branches' of item 'spoken_form_info'
+missing from second argument
+
+item 'random' of attribute 'branches' of item 'spoken_form_info'
 missing from first argument
 
-element 1 of attribute 'spoken_forms' of item 'f_lineno' of item 'symbol_info'
+item 'whrandom' of item 'symbol_info'
+missing from second argument
+
+item 'random' of item 'symbol_info'
 missing from first argument
 
 
@@ -3412,7 +3463,34 @@ tests passed
 * Description : Test the unit testing framework.
 *******************************************************************************
 
-tests passed
+
+
+--------------- failures -----------------
+
+
+---------- test_infinite_loop_in_object_structure (TestCaseWithHelpersTest.TestCaseWithHelpersTest) --------
+
+  File "%VCODE_HOME%\Admin\TestCaseWithHelpersTest.py", line 194, in test_infinite_loop_in_object_structure
+    "Comparing objects with infinite in their composition raised WRONG exception."
+  ...
+AssertStringEqualsFailed: Comparing objects with infinite in their composition raised WRONG exception.
+----
+The two sequences differred
+Expected sequence:
+   ('maximum recursion depth exceeded in cmp',)
+Got sequence:
+   ('maximum recursion depth exceeded.\nError happened while doing an assert_equal().\nMaybe one of the arguments of assert_equal() has an infinite loop in its composition structure?',)
+The two sequences differed at element ii=0.
+----
+Strings differed. See triple tilde (~~~) position below.
+Expected:
+   'maximum recursion depth exceeded~~~ in cmp'
+Got:
+   'maximum recursion depth exceeded~~~.
+Error happened while doing an assert_equal().
+Maybe one of the arguments of assert_equal() has an infinite loop in its composition structure?'
+
+
 
 *******************************************************************************
 * Name        : WhatCanISay
@@ -3461,7 +3539,31 @@ testing the current context website "filled" for language: python
 =======setting up WhatCanISay test instance
 
 =======setting up WhatCanISay test instance
-tests passed
+
+
+--------------- failures -----------------
+
+
+---------- test_resulting_websites (WhatCanISayTest.WhatCanISayTest) --------
+
+  File "%VCODE_HOME%\Admin\WhatCanISayTest.py", line 530, in test_resulting_websites
+    self.do_test_resulting_website('C', all_lang=1)
+  File "%VCODE_HOME%\Admin\WhatCanISayTest.py", line 586, in do_test_resulting_website
+    (lang, all_lang, curr_context, comment))
+  File "%VCODE_HOME%\Admin\WhatCanISayTest.py", line 617, in assert_equal_html_files
+    (expected_list, actual_list))
+  ...
+AssertionError: WhatCanISay website of language C (with all_lang: 1, curr_context: None, comment: None
+number of expected html files not equal to actual
+Expected: ['D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\c_csccommands.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\c_csccommandstoo.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\c_mixedcommands.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\c_overview.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\c_standardpunctuation.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\c_standardpunctuationnavigation.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\index.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\java_csccommands.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\java_overview.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\java_standardpunctuation.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\java_standardpunctuationnavigation.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\javascript_csccommands.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\javascript_overview.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\javascript_standardpunctuation.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\javascript_standardpunctuationnavigation.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\perl_csccommands.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\perl_mixedcommands.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\perl_overview.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\perl_standardpunctuation.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\perl_standardpunctuationnavigation.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\php_csccommands.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\php_overview.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\php_standardpunctuation.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\php_standardpunctuationnavigation.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\python_csccommands.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\python_mixedcommands.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\python_overview.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\python_standardpunctuation.html', 'D:\\natlink\\voicecode\\Data\\Benchmark\\WhatCanISayTestResults\\all_lang\\python_standardpunctuationnavigation.html']
+Actual: ['D:\\natlink\\voicecode\\Data\\whatCanISay\\c_csccommands.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\c_csccommandstoo.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\c_mixedcommands.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\c_overview.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\c_standardpunctuation.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\c_standardpunctuationnavigation.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\index.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\java_csccommands.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\java_overview.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\java_standardpunctuation.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\java_standardpunctuationnavigation.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\javascript_csccommands.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\javascript_overview.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\javascript_standardpunctuation.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\javascript_standardpunctuationnavigation.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\matlab_csccommands.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\matlab_overview.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\matlab_standardpunctuation.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\matlab_standardpunctuationnavigation.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\perl_csccommands.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\perl_mixedcommands.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\perl_overview.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\perl_standardpunctuation.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\perl_standardpunctuationnavigation.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\php_csccommands.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\php_overview.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\php_standardpunctuation.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\php_standardpunctuationnavigation.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\python_csccommands.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\python_mixedcommands.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\python_overview.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\python_standardpunctuation.html', 'D:\\natlink\\voicecode\\Data\\whatCanISay\\python_standardpunctuationnavigation.html']
+----
+The two numbers differed significantly.
+Expected:
+   29
+Got:
+   33
+
 
 *******************************************************************************
 * Name        : am_dictionaries
@@ -3704,8 +3806,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name', 'f name']
-f_name2: ['F. name 2', 'f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 float: ['float']
 floor: ['floor']
@@ -4183,13 +4285,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'10': appears in ['log10']
-'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
+'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -4628,13 +4729,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'10': appears in ['log10']
-'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
+'f': appears in ['f_name', 'f_name2']
 'unres': appears in ['this_sym_is_unres', 'this_sym_is_unres_too']
 'x': appears in ['x']
 'y': appears in ['y']
@@ -4661,8 +4761,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name', 'f name']
-f_name2: ['F. name 2', 'f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 float: ['float']
 floor: ['floor']
@@ -4744,8 +4844,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name', 'f name']
-f_name2: ['F. name 2', 'f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 float: ['float']
 floor: ['floor']
@@ -5224,13 +5324,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'10': appears in ['log10']
-'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
+'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
 'y': appears in ['y']
 
@@ -5264,8 +5363,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name', 'f name']
-f_name2: ['F. name 2', 'f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 file_name: ['file name']
 float: ['float']
@@ -5747,13 +5846,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'10': appears in ['log10']
-'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
+'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
 'y': appears in ['y']
 
@@ -6192,13 +6290,12 @@ List of abbreviations
 
 List of unresolved abbreviations
 
-'10': appears in ['log10']
-'2': appears in ['accept2dyear', 'atan2']
 'abbrev': appears in ['this_sym_has_an_other_abbrev']
 'abspath': appears in ['abspath']
 'atanh': appears in ['atanh']
 'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'dyear': appears in ['accept2dyear']
+'f': appears in ['f_name', 'f_name2']
 'x': appears in ['x']
 'y': appears in ['y']
 
@@ -6325,7 +6422,7 @@ scratch 1 succeeded as expected
 
 
 
->>> Testing console command: say(['define', 'method', 'grades', 'method', 'body', 'return', 'B.'], user_input='0
+>>> Testing console command: say(['define', 'method', 'grades', 'method', 'body', 'return', 'b\\B.'], user_input='0
 2
 ')
 Heard define method grades method body return B.
@@ -6341,6 +6438,15 @@ Heard define method grades method body return B.
 
 3 recently dictated utterances, as expected
 
+
+WARNING: utterance 1 doesn't match:
+
+expected:
+
+['define', 'method', 'grades', 'method', 'body', 'return', 'b\\B.']
+received:
+
+['define', 'method', 'grades', 'method', 'body', 'return', 'B.']
 
 
 >>> Testing console command: say(['select', 'Clown'], user_input='None')
@@ -7643,10 +7749,10 @@ WARNING: source file 'blah.cpp' doesn't exist.
 *** End of source buffer ***
 
 
->>> Testing console command: say(['class', 'some', 'Cclass', 'inherits', 'from', 'some', 'C', 'super', 'class'], user_input='None')
-Heard class some Cclass inherits from some C super class
+>>> Testing console command: say(['class', 'some', 'c\\C.', 'class', 'inherits', 'from', 'some', 'c\\C.', 'super', 'class'], user_input='None')
+Heard class some C. class inherits from some C. super class
 *** Start of source buffer ***
-  1: class SomeCclass: SomeCSuperclass <CURSOR>
+  1: class SomeCclass : SomeCSuperclass <CURSOR>
   2: {
   3: 
   4: public:
@@ -8974,6 +9080,7 @@ List of abbreviations
 
 List of unresolved abbreviations
 
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 
 
 >>> Testing console command: compile_symbols([r'%VCODE_HOME%\Data\TestData\small_buff.c'])
@@ -8983,8 +9090,8 @@ Compiling symbols for file '%VCODE_HOME%\Data\TestData\small_buff.c'
 API_function: ['A. P. I. function', 'API function']
 THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
 THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
-f_name: ['F. name', 'f name']
-f_name2: ['F. name 2', 'f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 float: ['float']
 horiz_pos: ['horiz pos', 'horiz position', 'horiz positioning', 'horizontal pos', 'horizontal position', 'horizontal positioning', 'horizontally pos', 'horizontally position', 'horizontally positioning']
 move: ['move']
@@ -9071,6 +9178,15 @@ Heard less-than greater-than equal-sign
 *******************************************************************************
 
 Heard yo page down
+Heard do that again
+Heard again two times
+Heard yo page up
+Heard do that again
+Heard again two times
+Heard go to end of line
+Heard go to beginning of line
+Heard yo top of file
+Heard yo bottom of file
 
 
 *******************************************************************************
@@ -9556,7 +9672,7 @@ Heard bits ampersand equals flag shift left one new statement
   5: <CURSOR>
 
 *** End of source buffer ***
-Saying: ['factor', 'star', 'equals', 'N.', 'new', 'statement']
+Saying: ['factor', 'star', 'equals', 'n\\N.', 'new', 'statement']
 Heard factor star equals N. new statement
   3: bits >>= 1
   4: bits &= flag << 1
@@ -9620,8 +9736,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name', 'f name']
-f_name2: ['F. name 2', 'f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 float: ['float']
 floor: ['floor']
@@ -9704,8 +9820,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name', 'f name']
-f_name2: ['F. name 2', 'f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 float: ['float']
 floor: ['floor']
@@ -12554,6 +12670,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 *** End of source buffer ***
 Saying: ['import\\import modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement']
+changed: ['import\\import modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement'] to ['import\\import modules', 'o\\O.', 's\\S.', ',\\comma', 'r\\R.', 'e\\E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement']
 Heard import modules O. S. comma R. E. comma string comma system new statement
 *** Start of source buffer ***
   1: import os, re, str, sys
@@ -12561,6 +12678,7 @@ Heard import modules O. S. comma R. E. comma string comma system new statement
 
 *** End of source buffer ***
 Saying: ['import\\import modules', 'auto\\auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'V.', 'C.', 'globals', 'new', 'statement']
+changed: ['import\\import modules', 'auto\\auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'V.', 'C.', 'globals', 'new', 'statement'] to ['import\\import modules', 'auto\\auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'v\\V.', 'c\\C.', 'globals', 'new', 'statement']
 Heard import modules auto test comma natural link comma V. C. globals new statement
 *** Start of source buffer ***
   1: import os, re, str, sys
@@ -12569,6 +12687,7 @@ Heard import modules auto test comma natural link comma V. C. globals new statem
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', 'import all', 'new', 'statement']
+changed: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', 'import all', 'new', 'statement'] to ['from', 'module', 'actions', 'c\\C.', 'c\\C.', 'p\\P.', 'p\\P.', 'import all', 'new', 'statement']
 Heard from module actions C. C. P. P. import all new statement
 *** Start of source buffer ***
   1: import os, re, str, sys
@@ -12586,6 +12705,7 @@ Heard from module application state import application state new statement
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement']
+changed: ['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement'] to ['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'c\\C.', 'comma', 'context', 'python', 'new', 'statement']
 Heard from module context generic import symbols context C. comma context python new statement
   3: from actions_C_Cpp import *
   4: from AppState import AppState
@@ -12626,6 +12746,7 @@ Heard import modules Ed simulator comma symbol dictionary new statement
 
 *** End of source buffer ***
 Saying: ['import\\import module', 'S.', 'R.', 'interface', 'new', 'statement']
+changed: ['import\\import module', 'S.', 'R.', 'interface', 'new', 'statement'] to ['import\\import module', 's\\S.', 'r\\R.', 'interface', 'new', 'statement']
 Heard import module S. R. interface new statement
   8: from Object import Object
   9: import EdSim, SymDict
@@ -12756,6 +12877,7 @@ Heard method body
 
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
+changed: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments'] to ['words', 'equals', 'r\\R.', 'e\\E.', 'dot', 'split', 'with', 'arguments']
 Heard words equals R. E. dot split with arguments
  19:                             attrs)
  20: 
@@ -12912,15 +13034,15 @@ Heard except do the following print single quotes error
  38:             try:
  39:                 some_function()
  40:             except :
- 41:                 print 'error<CURSOR>'
+ 41:                 print'error<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['finally', 'do', 'print', 'single', 'quotes', 'all', 'right']
 Heard finally do print single quotes all right
  40:             except :
- 41:                 print 'error'
+ 41:                 print'error'
  42:             finally:
- 43:                 print 'all_right<CURSOR>'
+ 43:                 print'all_right<CURSOR>'
 
 *** End of source buffer ***
 
@@ -12932,6 +13054,7 @@ WARNING: source file 'blah.py' doesn't exist.
 
 *** End of source buffer ***
 Saying: ['import\\import modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement']
+changed: ['import\\import modules', 'O.', 'S.', ',\\comma', 'R.', 'E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement'] to ['import\\import modules', 'o\\O.', 's\\S.', ',\\comma', 'r\\R.', 'e\\E.', ',\\comma', 'string', ',\\comma', 'system', 'new', 'statement']
 Heard import modules O. S. comma R. E. comma string comma system new statement
 *** Start of source buffer ***
   1: import os, re, str, system
@@ -12939,6 +13062,7 @@ Heard import modules O. S. comma R. E. comma string comma system new statement
 
 *** End of source buffer ***
 Saying: ['import\\import modules', 'auto\\auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'V.', 'C.', 'globals', 'new', 'statement']
+changed: ['import\\import modules', 'auto\\auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'V.', 'C.', 'globals', 'new', 'statement'] to ['import\\import modules', 'auto\\auto', 'test', ',\\comma', 'natural', 'link', ',\\comma', 'v\\V.', 'c\\C.', 'globals', 'new', 'statement']
 Heard import modules auto test comma natural link comma V. C. globals new statement
 *** Start of source buffer ***
   1: import os, re, str, system
@@ -12947,6 +13071,7 @@ Heard import modules auto test comma natural link comma V. C. globals new statem
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', 'import all', 'new', 'statement']
+changed: ['from', 'module', 'actions', 'C.', 'C.', 'P.', 'P.', 'import all', 'new', 'statement'] to ['from', 'module', 'actions', 'c\\C.', 'c\\C.', 'p\\P.', 'p\\P.', 'import all', 'new', 'statement']
 Heard from module actions C. C. P. P. import all new statement
 *** Start of source buffer ***
   1: import os, re, str, system
@@ -12964,6 +13089,7 @@ Heard from module application state import application state new statement
 
 *** End of source buffer ***
 Saying: ['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement']
+changed: ['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'C.', 'comma', 'context', 'python', 'new', 'statement'] to ['from', 'module', 'context', 'generic', 'import', 'symbols', 'context', 'c\\C.', 'comma', 'context', 'python', 'new', 'statement']
 Heard from module context generic import symbols context C. comma context python new statement
   3: from actions_ccpp import *
   4: from application_state import application_state
@@ -13004,6 +13130,7 @@ Heard import modules Ed simulator comma symbol dictionary new statement
 
 *** End of source buffer ***
 Saying: ['import\\import module', 'S.', 'R.', 'interface', 'new', 'statement']
+changed: ['import\\import module', 'S.', 'R.', 'interface', 'new', 'statement'] to ['import\\import module', 's\\S.', 'r\\R.', 'interface', 'new', 'statement']
 Heard import module S. R. interface new statement
   8: from object import object
   9: import ed_simulator, symbol_dictionary
@@ -13134,6 +13261,7 @@ Heard method body
 
 *** End of source buffer ***
 Saying: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments']
+changed: ['words', 'equals', 'R.', 'E.', 'dot', 'split', 'with', 'arguments'] to ['words', 'equals', 'r\\R.', 'e\\E.', 'dot', 'split', 'with', 'arguments']
 Heard words equals R. E. dot split with arguments
  19:                             attributes)
  20: 
@@ -13290,15 +13418,15 @@ Heard except do the following print single quotes error
  38:             try:
  39:                 some_function()
  40:             except :
- 41:                 print 'error<CURSOR>'
+ 41:                 print'error<CURSOR>'
 
 *** End of source buffer ***
 Saying: ['finally', 'do', 'print', 'single', 'quotes', 'all', 'right']
 Heard finally do print single quotes all right
  40:             except :
- 41:                 print 'error'
+ 41:                 print'error'
  42:             finally:
- 43:                 print 'all_right<CURSOR>'
+ 43:                 print'all_right<CURSOR>'
 
 *** End of source buffer ***
 
@@ -13344,6 +13472,7 @@ _cached_symbols_as_one_string[t] is:
     THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  this_word  type  
 Unresolved abbreviations are:
 'asymbol': appears in ['isASYMBOL']
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
 'isasymbol': appears in ['ISASYMBOL', 'ISASYMBOL2', 'isasymbol', 'isasymbol2']
 'sasymbol': appears in ['ISasymbol']
 
@@ -13921,8 +14050,8 @@ ceil: ['ceil', 'ceiling']
 cos: ['cos', 'cosine']
 cosh: ['cos H.', 'cosh', 'cosine H.', 'hyperbolic cosine']
 exp: ['exp', 'exponential']
-f_name: ['F. name', 'f name']
-f_name2: ['F. name 2', 'f name 2']
+f_name: ['F. name']
+f_name2: ['F. name 2']
 fabs: ['F.  absolute', 'F. abs', 'F. absolute value', 'fabs', 'float abs', 'float absolute', 'float absolute value']
 float: ['float']
 floor: ['floor']
@@ -16020,3 +16149,1255 @@ Heard go before next index equals zero
 
 
 >>> Testing console command: say(['go before previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go before previous index equals zero
+*** Start of source buffer ***
+  1: <CURSOR>index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['after next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard after next index equals zero
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: index = 0<CURSOR>
+  4: index = 1
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['after previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard after previous index equals zero
+*** Start of source buffer ***
+  1: index = 0<CURSOR>
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['before', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard before index equals zero
+*** Start of source buffer ***
+  1: <CURSOR>index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['before next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard before next index equals zero
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: <CURSOR>index = 0
+  4: index = 1
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['before previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard before previous index equals zero
+*** Start of source buffer ***
+  1: <CURSOR>index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+Testing selection commands...
+
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['select', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select index equals zero
+*** Start of source buffer ***
+  1: <SEL_START>index = 0<SEL_END>
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['select next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select next index equals zero
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: <SEL_START>index = 0<SEL_END>
+  4: index = 1
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['select previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select previous index equals zero
+*** Start of source buffer ***
+  1: <SEL_START>index = 0<SEL_END>
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+Testing repeated selection commands in both directions...
+
+
+
+>>> Testing console command: goto_line(1)
+
+*** Start of source buffer ***
+  1: <CURSOR>index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: say(['select next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select next index equals zero
+*** Start of source buffer ***
+  1: <SEL_START>index = 0<SEL_END>
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: say(['select next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select next index equals zero
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: <SEL_START>index = 0<SEL_END>
+  4: index = 1
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: goto_line(6)
+
+  3: index = 0
+  4: index = 1
+  5: index = 0
+  6: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['select previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select previous index equals zero
+  2: index = 1
+  3: index = 0
+  4: index = 1
+  5: <SEL_START>index = 0<SEL_END>
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['select previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select previous index equals zero
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: <SEL_START>index = 0<SEL_END>
+  4: index = 1
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+Testing repeatability of SelectPseudoCode commands...
+
+
+
+>>> Testing console command: goto_line(1)
+
+*** Start of source buffer ***
+  1: <CURSOR>index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: say(['select', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select index equals zero
+*** Start of source buffer ***
+  1: <SEL_START>index = 0<SEL_END>
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: say(['next', 'one'], user_input='None')
+Heard next one
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: <SEL_START>index = 0<SEL_END>
+  4: index = 1
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['previous', 'one'], user_input='None')
+Heard previous one
+*** Start of source buffer ***
+  1: <SEL_START>index = 0<SEL_END>
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: say(['go after next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard go after next index equals zero
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: index = 0<CURSOR>
+  4: index = 1
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['next', 'one'], user_input='None')
+Heard next one
+  2: index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0<CURSOR>
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['previous', 'one'], user_input='None')
+Heard previous one
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: index = 0<CURSOR>
+  4: index = 1
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: goto_line(1)
+
+*** Start of source buffer ***
+  1: <CURSOR>index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: say(['go before', 'index', '=\\equals', '1\\one'], user_input='None')
+Heard go before index equals one
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['next', 'one'], user_input='None')
+Heard next one
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: index = 0
+  4: <CURSOR>index = 1
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['previous', 'one'], user_input='None')
+Heard previous one
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: goto_line(1)
+
+*** Start of source buffer ***
+  1: <CURSOR>index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: say(['go after', 'index', '=\\equals', '1\\one'], user_input='None')
+Heard go after index equals one
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1<CURSOR>
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['next', 'one'], user_input='None')
+Heard next one
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1<CURSOR>
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['previous', 'one'], user_input='None')
+Heard previous one
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1<CURSOR>
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+   Testing reapeating without specifying direction...
+
+
+
+>>> Testing console command: goto_line(1)
+
+*** Start of source buffer ***
+  1: <CURSOR>index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: say(['go after', 'index', '=\\equals', '1\\one'], user_input='None')
+Heard go after index equals one
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1<CURSOR>
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['again'], user_input='None')
+Heard again
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1<CURSOR>
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: goto_line(5)
+
+  2: index = 1
+  3: index = 0
+  4: index = 1
+  5: <CURSOR>index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['go after', 'index', '=\\equals', '1\\one'], user_input='None')
+Heard go after index equals one
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1<CURSOR>
+  5: index = 0
+  6: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['again'], user_input='None')
+Heard again
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1<CURSOR>
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+Testing select X through Z...
+
+
+
+>>> Testing console command: goto_line(1)
+
+*** Start of source buffer ***
+  1: <CURSOR>index = 0
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: say(['select', 'index', 'through', '1\\one'], user_input='None')
+Heard select index through one
+*** Start of source buffer ***
+  1: index = 0
+  2: <SEL_START>index = 1<SEL_END>
+  3: index = 0
+  4: index = 1
+  5: index = 0
+
+
+>>> Testing console command: say(['select', 'index', 'through', '0\\zero'], user_input='None')
+Heard select index through zero
+*** Start of source buffer ***
+  1: <SEL_START>index = 0<SEL_END>
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: quit(save_speech_files=0, disconnect=0)
+
+
+
+*******************************************************************************
+* Name        : set_text
+* Description : Testing set_text.
+*******************************************************************************
+
+*** Start of source buffer ***
+  1: <CURSOR># This is a small test buffer for Python
+  2: 
+  3: 
+  4: 
+*** Start of source buffer ***
+  1: <CURSOR>nothing left
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: <CURSOR>almost nothing left
+
+*** End of source buffer ***
+*** Start of source buffer ***
+  1: <CURSOR>almost nobody left
+
+*** End of source buffer ***
+
+
+*******************************************************************************
+* Name        : std_func_calls
+* Description : Testing CSCs for calling standard functions.
+*******************************************************************************
+
+WARNING: source file 'blah1.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['absolute', 'value', 'with', 'arguments', 'one']
+Heard absolute value with arguments one
+*** Start of source buffer ***
+  1: abs(1<CURSOR>)
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+*** Start of source buffer ***
+  1: abs(1)
+  2: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['absolute', 'value', 'of', 'one']
+Heard absolute value of one
+*** Start of source buffer ***
+  1: abs(1)
+  2: abs(1<CURSOR>)
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+*** Start of source buffer ***
+  1: abs(1)
+  2: abs(1)
+  3: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['absolute', 'value', 'without', 'arguments']
+Heard absolute value without arguments
+*** Start of source buffer ***
+  1: abs(1)
+  2: abs(1)
+  3: abs()<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+*** Start of source buffer ***
+  1: abs(1)
+  2: abs(1)
+  3: abs()
+  4: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['some', 'function', 'with', 'argument', 'some', 'argument']
+Heard some function with argument some argument
+*** Start of source buffer ***
+  1: abs(1)
+  2: abs(1)
+  3: abs()
+  4: some_function(some_argument<CURSOR>)
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+  2: abs(1)
+  3: abs()
+  4: some_function(some_argument)
+  5: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['absolute', 'value']
+Heard absolute value
+  2: abs(1)
+  3: abs()
+  4: some_function(some_argument)
+  5: abs<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+  3: abs()
+  4: some_function(some_argument)
+  5: abs
+  6: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['some', 'function', 'of', 'some', 'argument']
+Heard some function of some argument
+  3: abs()
+  4: some_function(some_argument)
+  5: abs
+  6: some_function_of_some_argument<CURSOR>
+
+*** End of source buffer ***
+
+
+*******************************************************************************
+* Name        : symbol_formatting
+* Description : Testing styling and manual formatting of new symbols.
+*******************************************************************************
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Testing styles
+
+
+
+>>> Testing console command: say(['ordinary', 'formatting', 'equals', 'one'], user_input='None')
+Heard ordinary formatting equals one
+*** Start of source buffer ***
+  1: ordinary_formatting = 1<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+*** Start of source buffer ***
+  1: ordinary_formatting = 1
+  2: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['lower', 'Hungarian', 'ugly', 'Java', 'convention'], user_input='None')
+Heard lower Hungarian ugly Java convention
+*** Start of source buffer ***
+  1: ordinary_formatting = 1
+  2: uglyJavaConvention<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+*** Start of source buffer ***
+  1: ordinary_formatting = 1
+  2: uglyJavaConvention
+  3: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['animal', 'equals', 'Hungarian', 'friendly', 'dolphin', 'empty', 'function'], user_input='None')
+Heard animal equals Hungarian friendly dolphin empty function
+*** Start of source buffer ***
+  1: ordinary_formatting = 1
+  2: uglyJavaConvention
+  3: animal = FriendlyDolphin()<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+*** Start of source buffer ***
+  1: ordinary_formatting = 1
+  2: uglyJavaConvention
+  3: animal = FriendlyDolphin()
+  4: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['\\All-Caps', 'style', 'W.', 'M.', 'user'], user_input='None')
+changed: ['\\All-Caps', 'style', 'W.', 'M.', 'user'] to ['\\All-Caps', 'style', 'w\\W.', 'm\\M.', 'user']
+Heard All-Caps style W. M. user
+*** Start of source buffer ***
+  1: ordinary_formatting = 1
+  2: uglyJavaConvention
+  3: animal = FriendlyDolphin()
+  4: WM_USER<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  2: uglyJavaConvention
+  3: animal = FriendlyDolphin()
+  4: WM_USER
+  5: <CURSOR>
+
+*** End of source buffer ***
+Testing styling across utterances
+
+
+>>> Testing console command: say(['Hungarian'], user_input='None')
+Heard Hungarian
+  2: uglyJavaConvention
+  3: animal = FriendlyDolphin()
+  4: WM_USER
+  5: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['delayed', 'name'], user_input='None')
+Heard delayed name
+  2: uglyJavaConvention
+  3: animal = FriendlyDolphin()
+  4: WM_USER
+  5: DelayedName<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  3: animal = FriendlyDolphin()
+  4: WM_USER
+  5: DelayedName
+  6: <CURSOR>
+
+*** End of source buffer ***
+Testing manual formatting
+
+
+
+>>> Testing console command: say(['no', 'space', 'style', 'W.', 'X.', 'cap', 'python'], user_input='None')
+changed: ['no', 'space', 'style', 'W.', 'X.', 'cap', 'python'] to ['no', 'space', 'style', 'w\\W.', 'x\\X.', 'cap', 'python']
+Heard no space style W. X. cap python
+  3: animal = FriendlyDolphin()
+  4: WM_USER
+  5: DelayedName
+  6: wxPython<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  4: WM_USER
+  5: DelayedName
+  6: wxPython
+  7: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['send', 'to', '\\Caps-On', 'the', 'boss'], user_input='None')
+Heard send to Caps-On the boss
+  4: WM_USER
+  5: DelayedName
+  6: wxPython
+  7: send_to_The_Boss<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  5: DelayedName
+  6: wxPython
+  7: send_to_The_Boss
+  8: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['caps', 'on', 'matters', '\\No-Caps', 'of', 'state'], user_input='None')
+Heard caps on matters No-Caps of state
+  5: DelayedName
+  6: wxPython
+  7: send_to_The_Boss
+  8: Matters_of_State<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  6: wxPython
+  7: send_to_The_Boss
+  8: Matters_of_State
+  9: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['inter', 'caps', 'fish', '_\\underscore', 'food'], user_input='None')
+Heard inter caps fish underscore food
+  6: wxPython
+  7: send_to_The_Boss
+  8: Matters_of_State
+  9: Fish_Food<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  7: send_to_The_Boss
+  8: Matters_of_State
+  9: Fish_Food
+ 10: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['Hungarian', 'notation', '\\No-Caps', 'dog', 'food'], user_input='None')
+Heard Hungarian notation No-Caps dog food
+  7: send_to_The_Boss
+  8: Matters_of_State
+  9: Fish_Food
+ 10: dogFood<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  8: Matters_of_State
+  9: Fish_Food
+ 10: dogFood
+ 11: <CURSOR>
+
+*** End of source buffer ***
+Making sure manual underscores suppress automatic ones
+
+
+>>> Testing console command: say(['_\\underscore', 'private', '_\\underscore', 'variable', '_\\underscore'], user_input='None')
+Heard underscore private underscore variable underscore
+  8: Matters_of_State
+  9: Fish_Food
+ 10: dogFood
+ 11: _private_variable_<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+  9: Fish_Food
+ 10: dogFood
+ 11: _private_variable_
+ 12: <CURSOR>
+
+*** End of source buffer ***
+Making sure consecutive letters are treated as part of the same word
+
+
+>>> Testing console command: say(['windows', 'X.', 'P.'], user_input='None')
+changed: ['windows', 'X.', 'P.'] to ['windows', 'x\\X.', 'p\\P.']
+Heard windows X. P.
+  9: Fish_Food
+ 10: dogFood
+ 11: _private_variable_
+ 12: windows_xp<CURSOR>
+
+*** End of source buffer ***
+Heard new statement
+ 10: dogFood
+ 11: _private_variable_
+ 12: windows_xp
+ 13: <CURSOR>
+
+*** End of source buffer ***
+
+
+*******************************************************************************
+* Name        : symbol_matching
+* Description : Test special cases for the symbol matching algorithm.
+*******************************************************************************
+
+WARNING: source file 'blah1.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['editor', 'simulator']
+Heard editor simulator
+*** Start of source buffer ***
+  1: EdSim<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+*** Start of source buffer ***
+  1: EdSim
+  2: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['purple', 'bunny']
+Heard purple bunny
+*** Start of source buffer ***
+  1: EdSim
+  2: symbolWithUnmatchableExplicitSpokenForm<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+*** Start of source buffer ***
+  1: EdSim
+  2: symbolWithUnmatchableExplicitSpokenForm
+  3: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['application', 'state']
+Heard application state
+*** Start of source buffer ***
+  1: EdSim
+  2: symbolWithUnmatchableExplicitSpokenForm
+  3: application_state<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+*** Start of source buffer ***
+  1: EdSim
+  2: symbolWithUnmatchableExplicitSpokenForm
+  3: application_state
+  4: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['file', 'path']
+Heard file path
+*** Start of source buffer ***
+  1: EdSim
+  2: symbolWithUnmatchableExplicitSpokenForm
+  3: application_state
+  4: filepath<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+  2: symbolWithUnmatchableExplicitSpokenForm
+  3: application_state
+  4: filepath
+  5: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['directory', 'path']
+Heard directory path
+  2: symbolWithUnmatchableExplicitSpokenForm
+  3: application_state
+  4: filepath
+  5: directory_path<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+  3: application_state
+  4: filepath
+  5: directory_path
+  6: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['Toronto', 'transit', 'corporation']
+Heard Toronto transit corporation
+  3: application_state
+  4: filepath
+  5: directory_path
+  6: toronto_transit_corporation<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+  4: filepath
+  5: directory_path
+  6: toronto_transit_corporation
+  7: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['random', 'number']
+Heard random number
+  4: filepath
+  5: directory_path
+  6: toronto_transit_corporation
+  7: rannum<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+  5: directory_path
+  6: toronto_transit_corporation
+  7: rannum
+  8: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['green', 'rabbit']
+Heard green rabbit
+  5: directory_path
+  6: toronto_transit_corporation
+  7: rannum
+  8: GrnRab<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+  6: toronto_transit_corporation
+  7: rannum
+  8: GrnRab
+  9: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['integer', 'format']
+Heard integer format
+  6: toronto_transit_corporation
+  7: rannum
+  8: GrnRab
+  9: intfmt<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+  7: rannum
+  8: GrnRab
+  9: intfmt
+ 10: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['rabbit']
+Heard rabbit
+  7: rannum
+  8: GrnRab
+  9: intfmt
+ 10: rabbit<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+  8: GrnRab
+  9: intfmt
+ 10: rabbit
+ 11: <CURSOR>
+
+*** End of source buffer ***
+Saying: ['data', 'processing']
+Heard data processing
+  8: GrnRab
+  9: intfmt
+ 10: rabbit
+ 11: data_processing<CURSOR>
+
+*** End of source buffer ***
+Saying: ['new', 'statement']
+Heard new statement
+  9: intfmt
+ 10: rabbit
+ 11: data_processing
+ 12: <CURSOR>
+
+*** End of source buffer ***
+
+
+*******************************************************************************
+* Name        : unusual_symbols
+* Description : compilation and dictation of unusual symbols
+*******************************************************************************
+
+*** Compiling symbols from file: %VCODE_HOME%\Data\TestData\unusual_symbols.py ***
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_py_std_sym.py'
+Compiling symbols for file '%VCODE_HOME%\Data\TestData\test_C_Cpp_std_sym.cpp'
+
+
+Parsed symbols are: 
+THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym: ['this symbol was parsed from test C. C. plus plus standard sym', 'this symbol was parsed from test C. C. plus plus standard symbol', 'this symbol was parsed from test C. C. plus plus std sym', 'this symbol was parsed from test C. C. plus plus std symbol', 'this symbol was parsed from test C. cpp standard sym', 'this symbol was parsed from test C. cpp standard symbol', 'this symbol was parsed from test C. cpp std sym', 'this symbol was parsed from test C. cpp std symbol']
+THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym: ['this symbol was parsed from test P. Y. standard sym', 'this symbol was parsed from test P. Y. standard symbol', 'this symbol was parsed from test P. Y. std sym', 'this symbol was parsed from test P. Y. std symbol', 'this symbol was parsed from test pie standard sym', 'this symbol was parsed from test pie standard symbol', 'this symbol was parsed from test pie std sym', 'this symbol was parsed from test pie std symbol', 'this symbol was parsed from test py standard sym', 'this symbol was parsed from test py standard symbol', 'this symbol was parsed from test py std sym', 'this symbol was parsed from test py std symbol', 'this symbol was parsed from test python standard sym', 'this symbol was parsed from test python standard symbol', 'this symbol was parsed from test python std sym', 'this symbol was parsed from test python std symbol']
+openlog: ['openlog']
+s: ['S.']
+se: ['S. E.', 'se']
+_cached_symbols_as_one_string[o] is:
+    openlog  
+_cached_symbols_as_one_string[s] is:
+    s  se  sin  sinh  sqrt  str  
+_cached_symbols_as_one_string[t] is:
+    THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym  THIS_SYMBOL_WAS_PARSED_FROM_test_py_std_sym  tan  tanh  type  
+Unresolved abbreviations are:
+'c': appears in ['THIS_SYMBOL_WAS_PARSED_FROM_test_C_Cpp_std_sym']
+'openlog': appears in ['openlog']
+'s': appears in ['s']
+'se': appears in ['se']
+
+*** End of compilation test ***
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+Next utterance should not match short symbol 'se'
+Got command: say(['software', 'engineering', 'comma'],1
+,0,0,)
+Heard software engineering comma
+*** Start of source buffer ***
+  1: software_engineering, <CURSOR>
+
+*** End of source buffer ***
+Next utterance should match non-separable symbol 'openlog'
+Got command: say(['open', 'log'],1
+,0,0,)
+Heard open log
+*** Start of source buffer ***
+  1: software_engineering, openlog<CURSOR>
+
+*** End of source buffer ***
+
+
+*******************************************************************************
+* Name        : v7_select
+* Description : testing oddities in select pseudocode with Natspeak 7
+*******************************************************************************
+
+
+
+>>> Testing console command: open_file('blah.py')
+
+WARNING: source file 'blah.py' doesn't exist.
+*** Start of source buffer ***
+  1: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['index', 'equals', '0\\zero', 'new statement'], user_input='1\n')
+Heard index equals zero new statement
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['index', 'equals', '1\\one', 'new statement'], user_input='1\n')
+Heard index equals one new statement
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['index', '=\\equals', '0\\zero', 'new statement'], user_input='1\n')
+Heard index equals zero new statement
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: index = 0
+  4: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['index', '=\\equals', '1\\one', 'new statement'], user_input='1\n')
+Heard index equals one new statement
+  2: index = 1
+  3: index = 0
+  4: index = 1
+  5: <CURSOR>
+
+*** End of source buffer ***
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['select', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select index equals zero
+*** Start of source buffer ***
+  1: <SEL_START>index = 0<SEL_END>
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['select next', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select next index equals zero
+*** Start of source buffer ***
+  1: index = 0
+  2: index = 1
+  3: <SEL_START>index = 0<SEL_END>
+  4: index = 1
+  5: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: goto_line(2)
+
+*** Start of source buffer ***
+  1: index = 0
+  2: <CURSOR>index = 1
+  3: index = 0
+  4: index = 1
+  5: 
+
+*** End of source buffer ***
+
+
+>>> Testing console command: say(['select previous', 'index', '=\\equals', '0\\zero'], user_input='None')
+Heard select previous index equals zero
+*** Start of source buffer ***
+  1: <SEL_START>index = 0<SEL_END>
+  2: index = 1
+  3: index = 0
+  4: index = 1
+
+
+*******************************************************************************
+* Name        : wxWindowsWithHelpers
+* Description : Testing subclasses of wxWindows widgets.
+*******************************************************************************
+
+
+WARNING: Call to deprecated method TestCaseWithHelpers.assert_sequences_have_same_content
+
+
+
+
+-----------------------------------------------
+Test suite completed in:  686.104000092 secs
+-----------------------------------------------

@@ -26,6 +26,7 @@ from Object import Object
 from debug import trace, config_warning
 import Context
 from cont_gen import ContLanguage
+import sr_interface
 
 class DuplicateContextKeys(RuntimeError):
     def __init__(self, msg):
@@ -80,6 +81,9 @@ class CSCmd(object):
         *STR docstring* -- string documentating the command
         """
         self.spoken_forms = spoken_forms or []
+        #Correct any acronyms in the spoken forms for the current version of NatSpeak
+        self.spoken_forms = [sr_interface.fix_acronyms_spoken_form(word) for word in self.spoken_forms]
+        
         meanings = meanings or {}
         self.docstring = docstring
         self.meanings = CSCmdList(meanings, generate_discrete_cmd, parent=self)

@@ -311,8 +311,8 @@ the "equals" csc and lsa should (for python) show up with
                 'standard punctuation': 'javascript_standardpunctuation.html',
                 'standard punctuation navigation': 'javascript_standardpunctuationnavigation.html'},
  'matlab': {'csc commands': 'matlab_csccommands.html',
-                'standard punctuation': 'matlab_standardpunctuation.html',
-                'standard punctuation navigation': 'matlab_standardpunctuationnavigation.html'},
+            'standard punctuation': 'matlab_standardpunctuation.html',
+            'standard punctuation navigation': 'matlab_standardpunctuationnavigation.html'},
  'perl': {'csc commands': 'perl_csccommands.html',
           'mixed commands': 'perl_mixedcommands.html',
           'standard punctuation': 'perl_standardpunctuation.html',
@@ -339,6 +339,9 @@ the "equals" csc and lsa should (for python) show up with
  'javascript': ['csc commands',
                 'standard punctuation',
                 'standard punctuation navigation'],
+ 'matlab': ['csc commands',
+            'standard punctuation',
+            'standard punctuation navigation'],
  'perl': ['csc commands',
           'mixed commands',
           'standard punctuation',
@@ -538,6 +541,10 @@ the "equals" csc and lsa should (for python) show up with
          only test html files         
 
          if no html files present in folder, copy result into the folder and assume the result is correct
+
+         if language has changed/added, recopy from  (...)\\Data\whatCanISay to
+                  (...)\Data\Benchmark\WhatCanISayTestResults, and to subdir all_lang or other...
+         to: 
 
         """         
         html_folder= self.wciSay.html_folder
