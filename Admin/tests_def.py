@@ -401,10 +401,11 @@ add_unittest('WhatCanISay', desc='self-test for WhatCanISay.py')
 
 
 ##############################################################################
-# Testing SymbolResult
+# Testing SymbolResult, sr_interface
 ##############################################################################
 
 add_unittest('SymbolResult', desc='Testing SymbolResult.')
+add_unittest('SrInterface', desc='Testing sr_interface (with differences NatSpeak 10/Dragon 11.')
 
 
 ###############################################################################

@@ -20,7 +20,7 @@
 ##############################################################################
 """Interface to the Speech Recognition engine.
 """
- 
+
 import re
 import string
 import natlink, natlinkstatus
@@ -30,7 +30,7 @@ from debug import trace, trace_call_stack
 
 import SpokenUtterance
 
-
+reSimpleWord = re.compile(r'[a-z]+$')
 #import nsformat
 
 #
@@ -39,7 +39,7 @@ import SpokenUtterance
 sr_is_connected = 0
 
 NLstatus = natlinkstatus.NatlinkStatus()
-
+DNSVersion = NLstatus.getDNSVersion()
 # space or period space after letter spoken form(11) or (10 before)
 period_space_after_spoken_form_letter = '. '
 
@@ -68,6 +68,8 @@ vc_user_name = 'VoiceCode'
 vc_base_model = 'BestMatch Model'
 vc_base_topic = 'US General English - BestMatch Plus'
 
+# to be excluded of added words:
+stringsOfNumbers = [str(i) for i in range(101)]
 
 #
 # Flag used to add a word to NatSpeak
@@ -205,8 +207,11 @@ def saveUser():
     """Saves the current user"""
     natlink.saveUser()
     sr_user_needs_saving = 0
-
-marking_word = r'VoiceCode\Deleting this word will cause voice code to ' + \
+if DNSVersion >= 11:
+    marking_word = r'VoiceCode\\Deleting this word will cause voice code to ' + \
+            're-scan its standard symbol files'
+else:
+    marking_word = r'VoiceCode\Deleting this word will cause voice code to ' + \
             're-scan its standard symbol files'
 
 def mark_user():
@@ -346,6 +351,17 @@ def addWord(word, *rest):
         return 1
     if word == 'g' or word == 'g\\g':
         raise RuntimeError('I thought we agreed not to add single letters')
+    origWord = word
+    if word.endswith('I i'):
+        trace_call_stack('sr_interface.addWord', '**')
+        
+    word = normalize_word_for_Dragon(word)
+    if word in stringsOfNumbers:
+        print 'addWord, no numbers without spoken form are accepted: "%s"'% word
+        return
+    if word != origWord:
+        trace('sr_interface.addWord', 'this word is changed by normalize_word_for_Dragon: "%s" to "%s"'% (origWord, word))
+        
     if getWordInfo(word) is None:
         trace('sr_interface.addWord', 'this word is new to NatSpeak: %s'% word)
         #trace_call_stack('sr_interface.addWord', '**')
@@ -389,16 +405,24 @@ def deleteWord(word, *rest):
     Also, we only remove it if the word was added to the vocabulary by
     VoiceCode, i.e. if the word info has 'added by Vocabulary Builder'
     flag set and if the word is a phrase (single words might actually
-    have ben added by the real Vocabulary Builder)"""
-
+    have ben added by the real Vocabulary Builder)
+    
+    Dragon 11: flags are not recognised any more, so delete if not a lowercase single word.
+    
+    """
+    word = normalize_word_for_Dragon(word)
     flag = getWordInfo(word)
     num_words = len(re.split('\s+', word))
-    if addedByVC(flag) and num_words > 1:
+    if reSimpleWord.match(word):
+        trace('sr_interface.deleteWord', 'word not deleted by VoiceCode "%s", because of simple lowercase word phrase' % word)
+        return None
+    
+    if DNSVersion >= 11 or addedByVC(flag):
         trace('sr_interface.deleteWord', 'actually deleting word %s' % word)
         sr_user_needs_saving = 1
         return natlink.deleteWord(word)
     else:
-        trace('sr_interface.deleteWord', 'word not added by VoiceCode %s' % word)
+        trace('sr_interface.deleteWord', 'word not deleted by VoiceCode "%s", NatSpeak 10 or before, and not addedByVC' % word)
         return None
 
 def clean_written_form(written_form, clean_for=None):
@@ -469,19 +493,64 @@ def clean_spoken_form(spoken_form):
         # 
         clean_form = re.sub('[^a-z0-9]+', ' ', clean_form)    
          
-    #
-    # Remove leading, trailing and multiple blanks
-    # (do it always, QH)
-    clean_form = re.sub('\s+', ' ', clean_form)
-    clean_form = re.sub('^\s+', '', clean_form)
-    clean_form = re.sub('\s+$', '', clean_form)
+        clean_form = re.sub('\s+', ' ', clean_form)
+        clean_form = re.sub('^\s+', '', clean_form)
+        clean_form = re.sub('\s+$', '', clean_form)\
 
 #    trace('sr_interface.clean_spoken_form', 'returning clean_form=\'%s\'' % clean_form)
     return clean_form
 
+
+def normalize_word_for_Dragon(word):
+    """in Dragon 11 we need a double \ and several other details
+    
+    the spoken form part is handled in fix_acronyms_spoken_form
+    """
+    trace('sr_interface.normalize_word_for_Dragon', 
+                'start with word: "%s"'% word)
+    if word in ['...\\\\ellipsis', '...\\ellipsis', 'logarithm']:
+        trace_call_stack('sr_interface.normalize_word_for_Dragon')
+    parts = word.split('\\')
+    if DNSVersion >= 11:
+        if len(parts) == 3:
+            trace('sr_interface.normalize_word_for_Dragon', 
+                'parts length 2: "%s", "%s", "%s"' % (parts[0], parts[1], parts[2]))
+            p2 = parts[2]
+            parts[2] = fix_acronyms_spoken_form(parts[2])
+            if parts[2] != p2:
+                trace('sr_interface.normalize_word_for_Dragon', 
+                    'fixed acronyms spoken form from: "%s" to "%s"' % (p2, parts[2]))
+            return '\\'.join(parts)
+        elif len(parts) == 2:
+            p1 = parts[1]
+            parts[1] = fix_acronyms_spoken_form(parts[1])
+            if parts[1] != p1:
+                trace('sr_interface.normalize_word_for_Dragon', 
+                    'fixed acronyms spoken form from: "%s" to "%s"' % (p1, parts[1]))
+            trace('sr_interface.normalize_word_for_Dragon', 
+                'parts length 2: "%s", "%s"' % (parts[0], parts[1]))
+            return '\\\\'.join(parts)
+        else:
+            trace('sr_interface.normalize_word_for_Dragon', 
+                    'parts length 1, word: "%s"'% word)
+            
+    else:
+        # remove double \\
+        if len(parts) == 2:
+            result = '%s\\%s'% (parts[0], parts[2])
+            trace('sr_interface.normalize_word_for_Dragon', 
+                'parts length 2, removing double backslash, leave "%s"' % result)
+            return result
+    # no intervention:
+    return word
+            
+
 def fix_acronyms_spoken_form(word):
     """Function to spoken forms for versions of NatSpeak where periods should not be 
-    included for acronyms"""
+    included for acronyms
+    
+    also includes double \ between written and spoken form
+    """
     
     if period_space_after_spoken_form_letter == ' ' and '.' in word:
         word = re.sub(r"""(?<=[A-Z])\.""", '', word)
@@ -524,9 +593,9 @@ def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
                 spoken = a_match.group(1)  
                 category = a_match.group(2)
                 extra = string.rfind(written, '\\')
-                
+    			
                 trace('sr_interface.spoken_written_form', 
-                    'initial spoken, written = "%s", "%s"' % (spoken, written))             
+                    'initial spoken, written = "%s", "%s"' % (spoken, written)) 			
                 
                 #test if vocabulary entry is in form written\category\spoken
                 # But careful... if the word spoken was "backslash", then the written form is
@@ -547,7 +616,7 @@ def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
                 #vocabulary entry is in form written
                 written = vocabulary_entry
                 spoken = vocabulary_entry
-                
+    			
                 trace('sr_interface.spoken_written_form', 'entry \'%s\' is just spoken ' % written )
     else:
         #Before dns10, look for written, written\spoken, written\spoken\t form
