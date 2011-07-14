@@ -181,19 +181,16 @@ class TestCaseWithHelpersTest(unittest.TestCase):
            self.test_case.assert_equal(do1a, do1b)
            self.fail("Comparing objects with infinite in their composition structure did not raise exception.")
         except RuntimeError, err:
-            if err == "maximum recursion depth exceeded.":
+            expectedTexts =  ['maximum recursion depth exceeded.\nError happened while doing an assert_equal().\nMaybe one of the arguments of assert_equal() has an infinite loop in its composition structure?',
+            
+            "maximum recursion depth exceeded."]
+
+            if err in expectedTexts:
                 # shorter message maybe? this message seems to be enough:
                 pass
             else:
-                self.test_case.assert_equal(
-                              err.args, 
-                              ("maximum recursion depth exceeded.\n" + \
-                               "Error happened while doing an assert_equal().\n" + \
-                               "Maybe one of the arguments of assert_equal() has an infinite loop in its composition structure?", 
-                               ),
-                              "Comparing objects with infinite in their composition raised WRONG exception."
+                self.fail("Comparing objects with infinite in their composition raised WRONG exception.")
                                
-)
         
 ##############################################################################
 # Assertions and helpers

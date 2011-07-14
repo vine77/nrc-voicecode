@@ -1189,7 +1189,8 @@ class UtteranceInterpretation(Object):
         by the speech engine
         """
         spoken_words = map(lambda x: x[0], self.utterance.words())
-        debug.trace('UtteranceInterpretation.phrase', '** returning %s' % spoken_words)
+        debug.trace('UtteranceInterpretation.phrase', '** returning %s (%s)' % (spoken_words,
+                        self.utterance.words()))
         return spoken_words
         
     def phrase_as_string(self):
