@@ -537,7 +537,7 @@ def normalize_word_for_Dragon(word):
     else:
         # remove double \\
         if len(parts) == 2:
-            result = '%s\\%s'% (parts[0], parts[2])
+            result = '%s\\%s'% (parts[0], parts[1])
             trace('sr_interface.normalize_word_for_Dragon', 
                 'parts length 2, removing double backslash, leave "%s"' % result)
             return result
