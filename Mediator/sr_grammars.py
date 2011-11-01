@@ -260,7 +260,16 @@ class WinGram(GramCommon, OwnerObject):
 
         *STR* -- the message
         """
-        s = "Heard %s" % (string.join(map(lambda x: x[0], words)))
+        #s = "Heard %s" % (string.join(map(lambda x: x[0], words)))
+        L = []
+        for s in words:
+            if s[0] == s[1]:
+                L.append(s[0])
+            else:
+                L.append("%s\\%s"% (s[1], s[0]))
+                
+            
+        s = "Heard: %s" % ' '.join(L)
         if debug.tracing('WinGram.format_utterance_message'):
             debug.trace('WinGram.format_utterance_message', 
                 "Full utterance was %s" % repr(words))

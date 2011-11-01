@@ -36,23 +36,14 @@ def dictate_pseudo_C_Cpp(commands):
     commands.say(['after','angle'])
     commands.say(['new','paragraph'])
 
-    # comments
-
-    commands.say(['comment','line'])
-    commands.say(['test','comment'])
-    commands.say(['new','paragraph'])
-    commands.say(['begin','long','comment','this'])
-    commands.say(['new','line'])
-    commands.say(['is','an','important'])
-    commands.say(['new','line'])
-    commands.say(['bit','of','information','end','long','comment'])
-    commands.say(['new','paragraph'])
 
     # class template
 
     commands.say(['define','template'])
     commands.say(['type','name', 'N.', 's\\S.'])
     commands.say('type name  P. q\\Q.')
+    commands.say('first type I D.')
+    commands.say('second type I. D.')
     
     commands.say(['some','data','type'])
     commands.say([',\\comma','class','object','type'])
@@ -61,7 +52,6 @@ def dictate_pseudo_C_Cpp(commands):
     commands.say(['jump','out'])
 
     commands.say(['new','paragraph'])
-
     # declarations
 
     commands.say(['declare','function','test','procedure'])

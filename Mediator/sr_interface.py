@@ -68,9 +68,59 @@ vc_user_name = 'VoiceCode'
 vc_base_model = 'BestMatch Model'
 vc_base_topic = 'US General English - BestMatch Plus'
 
+
+## spelling letters are checked at start of connect with new user:
+## if they are defined as list, the first one that fits is replaced as entry for
+## the specific letter (QH)
+alpha_bravo = {}
+alpha_bravo["a"] = "alpha"
+alpha_bravo["b"] = "bravo"
+alpha_bravo["c"] = "Charlie"
+alpha_bravo["d"] = "delta"
+alpha_bravo["e"] = "echo"
+alpha_bravo["f"] = "foxtrot"
+alpha_bravo["g"] = "golf"
+alpha_bravo["h"] = "hotel"
+alpha_bravo["i"] = "India"
+alpha_bravo["j"] = ["Juliett", "Juliet"]
+alpha_bravo["k"] = "kilo"
+alpha_bravo["l"] = ["lima", "Lima"]
+alpha_bravo["m"] = "Mike"
+alpha_bravo["n"] = ["november", "November"]
+alpha_bravo["o"] = "Oscar"
+alpha_bravo["p"] = "papa"
+alpha_bravo["q"] = ["Quebec", 'Qu\xe9bec']
+alpha_bravo["r"] = "Romeo"
+alpha_bravo["s"] = "sierra"
+alpha_bravo["t"] = "tango"
+alpha_bravo["u"] = "uniform"
+alpha_bravo["v"] = "Victor"
+alpha_bravo["w"] = "whiskey"
+alpha_bravo["x"] = ["X ray", "x-ray"]
+alpha_bravo["y"] = ["yankee", "Yankee"]
+alpha_bravo["z"] = ["zulu", "Zulu"]
+
+# category often same as spoken:
+punctuation = r'.,:;<>()\\/{}[]?!@#$%^&*-_=+'
+punctuation_extra = [ '...']
 # to be excluded of added words:
 stringsOfNumbers = [str(i) for i in range(101)]
 
+
+#dict for unspecified spoken forms in mumbers (csc entries mainly like "atan 2 of" )
+numberToSpoken = {}
+numberToSpoken[0] = 'zero'
+numberToSpoken[1] = 'one'
+numberToSpoken[2] = 'two'
+numberToSpoken[3] = 'three'
+numberToSpoken[4] = 'four'
+numberToSpoken[5] = 'five'
+numberToSpoken[6] = 'six'
+numberToSpoken[7] = 'seven'
+numberToSpoken[8] = 'eight'
+numberToSpoken[9] = 'nine'
+numberToSpoken[10] = 'ten'
+numberstringToSpoken = dict( [(str(i), j) for (i,j) in numberToSpoken.items()])
 #
 # Flag used to add a word to NatSpeak
 # 0x40000000 -> added by VoiceCode (i.e. alias Vocabulary Builder)
@@ -150,6 +200,7 @@ def connect(user_name, mic_state=None, mic_change_callback = None):
         natlink.natConnect(1)
         sr_is_connected = 1            
         openUser(user_name)
+        check_alpha_bravo() # check the exact spelling of military alphabeth
     if mic_state:
         natlink.setMicState(mic_state)
     if mic_change_callback:
@@ -162,6 +213,41 @@ def connect(user_name, mic_state=None, mic_change_callback = None):
                 'natspeak_version: %s, nperiod_space_after_spoken_form_letter: "%s"'%
                     (natspeak_version, period_space_after_spoken_form_letter))
 
+def check_alpha_bravo():
+    """check the words a\\alpha through z\\zulu
+    """
+    global alpha_bravo
+    if DNSVersion >= 11:
+        for written in string.ascii_lowercase:
+            spoken = alpha_bravo[written]
+            if isinstance(spoken, str):
+                utt = '%s\\letter\\%s'% (written.upper(), spoken)
+                if word_exists(utt):
+                    continue
+                else:
+                    print 'sr_interface, alpha_bravo: incorrect spoken form for letter "%s" ("%s")' % (written, spoken)
+                    continue
+            for sp in spoken:
+                utt = '%s\\letter\\%s'% (written.upper(), sp)
+                if word_exists(utt):
+                    alpha_bravo[written] = sp
+                    break
+            else:
+                raise ValueError('sr_interface, alpha_bravo: could not find correct spoken form for letter: "%s" (variants: %s\nPlease correct in sr_interface, dict alpha_bravo!!!'% (written, repr(spoken)))
+    else:
+        for a in string.ascii_lowercase:
+            utt = alpha_bravo[a]
+            if word_exists(utt):
+                continue
+            print 'try letter variants for "%s", "%s"' % (a, utt)
+            for uttt in [utt.lower(), utt.capitalize()]:
+                try_utt = '%s\\%s'% (a.upper(), uttt)
+                if word_exists(try_utt):
+                    alpha_bravo[a] = try_utt
+                    break
+                else:
+                    print 'could not find correct variant for: %s'% a
+                
 def disconnect():
     """Dicsconnects from SR system.
     
@@ -283,9 +369,9 @@ def getWordInfo(word, flag = None):
     if not word:
         trace('sr_interface.getWordInfo', 'getWordInfo, empty word: %s'% word)
         return
-    if word.find('.') >= 0:
-        trace('sr_interface.getWordInfo', 'getWordInfo, word with . in spoken forms, skip: %s'% word)
-        return
+    #if word.find('.') >= 0:
+    #    trace('sr_interface.getWordInfo', 'getWordInfo, word with . in spoken forms, skip: %s'% word)
+    #    return
     if word.endswith('\\'):
         trace('sr_interface.getWordInfo', 'getWordInfo, empty spoken form: %s'% word)
         return
@@ -316,7 +402,7 @@ def word_exists(word):
     *STR* word -- the word
     """
     word_info = getWordInfo(word)    
-    if word_info  is None:    
+    if word_info is None:    
         return 0
     return 1
 
@@ -352,19 +438,33 @@ def addWord(word, *rest):
     if word == 'g' or word == 'g\\g':
         raise RuntimeError('I thought we agreed not to add single letters')
     origWord = word
-    if word.endswith('I i'):
-        trace_call_stack('sr_interface.addWord', '**')
-        
+    if len(word.split('\\')[0]) == 1 and word.split('\\')[0] and word.split('\\')[0][0] in string.letters:
+        trace('sr_interface.addWord', 'single letter word, should not be added! "%s"'% word)
+        return 
+
+
+    trace('sr_interface.addWord', 'normalizing word for Dragon: "%s"'% word)
     word = normalize_word_for_Dragon(word)
+    trace('sr_interface.addWord', 'after normalize word for Dragon: "%s"'% word)
     if word in stringsOfNumbers:
-        print 'addWord, no numbers without spoken form are accepted: "%s"'% word
+        if word in numberstringToSpoken:
+            word = numberstringToSpoken[word]
+            #print 'addWord, take spoken form for number: %s'% word
+        else:
+            print 'addWord, no numbers without spoken form are accepted: "%s"'% word
+            return
+
+    if word is None:
+        pass
         return
-    if word != origWord:
-        trace('sr_interface.addWord', 'this word is changed by normalize_word_for_Dragon: "%s" to "%s"'% (origWord, word))
         
     if getWordInfo(word) is None:
-        trace('sr_interface.addWord', 'this word is new to NatSpeak: %s'% word)
+        #trace('sr_interface.addWord', 'this word is new to NatSpeak: %s'% word)
         #trace_call_stack('sr_interface.addWord', '**')
+        if word.startswith('.'):
+            pass
+        if word != origWord:
+            trace('sr_interface.addWord', 'this word (to be added) is changed by normalize_word_for_Dragon: "%s" to "%s"'% (origWord, word))
         if len(rest) == 0:
             flag = word_info_flag
         elif len(rest) == 1:
@@ -505,6 +605,9 @@ def normalize_word_for_Dragon(word):
     """in Dragon 11 we need a double \ and several other details
     
     the spoken form part is handled in fix_acronyms_spoken_form
+    (this function should only be called when checking (and adding) new words, in the
+    config phase of the mediator, in order to keep the config files consistent for
+    the new Dragon (11) version. QH
     """
     trace('sr_interface.normalize_word_for_Dragon', 
                 'start with word: "%s"'% word)
@@ -512,28 +615,35 @@ def normalize_word_for_Dragon(word):
         trace_call_stack('sr_interface.normalize_word_for_Dragon')
     parts = word.split('\\')
     if DNSVersion >= 11:
-        if len(parts) == 3:
-            trace('sr_interface.normalize_word_for_Dragon', 
-                'parts length 2: "%s", "%s", "%s"' % (parts[0], parts[1], parts[2]))
-            p2 = parts[2]
-            parts[2] = fix_acronyms_spoken_form(parts[2])
-            if parts[2] != p2:
-                trace('sr_interface.normalize_word_for_Dragon', 
-                    'fixed acronyms spoken form from: "%s" to "%s"' % (p2, parts[2]))
-            return '\\'.join(parts)
-        elif len(parts) == 2:
-            p1 = parts[1]
-            parts[1] = fix_acronyms_spoken_form(parts[1])
-            if parts[1] != p1:
-                trace('sr_interface.normalize_word_for_Dragon', 
-                    'fixed acronyms spoken form from: "%s" to "%s"' % (p1, parts[1]))
-            trace('sr_interface.normalize_word_for_Dragon', 
-                'parts length 2: "%s", "%s"' % (parts[0], parts[1]))
-            return '\\\\'.join(parts)
-        else:
-            trace('sr_interface.normalize_word_for_Dragon', 
-                    'parts length 1, word: "%s"'% word)
+        spoken_first = parts[-1]
+        written = parts[0]
+        spoken = fix_acronyms_spoken_form(spoken_first)
+        if written and len(written) == 1:
+            if written in string.ascii_lowercase:
+                if written.lower() == spoken.lower():
+                    return  '%s\\letter'% (written.upper())
+                else:
+                    return  '%s\\letter\\%s'% (written, spoken)
+            elif written in string.ascii_uppercase and spoken == 'letter':
+                return word
+            elif written in punctuation:
+                return '%s\\%s\\%s'% (written, spoken, spoken)
+        elif written in punctuation_extra:
+            # like ellipsis
+                return '%s\\%s\\%s'% (written, spoken, spoken)
             
+        if spoken == spoken_first:
+            if len(parts) == 2:
+                trace('sr_interface.normalize_word_for_Dragon', 
+                    'parts length 2, just add extra backslash: "%s", "%s"' % (written, spoken))
+                return '%s\\\\%s'% (written, spoken)
+            else:
+                return word
+        elif written == spoken_first:
+            trace('sr_interface.normalize_word_for_Dragon', 
+                    'change both written and spoken form from "%s" to "%s"(written: "%s"' % (spoken_first, spoken_first, written))
+            return '%s\\\\%s'% (spoken, spoken)
+        
     else:
         # remove double \\
         if len(parts) == 2:
@@ -541,9 +651,9 @@ def normalize_word_for_Dragon(word):
             trace('sr_interface.normalize_word_for_Dragon', 
                 'parts length 2, removing double backslash, leave "%s"' % result)
             return result
-    # no intervention:
-    return word
-            
+        else:
+            # no intervention:
+            return word            
 
 def fix_acronyms_spoken_form(word):
     """Function to spoken forms for versions of NatSpeak where periods should not be 
@@ -569,89 +679,113 @@ def spoken_written_form(vocabulary_entry, clean_written = 1, clean_spoken = 1):
     
     *STR* (spoken, written) -- written and spoken forms of the vocabulary entry.
     """
+    parts = vocabulary_entry.split('\\')
     
     if category_information_in_vocabulary_entries:
         #DNS11 or higher - match written written\\spoken, written\category\spoken or written\category form
         
-        #First, we try to match the default form: that is spoken\\written, with no category form
-        a_match = re.match('^([\s\S]*)\\\\\\\\([^\\\\]*)$', vocabulary_entry)
-        if a_match:
-            trace('sr_interface.spoken_written_form', 'entry \'%s\' is spoken/written form' % vocabulary_entry)
-            
-            written = a_match.group(1)
-            spoken = a_match.group(2)
-            trace('sr_interface.spoken_written_form', 
-                'initial spoken, written = "%s", "%s"' % (spoken, written))
-            extra = string.find(written, '\\')
-           
-        else:
-            #Second, we try to match the forms written\category and written\category\spoken
-            a_match = re.match('^([\s\S]*)\\\\([^\\\\]*)$', vocabulary_entry)
-            if a_match:
-                
-                written = a_match.group(1)
-                spoken = a_match.group(1)  
-                category = a_match.group(2)
-                extra = string.rfind(written, '\\')
-    			
-                trace('sr_interface.spoken_written_form', 
-                    'initial spoken, written = "%s", "%s"' % (spoken, written)) 			
-                
-                #test if vocabulary entry is in form written\category\spoken
-                # But careful... if the word spoken was "backslash", then the written form is
-                # "\" (at least in NatSpeak 8 and 9). - AD            
-                if extra >= 0 and written != "\\":
-                
-                    #written\category\spoken form: discard the category for now
-                    was_written = written
-                    written = was_written[:extra]
-                    category = was_written[extra + 1:]
-                    spoken = a_match.group(2)
-                    trace('sr_interface.spoken_written_form', 
-                        'but category = %s' % category)
-                    trace('sr_interface.spoken_written_form', 
-                        'final spoken, written = "%s", "%s"' % (spoken, written))                  
-                  
+        if len(parts) in (2, 3) and parts[1] == 'letter':
+            written, spoken = parts[0].lower(), parts[0]
+        elif len(parts) == 2:
+            written = spoken = parts[0]
+        elif len(parts) == 3 and parts:
+            if len(parts[0]) == 1 and parts[1].startswith('lowercase'):
+                written, spoken = parts[0].lower(), parts[2]
             else:
-                #vocabulary entry is in form written
-                written = vocabulary_entry
-                spoken = vocabulary_entry
-    			
-                trace('sr_interface.spoken_written_form', 'entry \'%s\' is just spoken ' % written )
+                written, spoken = parts[0], parts[2]
+        else:
+            written = spoken = parts[0]
+        #    
+        #
+        #
+        ##First, we try to match the default form: that is spoken\\written, with no category form
+        #a_match = re.match('^([\s\S]*)\\\\\\\\([^\\\\]*)$', vocabulary_entry)
+        #if a_match:
+        #    trace('sr_interface.spoken_written_form', 'entry \'%s\' is spoken/written form' % vocabulary_entry)
+        #    
+        #    written = a_match.group(1)
+        #    spoken = a_match.group(2)
+        #    trace('sr_interface.spoken_written_form', 
+        #        'initial spoken, written = "%s", "%s"' % (spoken, written))
+        #    extra = string.find(written, '\\')
+        #   
+        #else:
+        #    #Second, we try to match the forms written\category and written\category\spoken
+        #    a_match = re.match('^([\s\S]*)\\\\([^\\\\]*)$', vocabulary_entry)
+        #    if a_match:
+        #        
+        #        written = a_match.group(1)
+        #        spoken = a_match.group(1)  
+        #        category = a_match.group(2)
+        #        extra = string.rfind(written, '\\')
+        #
+        #        trace('sr_interface.spoken_written_form', 
+        #            'initial spoken, written = "%s", "%s"' % (spoken, written)) 			
+        #        
+        #        #test if vocabulary entry is in form written\category\spoken
+        #        # But careful... if the word spoken was "backslash", then the written form is
+        #        # "\" (at least in NatSpeak 8 and 9). - AD            
+        #        if extra >= 0 and written != "\\":
+        #        
+        #            #written\category\spoken form: discard the category for now
+        #            was_written = written
+        #            written = was_written[:extra]
+        #            category = was_written[extra + 1:]
+        #            spoken = a_match.group(2)
+        #            trace('sr_interface.spoken_written_form', 
+        #                'but category = %s' % category)
+        #            trace('sr_interface.spoken_written_form', 
+        #                'final spoken, written = "%s", "%s"' % (spoken, written))                  
+        #          
+        #    else:
+        #        #vocabulary entry is in form written
+        #        written = vocabulary_entry
+        #        spoken = vocabulary_entry
+        #
+        #        trace('sr_interface.spoken_written_form', 'entry \'%s\' is just spoken ' % written )
     else:
         #Before dns10, look for written, written\spoken, written\spoken\t form
-        a_match = re.match('^([\s\S]*)\\\\([^\\\\]*)$', vocabulary_entry)
-        if a_match:
-            trace('sr_interface.spoken_written_form', 'entry \'%s\' is spoken/written form' % vocabulary_entry)
-            
-            #
-            # Note: need to check for things like {Enter} in written_form
-            # ignore for now
-            #
-            written = a_match.group(1)
-            
-            # the try block handles the special case of selection grammar utterances which
-            # select words with different written and spoken form, which, in
-            # natspeak 7, get reported as written\spoken\t (That's backslash and t,
-            # not a tab character) - DCF
-            # But careful... if the word spoken was "backslash", then the written form is
-            # "\" (at least in NatSpeak 8 and 9). - AD
-            spoken = a_match.group(2)
-            trace('sr_interface.spoken_written_form', 
-                'initial spoken, written = "%s", "%s"' % (spoken, written))
-            extra = string.find(written, '\\')
-            if extra >= 0 and written != "\\":
-                was_written = written
-                written = was_written[:extra]
-                spoken = was_written[extra+1:]
-                trace('sr_interface.spoken_written_form', 
-                    'but extra = %d' % extra)
-                trace('sr_interface.spoken_written_form', 
-                    'final spoken, written = "%s", "%s"' % (spoken, written))
+        if len(parts) == 1:
+            written = spoken = parts[0]
+        elif len(parts) == 2:
+            written, spoken = parts[0], parts[1]
         else:
-            trace('sr_interface.spoken_written_form', 'entry \'%s\' is just spoken ' % vocabulary_entry        )
-            written = vocabulary_entry
-            spoken = vocabulary_entry            
+            print 'spoken_written_form, Dragon <= 10, len(parts) should be 1 or 2, not: %s (%s)'% \
+                                (len(parts), repr(parts))
+            written, spoken = parts[0], parts[-1]
+        #
+        #a_match = re.match('^([\s\S]*)\\\\([^\\\\]*)$', vocabulary_entry)
+        #if a_match:
+        #    trace('sr_interface.spoken_written_form', 'entry \'%s\' is spoken/written form' % vocabulary_entry)
+        #    
+        #    #
+        #    # Note: need to check for things like {Enter} in written_form
+        #    # ignore for now
+        #    #
+        #    written = a_match.group(1)
+        #    
+        #    # the try block handles the special case of selection grammar utterances which
+        #    # select words with different written and spoken form, which, in
+        #    # natspeak 7, get reported as written\spoken\t (That's backslash and t,
+        #    # not a tab character) - DCF
+        #    # But careful... if the word spoken was "backslash", then the written form is
+        #    # "\" (at least in NatSpeak 8 and 9). - AD
+        #    spoken = a_match.group(2)
+        #    trace('sr_interface.spoken_written_form', 
+        #        'initial spoken, written = "%s", "%s"' % (spoken, written))
+        #    extra = string.find(written, '\\')
+        #    if extra >= 0 and written != "\\":
+        #        was_written = written
+        #        written = was_written[:extra]
+        #        spoken = was_written[extra+1:]
+        #        trace('sr_interface.spoken_written_form', 
+        #            'but extra = %d' % extra)
+        #        trace('sr_interface.spoken_written_form', 
+        #            'final spoken, written = "%s", "%s"' % (spoken, written))
+        #else:
+        #    trace('sr_interface.spoken_written_form', 'entry \'%s\' is just spoken ' % vocabulary_entry        )
+        #    written = vocabulary_entry
+        #    spoken = vocabulary_entry            
 
     #
     # Substitute special characters in written form (e.g. ' ', '\n') to the

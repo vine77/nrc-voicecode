@@ -42,7 +42,18 @@ class SrInterfaceTest(VoiceCodeRootTest.VoiceCodeRootTest):
       print 'delete %s: %s'% (word, sr_interface.deleteWord("testAddAWord"))
       print 'exists (deleted word) %s: %s'% (word, sr_interface.word_exists(word))
       self._say([word])
-             
+          
+   def test_Word_existence(self):
+      word = 'two'
+      print '%s exists: %s'% (word, sr_interface.word_exists(word))
+      word = 'one'
+      print '%s does not exist: %s'% (word, sr_interface.word_exists(word))
+      word = r'one\pronoun'
+      print '%s exists: %s'% (word, sr_interface.word_exists(word))
+      word = r'one\number'
+      print '%s exists: %s'% (word, sr_interface.word_exists(word))
+      # see for more examples unittestNatlink.py (testWordFuncs) in natlink/PyTest
+      
                
   
   ##########################################################

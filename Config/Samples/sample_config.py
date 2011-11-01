@@ -194,9 +194,10 @@ add_cmd_set(emacs_ctrl)
 # See config_helpers.py for the definitions of these generator
 # functions, and additional parameters to customize their behavior
 
-add_letters(military_letters, prefix = "")
-add_letters(military_letters, prefix = "letter-")
-add_cmd_set(military_letters)
+# try to skip these (QH)
+#add_letters(military_letters, prefix = "")
+#add_letters(military_letters, prefix = "letter-")
+#add_cmd_set(military_letters)
 
 add_escaped_characters(escaped_characters)
 add_cmd_set(escaped_characters)
