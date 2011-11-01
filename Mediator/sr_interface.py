@@ -72,34 +72,35 @@ vc_base_topic = 'US General English - BestMatch Plus'
 ## spelling letters are checked at start of connect with new user:
 ## if they are defined as list, the first one that fits is replaced as entry for
 ## the specific letter (QH)
-alpha_bravo = {}
-alpha_bravo["a"] = "alpha"
-alpha_bravo["b"] = "bravo"
-alpha_bravo["c"] = "Charlie"
-alpha_bravo["d"] = "delta"
-alpha_bravo["e"] = "echo"
-alpha_bravo["f"] = "foxtrot"
-alpha_bravo["g"] = "golf"
-alpha_bravo["h"] = "hotel"
-alpha_bravo["i"] = "India"
-alpha_bravo["j"] = ["Juliett", "Juliet"]
-alpha_bravo["k"] = "kilo"
-alpha_bravo["l"] = ["lima", "Lima"]
-alpha_bravo["m"] = "Mike"
-alpha_bravo["n"] = ["november", "November"]
-alpha_bravo["o"] = "Oscar"
-alpha_bravo["p"] = "papa"
-alpha_bravo["q"] = ["Quebec", 'Qu\xe9bec']
-alpha_bravo["r"] = "Romeo"
-alpha_bravo["s"] = "sierra"
-alpha_bravo["t"] = "tango"
-alpha_bravo["u"] = "uniform"
-alpha_bravo["v"] = "Victor"
-alpha_bravo["w"] = "whiskey"
-alpha_bravo["x"] = ["X ray", "x-ray"]
-alpha_bravo["y"] = ["yankee", "Yankee"]
-alpha_bravo["z"] = ["zulu", "Zulu"]
+alpha_bravo_raw = {}
+alpha_bravo_raw["a"] = "alpha"
+alpha_bravo_raw["b"] = "bravo"
+alpha_bravo_raw["c"] = "Charlie"
+alpha_bravo_raw["d"] = "delta"
+alpha_bravo_raw["e"] = "echo"
+alpha_bravo_raw["f"] = "foxtrot"
+alpha_bravo_raw["g"] = "golf"
+alpha_bravo_raw["h"] = "hotel"
+alpha_bravo_raw["i"] = "India"
+alpha_bravo_raw["j"] = ["Juliett", "Juliet"]
+alpha_bravo_raw["k"] = "kilo"
+alpha_bravo_raw["l"] = ["lima", "Lima"]
+alpha_bravo_raw["m"] = "Mike"
+alpha_bravo_raw["n"] = ["november", "November"]
+alpha_bravo_raw["o"] = "Oscar"
+alpha_bravo_raw["p"] = "papa"
+alpha_bravo_raw["q"] = ["Quebec", 'Qu\xe9bec']
+alpha_bravo_raw["r"] = "Romeo"
+alpha_bravo_raw["s"] = "sierra"
+alpha_bravo_raw["t"] = "tango"
+alpha_bravo_raw["u"] = "uniform"
+alpha_bravo_raw["v"] = "Victor"
+alpha_bravo_raw["w"] = "whiskey"
+alpha_bravo_raw["x"] = ["X ray", "x-ray", "xray"]
+alpha_bravo_raw["y"] = ["yankee", "Yankee"]
+alpha_bravo_raw["z"] = ["zulu", "Zulu"]
 
+alpha_bravo = {} # to be filled with correct spoken forms
 # category often same as spoken:
 punctuation = r'.,:;<>()\\/{}[]?!@#$%^&*-_=+'
 punctuation_extra = [ '...']
@@ -200,7 +201,8 @@ def connect(user_name, mic_state=None, mic_change_callback = None):
         natlink.natConnect(1)
         sr_is_connected = 1            
         openUser(user_name)
-        check_alpha_bravo() # check the exact spelling of military alphabeth
+        check_alpha_bravo() # check the exact spelling of military alphabet
+                            # return the results in alpha_bravo dict 
     if mic_state:
         natlink.setMicState(mic_state)
     if mic_change_callback:
@@ -217,37 +219,47 @@ def check_alpha_bravo():
     """check the words a\\alpha through z\\zulu
     """
     global alpha_bravo
-    if DNSVersion >= 11:
-        for written in string.ascii_lowercase:
-            spoken = alpha_bravo[written]
-            if isinstance(spoken, str):
-                utt = '%s\\letter\\%s'% (written.upper(), spoken)
-                if word_exists(utt):
-                    continue
-                else:
-                    print 'sr_interface, alpha_bravo: incorrect spoken form for letter "%s" ("%s")' % (written, spoken)
-                    continue
-            for sp in spoken:
-                utt = '%s\\letter\\%s'% (written.upper(), sp)
-                if word_exists(utt):
-                    alpha_bravo[written] = sp
-                    break
+    for written in string.ascii_lowercase:
+        spoken = alpha_bravo_raw[written]
+        result = _check_alpha_bravo(written, spoken)
+        alpha_bravo[written] = result or ''
+        if not result:
+            print 'sr_interface, alpha_bravo: incorrect spoken form for letter "%s" ("%s")' % (written, spoken)
+    
+def _check_alpha_bravo(written, spoken):
+    """check individual written\spoken form (or written\...\spoken in Dragon 11)
+    
+    return '' if no words match.
+    spoken may be a list of possible entries, of which also the capitalisation can be altered.
+    """
+    if isinstance(spoken, str):
+        if DNSVersion >= 11:
+            utt = '%s\\letter\\%s'% (written.upper(), spoken)
+        else:
+            utt = '%s\\%s'% (written, spoken)
+            
+        if word_exists(utt):
+            return spoken
+        else:
+            for sp2 in [spoken.lower(), spoken.capitalize()]:
+                if sp2 != spoken:
+                    if DNSVersion >= 11:
+                        utt2 = '%s\\letter\\%s'% (written.upper(), sp2)
+                    else:
+                        utt2 = '%s\\%s'% (written, sp2)
+                    if word_exists(utt2):
+                        return sp2
             else:
-                raise ValueError('sr_interface, alpha_bravo: could not find correct spoken form for letter: "%s" (variants: %s\nPlease correct in sr_interface, dict alpha_bravo!!!'% (written, repr(spoken)))
+                return ''
+
+    # spoken is a list now, call recursive:
+    for sp in spoken:
+        result = _check_alpha_bravo(written, sp)
+        if result:
+            return result
     else:
-        for a in string.ascii_lowercase:
-            utt = alpha_bravo[a]
-            if word_exists(utt):
-                continue
-            print 'try letter variants for "%s", "%s"' % (a, utt)
-            for uttt in [utt.lower(), utt.capitalize()]:
-                try_utt = '%s\\%s'% (a.upper(), uttt)
-                if word_exists(try_utt):
-                    alpha_bravo[a] = try_utt
-                    break
-                else:
-                    print 'could not find correct variant for: %s'% a
-                
+        return ''  # result at all...
+            
 def disconnect():
     """Dicsconnects from SR system.
     
@@ -402,7 +414,10 @@ def word_exists(word):
     *STR* word -- the word
     """
     word_info = getWordInfo(word)    
-    if word_info is None:    
+    if word_info is None:
+        written = word.split('\\')[0]
+        if written and written in string.ascii_letters:
+            return 1   # single letters assume they are there
         return 0
     return 1
 
@@ -645,8 +660,17 @@ def normalize_word_for_Dragon(word):
             return '%s\\\\%s'% (spoken, spoken)
         
     else:
+        # NatSpeak <= 10:
         # remove double \\
         if len(parts) == 2:
+            if parts[0] in string.ascii_lowercase and parts[1]:
+                spoken_letter = parts[1]
+                if len(spoken_letter) == 1 and spoken_letter in string.ascii_uppercase:
+                    return spoken_letter + '.'
+                elif len(spoken_letter) == 2 and spoken_letter[0] in string.ascii_uppercase and spoken_letter[1] == '.':
+                    return spoken_letter
+
+            # else:                
             result = '%s\\%s'% (parts[0], parts[1])
             trace('sr_interface.normalize_word_for_Dragon', 
                 'parts length 2, removing double backslash, leave "%s"' % result)

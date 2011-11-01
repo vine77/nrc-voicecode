@@ -59,6 +59,8 @@ def dictate_pseudo_C_Cpp(commands):
     commands.say([',\\comma','float','divisor'])
     commands.say(['returning','void'])
     commands.say(['new','statement'])
+    # char goes to care (july 2010, QH)
+    # solved, there was an extra word in vocabulare: character_hello
     commands.say(['declare','char','hello'])
     commands.say(['new','statement'])
     commands.say(['int\\int','count'])
@@ -244,7 +246,6 @@ def test_dictate_from_scratch(testing):
     #
     # Dictate some pseudo C/C++ where all symbols are already known
     #
-#     print '>>> Dictating C/C++ when all symbols are known <<<\n'
 #     testing.init_simulator_regression()
 #     names = testing.namespace()
 #     commands = names['commands']
