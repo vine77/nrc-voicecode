@@ -39,7 +39,8 @@ import Queue
 import thread_communication
 from tcp_threads import *
 
-
+messenger_sleep_time = None # 0.05  # experiment if voicecode or vctest fail intermittent (QH)
+                            # the standard value was 0.05
 
 # Uncomment this and add some entries to active_traces if you want to 
 # activate some traces.
@@ -138,7 +139,7 @@ class ClientConnection(Object.Object):
         broken_connection = ('broken_connection', {})
         self.client_quitting = threading.Event()
         sleeper = messaging.LightSleeper(self.client_quitting)
-        a_msgr = messaging.messenger_factory(listen_sock, sleep = 0.05,
+        a_msgr = messaging.messenger_factory(listen_sock, sleep = messenger_sleep_time,
             sleeper = sleeper)
         thread = ListenAndQueueMsgsThread(a_msgr, queue, data_event,
            self.client_quitting, broken_connection)
@@ -396,7 +397,7 @@ class ClientConnection(Object.Object):
         data_thread.start()
 
         listen_response_msgr = messaging.messenger_factory(listen_sock, 
-            sleep = 0.05)        
+            sleep = messenger_sleep_time)        
         listen_msgr = messaging.MixedMessenger(listen_response_msgr, messages)
  
         return listen_msgr

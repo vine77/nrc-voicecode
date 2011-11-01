@@ -34,38 +34,11 @@ import debug
 from SpacingState import *
 from vc_globals import *
 
-# US English military spelling
+# alpha_bravo now in sr_interface, alphabet is checked for valid words at start of connect.
+from sr_interface import alpha_bravo
 
-alpha_bravo = {}
-alpha_bravo["a"] = "alpha"
-alpha_bravo["b"] = "bravo"
-alpha_bravo["c"] = "charlie"
-alpha_bravo["d"] = "delta"
-alpha_bravo["e"] = "echo"
-alpha_bravo["f"] = "foxtrot"
-alpha_bravo["g"] = "golf"
-alpha_bravo["h"] = "hotel"
-alpha_bravo["i"] = "india"
-alpha_bravo["j"] = "juliett"
-alpha_bravo["k"] = "kilo"
-alpha_bravo["l"] = "lima"
-alpha_bravo["m"] = "mike"
-alpha_bravo["n"] = "november"
-alpha_bravo["o"] = "oscar"
-alpha_bravo["p"] = "papa"
-alpha_bravo["q"] = "quebec"
-alpha_bravo["r"] = "romeo"
-alpha_bravo["s"] = "sierra"
-alpha_bravo["t"] = "tango"
-alpha_bravo["u"] = "uniform"
-alpha_bravo["v"] = "victor"
-alpha_bravo["w"] = "whiskey"
-alpha_bravo["x"] = "xray"
-alpha_bravo["y"] = "yankee"
-alpha_bravo["z"] = "zulu"
-
-def add_letters(aliases, prefix, alphabet = 'abcdefghijklmnopqrstuvwxyz', 
-    name_map = alpha_bravo, language = None):
+def add_letters(aliases, prefix, alphabet = None,
+    name_map = None, language = None):
     """define LSAs for alpha, etc. or letter-alpha, etc.
 
     **INPUTS**
@@ -83,8 +56,12 @@ def add_letters(aliases, prefix, alphabet = 'abcdefghijklmnopqrstuvwxyz',
     *STR language* -- language of the aliases, or None to use in all
     languages (almost certainly the desired behavior)
     """
+    if name_map is None:
+        name_map = alpha_bravo
     if language == None:
         language = all_languages
+    if alphabet is None:
+        alphabet = string.ascii_lowercase
     for letter in alphabet:
         try:
             name = "%s" % name_map[letter]
@@ -98,8 +75,7 @@ def add_letters(aliases, prefix, alphabet = 'abcdefghijklmnopqrstuvwxyz',
     
     
 def add_escaped_characters(commands, back_slash = 'back slash', 
-    alphabet = 'abcdefghijklmnopqrstuvwxyz',
-    name_map = alpha_bravo, cap = "cap", context = None):
+    alphabet = None, name_map = None, cap = "cap", context = None):
     """define CSCs for characters escaped with backslashes
 
     **INPUTS**
@@ -121,6 +97,10 @@ def add_escaped_characters(commands, back_slash = 'back slash',
     *Context* context -- the context in which the CSCs should apply, or
     None for ContAny()
     """
+    if alphabet is None:
+        alphabet = string.ascii_lowercase
+    if name_map is None:
+        name_map = alpha_bravo
     if context is None:
         context = ContAny()
     for letter in alphabet:

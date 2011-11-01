@@ -1544,6 +1544,7 @@ class WinGramFactoryNL(WinGramFactory):
 
         *MilitarySpelling* -- the spelling grammar
         """
+        print 'making military spelling...'
         return MilitarySpellingNL(spell_words = spell_words, spelling_cbk =
             spelling_cbk, capitalize_rules = self.capitalize) 
    

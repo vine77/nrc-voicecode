@@ -163,14 +163,20 @@ import InstanceSpace
 
 already_ensured_was_in_vocab = {}
 def make_sure_word_is_in_vocab(word):
+   if len(word) == 1:
+      return 1 # skip single letters
    if not already_ensured_was_in_vocab.has_key(word):
-      if sr_interface.getWordInfo(word) == None:
+      if not sr_interface.word_exists(word):
+         print 'make_sure_word_is_in_vocab, add to vocabulary: %s'% word
          sr_interface.addWord(word)
+         if not sr_interface.word_exists(word):
+            raise ValueError('make_sure_word_is_in_vocab, could not add to vocabulary: %s'% word)
    already_ensured_was_in_vocab[word] = 1      
-
+   return 1
 
 # Set this to 0 during regression testing and > 0 during interactive testing
 sleep_before_recognitionMimic = 0
+
 
 class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
     """an object providing methods corresponding to the non-method
@@ -358,6 +364,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
 
 
         sys.stdout.flush()
+          
         if echo_utterance:
             print 'Saying: %s' % utterance
 
@@ -368,8 +375,8 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
              spoken = utterance
              
         # assume utterances can be in 'old' format, like 'D.':
-        b_utt = map(self.fix_say_test_letters, utterance)
-        c_utt = map(sr_interface.fix_acronyms_spoken_form, b_utt)
+        c_utt = map(self.fix_say_test_letters, utterance)
+        #c_utt = map(sr_interface.fix_acronyms_spoken_form, b_utt)
         if c_utt !=  utterance:
             print 'changed: %s to %s'% (utterance, c_utt)
             utterance = c_utt
@@ -412,7 +419,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                 #    utterance = b_utterance
                 #    spoken = self.utterance_spoken_forms(utterance)
 
-                print "HHHeard %s" % string.join(spoken)
+                print "Heard %s" % string.join(spoken)
                 dictation_allowed = self.app.recog_begin(None)
                 self.app.synchronize_with_app()
                 buff_name = self.app.curr_buffer_name()
@@ -436,26 +443,26 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                     # (e.g. '\n' instead of '{Enter}'
                     #
                     for a_word in utterance:
-                        b_word = sr_interface.fix_acronyms_spoken_form(a_word)
-                        if a_word !=  b_word:
-                           print 'changed: %s to %s'% (a_word, b_word)
-                           a_word = b_word
                         # Make sure word is in-vocabulary
+                        a_word = sr_interface.normalize_word_for_Dragon(a_word)
                         make_sure_word_is_in_vocab(a_word)
-# don't want to clean any more
-                        spoken, written = sr_interface.spoken_written_form(a_word, 
-                            clean_written = 0, clean_spoken = 0)
-                        if spoken != written:
-# don't want to do this any more
-#                        written = sr_interface.clean_written_form(written, clean_for='sr')
-                            words = words + [sr_interface.vocabulary_entry(spoken, written)]
-                        else:
-                            words = words + [written]
-                else:        
-                    words = re.split('\s+', utterance)
-                    for a_word in words:
-                        make_sure_word_is_in_vocab(a_word)                    
-
+                        words.append(a_word)
+# skipping things, QH...don't want to clean any more
+#                        spoken, written = sr_interface.spoken_written_form(a_word, 
+#                            clean_written = 0, clean_spoken = 0)
+#                        if spoken != written:
+## don't want to do this any more
+##                        written = sr_interface.clean_written_form(written, clean_for='sr')
+#                            words = words + [sr_interface.vocabulary_entry(spoken, written)]
+#                        else:
+#                            words = words + [written]
+                else:
+                    raise TypeError("sim_commands, say, should not come here, type of utterance: %s"% type(utterance))
+                    #words = re.split('\s+', utterance)
+                    #for a_word in words:
+                    #    a_word = sr_interface.normalize_word_for_Dragon(a_word)
+                    #    make_sure_word_is_in_vocab(a_word)                    
+ 
                 trace('SimCmdsObj.say', 'words=%s' % words)
                 
 #            for word in words:
@@ -474,7 +481,10 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                     time.sleep(sleep_before_recognitionMimic)
 
                 sys.stderr.flush()
-##                print 'words: %s'% words
+                words = [w for w in words if make_sure_word_is_in_vocab(w)]
+                
+                
+                #print 'recognitionMimic, words: %s'% repr(words)
                 natlink.recognitionMimic(words)
                 sys.stderr.flush()
                 if not self.app.alive:
@@ -489,7 +499,7 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                 
         finally:
             sys.stderr.flush()
-            #
+            #him
             # Redirect stdin back to what it was
             #
             if user_input:
@@ -500,10 +510,23 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
     def fix_say_test_letters(self, letters):
       """change 'C.' into 'c\\C.', for compatibility purposes with Dragon 11
       """
-      if len(letters) == 2 and letters[0] in string.ascii_uppercase and letters[1] == '.':
-         return '%s\\%s'% (letters[0].lower(), letters)
-      else:
-         return letters
+      if sr_interface.DNSVersion >= 11:
+         # C. should return C\\letter, c\\C. also...
+         if len(letters) == 1 and letters in string.ascii_uppercase:
+            return letters + '\\letter'
+         if len(letters) == 2 and letters[0] in string.ascii_uppercase and letters[1] == '.':
+            result = letters[0] + '\\letter'
+            print 'converting (len2) "%s" to "%s"'% (letters, result)
+            return result
+         elif len(letters) == 4 and letters[1] == '\\' and letters[0] in string.ascii_lowercase and \
+               letters[3] == '.':
+            result = letters[0].upper() + '\\letter'
+            print 'converting (len 4) "%s" to "%s"'% (letters, result)
+            return result
+
+            
+      return letters
+
 
     def goto(self, pos, echo_cmd=0):
         """Goes to position *INT pos* of the current buffer"""
