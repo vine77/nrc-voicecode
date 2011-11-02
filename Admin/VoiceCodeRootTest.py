@@ -74,9 +74,9 @@ class VoiceCodeRootTest(TestCaseWithHelpers.TestCaseWithHelpers):
         else:
             if self.collect_mode:
                 self.collect_data.append(' '*8 + 'self._say(%s)'% utterance)
-  
+
         self._commands().say(utterance, user_input, never_bypass_sr_recog, echo_utterance, echo_cmd)
-  
+   
 
    def _goto(self, pos):
       self._app().goto(pos)

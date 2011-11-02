@@ -85,7 +85,7 @@ debug.config_traces(status="off",
 ##                        "ResMgrStd.interpret_dictation": 1,
 ##                        'CmdInterp.interpret_utterance': 1,
 ##                                    'CmdInterp.add_csc': 1,
-##                        "CmdInterp.gram_spec_spoken_cmd": 1,
+##                        "CmdInterp.gram_spec_spoken_cmd": 1,vco   te  
 ##                                   'WhatCanISay.html_detail_page': 1,
 ##                                   'Context.conflicts_with': 1,
 ##                                   'ContLanguage.overlaps_with': 1,

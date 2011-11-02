@@ -28,7 +28,7 @@ function example_function<CURSOR>(){
 
 };"""
 
-utt7 = "with argument India"
+utt7 = "with argument i\\india"
 exp7 = \
 """<<1 line>>
 function example_function(i<CURSOR>){
