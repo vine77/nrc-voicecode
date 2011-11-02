@@ -426,7 +426,8 @@ large = large + "def"
         self._open_file(self._get_test_data_file_path('lots_of_selections_py'))
         self._goto_line(30)
         self._say("select center")
-        self._say(["select", "x\\X.", "through", ")\\close-paren"])
+        # problem NatSpeak 9, x\\X. does not work, probably we should add x\\X. in voc
+        self._say(["select", "x\\xray", "through", ")\\close-paren"])
         self._assert_lines_with_selection_content_is(\
 '''   calc5 = (<SEL_START>x.function1()<SEL_END> + y.function2()) /(z.function1() + z.function2())''')
 

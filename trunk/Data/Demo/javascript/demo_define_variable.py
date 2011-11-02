@@ -9,7 +9,7 @@ exp3 = "var example = 0<CURSOR>;"
 utt4 = "new statement"
 exp4 = "var example = 0;<CURSOR>;"
 
-utt5 = "india plus plus"
+utt5 = "i\\india plus plus"
 exp5 = "var example = 0;i++<CURSOR>;"
 
 utt6 = "new statement"

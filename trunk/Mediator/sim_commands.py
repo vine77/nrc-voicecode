@@ -485,7 +485,10 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
                 
                 
                 #print 'recognitionMimic, words: %s'% repr(words)
-                natlink.recognitionMimic(words)
+                try:
+                  natlink.recognitionMimic(words)
+                except natlink.MimicFailed:
+                  print '***recognitionMimic failed for words: %s'% words
                 sys.stderr.flush()
                 if not self.app.alive:
                     trace('SimCmdsObj.say', 'about to raise socket error')

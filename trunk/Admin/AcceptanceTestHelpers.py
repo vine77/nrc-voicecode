@@ -2,6 +2,7 @@ import VoiceCodeRootTest
 import vc_globals
 import os, os.path
 import time, itertools
+import sys
 
 class AcceptanceTestHelpers(VoiceCodeRootTest.VoiceCodeRootTest):
     """Helper functions for the different language acceptance test files.
@@ -11,6 +12,14 @@ class AcceptanceTestHelpers(VoiceCodeRootTest.VoiceCodeRootTest):
     def __init__(self, name):
         VoiceCodeRootTest.VoiceCodeRootTest.__init__(self, name)
 
+
+    def check_sys_path(self, folder):
+        """adds to sys.path if needed
+        """
+        folder = os.path.normpath(folder)
+        if not folder in sys.path:
+            sys.path.append(folder)
+            
     def find_demo_directory(self):
         """Return the correct language directory in Data/Demo"""
         demo_folder = vc_globals.demo_data
@@ -64,6 +73,7 @@ class AcceptanceTestHelpers(VoiceCodeRootTest.VoiceCodeRootTest):
         file_full_path = os.path.join(demo_folder, file_path)
         file_trunc = file_path[:-3]
         test_name = file_trunc.replace('_', " ")
+        self.check_sys_path(demo_folder)
         try:
             _ref_mod = __import__(file_trunc)
         except ImportError:
@@ -82,6 +92,9 @@ class AcceptanceTestHelpers(VoiceCodeRootTest.VoiceCodeRootTest):
         previous_contents = ''
         for utt in utterances:
             said = getattr(_ref_mod, utt)
+            if said.find('i\\India') >= 0:
+                pass
+            
             self._say(said)
             buffer_contents = self._get_buffer_content_with_selection_position()
             collect_data.extend(self.make_utterance_contents_list(utt, said, buffer_contents, previous_contents))
