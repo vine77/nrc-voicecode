@@ -258,7 +258,7 @@ class AcceptanceTestHelpers(VoiceCodeRootTest.VoiceCodeRootTest):
             spoken_to_test = getattr(to_test, u_ref)
             content_reference = getattr(ref, e_ref)
             content_to_test = getattr(to_test, e_ref)
-            message = "utterances %s and %s should be equal in\ntest %s"% (u_ref, u_to_test, test_info)
+            message = "utterances %s and %s should be equal in\ntest %s"% (spoken_reference, spoken_to_test, test_info)
             result = self.assert_equal(spoken_reference, spoken_to_test, message, no_stop=no_stop)
             if result:
                 return result
