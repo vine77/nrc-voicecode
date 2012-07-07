@@ -30,7 +30,10 @@
 ;;; VCode assumes the following.
 ;;;
 (require 'cl)
-(pc-selection-mode)
+; tebuck: what version is correct here?
+(when (<= emacs-major-version 23)
+ (pc-selection-mode)
+ )
 (load-file (substitute-in-file-name "$VCODE_HOME/Environments/Emacs/python-mode.el"))
 (load-file (substitute-in-file-name "$VCODE_HOME/Environments/Emacs/matlab-mode.el"))
 (custom-set-variables
