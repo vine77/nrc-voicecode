@@ -793,6 +793,11 @@ math_ops.add(LSAlias(['shift right equals', 'right shift equals'],
     spacing = binary_operator),
     name = 'shift right and assign')
 
+math_ops.add(LSAlias(['left divide'],
+        {'matlab': ' \ '}, spacing = binary_operator), name =
+        'left division')
+
+
 math_ops.add(LSAlias(['binary and', 'bitwise and'], {'python': ' & ', 'C': ' & ', 'java': ' & '}, spacing = binary_operator))
 math_ops.add(LSAlias(['binary or', 'bitwise or'], {'python': ' | ', 'C': ' | ', 'java': ' | '}, spacing = binary_operator))
 math_ops.add(LSAlias(['binary not', 'bitwise not'], {'python': '~', 'C': '~', 'java': ' ~ '}, spacing = unary_operator))
@@ -818,9 +823,47 @@ math_ops.add(LSAlias(['elementwise and', 'element and'],
 math_ops.add(LSAlias(['elementwise or', 'element or'],
     {'matlab': ' | '}, spacing = binary_operator),
     name = 'elementwise or')
+"""
 math_ops.add(LSAlias(['elementwise exclusive or', 'element exclusive or', 'elementwise X. or', 'element X. or',],
     {'matlab': ' | '}, spacing = binary_operator),
     name = 'elementwise or')
+"""
+
+# element-wise for matlab
+
+math_ops.add(LSAlias(['elementwise power', 'elementwise power of', 'element power', 'element power of'],
+        {'matlab': '.^'}, spacing = no_spaces), name =
+        'elementwise exponentiation')
+math_ops.add(LSAlias(['elementwise multiply', 'elementwise star', 'elementwise times',
+                      'element multiply', 'element star', 'element times',
+                      'dot times', 'dot star'],
+        {'matlab': ' .* '}, spacing = binary_operator), name =
+        'elementwise multiplication')
+math_ops.add(LSAlias(['elementwise divide', 'elementwise slash', 'element divide', 'element slash',
+                      'dot divide', 'dot slash'],
+        {'matlab': ' ./ '}, spacing = binary_operator), name =
+        'elementwise division')
+math_ops.add(LSAlias(['elementwise left divide', 'elementwise backslash', 'element left divide', 'element backslash',
+                      'dot left divide', 'dot backslash'],
+        {'matlab': ' .\ '}, spacing = binary_operator), name =
+        'elementwise left division')
+
+# transpose for matlab
+
+math_ops.add(LSAlias(['complex transpose'],
+    {'matlab': '.\''}, spacing = unary_operator),
+    name = 'complex matrix transposition')
+math_ops.add(LSAlias(['transpose'],
+    {'matlab': '\''}, spacing = unary_operator),
+    name = 'matrix transposition')
+
+# colon for ranges in matlab
+
+math_ops.add(LSAlias(['through', 'range colon', 'colon operator'],
+        {'matlab': ':'}, spacing = no_spaces), name =
+        'colon operator')
+
+
 
 ## logical operators
 
@@ -1061,7 +1104,7 @@ acmd = CSCmd(spoken_forms=['if', 'if statement'],
                           spacing = no_space_after),
                        contJava: ActionInsert('if (', ') {\n\t\n}',
                           spacing = no_space_after),
-                       contMatlab: ActionInsert('if (', ')\n\t\nend\n', 
+                       contMatlab: ActionInsert('if ', '\n\t\nend\n', 
                           spacing = no_space_after)},
              docstring = 'if statement')
 ctrl_structures.add(acmd)
