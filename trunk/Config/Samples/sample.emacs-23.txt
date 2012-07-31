@@ -51,7 +51,8 @@
  '(t nil t)
  '(tabkey2-mode t)
  ;;'(w32-meta-style (quote w32-lr))
- ;;'(w32shell-shell (quote cmd)))
+ ;;'(w32shell-shell (quote cmd))
+ )
 (custom-set-faces
   ;; custom-set-faces was added by Custom.
   ;; If you edit it by hand, you could mess it up, so be careful.
