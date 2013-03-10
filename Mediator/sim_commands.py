@@ -526,8 +526,18 @@ class SimCmdsObj(Object.Object, InstanceSpace.InstanceSpace):
             result = letters[0].upper() + '\\letter'
             print 'converting (len 4) "%s" to "%s"'% (letters, result)
             return result
-
-            
+         # try a\\alpha etc
+         letterList = letters.split('\\')
+         if len(letterList) == 2 and letterList[0] in string.ascii_letters:
+            letter = letterList[0]
+            spoken = letterList[1]
+            ab = sr_interface.alpha_bravo
+            if letter.lower() in ab and ab[letter.lower()].lower() == spoken.lower():
+               result = '%s\\letter\\%s'% (letter.upper(), ab[letter.lower()])
+               return result
+               
+                                           
+      
       return letters
 
 
